@@ -1,0 +1,1011 @@
+#! /bin/sh
+# Copyright by the COMMONWEALTH SCIENTIFIC AND INDUSTRIAL RESEARCH
+# ORGANISATION (CSIRO), Australia.
+# All rights reserved.
+#
+# This file is part of ADT.  The full ADT copyright notice, including
+# terms governing use, modification, and redistribution, is contained in
+# the file COPYING. COPYING can be found at the root of the source code
+# distribution tree;
+#
+# This is a script to build template code include files for Pascal ADLib
+#
+# Paavo Jumppanen.
+
+
+# create adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_1B/g' adtarrayplan1_decl_base.inc > adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10UC/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10I/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10S/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10US/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10L/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10UL/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10F/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+sed 's/<T>/ARRAY_1D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10D/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
+
+# create adtarrayplan1_impl_base.inc implementations
+sed 's/<T>/ARRAY_1B/g' adtarrayplan1_impl_base.inc > adtarray_impl.inc
+sed 's/<T>/ARRAY_2B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UC/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10I/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10S/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10US/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10L/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UL/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10F/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10D/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+
+# create adtarrayplan1_static_decl_base.inc declarations
+sed 's/<T>/ARRAY_1B/g' adtarrayplan1_static_decl_base.inc > adtarray_decl.inc
+sed 's/<T>/ARRAY_2B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10UC/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10I/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10S/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10US/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10L/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10UL/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10F/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+sed 's/<T>/ARRAY_1D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10D/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
+
+# create adtarrayplan1_static_impl_base.inc implementations
+sed 's/<T>/ARRAY_1B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UC/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10I/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10S/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10US/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10L/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UL/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10F/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
+
+# create adtarrayplan2_static_decl_base.inc declarations
+sed 's/<T>/B/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/C/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/UC/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/I/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/S/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/US/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/L/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/UL/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/F/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/D/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+
+# create adtarrayplan2_static_impl_base.inc implementations
+sed 's/<T>/B/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/C/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/UC/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/I/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/S/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/US/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/L/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/UL/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/F/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/D/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+
+# create adtarrays1_static_decl_base.inc declarations
+sed 's/<T>/boolean/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/shortint/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/byte/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+#Need to comment this out cos Free pascal doesn't recognise integer and longint as different types
+#sed 's/<T>/integer/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/smallint/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/word/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/longint/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/longword/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/single/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/double/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+
+# create adtarrays1_static_impl_base.inc implementations
+sed 's/<T>/boolean/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/shortint/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/byte/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+#Need to comment this out cos Free pascal doesn't recognise integer and longint as different types
+#sed 's/<T>/integer/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/smallint/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/word/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/longint/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/longword/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/single/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/double/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+
+
+# create adtarrays1_decl_base.inc declarations
+sed 's/<T>/ARRAY_1B/g' adtarrays1_decl_base.inc > adtarrays_decl.inc
+sed 's/<T>/ARRAY_2B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10UC/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10I/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10S/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10US/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10L/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10UL/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10F/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10D/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+
+# create adtarrays1_decl_base.inc implementations
+sed 's/<T>/ARRAY_1B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UC/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10I/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10S/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10US/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10L/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UL/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10F/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
+
+# create adtarrays2_decl_base.inc declarations
+sed 's/<T>/ARRAY_1C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10UC/g;s/<D>/byte/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10I/g;s/<D>/integer/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10S/g;s/<D>/smallint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10US/g;s/<D>/word/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10L/g;s/<D>/longint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10UL/g;s/<D>/longword/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10F/g;s/<D>/single/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
+
+
+# create adtarrays2_impl_base.inc declarations
+sed 's/<T>/ARRAY_1C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UC/g;s/<D>/byte/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10I/g;s/<D>/integer/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10S/g;s/<D>/smallint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10US/g;s/<D>/word/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10L/g;s/<D>/longint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10UL/g;s/<D>/longword/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10F/g;s/<D>/single/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10D/g;s/<D>/double/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
+
+
+# create adtarrays2b_decl_base.inc declarations
+sed 's/<T>/ARRAY_1F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10F/g;s/<D>/single/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10D/g;s/<D>/double/g' adtarrays2b_decl_base.inc >> adtarrays_decl.inc
+
+
+# create adtarrays2b_impl_base.inc declarations
+sed 's/<T>/ARRAY_1F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10F/g;s/<D>/single/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_impl.inc
+
+
+# create adtarrays3_decl_base.inc declarations
+sed 's/<T>/B/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/C/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/UC/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/I/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/S/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/US/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/L/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/UL/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/F/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/D/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+
+# create adtarrays3_impl_base.inc implementations
+sed 's/<T>/B/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/C/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/UC/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/I/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/S/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/US/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/L/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/UL/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/F/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/D/g' adtarrays3_impl_base.inc >> adtarray_impl.inc

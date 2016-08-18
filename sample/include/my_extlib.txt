@@ -1,0 +1,890 @@
+function plogis:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function new_log1p:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function log1p:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function expm1:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function inv_logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function scal_logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function scal_inv_logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function cum_normal_prob:
+  intrinsic:
+  shape: (param 1 result)
+  type: (metavar real, metavar real)
+
+function pwr:
+  intrinsic:
+  shape: (param 1, param 2, result)
+  type: (metavar real, ident integer, metavar real)
+
+function gammln:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function polygamma:
+  intrinsic:
+  shape: (param 1, param 2, result)
+  type: (metavar real, ident integer, metavar real)
+
+function cheval:
+  intrinsic:
+  shape: (param 1, param 2, param 3, result)
+  type: (metavar real, ident integer, metavar complex, metavar real)
+
+function ln:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function inv:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function pxe:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function identity:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function unity:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function nought:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function vnought:
+  intrinsic:
+  shape: (param 1, result)
+  type: (arrayType(metavar real,dimColons()),
+         metavar real))
+
+function lgammafn:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+  ReadNotWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+
+function ipwr:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function DNORM:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function TRUNC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar real, metavar real)
+
+function PREINC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar integer, metavar integer)
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+function PREDEC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar integer, metavar integer)
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+function POSTINC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar integer, metavar integer)
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+function POSTDEC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (metavar integer, metavar integer)
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+subroutine pushreal4:
+  external:
+  shape:(param 1,
+         common /adstack_r4/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 4), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popreal4:
+  external:
+  shape:(param 1,
+         common /adstack_r4/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 4), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookreal4:
+  external:
+  shape:(param 1,
+         common /adstack_r4/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 4), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushreal4array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_r4/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
+                  dimColons(dimColon(none(),none()))),
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popreal4array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_r4/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
+                  dimColons(dimColon(none(),none()))),   
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushreal8:
+  external:
+  shape:(param 1,
+         common /adstack_r8/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 8), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popreal8:
+  external:
+  shape:(param 1,
+         common /adstack_r8/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 8), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookreal8:
+  external:
+  shape:(param 1,
+         common /adstack_r8/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 8), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushreal8array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_r8/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
+                  dimColons(dimColon(none(),none()))),
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popreal8array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_r8/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
+                  dimColons(dimColon(none(),none()))),   
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushreal16:
+  external:
+  shape:(param 1,
+         common /adstack_r16/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 16), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popreal16:
+  external:
+  shape:(param 1,
+         common /adstack_r16/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 16), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookreal16:
+  external:
+  shape:(param 1,
+         common /adstack_r16/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 16), ident real),
+        arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushreal16array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_r16/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
+                  dimColons(dimColon(none(),none()))),
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popreal16array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_r16/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
+                  dimColons(dimColon(none(),none()))),   
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushinteger1:
+  external:
+  shape:(param 1,
+         common /adstack_i1/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 1), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popinteger1:
+  external:
+  shape:(param 1,
+         common /adstack_i1/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 1), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookinteger1:
+  external:
+  shape:(param 1,
+         common /adstack_i1/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 1), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushinteger1array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i1/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
+                  dimColons(dimColon(none(),none()))),
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popinteger1array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i1/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
+                  dimColons(dimColon(none(),none()))),   
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushinteger2:
+  external:
+  shape:(param 1,
+         common /adstack_i2/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 2), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popinteger2:
+  external:
+  shape:(param 1,
+         common /adstack_i2/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 2), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookinteger2:
+  external:
+  shape:(param 1,
+         common /adstack_i2/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 2), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushinteger2array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i2/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
+                  dimColons(dimColon(none(),none()))),
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popinteger2array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i2/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
+                  dimColons(dimColon(none(),none()))),   
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushinteger4:
+  external:
+  shape:(param 1,
+         common /adstack_i4/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 4), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popinteger4:
+  external:
+  shape:(param 1,
+         common /adstack_i4/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 4), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookinteger4:
+  external:
+  shape:(param 1,
+         common /adstack_i4/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 4), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushinteger4array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i4/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
+                  dimColons(dimColon(none(),none()))),
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popinteger4array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i4/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
+                  dimColons(dimColon(none(),none()))),   
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushinteger8:
+  external:
+  shape:(param 1,
+         common /adstack_i8/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 8), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popinteger8:
+  external:
+  shape:(param 1,
+         common /adstack_i8/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 8), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookinteger8:
+  external:
+  shape:(param 1,
+         common /adstack_i8/[0,*[)
+  type:(modifiedTypeName(modifiers(intCst 8), ident integer),
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushinteger8array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i8/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
+                  dimColons(dimColon(none(),none()))),
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popinteger8array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_i8/[0,*[)
+  type:(arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
+                  dimColons(dimColon(none(),none()))),   
+        ident integer,
+        arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushcontrol1b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popcontrol1b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookcontrol1b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushcontrol1barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popcontrol1barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushcontrol2b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popcontrol2b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookcontrol2b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushcontrol2barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popcontrol2barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushcontrol3b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popcontrol3b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookcontrol3b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushcontrol3barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popcontrol3barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+
+subroutine pushcontrol4b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(1, 0)
+  ReadThenWritten:(0, 1)
+  id: (0,0,
+       1,0)
+
+subroutine popcontrol4b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadThenWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,1)
+
+subroutine lookcontrol4b:
+  external:
+  shape:(param 1,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0)
+  id: (0,1,
+       0,0)
+
+subroutine pushcontrol4barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(1, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  id: (0,0,0,
+       0,0,0,
+       1,1,0)
+
+subroutine popcontrol4barray:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack_b/[0,*[)
+  type:(ident integer,
+        ident integer,
+        ident integer)
+  ReadNotWritten:(0, 1, 0)
+  ReadThenWritten:(0, 0, 1)
+  NotReadThenWritten:(1, 0, 0)
+  id: (0,1,1,
+       0,0,0,
+       0,1,1)
+

@@ -1,0 +1,1302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="generator" content="HTML Tidy for Linux/x86 (vers 1st November 2003), see www.w3.org" />
+    <title>HTML Slidy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="copyright" content="Copyright &#169; 2015 CSIRO Marine and Atmospheric Research" />
+    <meta name="duration" content="5" />
+    <meta name="font-size-adjustment" content="-2" />
+    <link rel="stylesheet" href="slidy/slidy.css" type="text/css" />
+    <link rel="stylesheet" href="slidy/w3c-blue.css" type="text/css" />
+    <script src="slidy/slidy.js" charset="utf-8" type="text/javascript">
+    </script>
+  </head>
+
+  <body>
+  <div class="background">
+    <img alt="" id="head-icon" src="slidy/csirologo.png" />
+  </div>
+
+  <div class="background slanty">
+    <img src="graphics/w3c-logo-slanted.jpg" alt="slanted W3C logo" />
+  </div>
+
+  <div class="slide cover title">
+    <!-- hidden style graphics to ensure they are saved with other content -->
+    <img class="hidden" src="slidy/bullet.png" alt="" />
+    <img class="hidden" src="slidy/fold.gif" alt="" />
+    <img class="hidden" src="slidy/unfold.gif" alt="" />
+    <img class="hidden" src="slidy/fold-dim.gif" alt="" />
+    <img class="hidden" src="slidy/nofold-dim.gif" alt="" />
+    <img class="hidden" src="slidy/unfold-dim.gif" alt="" />
+    <img class="hidden" src="slidy/bullet-fold.gif" alt="" />
+    <img class="hidden" src="slidy/bullet-unfold.gif" alt="" />
+    <img class="hidden" src="slidy/bullet-fold-dim.gif" alt="" />
+    <img class="hidden" src="slidy/bullet-nofold-dim.gif" alt="" />
+    <img class="hidden" src="slidy/bullet-unfold-dim.gif" alt="" />
+    <br clear="all" />
+    <h1>ADT - Automatic / Algorithmic Differentiation through Tapenade</h1>
+    <p>
+      A tool to assist in the coding of C++ or Pascal numerical dynamic library
+      extensions to R.
+    </p>
+
+    <p>
+      contact: Paavo Jumppanen
+      <br />
+      email: <a href="mailto:paavo.jumppanen@csiro.au">paavo.jumppanen@csiro.au</a>
+      <br />
+      project repository: <a href="https://svnserv.csiro.au/svn/pelagic-svn/adt/trunk">https://svnserv.csiro.au/svn/pelagic-svn/adt/trunk</a>
+      <br />
+      <br />
+      <br />
+      <br />
+      <em>Hit the space bar or swipe left for next slide</em>
+    </p>
+  </div>
+
+  <div class="slide">
+    <h1>What is Automatic or Algorithmic Differentiation?</h1>
+
+    <ul class="incremental">
+      <li>
+        Automatic Differentiation is a <i>"mechanical"</i> process of calculating
+        machine precision differentials via the chain rule.
+      </li>
+
+      <li>
+        At its simplest level it can be done <em>by hand</em> but is more typically
+        is done through software.
+      </li>
+
+      <li>
+        Software based Automatic Differentiation is carried out using one of two approaches:
+        <ul>
+          <li>operator overloading in object oriented languages - CPPAD, ADOL-C etc.</li>
+          <li>code transformation programs / compilers - TAPENADE, ADIC, ADIFOR etc.</li>
+        </ul>
+      </li>
+
+      <li>
+        Generally speaking, operator overloading approaches are easier to implement
+        but are less optimisable. Code transformation approaches can incorporate common
+        sub-expression optimisations in the transformation and the resulting code is
+        also more easily optimised by optimising compilers.
+      </li>
+
+      <li>
+        differentials can be evaluated in one of two ways:
+        <ul>
+          <li>Forward Mode (also referred to as Tangent Mode)
+            <p>
+              In forward mode the partial derivative of a function with respect to
+              the input variables is obtained. No extra storage is required to evaluate it.
+            </p>
+          </li>
+          <li>Reverse Mode (also referred to as Adjoint Mode)
+            <p>
+              In reverse mode the gradient of a function with respect to the input variables
+              is obtained. This mode requires a backward sweep of the calculation and as such, it
+              is necessary to store intermediate values for later re-use. This is typically done
+              in a <i>stack</i> or <i>tape</i> and on complex problems can result in large memory
+              consumption.
+            </p>
+            <p>
+              Reverse mode is important in minimisation problems because calculating the gradient of
+              a function in N variables will require N evaluations of Forward mode code as opposed to
+              only one evaluation of Reverse mode code. The use of reverse mode can therefore
+              dramatically improve the speed of minimisation problems.
+            </p>
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        We use TAPENADE to create forward or reverse mode differentials. It is a mature tool
+        that was at the time of beginning to develop this tool, and perhaps still is, the most
+        capable code transformation solution to automatic differentiation.
+      </li>
+    </ul>
+  </div>
+
+  <div class="slide">
+    <h1>TAPENADE Forward Mode Example</h1>
+    <p>
+      Consider the FORTRAN function:
+    </p>
+    <pre>
+      DOUBLE PRECISION FUNCTION trig(x, y)
+        INTENT (IN) x, y
+        trig = cos(3 * x) + sin(y / 5)
+        RETURN
+      END
+    </pre>
+    <p>
+      Using TAPENADE in forward mode produces:
+    </p>
+    <pre>
+      !        Generated by TAPENADE     (INRIA, Tropics team)
+      !  Tapenade 3.7 (r4888) - 28 May 2013 10:47
+      !
+      !  Differentiation of trig in forward (tangent) mode:
+      !   variations   of useful results: trig
+      !   with respect to varying inputs: x y
+      !   RW status of diff variables: x:in y:in trig:out
+      DOUBLE PRECISION FUNCTION TRIG_D(x, xd, y, yd, trig)
+        REAL :: x, y, xd, yd
+        INTENT(IN) x, y, xd, yd
+        DOUBLE PRECISION :: trig
+        trig_d = yd*COS(y/5)/5 - 3*xd*SIN(3*x)
+        trig = COS(3*x) + SIN(y/5)
+        RETURN
+      END FUNCTION TRIG_D
+    </pre>
+    <p>
+      In studying the code above it should be apparent that the partial differentials
+      of <strong>trig</strong> with respect to <strong>x</strong> and <strong>y</strong>
+      are found through:
+    </p>
+    <pre>
+      x_dot = TRIG_D(x, 1, y, 0, trig)
+      y_dot = TRIG_D(x, 0, y, 1, trig)
+    </pre>
+    <p>
+      TAPENADE introduces the input variables <strong>xd</strong> and <strong>yd</strong>
+       to facilitate the application of the chain rule.
+    </p>
+  </div>
+
+  <div class="slide">
+    <h1>TAPENADE Reverse Mode Example</h1>
+    <p>
+      Consider again, the FORTRAN function:
+    </p>
+    <pre>
+      DOUBLE PRECISION FUNCTION trig(x, y)
+        INTENT (IN) x, y
+        trig = cos(3 * x) + sin(y / 5)
+        RETURN
+      END
+    </pre>
+    <p>
+      Using TAPENADE in reverse mode produces:
+    </p>
+    <pre>
+      !        Generated by TAPENADE     (INRIA, Tropics team)
+      !  Tapenade 3.7 (r4888) - 28 May 2013 10:47
+      !
+      !  Differentiation of trig in reverse (adjoint) mode:
+      !   gradient     of useful results: x y trig
+      !   with respect to varying inputs: x y
+      !   RW status of diff variables: x:incr y:incr trig:in-killed
+      SUBROUTINE TRIG_B(x, xb, y, yb, trigb)
+        REAL :: x, y, xb, yb
+        INTENT(IN) x, y
+        DOUBLE PRECISION :: trigb, trig
+        xb = xb - SIN(3*x)*3*trigb
+        yb = yb + COS(y/5)*trigb/5
+      END SUBROUTINE TRIG_B
+    </pre>
+    <p>
+      In studying the code above it should be clear that the gradient of <strong>trig</strong>
+      is found through:
+    </p>
+    <pre>
+      grad_x = 0
+      grad_y = 0
+      TRIG_B(x, grad_x, y, grad_y, 1)
+    </pre>
+    <p>
+      Again, TAPENADE introduces the variables <strong>xb</strong>, <strong>yb</strong>
+      and <strong>trigb</strong> to facilitate the application of the chain rule.
+    </p>
+  </div>
+
+  <div class="slide">
+  <h1>ADT Toolset Requirements</h1>
+  <p>
+    We wanted a toolset that:
+  </p>
+  <ul class="incremental">
+    <li>
+      can support forward and reverse mode differentiation that can be applied repeatedly
+      to obtain higher order differentials
+    </li>
+    <li>
+      can support a simple and flexible specification of <em>black box</em> functions
+      (single value functions with simple analytical derivatives that TAPENADE can
+      use instead of processing the code directly and which we may not have access to)
+    </li>
+    <li>
+      allows incorporating code into a project that is <u>not</u> to  be subject to
+      automatic differentiation and its inclusion should <u>not</u> break the ability of the
+      toolset to process code that is to be differentiated
+    </li>
+    <li>
+      can provide simplified multi-dimension array handling with arbitrary array base indexing
+      for regular and ragged arrays without compromising the speed of the code
+    </li>
+    <li>
+      can provide automatically generated interface code to R that presents the methods
+      we write and those that result from AD operations as R callable methods via the
+      .Call interface
+    </li>
+    <li>
+      can provide the above support for Pascal and C++ (or a workable subset thereof)
+    </li>
+    <p>
+      These requirements are fulfilled by:
+      <ul class="incremental">
+        <li>
+          The ADT command line tool combined with a command line version of TAPENADE
+        </li>
+        <li>
+          The ADLib (C++) and ADLibPascal (Pascal) support libraries
+        </li>
+      </ul>
+    </p>
+  </ul>
+  </div>
+
+  <div class="slide">
+    <h1>ADLib and ADLibPascal Support Libraries</h1>
+    <p>
+      ADLib is an ancillary library that provides simplified and efficient array programming
+      for C++. ADLibPascal implements the same support but for the Pascal language.
+    </p>
+    <p>
+      It implements:
+    </p>
+    <ul class="incremental">
+      <li>
+        support for the creation and management of arrays with up to 10 dimensions (can be
+        further extended should the need arise) with user defined starting indices and sizes
+      </li>
+      <li>
+        creation of an array as a single contiguous block of memory to aid in improved
+        computational performance and easier interfacing with R arrays
+      </li>
+      <li>
+        arrays of the (commonly used) intrinsic data types within the C/C++ language and most
+        of the intrinsic data types in the Pascal language.
+      </li>
+      <li>
+        To simplify coding and readability ADLib and ADLibPascal define aliases for the different
+        size and types of arrays.
+        <br>The general format of the type name follows the pattern,
+        <p>
+          <pre>
+            ARRAY_{number of dimensions}{type characters}
+          </pre>
+        </p>
+        <p>
+          The number of dimensions can be between 1 and 10 inclusive and the type characters map to
+          intrinsic types as in the following table.
+        </p>
+        <table style='border-collapse:collapse'>
+          <tr>
+            <th style='padding:0em 1em 0em 0em'>C++ type</th><th style='padding:0em 1em 0em 0em'>Pascal type</th><th style='padding:0em 1em 0em 0em'>type character</th>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>bool</td><td style='padding:0em 1em 0em 0em'>boolean</td><td style='padding:0em 1em 0em 0em'>B</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>char</td><td style='padding:0em 1em 0em 0em'>shortint</td><td style='padding:0em 1em 0em 0em'>C</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>unsigned char</td><td style='padding:0em 1em 0em 0em'>byte</td><td style='padding:0em 1em 0em 0em'>UC</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>int</td><td style='padding:0em 1em 0em 0em'>integer</td><td style='padding:0em 1em 0em 0em'>I</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>unsigned int</td><td style='padding:0em 1em 0em 0em'></td><td style='padding:0em 1em 0em 0em'>UI</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>short</td><td style='padding:0em 1em 0em 0em'>smallint</td><td style='padding:0em 1em 0em 0em'>S</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>unsigned short</td><td style='padding:0em 1em 0em 0em'>word</td><td style='padding:0em 1em 0em 0em'>US</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>long</td><td style='padding:0em 1em 0em 0em'>longint</td><td style='padding:0em 1em 0em 0em'>L</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>unsigned long</td><td style='padding:0em 1em 0em 0em'>longword</td><td style='padding:0em 1em 0em 0em'>UL</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>float</td><td style='padding:0em 1em 0em 0em'>single</td><td style='padding:0em 1em 0em 0em'>F</td>
+          </tr>
+          <tr>
+            <td style='padding:0em 1em 0em 0em'>double</td><td style='padding:0em 1em 0em 0em'>double</td><td style='padding:0em 1em 0em 0em'>D</td>
+          </tr>
+        </table>
+      </li>
+    </ul>
+  </div>
+
+  <div class="slide">
+    <h1>ADLib and ADLibPascal: Creating Arrays</h1>
+    <p>
+      Arrays can be created in one of two ways, either with explicitely defined size/shape using an <b>AdtArrayPlan</b> instance
+      (or the complimentary static create() functions), or implicitely by copying the shape of an existing array.
+    </p>
+    <p>
+      Explicitely specifying the array size and base indices is done through an AdtArrayPlan instance. The constructor is
+      overloaded to cater for different dimension arrays and follows the generalised form,
+    </p>
+    <pre>
+      AdtArrayPlan(int nBaseIndex1, int nSize1,
+                   int nBaseIndex2, int nSize2,
+                   int nBaseIndex3, int nSize3,
+                    .       .           .
+                    .       .           .
+                    .       .           . );
+    </pre>
+    <p>
+       As an example, lets say we want to create a series of 6 by 4 arrays whose indices are one based. We create an <b>AdtArrayPlan</b>
+       instance that describes the array size with,
+    </p>
+    <pre>
+      AdtArrayPlan SixByFour(1,6,1,4);
+    </pre>
+    <p>
+       Then we call the create method to make the array with,
+    </p>
+    <pre>
+      ARRAY_2D Array1 = 0;
+      ARRAY_2D Array2 = 0;
+      ARRAY_2I Array3 = 0;
+
+      SixByFour.create(MemAllocator, Array1);
+      SixByFour.create(MemAllocator, Array2);
+      SixByFour.create(MemAllocator, Array3);
+    </pre>
+  </div>
+
+  <div class="slide">
+    <h1>ADLib and ADLibPascal: Why Array Plans?</h1>
+    <p>
+       Internally within R, every array, irrespective of the number of dimensions and layout is stored as a single
+       contiguous block of memory (a vector in R terminology). If passed a pointer to an R array you would normally
+       have to manage the correct indexing yourself (potentially complex)
+    </p>
+    <p>
+     -- OR --
+    </p>
+    <p class="incremental">
+      Let an array plan do the work for you
+
+      <ul class="incremental">
+        <li>
+          ADLib arrays allocate enough storage for the data <u>plus</u> enough
+          extra storage to implement a lookup table in such a manner to make the
+          array look and behave as it would appear in an R context (albeit transposed)
+        </li>
+        <li>
+          The knowledge of how to create and initialise this lookup table adjoining
+          the array is contained in the <b>AdtArrayPlan</b> instance
+        </li>
+        <li>
+          As creating that object instance takes CPU time it is beneficial to split array
+          plan creation from array creation so that we are not unecessarily re-creating
+          the same plan over and over again (which would happen when creating many arrays of
+          the same shape)
+        </li>
+      </ul>
+    </p>
+    <div class="incremental">
+      <p>
+        Normally AdLib arrays are self contained but we can also simply create the lookup table part
+        such that it points into a supplied block of memory - aka an R array as aluded to above, for example:
+      </p>
+      <pre>
+        AdtArrayPlan    NineByEigth(1,9,1,8);
+        ARRAY_2D        AliasArray = 0;
+
+        NineByEight.create(MemAllocator, AliasArray, (void*)pR_ArrayMemory);
+      </pre>
+      <p>
+        which can now be indexed simply in code with something like,
+      </p>
+      <pre>
+        // Indexing the jth row and ith column of the R array passed in pR_ArrayMemory
+        // Note that indices are transposed in C++ as the language is row major
+        // whereas R is column major
+        v = AliasArray[i][j];
+      </pre>
+    </div>
+  </div>
+
+  <div class="slide">
+    <h1>ADLib and ADLibPascal: How the lookup table helps</h1>
+    <ul>
+      <li>
+        For a 3 dimensional array passed to us from R in <b>pR_ArrayMemory</b> to index it
+        manually requires
+        <pre>
+          // Assumes a 3 dimensional array with index base in variables nBase1, nBase2 and nBase3
+          // and index length in nLength1, nLength2 and nLength3
+          for (int i = nBase1 ; i < nBase1 + nLength1 ; i++)
+          { // Note the complex indirection which is potentially error prone!
+            double* pA = pR_ArrayMemory + (i - nBase1) * nLength2 * nLength3 * sizeof(*pR_ArrayMemory);
+
+            for (int j = nBase2 ; j < nBase2 + nLength2 ; j++)
+            { // Note the complex indirection which is potentially error prone!
+              double* pB = pA + (j - nBase2) * nLength3 * sizeof(*pR_ArrayMemory);
+
+              for (int k = nBase3 ; k < nBase3 + nLength3 ; k++)
+              {
+                pB[k - nBase3] = ... do something here ...;
+              }
+            }
+          }
+        </pre>
+      </li>
+      <li class="incremental">
+        For the same case using an array plan lookup we have
+        <pre>
+          // Assumes a 3 dimensional array with index base in variables nBase1, nBase2 and nBase3
+          // and index length in nLength1, nLength2 and nLength3 and ArrayPlan initialised with
+          // these dimensions.
+          ARRAY_3D  AliasArray = 0;
+          ArrayPlan.create(MemAllocator, AliasArray, (void*)pR_ArrayMemory);
+
+          for (int i = nBase1 ; i < nBase1 + nLength1 ; i++)
+          {
+            for (int j = nBase2 ; j < nBase2 + nLength2 ; j++)
+            {
+              for (int k = nBase3 ; k < nBase3 + nLength3 ; k++)
+              { // No complex pointer calculations required!
+                AliasArray[i][j][k] = ... do something here ...;
+              }
+            }
+          }
+        </pre>
+      </li>
+    </ul>
+  </div>
+
+  <div class="slide">
+    <h1>ADT command line utility</h1>
+    <div>
+      <p>
+        ADT is a command line utility that takes source code in C++ or Pascal programming languages and processes
+        it according to instructions provided in a <em>makefile</em> and via commands embedded in
+        comments within the code to be processed.
+      <p>
+    </div>
+    <p class="incremental">
+      It requires the TAPENADE tool from INRIA to do automatic differentiation of your code.
+    </p>
+    <p class="incremental">
+      It is built from self contained source code (no external dependencies) and can be built using
+      Microsoft Visual Studio on Windows machines and automake & gcc on Linux based
+      machines.
+    </p>
+    <p class="incremental">
+      With ADT and ADLib you can create dynamically libraries that interface with R whereby the interface
+      code between R and your module is automatically generated by ADT.
+    </p>
+    <div class="incremental">
+      <p>
+        An ADT module is made by creating a class derived from <b>AdtArrays</b> that is then processed by ADT.
+      </p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example</h1>
+    <p>
+      A simple example is the test-harness module Rosenbrock that implements the
+      Rosenbrock minimisation problem for testing minimisers.
+    </p>
+    <h3>Rosenbrock.hpp</h3>
+    <pre>
+      #include &lt;adtarrays.hpp&gt;
+      #include "adtR.hpp"
+
+      // -------------------------------------------------------------
+
+      class MinRosenbrock : public AdtArrays
+      {
+        protected:
+         /* AD_LIBNAME Rosenbrock */
+         /* AD_ALIAS Rb=D_MinRosenbrock */
+         /* AUTOINIT */
+         int     N;
+      #include "Rb_array_plans.hpp"
+
+      public:
+         MinRosenbrock(
+      #include "Rb_constructor_args.hpp"
+         );
+
+      #include "Rb_decl_lib_interface_methods.hpp"
+
+        double  rosenbrock(const ARRAY_1D X/*N*/);
+      };
+    </pre>
+    <ul class="incremental">
+      <li>
+        <b>Rosenbrock.hpp</b> includes the files <b>adtarrays.hpp</b> (needed for the array support) and <b>adtR.hpp</b> (needed for the R interface support).
+      </li>
+      <li>
+        It declares the class <b>MinRosenbrock</b>, which is derived from <b>AdtArrays</b>, and declares and implements the method <b>rosenbrock()</b> and the attribute <b>N</b>,
+        both used to implement our N order rosenbrock function.
+      </li>
+      <li>
+        It has a bunch of comments to instruct ADT how to process the file.
+      </li>
+    </ul>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <div>
+      <p>
+        The comments,
+      </p>
+
+      <pre>
+        /* AD_LIBNAME Rosenbrock */
+        /* AD_ALIAS Rb=D_MinRosenbrock */
+        /* AUTOINIT */
+      </pre>
+
+      <ul>
+        <li>
+          instruct ADT that the library name to be generated is Rosenbrock (<b>AD_LIBNAME</b> command)
+        </li>
+        <li>
+          instruct ADT to generate R interface code for this class (<b>AD_ALIAS</b> command)
+        </li>
+        <li>
+          instruct ADT to automatically initialise the <b>N</b> attribute (<b>AUTOINIT</b> command)
+        </li>
+      </ul>
+    </div>
+    <div class="incremental">
+      <div>
+        <p>
+          The comment in,
+        </p>
+
+        <pre>
+        double  rosenbrock(const ARRAY_1D X/*N*/);
+        </pre>
+
+        <ul>
+          <li>
+            instructs ADT that the array <b>X</b> has a dimension of <b>N</b>
+          </li>
+          <li>
+            The other include file directives are source code includes inserted to include the automatically generated R interface and intialisation code
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <h3>Rosenbrock.cpp</h3>
+    <pre>
+      #include "Rosenbrock.hpp"
+
+      MinRosenbrock::MinRosenbrock(
+      #include "Rb_constructor_args.hpp"
+      )
+      {
+        #include "Rb_constructor_locals.hpp"
+        #include "Rb_constructor_scalars_phase_1.hpp"
+        #include "Rb_constructor_arrays_phase_1.hpp"
+        #include "Rb_array_plans_init.hpp"
+      }
+
+      double MinRosenbrock::rosenbrock(const ARRAY_1D X/*N*/)
+      {
+        int cn;
+        double dSum;
+        double p1,p2,f1,f2;
+
+        dSum = 0.0;
+
+        for (cn = 1 ; cn <= N / 2 ; cn++)
+        {
+          p1 = X[2 * cn - 1];
+          p2 = X[2 * cn];
+          f1 = (p1 * p1 - p2);
+          f1 = 100 * f1 * f1;
+          f2 = (p1 - 1.0);
+          f2 = f2 * f2;
+          dSum += f1 + f2;
+        }
+
+        return (dSum);
+      }
+    </pre>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <p>In the class constructor</p>
+    <pre>
+      MinRosenbrock::MinRosenbrock(
+      #include "Rb_constructor_args.hpp"
+      )
+      {
+        #include "Rb_constructor_locals.hpp"
+        #include "Rb_constructor_scalars_phase_1.hpp"
+        #include "Rb_constructor_arrays_phase_1.hpp"
+        #include "Rb_array_plans_init.hpp"
+      }
+    </pre>
+    <ul>
+      <li>
+        <b>Rb_constructor_args.hpp</b> is an auto-generated file containing the contructor arguments list
+      </li>
+      <li>
+        <b>Rb_constructor_locals.hpp, Rb_constructor_scalars_phase_1.hpp, Rb_constructor_arrays_phase_1.hpp</b>
+        and <b>Rb_array_plans_init.hpp</b> are auto-generated files to initialise the class attributes
+      </li>
+      <li>
+        You can add whatever custom initialisation is required at any location in the constructor
+      </li>
+      <li>
+        The <b>_phase_1</b> in the auto-generated files refers to the phase of construction. In the AUTOINIT
+        command we can specify a phase number to split initialisation across stages. This then allows us to
+        have custom initialisation occur in between phases.
+      </li>
+    </ul>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <h3>Rosenbrock.mk</h3>
+    <p>
+      The makefile instructs ADT which files to process, which functions to differentiate and
+      which class to put the differentiated methods into.
+    </p>
+    <pre>
+      AD BEGIN
+        PATHS: "../include","../common", "../../src/ADLib";
+        WORKING DIRECTORY: "./work/";
+        CPP OPTIONS FILE: cpp_macros.txt;
+        FORTRAN INCLUDE FILES: stdlib.f;
+
+        CLASS D_MinRosenbrock(MinRosenbrock)
+          SOURCE FILE: Rosenbrock.cpp
+          OUTPUT FILES: d_Rosenbrock.cpp d_Rosenbrock.hpp
+        BEGIN
+          FUNCTION=rosenbrock OUTVAR=rosenbrock VAR=X MODE=r;
+          FUNCTION=ROSENBROCK_BX OUTVAR=xb1_x VAR=X MODE=f;
+        END
+
+        CLASS DR_MinRosenbrock(R_MinRosenbrock)
+          SOURCE FILE: R_Rosenbrock.cpp
+          OUTPUT FILES: dR_Rosenbrock.cpp dR_Rosenbrock.hpp
+        BEGIN
+        END
+      END
+    </pre>
+
+    <ul>
+      <li>
+        Each class entry instructs ADT to build a new class derived from the one listed
+        and apply the given AD operations to the specified FUNCTIONs
+      </li>
+      <li>
+        <b>rosenbrock</b> is differentiated in reverse(r) mode with respect to the input <b>X</b>,
+      </li>
+      <li>
+        <b>ROSENBROCK_BX</b>, which is the reverse mode differential(gradient of) <b>rosenbrock</b>
+        is differentiated in forward(f) mode with respect to the input X. This is used to
+        implement a hessian for the minimisation problem
+      </li>
+      <li>
+        We include a <i>null</i> differentiation step so that R interface code will be auto-generated
+        for the differentiated code in the previous step
+      </li>
+    </ul>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <h3>The R Interface</h3>
+    <p>
+      ADT creates constructor and destructor R function wrappers,
+    </p>
+    <pre>
+      EXPORT void Rb_destroy(SEXP rInstance);
+      EXPORT SEXP Rb_create(SEXP _N);
+    </pre>
+    <p>
+      along with getters and setters for class attributes and wrappers for
+      public class methods,
+    </p>
+    <pre>
+      EXPORT SEXP Rb_get_N(SEXP rInstance);
+      EXPORT SEXP Rb_set_N(SEXP rInstance, SEXP _N);
+      EXPORT SEXP Rb_R_rosenbrock(SEXP rInstance, SEXP X);
+      EXPORT SEXP Rb_R_nt_rosenbrock(SEXP rInstance, SEXP X);
+      EXPORT SEXP Rb_R_ROSENBROCK_BX(SEXP rInstance, SEXP X, SEXP xb1_x, SEXP rosenbrockb1_x);
+      EXPORT SEXP Rb_R_nt_ROSENBROCK_BX(SEXP rInstance, SEXP X, SEXP xb1_x, SEXP rosenbrockb1_x);
+      EXPORT SEXP Rb_R_ROSENBROCK_BX_DX(SEXP rInstance, SEXP X, SEXP xd2_x, SEXP xb1_x, SEXP xb1_xd2_x, SEXP rosenbrockb1_x);
+      EXPORT SEXP Rb_R_nt_ROSENBROCK_BX_DX(SEXP rInstance, SEXP X, SEXP xd2_x, SEXP xb1_x, SEXP xb1_xd2_x, SEXP rosenbrockb1_x);
+    </pre>
+    <p>
+      for the <b>D_MinRosenbrock</b> class. The <b>Rb_</b> prefix comes from the
+      definition in the comments of <b>Rosenbrock.hpp</b>,
+    </p>
+    <pre>
+      /* AD_ALIAS Rb=D_MinRosenbrock */
+    </pre>
+    <p>
+      There are two variants of each method wrapper <b>Rb_R_</b> and <b>Rb_R_nt_</b> as an
+      efficiency aid. Since C++ / Pascal represents arrays in row major whereas R
+      represents arrays in column major format, ADT automatically transposes the data
+      passed in via the constructor so that you don't have to mentally change from one representation
+      to the other when debugging. However, if a method is going to be called repeatedly by, for example,
+      a minimiser in R, then a large CPU cost penalty would occur. The <b>Rb_R_nt_</b> representations
+      are the same methods but without the transposing of data.
+    </p>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <h3>The R Interface</h3>
+    <p>
+      ADT also creates getters and setters for class attributes and wrappers for
+      public class methods,
+    </p>
+    <pre>
+      EXPORT SEXP RRb_R_hessian(SEXP rInstance, SEXP pX, SEXP pHessian);
+      EXPORT SEXP RRb_R_nt_hessian(SEXP rInstance, SEXP pX, SEXP pHessian);
+      EXPORT SEXP RRb_get_lxb1_x(SEXP rInstance, SEXP sArgList);
+      EXPORT SEXP RRb_set_lxb1_x(SEXP rInstance, SEXP _lxb1_x, SEXP sArgList);
+      EXPORT SEXP RRb_get_lxd2_x(SEXP rInstance, SEXP sArgList);
+      EXPORT SEXP RRb_set_lxd2_x(SEXP rInstance, SEXP _lxd2_x, SEXP sArgList);
+    </pre>
+    <p>
+      for the <b>DR_MinRosenbrock</b> class.
+    </p>
+    <div class="incremental">
+      <div>
+        <h3>Do you really want to write this stuff by hand for each method?</h3>
+        <pre>
+          SEXP DR_MinRosenbrock::R_internal_hessian(SEXP pX, SEXP pHessian, bool bTranslate)
+          {
+            ARRAY_1D _pX;
+            ARRAY_2D _pHessian;
+
+            R_CheckArgument("pX", "REALSXP", REALSXP, pX, __FILE__, __LINE__, 1, 1, N);
+            R_CheckArgument("pHessian", "REALSXP", REALSXP, pHessian, __FILE__, __LINE__, 2, 1, N, 1, N);
+
+            if (bTranslate)
+            {
+              _pX = 0;
+              Plan_1.create(MemAllocator, _pX);
+              AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)REAL(pX), (char*)_pX);
+
+              _pHessian = 0;
+              Plan_2.create(MemAllocator, _pHessian);
+              AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)REAL(pHessian), (char*)_pHessian);
+            }
+            else
+            {
+              _pX = 0;
+              Plan_1.create(MemAllocator, _pX, (void*)REAL(pX));
+
+              _pHessian = 0;
+              Plan_2.create(MemAllocator, _pHessian, (void*)REAL(pHessian));
+            }
+
+            SEXP Result = Rf_allocVector(REALSXP, 1);
+
+            PROTECT(Result);
+            REAL(Result)[0] = 0.0;
+            hessian(_pX, _pHessian);
+
+            if (bTranslate)
+            {
+              AdtArrayPlanActor::ADlib_to_R(MemAllocator, (char*)_pX, (char*)REAL(pX));
+              AdtArrayPlanActor::ADlib_to_R(MemAllocator, (char*)_pHessian, (char*)REAL(pHessian));
+            }
+
+            AdtArrayPlan::destroy(MemAllocator, _pX);
+            AdtArrayPlan::destroy(MemAllocator, _pHessian);
+            UNPROTECT(1);
+
+            return (Result);
+          }
+
+          SEXP DR_MinRosenbrock::R_hessian(SEXP pX, SEXP pHessian)
+          {
+            return (R_internal_hessian(pX, pHessian, true));
+          }
+
+          SEXP DR_MinRosenbrock::R_nt_hessian(SEXP pX, SEXP pHessian)
+          {
+            return (R_internal_hessian(pX, pHessian, false));
+          }
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <h3>The R Interface</h3>
+    <p>
+      The constructor/destructor, getters, setters and methods are also registered
+      as .Call callable functions in R with,
+    </p>
+    <pre>
+      static const R_CallMethodDef callMethods[] =
+      {
+        {"_Rb.create", (DL_FUNC)&Rb_create, 1},
+        {"_Rb.get.N", (DL_FUNC)&Rb_get_N, 1},
+        {"_Rb.set.N", (DL_FUNC)&Rb_set_N, 2},
+        {"_Rb.rosenbrock", (DL_FUNC)&Rb_R_rosenbrock, 2},
+        {"_Rb.nt.rosenbrock", (DL_FUNC)&Rb_R_nt_rosenbrock, 2},
+        {"_Rb.ROSENBROCK_BX", (DL_FUNC)&Rb_R_ROSENBROCK_BX, 4},
+        {"_Rb.nt.ROSENBROCK_BX", (DL_FUNC)&Rb_R_nt_ROSENBROCK_BX, 4},
+        {"_Rb.ROSENBROCK_BX_DX", (DL_FUNC)&Rb_R_ROSENBROCK_BX_DX, 6},
+        {"_Rb.nt.ROSENBROCK_BX_DX", (DL_FUNC)&Rb_R_nt_ROSENBROCK_BX_DX, 6},
+        {"_RRb.create", (DL_FUNC)&RRb_create, 1},
+        {"_RRb.hessian", (DL_FUNC)&RRb_R_hessian, 3},
+        {"_RRb.nt.hessian", (DL_FUNC)&RRb_R_nt_hessian, 3},
+        {"_RRb.get.lxb1_x", (DL_FUNC)&RRb_get_lxb1_x, 2},
+        {"_RRb.set.lxb1_x", (DL_FUNC)&RRb_set_lxb1_x, 3},
+        {"_RRb.get.lxd2_x", (DL_FUNC)&RRb_get_lxd2_x, 2},
+        {"_RRb.set.lxd2_x", (DL_FUNC)&RRb_set_lxd2_x, 3},
+        0
+      };
+
+      EXPORT void R_init_Rosenbrock(DllInfo* pInfo) // Called in a windows dll
+      {
+        R_registerRoutines(pInfo, 0, callMethods, 0, 0);
+      }
+
+      EXPORT void R_init_libRosenbrock(DllInfo* pInfo) // Called in a Linux/BSD dynamic library
+      {
+        R_registerRoutines(pInfo, 0, callMethods, 0, 0);
+      }
+    </pre>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <h3>The R Interface</h3>
+    <p>
+      ADT also creates R code wrappers to make the .Call method calls with,
+    </p>
+    <pre>
+      RRb.create <- function(N)
+      {
+        return (.Call('_RRb.create', as.integer(N)))
+      }
+
+      RRb.hessian <- function(Context, pX, pHessian)
+      {
+        return (.Call('_RRb.hessian', Context, as.double(pX), as.double(pHessian)))
+      }
+
+      RRb.nt.hessian <- function(Context, pX, pHessian)
+      {
+        return (.Call('_RRb.nt.hessian', Context, pX, pHessian))
+      }
+
+      RRb.get.lxb1_x <- function(Context, ...)
+      {
+        return (.Call('_RRb.get.lxb1_x', Context, list(...)))
+      }
+
+      RRb.set.lxb1_x <- function(Context, Arg, ...)
+      {
+        return (.Call('_RRb.set.lxb1_x', Context, as.double(Arg), list(...)))
+      }
+
+      RRb.get.lxd2_x <- function(Context, ...)
+      {
+        return (.Call('_RRb.get.lxd2_x', Context, list(...)))
+      }
+
+      RRb.set.lxd2_x <- function(Context, Arg, ...)
+      {
+        return (.Call('_RRb.set.lxd2_x', Context, as.double(Arg), list(...)))
+      }
+    </pre>
+    <p>
+      found in <b>RRb_R_interface.r</b> and similarly, wrappers in <b>Rb_R_interface.r</b>
+      for the exports of the <b>D_MinRosenbrock</b> class.
+    </p>
+  </div>
+
+  <div class="slide">
+    <h1>An ADT example - continued</h1>
+    <h3>Usage in R</h3>
+    <p>
+      To use the library we load it in R with,
+    </p>
+    <pre>
+        dyn.load("Rosenbrock.dll")
+    </pre>
+    <p>
+      load the wrapper source with,
+    </p>
+    <pre>
+      source('Rb_R_interface.r', print.eval=TRUE)
+      source('RRb_R_interface.r', print.eval=TRUE)
+    </pre>
+    <p>
+      create an object instance with,
+    </p>
+    <pre>
+      # create the object instance
+      RRb.Context <- RRb.create(RRb.N)
+    </pre>
+    <p>
+      To test the nlminb minimiser with the rosenbrock function and its gradient we would do,
+    </p>
+    <pre>
+      # Objective function.
+      objFn <- function(X)
+      {
+        return (Rb.nt.rosenbrock(RRb.Context, X))
+      }
+
+      # Gradient wrapper function. Note that Grad should be declared to the correct size in global scope for efficiency reasons.
+      gradFn <- function(X)
+      {
+        Rb.nt.ROSENBROCK_BX(RRb.Context, X, Grad, as.double(1.0))
+        return (Grad)
+      }
+
+      res<-nlminb(start = StartX, objective = objFn, gradient = gradFn)
+    </pre>
+  </div>
+
+  <div class="slide">
+    <h1>Arrays in Classes</h1>
+    <p>
+      Arrays can be automatically instantiated with the correct dimensions and
+      index base using comments to declare the sizes. Any variables used in the
+      dimensioning comments must be class attributes.
+    </p>
+    <pre>
+      class ArrayTest : public AdtArrays
+      {
+      protected:
+        /* AD_LIBNAME ArrayTest */
+        /* AD_ALIAS AT=R_ArrayTest */
+        /* AUTOINIT 1 */
+        int       ix;
+        int       iy;
+
+        // Test 1D arrays
+        ARRAY_1I  A1_I /*1:1+ix*/;
+        ARRAY_1D  A1_D /*1:ix*/;
+        ARRAY_2I  A2_IA /*1+ix,-1:iy*/;
+        ARRAY_2I  A2_IB /*-1:iy,1+ix*/;
+
+        /* AUTODEC 2 */
+        ARRAY_3D  A3_DA /*-1:iy,1+ix,A2_IA[<2>,<1>]+A2_IB[<1>,<2>]*/;
+        .
+        .
+        .
+    </pre>
+    <div class="incremental">
+      <div>
+        <p>
+          The array size comment syntax conforms to,
+        </p>
+        <pre>
+          /*[lower bound index 1:]upper bound index 1,
+            [lower bound index 2:]upper bound index 2, ...,
+            [lower bound index n:]upper bound index n*/
+        </pre>
+      </div>
+    </div>
+    <div class="incremental">
+      <p>
+        Note that <b>A3_DA</b> is a ragged array whose 3rd dimension is determined
+        by the contents of the arrays <b>A2_IA</b> and <b>A2_IB</b>. The &lt;<i>number</i>&gt;
+        in the expression tells ADT which non-ragged indice to use in indexing the ragged
+        dimension array.
+      </p>
+    </div>
+    <div class="incremental">
+      <p>
+        Also note that <b>ix,iy,A1_I,A1_D,A2_IA,A2_IB</b> are all initialised by the constructor
+        in phase 1 (determined by <b>/* AUTOINIT 1 */</b>) whilst <b>A3_DA</b> is
+        instantiated with a zero default in the constructor in phase 2 (determined by <b>/* AUTODEC 2 */</b>).
+      </p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <h1>R Array Getters and Setters</h1>
+    <p>
+      The implementation of Getters and Setters to class attributes is quite flexible. If you call,
+    </p>
+    <pre>
+      AT.get.A2_IA(Context)
+    </pre>
+    <p>
+      in R it will return the entire Array as an array object. If you call,
+    </p>
+    <pre>
+      AT.get.A2_IA(Context,3)
+    </pre>
+    <p>
+      it will return the Array slice with first index set to 3 as an array object. If <b>A2_IA</b> were an
+      R array then it is equivalent to <b>A2_IA[3,]</b>. If you call,
+    </p>
+    <pre>
+      AT.get.A2_IA(Context,3,1)
+    </pre>
+    <p>
+      it will return the Array element at location 3,1 as an integer. If <b>A2_IA</b> were an
+      R array then it is equivalent to <b>A2_IA[3,1]</b>.
+    </p>
+    <p>
+      Setters work in the same fashion but the R source data must be big enough to fill
+      the size of element the Setter is attempting to set. If not, the Setter will throw and R exception.
+    </p>
+  </div>
+
+  <div class="slide">
+    <h1>Including code <u>not</u> to be Differentiated</h1>
+    <p>
+      You may want to include special code within your class that is not differentiable
+      and including it in a ADT run may cause it to fail (as it violates the language subset
+      supported by ADT). This problem can be circumvented by putting the special code
+      inside a conditional compilation directive.
+    </p>
+    <pre>
+      #ifndef AD
+        // Put your special code here. AD is defined when ADT is compiling.
+        .
+        .
+        .
+      #endif
+    </pre>
+    <p>
+      ADT understands <b>#define</b> (only simple defines), <b>#ifdef</b>, <b>#ifndef</b>, <b>#else</b>
+      and <b>#include</b> pre-processor commands. The symbol <b>AD</b> is defined
+      during an ADT compilation.
+    </p>
+    <p>
+      Similarly, you may need to include header files into your source code that contain
+      code that ADT does not undertand. This problem can be avoided by using the &lt;&gt;
+      bracketed include directive.
+    </p>
+    <pre>
+      // This include is not parsed by ADT
+      #include &lt;string.h&gt;
+
+      // This include is parsed by ADT
+      #include "my_code.h"
+    </pre>
+  </div>
+
+  <div class="slide">
+    <h1>Language Limitations for Differentiable Code</h1>
+    <p>
+      ADT takes C++ source code and translates it to a FORTRAN form so that TAPENADE can
+      process it. This translation to and from FORTRAN imposes some language restrictions
+      to make the processing a more managable problem. Similarly, a lot of the more
+      advanced C++ programming capabilities (pointers and templates for example) are
+      <u>not</u> catered for. The following limitations apply:
+    </p>
+    <ul class="incremental">
+      <li>
+        Only intrinsic types and the array types defined in <b>AdtArrays.hpp</b> may be used in your code
+      </li>
+      <li>
+        Classes cannot be used in code that is to be automatically differentiated
+      </li>
+      <li>
+        Local variable declarations must be in one block at the beginning of a function definition (much like C syntax)
+        and combined declaration - initialisation is not allowed
+      </li>
+      <li>
+        Use of case to distinguish between variables and/or methods is not allowed. This is because the AD part carried
+        out by TAPENADE is in FORTRAN code which is case insensitive. Any discrimination by case is lost in the
+        translation to FORTRAN.
+      </li>
+      <li>
+        Any function to be automatically differentiated must be a public method of a class publically derived from <b>AdtArray</b>
+      </li>
+      <li>
+        Function overloading for differentiated code is not allowed (that is providing multiple implementations of the same
+        function that differ only by the function argument list)
+      </li>
+      <li>
+        Meta data is required in the form of comments to instruct ADT about the size of arrays and for the automatic creation
+        of R interface code
+      </li>
+    </ul>
+  </div>
+
+  <div class="slide">
+    <h1>ADT Naming Conventions</h1>
+    <p>
+      The naming convention used for the creation of new variables and functions by TAPENADE is an
+      extension of the TAPENADE default behaviour. Since the primary aim of ADT is to easily allow
+      higher order differentiation, even when using reverse mode, we need to create new variables in
+      a manner that will not result in name clashes with previous output. As such, the naming convention
+      in ADT includes an iteration number that corresponds to the number of the operation in the list
+      of FUNCTIONs to be AD'ed within the ADT makefile and the variables we are differentiating with respect to.
+    </p>
+    <p>
+      The variable and function naming conforms to the following templates:
+    </p>
+    <table>
+      <tr>
+        <th>FUNCTION</th><th></th>
+      </tr>
+      <tr>
+        <td>Forward Mode</td><td>{function name}_D{dependent variables}</td>
+      </tr>
+      <tr>
+        <td>Reverse Mode</td><td>{function name}_B{dependent variables}</td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th>VARIABLE</th><th></th>
+      </tr>
+      <tr>
+        <td>Forward Mode</td><td>{variable name}d{iteration}_{dependent variables}</td>
+      </tr>
+      <tr>
+        <td>Reverse Mode</td><td>{variable name}b{iteration}_{dependent variables}</td>
+      </tr>
+    </table>
+    <p>
+      For example:
+    </p>
+    <pre>
+      CLASS D_MinRosenbrock(MinRosenbrock) SOURCE FILE: Rosenbrock.cpp OUTPUT FILES: d_Rosenbrock.cpp d_Rosenbrock.hpp
+      BEGIN
+        FUNCTION=rosenbrock OUTVAR=rosenbrock VAR=X MODE=r; //Iteration number 1
+        FUNCTION=ROSENBROCK_BX OUTVAR=xb1_x VAR=X MODE=f;   //Iteration number 2
+      END
+    </pre>
+    <p>
+      produces the differentiated function <b>ROSENBROCK_BX</b> with the output gradient variable <b>xb1_x</b> and the
+      input scaling value <b>rosenbrockb1_x</b> because the dependent variable is <b>x</b> and the iteration number is 1
+      and the differentiated function <b>ROSENBROCK_BX_DX</b> with output variable <b>xb1_xd2_x</b> and input variable
+      <b>xd2_x</b> because the dependent variable is <b>x</b> and the iteration number is 2
+    </p>
+  </div>
+
+  <div class="slide">
+    <h1>TAPENADE Black Boxes</h1>
+    <p>
+      Normally if TAPENADE is to create differentiated code from your source it must know all the code
+      called within the method to be differentiated <u>or</u> must know how to differentiate calls to
+      functions it does not have the source to. The later is referred to as a black box routine, typical
+      examples of which TAPENADE already knows about are the trignometric intrinsics like <b>sin()</b> and <b>cos()</b>.
+    </p>
+    <p>
+      TAPENADE has a means for specifying black box routines but it is very ugly! Take for example, the
+      black box definition for the intrinsic function <b>sin()</b>
+    </p>
+    <pre>
+      function sin:
+      intrinsic:
+      shape: (param 1, result)
+      type: (metavar real, metavar real)
+      derivative:
+        binary(call(ident sin, expressions(metavar x)), none(),
+               expressions(binary(metavar x, none(), call(ident cos,
+               expressions(metavar x)))))
+    </pre>
+    <p>
+      To make the process more manageable ADT provides two additional and easier ways to
+      specify black box routines.
+    </p>
+  </div>
+
+  <div class="slide">
+    <h1>ADT Black Box Definitions</h1>
+    <p>
+      If you have a function that you have implemented but which has a simple analytical
+      solution, you can improve the preformance of the resulting differentiated code
+      that uses it by providing an inline black box definition. Doing so automatically
+      excludes the function source from TAPENADE and provides a TAPENADE style black
+      box definition. For example,
+    </p>
+    <pre>
+      // # Black box definition for polyA
+      // D/D(x) (4 * x) - 5;
+      double ArrayTest::polyA(double x)
+      {
+        double dResult;
+        dResult = (2 * x * x) - (5 * x) + 3;
+
+        return (dResult);
+      }
+    </pre>
+    <p>
+      The comment above the method implementation tells ADT to create a black box
+      definition with the specified result. Alternatively, if the above function was
+      in an external library whose code is not accesible then you can create a black
+      box definition file defining all the black boxes for each function in the
+      library. For example,
+    </p>
+    <pre>
+      # Black box definition for polyA
+      function polyA(x : real in) : real
+      begin
+        D/D(x) (4 * x) - 5;
+      end
+    </pre>
+    <p>
+      The definitions can then be included in the ADT makefile with,
+    </p>
+    <pre>
+      AD BEGIN
+        PATHS: "../include", "../../src/ADLib";
+        WORKING DIRECTORY: "./work/";
+        BLACKBOX: ArrayTest.bbdef;  //Include our black box definitions
+        CPP OPTIONS FILE: cpp_macros.txt;
+        FORTRAN INCLUDE FILES: stdlib.f;
+    </pre>
+  </div>
+
+  <div class="slide">
+    <h1>Summary</h1>
+    <p>
+      ADT is a tool to assist in the coding of C++ or Pascal numerical dynamic library
+      extensions to R. This presentation concentrated on the C++ language support
+      but there are direct functional equivalents provided for the Pascal language.
+    </p>
+    <p>
+      There is quite a bit of detail regarding how ADT manages the reverse mode
+      stack / tape that is not touched upon. For the most part, when working properly,
+      you need not know anything about it. This aspect of ADT has been left out so
+      as to not bore you with extraneous details.
+    </p>
+    <p>
+      ADT is as much as possible, platform agnostic. It builds and runs happily with
+      Microsoft Visual Studio or with Linux / BSD based operating systems running
+      gcc and the automake toolset. Likewise, it should compile and run with MinGW or
+      CygWin when gcc and automake are installed.
+    </p>
+    <p>
+      The source code is held in an IM&T managed SVN repository and is available
+      at request. The repository is at:
+    </p>
+    <p>
+      <a href="https://svnserv.csiro.au/svn/pelagic-svn/adt/trunk">https://svnserv.csiro.au/svn/pelagic-svn/adt/trunk</a>
+    </p>
+    <h3>Thank you</h3>
+  </div>
+  </body>
+</html>

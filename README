@@ -1,0 +1,387 @@
+ADT - Automatic Differentiation via Tapenade Utility
+----------------------------------------------------
+
+This utility application and associated support files allows you to produce
+Pascal units or C++ classes containing automatically differentiated code.
+
+Prerequisites
+-------------
+Before building Adt and the demonstration R library you need to ensure that you
+have Tapenade installed on your machine. Tapenade is available from:
+
+  http://www-sop.inria.fr/tropics/tapenade/downloading.html
+
+You can read more about Tapenade and automatic differentiation here:
+
+  http://www-sop.inria.fr/tropics/tapenade.html
+
+The Tapenade bin folder needs to be in the PATH environment variable so that it
+can be run without specifying a fully qualified path to the file. On Linux
+systems a good place to install tapenade is in /usr/share (eg. /usr/share/tapenade3.10).
+On Windows systems install under the Program Files folder (eg. C:\Program Files\tapenade3.10).
+
+To build ADT, on Linux distributions you must have gcc, flex, bison and the
+automake tool set installed and on Windows you must have either Visual Studio
+or cygwin with gcc and the automake toolset installed and flex and bison. Flex
+and Bison can be found here:
+
+http://www.gnu.org/software/flex
+
+and
+
+http://www.gnu.org/software/bison
+
+When installing Flex and Bison on Windows ensure that the path to the install
+location does not contain spaces as Bison doesn't handle paths with spaces
+correctly on the Windows build. The default install location is typically
+C:\Program Files\GnuWin32. Change it to C:\GnuWin32. The bin folder will also
+need to be in the system path so add C:\GnuWin32 to the system path using the
+Advanced System Settings in the control panel system section.
+
+In order to run the example project you will need to have R installed. R can be
+obtained from:
+
+http://www.r-project.org
+
+Further to these requirements, should you wish to build and run the Pascal
+example then you will also need to install lazarus and ensure that the Free Pascal
+compiler bin folder is in the PATH environment variable. Lazarus is available
+from here:
+
+http://www.lazarus.freepascal.org
+
+
+Building Adt on Linux
+---------------------
+Run the configure script to generated the necessary makefiles. That is, in
+the root folder for adt (the folder where the source package is installed -
+for example: /usr/src/adt-1.03), run the following in a command shell:
+
+  ./configure
+
+On completion run:
+
+  make clean
+
+and,
+
+  make
+
+and,
+
+  sudo make install
+
+If you have compile errors there are a number of possible reasons. Firstly, do
+you have the necessary tools installed (gcc, flex, bison, tapenade and R)? If
+you do, is tapenade and R in the search PATH and is R installed in a different
+location to where the configure script expects it to be? By default, configure
+assumes the R include files to be located in,
+
+/usr/share/R/include
+
+and the R shared library to be located in,
+
+/usr/lib/R/lib
+
+If your locations are different to these then you will have to run configure
+with options specifying the correct paths and the re-run make and
+sudo make install. That is,
+
+  ./configure --with-R-include-path={path to R include folder} --with-R-lib-path={path to R lib folder}
+
+For further information you can run,
+
+  ./configure --help
+
+When compiled without error you should have the libraries ADlib and ADlibErr
+installed in /usr/local/lib and adt installed in /usr/local/bin.
+Running,
+
+  adt
+
+should display the help text for adt.
+
+
+Building Adt on Windows
+-----------------------
+Building Adt on Windows can be done in one of two ways. Firstly, by using a
+CygWin or MinGW install with Automake utilities installed, adt can be built
+using the same procedure as for building under Linux, though you need to ensure
+you have the developer version of lapack installed so that the libblas library
+will be available.
+
+Alternatively, VC solution and workspace files are included in the obj folder
+and may be used to build adt using Visual C++. If building via Visual C++,
+it is necessary to install flex and bison and have them in the system path.
+
+A Windows compatible Flex can be found here:
+
+  http://gnuwin32.sourceforge.net/packages/flex.htm
+
+A Windows compatible Bison can be found here:
+
+  http://gnuwin32.sourceforge.net/packages/bison.htm
+
+When building with Visual C++ the executable will be in either the debug or
+release folder under the obj folder, depending on whether you choose to build
+a debug or release version.
+
+When the build is complete running,
+
+  ./objs/debug/adt
+
+or,
+
+  ./objs/release/adt
+
+should display the help text for adt.
+
+
+Running Adt
+-----------
+Before you run Adt you must ensure that you have Tapenade installed and
+running on your machine. Once tapenade is installed and can be run from a
+shell command prompt, you can run adt in the following manner.
+
+adt <makefile1>[ <makefile2> ...]
+
+The makefile adheres to the format detailed below. Required user data is
+enclosed in <>. Optional data is enclosed in [].
+
+Filenames and paths only need to be quoted when whitespace occurs in the name.
+Any extra arguments passed to tapenade using the USER parameter must be quoted
+in a single string. Single line comments begin with // and free formating of
+the makefile is allowed provided the syntax is preserved.
+
+The source code classes whose methods are being differentiated must be
+derrived from the tuseful class and can only use the array types provided by
+that class. Any other non-scalar types are not allowed in differentiated code.
+
+AD BEGIN
+  PATHS: <path 1[,path 2, ... ,path n]>;
+  SOURCE FILES: <include file 1[, include file 2, ... ,include file n]>;
+  WORKING DIRECTORY: <path to working directory>;
+
+  // language dependent file defining source code macro substitutions and array types - Required.
+  PASCAL OPTIONS FILE: pascal_macros.txt;
+
+  // language dependent file defining source code macro substitutions and array types - Required.
+  CPP OPTIONS FILE: cpp_macros.txt;
+
+  // file defining fortran functions needed to do the dfferentiation - Required.
+  FORTRAN INCLUDE FILES: stdlib.f;
+
+  CLASS <DifferentiatedClass_1> (<ClassBeingDifferentiated_1>)
+    SOURCE FILE: <class source file>
+    OUTPUT FILE: <differentiated class destination file>
+  BEGIN
+    FUNCTION=<function_1_to_differentiate> // The function to differentiate
+      OUTVAR=<ovar_1[,ovar_2,...,ovar_n]>  // Specify the output variables
+      VAR=<diff_wrt_var>                   // Specify the variable to differentiate with respect to
+      // Tapenade differentiation modes
+      // ------------------------------
+      // f = forward or tangent mode
+      // r = reverse mode
+      // m = multi-directional tangent mode
+      MODE=<Tapenade differentiation mode>
+      USER=<'extra tapenade command line args'>; // Additional command line arguments to pass to Tapenade - these must be bracketed by quotes
+    .
+    .
+    .
+
+    FUNCTION=<function_n_to_differentiate>
+      OUTVAR=<ovar_1[,ovar_2,...,ovar_n]>
+      VAR=<diff_wrt_var>
+      MODE=<Tapenade differentiation mode>
+      USER=<'extra tapenade command line args'>;
+  END
+
+  .
+  .
+  .
+
+  CLASS <DifferentiatedClass_n> (<ClassBeingDifferentiated_n>)
+    SOURCE FILE: <class source file>
+    OUTPUT FILE: <differentiated class destination file>
+  BEGIN
+    FUNCTION=<function_1_to_differentiate>
+      OUTVAR=<ovar_1[,ovar_2,...,ovar_n]>
+      VAR=<diff_wrt_var>
+      MODE=<Tapenade differentiation mode>
+      USER=<'extra tapenade command line args'>;
+    .
+    .
+    .
+
+    FUNCTION=<function_n_to_differentiate>
+      OUTVAR=<ovar_1[,ovar_2,...,ovar_n]>
+      VAR=<diff_wrt_var>
+      MODE=<Tapenade differentiation mode>
+      USER=<'extra tapenade command line args'>;
+  END
+
+Note that in the case of C++ code generation the OUTPUT FILE entry is
+replaced by OUTPUT FILES and both the destination header and source file
+names must be specified. That is
+
+  CLASS <DifferentiatedClass_n> (<ClassBeingDifferentiated_n>)
+    SOURCE FILE: <class source file>
+    OUTPUT FILES: <differentiated class destination header file>
+                  <differentiated class destination source file>
+  BEGIN
+    FUNCTION=<function_1_to_differentiate>
+      OUTVAR=<ovar_1[,ovar_2,...,ovar_n]>
+      VAR=<diff_wrt_var>
+      MODE=<Tapenade differentiation mode>
+      USER=<'extra tapenade command line args'>;
+    .
+    .
+    .
+
+    FUNCTION=<function_n_to_differentiate>
+      OUTVAR=<ovar_1[,ovar_2,...,ovar_n]>
+      VAR=<diff_wrt_var>
+      MODE=<Tapenade differentiation mode>
+      USER=<'extra tapenade command line args'>;
+  END
+END
+
+
+An R auto-differentiation example
+---------------------------------
+A complete auto-differentiation sample application can be found in the folder
+'sample'. This folder contains three sub folders : 'ArrayTest', 'common', 'include' and
+'Rosenbrock'.
+
+'ArrayTest' contains a test harness for the Pascal and C++ array support.
+
+'common' contains useful pascal source code.
+
+'include' contains files needed by adt to carry out the auto-differentiation.
+
+'Rosenbrock' contains files needed to build and run the example R dynamic library,
+which in this case, is a simple minimisation of the Rosenbrock minimisation
+problem for testing the convergence of minimisers.
+
+If all ran without error when building adt, then you should already have a
+complete shared library for this example. To run the example change directories
+to the Rosenbrock folder. For example,
+
+  cd sample/Rosenbrock
+
+now start R with,
+
+  R
+
+This assumes that R is in the executable search PATH. If it isn't then you will
+need to fully qualify the command.
+
+In the R session enter the following command,
+
+  source('Rosenbrock.R', print.eval=TRUE)
+
+On doing so and after a minute or so you should see some results displayed
+similar to the following:
+
+[1] "Comparison of minimisation run times and performance for different "
+[2] "implementations of the Rosenbrock minimisation problem with "
+[3] "150 parameters. Minimisation performed using nlminb. "
+                                               case objective    RMS.error
+1                                       All R based         0 7.307681e-12
+2                                     C++ objective         0 1.505906e-09
+3                       C++ objective - transposing         0 1.505906e-09
+4                        C++ objective and gradient         0 5.016338e-12
+5          C++ objective and gradient - transposing         0 5.016338e-12
+6               C++ objective, gradient and hessian         0 0.000000e+00
+7 C++ objective, gradient and hessian - transposing         0 0.000000e+00
+  convergence time.taken iterations fn.evaluations grad.evaluations
+1           0      43.12        501            818            83418
+2           1       0.73        321            539            68260
+3           1       0.76        321            539            68260
+4           1       0.65        496            856              496
+5           1       0.66        496            856              496
+6           0       0.43         18             29               19
+7           0       9.17        255            347              256
+                message
+1     X-convergence (3)
+2 false convergence (8)
+3 false convergence (8)
+4 false convergence (8)
+5 false convergence (8)
+6     X-convergence (3)
+7     X-convergence (3)
+
+This shows the comparative performance of various minimisations of the same
+Rosenbrock function, implemented in R, in C++ and with an without algorithmically
+differentiated gradient and hessian. Having access to machine precision
+gradient and hessian has a significant effect on minimiser performance. In
+particular, it is interesting to note that with machine precision gradient and
+hessian nlminb was able to find the solution exactly and in the shortest amount
+of time.
+
+Study the example code, the adt makefile and the Tapenade documentation to
+understand how it works and how to solve your own AD problems.
+
+
+An R auto-differentiation example - Pascal version
+--------------------------------------------------
+If you wish to code in Pascal rather than C++ a Pascal sample of the same
+problem is also included.
+
+Before you can run the Pascal version you must first build the shared library.
+Under Windows run the batch file build_lib.bat . Under Linux distributions run
+build_lib.sh .
+
+To run the Pascal example change directories to the Rosenbrock folder. For example,
+
+  cd sample/Rosenbrock
+
+now start R with,
+
+  R
+
+This assumes that R is in the executable search PATH. If it isn't then you will
+need to fully qualify the command.
+
+In the R session enter the following command,
+
+  source('RosenbrockPas.R', print.eval=TRUE)
+
+On doing so and after a minute or so you should see some results displayed
+similar to the following:
+
+[1] "Comparison of minimisation run times and performance for different "
+[2] "implementations of the Rosenbrock minimisation problem with "
+[3] "150 parameters. Minimisation performed using nlminb. "
+                                                  case objective    RMS.error
+1                                          All R based         0 7.307681e-12
+2                                     Pascal objective         0 2.354987e-11
+3                       Pascal objective - transposing         0 2.354987e-11
+4                        Pascal objective and gradient         0 1.473745e-11
+5          Pascal objective and gradient - transposing         0 1.473745e-11
+6               Pascal objective, gradient and hessian         0 0.000000e+00
+7 Pascal objective, gradient and hessian - transposing         0 5.933984e-14
+  convergence time.taken iterations fn.evaluations grad.evaluations
+1           0      42.62        501            818            83418
+2           1       1.47        574            938            98685
+3           1       1.58        574            938            98685
+4           1       0.67        494            824              494
+5           1       0.70        494            824              494
+6           0       0.49         18             29               19
+7           0       9.91        257            355              258
+                message
+1     X-convergence (3)
+2 false convergence (8)
+3 false convergence (8)
+4 false convergence (8)
+5 false convergence (8)
+6     X-convergence (3)
+7     X-convergence (3)
+
+This shows the comparative performance of various minimisations of the same
+Rosenbrock function, implemented in R, in Pascal and with an without algorithmically
+differentiated gradient and hessian. Having access to machine precision
+gradient and hessian has a significant effect on minimiser performance. In
+particular, it is interesting to note that with machine precision gradient and
+hessian nlminb was able to find the solution exactly and in the shortest amount
+of time.

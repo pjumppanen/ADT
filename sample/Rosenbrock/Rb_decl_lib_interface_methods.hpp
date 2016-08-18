@@ -1,0 +1,11 @@
+SEXP _get_N() const;
+SEXP _set_N(SEXP arg_N);
+SEXP R_internal_rosenbrock(SEXP X, bool bTranslate);
+SEXP R_rosenbrock(SEXP X);
+SEXP R_nt_rosenbrock(SEXP X);
+SEXP R_internal_ROSENBROCK_BX(SEXP X, SEXP xb1_x, SEXP rosenbrockb1_x, bool bTranslate);
+SEXP R_ROSENBROCK_BX(SEXP X, SEXP xb1_x, SEXP rosenbrockb1_x);
+SEXP R_nt_ROSENBROCK_BX(SEXP X, SEXP xb1_x, SEXP rosenbrockb1_x);
+SEXP R_internal_ROSENBROCK_BX_DX(SEXP X, SEXP xd2_x, SEXP xb1_x, SEXP xb1_xd2_x, SEXP rosenbrockb1_x, bool bTranslate);
+SEXP R_ROSENBROCK_BX_DX(SEXP X, SEXP xd2_x, SEXP xb1_x, SEXP xb1_xd2_x, SEXP rosenbrockb1_x);
+SEXP R_nt_ROSENBROCK_BX_DX(SEXP X, SEXP xd2_x, SEXP xb1_x, SEXP xb1_xd2_x, SEXP rosenbrockb1_x);

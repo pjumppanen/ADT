@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{15701429-0572-43BA-93A1-0A42983CB016}</ProjectGuid>
+    <RootNamespace>fdlibm51</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>__LITTLE_ENDIAN;WIN32;_DEBUG;_LIB;__STDC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>__LITTLE_ENDIAN;WIN32;_DEBUG;_LIB;__STDC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>__LITTLE_ENDIAN;WIN32;NDEBUG;_LIB;__STDC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat />
+      <PrecompiledHeaderFile />
+      <PrecompiledHeaderOutputFile />
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>__LITTLE_ENDIAN;WIN32;NDEBUG;_LIB;__STDC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_acos.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_acosh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_asin.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_atan2.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_atanh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_cosh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_exp.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_fmod.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_gamma.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_gamma_r.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_hypot.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_j0.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_j1.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_jn.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_lgamma.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_lgamma_r.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_log.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_log10.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_pow.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_remainder.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_rem_pio2.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_scalb.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_sinh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\e_sqrt.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\k_cos.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\k_rem_pio2.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\k_sin.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\k_standard.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\k_tan.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\libm-dllversion.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_asinh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_atan.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_cbrt.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_ceil.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_copysign.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_cos.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_erf.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_expm1.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_fabs.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_finite.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_floor.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_frexp.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_ilogb.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_isnan.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_ldexp.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_lib_version.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_log1p.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_logb.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_matherr.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_modf.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_nextafter.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_rint.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_scalbn.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_signgam.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_significand.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_sin.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_tan.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\s_tanh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_acos.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_acosh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_asin.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_atan2.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_atanh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_cosh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_exp.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_fmod.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_gamma.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_gamma_r.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_hypot.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_j0.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_j1.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_jn.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_lgamma.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_lgamma_r.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_log.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_log10.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_pow.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_remainder.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_scalb.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_sinh.c" />
+    <ClCompile Include="..\src\fdlibm-5.2\src\w_sqrt.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

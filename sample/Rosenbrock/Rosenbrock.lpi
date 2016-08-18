@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <PathDelim Value="\"/>
+    <General>
+      <Flags>
+        <MainUnitHasCreateFormStatements Value="False"/>
+        <MainUnitHasTitleStatement Value="False"/>
+      </Flags>
+      <MainUnit Value="0"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1" Active="Default">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+        <HostApplicationFilename Value="C:\Program Files\R\R-2.15.1\bin\i386\Rgui.exe"/>
+        <WorkingDirectory Value="C:\cygwin\usr\src\adt\sample\Rosenbrock"/>
+      </local>
+    </RunParams>
+    <Units Count="42">
+      <Unit0>
+        <Filename Value="RosenbrockPas.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="RosenbrockPas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="5" Y="9"/>
+        <UsageCount Value="266"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="MinRosenbrock_Unit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="MinRosenbrock_Unit"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="29"/>
+        <CursorPos X="1" Y="44"/>
+        <UsageCount Value="265"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="D_MinRosenbrock_Unit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="D_MinRosenbrock_Unit"/>
+        <EditorIndex Value="11"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="73"/>
+        <CursorPos X="1" Y="73"/>
+        <UsageCount Value="265"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="R_MinRosenbrock_Unit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="R_MinRosenbrock_Unit"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="52"/>
+        <CursorPos X="54" Y="72"/>
+        <UsageCount Value="265"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="DR_MinRosenbrock_Unit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="DR_MinRosenbrock_Unit"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="20"/>
+        <UsageCount Value="265"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="gutil.pp"/>
+        <UnitName Value="gutil"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="36"/>
+        <CursorPos X="1" Y="39"/>
+        <UsageCount Value="256"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="gset.pp"/>
+        <UnitName Value="gset"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="36"/>
+        <CursorPos X="1" Y="65"/>
+        <UsageCount Value="256"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="gmap.pp"/>
+        <UnitName Value="gmap"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="36"/>
+        <CursorPos X="1" Y="65"/>
+        <UsageCount Value="256"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="C:\cygwin\usr\src\adt\sample\Rosenbrock\$(ProjOutDir)..\..\src\ADLibPascal\adtalias.pas"/>
+        <UnitName Value="adtalias"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="C:\cygwin\usr\src\adt\sample\Rosenbrock\$(ProjOutDir)..\..\src\ADLibPascal\adtalloc.pas"/>
+        <UnitName Value="adtalloc"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="C:\cygwin\usr\src\adt\sample\Rosenbrock\$(ProjOutDir)..\..\src\ADLibPascal\adtarray.pas"/>
+        <UnitName Value="adtarray"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\..\src\ADLibPascal\adtalias.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="adtalias"/>
+        <EditorIndex Value="16"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\..\src\ADLibPascal\adtalloc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="adtalloc"/>
+        <EditorIndex Value="17"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="229"/>
+        <CursorPos X="1" Y="249"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\..\src\ADLibPascal\adtarray.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="adtarray"/>
+        <EditorIndex Value="18"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2663"/>
+        <CursorPos X="39" Y="2671"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="..\..\src\ADLibPascal\adtcommon.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="adtcommon"/>
+        <EditorIndex Value="21"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="573"/>
+        <CursorPos X="1" Y="590"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="adtR"/>
+        <EditorIndex Value="22"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1024"/>
+        <CursorPos X="1" Y="1038"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="..\..\src\ADLibPascal\Raccess.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Raccess"/>
+        <EditorIndex Value="23"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="209"/>
+        <CursorPos X="1" Y="231"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\garrayutils.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="garrayutils"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gdeque.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gdeque"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\ghashmap.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ghashmap"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\ghashset.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ghashset"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gmap.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gmap"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="93"/>
+        <CursorPos X="1" Y="107"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gpriorityqueue.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gpriorityqueue"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="27"/>
+        <CursorPos X="41" Y="47"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gqueue.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gqueue"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gset.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gset"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gstack.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gstack"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gutil.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gutil"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gvector.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gvector"/>
+        <UsageCount Value="116"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="RRb_impl_lib_interface_globals.pas"/>
+        <UnitName Value="RRb_impl_lib_interface_globals"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="85"/>
+        <CursorPos X="1" Y="100"/>
+        <UsageCount Value="57"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="RRb_decl_lib_interface_constructor.pas"/>
+        <UnitName Value="RRb_decl_lib_interface_constructor"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="1"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="Rb_impl_lib_interface_constructor.pas"/>
+        <UnitName Value="Rb_impl_lib_interface_constructor"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="51"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="RRb_impl_lib_interface_constructor.pas"/>
+        <UnitName Value="RRb_impl_lib_interface_constructor"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="4"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="Rb_constructor_scalars_phase_1.pas"/>
+        <UnitName Value="Rb_constructor_scalars_phase_1"/>
+        <EditorIndex Value="19"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="Rb_array_plans_init.pas"/>
+        <UnitName Value="Rb_array_plans_init"/>
+        <EditorIndex Value="20"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="..\..\src\ADLibPascal\adtarray_impl.inc"/>
+        <EditorIndex Value="15"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2345"/>
+        <CursorPos X="1" Y="2365"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit34>
+      <Unit35>
+        <Filename Value="RRb_constructor_scalars_phase_1.pas"/>
+        <UnitName Value="RRb_constructor_scalars_phase_1"/>
+        <EditorIndex Value="12"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="RRb_constructor_arrays_phase_1.pas"/>
+        <UnitName Value="RRb_constructor_arrays_phase_1"/>
+        <EditorIndex Value="13"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="7"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="RRb_array_plans_init.pas"/>
+        <UnitName Value="RRb_array_plans_init"/>
+        <EditorIndex Value="14"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <UnitName Value="RRb_impl_lib_interface_methods"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="20"/>
+        <CursorPos X="1" Y="44"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="RRb_decl_lib_interface_globals.pas"/>
+        <UnitName Value="RRb_decl_lib_interface_globals"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit39>
+      <Unit40>
+        <Filename Value="RRb_impl_lib_init.pas"/>
+        <UnitName Value="RRb_impl_lib_init"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="50" Y="6"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit40>
+      <Unit41>
+        <Filename Value="RRb_lib_exports.pas"/>
+        <UnitName Value="RRb_lib_exports"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit41>
+    </Units>
+    <JumpHistory Count="29" HistoryIndex="28">
+      <Position1>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <Caret Line="34" Column="1" TopLine="16"/>
+      </Position1>
+      <Position2>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <Caret Line="36" Column="1" TopLine="16"/>
+      </Position2>
+      <Position3>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <Caret Line="40" Column="1" TopLine="16"/>
+      </Position3>
+      <Position4>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <Caret Line="42" Column="1" TopLine="18"/>
+      </Position4>
+      <Position5>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <Caret Line="43" Column="1" TopLine="19"/>
+      </Position5>
+      <Position6>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <Caret Line="44" Column="1" TopLine="20"/>
+      </Position6>
+      <Position7>
+        <Filename Value="R_MinRosenbrock_Unit.pas"/>
+        <Caret Line="59" Column="1" TopLine="36"/>
+      </Position7>
+      <Position8>
+        <Filename Value="R_MinRosenbrock_Unit.pas"/>
+        <Caret Line="64" Column="1" TopLine="52"/>
+      </Position8>
+      <Position9>
+        <Filename Value="R_MinRosenbrock_Unit.pas"/>
+        <Caret Line="66" Column="1" TopLine="52"/>
+      </Position9>
+      <Position10>
+        <Filename Value="R_MinRosenbrock_Unit.pas"/>
+        <Caret Line="72" Column="54" TopLine="52"/>
+      </Position10>
+      <Position11>
+        <Filename Value="RRb_impl_lib_interface_globals.pas"/>
+        <Caret Line="14" Column="1" TopLine="1"/>
+      </Position11>
+      <Position12>
+        <Filename Value="RRb_impl_lib_interface_globals.pas"/>
+        <Caret Line="6" Column="1" TopLine="1"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gmap.pp"/>
+        <Caret Line="107" Column="1" TopLine="93"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\..\src\ADLibPascal\adtarray.pas"/>
+        <Caret Line="2668" Column="1" TopLine="2654"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gmap.pp"/>
+        <Caret Line="107" Column="1" TopLine="93"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\..\src\ADLibPascal\adtarray.pas"/>
+        <Caret Line="2668" Column="1" TopLine="2663"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\..\src\ADLibPascal\fcl-stl\gmap.pp"/>
+        <Caret Line="107" Column="1" TopLine="93"/>
+      </Position17>
+      <Position18>
+        <Filename Value="RRb_impl_lib_interface_methods.pas"/>
+        <Caret Line="44" Column="1" TopLine="20"/>
+      </Position18>
+      <Position19>
+        <Filename Value="RRb_impl_lib_interface_globals.pas"/>
+        <Caret Line="120" Column="1" TopLine="93"/>
+      </Position19>
+      <Position20>
+        <Filename Value="RRb_impl_lib_interface_globals.pas"/>
+        <Caret Line="99" Column="7" TopLine="139"/>
+      </Position20>
+      <Position21>
+        <Filename Value="RRb_impl_lib_interface_globals.pas"/>
+        <Caret Line="166" Column="1" TopLine="139"/>
+      </Position21>
+      <Position22>
+        <Filename Value="RRb_decl_lib_interface_globals.pas"/>
+        <Caret Line="1" Column="11" TopLine="1"/>
+      </Position22>
+      <Position23>
+        <Filename Value="RRb_impl_lib_init.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position23>
+      <Position24>
+        <Filename Value="RRb_impl_lib_init.pas"/>
+        <Caret Line="4" Column="47" TopLine="1"/>
+      </Position24>
+      <Position25>
+        <Filename Value="RRb_impl_lib_init.pas"/>
+        <Caret Line="6" Column="66" TopLine="1"/>
+      </Position25>
+      <Position26>
+        <Filename Value="RRb_impl_lib_init.pas"/>
+        <Caret Line="6" Column="67" TopLine="1"/>
+      </Position26>
+      <Position27>
+        <Filename Value="RRb_impl_lib_init.pas"/>
+        <Caret Line="4" Column="47" TopLine="1"/>
+      </Position27>
+      <Position28>
+        <Filename Value="RosenbrockPas.lpr"/>
+        <Caret Line="7" Column="10" TopLine="1"/>
+      </Position28>
+      <Position29>
+        <Filename Value="RosenbrockPas.lpr"/>
+        <Caret Line="9" Column="27" TopLine="1"/>
+      </Position29>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="RosenbrockPas"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir);$(ProjOutDir)..\common"/>
+      <OtherUnitFiles Value="$(ProjOutDir)..\common;$(ProjOutDir)..\..\src\ADLibPascal;$(ProjOutDir)..\..\src\ADLibPascal\fcl-stl;..\..\src\ADLibPascal;..\..\src\ADLibPascal\fcl-stl"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <SyntaxMode Value="Delphi"/>
+      </SyntaxOptions>
+    </Parsing>
+    <CodeGeneration>
+      <Optimizations>
+        <OptimizationLevel Value="0"/>
+      </Optimizations>
+    </CodeGeneration>
+    <Linking>
+      <Options>
+        <ExecutableType Value="Library"/>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+      <ExecuteBefore>
+        <Command Value="..\..\obj\release\ADT.exe RosenbrockPas.mk"/>
+        <CompileReasons Run="False"/>
+      </ExecuteBefore>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="RRb_impl_lib_interface_globals.pas"/>
+        <Line Value="166"/>
+      </Item1>
+    </BreakPoints>
+    <Watches Count="7">
+      <Item1>
+        <Expression Value="bOk"/>
+        <Enabled Value="False"/>
+      </Item1>
+      <Item2>
+        <Expression Value="pN"/>
+      </Item2>
+      <Item3>
+        <Expression Value="rN"/>
+      </Item3>
+      <Item4>
+        <Expression Value="N"/>
+      </Item4>
+      <Item5>
+        <Expression Value="this"/>
+      </Item5>
+      <Item6>
+        <Expression Value="this"/>
+        <DisplayStyle Value="wdfHex"/>
+      </Item6>
+      <Item7>
+        <Expression Value="No2"/>
+      </Item7>
+    </Watches>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+  <EditorMacros Count="0"/>
+</CONFIG>

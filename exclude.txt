@@ -1,0 +1,12 @@
+.obj
+.pdb
+.dll
+.svn
+.vs
+.tlog
+\debug
+\release
+\work
+.sdf
+.opendb
+.sln

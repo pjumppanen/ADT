@@ -1,0 +1,10 @@
+Title:		FDLIBM
+Version:	5.1
+Description: 	FDLIBM is a C math library for machines that support IEEE 754 
+		floating-point arithmetic. 
+Author: 	Kwok C Ng (kwok.ng@sunpro.eng.sun.com)
+Maintained-hy: 	fdlibm-comments@sunpro.eng.sun.com
+Maintained-at:	sunsite.unc.edu
+Platforms:	Require ANSI C compiler with IEEE 754 style arithmetic
+Copying-Policy: Freely Redistributable
+Keywords:	libm,exp,log,sin,cos,floating-point,IEEE754

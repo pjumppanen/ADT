@@ -1,0 +1,82 @@
+#% Do not delete the line below; configure depends on this
+#  \DeclareLaTeXClass[book]{ADTbook}
+Input stdclass.inc
+
+# %%% SourceCode Environment
+Style SourceCode
+  LatexType             Environment
+  LatexName             source_code_l
+  FreeSpacing           1
+  TopSep                0.7
+	BottomSep             0.7
+	ParSep                0
+  ParIndent             ""
+  LeftMargin            "M"
+
+  Font
+    Family              Typewriter
+    Shape               Upright
+    Size                Normal
+  EndFont
+
+  Preamble
+        \newenvironment{source_code_l}
+                {
+                %comment
+                \parindent=0.4em
+                \everypar=
+                {
+                  \hangindent=0.4em
+                  \hangafter=1
+                }
+                \ttfamily
+                \upshape
+                \normalsize
+                \parskip=0em
+                \vskip 0.7em
+                }
+                {
+                \vskip 0.7em
+                \par
+                }
+  EndPreamble
+End
+
+Style GrammarRule
+  LatexType             Environment
+  LatexName             grammar_rule_l
+  TopSep                0.7
+	BottomSep             0.7
+  ParSep                0.7
+  ParIndent             -"MM"
+  LeftMargin            "MMMM"
+
+  Font
+    Family              Typewriter
+    Shape               Upright
+    Size                Normal
+  EndFont
+
+  Preamble
+        \newenvironment{grammar_rule_l}
+                {
+                %comment
+                \everypar=
+                {
+                  \parindent=0em
+                  \hangindent=2em
+                  \hangafter=1
+                }
+                \ttfamily
+                \upshape
+                \normalsize
+                \parskip=0.7em
+                \vskip 0.7em
+                }
+                {
+                \vskip 0.7em
+                \par
+                }
+  EndPreamble
+End
+

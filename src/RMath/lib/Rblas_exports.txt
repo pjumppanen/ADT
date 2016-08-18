@@ -1,0 +1,114 @@
+Microsoft (R) COFF/PE Dumper Version 12.00.31101.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file C:\Program Files\R\R-3.2.1\bin\i386\Rblas.dll
+
+File Type: DLL
+
+  Section contains the following exports for Rblas.dll
+
+    00000000 characteristics
+    5582F9C6 time date stamp Fri Jun 19 03:03:02 2015
+        0.00 version
+           1 ordinal base
+          74 number of functions
+          74 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00001500 dasum_
+          2    1 00001610 daxpy_
+          3    2 0000D080 dcabs1_
+          4    3 00001780 dcopy_
+          5    4 000018C0 ddot_
+          6    5 00001A10 dgbmv_
+          7    6 000020E0 dgemm_
+          8    7 00002960 dgemv_
+          9    8 00002F00 dger_
+         10    9 000031B0 dnrm2_
+         11    A 00003280 drot_
+         12    B 00003380 drotg_
+         13    C 00003560 drotm_
+         14    D 000038B0 drotmg_
+         15    E 00003C40 dsbmv_
+         16    F 00004420 dscal_
+         17   10 00004610 dspmv_
+         18   11 00005000 dspr2_
+         19   12 00004CA0 dspr_
+         20   13 000055F0 dswap_
+         21   14 00005720 dsymm_
+         22   15 00005FD0 dsymv_
+         23   16 00006A80 dsyr2_
+         24   17 00007010 dsyr2k_
+         25   18 000066F0 dsyr_
+         26   19 000079B0 dsyrk_
+         27   1A 000081A0 dtbmv_
+         28   1B 00008B10 dtbsv_
+         29   1C 000094E0 dtpmv_
+         30   1D 00009C00 dtpsv_
+         31   1E 0000A310 dtrmm_
+         32   1F 0000B060 dtrmv_
+         33   20 0000B910 dtrsm_
+         34   21 0000C7C0 dtrsv_
+         35   22 0000D0A0 dzasum_
+         36   23 0000D150 dznrm2_
+         37   24 0000CFE0 idamax_
+         38   25 0000D240 izamax_
+         39   26 000014C0 lsame_
+         40   27 0000D350 zaxpy_
+         41   28 0000D4B0 zcopy_
+         42   29 0000D570 zdotc_ = _zhemv_
+         43   2A 0000D6A0 zdotu_
+         44   2B 00015FA0 zdrot_
+         45   2C 0000D7D0 zdscal_
+         46   2D 000161A0 zgbmv_
+         47   2E 00022E10 zgemm_
+         48   2F 0000D870 zgemv_
+         49   30 0000E2A0 zgerc_
+         50   31 00016DF0 zgeru_
+         51   32 000170C0 zhbmv_
+         52   33 00017D60 zhemm_
+         53   34 0000E570 zhemv_
+         54   35 0000F110 zher2_
+         55   36 0000FAD0 zher2k_
+         56   37 00018D30 zher_
+         57   38 00019340 zherk_ = _zhpmv_
+         58   39 0001A340 zhpmv_
+         59   3A 0001B360 zhpr2_
+         60   3B 0001AE40 zhpr_
+         61   3C 0001BC50 zrotg_
+         62   3D 00010FD0 zscal_
+         63   3E 00011060 zswap_
+         64   3F 0001BE80 zsymm_
+         65   40 0001CDA0 zsyr2k_
+         66   41 0001DFD0 zsyrk_
+         67   42 0001EDD0 ztbmv_
+         68   43 0001FE30 ztbsv_
+         69   44 00021150 ztpmv_
+         70   45 00021EC0 ztpsv_
+         71   46 00011140 ztrmm_
+         72   47 00012700 ztrmv_
+         73   48 00013570 ztrsm_
+         74   49 00014EF0 ztrsv_
+
+  Summary
+
+        1000 .CRT
+        1000 .bss
+        1000 .data
+        2000 .debug_abbrev
+        1000 .debug_aranges
+        1000 .debug_frame
+        8000 .debug_info
+        2000 .debug_line
+        2000 .debug_loc
+        1000 .debug_ranges
+        1000 .debug_str
+        1000 .edata
+        1000 .idata
+        1000 .rdata
+        1000 .reloc
+        1000 .rsrc
+       25000 .text
+        1000 .tls

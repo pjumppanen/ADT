@@ -1,0 +1,5 @@
+AM_CPPFLAGS = -I./make_parse -I./fortran_parse -I./delphi_parse -I./cpp_parse -I./java_parse -I./expression_parse -I./blackbox_parse -I../src
+
+bin_PROGRAMS = adt
+adt_SOURCES = ../src/main.cpp ../src/adtcommon.cpp ../src/adtautomate.cpp ../src/adtblackbox.cpp ../src/adtexpression.cpp ../src/adtutils.cpp ../src/adtparser.cpp ../src/adtmake.cpp ../src/adtfortran.cpp ../src/adtdelphi.cpp ../src/adtcpp.cpp ../src/adtjava.cpp ../src/make_y_wrap.c ../src/make_l_wrap.c ../src/cpp_y_wrap.c ../src/cpp_l_wrap.c ../src/java_y_wrap.c ../src/java_l_wrap.c ../src/delphi_y_wrap.c ../src/delphi_l_wrap.c ../src/fortran_y_wrap.c ../src/fortran_l_wrap.c ../src/expression_y_wrap.c ../src/expression_l_wrap.c ../src/black_box_y_wrap.c ../src/black_box_l_wrap.c
+adt_DEPENDENCIES = ./make_parse/libmake_l.a ./make_parse/libmake_y.a ./fortran_parse/libfortran_l.a ./fortran_parse/libfortran_y.a ./delphi_parse/libdelphi_l.a ./delphi_parse/libdelphi_y.a ./cpp_parse/libcpp_l.a ./cpp_parse/libcpp_y.a ./java_parse/libjava_l.a ./java_parse/libjava_l.a ./expression_parse/libexpression_l.a ./expression_parse/libexpression_y.a ./blackbox_parse/libblackbox_l.a ./blackbox_parse/libblackbox_y.a

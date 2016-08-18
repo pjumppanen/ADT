@@ -1,0 +1,7 @@
+# Black box definition for pow
+function pow(x : real in, y : real in) : real
+begin
+  D/D(.) 1,
+  D/D(x) .* y * pow(x, y - 1),
+  D/D(y) .* log(x) * pow(x, y);
+end

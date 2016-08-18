@@ -1,0 +1,7 @@
+ADT - Automatic Differentiation via Tepenade Utility
+----------------------------------------------------
+
+This utility application and associated support files allows you to produce
+Pascal units or C++ classes containing automatically differentiated code. For
+more information on building the tool and associated libraries please consult
+the README file.
