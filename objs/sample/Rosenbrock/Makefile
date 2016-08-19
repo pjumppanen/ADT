@@ -211,13 +211,13 @@ AUTOMAKE = automake-1.14
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =  -g -DDEBUG -I "/usr/share/R/include"
+CFLAGS =  -O2 -I "/usr/share/R/include"
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS =  -g -DDEBUG -I "/usr/share/R/include"
+CXXFLAGS =  -O2 -I "/usr/share/R/include"
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -332,7 +332,7 @@ lib_LTLIBRARIES = libRosenbrock.la
 libRosenbrock_la_LDFLAGS = -no-undefined
 libRosenbrock_la_SOURCES = ../../../sample/Rosenbrock/Rosenbrock.cpp ../../../sample/Rosenbrock/d_Rosenbrock.cpp ../../../sample/Rosenbrock/R_Rosenbrock.cpp ../../../sample/Rosenbrock/dR_Rosenbrock.cpp ../../../sample/Rosenbrock/registration.cpp
 libRosenbrock_la_LIBADD = ../../../src/ADLib/adtR.lo ../../../src/ADLib/ts_optim.lo ../../../src/ADLib/adtmaths.lo ../../../src/ADLib/adtarrays.lo ../../../src/ADLib/adtdiff.lo ../../../src/ADLib/adtstack.lo ../../../src/ADLib/adtthreads.lo ../../../src/ADLib/adtparallel.lo -L$(R_LIB) -lR -lblas -lpthread
-BUILT_SOURCES = ../../../sample/Rosenbrock/d_Rosenbrock.cpp ../../../sample/Rosenbrock/dR_Rosenbrock.cpp
+#BUILT_SOURCES = ../../../sample/Rosenbrock/d_Rosenbrock.cpp ../../../sample/Rosenbrock/dR_Rosenbrock.cpp
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -597,6 +597,7 @@ maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+clean-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
@@ -685,14 +686,14 @@ uninstall-am: uninstall-libLTLIBRARIES
 	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES
 
 
-../../../sample/Rosenbrock/d_Rosenbrock.cpp : ../../../sample/Rosenbrock/Rosenbrock.mk
-	../../../sample/Rosenbrock/run_mk Rosenbrock.mk
+#../../../sample/Rosenbrock/d_Rosenbrock.cpp : ../../../sample/Rosenbrock/Rosenbrock.mk
+#	../../../sample/Rosenbrock/run_mk Rosenbrock.mk
 
-../../../sample/Rosenbrock/dR_Rosenbrock.cpp : ../../../sample/Rosenbrock/Rosenbrock.mk
-	../../../sample/Rosenbrock/run_mk Rosenbrock.mk
+#../../../sample/Rosenbrock/dR_Rosenbrock.cpp : ../../../sample/Rosenbrock/Rosenbrock.mk
+#	../../../sample/Rosenbrock/run_mk Rosenbrock.mk
 
-clean-local:
-	-rm -f ../../../sample/Rosenbrock/d_Rosenbrock.cpp ../../../sample/Rosenbrock/dR_Rosenbrock.cpp ../../../sample/Rosenbrock/Rb_*.hpp ../../../sample/Rosenbrock/RRb_*.hpp ../../../sample/Rosenbrock/Rosenbrock.dch
+#clean-local:
+#	-rm -f ../../../sample/Rosenbrock/d_Rosenbrock.cpp ../../../sample/Rosenbrock/dR_Rosenbrock.cpp ../../../sample/Rosenbrock/Rb_*.hpp ../../../sample/Rosenbrock/RRb_*.hpp ../../../sample/Rosenbrock/Rosenbrock.dch
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

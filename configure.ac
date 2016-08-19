@@ -13,22 +13,20 @@ AC_PROG_CXX
 AC_LANG([C++])
 
 
-AC_MSG_NOTICE(checking whether to enable debugging)
-
 AC_ARG_ENABLE([debug],
               [AS_HELP_STRING([--enable-debug=(no/yes)],[turn on debugging (default=no)])],
-              [enable_debug=$withval],
+              [enable_debug=$enableval],
               [enable_debug=no])
+
+AC_MSG_NOTICE([checking whether to enable debugging... $enable_debug])
 
 if test "x$enable_debug" = "xyes"; then
   CXXFLAGS="$CXXFLAGS -g -DDEBUG"
   CFLAGS="$CFLAGS -g -DDEBUG"
-  AC_MSG_RESULT(yes)
 else
   CXXFLAGS="$CXXFLAGS -O2"
   CFLAGS="$CFLAGS -O2"
   AH_BOTTOM([#define NDEBUG])
-  AC_MSG_RESULT(no)
 fi
 
 
@@ -44,19 +42,17 @@ AC_ARG_WITH([r-lib-path],
             [R_LIB="/usr/lib/R/lib"])
 
 
-AC_MSG_NOTICE(checking whether to use standalone R libs)
-
 AC_ARG_ENABLE([standalone],
               [AS_HELP_STRING([--enable-standalone=(no/yes)],[use standalone R libs (default=no)])],
-              [enable_standalone=$withval],
+              [enable_standalone=$enableval],
               [enable_standalone=no])
+
+AC_MSG_NOTICE([checking whether to use standalone R libs... $enable_standalone])
 
 if test "x$enable_standalone" = "xyes"; then
   CFLAGS="$CFLAGS -D MATHLIB_STANDALONE -I ../../src/RMath/include/"
   CXXFLAGS="$CXXFLAGS -D MATHLIB_STANDALONE -I ../../src/RMath/include/"
-  AC_MSG_RESULT(yes)
 else
-  AC_MSG_RESULT(no)
   CFLAGS="$CFLAGS -I \"$R_INCLUDE\""
   CXXFLAGS="$CXXFLAGS -I \"$R_INCLUDE\""
 
@@ -64,6 +60,16 @@ else
                 [],
                 [AC_MSG_ERROR([Cannot find R.h. Make sure the R_HOME environment variable is set])])
 fi
+
+
+AC_ARG_ENABLE([tapenade],
+              [AS_HELP_STRING([--enable-tapenade=(no/yes)],[do you have tapenade (default=yes)])],
+              [enable_tapenade=$enableval],
+              [enable_tapenade=yes])
+
+AC_MSG_NOTICE([checking whether we are using tapenade... $enable_tapenade])
+
+AM_CONDITIONAL([WITH_TAPENADE], test "x$enable_tapenade" = "xyes")
 
 
 CFLAGS="$CFLAGS"

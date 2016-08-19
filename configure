@@ -637,6 +637,8 @@ LTLIBOBJS
 LIBOBJS
 R_LIB
 R_INCLUDE
+WITH_TAPENADE_FALSE
+WITH_TAPENADE_TRUE
 am__fastdepCXX_FALSE
 am__fastdepCXX_TRUE
 CXXDEPMODE
@@ -777,6 +779,7 @@ enable_debug
 with_r_include_path
 with_r_lib_path
 enable_standalone
+enable_tapenade
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1425,6 +1428,8 @@ Optional Features:
   --enable-debug=(no/yes) turn on debugging (default=no)
   --enable-standalone=(no/yes)
                           use standalone R libs (default=no)
+  --enable-tapenade=(no/yes)
+                          do you have tapenade (default=yes)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -15550,28 +15555,24 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable debugging" >&5
-$as_echo "$as_me: checking whether to enable debugging" >&6;}
-
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
-  enableval=$enable_debug; enable_debug=$withval
+  enableval=$enable_debug; enable_debug=$enableval
 else
   enable_debug=no
 fi
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable debugging... $enable_debug" >&5
+$as_echo "$as_me: checking whether to enable debugging... $enable_debug" >&6;}
+
 if test "x$enable_debug" = "xyes"; then
   CXXFLAGS="$CXXFLAGS -g -DDEBUG"
   CFLAGS="$CFLAGS -g -DDEBUG"
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
 else
   CXXFLAGS="$CXXFLAGS -O2"
   CFLAGS="$CFLAGS -O2"
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
 fi
 
 
@@ -15595,25 +15596,21 @@ fi
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use standalone R libs" >&5
-$as_echo "$as_me: checking whether to use standalone R libs" >&6;}
-
 # Check whether --enable-standalone was given.
 if test "${enable_standalone+set}" = set; then :
-  enableval=$enable_standalone; enable_standalone=$withval
+  enableval=$enable_standalone; enable_standalone=$enableval
 else
   enable_standalone=no
 fi
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use standalone R libs... $enable_standalone" >&5
+$as_echo "$as_me: checking whether to use standalone R libs... $enable_standalone" >&6;}
+
 if test "x$enable_standalone" = "xyes"; then
   CFLAGS="$CFLAGS -D MATHLIB_STANDALONE -I ../../src/RMath/include/"
   CXXFLAGS="$CXXFLAGS -D MATHLIB_STANDALONE -I ../../src/RMath/include/"
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
   CFLAGS="$CFLAGS -I \"$R_INCLUDE\""
   CXXFLAGS="$CXXFLAGS -I \"$R_INCLUDE\""
 
@@ -15641,6 +15638,27 @@ else
 fi
 
 fi
+
+
+# Check whether --enable-tapenade was given.
+if test "${enable_tapenade+set}" = set; then :
+  enableval=$enable_tapenade; enable_tapenade=$enableval
+else
+  enable_tapenade=yes
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are using tapenade... $enable_tapenade" >&5
+$as_echo "$as_me: checking whether we are using tapenade... $enable_tapenade" >&6;}
+
+ if test "x$enable_tapenade" = "xyes"; then
+  WITH_TAPENADE_TRUE=
+  WITH_TAPENADE_FALSE='#'
+else
+  WITH_TAPENADE_TRUE='#'
+  WITH_TAPENADE_FALSE=
+fi
+
 
 
 CFLAGS="$CFLAGS"
@@ -15813,6 +15831,10 @@ fi
 
 if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCXX\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${WITH_TAPENADE_TRUE}" && test -z "${WITH_TAPENADE_FALSE}"; then
+  as_fn_error $? "conditional \"WITH_TAPENADE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

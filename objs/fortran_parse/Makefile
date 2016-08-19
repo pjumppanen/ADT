@@ -198,13 +198,13 @@ AUTOMAKE = automake-1.14
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =  -g -DDEBUG -I "/usr/share/R/include"
+CFLAGS =  -O2 -I "/usr/share/R/include"
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS =  -g -DDEBUG -I "/usr/share/R/include"
+CXXFLAGS =  -O2 -I "/usr/share/R/include"
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps

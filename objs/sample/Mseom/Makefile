@@ -209,13 +209,13 @@ AUTOMAKE = automake-1.14
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =  -g -DDEBUG -I "/usr/share/R/include"
+CFLAGS =  -O2 -I "/usr/share/R/include"
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS =  -g -DDEBUG -I "/usr/share/R/include"
+CXXFLAGS =  -O2 -I "/usr/share/R/include"
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -330,7 +330,7 @@ lib_LTLIBRARIES = libMseom.la
 libMseom_la_LDFLAGS = -no-undefined
 libMseom_la_SOURCES = ../../../sample/Mseom/Mseom.cpp ../../../sample/Mseom/MseomMin.cpp = ../../../sample/Mseom/D_Mseom.cpp ../../../sample/Mseom/D_MseomMin.cpp ../../../sample/Mseom/Mseom_registration.cpp
 libMseom_la_LIBADD = ../../../src/ADLib/adtR.lo ../../../src/ADLib/ts_optim.lo ../../../src/ADLib/adtmaths.lo ../../../src/ADLib/adtarrays.lo ../../../src/ADLib/adtdiff.lo ../../../src/ADLib/adtstack.lo ../../../src/ADLib/adtthreads.lo ../../../src/ADLib/adtparallel.lo -L$(R_LIB) -lR -lblas -lpthread
-BUILT_SOURCES = ../../../sample/Mseom/D_Mseom.cpp ../../../sample/Mseom/D_MseomMin.cpp
+#BUILT_SOURCES = ../../../sample/Mseom/D_Mseom.cpp ../../../sample/Mseom/D_MseomMin.cpp
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -594,6 +594,7 @@ maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+clean-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
@@ -682,14 +683,14 @@ uninstall-am: uninstall-libLTLIBRARIES
 	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES
 
 
-../../../sample/Mseom/D_Mseom.cpp : ../../../sample/Mseom/Mseom.mk
-	../../../sample/Mseom/run_mk Mseom.mk
+#../../../sample/Mseom/D_Mseom.cpp : ../../../sample/Mseom/Mseom.mk
+#	../../../sample/Mseom/run_mk Mseom.mk
 
-../../../sample/Mseom/D_MseomMin.cpp : ../../../sample/Mseom/Mseom.mk
-	../../../sample/Mseom/run_mk Mseom.mk
+#../../../sample/Mseom/D_MseomMin.cpp : ../../../sample/Mseom/Mseom.mk
+#	../../../sample/Mseom/run_mk Mseom.mk
 
-clean-local:
-	-rm -f ../../../sample/Mseom/D_Mseom.cpp ../../../sample/Mseom/D_MseomMin.cpp ../../../sample/Mseom/Om_*.hpp ../../../sample/Mseom/OmB_*.hpp ../../../sample/Mseom/Mseom.dch
+#clean-local:
+#	-rm -f ../../../sample/Mseom/D_Mseom.cpp ../../../sample/Mseom/D_MseomMin.cpp ../../../sample/Mseom/Om_*.hpp ../../../sample/Mseom/OmB_*.hpp ../../../sample/Mseom/Mseom.dch
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
