@@ -188,6 +188,7 @@ interface
   function Rf_classgets(x:SEXP;y:SEXP):SEXP;cdecl;external R_Lib;
   function Rf_dimgets(x:SEXP;y:SEXP):SEXP;cdecl;external R_Lib;
   function Rf_dimnamesgets(x:SEXP;y:SEXP):SEXP;cdecl;external R_Lib;
+  function Rf_duplicate(x:SEXP):SEXP;cdecl;external R_Lib;
   function Rf_setAttrib(x:SEXP;y:SEXP;z:SEXP):SEXP;cdecl;external R_Lib;
   function Rf_asLogical(x:SEXP):longint;cdecl;external R_Lib;
   function Rf_asInteger(x:SEXP):longint;cdecl;external R_Lib;
