@@ -65,6 +65,20 @@ AdtMakeCommandOperation   AdtMakeSystem::CurrentCommandOperation;
 AdtMakeCommandList        AdtMakeSystem::MakeCommandList;
 AdtMakeSystem::AdtOpType  AdtMakeSystem::OpType = AdtMakeSystem::OtherOpType;
 AdtMakeIncremental        AdtMakeSystem::BuildCheck;
+string                    AdtExePath::ExePath;
+
+
+//  ----------------------------------------------------------------------------
+//  AdtExePath method implementations
+//  ----------------------------------------------------------------------------
+AdtExePath::AdtExePath(const char* pExeFileAndPath)
+{
+  UtlFilePath Path(pExeFileAndPath);
+
+  Path.name("");
+  Path.extension("");
+  Path.join(ExePath);
+}
 
 
 //  ----------------------------------------------------------------------------
@@ -2497,7 +2511,51 @@ void AdtMakeCommand::reset()
   BlackBoxList.clear();
   SourceFiles.clear();
   ClassList.clear();
+  addDefaultPaths();
 }
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeCommand::addDefaultPaths()
+{
+  // Add default paths to ADT includes plus ADLib includes. On linux like
+  // environments these are:
+  //
+  // /usr/local/share/adt/include
+  // /usr/local/share/adt/templates/source/cpp
+  // /usr/local/share/adt/templates/source/pascal
+  //
+  // On Windows these are:
+  //
+  // {adt exe path}/adt-include
+  // {adt exe path}/../templates/source/cpp
+  // {adt exe path}/../templates/source/pascal
+  string sADT_include;
+  string sADLib_include;
+  string sADLibPas_include;
+
+  #if defined(_MSC_VER)
+
+  AdtExePath  sPath;
+  string      sExePath(sPath);
+
+  sADT_include      = sExePath + "\\adt-include\\";
+  sADLib_include    = sExePath + "\\..\\templates\\source\\cpp\\";
+  sADLibPas_include = sExePath + "\\..\\templates\\source\\pascal\\";
+
+  #else
+
+  sADT_include      = "/usr/local/share/adt/include/";
+  sADLib_include    = "/usr/local/share/adt/templates/source/cpp/";
+  sADLibPas_include = "/usr/local/share/adt/templates/source/pascal/";
+
+  #endif
+
+  Paths.push_back(sADT_include);
+  Paths.push_back(sADLib_include);
+  Paths.push_back(sADLibPas_include);
+}
+
 //  ----------------------------------------------------------------------------
 
 AdtMakeCommand::AdtMakeCommand()
@@ -2510,6 +2568,8 @@ AdtMakeCommand::AdtMakeCommand()
    ClassList()
 {
   SourceFileType = UnknownSourceFileType;
+
+  addDefaultPaths();
 }
 
 //  ----------------------------------------------------------------------------
@@ -2692,13 +2752,12 @@ bool AdtMakeCommand::withStackSubstitution(const AdtMakeCommandOperation* pOpera
 
 bool AdtMakeCommand::isFile(const char* pFileName) const
 {
-  bool  bIsFile = false;
-  FILE* pFile   = fopen(pFileName, "r");
+  bool        bIsFile = false;
+  struct stat status;
 
-  if (pFile != 0)
+  if (stat(pFileName, &status) == 0)
   {
-    bIsFile = true;
-    fclose(pFile);
+    bIsFile = (((status.st_mode & S_IFDIR) != S_IFDIR) && ((status.st_mode & S_IFREG) == S_IFREG));
   }
 
   return (bIsFile);
@@ -3438,6 +3497,13 @@ int AdtMakeSystem::make(const char* pFilename)
     if (rMakeCommand.switchDefined("Rebuild"))
     {
       BuildCheck.forceRebuild();
+    }
+
+    useArrayClass(ArrayClass_offarray);
+
+    if (rMakeCommand.switchDefined("Oarray"))
+    {
+      useArrayClass(ArrayClass_Oarray);
     }
 
     nReturnCode = rMakeCommand.make(BuildCheck);

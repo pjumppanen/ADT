@@ -1,7 +1,7 @@
 AD BEGIN
   PATHS: "../include","../common", "../../src/ADLib";
   WORKING DIRECTORY: "./work/";
-  SWITCHES: "rebuild";
+  SWITCHES: "rebuild","Oarray";
   BLACKBOX: common.bbdef;
   CPP OPTIONS FILE: cpp_macros.txt;
   PASCAL OPTIONS FILE: pascal_macros.txt;

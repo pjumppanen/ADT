@@ -156,12 +156,14 @@ static const R_CallMethodDef callMethods[] =
 
 EXPORT void R_init_Mseom(DllInfo* pInfo)
 {
+  R_SetArrayClass(ArrayClass_Oarray);
   R_registerRoutines(pInfo, 0, callMethods, 0, 0);
 }
 
 
 EXPORT void R_init_libMseom(DllInfo* pInfo)
 {
+  R_SetArrayClass(ArrayClass_Oarray);
   R_registerRoutines(pInfo, 0, callMethods, 0, 0);
 }
 

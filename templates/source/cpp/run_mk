@@ -1,0 +1,5 @@
+#!/bin/bash
+# script to run adt to build source files. We cd to the source file dir as
+# paths in the make file are relative to this location
+cd $(dirname $0)
+adt $1

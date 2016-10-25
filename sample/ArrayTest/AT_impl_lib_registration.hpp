@@ -54,12 +54,14 @@ static const R_CallMethodDef callMethods[] =
 
 EXPORT void R_init_ArrayTest(DllInfo* pInfo)
 {
+  R_SetArrayClass(ArrayClass_Oarray);
   R_registerRoutines(pInfo, 0, callMethods, 0, 0);
 }
 
 
 EXPORT void R_init_libArrayTest(DllInfo* pInfo)
 {
+  R_SetArrayClass(ArrayClass_Oarray);
   R_registerRoutines(pInfo, 0, callMethods, 0, 0);
 }
 

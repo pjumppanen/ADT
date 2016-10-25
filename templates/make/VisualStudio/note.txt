@@ -1,0 +1,8 @@
+Visual Studio project hierarchy is,
+
+Solution Folder
+ |-Solution.sln
+ |-Project Folder
+    |-Project.vcxproj
+    |-{other project files}
+

@@ -12,7 +12,7 @@ libADLib_la_LIBADD = -L$(R_LIB) -lR -lblas -lpthread
 libADLibR_la_LDFLAGS = -no-undefined
 
 libADLibR_la_SOURCES = ../../src/ADLib/adtR.cpp ../../src/ADLib/ts_optim.cpp
-libADLibR_la_include_HEADERS = ../../src/ADLib/adtR.hpp ../../src/ADLib/ts_lbfgsb.cpp
+libADLibR_la_include_HEADERS = ../../src/ADLib/adtR.hpp
 libADLibR_la_includedir = $(includedir)
 libADLibR_la_LIBADD = libADLib.la -L$(R_LIB) -lR -lblas -lpthread
 

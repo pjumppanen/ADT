@@ -1,0 +1,10 @@
+Package: newadt
+Type: Package
+Title: Create Skeleton ADT projects
+Version: 1.01
+Date: 2016-10-20
+Author: Paavo Jumppanen
+Maintainer: Paavo Jumppanen <paavo.jumppanen@csiro.au>
+Depends:
+Description: This package creates all source and make files comprising a skeleton ADT project.
+License: GPL

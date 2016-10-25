@@ -1,0 +1,9 @@
+new.adt made project. To build go to a command prompt and run
+
+./init_config.sh
+
+then,
+
+./configure
+make clean
+make

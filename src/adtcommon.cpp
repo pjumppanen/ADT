@@ -284,3 +284,47 @@ void UtlFilePath::join(string& rJoinedPath, bool bQuoted) const
     rJoinedPath += "\"";
   }
 }
+
+//  ----------------------------------------------------------------------------
+
+static AdtUseArrayClass _UseArrayClass = ArrayClass_offarray;
+
+//  ----------------------------------------------------------------------------
+
+AdtUseArrayClass useArrayClass()
+{
+  return (_UseArrayClass);
+}
+
+//  ----------------------------------------------------------------------------
+
+void useArrayClass(AdtUseArrayClass nClass)
+{
+  _UseArrayClass = nClass;
+}
+
+//  ----------------------------------------------------------------------------
+
+void getUseArrayClassName(string& rName)
+{
+  switch (_UseArrayClass)
+  {
+    case ArrayClass_offarray:
+    {
+      rName = "offarray";
+      break;
+    }
+
+    case ArrayClass_Oarray:
+    {
+      rName = "Oarray";
+      break;
+    }
+
+    default:
+    {
+      FAIL();
+      break;
+    }
+  }
+}

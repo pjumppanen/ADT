@@ -31,8 +31,16 @@
 //  ----------------------------------------------------------------------------
 //  R Interface helper functions used to simplify interface code
 //  ----------------------------------------------------------------------------
-static SEXP DropNegativeSymbol  = NULL;
-static SEXP OffsetSymbol        = NULL;
+static SEXP             DropNegativeSymbol  = NULL;
+static SEXP             OffsetSymbol        = NULL;
+static R_UseArrayClass  ArrayClass          = ArrayClass_offarray;
+
+//  ----------------------------------------------------------------------------
+
+void R_SetArrayClass(R_UseArrayClass nClass)
+{
+  ArrayClass = nClass;
+}
 
 //  ----------------------------------------------------------------------------
 
@@ -720,50 +728,100 @@ SEXP R_CreateArray(int nDims, AdtArrayCoord* pCoords, SEXPTYPE nType)
 
     if (bOarray)
     {
-      SEXP Class;
-      SEXP DropNegative;
-      SEXP Dim;
-      SEXP Offset;
-
-      // Add Oarray class attribute
-      Class = PROTECT(Rf_allocVector(STRSXP, 1));
-      SET_STRING_ELT(Class, 0, Rf_mkChar("Oarray"));
-      Rf_classgets(Result, Class);
-      UNPROTECT(1);
-
-      // Add attribute names for offset and drop.negative
-      if (OffsetSymbol == NULL)
+      switch (ArrayClass)
       {
-        OffsetSymbol = Rf_install("offset");
+        case ArrayClass_Oarray:
+        {
+          SEXP Class;
+          SEXP DropNegative;
+          SEXP Dim;
+          SEXP Offset;
+
+          // Add Oarray class attribute
+          Class = PROTECT(Rf_allocVector(STRSXP, 1));
+          SET_STRING_ELT(Class, 0, Rf_mkChar("Oarray"));
+          Rf_classgets(Result, Class);
+          UNPROTECT(1);
+
+          // Add attribute names for offset and drop.negative
+          if (OffsetSymbol == NULL)
+          {
+            OffsetSymbol = Rf_install("offset");
+          }
+
+          if (DropNegativeSymbol == NULL)
+          {
+            DropNegativeSymbol = Rf_install("drop.negative");
+          }
+
+          // Add drop negative attribute
+          DropNegative = PROTECT(Rf_ScalarLogical(bNegativeOrZero ? 0 : 1));
+
+          Rf_setAttrib(Result, DropNegativeSymbol, DropNegative);
+          UNPROTECT(1);
+
+          // Add dim and offset attributes
+          Dim     = PROTECT(Rf_allocVector(INTSXP, nDims));
+          Offset  = PROTECT(Rf_allocVector(INTSXP, nDims));
+
+          for (cn = 0 ; cn < nDims ; cn++)
+          {
+            int nLowerBound = pCoords[cn].IndexBase;
+            int nSize       = pCoords[cn].Size;
+
+            INTEGER(Dim)[cn]    = nSize;
+            INTEGER(Offset)[cn] = nLowerBound;
+          }
+
+          Rf_dimgets(Result, Dim);
+          Rf_setAttrib(Result, OffsetSymbol, Offset);
+          UNPROTECT(2);
+          break;
+        }
+
+        case ArrayClass_offarray:
+        {
+          SEXP Class;
+          SEXP Dim;
+          SEXP Offset;
+
+          // Add offarray class attribute
+          Class = PROTECT(Rf_allocVector(STRSXP, 1));
+          SET_STRING_ELT(Class, 0, Rf_mkChar("offarray"));
+          Rf_classgets(Result, Class);
+          UNPROTECT(1);
+
+          // Add attribute name for offset
+          if (OffsetSymbol == NULL)
+          {
+            OffsetSymbol = Rf_install("offset");
+          }
+
+          // Add dim and offset attributes
+          Dim     = PROTECT(Rf_allocVector(INTSXP, nDims));
+          Offset  = PROTECT(Rf_allocVector(INTSXP, nDims));
+
+          for (cn = 0 ; cn < nDims ; cn++)
+          {
+            int nLowerBound = pCoords[cn].IndexBase;
+            int nSize       = pCoords[cn].Size;
+
+            INTEGER(Dim)[cn]    = nSize;
+            INTEGER(Offset)[cn] = nLowerBound;
+          }
+
+          Rf_dimgets(Result, Dim);
+          Rf_setAttrib(Result, OffsetSymbol, Offset);
+          UNPROTECT(2);
+          break;
+        }
+
+        default:
+        {
+          std::runtime_error("R_CreateArray called with invalid R ArrayClass\n");
+          break;
+        }
       }
-
-      if (DropNegativeSymbol == NULL)
-      {
-        DropNegativeSymbol = Rf_install("drop.negative");
-      }
-
-      // Add drop negative attribute
-      DropNegative = PROTECT(Rf_ScalarLogical(bNegativeOrZero ? 0 : 1));
-
-      Rf_setAttrib(Result, DropNegativeSymbol, DropNegative);
-      UNPROTECT(1);
-
-      // Add dim and offset attributes
-      Dim     = PROTECT(Rf_allocVector(INTSXP, nDims));
-      Offset  = PROTECT(Rf_allocVector(INTSXP, nDims));
-
-      for (cn = 0 ; cn < nDims ; cn++)
-      {
-        int nLowerBound = pCoords[cn].IndexBase;
-        int nSize       = pCoords[cn].Size;
-
-        INTEGER(Dim)[cn]    = nSize;
-        INTEGER(Offset)[cn] = nLowerBound;
-      }
-
-      Rf_dimgets(Result, Dim);
-      Rf_setAttrib(Result, OffsetSymbol, Offset);
-      UNPROTECT(2);
     }
     else
     {

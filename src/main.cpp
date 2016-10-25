@@ -147,6 +147,8 @@ int main(int argc, char** argv)
   //Main code
   if (argc > 0)
   {
+    AdtExePath  Path(argv[-1]);
+
     for (int cn = 0 ; cn < argc ; cn++)
     {
       nReturnCode = AdtMakeSystem::make(argv[cn]);

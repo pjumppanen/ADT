@@ -107,6 +107,46 @@ class AdtMakeCommand;
 
 
 //  ----------------------------------------------------------------------------
+//  AdtExePath class
+//  ----------------------------------------------------------------------------
+//  Global var class holding path to folder the ADT executable resides in
+//  ----------------------------------------------------------------------------
+class AdtExePath
+{
+private:
+  static string   ExePath;
+
+public:
+  AdtExePath();
+  AdtExePath(const char* pExeFileAndPath);
+  virtual ~AdtExePath();
+
+  operator const char* () const;
+};
+
+//  ----------------------------------------------------------------------------
+
+inline AdtExePath::AdtExePath()
+{
+  // Do nothing
+}
+
+//  ----------------------------------------------------------------------------
+
+inline AdtExePath::~AdtExePath()
+{
+  // Do nothing
+}
+
+//  ----------------------------------------------------------------------------
+
+inline AdtExePath::operator const char* () const
+{
+  return (ExePath.c_str());
+}
+
+
+//  ----------------------------------------------------------------------------
 //  AdtMakeIncremental class
 //  ----------------------------------------------------------------------------
 //  Utility class to help implement incremental building of ADT projects. This
@@ -659,6 +699,7 @@ private:
 
 protected:
   void                      reset();
+  void                      addDefaultPaths();
 
 public:
   AdtMakeCommand();
@@ -714,6 +755,8 @@ inline void AdtMakeCommand::sourceOptionsFile(const char* pOptionsFile, AdtSourc
 inline void AdtMakeCommand::paths(const AdtStringList& rPaths)
 {
   Paths = rPaths;
+
+  addDefaultPaths();
 }
 
 //  ----------------------------------------------------------------------------

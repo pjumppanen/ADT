@@ -796,4 +796,19 @@ enum AdtAutoDir
 };
 
 
+//  ----------------------------------------------------------------------------
+//  enum AdtUseArrayClass
+//  ----------------------------------------------------------------------------
+enum AdtUseArrayClass
+{
+  ArrayClass_offarray = 0,
+  ArrayClass_Oarray   = 1,
+};
+
+
+AdtUseArrayClass useArrayClass();
+void             useArrayClass(AdtUseArrayClass nClass);
+void             getUseArrayClassName(string& rName);
+
+
 #endif  //__ADTCOMMON_HPP

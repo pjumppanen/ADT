@@ -152,6 +152,16 @@ SEXP R_Scalar(const double& dResult);
 SEXP R_Empty();
 
 
+enum R_UseArrayClass
+{
+  ArrayClass_offarray = 0,
+  ArrayClass_Oarray   = 1,
+};
+
+
+void R_SetArrayClass(R_UseArrayClass nClass);
+
+
 #include <R_ext/Applic.h>
 
 

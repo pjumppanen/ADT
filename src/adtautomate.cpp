@@ -8069,9 +8069,14 @@ void AdtAutoClass::writeCommonR_Code(AdtFile& rFile) const
   size_t                  nCount;
   AdtStringListConstIter  Iter;
   AdtAutoHelper           Helper;
+  string                  rUseArrayClassName;
+
+  getUseArrayClassName(rUseArrayClassName);
 
   // requirements
-  rFile.write("require(Oarray)");
+  rFile.write("require(");
+  rFile.write(rUseArrayClassName);
+  rFile.write(")");
   rFile.newline();
   rFile.newline();
 
@@ -8799,6 +8804,10 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
 
         for (int cn = 0 ; cn < 2 ; cn++)
         {
+          string  rUseArrayClassName;
+
+          getUseArrayClassName(rUseArrayClassName);
+
           rFile.write("EXPORT void R_init_");
           rFile.write(LibPrefix[cn]);
           rFile.write(LibName);
@@ -8806,6 +8815,10 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
           rFile.newline();
           rFile.write("{");
           rFile.incrementIndent();
+          rFile.newline();
+          rFile.write("R_SetArrayClass(ArrayClass_");
+          rFile.write(rUseArrayClassName);
+          rFile.write(");");
           rFile.newline();
           rFile.write("R_registerRoutines(pInfo, 0, callMethods, 0, 0);");
           rFile.decrementIndent();

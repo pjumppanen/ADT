@@ -1,2 +1,12 @@
 SUBDIRS = objs/ADLib objs/ADLibTest objs/make_parse objs/fortran_parse objs/delphi_parse objs/cpp_parse objs/java_parse objs/expression_parse objs/blackbox_parse objs objs/sample/ArrayTest objs/sample/Rosenbrock objs/sample/Mseom
 dist_doc_DATA = INSTALL README ChangeLog
+tempmakeacdir = $(datadir)/adt/templates/make/autoconf
+tempmakevsdir = $(datadir)/adt/templates/make/VisualStudio
+tempsrccppdir = $(datadir)/adt/templates/source/cpp
+tempsrcpasdir = $(datadir)/adt/templates/source/pascal
+adtincludedir = $(datadir)/adt/include
+dist_tempmakeac_DATA = templates/make/autoconf/configure.ac templates/make/autoconf/Makefile.am templates/make/autoconf/init_config.sh templates/make/autoconf/COPYING templates/make/autoconf/INSTALL templates/make/autoconf/README templates/make/autoconf/ChangeLog
+dist_tempmakevs_DATA = templates/make/VisualStudio/base.sln templates/make/VisualStudio/base.vcxproj templates/make/VisualStudio/note.txt
+dist_tempsrccpp_DATA = templates/source/cpp/base.cpp templates/source/cpp/base.hpp templates/source/cpp/Rbase.cpp templates/source/cpp/Rbase.hpp templates/source/cpp/base_registration.cpp templates/source/cpp/base.mk templates/source/cpp/run_mk
+dist_tempsrcpas_DATA = templates/source/pascal/dummy.txt
+dist_adtinclude_DATA = sample/include/common.bbdef sample/include/stdlib.f sample/include/cpp_macros.txt sample/include/pascal_macros.txt sample/include/my_adlib.txt sample/include/my_extlib.txt

@@ -2,7 +2,7 @@ AD BEGIN
   PATHS: "../common", "../include", "../../src/ADLib";
   WORKING DIRECTORY: "./work/";
   BLACKBOX: Mseom.bbdef;
-  SWITCHES: "rebuild";
+  SWITCHES: "rebuild","Oarray";
   CPP OPTIONS FILE: cpp_macros.txt;
   PASCAL OPTIONS FILE: pascal_macros.txt;
   FORTRAN INCLUDE FILES: stdlib.f;
