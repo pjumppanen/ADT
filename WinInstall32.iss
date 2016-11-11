@@ -2,7 +2,7 @@
 [Setup]
 OutputBaseFilename=ADT_win32_setup
 AppName=ADT
-AppVersion=1.07.0
+AppVersion=1.07.1
 DefaultDirName={pf}\ADT
 DefaultGroupName=ADT
 Compression=lzma2
