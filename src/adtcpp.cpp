@@ -1558,6 +1558,40 @@ void AdtCppTranslationUnit::writeArraySizes(AdtFile& rOutFile,
 
 //  ----------------------------------------------------------------------------
 
+void AdtCppTranslationUnit::addDimensionVars(const char* pClassName,
+                                             AdtParserPtrByStringMap& rVarsMap) const
+{
+  string                ParentClassName;
+  AdtCppClassSpecifier* pClass = findClass(pClassName, ParentClassName);
+
+  if (pClass != 0)
+  {
+    AdtParserPtrList      rList;
+    AdtParserPtrListIter  Iter;
+
+    pClass->findDimensionVars(this, rVarsMap, rList);
+
+    for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+    {
+      const AdtParser*  pExternal = *Iter;
+
+      if (pExternal != 0)
+      {
+        char  sKeyName[32]  = {0};
+
+        //Quick and dirty hack to build a unique key name to stop the same
+        //object being inserted more than once.
+        ::sprintf(sKeyName, "%zx", (size_t)pExternal);
+
+        //Is a class variable
+        rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+      }
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 bool AdtCppTranslationUnit::compile(const AdtCppFunctionDefinition* pFunction,
                                     AdtParserPtrByStringMap& rFunctionsMap,
                                     AdtParserPtrByStringMap& rVarsMap,
@@ -1662,6 +1696,9 @@ bool AdtCppTranslationUnit::compile(const AdtCppFunctionDefinition* pFunction,
           }
         }
       }
+
+      // Look through VarsMap and add any dimension vars not already in VarsMap (that aren't ragged arrays which aren't allowed in AD'ed code)
+      addDimensionVars(ClassName, rVarsMap);
 
       bCompiled = true;
 
@@ -7946,6 +7983,67 @@ bool AdtCppClassSpecifier::flattenClass(AdtCppTranslationUnit* pRoot,
   BaseSpecifierList = 0;
 
   return (bFlattened);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtCppClassSpecifier::findDimensionVars(const AdtCppTranslationUnit* pRoot,
+                                             const AdtParserPtrByStringMap& rVarsMap,
+                                             AdtParserPtrList& rList) const
+{
+  AdtStringByStringMap              DefinedMap;
+  AdtParserPtrByStringMapConstIter  Iter;
+
+  // Make map of object names as a check for whether they are already mapped
+  for (Iter = rVarsMap.begin() ; Iter != rVarsMap.end() ; ++Iter)
+  {
+    const AdtParser* pObj = Iter->second;
+
+    if ((pObj != 0) && pObj->isType("AdtCppDeclarator"))
+    {
+      AdtCppDeclarator* pDeclarator;
+
+      pDeclarator                     = (AdtCppDeclarator*)pObj;
+      DefinedMap[pDeclarator->name()] = pDeclarator->name();
+    }
+  }
+
+  // For all the mapped variables check for dimension specs and add dim vars
+  for (Iter = rVarsMap.begin() ; Iter != rVarsMap.end() ; ++Iter)
+  {
+    const AdtParser* pObj = Iter->second;
+
+    if ((pObj != 0) && pObj->isType("AdtCppDeclarator"))
+    {
+      AdtStringListIter StrIter;
+      AdtStringList     rArrayBoundList;
+      AdtCppDeclarator* pDeclarator = (AdtCppDeclarator*)pObj;
+
+      pDeclarator->enumerateArraySizes(rArrayBoundList, rArrayBoundList);
+
+      for (StrIter = rArrayBoundList.begin() ; StrIter != rArrayBoundList.end() ; ++StrIter)
+      {
+        AdtExpressionCompiler Compiler;
+        AdtStringList         rDependencyList;
+        AdtStringListIter     DepIter;
+        const string&         rIndexExpression = *StrIter;
+
+        Compiler.findDependencies(rIndexExpression, rDependencyList);
+
+        for (DepIter = rDependencyList.begin() ; DepIter != rDependencyList.end() ; ++DepIter)
+        {
+          const string&     rDepName = *DepIter;
+          const AdtParser*  pDepObj  = 0;
+
+          if ((DefinedMap.find(rDepName) == DefinedMap.end()) && findField(pRoot, rDepName, pDepObj))
+          {
+            DefinedMap[pDepObj->name()] = pDepObj->name();
+            rList.push_back((AdtParser*)pDepObj);
+          }
+        }
+      }
+    }
+  }
 }
 
 //  ----------------------------------------------------------------------------

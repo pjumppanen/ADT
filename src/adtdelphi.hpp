@@ -513,6 +513,9 @@ protected:
 
   void                          buildMacroMap(AdtParserPtrByStringMultiMap& rMacroMap) const;
 
+  void                          addDimensionVars(const char* pClassName,
+                                                 AdtParserPtrByStringMap& rVarsMap) const;
+
   bool                          compile(const AdtDelphiProcedureDecl* pProcedureDecl,
                                         AdtParserPtrByStringMap& rProceduresMap,
                                         AdtParserPtrByStringMap& rVarsMap,
@@ -3819,6 +3822,9 @@ public:
   const char*                     parentClassName() const;
 
   AdtDelphiClassType::SymbolType  defined(const char* pName) const;
+
+  void                            findDimensionVars(const AdtParserPtrByStringMap& rVarsMap,
+                                                    AdtParserPtrList& rList) const;
 
   bool                            findField(const char* pName, const AdtParser*& pExternal) const;
   bool                            findMethod(const char* pName, const AdtParser*& pExternal) const;

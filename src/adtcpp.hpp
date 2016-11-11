@@ -480,6 +480,9 @@ protected:
                                                 const AdtParserPtrByStringMap& rFunctionsMap,
                                                 const AdtParserPtrByStringMap& rVarsMap) const;
 
+  void                          addDimensionVars(const char* pClassName,
+                                                 AdtParserPtrByStringMap& rVarsMap) const;
+
   bool                          compile(const AdtCppFunctionDefinition* pFunction,
                                         AdtParserPtrByStringMap& rFunctionsMap,
                                         AdtParserPtrByStringMap& rVarsMap,
@@ -2002,6 +2005,10 @@ public:
   bool                          flattenClass(AdtCppTranslationUnit* pRoot,
                                              const AdtParserPtrList& rRootList,
                                              string& rUsesList);
+
+  void                          findDimensionVars(const AdtCppTranslationUnit* pRoot,
+                                                  const AdtParserPtrByStringMap& rVarsMap,
+                                                  AdtParserPtrList& rList) const;
 
   bool                          findField(const AdtCppTranslationUnit* pRoot,
                                           const char* pName,

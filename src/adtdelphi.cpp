@@ -1690,6 +1690,44 @@ void AdtDelphiGoal::buildMacroMap(AdtParserPtrByStringMultiMap& rMacroMap) const
 
 //  ----------------------------------------------------------------------------
 
+void AdtDelphiGoal::addDimensionVars(const char* pClassName,
+                                     AdtParserPtrByStringMap& rVarsMap) const
+{
+  const AdtParser*  pClassObj = 0;
+
+  if (findObject(LocalTypeMap, pClassName, pClassObj) || findObject(ExportedTypeMap, pClassName, pClassObj))
+  {
+    AdtDelphiClassType* pClass = (AdtDelphiClassType*)pClassObj->findObject("AdtDelphiClassType");
+
+    if (pClass != 0)
+    {
+      AdtParserPtrList      rList;
+      AdtParserPtrListIter  Iter;
+
+      pClass->findDimensionVars(rVarsMap, rList);
+
+      for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+      {
+        const AdtParser*  pExternal = *Iter;
+
+        if (pExternal != 0)
+        {
+          char  sKeyName[32]  = {0};
+
+          //Quick and dirty hack to build a unique key name to stop the same
+          //object being inserted more than once.
+          ::sprintf(sKeyName, "%zx", (size_t)pExternal);
+
+          //Is a class variable
+          rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+        }
+      }
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 bool AdtDelphiGoal::compile(const AdtDelphiProcedureDecl* pProcedureDecl,
                             AdtParserPtrByStringMap& rProceduresMap,
                             AdtParserPtrByStringMap& rVarsMap,
@@ -1802,6 +1840,9 @@ bool AdtDelphiGoal::compile(const AdtDelphiProcedureDecl* pProcedureDecl,
           }
         }
       }
+
+      // Look through VarsMap and add any dimension vars not already in VarsMap (that aren't ragged arrays which aren't allowed in AD'ed code)
+      addDimensionVars(ClassName, rVarsMap);
 
       bCompiled = true;
 
@@ -14527,6 +14568,66 @@ AdtDelphiClassType::SymbolType AdtDelphiClassType::defined(const char* pName) co
   }
 
   return (Result);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtDelphiClassType::findDimensionVars(const AdtParserPtrByStringMap& rVarsMap,
+                                           AdtParserPtrList& rList) const
+{
+  AdtStringByStringMap              DefinedMap;
+  AdtParserPtrByStringMapConstIter  Iter;
+
+  // Make map of object names as a check for whether they are already mapped
+  for (Iter = rVarsMap.begin() ; Iter != rVarsMap.end() ; ++Iter)
+  {
+    const AdtParser* pObj = Iter->second;
+
+    if ((pObj != 0) && pObj->isType("AdtDelphiIdent"))
+    {
+      AdtDelphiIdent* pIdent;
+
+      pIdent                     = (AdtDelphiIdent*)pObj;
+      DefinedMap[pIdent->name()] = pIdent->name();
+    }
+  }
+
+  // For all the mapped variables check for dimension specs and add dim vars
+  for (Iter = rVarsMap.begin() ; Iter != rVarsMap.end() ; ++Iter)
+  {
+    const AdtParser* pObj = Iter->second;
+
+    if ((pObj != 0) && pObj->isType("AdtDelphiIdent"))
+    {
+      AdtStringListIter StrIter;
+      AdtStringList     rArrayBoundList;
+      AdtDelphiIdent*   pIdent = (AdtDelphiIdent*)pObj;
+
+      pIdent->enumerateArraySizes(rArrayBoundList, rArrayBoundList);
+
+      for (StrIter = rArrayBoundList.begin() ; StrIter != rArrayBoundList.end() ; ++StrIter)
+      {
+        AdtExpressionCompiler Compiler;
+        AdtStringList         rDependencyList;
+        AdtStringListIter     DepIter;
+        const string&         rIndexExpression = *StrIter;
+
+        Compiler.findDependencies(rIndexExpression, rDependencyList);
+
+        for (DepIter = rDependencyList.begin() ; DepIter != rDependencyList.end() ; ++DepIter)
+        {
+          const string&     rDepName = *DepIter;
+          const AdtParser*  pDepObj  = 0;
+
+          if ((DefinedMap.find(rDepName) == DefinedMap.end()) && findField(rDepName, pDepObj))
+          {
+            DefinedMap[pDepObj->name()] = pDepObj->name();
+            rList.push_back((AdtParser*)pDepObj);
+          }
+        }
+      }
+    }
+  }
 }
 
 //  ----------------------------------------------------------------------------
