@@ -2522,15 +2522,18 @@ void AdtMakeCommand::addDefaultPaths()
   // environments these are:
   //
   // /usr/local/share/adt/include
+  // /usr/local/include
   // /usr/local/share/adt/templates/source/cpp
   // /usr/local/share/adt/templates/source/pascal
   //
   // On Windows these are:
   //
   // {adt exe path}/adt-include
+  // {adt exe path}/include
   // {adt exe path}/../templates/source/cpp
   // {adt exe path}/../templates/source/pascal
   string sADT_include;
+  string sADTSrc_include;
   string sADLib_include;
   string sADLibPas_include;
 
@@ -2538,20 +2541,33 @@ void AdtMakeCommand::addDefaultPaths()
 
   AdtExePath  sPath;
   string      sExePath(sPath);
+  string      sExePathLessSlash(sExePath);
+  string      sRootPath;
 
-  sADT_include      = sExePath + "\\adt-include\\";
-  sADLib_include    = sExePath + "\\..\\templates\\source\\cpp\\";
-  sADLibPas_include = sExePath + "\\..\\templates\\source\\pascal\\";
+  sExePathLessSlash.left(sExePathLessSlash.length() - 1);
+
+  UtlFilePath rPath(sExePathLessSlash);
+
+  rPath.name("");
+  rPath.extension("");
+  rPath.join(sRootPath);
+
+  sADT_include      = sExePath + "adt-include\\";
+  sADTSrc_include   = sRootPath + "include\\";
+  sADLib_include    = sRootPath + "templates\\source\\cpp\\";
+  sADLibPas_include = sRootPath + "templates\\source\\pascal\\";
 
   #else
 
-  sADT_include      = "/usr/local/share/adt/include/";
-  sADLib_include    = "/usr/local/share/adt/templates/source/cpp/";
-  sADLibPas_include = "/usr/local/share/adt/templates/source/pascal/";
+  sADT_include      = "usr/local/share/adt/include/";
+  sADTSrc_include   = "usr/local/include/";
+  sADLib_include    = "usr/local/share/adt/templates/source/cpp/";
+  sADLibPas_include = "usr/local/share/adt/templates/source/pascal/";
 
   #endif
 
   Paths.push_back(sADT_include);
+  Paths.push_back(sADTSrc_include);
   Paths.push_back(sADLib_include);
   Paths.push_back(sADLibPas_include);
 }
@@ -2568,8 +2584,6 @@ AdtMakeCommand::AdtMakeCommand()
    ClassList()
 {
   SourceFileType = UnknownSourceFileType;
-
-  addDefaultPaths();
 }
 
 //  ----------------------------------------------------------------------------

@@ -30,6 +30,12 @@
 #include "adtdelphi.hpp"
 #include "adtfortran.hpp"
 
+#if defined(_MSC_VER)
+
+#include <windows.h>
+
+#endif
+
 const char* pHelpText =
 
 "Invocation:\n"
@@ -147,7 +153,15 @@ int main(int argc, char** argv)
   //Main code
   if (argc > 0)
   {
+#if defined(_MSC_VER)
+    char  sPath[MAX_PATH] = {0};
+
+    ::GetModuleFileNameA(NULL, sPath, sizeof(sPath));
+
+    AdtExePath  Path(sPath);
+#else
     AdtExePath  Path(argv[-1]);
+#endif
 
     for (int cn = 0 ; cn < argc ; cn++)
     {
