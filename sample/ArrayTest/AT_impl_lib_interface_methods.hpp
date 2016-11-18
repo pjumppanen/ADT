@@ -111,6 +111,51 @@ SEXP R_ArrayTest::_set_nt_A2_IB(SEXP arg_A2_IB, SEXP sArgList)
   return (Result);
 }
 
+SEXP R_ArrayTest::R_internal_boundsCheckTest(SEXP X, bool bTranslate)
+{
+  ARRAY_1D arg_X;
+  
+  R_CheckArgument("X", "REALSXP", REALSXP, X, __FILE__, __LINE__, 1, 1, ix);
+  
+  if (bTranslate)
+  {
+    arg_X = 0;
+    
+    Plan_1.create(MemAllocator, arg_X);
+    
+    AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)REAL(X), (char*)arg_X);
+    
+  }
+  else
+  {
+    arg_X = 0;
+    
+    Plan_1.create(MemAllocator, arg_X, (void*)REAL(X));
+    
+  }
+  
+  SEXP Result = Rf_allocVector(REALSXP, 1);
+  
+  PROTECT(Result);
+  REAL(Result)[0] = boundsCheckTest(arg_X);
+  
+  
+  AdtArrayPlan::destroy(MemAllocator, arg_X);
+  UNPROTECT(1);
+  
+  return (Result);
+}
+
+SEXP R_ArrayTest::R_boundsCheckTest(SEXP X)
+{
+  return (R_internal_boundsCheckTest(X, true));
+}
+
+SEXP R_ArrayTest::R_nt_boundsCheckTest(SEXP X)
+{
+  return (R_internal_boundsCheckTest(X, false));
+}
+
 SEXP R_ArrayTest::R_internal_GLOBAL_SUM_BX(SEXP X, SEXP xb1_x, SEXP nBase, SEXP nCount, SEXP global_sumb1_x, bool bTranslate)
 {
   ARRAY_1D arg_X;

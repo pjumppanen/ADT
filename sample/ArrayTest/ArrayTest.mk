@@ -9,6 +9,7 @@ AD BEGIN
 
   CLASS R_ArrayTest(ArrayTest) SOURCE FILE: ArrayTest.cpp OUTPUT FILES: R_ArrayTest.cpp R_ArrayTest.hpp
   BEGIN
+    BOUNDS CHECK boundsCheckTest;
     FUNCTION=sum OUTVAR=sum VAR=X MODE=r;
     FUNCTION=polySumA OUTVAR=polySumA VAR=X MODE=r;
     FUNCTION=polySumB OUTVAR=polySumB VAR=X MODE=r;

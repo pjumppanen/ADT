@@ -318,7 +318,6 @@ void R_ArrayTest::POLYSUMC_BX(const ARRAY_1D X/* ix */, ARRAY_1D xb4_x/* ix */, 
 //    gradient     of useful results: arraytest__iftest
 //    with respect to varying inputs: x
 //    RW status of diff variables: x:out arraytest__iftest:in-killed
-//  ----------------------------------------------------------------------------
 void R_ArrayTest::IFTEST_BX(double X, double& xb5_x, double& iftestb5_x)
 {
   int branch;
@@ -418,6 +417,29 @@ void R_ArrayTest::POLYB_BX0(double X, double& xb5_x, double& polybb5_x)
   double dresultb5_x;
   dresultb5_x = polybb5_x;
   xb5_x = (pow(2,2) * X - 5) * dresultb5_x;
+}
+
+// ----------------------------------------------------------------------------
+
+double R_ArrayTest::boundsCheckTest(const ARRAY_1D X/* ix */)
+{
+  CHECK_CONTEXT CHECK_X_1;
+  int cn;
+  double dSum;
+  double ret_boundsCheckTest;
+  CHECK_X_1 = 0;
+  dSum = 0.0;
+  cn = 1;
+  
+  while ((cn <= ix + 5))
+  {
+    check1(CHECK_X_1,X,"X",__FILE__,__LINE__,true,cn,"cn");
+    dSum = dSum + (X[cn]);
+    cn = cn + 1;
+  }
+  
+  ret_boundsCheckTest = (dSum);
+  return (ret_boundsCheckTest);
 }
 
 #include "AT_impl_lib_interface_methods.hpp"

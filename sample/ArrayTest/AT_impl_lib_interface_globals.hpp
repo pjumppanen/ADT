@@ -145,6 +145,28 @@ EXPORT SEXP AT_set_nt_A2_IB(SEXP rInstance, SEXP arg_A2_IB, SEXP sArgList)
   return (pContext->_set_nt_A2_IB(arg_A2_IB, sArgList));
 }
 
+EXPORT SEXP AT_R_boundsCheckTest(SEXP rInstance, SEXP X)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_boundsCheckTest(X);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_nt_boundsCheckTest(SEXP rInstance, SEXP X)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_nt_boundsCheckTest(X);
+  
+  return (Result);
+}
+
 EXPORT SEXP AT_R_GLOBAL_SUM_BX(SEXP rInstance, SEXP X, SEXP xb1_x, SEXP nBase, SEXP nCount, SEXP global_sumb1_x)
 {
   ASSERT_TYPE_TAG(rInstance, R_ArrayTest);

@@ -16,6 +16,8 @@ EXPORT SEXP AT_get_A2_IB(SEXP rInstance, SEXP sArgList);
 EXPORT SEXP AT_set_A2_IB(SEXP rInstance, SEXP arg_A2_IB, SEXP sArgList);
 EXPORT SEXP AT_get_nt_A2_IB(SEXP rInstance, SEXP sArgList);
 EXPORT SEXP AT_set_nt_A2_IB(SEXP rInstance, SEXP arg_A2_IB, SEXP sArgList);
+EXPORT SEXP AT_R_boundsCheckTest(SEXP rInstance, SEXP X);
+EXPORT SEXP AT_R_nt_boundsCheckTest(SEXP rInstance, SEXP X);
 EXPORT SEXP AT_R_GLOBAL_SUM_BX(SEXP rInstance, SEXP X, SEXP xb1_x, SEXP nBase, SEXP nCount, SEXP global_sumb1_x);
 EXPORT SEXP AT_R_nt_GLOBAL_SUM_BX(SEXP rInstance, SEXP X, SEXP xb1_x, SEXP nBase, SEXP nCount, SEXP global_sumb1_x);
 EXPORT SEXP AT_R_IFTEST_BX(SEXP rInstance, SEXP X, SEXP xb5_x, SEXP iftestb5_x);

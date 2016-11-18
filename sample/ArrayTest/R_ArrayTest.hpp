@@ -62,12 +62,12 @@ public:
   //    gradient     of useful results: arraytest__iftest
   //    with respect to varying inputs: x
   //    RW status of diff variables: x:out arraytest__iftest:in-killed
-  //  ----------------------------------------------------------------------------
   void IFTEST_BX(double X, double& xb5_x, double& iftestb5_x);
   //   Differentiation of arraytest__polyb in reverse (adjoint) mode:
   //    gradient     of useful results: arraytest__polyb
   //    with respect to varying inputs: x
   void POLYB_BX0(double X, double& xb5_x, double& polybb5_x);
+  virtual double boundsCheckTest(const ARRAY_1D X/* ix */);
   
 };
 

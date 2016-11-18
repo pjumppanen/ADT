@@ -179,3 +179,21 @@ double ArrayTest::polySumC(const ARRAY_1D X/*1:ix*/)
 
   return (dSum);
 }
+
+// ----------------------------------------------------------------------------
+
+double ArrayTest::boundsCheckTest(const ARRAY_1D X/*1:ix*/)
+{
+  int     cn;
+  double  dSum;
+
+  dSum = 0.0;
+
+  // Make indexing step over the line on purpose. Bounds error!
+  for (cn = 1 ; cn <= ix + 5 ; cn++)
+  {
+    dSum += X[cn];
+  }
+
+  return (dSum);
+}

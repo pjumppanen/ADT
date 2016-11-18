@@ -70,6 +70,7 @@ public:
   double polySumA(const ARRAY_1D X/*1:ix*/);
   double polySumB(const ARRAY_1D X/*1:ix*/);
   double polySumC(const ARRAY_1D X/*1:ix*/);
+  virtual double boundsCheckTest(const ARRAY_1D X/*1:ix*/);
 };
 
 

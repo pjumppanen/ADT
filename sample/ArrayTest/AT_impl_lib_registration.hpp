@@ -18,6 +18,8 @@ static const R_CallMethodDef callMethods[] =
   {"_AT.set.A2_IB", (DL_FUNC)&AT_set_A2_IB, 3},
   {"_AT.get.nt.A2_IB", (DL_FUNC)&AT_get_nt_A2_IB, 2},
   {"_AT.set.nt.A2_IB", (DL_FUNC)&AT_set_nt_A2_IB, 3},
+  {"_AT.boundsCheckTest", (DL_FUNC)&AT_R_boundsCheckTest, 2},
+  {"_AT.nt.boundsCheckTest", (DL_FUNC)&AT_R_nt_boundsCheckTest, 2},
   {"_AT.GLOBAL_SUM_BX", (DL_FUNC)&AT_R_GLOBAL_SUM_BX, 6},
   {"_AT.nt.GLOBAL_SUM_BX", (DL_FUNC)&AT_R_nt_GLOBAL_SUM_BX, 6},
   {"_AT.IFTEST_BX", (DL_FUNC)&AT_R_IFTEST_BX, 4},

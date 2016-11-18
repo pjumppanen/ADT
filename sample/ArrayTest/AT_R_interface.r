@@ -90,6 +90,16 @@ AT.set.nt.A2_IB <- function(Context, Arg, ...)
   return (.Call('_AT.set.nt.A2_IB', Context, as.integer(Arg), list(...)))
 }
 
+AT.boundsCheckTest <- function(Context, X)
+{
+  return (.Call('_AT.boundsCheckTest', Context, X))
+}
+
+AT.nt.boundsCheckTest <- function(Context, X)
+{
+  return (.Call('_AT.nt.boundsCheckTest', Context, X))
+}
+
 AT.GLOBAL_SUM_BX <- function(Context, X, xb1_x, nBase, nCount, global_sumb1_x)
 {
   return (.Call('_AT.GLOBAL_SUM_BX', Context, X, xb1_x, nBase, nCount, global_sumb1_x))
