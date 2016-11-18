@@ -7670,6 +7670,33 @@ AdtCppDeclModifierList::~AdtCppDeclModifierList()
 
 //  ----------------------------------------------------------------------------
 
+bool AdtCppDeclModifierList::hasModifier(AdtCppDeclModifierType nType) const
+{
+  bool                      bHasModifier = false;
+  const AdtParserPtrList&   rList        = objList();
+  AdtParserPtrListConstIter Iter;
+
+  for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+  {
+    const AdtParser*  pObj = *Iter;
+
+    if (pObj->isType("AdtCppDeclModifier"))
+    {
+      const AdtCppDeclModifier* pModifier = (const AdtCppDeclModifier*)pObj;
+
+      if (pModifier->modifier() == nType)
+      {
+        bHasModifier = true;
+        break;
+      }
+    }
+  }
+
+  return (bHasModifier);
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtAutoDir AdtCppDeclModifierList::autoDir(AdtAutoDir nDir) const
 {
   AdtParserPtrListConstIter Iter;
@@ -11600,6 +11627,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
         AdtAutoFunction*  pFunction   = pClass->addFunction(FunctionDefinition->name(),
                                                             nReturnType,
                                                             AdtAutoDir_UNDEFINED,
+                                                            FunctionDefinition->isVirtual(),
                                                             FunctionDefinition->fileName(),
                                                             FunctionDefinition->lineNumber());
 

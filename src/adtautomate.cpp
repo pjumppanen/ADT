@@ -2911,6 +2911,7 @@ void AdtAutoAttribute::writeCppR_GetterAndSetter(AdtFile& rFile,
 
 AdtAutoAttribute::AdtAutoAttribute(const char* pName,
                                    const char* pClassName,
+                                   AdtAtributeType nAttributeType,
                                    AdtAutoType nType,
                                    AdtAutoMode nMode,
                                    AdtAutoDir nDir,
@@ -2924,6 +2925,7 @@ AdtAutoAttribute::AdtAutoAttribute(const char* pName,
    ClassName(pClassName),
    FileName(pFileName)
 {
+  AttributeType       = nAttributeType;
   Type                = nType;
   Mode                = nMode;
   Dir                 = nDir;
@@ -2941,6 +2943,7 @@ AdtAutoAttribute::AdtAutoAttribute(const AdtAutoAttribute& rCopy)
    ClassName(rCopy.ClassName),
    FileName(rCopy.FileName)
 {
+  AttributeType       = rCopy.AttributeType;
   Type                = rCopy.Type;
   Mode                = rCopy.Mode;
   Dir                 = rCopy.Dir;
@@ -3811,6 +3814,7 @@ AdtAutoScalar::AdtAutoScalar(const char* pName,
                              int nLineNumber)
  : AdtAutoAttribute(pName,
                     pClassName,
+                    AttributeTypeScalar,
                     nType,
                     nMode,
                     nDir,
@@ -5821,6 +5825,7 @@ AdtAutoArray::AdtAutoArray(const char* pName,
                            int nLineNumber)
  : AdtAutoAttribute(pName,
                     pClassName,
+                    AttributeTypeArray,
                     nType,
                     nMode,
                     nDir,
@@ -6501,6 +6506,7 @@ AdtAutoFunction::AdtAutoFunction(const char* pName,
                                  int nLineNumber)
  : AdtAutoAttribute(pName,
                     pClassName,
+                    AttributeTypeFunction,
                     nType,
                     AdtAutoMode_MANUAL,
                     nDir,
@@ -9167,12 +9173,14 @@ AdtAutoArray* AdtAutoClass::addArray(const char* pName,
 AdtAutoFunction* AdtAutoClass::addFunction(const char* pName,
                                            AdtAutoType nType,
                                            AdtAutoDir nDir,
+                                           bool bIsVirtual,
                                            const char* pFileName,
                                            int nLineNumber)
 {
-  AdtAutoFunction* pAttribute = 0;
+  AdtAutoFunction*                    pAttribute = 0;
+  AdtAutoAttributePtrByStringMapIter  Iter       = AttributeByNameMap.find(pName);
 
-  if (AttributeByNameMap.find(pName) == AttributeByNameMap.end())
+  if (Iter == AttributeByNameMap.end())
   {
     pAttribute = new AdtAutoFunction(pName,
                                      ClassName,
@@ -9189,10 +9197,30 @@ AdtAutoFunction* AdtAutoClass::addFunction(const char* pName,
   }
   else
   {
-    ::printf("ERROR:Duplicate definition of %s in file %s on line %d\n",
-             pName,
-             pFileName,
-             nLineNumber);
+    if (bIsVirtual)
+    {
+      AdtAutoAttribute*  pAttr = Iter->second;
+
+      if (pAttr->attributeType() == AttributeTypeFunction)
+      {
+        pAttribute = (AdtAutoFunction*)pAttr;
+        pAttribute->reset();
+      }
+      else
+      {
+        ::printf("ERROR:Function definition of %s in file %s on line %d masked by another object\n",
+                 pName,
+                 pFileName,
+                 nLineNumber);
+      }
+    }
+    else
+    {
+      ::printf("ERROR:Duplicate definition of %s in file %s on line %d\nIf using BoundsCheck make sure methods are virtual\n",
+               pName,
+               pFileName,
+               nLineNumber);
+    }
   }
 
   return (pAttribute);

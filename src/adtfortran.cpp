@@ -2646,12 +2646,12 @@ void AdtFortranBase::setChangePrefix(const char* pRemovePrefixString, const char
 
 AdtFile& AdtFortranBase::writeWithChangedPrefix(AdtFile& pOutFile, const char* pString, bool bSupressNew)
 {
+  int     nStart  = 0;
+  int     nLength = 0;
+  string  sName(pString);
+
   if (RemovePrefixString != 0)
   {
-    int     nStart  = 0;
-    int     nLength = 0;
-    string  sName(pString);
-
     if (AdtParser::hasSubString(sName,
                                 RemovePrefixString,
                                 nStart,
@@ -2660,7 +2660,8 @@ AdtFile& AdtFortranBase::writeWithChangedPrefix(AdtFile& pOutFile, const char* p
     {
       const char* pName = sName;
 
-      if (!bSupressNew && (AddPrefixString != 0))
+      // If it matches the prefix we should allows add the new one
+      if (AddPrefixString != 0)
       {
         write(pOutFile, AddPrefixString);
       }
@@ -2679,9 +2680,21 @@ AdtFile& AdtFortranBase::writeWithChangedPrefix(AdtFile& pOutFile, const char* p
   }
   else
   {
-    if (!bSupressNew && (AddPrefixString != 0))
+    if (AddPrefixString != 0)
     {
-      write(pOutFile, AddPrefixString);
+      // If it matches the new prefix we shouldn't add the new one
+      if (AdtParser::hasSubString(sName,
+                                  AddPrefixString,
+                                  nStart,
+                                  nLength,
+                                  false) && (nStart == 0))
+      {
+        // Do nothing
+      }
+      else if (!bSupressNew)
+      {
+        write(pOutFile, AddPrefixString);
+      }
     }
 
     write(pOutFile, pString);
@@ -3170,7 +3183,7 @@ void AdtFortranExecutableProgram::addBoundsChecking(AdtParser* pFuncOrSubObj,
 
             sCallCode += ")\n";
 
-            AdtParser* pRoot = (pObj->findAscendantWithClass("AdtFortranExecutableConstruct"))->parent();
+            AdtParser* pRoot = pObj->findAscendantWithClass("AdtFortranExecutableConstruct");
 
             ::sprintf(sBuffer, "%zx", (size_t)pRoot);
 
@@ -3183,9 +3196,21 @@ void AdtFortranExecutableProgram::addBoundsChecking(AdtParser* pFuncOrSubObj,
             // hence we build the statement root pointer into the key.
             if (AddedCheckMap.find(sKey) == AddedCheckMap.end())
             {
-              expressionBuildAndInsert(sCallCode,
-                                       pObj,
-                                       false);
+              AdtFortranBase* pContainer = expressionBuildAndInsert(sCallCode,
+                                                                    pObj,
+                                                                    false);
+
+              if (0)
+              {
+                string  sTest;
+                AdtFile FortranOut(true);
+
+                if (FortranOut.open(sTest))
+                {
+                  pContainer->writeFortran(FortranOut);
+                  FortranOut.close();
+                }
+              }
 
               AddedCheckMap[sKey] = "";
             }
@@ -4010,11 +4035,11 @@ AdtFortranBase* AdtFortranExecutableProgram::expressionBuildAndInsert(const char
 
         if (bInsertAfter)
         {
-          pObjectContainer->insertAfter(pObjectToInsertAt, pReplacementContainer);
+          pObjectContainer->insertAfter(pObjectToInsertAt, pReplacementContainer->objList());
         }
         else
         {
-          pObjectContainer->insertBefore(pObjectToInsertAt, pReplacementContainer);
+          pObjectContainer->insertBefore(pObjectToInsertAt, pReplacementContainer->objList());
         }
       }
 
@@ -7667,7 +7692,13 @@ void AdtFortranBody::addTypeDeclarationStmt(AdtFortranTypeDeclarationStmt* pObj)
   }
   else
   {
-    insertAfter(pInsertAfter, pObj);
+    AdtFortranSpecificationPartConstruct* pSpecPartConstruct = new AdtFortranSpecificationPartConstruct(0, 0, 0, pObj, 0, 0, 0, 0);
+    AdtFortranBodyConstruct*              pBodyConstruct     = new AdtFortranBodyConstruct(pSpecPartConstruct, 0);
+
+    insertAfter(pInsertAfter, pBodyConstruct);
+
+    UtlReleaseReference(pBodyConstruct);
+    UtlReleaseReference(pSpecPartConstruct);
   }
 }
 
@@ -8263,6 +8294,16 @@ AdtFortranModule::AdtFortranModule(AdtParser* pModuleStmtObj,
                                    AdtParser* pEndModuleStmtObj)
  : AdtFortranBase()
 {
+  bool bCreated = false;
+
+  // If pModuleBodyObj is null then create an empty one as we need this to be
+  // initialised for the mergeWith() method to work correctly.
+  if (pModuleBodyObj == 0)
+  {
+    pModuleBodyObj  = new AdtFortranModuleBody();
+    bCreated        = true;
+  }
+
   initObject(ModuleStmt,    pModuleStmtObj,     AdtFortranModuleStmt,     true);
   initObject(ModuleBody,    pModuleBodyObj,     AdtFortranModuleBody,     true);
   initObject(EndModuleStmt, pEndModuleStmtObj,  AdtFortranEndModuleStmt,  true);
@@ -8270,6 +8311,11 @@ AdtFortranModule::AdtFortranModule(AdtParser* pModuleStmtObj,
   if (ModuleStmt != 0)
   {
     name(ModuleStmt->name());
+  }
+
+  if (bCreated)
+  {
+    UtlReleaseReference(pModuleBodyObj);
   }
 }
 
@@ -8344,6 +8390,14 @@ implType(AdtFortranModule, AdtFortranBase);
 //  ----------------------------------------------------------------------------
 //  AdtFortranModuleBody method implementations
 //  ----------------------------------------------------------------------------
+AdtFortranModuleBody::AdtFortranModuleBody()
+ : AdtFortranBase()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtFortranModuleBody::AdtFortranModuleBody(AdtParser* pModuleBodyContentObj)
  : AdtFortranBase()
 {
@@ -9952,6 +10006,11 @@ void AdtFortranTypeSpec::initialise()
     }
 
     case ForType_BOUNDSCHECK:
+    {
+      pTypeName = "CHECK_CONTEXT";
+      break;
+    }
+
     default:
     {
       break;
@@ -10410,6 +10469,7 @@ AdtFile& AdtFortranTypeSpec::writeFortran(AdtFile& pOutFile, int nMode) const
 
     case ForType_BOUNDSCHECK:
     {
+      write(pOutFile, "CHECK_CONTEXT ");
       break;
     }
 
@@ -20919,7 +20979,7 @@ AdtFile& AdtFortranSubroutineStmt::writeCPP(AdtFile& pOutFile, int nMode) const
     LblDef->writeCPP(pOutFile, nMode);
   }
 
-  if (IsVirtual)
+  if ((IsVirtual) && (nMode == CPP_MODE_FUNCTION_DECLARATION))
   {
     write(pOutFile, "virtual ");
   }

@@ -1271,11 +1271,13 @@ void check(const AdtArrayPlanActor*& pContext,
                  nIndex,
                  pCoord->IndexBase - 1);
 
-        log_error(sBuffer);
-
         if (bThrowException)
         {
           throw(std::runtime_error(sBuffer));
+        }
+        else
+        {
+          log_error(sBuffer);
         }
         break;
       }
@@ -1295,11 +1297,13 @@ void check(const AdtArrayPlanActor*& pContext,
                  nIndex,
                  pCoord->IndexBase + pCoord->Size);
 
-        log_error(sBuffer);
-
         if (bThrowException)
         {
           throw(std::runtime_error(sBuffer));
+        }
+        else
+        {
+          log_error(sBuffer);
         }
         break;
       }

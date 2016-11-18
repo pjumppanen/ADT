@@ -815,7 +815,6 @@ public:
                                                const char* pClassPrefix,
                                                AdtFile* pFile = 0);
 
-  void                          boundsCheckAll();
   void                          boundsCheck(const AdtStringList& rBoundsCheckList);
 
   void                          enumerateFunctionNames(AdtStringByStringMap& rRegardAsClassFunctionsMap,
@@ -1156,6 +1155,7 @@ public:
 class AdtFortranModuleBody : public AdtFortranBase
 {
 public:
+  AdtFortranModuleBody();
   AdtFortranModuleBody(AdtParser* pModuleBodyContentObj);
   AdtFortranModuleBody(const AdtFortranModuleBody& rCopy);
   virtual ~AdtFortranModuleBody();

@@ -255,6 +255,17 @@ inline AdtAutoHelper::~AdtAutoHelper()
 
 
 //  ----------------------------------------------------------------------------
+//  enum AdtAtributeType
+//  ----------------------------------------------------------------------------
+enum AdtAtributeType
+{
+  AttributeTypeScalar,
+  AttributeTypeArray,
+  AttributeTypeFunction,
+};
+
+
+//  ----------------------------------------------------------------------------
 //  class AdtAutoAttribute
 //  ----------------------------------------------------------------------------
 class AdtAutoAttribute : public UtlReferenceCount
@@ -262,6 +273,7 @@ class AdtAutoAttribute : public UtlReferenceCount
 private:
   string              ClassName;
   string              Name;
+  AdtAtributeType     AttributeType;
   AdtAutoType         Type;
   AdtAutoMode         Mode;
   AdtAutoDir          Dir;
@@ -365,6 +377,7 @@ protected:
 public:
   AdtAutoAttribute(const char* pName,
                    const char* pClassName,
+                   AdtAtributeType nAttributeType,
                    AdtAutoType nType,
                    AdtAutoMode nMode,
                    AdtAutoDir nDir,
@@ -382,6 +395,7 @@ public:
 
   const string&       className() const;
   const string&       name() const;
+  AdtAtributeType     attributeType() const;
   AdtAutoType         type() const;
   AdtAutoMode         mode() const;
   AdtAutoDir          dir() const;
@@ -459,6 +473,13 @@ inline const string& AdtAutoAttribute::className() const
 inline const string& AdtAutoAttribute::name() const
 {
   return (Name);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline AdtAtributeType AdtAutoAttribute::attributeType() const
+{
+  return (AttributeType);
 }
 
 //  ----------------------------------------------------------------------------
@@ -1275,6 +1296,7 @@ public:
   AdtAutoFunction*      addFunction(const char* pName,
                                     AdtAutoType nType,
                                     AdtAutoDir nDir,
+                                    bool bIsVirtual,
                                     const char* pFileName,
                                     int nLineNumber);
 

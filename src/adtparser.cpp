@@ -1961,6 +1961,101 @@ bool AdtParser::insertAfter(const AdtParser* pObj, AdtParser* pInsertObj)
 
 //  ----------------------------------------------------------------------------
 
+bool AdtParser::insertBefore(const AdtParser* pObj, const AdtParserPtrList& rObjList)
+{
+  bool bInserted = false;
+
+  if ((ObjList != 0) && (pObj != 0) && (rObjList.size() > 0))
+  {
+    AdtParserPtrListIter Iter;
+
+    for (Iter = ObjList->begin() ; Iter != ObjList->end() ; )
+    {
+      AdtParser*  pListObj = *Iter;
+
+      if (pListObj == pObj)
+      {
+        AdtParserPtrListConstIter ObjIter;
+
+        for (ObjIter = rObjList.begin() ; ObjIter != rObjList.end() ; ++ObjIter)
+        {
+          AdtParser*  pInsertObj = (AdtParser*)(const AdtParser*)*ObjIter;
+
+          Iter = ObjList->insert(Iter, pInsertObj);
+          pInsertObj->parent(this);
+        }
+
+        bInserted = true;
+        break;
+      }
+      else
+      {
+        ++Iter;
+      }
+    }
+  }
+
+  return (bInserted);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtParser::insertAfter(const AdtParser* pObj, const AdtParserPtrList& rObjList)
+{
+  bool bInserted = false;
+
+  if ((ObjList != 0) && (pObj != 0) && (rObjList.size() > 0))
+  {
+    AdtParserPtrListIter Iter;
+
+    for (Iter = ObjList->begin() ; Iter != ObjList->end() ; )
+    {
+      AdtParser*  pListObj = *Iter;
+
+      if (pListObj == pObj)
+      {
+        Iter++;
+
+        if (Iter == ObjList->end())
+        {
+          AdtParserPtrListConstIter ObjIter;
+
+          for (ObjIter = rObjList.begin() ; ObjIter != rObjList.end() ; ++ObjIter)
+          {
+            AdtParser*  pInsertObj = (AdtParser*)(const AdtParser*)*ObjIter;
+
+            ObjList->push_back(pInsertObj);
+            pInsertObj->parent(this);
+          }
+        }
+        else
+        {
+          AdtParserPtrListConstIter ObjIter;
+
+          for (ObjIter = rObjList.begin() ; ObjIter != rObjList.end() ; ++ObjIter)
+          {
+            AdtParser*  pInsertObj = (AdtParser*)(const AdtParser*)*ObjIter;
+
+            Iter = ObjList->insert(Iter, pInsertObj);
+            pInsertObj->parent(this);
+          }
+        }
+
+        bInserted = true;
+        break;
+      }
+      else
+      {
+        ++Iter;
+      }
+    }
+  }
+
+  return (bInserted);
+}
+
+//  ----------------------------------------------------------------------------
+
 void AdtParser::remove(const char* pObjName)
 {
   if ((ObjList != 0) && (pObjName != 0))

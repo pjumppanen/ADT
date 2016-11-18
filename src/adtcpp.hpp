@@ -1839,42 +1839,6 @@ public:
 
 
 //  ----------------------------------------------------------------------------
-//  AdtCppSimpleDeclaration class
-//  ----------------------------------------------------------------------------
-class AdtCppSimpleDeclaration : public AdtCppBase
-{
-private:
-  AdtCppClassSpecifier*         ClassSpecifier;
-  AdtCppEnumSpecifier*          EnumSpecifier;
-  AdtCppSimpleTypeSpecifier*    SimpleTypeSpecifier;
-  AdtCppInitDeclaratorList*     InitDeclaratorList;
-  AdtCppDeclModifierList*       DeclModifierList;
-  bool                          HasTypeDef;
-
-public:
-  AdtCppSimpleDeclaration(AdtParser* pClassSpecifierObj,
-                          AdtParser* pEnumSpecifierObj,
-                          AdtParser* pSimpleTypeSpecifierObj,
-                          AdtParser* pInitDeclaratorListObj,
-                          AdtParser* pDeclModifierListObj,
-                          bool bHasTypeDef,
-                          const char* pComment);
-
-  AdtCppSimpleDeclaration(const AdtCppSimpleDeclaration& rCopy);
-  virtual ~AdtCppSimpleDeclaration();
-
-  bool                          isTypeDef(const char** ppAliasName = 0) const;
-
-  void                          writeFortranDeclaration(AdtFile& rOutFile, const AdtCppDeclarator* pDeclarator) const;
-
-  virtual AdtFile&              writeCPP(AdtFile& rOutFile, int nMode = 0) const;
-  virtual AdtFile&              writeFortran(AdtFile& rOutFile, int nMode = 0) const;
-
-  declType;
-};
-
-
-//  ----------------------------------------------------------------------------
 
 enum AdtCppDeclModifierType
 {
@@ -1891,6 +1855,7 @@ enum AdtCppDeclModifierType
   AdtCppDeclModifierType_FRIEND   = 10
 };
 
+
 //  ----------------------------------------------------------------------------
 //  AdtCppDeclModifier class
 //  ----------------------------------------------------------------------------
@@ -1905,6 +1870,7 @@ public:
   virtual ~AdtCppDeclModifier();
 
   bool                          isConst() const;
+  AdtCppDeclModifierType        modifier() const;
   AdtAutoDir                    autoDir(AdtAutoDir nDir) const;
 
   virtual AdtFile&              writeCPP(AdtFile& rOutFile, int nMode = 0) const;
@@ -1912,6 +1878,13 @@ public:
 
   declType;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline AdtCppDeclModifierType AdtCppDeclModifier::modifier() const
+{
+  return (Type);
+}
 
 //  ----------------------------------------------------------------------------
 
@@ -1961,6 +1934,7 @@ public:
   virtual ~AdtCppDeclModifierList();
 
   AdtAutoDir                    autoDir(AdtAutoDir nDir) const;
+  bool                          hasModifier(AdtCppDeclModifierType nType) const;
 
   virtual AdtFile&              writeCPP(AdtFile& rOutFile, int nMode = 0) const;
   virtual AdtFile&              writeFortran(AdtFile& rOutFile, int nMode = 0) const;
@@ -1968,6 +1942,50 @@ public:
   declListType(AdtCppDeclModifier);
   declType;
 };
+
+
+//  ----------------------------------------------------------------------------
+//  AdtCppSimpleDeclaration class
+//  ----------------------------------------------------------------------------
+class AdtCppSimpleDeclaration : public AdtCppBase
+{
+private:
+  AdtCppClassSpecifier*         ClassSpecifier;
+  AdtCppEnumSpecifier*          EnumSpecifier;
+  AdtCppSimpleTypeSpecifier*    SimpleTypeSpecifier;
+  AdtCppInitDeclaratorList*     InitDeclaratorList;
+  AdtCppDeclModifierList*       DeclModifierList;
+  bool                          HasTypeDef;
+
+public:
+  AdtCppSimpleDeclaration(AdtParser* pClassSpecifierObj,
+                          AdtParser* pEnumSpecifierObj,
+                          AdtParser* pSimpleTypeSpecifierObj,
+                          AdtParser* pInitDeclaratorListObj,
+                          AdtParser* pDeclModifierListObj,
+                          bool bHasTypeDef,
+                          const char* pComment);
+
+  AdtCppSimpleDeclaration(const AdtCppSimpleDeclaration& rCopy);
+  virtual ~AdtCppSimpleDeclaration();
+
+  bool                          isTypeDef(const char** ppAliasName = 0) const;
+  bool                          isVirtual() const;
+
+  void                          writeFortranDeclaration(AdtFile& rOutFile, const AdtCppDeclarator* pDeclarator) const;
+
+  virtual AdtFile&              writeCPP(AdtFile& rOutFile, int nMode = 0) const;
+  virtual AdtFile&              writeFortran(AdtFile& rOutFile, int nMode = 0) const;
+
+  declType;
+};
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppSimpleDeclaration::isVirtual() const
+{
+  bool bIsVirtual = (DeclModifierList != 0) ? DeclModifierList->hasModifier(AdtCppDeclModifierType_VIRTUAL) : false;
+}
 
 
 //  ----------------------------------------------------------------------------
@@ -2450,6 +2468,7 @@ public:
   bool                          isCallDeclaration(size_t* pnArgs = 0) const;
   bool                          isFunctionDeclaration() const;
   bool                          isObj() const;
+  bool                          isVirtual() const;
 
   virtual AdtFile&              writeCPP(AdtFile& rOutFile, int nMode = 0) const;
   virtual AdtFile&              writeFortran(AdtFile& rOutFile, int nMode = 0) const;
@@ -2462,6 +2481,13 @@ public:
 inline bool AdtCppDeclarator::isObj() const
 {
   return (IsObj);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppDeclarator::isVirtual() const
+{
+  return (IsVirtual);
 }
 
 
@@ -2587,6 +2613,8 @@ public:
 
   bool                          isProcedure() const;
 
+  bool                          isVirtual() const;
+
   void                          checkDeclarations(const AdtCppTranslationUnit* pTranslationUnit) const;
 
   bool                          enumerateLocalObjects(AdtParserPtrList& rExternalsList) const;
@@ -2622,6 +2650,15 @@ inline AdtBlackBoxDefinition* AdtCppFunctionDefinition::blackBox() const
 inline bool AdtCppFunctionDefinition::hasBody() const
 {
   return (FunctionBody != 0);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppFunctionDefinition::isVirtual() const
+{
+  bool bIsVirtual = (DeclModifierList != 0) ? DeclModifierList->hasModifier(AdtCppDeclModifierType_VIRTUAL) : false;
+
+  return (bIsVirtual);
 }
 
 //  ----------------------------------------------------------------------------
@@ -2834,6 +2871,7 @@ public:
   bool                          shouldImport(AdtIntByStringMap& rImportMap) const;
   bool                          isCtor() const;
   bool                          isInlineFunction() const;
+  bool                          isVirtual() const;
   void                          checkLookForDefinition(AdtStringList& rImportDefinitionList) const;
 
   void                          exportFunctionImplementation(AdtCppTranslationUnit* pTarget);
@@ -2846,6 +2884,15 @@ public:
 
   declType;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppMemberDeclaration::isVirtual() const
+{
+  bool bIsVirtual = (DeclModifierList != 0) ? DeclModifierList->hasModifier(AdtCppDeclModifierType_VIRTUAL) : false;
+
+  return (bIsVirtual);
+}
 
 
 //  ----------------------------------------------------------------------------

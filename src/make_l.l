@@ -248,6 +248,13 @@ char* mallocScanComment(const char* pClosingBrace)
 
 %x FILENAMES
 
+
+FILENAME_CHARS          [a-zA-Z0-9_%&(){}#@!$\+\-]
+QUOTED_FILENAME_CHARS   [a-zA-Z0-9_%&(){}#@!$\+\- ]
+FILENAME_LITERAL        ((([a-zA-Z]\:)?{FILENAME_CHARS}*(\.{FILENAME_CHARS}*)*([\\\/]{FILENAME_CHARS}*(\.{FILENAME_CHARS}*)*)*)|([\'\"]([a-zA-Z ]\:)?{QUOTED_FILENAME_CHARS}*(\.{QUOTED_FILENAME_CHARS}*)*([\\\/]{QUOTED_FILENAME_CHARS}*(\.{QUOTED_FILENAME_CHARS}*)*)*[\'\"]))
+IDENTIFIER_LITERAL      [a-zA-Z_]([a-zA-Z0-9_])*
+
+
 %%
 <*>AD                                             return (dispatchToken(&yylval, yytext, M_AD));
 <*>CLASS                                          return (dispatchToken(&yylval, yytext, M_CLASS));
@@ -333,10 +340,10 @@ char* mallocScanComment(const char* pClosingBrace)
 <*>([\/][\/].*[\n])                               {
                                                     int   nToken   = M_SINGLELINE_COMMENT;
                                                   }
-<FILENAMES>((([a-zA-Z]\:)?[a-zA-Z0-9_\-]*(\.[a-zA-Z0-9_\-]*)*([\\\/][a-zA-Z0-9_\-]*(\.[a-zA-Z0-9_\-]*)*)*)|([\'\"]([a-zA-Z ]\:)?[a-zA-Z0-9_ \-]*(\.[a-zA-Z0-9_ \-]*)*([\\\/][a-zA-Z0-9_ \-]*(\.[a-zA-Z0-9_ \-]*)*)*[\'\"])) {
+<FILENAMES>{FILENAME_LITERAL}                     {
                                                     return (dispatchToken(&yylval, yytext, M_FILENAME));
                                                   }
-<INITIAL>[a-zA-Z_]([a-zA-Z0-9_])*                 return (dispatchToken(&yylval, yytext, M_IDENT));
+<INITIAL>{IDENTIFIER_LITERAL}                     return (dispatchToken(&yylval, yytext, M_IDENT));
 <*>\'[^\'\n]*[\'\n]                               return (dispatchToken(&yylval, yytext, M_TEXT));
 <*>\"[^\"\n]*[\"\n]                               return (dispatchToken(&yylval, yytext, M_TEXT));
 <*>\n                                             {

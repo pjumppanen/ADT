@@ -3464,9 +3464,17 @@ public:
   virtual ~AdtDelphiDirective();
 
   virtual AdtFile&      writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
+  AdtType               directive() const;
 
   declType;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline AdtDelphiDirective::AdtType AdtDelphiDirective::directive() const
+{
+  return (Type);
+}
 
 
 //  ----------------------------------------------------------------------------
@@ -3479,6 +3487,7 @@ public:
   AdtDelphiDirectiveList(const AdtDelphiDirectiveList& rCopy);
   virtual ~AdtDelphiDirectiveList();
 
+  bool                           hasDirective(AdtDelphiDirective::AdtType nType) const;
   virtual AdtFile&               writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
 
   declListType(AdtDelphiDirective);
@@ -3581,6 +3590,7 @@ public:
   bool                          isFunction() const;
   bool                          isConstructor() const;
   bool                          isDestructor() const;
+  bool                          isVirtual() const;
 
   declType;
 };
@@ -3951,6 +3961,8 @@ public:
 
   virtual AdtFile&  writeFortran(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&  writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
+
+  bool              isVirtual() const;
 
   declType;
 };

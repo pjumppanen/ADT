@@ -484,6 +484,9 @@ public:
   bool                                insertBefore(const AdtParser* pObj, AdtParser* pInsertObj);
   bool                                insertAfter(const AdtParser* pObj, AdtParser* pInsertObj);
 
+  bool                                insertBefore(const AdtParser* pObj, const AdtParserPtrList& rObjList);
+  bool                                insertAfter(const AdtParser* pObj, const AdtParserPtrList& rObjList);
+
   void                                remove(AdtParser* pObj);
   void                                remove(const char* pObjName);
   virtual void                        removeMatching(const AdtParserPtrByStringMap& rMap, AdtParserPtrList* pRemovedList = 0);

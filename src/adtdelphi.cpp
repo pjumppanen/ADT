@@ -13384,6 +13384,33 @@ AdtDelphiDirectiveList::~AdtDelphiDirectiveList()
 
 //  ----------------------------------------------------------------------------
 
+bool AdtDelphiDirectiveList::hasDirective(AdtDelphiDirective::AdtType nType) const
+{
+  bool                      bHasType = false;
+  const AdtParserPtrList&   rList    = objList();
+  AdtParserPtrListConstIter Iter;
+
+  for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+  {
+    const AdtParser*  pObj = *Iter;
+
+    if (pObj->isType("AdtDelphiDirective"))
+    {
+      const AdtDelphiDirective* pDirective = (const AdtDelphiDirective*)pObj;
+
+      if (pDirective->directive() == nType)
+      {
+        bHasType = true;
+        break;
+      }
+    }
+  }
+
+  return (bHasType);
+}
+
+//  ----------------------------------------------------------------------------
+
 implType(AdtDelphiDirectiveList, AdtDelphiBase);
 
 
@@ -13625,6 +13652,15 @@ AdtFile& AdtDelphiMethod::writeDelphi(AdtFile& pOutFile, int nMode) const
   }
 
   return (pOutFile);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtDelphiMethod::isVirtual() const
+{
+  bool bIsVirtual = (DirectiveList != 0) ? DirectiveList->hasDirective(AdtDelphiDirective::AdtType_VIRTUAL) : false;
+
+  return (bIsVirtual);
 }
 
 //  ----------------------------------------------------------------------------
@@ -14975,6 +15011,7 @@ AdtDelphiClassMethod::AdtDelphiClassMethod(AdtVisibility nVisibility,
         AdtAutoFunction*  pFunction = pClass->addFunction(pRootObj->name(),
                                                           nReturnType,
                                                           AdtAutoDir_UNDEFINED,
+                                                          isVirtual(),
                                                           pRootObj->fileName(),
                                                           pRootObj->lineNumber());
 
@@ -15177,6 +15214,16 @@ AdtFile& AdtDelphiClassMethod::writeDelphi(AdtFile& pOutFile, int nMode) const
   }
 
   return (pOutFile);
+}
+
+
+//  ----------------------------------------------------------------------------
+
+bool AdtDelphiClassMethod::isVirtual() const
+{
+  bool bIsVirtual = (Method != 0) ? Method->isVirtual() : false;
+
+  return (bIsVirtual);
 }
 
 //  ----------------------------------------------------------------------------
