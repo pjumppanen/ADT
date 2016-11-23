@@ -1,8 +1,8 @@
 Package: newadt
 Type: Package
 Title: Create Skeleton ADT projects
-Version: 1.01
-Date: 2016-10-20
+Version: 1.02
+Date: 2016-11-23
 Author: Paavo Jumppanen
 Maintainer: Paavo Jumppanen <paavo.jumppanen@csiro.au>
 Depends:

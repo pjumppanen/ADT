@@ -25,7 +25,7 @@ createUUID <- function()
   return (UUID)
 }
 
-new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templates=NA)
+new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templates=NA, overwrite=FALSE)
 {
   not.dir <- !file.info(path)$isdir
 
@@ -100,12 +100,27 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     solution.guid <- createUUID()
     project.guid  <- createUUID()
 
-    # create solution folder
-    dir.create(solution.path)
+    if (dir.exists(solution.path))
+    {
+      if (!overwrite)
+      {
+        stop("Solution folder already exists! Use overwrite argument to force the result.")
+      }
+    }
+    else
+    {
+      # create solution folder
+      dir.create(solution.path)
+    }
+
     Sys.chmod(solution.path, mode="0777")
 
-    # create project folder
-    dir.create(project.path)
+    if (!dir.exists(project.path))
+    {
+      # create project folder
+      dir.create(project.path)
+    }
+
     Sys.chmod(project.path, mode="0777")
 
     # create project file
@@ -179,9 +194,19 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     project.path  <- paste(path, "/", name, sep="")
     src.path      <- paste(project.path, "/src", sep="")
 
-    # create project folder
-    dir.create(project.path)
-    Sys.chmod(project.path, mode="0777")
+    if (dir.exists(project.path))
+    {
+      if (!overwrite)
+      {
+        stop("Project folder already exists! Use overwrite argument to force the result.")
+      }
+    }
+    else
+    {
+      # create project folder
+      dir.create(project.path)
+      Sys.chmod(project.path, mode="0777")
+    }
 
     # create src folder
     dir.create(src.path)
