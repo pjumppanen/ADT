@@ -1690,6 +1690,15 @@ bool AdtCppTranslationUnit::compile(const AdtCppFunctionDefinition* pFunction,
             //Is a class variable
             rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
           }
+          else if (findEnum(rName, pExternal))
+          {
+            //Quick and dirty hack to build a unique key name to stop the same
+            //object being inserted more than once.
+            ::sprintf(sKeyName, "%zx", (size_t)pExternal);
+
+            //Is a variable
+            rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+          }
           else
           {
             //warning : unresolved externals
@@ -1798,6 +1807,22 @@ bool AdtCppTranslationUnit::isFunction(const char* pName)
 
 //  ----------------------------------------------------------------------------
 
+bool AdtCppTranslationUnit::findEnum(const char* pName,
+                                     const AdtParser*& pObj) const
+{
+  bool bFound = false;
+
+  if (DeclarationSeq != 0)
+  {
+    pObj   = 0;
+    bFound = DeclarationSeq->findEnumSpecifierByConst(pName, pObj);
+  }
+
+  return (bFound);
+}
+
+//  ----------------------------------------------------------------------------
+
 bool AdtCppTranslationUnit::findVar(const char* pName,
                                     const AdtParser*& pObj) const
 {
@@ -1805,9 +1830,8 @@ bool AdtCppTranslationUnit::findVar(const char* pName,
 
   if (DeclarationSeq != 0)
   {
-    const AdtParser*  pVar = 0;
-
-    bFound = DeclarationSeq->findVarDefinition(pName, pVar);
+    pObj   = 0;
+    bFound = DeclarationSeq->findVarDefinition(pName, pObj);
   }
 
   return (bFound);
@@ -2400,27 +2424,37 @@ AdtFile& AdtCppTranslationUnit::writeFortran(AdtFile& rOutFile,
       {
         AdtParser* pObj = (*Iter).second;
 
-        if ((pObj != 0) && pObj->isType("AdtCppDeclarator"))
+        if (pObj != 0)
         {
-          const AdtCppDeclarator*         pDeclarator         = (const AdtCppDeclarator*)pObj;
-          const AdtCppMemberDeclaration*  pMemberDeclaration  = (const AdtCppMemberDeclaration*)pDeclarator->findAscendantWithClassLineage("AdtCppMemberDeclarator,AdtCppMemberDeclarationList,AdtCppMemberDeclaration");
-
-          if (pMemberDeclaration != 0)
+          if (pObj->isType("AdtCppDeclarator"))
           {
-            pMemberDeclaration->writeFortranDeclaration(rOutFile, pDeclarator);
-          }
-          else
-          {
-            const AdtCppSimpleDeclaration*  pSimpleDeclaration  = (const AdtCppSimpleDeclaration*)pDeclarator->findAscendantWithClassLineage("AdtCppInitDeclarator,AdtCppInitDeclaratorList,AdtCppSimpleDeclaration");
+            const AdtCppDeclarator*         pDeclarator         = (const AdtCppDeclarator*)pObj;
+            const AdtCppMemberDeclaration*  pMemberDeclaration  = (const AdtCppMemberDeclaration*)pDeclarator->findAscendantWithClassLineage("AdtCppMemberDeclarator,AdtCppMemberDeclarationList,AdtCppMemberDeclaration");
 
-            if (pSimpleDeclaration != 0)
+            if (pMemberDeclaration != 0)
             {
-              pSimpleDeclaration->writeFortranDeclaration(rOutFile, pDeclarator);
+              pMemberDeclaration->writeFortranDeclaration(rOutFile, pDeclarator);
             }
             else
             {
-              FAIL();
+              const AdtCppSimpleDeclaration*  pSimpleDeclaration  = (const AdtCppSimpleDeclaration*)pDeclarator->findAscendantWithClassLineage("AdtCppInitDeclarator,AdtCppInitDeclaratorList,AdtCppSimpleDeclaration");
+
+              if (pSimpleDeclaration != 0)
+              {
+                pSimpleDeclaration->writeFortranDeclaration(rOutFile, pDeclarator);
+              }
+              else
+              {
+                FAIL();
+              }
             }
+          }
+          else if (pObj->isType("AdtCppEnumSpecifier"))
+          {
+            const AdtCppEnumSpecifier* pEnumSpecifier = (const AdtCppEnumSpecifier*)pObj;
+
+            rOutFile.write("INTEGER, ");
+            pEnumSpecifier->writeFortran(rOutFile, 0);
           }
         }
 
@@ -2941,7 +2975,69 @@ void AdtCppDeclarationInfo::flush()
   FunctionDefinitionMap.clear();
   VarDefinitionMap.clear();
   EnumSpecifierMap.clear();
+  EnumSpecifierByConstantMap.clear();
   ClassSpecifierMap.clear();
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtCppDeclarationInfo::enumerateEnumSpecifierByConstants()
+{
+  AdtParserPtrByStringMapIter Iter;
+
+  for (Iter = EnumSpecifierMap.begin() ; Iter != EnumSpecifierMap.end() ; ++Iter)
+  {
+    AdtParser* pEnumSpecifierObj = Iter->second;
+
+    if ((pEnumSpecifierObj != 0) && pEnumSpecifierObj->isType("AdtCppEnumSpecifier"))
+    {
+      const AdtCppEnumeratorList* pEnumeratorList = (const AdtCppEnumeratorList*)pEnumSpecifierObj->findDescendant("EnumeratorList");
+
+      if (pEnumeratorList != 0)
+      {
+        AdtParserPtrListConstIter ListIter;
+        const AdtParserPtrList&   rList = pEnumeratorList->objList();
+
+        for (ListIter = rList.begin() ; ListIter != rList.end() ; ++ListIter)
+        {
+          const AdtParser*  pObj = *ListIter;
+
+          if (pObj != 0)
+          {
+            AdtParserPtrByStringMapIter ByIter = EnumSpecifierByConstantMap.find(pObj->name());
+
+            if (ByIter != EnumSpecifierByConstantMap.end())
+            {
+              const AdtParser* pExistingObj = ByIter->second;
+
+              if (pExistingObj != pEnumSpecifierObj)
+              {
+                // Multiple names for the same constant in different enumerated types.
+                // This cannot be supported in Fortran 95 as the language has no
+                // native enumerated types and we just map enumerated types as
+                // constant parameters.
+                ::printf("ERROR: Enumerated constant %s on line %d in file %s is already "
+                         "defined in %s on line %d in file %s. They must have globally "
+                         "unique names to be translatable to Fortran.\n",
+                         pObj->name().c_str(),
+                         pObj->lineNumber(),
+                         pObj->fileName(),
+                         pExistingObj->name().c_str(),
+                         pExistingObj->lineNumber(),
+                         pExistingObj->fileName());
+
+                AdtExit(-1);
+              }
+            }
+            else
+            {
+              EnumSpecifierByConstantMap[pObj->name()] = pEnumSpecifierObj;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -3018,6 +3114,7 @@ AdtCppDeclarationInfo::AdtCppDeclarationInfo()
    FunctionDefinitionMap(),
    VarDefinitionMap(),
    EnumSpecifierMap(),
+   EnumSpecifierByConstantMap(),
    ClassSpecifierMap()
 {
 
@@ -3031,6 +3128,7 @@ AdtCppDeclarationInfo::AdtCppDeclarationInfo(const AdtCppDeclarationInfo& rCopy)
    FunctionDefinitionMap(),
    VarDefinitionMap(),
    EnumSpecifierMap(),
+   EnumSpecifierByConstantMap(),
    ClassSpecifierMap()
 {
 
@@ -8388,10 +8486,14 @@ AdtFile& AdtCppEnumSpecifier::writeCPP(AdtFile& rOutFile, int nMode) const
 
 AdtFile& AdtCppEnumSpecifier::writeFortran(AdtFile& rOutFile, int nMode) const
 {
-  ::printf("ERROR: enum not supported in translation to Fortran on "
-           "line %d in file %s\n", lineNumber(),
-                                   fileName());
-  AdtExit(-1);
+  write(rOutFile, "PARAMETER :: ");
+
+  if (EnumeratorList != 0)
+  {
+    EnumeratorList->writeFortran(rOutFile, nMode);
+  }
+
+  rOutFile.newline();
 
   return (rOutFile);
 }
@@ -9237,10 +9339,14 @@ AdtFile& AdtCppEnumeratorDefinition::writeCPP(AdtFile& rOutFile, int nMode) cons
 
 AdtFile& AdtCppEnumeratorDefinition::writeFortran(AdtFile& rOutFile, int nMode) const
 {
-  ::printf("ERROR: enum not supported in translation to Fortran on "
-           "line %d in file %s\n", lineNumber(),
-                                   fileName());
-  AdtExit(-1);
+  write(rOutFile, name());
+
+  if (ConstantExpression != 0)
+  {
+    write(rOutFile, " = ");
+
+    ConstantExpression->writeFortran(rOutFile, nMode);
+  }
 
   return (rOutFile);
 }

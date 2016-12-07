@@ -506,6 +506,9 @@ public:
   static bool                   isProcedure(const char* pName);
   static bool                   isFunction(const char* pName);
 
+  bool                          findEnum(const char* pName,
+                                         const AdtParser*& pObj) const;
+
   bool                          findVar(const char* pName,
                                         const AdtParser*& pObj) const;
 
@@ -612,11 +615,13 @@ protected:
   AdtParserPtrByStringMap               FunctionDefinitionMap;
   AdtParserPtrByStringMap               VarDefinitionMap;
   AdtParserPtrByStringMap               EnumSpecifierMap;
+  AdtParserPtrByStringMap               EnumSpecifierByConstantMap;
   AdtParserPtrByStringMap               ClassSpecifierMap;
 
 protected:
   void                                  flush();
 
+  void                                  enumerateEnumSpecifierByConstants();
   void                                  enumerateObjects(AdtParserPtrByStringMap& rMap,
                                                          const char* pSearchPath,
                                                          const char* pClassName,
@@ -642,17 +647,20 @@ public:
   const AdtParserPtrByStringMap&        functionDefinitionMap() const;
   const AdtParserPtrByStringMap&        varDefinitionMap() const;
   const AdtParserPtrByStringMap&        enumSpecifierMap() const;
+  const AdtParserPtrByStringMap&        enumSpecifierByConstantMap() const;
   const AdtParserPtrByStringMap&        classSpecifierMap() const;
 
   AdtCppFunctionDefinition*             findFunctionDefinition(const char* pObjName) const;
   AdtCppDeclarator*                     findVarDefinition(const char* pObjName) const;
   AdtCppEnumSpecifier*                  findEnumSpecifier(const char* pObjName) const;
   AdtCppClassSpecifier*                 findClassSpecifier(const char* pObjName) const;
+  AdtCppEnumSpecifier*                  findEnumSpecifierByConst(const char* pConstName) const;
 
   bool                                  findFunctionDefinition(const char* pObjName, const AdtParser*& pObj) const;
   bool                                  findVarDefinition(const char* pObjName, const AdtParser*& pObj) const;
   bool                                  findEnumSpecifier(const char* pObjName, const AdtParser*& pObj) const;
   bool                                  findClassSpecifier(const char* pObjName, const AdtParser*& pObj) const;
+  bool                                  findEnumSpecifierByConst(const char* pConstName, const AdtParser*& pObj) const;
 };
 
 //  ----------------------------------------------------------------------------
@@ -681,6 +689,8 @@ inline void AdtCppDeclarationInfo::enumerateEnumSpecifiers(const char* pSearchPa
   enumerateObjects(EnumSpecifierMap,
                    pSearchPath,
                    "AdtCppEnumSpecifier");
+
+  enumerateEnumSpecifierByConstants();
 }
 
 //  ----------------------------------------------------------------------------
@@ -718,6 +728,13 @@ inline const AdtParserPtrByStringMap& AdtCppDeclarationInfo::varDefinitionMap() 
 inline const AdtParserPtrByStringMap& AdtCppDeclarationInfo::enumSpecifierMap() const
 {
   return (EnumSpecifierMap);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline const AdtParserPtrByStringMap& AdtCppDeclarationInfo::enumSpecifierByConstantMap() const
+{
+  return (EnumSpecifierByConstantMap);
 }
 
 //  ----------------------------------------------------------------------------
@@ -773,6 +790,17 @@ inline AdtCppClassSpecifier* AdtCppDeclarationInfo::findClassSpecifier(const cha
 
 //  ----------------------------------------------------------------------------
 
+inline AdtCppEnumSpecifier* AdtCppDeclarationInfo::findEnumSpecifierByConst(const char* pConstName) const
+{
+  const AdtParser*  pObj = 0;
+
+  findObject(EnumSpecifierByConstantMap, pConstName, pObj);
+
+  return ((AdtCppEnumSpecifier*)pObj);
+}
+
+//  ----------------------------------------------------------------------------
+
 inline bool AdtCppDeclarationInfo::findFunctionDefinition(const char* pObjName, const AdtParser*& pObj) const
 {
   return (findObject(FunctionDefinitionMap, pObjName, pObj));
@@ -797,6 +825,13 @@ inline bool AdtCppDeclarationInfo::findEnumSpecifier(const char* pObjName, const
 inline bool AdtCppDeclarationInfo::findClassSpecifier(const char* pObjName, const AdtParser*& pObj) const
 {
   return (findObject(ClassSpecifierMap, pObjName, pObj));
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppDeclarationInfo::findEnumSpecifierByConst(const char* pConstName, const AdtParser*& pObj) const
+{
+  return (findObject(EnumSpecifierByConstantMap, pConstName, pObj));
 }
 
 
