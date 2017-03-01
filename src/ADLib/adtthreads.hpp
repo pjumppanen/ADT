@@ -743,6 +743,19 @@ typedef std::map<unsigned, pthread_t>::const_iterator   PthreadByUnsignedMapCons
 //  ----------------------------------------------------------------------------
 class AdtThread : public AdtReferenceCount
 {
+private:
+  union AdtThreadId
+  {
+    void*     pId;
+    unsigned  nId;
+
+    AdtThreadId()
+    {
+      pId = 0;
+      nId = 0;
+    };
+  };
+
 protected:
   static unsigned             NextId;
   static pthread_key_t        KeyId;

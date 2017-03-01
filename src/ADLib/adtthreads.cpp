@@ -910,12 +910,12 @@ pthread_t             AdtThread::MainThread   = ::pthread_self();
 
 unsigned AdtThread::initNextId()
 {
-  unsigned nId = 0;
+  AdtThreadId Id;
 
   pthread_once(&AdtThread::KeyIdOnce, AdtThread::makeKeyId);
-  pthread_setspecific(AdtThread::KeyId, (void*)nId);
+  pthread_setspecific(AdtThread::KeyId, Id.pId);
 
-  return (nId);
+  return (Id.nId);
 }
 
 //  ----------------------------------------------------------------------------
@@ -931,9 +931,12 @@ unsigned AdtThread::threadMain(AdtThread* pThis)
 {
   unsigned    nExitCode;
   unsigned    nId = ++NextId;
+  AdtThreadId Id;
+
+  Id.nId = nId;
 
   pthread_once(&AdtThread::KeyIdOnce, AdtThread::makeKeyId);
-  pthread_setspecific(AdtThread::KeyId, (void*)nId);
+  pthread_setspecific(AdtThread::KeyId, Id.pId);
 
   PthreadMap[nId] = pThis->Thread;
   pThis->Id       = nId;
@@ -1137,7 +1140,11 @@ void AdtThread::exit(unsigned long nExitCode)
 
 unsigned AdtThread::threadId()
 {
-  unsigned nId = (unsigned)pthread_getspecific(AdtThread::KeyId);
+  AdtThreadId Id;
+
+  Id.pId = pthread_getspecific(AdtThread::KeyId);
+
+  return (Id.nId);
 }
 
 //  ----------------------------------------------------------------------------
