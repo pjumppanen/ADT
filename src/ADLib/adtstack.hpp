@@ -54,6 +54,8 @@
 
 #else
 
+  #include <pthread.h>
+
   #define currentThreadId   pthread_self
   #define ThreadIdType      pthread_t
 
