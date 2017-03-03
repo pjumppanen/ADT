@@ -3447,7 +3447,7 @@ AdtParser* AdtDelphiMacro::findCollapsedMacroRoot(AdtParser* pObject, AdtDelphiE
                 }
                 else
                 {
-                  ::printf("ERROR: Incompatible macro replacement, %s", name().c_str());
+                  ::printf("ERROR: Incompatible macro replacement, %s\n", name().c_str());
                   AdtExit(-1);
                   pRoot = 0;
                 }
@@ -3469,7 +3469,7 @@ AdtParser* AdtDelphiMacro::findCollapsedMacroRoot(AdtParser* pObject, AdtDelphiE
                   }
                   else
                   {
-                    ::printf("ERROR: Incompatible macro replacement, %s", name().c_str());
+                    ::printf("ERROR: Incompatible macro replacement, %s\n", name().c_str());
                     AdtExit(-1);
                     pRoot = 0;
                   }
@@ -3477,7 +3477,7 @@ AdtParser* AdtDelphiMacro::findCollapsedMacroRoot(AdtParser* pObject, AdtDelphiE
               }
               else
               {
-                ::printf("ERROR: Incompatible macro replacement, %s", name().c_str());
+                ::printf("ERROR: Incompatible macro replacement, %s\n", name().c_str());
                 AdtExit(-1);
                 pRoot = 0;
               }

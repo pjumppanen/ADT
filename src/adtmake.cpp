@@ -897,6 +897,7 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
     string                  sNewFunctionName;
     string                  sFunctionName;
     string                  sOutputFileName;
+    string                  sTestOutputFileName;
 
     VarSuffix     = "";
     SubSuffix     = "";
@@ -1142,11 +1143,6 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
     bool    bWriteMessageFile = true;
 
     sMessageFile    += ".msg";
-    sOutputFileName += ".f95";
-
-    rParent.prefixWorkingDirectory(rOutputFileName,
-                                   sOutputFileName,
-                                   false);
 
     if (PreCommand.length() > 0)
     {
@@ -1240,6 +1236,27 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
 
       bDone = true;
     }
+
+    sTestOutputFileName = sOutputFileName + ".f95";
+
+    rParent.prefixWorkingDirectory(rOutputFileName,
+                                   sTestOutputFileName,
+                                   false);
+
+    struct stat finfo = {0};
+
+    if (::stat(rOutputFileName, &finfo) != 0)
+    {
+      sTestOutputFileName = sOutputFileName + ".f90";
+
+      rParent.prefixWorkingDirectory(rOutputFileName,
+                                     sTestOutputFileName,
+                                     false);
+
+      ::printf("WARNING: Expected .f95 output not found. Trying .f90 extension.\n");
+    }
+
+    sOutputFileName = sTestOutputFileName;
 
     if (PostCommand.length() > 0)
     {
@@ -3251,7 +3268,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
       default:
       case UnknownSourceFileType:
       {
-        ::printf("ERROR: Source file %s has unknown file type.", rSourceFileName.c_str());
+        ::printf("ERROR: Source file %s has unknown file type.\n", rSourceFileName.c_str());
 
         AdtExit(-1);
         break;
@@ -3271,7 +3288,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
 
           case CppSourceFileType:
           {
-            ::printf("ERROR: Mixing source types not allowed. First type was object pascal but this one is C++.");
+            ::printf("ERROR: Mixing source types not allowed. First type was object pascal but this one is C++.\n");
 
             AdtExit(-1);
             break;
@@ -3279,7 +3296,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
 
           case JavaSourceFileType:
           {
-            ::printf("ERROR: Mixing source types not allowed. First type was object pascal but this one is java.");
+            ::printf("ERROR: Mixing source types not allowed. First type was object pascal but this one is java.\n");
 
             AdtExit(-1);
             break;
@@ -3303,7 +3320,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
 
           case DelphiSourceFileType:
           {
-            ::printf("ERROR: Mixing source types not allowed. First type was C++ but this one is object pascal.");
+            ::printf("ERROR: Mixing source types not allowed. First type was C++ but this one is object pascal.\n");
 
             AdtExit(-1);
             break;
@@ -3311,7 +3328,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
 
           case JavaSourceFileType:
           {
-            ::printf("ERROR: Mixing source types not allowed. First type was C++ but this one is java.");
+            ::printf("ERROR: Mixing source types not allowed. First type was C++ but this one is java.\n");
 
             AdtExit(-1);
             break;
@@ -3324,7 +3341,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
       case CppHeaderFileType:
       {
         // ERROR - headers not allowed as source files. Need a cpp file
-        ::printf("ERROR: header files not allowed as source files");
+        ::printf("ERROR: header files not allowed as source files\n");
 
         AdtExit(-1);
         break;
@@ -3344,7 +3361,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
 
           case CppSourceFileType:
           {
-            ::printf("ERROR: Mixing source types not allowed. First type was java but this one is C++.");
+            ::printf("ERROR: Mixing source types not allowed. First type was java but this one is C++.\n");
 
             AdtExit(-1);
             break;
@@ -3352,7 +3369,7 @@ void AdtMakeCommand::sourceFiles(const AdtStringList& rSourceFiles)
 
           case DelphiSourceFileType:
           {
-            ::printf("ERROR: Mixing source types not allowed. First type was java but this one is object pascal.");
+            ::printf("ERROR: Mixing source types not allowed. First type was java but this one is object pascal.\n");
 
             AdtExit(-1);
             break;

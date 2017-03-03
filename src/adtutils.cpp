@@ -104,7 +104,7 @@ int automate_ParseBegin(const char*& pChar,
 
   if (AdtParse::matchWhichWord(pChar, ppOpenBraces, 2) < 0)
   {
-    ::printf("FATAL: Unknown comment brace. See file %s on line %d", __FILE__, __LINE__);
+    ::printf("FATAL: Unknown comment brace. See file %s on line %d\n", __FILE__, __LINE__);
     AdtExit(-1);
   }
 
@@ -115,7 +115,7 @@ int automate_ParseBegin(const char*& pChar,
 
   if (nWhich < 0)
   {
-    ::printf("ERROR: Unknown macro %s in file %s on line %d", pChar, pFileName, nLineNumber);
+    ::printf("ERROR: Unknown macro %s in file %s on line %d\n", pChar, pFileName, nLineNumber);
     AdtExit(-1);
   }
 
@@ -137,7 +137,7 @@ void automate_ParseEnd(const char*& pChar,
 
   if (AdtParse::matchWhichWord(pChar, ppCloseBraces, 2) < 0)
   {
-    ::printf("FATAL: No closing comment brace. See file %s on line %d", __FILE__, __LINE__);
+    ::printf("FATAL: No closing comment brace. See file %s on line %d\n", __FILE__, __LINE__);
     AdtExit(-1);
   }
 }
@@ -165,7 +165,7 @@ void automate_AD_LibName(const char* pText, const char* pFileName, int nLineNumb
     // look for libname
     if (!AdtParse::extractWord(sLibName, ", *}", pChar, true))
     {
-      ::printf("ERROR: No library name specified in macro AD_LIBNAME in file %s on line %d", pFileName, nLineNumber);
+      ::printf("ERROR: No library name specified in macro AD_LIBNAME in file %s on line %d\n", pFileName, nLineNumber);
       AdtExit(-1);
     }
 
@@ -204,7 +204,7 @@ void automate_AD_Alias(const char* pText, const char* pFileName, int nLineNumber
     // look for short_name
     if (!AdtParse::extractWord(sShortName, " =", pChar, true))
     {
-      ::printf("ERROR: No short name specified in macro AD_ALIAS in file %s on line %d", pFileName, nLineNumber);
+      ::printf("ERROR: No short name specified in macro AD_ALIAS in file %s on line %d\n", pFileName, nLineNumber);
       AdtExit(-1);
     }
 
@@ -213,7 +213,7 @@ void automate_AD_Alias(const char* pText, const char* pFileName, int nLineNumber
     // look for full_name
     if (!AdtParse::matchWord(pChar, "=") || !AdtParse::extractWord(sFullName, ", *}", pChar, true))
     {
-      ::printf("ERROR: No full name specified in macro AD_ALIAS in file %s on line %d", pFileName, nLineNumber);
+      ::printf("ERROR: No full name specified in macro AD_ALIAS in file %s on line %d\n", pFileName, nLineNumber);
       AdtExit(-1);
     }
 
@@ -226,7 +226,7 @@ void automate_AD_Alias(const char* pText, const char* pFileName, int nLineNumber
 
       if (!AdtParse::extractWord(sParentFullName, " *}", pChar, true))
       {
-        ::printf("ERROR: No parent class full name specified in macro AD_ALIAS in file %s on line %d", pFileName, nLineNumber);
+        ::printf("ERROR: No parent class full name specified in macro AD_ALIAS in file %s on line %d\n", pFileName, nLineNumber);
         AdtExit(-1);
       }
     }
@@ -273,7 +273,7 @@ void automate_VarModeAndPhase(int nMode, const char* pText, const char* pFileNam
       {
         if (::sscanf(sArg.c_str(), "%d", &nPhase) != 1)
         {
-          ::printf("WARNING: Bad or missing phase number in command in file %s on line %d", pFileName, nLineNumber);
+          ::printf("WARNING: Bad or missing phase number in command in file %s on line %d\n", pFileName, nLineNumber);
         }
       }
       else
@@ -286,7 +286,7 @@ void automate_VarModeAndPhase(int nMode, const char* pText, const char* pFileNam
         }
         else
         {
-          ::printf("WARNING: Bad or missing NO_INTERFACE option in command in file %s on line %d", pFileName, nLineNumber);
+          ::printf("WARNING: Bad or missing NO_INTERFACE option in command in file %s on line %d\n", pFileName, nLineNumber);
         }
       }
 
@@ -3591,7 +3591,7 @@ const char* AdtGenericCommandBlock::parseInclude(const char* pChar)
   }
   else
   {
-    ::printf("WARNING: Unable to open command include %s", (const char*)sFilename);
+    ::printf("WARNING: Unable to open command include %s\n", (const char*)sFilename);
   }
 
   pParseText = AdtParse::nextWord(pParseText);
@@ -3646,7 +3646,7 @@ const char* AdtGenericCommandBlock::parseTypeMap(const char* pChar)
 
       if (bError)
       {
-        ::printf("ERROR: Invalid #type_map format in command section");
+        ::printf("ERROR: Invalid #type_map format in command section\n");
       }
 
       pParseText = AdtParse::nextWord(pParseText);
@@ -3654,7 +3654,7 @@ const char* AdtGenericCommandBlock::parseTypeMap(const char* pChar)
   }
   else
   {
-    ::printf("ERROR: Invalid #type_map format in command section");
+    ::printf("ERROR: Invalid #type_map format in command section\n");
   }
 
   AdtCppScopeManager::addUserDefinedType(sGenericType);

@@ -4732,48 +4732,52 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
     AdtParser*  pDestModule   = findObject("AdtFortranModule", "COMMON");
     AdtParser*  pSourceModule = pSource->findObject("AdtFortranModule", SourceName);
 
-    if ((pDestModule != 0) && (pSourceModule != 0))
+    if (pDestModule != 0)
     {
-      AdtParser*  pSourceModuleBody;
+      bFailed = false;
 
-      bFailed           = false;
-      pSourceModuleBody = pSourceModule->findDescendant("ModuleBody");
-      pDestModuleBody   = pDestModule->findDescendant("ModuleBody");
+      pDestModuleBody = pDestModule->findDescendant("ModuleBody");
+      pModuleBody     = (AdtFortranModuleBody*)pDestModuleBody;
 
-      if ((pDestModuleBody != 0) && (pSourceModuleBody != 0))
+      if (pSourceModule != 0)
       {
-        AdtParserPtrList      TypeDeclList;
-        AdtParserPtrListIter  Iter;
+        AdtParser*  pSourceModuleBody;
 
-        pModuleBody = (AdtFortranModuleBody*)pDestModuleBody;
+        pSourceModuleBody = pSourceModule->findDescendant("ModuleBody");
 
-        //Find all the type definitions that tapenade created and step through them
-        pSourceModuleBody->findObjects(TypeDeclList, "AdtFortranTypeDeclarationStmt");
-
-        for (Iter = TypeDeclList.begin() ; Iter != TypeDeclList.end() ; ++Iter)
+        if ((pDestModuleBody != 0) && (pSourceModuleBody != 0))
         {
-          AdtParser*  pTypeDeclObj = *(Iter);
+          AdtParserPtrList      TypeDeclList;
+          AdtParserPtrListIter  Iter;
 
-          if ((pTypeDeclObj != 0) &&
-              (pTypeDeclObj->findAscendantWithClassLineage("AdtFortranSpecificationPartConstruct,AdtFortranModuleBodyContent") != 0))
+          //Find all the type definitions that tapenade created and step through them
+          pSourceModuleBody->findObjects(TypeDeclList, "AdtFortranTypeDeclarationStmt");
+
+          for (Iter = TypeDeclList.begin() ; Iter != TypeDeclList.end() ; ++Iter)
           {
-            //Make a temporary copy of the type definition and remove any variable
-            //names already defined in our module from it. If there are any left
-            //then add the copied definition to our module.
-            AdtFortranTypeDeclarationStmt*  pTypeDeclCopy = (AdtFortranTypeDeclarationStmt*)pTypeDeclObj->copy();
+            AdtParser*  pTypeDeclObj = *(Iter);
 
-            if (pTypeDeclCopy->removeSharedNames(pDestModuleBody, &rNewAttributeList, &rNewAttributeMap))
+            if ((pTypeDeclObj != 0) &&
+                (pTypeDeclObj->findAscendantWithClassLineage("AdtFortranSpecificationPartConstruct,AdtFortranModuleBodyContent") != 0))
             {
-              AdtParser* pSpecificationPart = new AdtFortranSpecificationPartConstruct(0, 0, 0, pTypeDeclCopy, 0, 0, 0, 0);
-              AdtParser* pBodyContent       = new AdtFortranModuleBodyContent(pSpecificationPart, 0, 0);
+              //Make a temporary copy of the type definition and remove any variable
+              //names already defined in our module from it. If there are any left
+              //then add the copied definition to our module.
+              AdtFortranTypeDeclarationStmt*  pTypeDeclCopy = (AdtFortranTypeDeclarationStmt*)pTypeDeclObj->copy();
 
-              pDestModuleBody->add(pBodyContent);
+              if (pTypeDeclCopy->removeSharedNames(pDestModuleBody, &rNewAttributeList, &rNewAttributeMap))
+              {
+                AdtParser* pSpecificationPart = new AdtFortranSpecificationPartConstruct(0, 0, 0, pTypeDeclCopy, 0, 0, 0, 0);
+                AdtParser* pBodyContent       = new AdtFortranModuleBodyContent(pSpecificationPart, 0, 0);
 
-              UtlReleaseReference(pBodyContent);
-              UtlReleaseReference(pSpecificationPart);
+                pDestModuleBody->add(pBodyContent);
+
+                UtlReleaseReference(pBodyContent);
+                UtlReleaseReference(pSpecificationPart);
+              }
+
+              UtlReleaseReference(pTypeDeclCopy);
             }
-
-            UtlReleaseReference(pTypeDeclCopy);
           }
         }
       }
@@ -4781,7 +4785,7 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
 
     if (bFailed)
     {
-      ::printf("MERGE ERROR : Null pointer error on "
+      ::printf("MERGE ERROR : Missing destination MODULE "
                "line %d in file %s\n", lineNumber(),
                                        fileName());
       FAIL();
@@ -5227,7 +5231,7 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
           }
           else
           {
-            ::printf("WARNING: Method %s is already defined in module. This definition ignored.", pObjCopy->name().c_str());
+            ::printf("WARNING: Method %s is already defined in module. This definition ignored.\n", pObjCopy->name().c_str());
           }
 
           UtlReleaseReference(pParentObjCopy);
@@ -7266,7 +7270,7 @@ bool AdtFortranCallExpand::expand(AdtFortranCallStmt* pCallStmt,
       else
       {
         //Argument list does not match so no substitution is possible
-        ::printf("WARNING: Incompatible macro replacement, %s", name().c_str());
+        ::printf("WARNING: Incompatible macro replacement, %s\n", name().c_str());
       }
     }
     else
@@ -7280,7 +7284,7 @@ bool AdtFortranCallExpand::expand(AdtFortranCallStmt* pCallStmt,
       else
       {
         //Argument list not empty so no substitution is possible
-        ::printf("WARNING: Incompatible macro replacement, %s", name().c_str());
+        ::printf("WARNING: Incompatible macro replacement, %s\n", name().c_str());
       }
     }
 

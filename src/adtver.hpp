@@ -24,7 +24,7 @@
 
 #if !defined(ADT_VERSION_STRING)
 
-  #define ADT_VERSION_STRING  "1.08.1"
-  #define ADT_YEAR_STRING     "2016"
+  #define ADT_VERSION_STRING  "1.08.2"
+  #define ADT_YEAR_STRING     "2017"
 
 #endif
