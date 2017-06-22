@@ -6249,6 +6249,7 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
 
       pOutFile.write("constructor ");
       pOutFile.write(rConstructorDeclaration);
+      pOutFile.write("overload;");
       pOutFile.newline();
     }
 

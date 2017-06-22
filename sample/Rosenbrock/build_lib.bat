@@ -8,7 +8,7 @@ del /Q .\lib\*.*
 del /Q .\RosenbrockPas.dll
 del /Q .\D_MinRosenbrock_Unit.pas
 del /Q .\RosenbrockPas.dch
-..\..\objs\Release\ADT RosenbrockPas.mk
+..\..\objs\Win32\Release\ADT RosenbrockPas.mk
 fpc -Mobjfpc -Scghi -O3 -gl -vewnhi -l -Fi.\lib -Fi..\common -Fu. -FU.\lib ..\..\src\ADLibPascal\fcl-stl\gutil.pp
 fpc -Mobjfpc -Scghi -O3 -gl -vewnhi -l -Fi.\lib -Fi..\common -Fu. -FU.\lib ..\..\src\ADLibPascal\fcl-stl\gset.pp
 fpc -Mobjfpc -Scghi -O3 -gl -vewnhi -l -Fi.\lib -Fi..\common -Fu. -FU.\lib ..\..\src\ADLibPascal\fcl-stl\gmap.pp

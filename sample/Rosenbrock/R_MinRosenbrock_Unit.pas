@@ -24,7 +24,8 @@ type
     lxd2_x{1:N} : ARRAY_1D;
     {$I RRb_array_plans.pas}
 
-    constructor create({$I RRb_constructor_args.pas});
+    constructor create({$I RRb_constructor_args.pas});overload;
+    constructor create(const rCopy : R_MinRosenbrock);overload;
 
     procedure hessian(pX{1:N} : ARRAY_1D; var pHessian{1:N,1:N} : ARRAY_2D);
   end;
@@ -45,6 +46,14 @@ begin
   {$I RRb_constructor_scalars_phase_1.pas}
   {$I RRb_constructor_arrays_phase_1.pas}
   {$I RRb_array_plans_init.pas}
+end;
+
+// -----------------------------------------------------------------------
+
+constructor R_MinRosenbrock.create(const rCopy : R_MinRosenbrock);
+
+begin
+  inherited create(rCopy);
 end;
 
 // -----------------------------------------------------------------------

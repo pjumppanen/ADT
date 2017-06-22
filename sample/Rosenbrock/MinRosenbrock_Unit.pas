@@ -25,7 +25,8 @@ type
 
     {$I Rb_array_plans.pas}
 
-    constructor create({$I Rb_constructor_args.pas});
+    constructor create({$I Rb_constructor_args.pas});overload;
+    constructor create(const rCopy : MinRosenbrock);overload;
 
     function rosenbrock(const X{N}: ARRAY_1D):double;
   end;
@@ -49,7 +50,18 @@ implementation
 
     // I need to put this here because div is not translatable to fortran in
     // any circularly consistent manner.
-    No2 := _N div 2;
+    No2 := arg_N div 2;
+  end;
+
+  //------------------------------------------------------------------------
+
+  constructor MinRosenbrock.create(const rCopy : MinRosenbrock);
+
+  begin
+    inherited create;
+
+    N   := rCopy.N;
+    No2 := rCopy.N;
   end;
 
 //------------------------------------------------------------------------

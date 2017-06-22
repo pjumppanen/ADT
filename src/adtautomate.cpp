@@ -5201,7 +5201,7 @@ void AdtAutoArray::writeDelphiVarDestroy(AdtFile& rFile) const
 
     case AdtAutoMode_FN_ARGUMENT:
     {
-      rFile.write("AdtArrayPlan_destroy(_MemAllocator, _");
+      rFile.write("AdtArrayPlan_destroy(_MemAllocator, arg_");
       rFile.write(name());
       rFile.write(");");
       rFile.newline();
@@ -7651,7 +7651,8 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.write("_destroy_handler(rInstance);");
       rFile.newline();
       rFile.newline();
-      rFile.write("return (rInstance);");
+      rFile.write(FunctionName);
+      rFile.write(" := rInstance;");
       rFile.decrementIndent();
       rFile.newline();
       rFile.write("end;");
