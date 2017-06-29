@@ -6254,7 +6254,7 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
     }
 
     //Write class destructor
-    pOutFile.write("destructor destroy();");
+    pOutFile.write("destructor destroy();override;");
     pOutFile.newline();
     pOutFile.newline();
 
@@ -6763,6 +6763,8 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
       }
     }
 
+    pOutFile.newline();
+    pOutFile.write("inherited;");
     pOutFile.decrementIndent();
     pOutFile.newline();
     pOutFile.write("end;");
