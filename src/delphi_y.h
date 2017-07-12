@@ -106,91 +106,92 @@ extern int yydebug;
     OLEVARIANT = 316,
     OR = 317,
     OUT = 318,
-    OVERLOAD = 319,
-    OVERRIDE = 320,
-    PACKAGE = 321,
-    PACKED = 322,
-    PASCAL = 323,
-    PCHAR = 324,
-    PRIVATE = 325,
-    PROCEDURE = 326,
-    PROGRAM = 327,
-    PROPERTY = 328,
-    PROTECTED = 329,
-    PUBLIC = 330,
-    PUBLISHED = 331,
-    READ = 332,
-    REAL = 333,
-    REAL48 = 334,
-    RECORD = 335,
-    REGISTER = 336,
-    REINTRODUCE = 337,
-    REPEAT = 338,
-    REQUIRES = 339,
-    SAFECALL = 340,
-    SET = 341,
-    SHL = 342,
-    SHORTINT = 343,
-    SHR = 344,
-    SINGLE = 345,
-    SIZEOF = 346,
-    SMALLINT = 347,
-    STDCALL = 348,
-    STORED = 349,
-    STRING = 350,
-    THEN = 351,
-    TO = 352,
-    TYPE = 353,
-    UNIT = 354,
-    UNTIL = 355,
-    USES = 356,
-    VAR = 357,
-    VARIANT = 358,
-    VIRTUAL = 359,
-    WHILE = 360,
-    WIDECHAR = 361,
-    WIDESTRING = 362,
-    WITH = 363,
-    WORD = 364,
-    WRITE = 365,
-    XOR = 366,
-    EXIT = 367,
-    POINTER = 368,
-    COMMA = 369,
-    SEMICOLON = 370,
-    COLON = 371,
-    ASSIGNMENT = 372,
-    PLUS_EQUALS = 373,
-    MINUS_EQUALS = 374,
-    TIMES_EQUALS = 375,
-    DIV_EQUALS = 376,
-    EQUALS = 377,
-    DOT = 378,
-    RANGE = 379,
-    LPARENTHESIS = 380,
-    RPARENTHESIS = 381,
-    LBRACKET = 382,
-    RBRACKET = 383,
-    AT = 384,
-    HAT = 385,
-    PLUS = 386,
-    MINUS = 387,
-    GT = 388,
-    LT = 389,
-    GE = 390,
-    LE = 391,
-    NE = 392,
-    MULTIPLY = 393,
-    DIVIDE = 394,
-    IDENTIFIER = 395,
-    BOOL_NUMBER = 396,
-    INT_NUMBER = 397,
-    REAL_NUMBER = 398,
-    TEXT = 399,
-    SINGLELINE_COMMENT = 400,
-    MULTILINE_COMMENT = 401,
-    EMBEDDED_COMMANDS = 402,
-    ADDVARIABLES = 403
+    OUTO = 319,
+    OVERLOAD = 320,
+    OVERRIDE = 321,
+    PACKAGE = 322,
+    PACKED = 323,
+    PASCAL = 324,
+    PCHAR = 325,
+    PRIVATE = 326,
+    PROCEDURE = 327,
+    PROGRAM = 328,
+    PROPERTY = 329,
+    PROTECTED = 330,
+    PUBLIC = 331,
+    PUBLISHED = 332,
+    READ = 333,
+    REAL = 334,
+    REAL48 = 335,
+    RECORD = 336,
+    REGISTER = 337,
+    REINTRODUCE = 338,
+    REPEAT = 339,
+    REQUIRES = 340,
+    SAFECALL = 341,
+    SET = 342,
+    SHL = 343,
+    SHORTINT = 344,
+    SHR = 345,
+    SINGLE = 346,
+    SIZEOF = 347,
+    SMALLINT = 348,
+    STDCALL = 349,
+    STORED = 350,
+    STRING = 351,
+    THEN = 352,
+    TO = 353,
+    TYPE = 354,
+    UNIT = 355,
+    UNTIL = 356,
+    USES = 357,
+    VAR = 358,
+    VARIANT = 359,
+    VIRTUAL = 360,
+    WHILE = 361,
+    WIDECHAR = 362,
+    WIDESTRING = 363,
+    WITH = 364,
+    WORD = 365,
+    WRITE = 366,
+    XOR = 367,
+    EXIT = 368,
+    POINTER = 369,
+    COMMA = 370,
+    SEMICOLON = 371,
+    COLON = 372,
+    ASSIGNMENT = 373,
+    PLUS_EQUALS = 374,
+    MINUS_EQUALS = 375,
+    TIMES_EQUALS = 376,
+    DIV_EQUALS = 377,
+    EQUALS = 378,
+    DOT = 379,
+    RANGE = 380,
+    LPARENTHESIS = 381,
+    RPARENTHESIS = 382,
+    LBRACKET = 383,
+    RBRACKET = 384,
+    AT = 385,
+    HAT = 386,
+    PLUS = 387,
+    MINUS = 388,
+    GT = 389,
+    LT = 390,
+    GE = 391,
+    LE = 392,
+    NE = 393,
+    MULTIPLY = 394,
+    DIVIDE = 395,
+    IDENTIFIER = 396,
+    BOOL_NUMBER = 397,
+    INT_NUMBER = 398,
+    REAL_NUMBER = 399,
+    TEXT = 400,
+    SINGLELINE_COMMENT = 401,
+    MULTILINE_COMMENT = 402,
+    EMBEDDED_COMMANDS = 403,
+    ADDVARIABLES = 404
   };
 #endif
 /* Tokens.  */
@@ -255,91 +256,92 @@ extern int yydebug;
 #define OLEVARIANT 316
 #define OR 317
 #define OUT 318
-#define OVERLOAD 319
-#define OVERRIDE 320
-#define PACKAGE 321
-#define PACKED 322
-#define PASCAL 323
-#define PCHAR 324
-#define PRIVATE 325
-#define PROCEDURE 326
-#define PROGRAM 327
-#define PROPERTY 328
-#define PROTECTED 329
-#define PUBLIC 330
-#define PUBLISHED 331
-#define READ 332
-#define REAL 333
-#define REAL48 334
-#define RECORD 335
-#define REGISTER 336
-#define REINTRODUCE 337
-#define REPEAT 338
-#define REQUIRES 339
-#define SAFECALL 340
-#define SET 341
-#define SHL 342
-#define SHORTINT 343
-#define SHR 344
-#define SINGLE 345
-#define SIZEOF 346
-#define SMALLINT 347
-#define STDCALL 348
-#define STORED 349
-#define STRING 350
-#define THEN 351
-#define TO 352
-#define TYPE 353
-#define UNIT 354
-#define UNTIL 355
-#define USES 356
-#define VAR 357
-#define VARIANT 358
-#define VIRTUAL 359
-#define WHILE 360
-#define WIDECHAR 361
-#define WIDESTRING 362
-#define WITH 363
-#define WORD 364
-#define WRITE 365
-#define XOR 366
-#define EXIT 367
-#define POINTER 368
-#define COMMA 369
-#define SEMICOLON 370
-#define COLON 371
-#define ASSIGNMENT 372
-#define PLUS_EQUALS 373
-#define MINUS_EQUALS 374
-#define TIMES_EQUALS 375
-#define DIV_EQUALS 376
-#define EQUALS 377
-#define DOT 378
-#define RANGE 379
-#define LPARENTHESIS 380
-#define RPARENTHESIS 381
-#define LBRACKET 382
-#define RBRACKET 383
-#define AT 384
-#define HAT 385
-#define PLUS 386
-#define MINUS 387
-#define GT 388
-#define LT 389
-#define GE 390
-#define LE 391
-#define NE 392
-#define MULTIPLY 393
-#define DIVIDE 394
-#define IDENTIFIER 395
-#define BOOL_NUMBER 396
-#define INT_NUMBER 397
-#define REAL_NUMBER 398
-#define TEXT 399
-#define SINGLELINE_COMMENT 400
-#define MULTILINE_COMMENT 401
-#define EMBEDDED_COMMANDS 402
-#define ADDVARIABLES 403
+#define OUTO 319
+#define OVERLOAD 320
+#define OVERRIDE 321
+#define PACKAGE 322
+#define PACKED 323
+#define PASCAL 324
+#define PCHAR 325
+#define PRIVATE 326
+#define PROCEDURE 327
+#define PROGRAM 328
+#define PROPERTY 329
+#define PROTECTED 330
+#define PUBLIC 331
+#define PUBLISHED 332
+#define READ 333
+#define REAL 334
+#define REAL48 335
+#define RECORD 336
+#define REGISTER 337
+#define REINTRODUCE 338
+#define REPEAT 339
+#define REQUIRES 340
+#define SAFECALL 341
+#define SET 342
+#define SHL 343
+#define SHORTINT 344
+#define SHR 345
+#define SINGLE 346
+#define SIZEOF 347
+#define SMALLINT 348
+#define STDCALL 349
+#define STORED 350
+#define STRING 351
+#define THEN 352
+#define TO 353
+#define TYPE 354
+#define UNIT 355
+#define UNTIL 356
+#define USES 357
+#define VAR 358
+#define VARIANT 359
+#define VIRTUAL 360
+#define WHILE 361
+#define WIDECHAR 362
+#define WIDESTRING 363
+#define WITH 364
+#define WORD 365
+#define WRITE 366
+#define XOR 367
+#define EXIT 368
+#define POINTER 369
+#define COMMA 370
+#define SEMICOLON 371
+#define COLON 372
+#define ASSIGNMENT 373
+#define PLUS_EQUALS 374
+#define MINUS_EQUALS 375
+#define TIMES_EQUALS 376
+#define DIV_EQUALS 377
+#define EQUALS 378
+#define DOT 379
+#define RANGE 380
+#define LPARENTHESIS 381
+#define RPARENTHESIS 382
+#define LBRACKET 383
+#define RBRACKET 384
+#define AT 385
+#define HAT 386
+#define PLUS 387
+#define MINUS 388
+#define GT 389
+#define LT 390
+#define GE 391
+#define LE 392
+#define NE 393
+#define MULTIPLY 394
+#define DIVIDE 395
+#define IDENTIFIER 396
+#define BOOL_NUMBER 397
+#define INT_NUMBER 398
+#define REAL_NUMBER 399
+#define TEXT 400
+#define SINGLELINE_COMMENT 401
+#define MULTILINE_COMMENT 402
+#define EMBEDDED_COMMANDS 403
+#define ADDVARIABLES 404
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

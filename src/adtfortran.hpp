@@ -1336,6 +1336,7 @@ private:
   AdtFortranEntityDeclList*       EntityDeclList;
   size_t                          Dimensions;
   bool                            IsConst;
+  bool                            IsOutOnly;
 
 public:
   AdtFortranTypeDeclarationStmt(AdtParser* pLblDefObj,
@@ -1346,8 +1347,9 @@ public:
   AdtFortranTypeDeclarationStmt(const AdtFortranTypeDeclarationStmt& rCopy);
   virtual ~AdtFortranTypeDeclarationStmt();
 
-  void                            isConst(bool bIsConst);
+  void                            isConst(bool bIsConst, bool bIsOutOnly);
   bool                            isConst() const;
+  bool                            isOutOnly() const;
 
   void                            removeExternals(const AdtParserPtrByStringMap& rExternalsMap);
 
@@ -1367,9 +1369,10 @@ public:
 
 //  ----------------------------------------------------------------------------
 
-inline void AdtFortranTypeDeclarationStmt::isConst(bool bIsConst)
+inline void AdtFortranTypeDeclarationStmt::isConst(bool bIsConst, bool bIsOutOnly)
 {
-  IsConst = bIsConst;
+  IsConst   = bIsConst;
+  IsOutOnly = bIsOutOnly;
 }
 
 //  ----------------------------------------------------------------------------
@@ -1377,6 +1380,13 @@ inline void AdtFortranTypeDeclarationStmt::isConst(bool bIsConst)
 inline bool AdtFortranTypeDeclarationStmt::isConst() const
 {
   return (IsConst);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtFortranTypeDeclarationStmt::isOutOnly() const
+{
+  return (IsOutOnly);
 }
 
 

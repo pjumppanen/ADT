@@ -12700,6 +12700,7 @@ AdtFile& AdtDelphiFormalParam::writeCPP(AdtFile& pOutFile, int nMode) const
       switch (Type)
       {
         case AdtType_OUT:
+        case AdtType_OUTO:
         case AdtType_VAR:
         {
           nMode = nMode | 2;
@@ -12754,6 +12755,7 @@ AdtFile& AdtDelphiFormalParam::writeFortran(AdtFile& pOutFile, int nMode) const
         }
 
         case AdtType_OUT:
+        case AdtType_OUTO:
         {
           pIntent = "INTENT (OUT)";
           break;
@@ -12807,6 +12809,12 @@ AdtFile& AdtDelphiFormalParam::writeDelphi(AdtFile& pOutFile, int nMode) const
         case AdtType_OUT:
         {
           pType = "out";
+          break;
+        }
+
+        case AdtType_OUTO:
+        {
+          pType = "outo";
           break;
         }
 

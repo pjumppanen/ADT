@@ -3307,6 +3307,7 @@ public:
 enum  AdtType{AdtType_VAR   = 1,
               AdtType_CONST = 2,
               AdtType_OUT   = 3,
+              AdtType_OUTO  = 4,
               AdtType_EMPTY = 0};
 
 protected:
@@ -3356,6 +3357,7 @@ inline AdtAutoDir AdtDelphiFormalParam::autoDirType() const
     }
 
     case AdtType_OUT:
+    case AdtType_OUTO:
     {
       nDir = AdtAutoDir_OUT;
       break;

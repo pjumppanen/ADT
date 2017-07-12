@@ -559,6 +559,7 @@ OF                                                return (dispatchToken(adtDelph
 OLEVARIANT                                        return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OLEVARIANT));
 OR                                                return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OR));
 OUT                                               return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OUT));
+OUTO                                              return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OUTO));
 OVERLOAD                                          return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OVERLOAD));
 OVERRIDE                                          return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OVERRIDE));
 PACKAGE                                           {

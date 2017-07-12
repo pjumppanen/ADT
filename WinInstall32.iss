@@ -1,8 +1,8 @@
 ; ADT inno setup installer script
 [Setup]
-OutputBaseFilename=ADT-1.08.4_win32_setup
+OutputBaseFilename=ADT-1.08.5_win32_setup
 AppName=ADT
-AppVersion=1.08.4
+AppVersion=1.08.5
 DefaultDirName={pf}\ADT
 DefaultGroupName=ADT
 Compression=lzma2

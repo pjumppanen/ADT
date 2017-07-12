@@ -1699,6 +1699,7 @@ bool AdtFortranDeclarations::extractDeclarations(AdtParser* pParentObj,
 
     AdtParserPtrList          IntentStmtList;
     AdtParserPtrByStringMap   ConstVarMap;
+    AdtParserPtrByStringMap   OutVarMap;
     AdtParserPtrByStringMap   NonConstVarMap;
 
     // enumerate the intent statements and set the appropriate flag in
@@ -1722,6 +1723,11 @@ bool AdtFortranDeclarations::extractDeclarations(AdtParser* pParentObj,
           }
 
           case ForIntent_OUT:
+          {
+            pIntentStmtObj->enumerateDescendantMap(OutVarMap, "NameList");
+            break;
+          }
+
           case ForIntent_INOUT:
           case ForIntent_IN_OUT:
           default:
@@ -1749,16 +1755,20 @@ bool AdtFortranDeclarations::extractDeclarations(AdtParser* pParentObj,
 
         if ((ConstVarMap.find(pObj->name()) != ConstVarMap.end()) && (pParameterTypeDeclObj != 0))
         {
-          pParameterTypeDeclObj->isConst(true);
+          pParameterTypeDeclObj->isConst(true, false);
+        }
+        else if ((OutVarMap.find(pObj->name()) != OutVarMap.end()) && (pParameterTypeDeclObj != 0))
+        {
+          pParameterTypeDeclObj->isConst(false, true);
         }
         else if ((NonConstVarMap.find(pObj->name()) != NonConstVarMap.end()) && (pParameterTypeDeclObj != 0))
         {
-          pParameterTypeDeclObj->isConst(false);
+          pParameterTypeDeclObj->isConst(false, false);
         }
         else if (pParameterTypeDeclObj != 0)
         {
           // Make anything unspecified non-const
-          pParameterTypeDeclObj->isConst(false);
+          pParameterTypeDeclObj->isConst(false, false);
         }
       }
     }
@@ -9465,6 +9475,7 @@ AdtFortranTypeDeclarationStmt::AdtFortranTypeDeclarationStmt(AdtParser* pLblDefO
 
   Dimensions  = 0;
   IsConst     = false;
+  IsOutOnly   = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -9479,6 +9490,7 @@ AdtFortranTypeDeclarationStmt::AdtFortranTypeDeclarationStmt(const AdtFortranTyp
 
   Dimensions  = rCopy.Dimensions;
   IsConst     = rCopy.IsConst;
+  IsOutOnly   = rCopy.IsOutOnly;
 }
 
 //  ----------------------------------------------------------------------------
@@ -9817,6 +9829,10 @@ AdtFile& AdtFortranTypeDeclarationStmt::writeDelphi(AdtFile& pOutFile, int nMode
         if (IsConst)
         {
           pOutFile.write("const ");
+        }
+        else if (IsOutOnly)
+        {
+          pOutFile.write("outo ");
         }
         else
         {

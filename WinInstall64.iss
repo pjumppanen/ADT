@@ -2,9 +2,9 @@
 [Setup]
 ArchitecturesInstallIn64BitMode=x64
 ArchitecturesAllowed=x64
-OutputBaseFilename=ADT-1.08.4_x64_setup
+OutputBaseFilename=ADT-1.08.5_x64_setup
 AppName=ADT
-AppVersion=1.08.4
+AppVersion=1.08.5
 DefaultDirName={pf}\ADT
 DefaultGroupName=ADT
 Compression=lzma2
