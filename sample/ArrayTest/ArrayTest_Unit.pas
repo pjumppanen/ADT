@@ -11,7 +11,8 @@ uses
   adtcommon,
   adtarray,
   adtR,
-  Raccess;
+  Raccess,
+  Math;
 
 type
   ArrayTest = class(AdtArrays)
@@ -56,18 +57,30 @@ type
     function polyC(x : double) : double;
     {$ENDIF}
 
+    function t_one_if(bTrue : boolean) : integer;
+    function ifTest(x : double) : double;
+
   public
-    constructor create({$I AT_constructor_args.pas});
+    constructor create({$I AT_constructor_args.pas}); overload;
+    constructor create(const rCopy : ArrayTest); overload;
+
+    // Function to test the interface generation on functions with no args
+    function sumA1_D() : double;
 
     function sum(const X{1:ix} : ARRAY_1D) : double;
     function polySumA(const X{1:ix} : ARRAY_1D) : double;
     function polySumB(const X{1:ix} : ARRAY_1D) : double;
     function polySumC(const X{1:ix} : ARRAY_1D) : double;
+    function boundsCheckTest(const X{1:ix} : ARRAY_1D) : double; virtual;
+    function test_one_if(v : double) : double;
+    function test_one_if_internal(v : double) : double;
   end;
 
   function global_sum(const X{1:ix} : ARRAY_1D; nBase, nCount : integer) : double;
 
 implementation
+
+// ----------------------------------------------------------------------------
 
   function ArrayTest.polyA(x : double) : double;
 
@@ -75,7 +88,7 @@ implementation
     Result := (2 * x * x) - (5 * x) + 3;
   end;
 
-//------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
   function ArrayTest.polyB(x : double) : double;
 
@@ -83,7 +96,7 @@ implementation
     Result := (2 * x * x) - (5 * x) + 3;
   end;
 
-//------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
   {$IFNDEF AD}
 
@@ -95,9 +108,44 @@ implementation
 
   {$ENDIF}
 
-//------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-  constructor ArrayTest.create({$I AT_constructor_args.pas});
+  function ArrayTest.t_one_if(bTrue : boolean) : integer;
+
+  begin
+    if (bTrue) then
+      Result := 1
+    else
+      Result := 0;
+  end;
+
+// ----------------------------------------------------------------------------
+
+  function ArrayTest.ifTest(x : double) : double;
+
+  var
+    dValue : double;
+
+  begin
+    dValue := polyB(x);
+
+    if (dValue > 0.0) then
+      dValue := dValue * 2.0;
+
+    if (true) then
+    begin
+      if (dValue > 1.0) then
+      begin
+        dValue := dValue * 1.5;
+      end;
+    end;
+
+    Result := dValue;
+  end;
+
+// ----------------------------------------------------------------------------
+
+  constructor ArrayTest.create({$I AT_constructor_args.pas}); overload;
 
   var
     dummy : longint;
@@ -113,7 +161,34 @@ implementation
     {$I AT_array_plans_init.pas}
   end;
 
-//------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------
+
+  constructor ArrayTest.create(const rCopy : ArrayTest); overload;
+
+  begin
+    inherited create(@rCopy, false);
+  end;
+
+// ----------------------------------------------------------------------------
+
+  function ArrayTest.sumA1_D() : double;
+
+  var
+    cn   : integer;
+    dSum : double;
+
+  begin
+    dSum := 0.0;
+
+    for cn := 1 to ix do
+    begin
+      dSum := dSum + A1_D[cn];
+    end;
+
+    Result := dSum;
+  end;
+
+// ----------------------------------------------------------------------------
 
   function ArrayTest.sum(const X{1:ix} : ARRAY_1D) : double;
 
@@ -195,6 +270,42 @@ implementation
     end;
 
     Result := dSum;
+  end;
+
+// ----------------------------------------------------------------------------
+
+  function ArrayTest.boundsCheckTest(const X{1:ix} : ARRAY_1D) : double;
+
+  var
+    cn    : integer;
+    dSum  : double;
+
+  begin
+    dSum := 0.0;
+
+    // Make indexing step over the line on purpose. Bounds error!
+    for cn := 1 to ix + 5 do
+    begin
+      dSum := dSum + X[cn];
+    end;
+
+    Result := dSum;
+  end;
+
+// ----------------------------------------------------------------------------
+
+  function ArrayTest.test_one_if(v : double) : double;
+
+  begin
+    Result := power((t_one_if(v > 0.0) - t_one_if(v > 30.0)) * v, 5);
+  end;
+
+// ----------------------------------------------------------------------------
+
+  function ArrayTest.test_one_if_internal(v : double) : double;
+
+  begin
+    Result := power((one_if(v > 0.0) - one_if(v > 30.0)) * v, 5);
   end;
 
 end.

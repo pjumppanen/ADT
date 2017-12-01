@@ -56,6 +56,7 @@ protected:
   double polyC(double x);
 #endif
 
+  int    t_one_if(bool bTrue);
   double ifTest(double x);
 
 public:
@@ -64,13 +65,15 @@ public:
   );
 
   // Function to test the interface generation on functions with no args
-  double sumA1_B();
+  double sumA1_D();
 
   double sum(const ARRAY_1D X/*1:ix*/);
   double polySumA(const ARRAY_1D X/*1:ix*/);
   double polySumB(const ARRAY_1D X/*1:ix*/);
   double polySumC(const ARRAY_1D X/*1:ix*/);
   virtual double boundsCheckTest(const ARRAY_1D X/*1:ix*/);
+  double test_one_if(double v);
+  double test_one_if_internal(double v);
 };
 
 

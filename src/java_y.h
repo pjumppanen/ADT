@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_______SRC_JAVA_Y_H_INCLUDED
-# define YY_YY_______SRC_JAVA_Y_H_INCLUDED
+#ifndef YY_YY_SRC_JAVA_Y_H_INCLUDED
+# define YY_YY_SRC_JAVA_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -151,111 +151,6 @@ extern int yydebug;
     EMBEDDED_COMMANDS = 361
   };
 #endif
-/* Tokens.  */
-#define ABSTRACT 258
-#define AND 259
-#define AND_EQUALS 260
-#define BOOL 261
-#define BOOLEAN 262
-#define BOOLEANLITERAL 263
-#define BREAK 264
-#define BYTE 265
-#define CASE 266
-#define CATCH 267
-#define CHAR 268
-#define CHARACTERLITERAL 269
-#define CLASS 270
-#define COLON 271
-#define COMMA 272
-#define CONST 273
-#define CONTINUE 274
-#define DECR 275
-#define DEFAULT 276
-#define DIV 277
-#define DIV_EQUALS 278
-#define DO 279
-#define DOUBLE 280
-#define ELSE 281
-#define EQ 282
-#define EQUALS 283
-#define EXTENDS 284
-#define FINAL 285
-#define FINALLY 286
-#define FLOAT 287
-#define FLOATINGPOINTLITERAL 288
-#define FOR 289
-#define GT 290
-#define GTE 291
-#define IDENTIFIER 292
-#define IF 293
-#define IMPLEMENTS 294
-#define IMPORT 295
-#define INCR 296
-#define INSTANCEOF 297
-#define INT 298
-#define INTEGERLITERAL 299
-#define INTERFACE 300
-#define LAND 301
-#define LBRACKET 302
-#define LCBRACKET 303
-#define LNOT 304
-#define LONG 305
-#define LOR 306
-#define LSQRBRACKET 307
-#define LT 308
-#define LTE 309
-#define MINUS 310
-#define MINUS_EQUALS 311
-#define MOD 312
-#define MOD_EQUALS 313
-#define MULTIPLY 314
-#define NATIVE 315
-#define NE 316
-#define NEW 317
-#define NOT 318
-#define NULLLITERAL 319
-#define OR 320
-#define OR_EQUALS 321
-#define PACKAGE 322
-#define PERIOD 323
-#define PLUS 324
-#define PLUS_EQUALS 325
-#define PRIVATE 326
-#define PROTECTED 327
-#define PUBLIC 328
-#define QUESTION 329
-#define RBRACKET 330
-#define RCBRACKET 331
-#define RETURN 332
-#define RSQRBRACKET 333
-#define SAL 334
-#define SAL_EQUALS 335
-#define SAR 336
-#define SAR_EQUALS 337
-#define SEMICOLON 338
-#define SHORT 339
-#define SHR 340
-#define SHR_EQUALS 341
-#define STATIC 342
-#define STRINGLITERAL 343
-#define SUPER 344
-#define SWITCH 345
-#define SYNCHRONIZED 346
-#define THIS 347
-#define THROW 348
-#define THROWS 349
-#define TIMES_EQUALS 350
-#define TRANSIENT 351
-#define TRY 352
-#define VOID 353
-#define VOLATILE 354
-#define WHILE 355
-#define XOR 356
-#define XOR_EQUALS 357
-#define SCOPE 358
-#define SINGLELINE_COMMENT 359
-#define MULTILINE_COMMENT 360
-#define EMBEDDED_COMMANDS 361
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -269,4 +164,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_______SRC_JAVA_Y_H_INCLUDED  */
+#endif /* !YY_YY_SRC_JAVA_Y_H_INCLUDED  */

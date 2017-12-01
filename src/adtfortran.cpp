@@ -3152,7 +3152,7 @@ void AdtFortranExecutableProgram::addBoundsChecking(AdtParser* pFuncOrSubObj,
 
               if (pBody != 0)
               {
-                AdtFortranExpr*                 pNull         = createSimpleExpression("0");
+                AdtFortranExpr*                 pNull         = createSimpleExpression("nil");
                 AdtFortranTypeDeclarationStmt*  pTypeDeclStmt = createSimpleTypeDeclarationStmt(sContextVar, ForType_BOUNDSCHECK, pNull);
 
                 pBody->addTypeDeclarationStmt(pTypeDeclStmt);
@@ -6264,7 +6264,7 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
     }
 
     //Write class destructor
-    pOutFile.write("destructor destroy();override;");
+    pOutFile.write("destructor destroy(); override;");
     pOutFile.newline();
     pOutFile.newline();
 
@@ -20135,15 +20135,30 @@ void AdtFortranFunctionStmt::initialise(AdtParserPtrByStringMap* pFunctionMap)
     AdtParser* pBodyObj = Parent->findDescendant("Body");
 
     if ((pBodyObj     != 0) &&
-        (ResultName   != 0) &&
         (FunctionName != 0))
     {
-      AdtParserPtrByStringMap rExternalsMap;
-      AdtParserPtrListIter    Iter;
 
-      // Enumerate externals and remove them from the type declarations. We need to
-      // do this so that when translating into C++ or Delphi the externals are
-      // treated as functions and not variables.
+      // Make a copy of pFunctionMap, remove any elements that match the
+      // elements in the arg list, add any externals, then remove all those
+      // from matching type declaration statements. This ensures that when
+      // translating into C++ or Delphi the externals are treated as functions
+      // and not variables.
+      AdtParserPtrListConstIter Iter;
+      AdtParserPtrByStringMap   rExternalsMap(*pFunctionMap);
+
+      if (ParameterList != 0)
+      {
+        for (Iter = ParameterList->objList().begin() ; Iter != ParameterList->objList().end() ; ++Iter)
+        {
+          AdtParser* pObj = *Iter;
+
+          if (pObj != 0)
+          {
+            rExternalsMap.erase(pObj->name());
+          }
+        }
+      }
+
       pBodyObj->enumerateDescendantMap(rExternalsMap, "AdtFortranBodyConstruct,SpecificationPartConstruct,ExternalStmt,NameList");
 
       if (rExternalsMap.size() > 0)
@@ -20169,51 +20184,54 @@ void AdtFortranFunctionStmt::initialise(AdtParserPtrByStringMap* pFunctionMap)
 
       rExternalsMap.clear();
 
-      // If ResultName != 0 then we need to find the type declaration for
-      // ResultName and remove it from the function body, use the type to make a
-      // TypeSpec instance for the function and then replace all name instances
-      // of ResultName with FunctionName. That changes the function declaration
-      // from new style to old style, which is easier to convert to Delphi or C++.
-      AdtParserPtrList      rNameList;
-
-      pBodyObj->findObjects(rNameList,
-                            "AdtFortranName",
-                            ResultName->name(),
-                            false);
-
-      for (Iter = rNameList.begin() ; Iter != rNameList.end() ; ++Iter)
+      if (ResultName != 0)
       {
-        AdtParser* pObj = *Iter;
+        // If ResultName != 0 then we need to find the type declaration for
+        // ResultName and remove it from the function body, use the type to make a
+        // TypeSpec instance for the function and then replace all name instances
+        // of ResultName with FunctionName. That changes the function declaration
+        // from new style to old style, which is easier to convert to Delphi or C++.
+        AdtParserPtrList      rNameList;
 
-        if (pObj != 0)
+        pBodyObj->findObjects(rNameList,
+                              "AdtFortranName",
+                              ResultName->name(),
+                              false);
+
+        for (Iter = rNameList.begin() ; Iter != rNameList.end() ; ++Iter)
         {
-          if ((pObj->parent()            != 0) &&
-              (pObj->parent()->parent()  != 0) &&
-              (pObj->findAscendantWithClassLineage("AdtFortranEntityDecl,"
-                                                   "AdtFortranEntityDeclList,"
-                                                   "AdtFortranTypeDeclarationStmt,"
-                                                   "AdtFortranSpecificationPartConstruct") != 0))
+          AdtParser* pObj = *Iter;
+
+          if (pObj != 0)
           {
-            AdtParser*  pTypeDeclStmt = pObj->findAscendantWithClass("AdtFortranTypeDeclarationStmt");
-            AdtParser*  pTypeSpecObj  = pTypeDeclStmt->findDescendant("TypeSpec");
+            if ((pObj->parent()            != 0) &&
+                (pObj->parent()->parent()  != 0) &&
+                (pObj->findAscendantWithClassLineage("AdtFortranEntityDecl,"
+                                                     "AdtFortranEntityDeclList,"
+                                                     "AdtFortranTypeDeclarationStmt,"
+                                                     "AdtFortranSpecificationPartConstruct") != 0))
+            {
+              AdtParser*  pTypeDeclStmt = pObj->findAscendantWithClass("AdtFortranTypeDeclarationStmt");
+              AdtParser*  pTypeSpecObj  = pTypeDeclStmt->findDescendant("TypeSpec");
 
-            UtlReleaseReference(TypeSpec);
+              UtlReleaseReference(TypeSpec);
 
-            // Add return type spec
-            initObject(TypeSpec, pTypeSpecObj->copy(), AdtFortranTypeSpec, true);
+              // Add return type spec
+              initObject(TypeSpec, pTypeSpecObj->copy(), AdtFortranTypeSpec, true);
 
-            // Remove type declaration
-            pObj->parent()->parent()->remove(pObj->parent());
+              // Remove type declaration
+              pObj->parent()->parent()->remove(pObj->parent());
+            }
+
+            // Change symbol name
+            pObj->name(FunctionName->name());
           }
-
-          // Change symbol name
-          pObj->name(FunctionName->name());
         }
-      }
 
-      // Remove result name
-      UtlReleaseReference(ResultName);
-      ResultName = 0;
+        // Remove result name
+        UtlReleaseReference(ResultName);
+        ResultName = 0;
+      }
     }
 
     Declarations = new AdtFortranDeclarations(this, pBodyObj, ParameterList, pFunctionMap);
@@ -20438,7 +20456,7 @@ AdtFile& AdtFortranFunctionStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
   write(pOutFile, ";");
 
-  if (IsVirtual)
+  if ((IsVirtual) && (nMode == DELPHI_MODE_FUNCTION_DECLARATION))
   {
     write(pOutFile, " override;");
   }

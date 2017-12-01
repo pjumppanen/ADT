@@ -13666,7 +13666,7 @@ AdtFile& AdtDelphiMethod::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 bool AdtDelphiMethod::isVirtual() const
 {
-  bool bIsVirtual = (DirectiveList != 0) ? DirectiveList->hasDirective(AdtDelphiDirective::AdtType_VIRTUAL) : false;
+  bool bIsVirtual = (DirectiveList != 0) ? DirectiveList->hasDirective(AdtDelphiDirective::AdtType_VIRTUAL) | DirectiveList->hasDirective(AdtDelphiDirective::AdtType_OVERRIDE) : false;
 
   return (bIsVirtual);
 }
@@ -16168,7 +16168,6 @@ void AdtDelphiIdent::writeArrayBounds(AdtFile& pOutFile, const char* pAbstractBo
                                        pOpenBrackets,
                                        pCloseBrackets,
                                        pChar);
-//        AdtParse::extractWord(sName, ":*,}", pChar);
 
         if (AdtParse::matchWord(pChar, ":"))
         {
@@ -16194,13 +16193,7 @@ void AdtDelphiIdent::writeArrayBounds(AdtFile& pOutFile, const char* pAbstractBo
                                          pOpenBrackets,
                                          pCloseBrackets,
                                          pChar);
-//          AdtParse::extractWord(sName, ":*,}", pChar);
         }
-
-//        if (AdtParse::matchWord(pChar, "*"))
-//        {
-//          //Is variable size array definition
-//        }
 
         pOutFile.write(sName);
 

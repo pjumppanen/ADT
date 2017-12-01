@@ -321,6 +321,7 @@ const
   //  ----------------------------------------------------------------------------
   ADLIB_MAX_COORDS = 10;
 
+  function one_if(bTrue : boolean) : integer;inline;
   function add_to(var i : integer; v : integer) : integer;inline;
   function add_one_to(var i : integer) : integer;inline;
   function sub_one_from(var i : integer) : integer;inline;
@@ -441,6 +442,15 @@ const
   function varType(rArray : ARRAY_10D) : AdtVarType;overload;
 
 implementation
+
+  function one_if(bTrue : boolean) : integer;inline;
+
+  begin
+    If (bTrue) then
+      Result := 1
+    else
+      Result := 0;
+  end;
 
   function add_to(var i : integer ; v : integer) : integer;inline;
 

@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "delphi_y.y" /* yacc.c:339  */
+#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:339  */
 
 /*
  * delphi.y
@@ -97,7 +97,7 @@
 #define YYSTYPE   delphiType
 
 
-#line 101 "../../src/delphi_y.c" /* yacc.c:339  */
+#line 101 "..\\src\\delphi_y.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -116,9 +116,9 @@
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "y.tab.h".  */
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+   by #include "delphi_y.h".  */
+#ifndef YY_YY_SRC_DELPHI_Y_H_INCLUDED
+# define YY_YY_SRC_DELPHI_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -281,154 +281,6 @@ extern int yydebug;
     ADDVARIABLES = 404
   };
 #endif
-/* Tokens.  */
-#define ABSOLUTE 258
-#define AND 259
-#define ANSISTRING 260
-#define ARRAY 261
-#define AS 262
-#define B_BEGIN 263
-#define BOOLEAN 264
-#define BYTE 265
-#define CASE 266
-#define CDECL 267
-#define CHAR 268
-#define CLASS 269
-#define COMP 270
-#define CONST 271
-#define CONSTRUCTOR 272
-#define CONTAINS 273
-#define CURRENCY 274
-#define DEFAULT 275
-#define DESTRUCTOR 276
-#define DIV 277
-#define DO 278
-#define DOUBLE 279
-#define DOWNTO 280
-#define DYNAMIC 281
-#define ELSE 282
-#define B_END 283
-#define EXPORT 284
-#define EXTENDED 285
-#define EXTERNAL 286
-#define FAR 287
-#define P_FILE 288
-#define FINALIZATION 289
-#define FOR 290
-#define FORWARD 291
-#define FUNCTION 292
-#define GOTO 293
-#define IF 294
-#define IMPLEMENTATION 295
-#define IMPLEMENTS 296
-#define IN 297
-#define INDEX 298
-#define INHERITED 299
-#define INITIALIZATION 300
-#define INT64 301
-#define INTEGER 302
-#define INTERFACE 303
-#define IS 304
-#define LABEL 305
-#define LIBRARY 306
-#define LONGINT 307
-#define LONGWORD 308
-#define MESSAGE 309
-#define MOD 310
-#define NIL 311
-#define NODEFAULT 312
-#define NOT 313
-#define OBJECT 314
-#define OF 315
-#define OLEVARIANT 316
-#define OR 317
-#define OUT 318
-#define OUTO 319
-#define OVERLOAD 320
-#define OVERRIDE 321
-#define PACKAGE 322
-#define PACKED 323
-#define PASCAL 324
-#define PCHAR 325
-#define PRIVATE 326
-#define PROCEDURE 327
-#define PROGRAM 328
-#define PROPERTY 329
-#define PROTECTED 330
-#define PUBLIC 331
-#define PUBLISHED 332
-#define READ 333
-#define REAL 334
-#define REAL48 335
-#define RECORD 336
-#define REGISTER 337
-#define REINTRODUCE 338
-#define REPEAT 339
-#define REQUIRES 340
-#define SAFECALL 341
-#define SET 342
-#define SHL 343
-#define SHORTINT 344
-#define SHR 345
-#define SINGLE 346
-#define SIZEOF 347
-#define SMALLINT 348
-#define STDCALL 349
-#define STORED 350
-#define STRING 351
-#define THEN 352
-#define TO 353
-#define TYPE 354
-#define UNIT 355
-#define UNTIL 356
-#define USES 357
-#define VAR 358
-#define VARIANT 359
-#define VIRTUAL 360
-#define WHILE 361
-#define WIDECHAR 362
-#define WIDESTRING 363
-#define WITH 364
-#define WORD 365
-#define WRITE 366
-#define XOR 367
-#define EXIT 368
-#define POINTER 369
-#define COMMA 370
-#define SEMICOLON 371
-#define COLON 372
-#define ASSIGNMENT 373
-#define PLUS_EQUALS 374
-#define MINUS_EQUALS 375
-#define TIMES_EQUALS 376
-#define DIV_EQUALS 377
-#define EQUALS 378
-#define DOT 379
-#define RANGE 380
-#define LPARENTHESIS 381
-#define RPARENTHESIS 382
-#define LBRACKET 383
-#define RBRACKET 384
-#define AT 385
-#define HAT 386
-#define PLUS 387
-#define MINUS 388
-#define GT 389
-#define LT 390
-#define GE 391
-#define LE 392
-#define NE 393
-#define MULTIPLY 394
-#define DIVIDE 395
-#define IDENTIFIER 396
-#define BOOL_NUMBER 397
-#define INT_NUMBER 398
-#define REAL_NUMBER 399
-#define TEXT 400
-#define SINGLELINE_COMMENT 401
-#define MULTILINE_COMMENT 402
-#define EMBEDDED_COMMANDS 403
-#define ADDVARIABLES 404
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -442,11 +294,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SRC_DELPHI_Y_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 450 "../../src/delphi_y.c" /* yacc.c:358  */
+#line 302 "..\\src\\delphi_y.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -2921,7 +2773,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 70 "delphi_y.y" /* yacc.c:1646  */
+#line 70 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   void* pObj;
 
@@ -2930,11 +2782,11 @@ yyreduce:
 
   adtDelphi_releaseObject(pObj);
 }
-#line 2934 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2786 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 79 "delphi_y.y" /* yacc.c:1646  */
+#line 79 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   void* pObj;
 
@@ -2943,11 +2795,11 @@ yyreduce:
 
   adtDelphi_releaseObject(pObj);
 }
-#line 2947 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2799 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 88 "delphi_y.y" /* yacc.c:1646  */
+#line 88 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   void* pObj;
 
@@ -2956,11 +2808,11 @@ yyreduce:
 
   adtDelphi_releaseObject(pObj);
 }
-#line 2960 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2812 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 97 "delphi_y.y" /* yacc.c:1646  */
+#line 97 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   void* pObj;
 
@@ -2969,3873 +2821,3873 @@ yyreduce:
 
   adtDelphi_releaseObject(pObj);
 }
-#line 2973 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2825 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 106 "delphi_y.y" /* yacc.c:1646  */
+#line 106 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add(adtDelphi_getRoot(), (yyvsp[0]).pContext);
 }
-#line 2981 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2833 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 116 "delphi_y.y" /* yacc.c:1646  */
+#line 116 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0);
 }
-#line 2989 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2841 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 120 "delphi_y.y" /* yacc.c:1646  */
+#line 120 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, 0);
 }
-#line 2997 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2849 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 124 "delphi_y.y" /* yacc.c:1646  */
+#line 124 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0);
 }
-#line 3005 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2857 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 128 "delphi_y.y" /* yacc.c:1646  */
+#line 128 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 3013 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2865 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 132 "delphi_y.y" /* yacc.c:1646  */
+#line 132 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-6]).pContext, (yyvsp[-4]).pContext, 0, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3021 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2873 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 136 "delphi_y.y" /* yacc.c:1646  */
+#line 136 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-7]).pContext, (yyvsp[-5]).pContext, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 3029 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2881 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 140 "delphi_y.y" /* yacc.c:1646  */
+#line 140 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-7]).pContext, (yyvsp[-5]).pContext, 0, (yyvsp[-3]).pContext, (yyvsp[0]).pContext);
 }
-#line 3037 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2889 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 144 "delphi_y.y" /* yacc.c:1646  */
+#line 144 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMacro_create((yyvsp[-8]).pContext, (yyvsp[-6]).pContext, 0, (yyvsp[-4]).pContext, (yyvsp[-1]).pContext);
 }
-#line 3045 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2897 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 150 "delphi_y.y" /* yacc.c:1646  */
+#line 150 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProgram_create((yyvsp[-7]).pContext, (yyvsp[-5]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[-8]).sComment);
 }
-#line 3053 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2905 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 154 "delphi_y.y" /* yacc.c:1646  */
+#line 154 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProgram_create((yyvsp[-4]).pContext, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[-5]).sComment);
 }
-#line 3061 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2913 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 158 "delphi_y.y" /* yacc.c:1646  */
+#line 158 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProgram_create(0, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[-2]).sComment);
 }
-#line 3069 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2921 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 164 "delphi_y.y" /* yacc.c:1646  */
+#line 164 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiUnit_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[-6]).sComment);
 }
-#line 3077 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2929 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 170 "delphi_y.y" /* yacc.c:1646  */
+#line 170 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPackage_create((yyvsp[-3]).pContext, 0, 0, (yyvsp[-4]).sComment);
 }
-#line 3085 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2937 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 174 "delphi_y.y" /* yacc.c:1646  */
+#line 174 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPackage_create((yyvsp[-6]).pContext, 0, (yyvsp[-3]).pContext, (yyvsp[-7]).sComment);
 }
-#line 3093 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2945 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 178 "delphi_y.y" /* yacc.c:1646  */
+#line 178 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPackage_create((yyvsp[-6]).pContext, (yyvsp[-3]).pContext, 0, (yyvsp[-7]).sComment);
 }
-#line 3101 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2953 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 182 "delphi_y.y" /* yacc.c:1646  */
+#line 182 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPackage_create((yyvsp[-9]).pContext, (yyvsp[-6]).pContext, (yyvsp[-3]).pContext, (yyvsp[-10]).sComment);
 }
-#line 3109 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2961 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 188 "delphi_y.y" /* yacc.c:1646  */
+#line 188 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiLibrary_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[-5]).sComment);
 }
-#line 3117 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2969 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 194 "delphi_y.y" /* yacc.c:1646  */
+#line 194 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiUsesClause_create((yyvsp[-1]).pContext, (yyvsp[-2]).sComment);
 }
-#line 3125 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2977 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 198 "delphi_y.y" /* yacc.c:1646  */
+#line 198 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 3133 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2985 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 204 "delphi_y.y" /* yacc.c:1646  */
+#line 204 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceSection_create((yyvsp[-4]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-5]).sComment);
 }
-#line 3141 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 2993 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 208 "delphi_y.y" /* yacc.c:1646  */
+#line 208 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceSection_create((yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, 0, (yyvsp[-4]).sComment);
 }
-#line 3149 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3001 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 212 "delphi_y.y" /* yacc.c:1646  */
+#line 212 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 3157 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3009 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 218 "delphi_y.y" /* yacc.c:1646  */
+#line 218 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 3165 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3017 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 222 "delphi_y.y" /* yacc.c:1646  */
+#line 222 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExportedHeadingList_create((yyvsp[0]).pContext);
 }
-#line 3173 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3025 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 228 "delphi_y.y" /* yacc.c:1646  */
+#line 228 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExportedHeading_create((yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext, (yyvsp[-3]).sComment);
 }
-#line 3181 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3033 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 232 "delphi_y.y" /* yacc.c:1646  */
+#line 232 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExportedHeading_create(0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, (yyvsp[-3]).sComment);
 }
-#line 3189 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3041 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 236 "delphi_y.y" /* yacc.c:1646  */
+#line 236 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExportedHeading_create((yyvsp[-1]).pContext, 0, 0, (yyvsp[-1]).sComment);
 }
-#line 3197 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3049 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 240 "delphi_y.y" /* yacc.c:1646  */
+#line 240 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExportedHeading_create(0, (yyvsp[-1]).pContext, 0, (yyvsp[-1]).sComment);
 }
-#line 3205 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3057 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 246 "delphi_y.y" /* yacc.c:1646  */
+#line 246 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiImplementationSection_create((yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-2]).sComment);
 }
-#line 3213 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3065 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 250 "delphi_y.y" /* yacc.c:1646  */
+#line 250 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 3221 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3073 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 256 "delphi_y.y" /* yacc.c:1646  */
+#line 256 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiBlock_create((yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-1]).sComment);
 }
-#line 3229 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3081 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 262 "delphi_y.y" /* yacc.c:1646  */
+#line 262 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDeclSection_create((yyvsp[-4]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-4]).sComment);
 }
-#line 3237 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3089 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 268 "delphi_y.y" /* yacc.c:1646  */
+#line 268 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiLabelDeclSection_create((yyvsp[0]).pContext);
 }
-#line 3245 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3097 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 272 "delphi_y.y" /* yacc.c:1646  */
+#line 272 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 3253 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3105 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 278 "delphi_y.y" /* yacc.c:1646  */
+#line 278 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 3261 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3113 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 282 "delphi_y.y" /* yacc.c:1646  */
+#line 282 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiLabelDeclList_create((yyvsp[0]).pContext);
 }
-#line 3269 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3121 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 288 "delphi_y.y" /* yacc.c:1646  */
+#line 288 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiLabelDecl_create((yyvsp[-1]).pContext, (yyvsp[-2]).sComment);
 }
-#line 3277 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3129 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 294 "delphi_y.y" /* yacc.c:1646  */
+#line 294 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstSection_create((yyvsp[0]).pContext, (yyvsp[-1]).sComment);
 }
-#line 3285 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3137 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 298 "delphi_y.y" /* yacc.c:1646  */
+#line 298 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 3293 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3145 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 304 "delphi_y.y" /* yacc.c:1646  */
+#line 304 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 3301 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3153 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 308 "delphi_y.y" /* yacc.c:1646  */
+#line 308 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstantDeclList_create((yyvsp[0]).pContext);
 }
-#line 3309 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3161 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 314 "delphi_y.y" /* yacc.c:1646  */
+#line 314 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstantDecl_create((yyvsp[-3]).pContext, 0, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 3317 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3169 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 318 "delphi_y.y" /* yacc.c:1646  */
+#line 318 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstantDecl_create((yyvsp[-3]).pContext, (yyvsp[-5]).pContext, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 3325 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3177 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 322 "delphi_y.y" /* yacc.c:1646  */
+#line 322 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstantDecl_create((yyvsp[-3]).pContext, (yyvsp[-5]).pContext, (yyvsp[-7]).pContext, 0, (yyvsp[-1]).pContext);
 }
-#line 3333 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3185 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 328 "delphi_y.y" /* yacc.c:1646  */
+#line 328 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypeSection_create((yyvsp[0]).pContext, (yyvsp[-1]).sComment);
 }
-#line 3341 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3193 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 332 "delphi_y.y" /* yacc.c:1646  */
+#line 332 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 3349 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3201 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 338 "delphi_y.y" /* yacc.c:1646  */
+#line 338 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 3357 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3209 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 342 "delphi_y.y" /* yacc.c:1646  */
+#line 342 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypeDeclList_create((yyvsp[0]).pContext);
 }
-#line 3365 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3217 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 348 "delphi_y.y" /* yacc.c:1646  */
+#line 348 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   adtDelphi_setTypeScope((yyvsp[-1]).pContext);
 
   (yyval).pContext = (yyvsp[-1]).pContext;
 }
-#line 3375 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3227 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 356 "delphi_y.y" /* yacc.c:1646  */
+#line 356 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypeDecl_create((yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0);
 
   adtDelphi_clearTypeScope();
 }
-#line 3385 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3237 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 362 "delphi_y.y" /* yacc.c:1646  */
+#line 362 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypeDecl_create((yyvsp[-2]).pContext, 0, (yyvsp[-1]).pContext);
 
   adtDelphi_clearTypeScope();
 }
-#line 3395 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3247 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 370 "delphi_y.y" /* yacc.c:1646  */
+#line 370 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypedConstant_create((yyvsp[0]).pContext, 0, 0);
 }
-#line 3403 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3255 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 374 "delphi_y.y" /* yacc.c:1646  */
+#line 374 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypedConstant_create(0, (yyvsp[0]).pContext, 0);
 }
-#line 3411 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3263 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 378 "delphi_y.y" /* yacc.c:1646  */
+#line 378 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypedConstant_create(0, 0, (yyvsp[0]).pContext);
 }
-#line 3419 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3271 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 384 "delphi_y.y" /* yacc.c:1646  */
+#line 384 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiArrayConstant_create((yyvsp[-1]).pContext);
 }
-#line 3427 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3279 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 390 "delphi_y.y" /* yacc.c:1646  */
+#line 390 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3435 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3287 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 394 "delphi_y.y" /* yacc.c:1646  */
+#line 394 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypedConstantList_create((yyvsp[0]).pContext);
 }
-#line 3443 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3295 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 400 "delphi_y.y" /* yacc.c:1646  */
+#line 400 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecordConstant_create((yyvsp[-1]).pContext);
 }
-#line 3451 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3303 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 406 "delphi_y.y" /* yacc.c:1646  */
+#line 406 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3459 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3311 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 410 "delphi_y.y" /* yacc.c:1646  */
+#line 410 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecordFieldConstantList_create((yyvsp[0]).pContext);
 }
-#line 3467 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3319 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 416 "delphi_y.y" /* yacc.c:1646  */
+#line 416 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecordFieldConstant_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3475 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3327 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 422 "delphi_y.y" /* yacc.c:1646  */
+#line 422 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create((yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 3483 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3335 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 426 "delphi_y.y" /* yacc.c:1646  */
+#line 426 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 3491 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3343 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 430 "delphi_y.y" /* yacc.c:1646  */
+#line 430 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create(0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0);
 }
-#line 3499 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3351 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 434 "delphi_y.y" /* yacc.c:1646  */
+#line 434 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create(0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0);
 }
-#line 3507 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3359 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 438 "delphi_y.y" /* yacc.c:1646  */
+#line 438 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create(0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0);
 }
-#line 3515 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3367 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 442 "delphi_y.y" /* yacc.c:1646  */
+#line 442 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create(0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 3523 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3375 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 446 "delphi_y.y" /* yacc.c:1646  */
+#line 446 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create(0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0);
 }
-#line 3531 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3383 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 450 "delphi_y.y" /* yacc.c:1646  */
+#line 450 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create(0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0);
 }
-#line 3539 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3391 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 454 "delphi_y.y" /* yacc.c:1646  */
+#line 454 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiType_create(0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext);
 }
-#line 3547 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3399 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 460 "delphi_y.y" /* yacc.c:1646  */
+#line 460 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRestrictedType_create((yyvsp[0]).pContext, 0, 0);
 }
-#line 3555 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3407 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 464 "delphi_y.y" /* yacc.c:1646  */
+#line 464 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRestrictedType_create(0, (yyvsp[0]).pContext, 0);
 }
-#line 3563 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3415 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 468 "delphi_y.y" /* yacc.c:1646  */
+#line 468 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRestrictedType_create(0, 0, (yyvsp[0]).pContext);
 }
-#line 3571 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3423 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 474 "delphi_y.y" /* yacc.c:1646  */
+#line 474 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassRefType_create((yyvsp[0]).pContext, 0);
 }
-#line 3579 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3431 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 478 "delphi_y.y" /* yacc.c:1646  */
+#line 478 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassRefType_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext);
 }
-#line 3587 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3439 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 484 "delphi_y.y" /* yacc.c:1646  */
+#line 484 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleType_create((yyvsp[0]).pContext, 0);
 }
-#line 3595 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3447 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 488 "delphi_y.y" /* yacc.c:1646  */
+#line 488 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleType_create(0, (yyvsp[0]).pContext);
 }
-#line 3603 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3455 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 494 "delphi_y.y" /* yacc.c:1646  */
+#line 494 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRealType_create(0);
 }
-#line 3611 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3463 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 498 "delphi_y.y" /* yacc.c:1646  */
+#line 498 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRealType_create(1);
 }
-#line 3619 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3471 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 502 "delphi_y.y" /* yacc.c:1646  */
+#line 502 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRealType_create(2);
 }
-#line 3627 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3479 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 506 "delphi_y.y" /* yacc.c:1646  */
+#line 506 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRealType_create(3);
 }
-#line 3635 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3487 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 510 "delphi_y.y" /* yacc.c:1646  */
+#line 510 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRealType_create(4);
 }
-#line 3643 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3495 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 514 "delphi_y.y" /* yacc.c:1646  */
+#line 514 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRealType_create(5);
 }
-#line 3651 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3503 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 518 "delphi_y.y" /* yacc.c:1646  */
+#line 518 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRealType_create(6);
 }
-#line 3659 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3511 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 524 "delphi_y.y" /* yacc.c:1646  */
+#line 524 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdinalType_create((yyvsp[0]).pContext, 0, 0);
 }
-#line 3667 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3519 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 528 "delphi_y.y" /* yacc.c:1646  */
+#line 528 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdinalType_create(0, (yyvsp[0]).pContext, 0);
 }
-#line 3675 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3527 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 532 "delphi_y.y" /* yacc.c:1646  */
+#line 532 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdinalType_create(0, 0, (yyvsp[0]).pContext);
 }
-#line 3683 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3535 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 538 "delphi_y.y" /* yacc.c:1646  */
+#line 538 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(0);
 }
-#line 3691 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3543 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 542 "delphi_y.y" /* yacc.c:1646  */
+#line 542 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(1);
 }
-#line 3699 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3551 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 546 "delphi_y.y" /* yacc.c:1646  */
+#line 546 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(2);
 }
-#line 3707 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3559 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 550 "delphi_y.y" /* yacc.c:1646  */
+#line 550 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(3);
 }
-#line 3715 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3567 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 554 "delphi_y.y" /* yacc.c:1646  */
+#line 554 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(4);
 }
-#line 3723 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3575 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 558 "delphi_y.y" /* yacc.c:1646  */
+#line 558 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(5);
 }
-#line 3731 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3583 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 562 "delphi_y.y" /* yacc.c:1646  */
+#line 562 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(6);
 }
-#line 3739 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3591 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 566 "delphi_y.y" /* yacc.c:1646  */
+#line 566 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(7);
 }
-#line 3747 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3599 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 570 "delphi_y.y" /* yacc.c:1646  */
+#line 570 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(8);
 }
-#line 3755 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3607 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 574 "delphi_y.y" /* yacc.c:1646  */
+#line 574 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(9);
 }
-#line 3763 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3615 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 578 "delphi_y.y" /* yacc.c:1646  */
+#line 578 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(10);
 }
-#line 3771 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3623 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 582 "delphi_y.y" /* yacc.c:1646  */
+#line 582 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(11);
 }
-#line 3779 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3631 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 586 "delphi_y.y" /* yacc.c:1646  */
+#line 586 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdIdent_create(12);
 }
-#line 3787 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3639 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 592 "delphi_y.y" /* yacc.c:1646  */
+#line 592 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVariantType_create(0);
 }
-#line 3795 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3647 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 596 "delphi_y.y" /* yacc.c:1646  */
+#line 596 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVariantType_create(1);
 }
-#line 3803 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3655 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 602 "delphi_y.y" /* yacc.c:1646  */
+#line 602 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSubrangeType_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3811 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3663 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 608 "delphi_y.y" /* yacc.c:1646  */
+#line 608 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiEnumeratedType_create((yyvsp[-1]).pContext);
 }
-#line 3819 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3671 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 614 "delphi_y.y" /* yacc.c:1646  */
+#line 614 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3827 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3679 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 618 "delphi_y.y" /* yacc.c:1646  */
+#line 618 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiEnumeratedTypeElementList_create((yyvsp[0]).pContext);
 }
-#line 3835 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3687 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 624 "delphi_y.y" /* yacc.c:1646  */
+#line 624 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiEnumeratedTypeElement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3843 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3695 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 628 "delphi_y.y" /* yacc.c:1646  */
+#line 628 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiEnumeratedTypeElement_create((yyvsp[0]).pContext, 0);
 }
-#line 3851 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3703 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 634 "delphi_y.y" /* yacc.c:1646  */
+#line 634 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStringType_create(0, 0);
 }
-#line 3859 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3711 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 638 "delphi_y.y" /* yacc.c:1646  */
+#line 638 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStringType_create(1, 0);
 }
-#line 3867 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3719 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 642 "delphi_y.y" /* yacc.c:1646  */
+#line 642 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStringType_create(2, 0);
 }
-#line 3875 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3727 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 646 "delphi_y.y" /* yacc.c:1646  */
+#line 646 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStringType_create(0, (yyvsp[-1]).pContext);
 }
-#line 3883 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3735 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 652 "delphi_y.y" /* yacc.c:1646  */
+#line 652 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(1, (yyvsp[-1]).pContext, 0, 0, 0);
 }
-#line 3891 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3743 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 656 "delphi_y.y" /* yacc.c:1646  */
+#line 656 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(1, 0, (yyvsp[-1]).pContext, 0, 0);
 }
-#line 3899 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3751 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 660 "delphi_y.y" /* yacc.c:1646  */
+#line 660 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(1, 0, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 3907 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3759 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 664 "delphi_y.y" /* yacc.c:1646  */
+#line 664 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(1, 0, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 3915 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3767 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 668 "delphi_y.y" /* yacc.c:1646  */
+#line 668 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(0, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 3923 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3775 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 672 "delphi_y.y" /* yacc.c:1646  */
+#line 672 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(0, 0, (yyvsp[0]).pContext, 0, 0);
 }
-#line 3931 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3783 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 125:
-#line 676 "delphi_y.y" /* yacc.c:1646  */
+#line 676 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(0, 0, 0, (yyvsp[0]).pContext, 0);
 }
-#line 3939 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3791 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 126:
-#line 680 "delphi_y.y" /* yacc.c:1646  */
+#line 680 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStructType_create(0, 0, 0, 0, (yyvsp[0]).pContext);
 }
-#line 3947 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3799 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 127:
-#line 686 "delphi_y.y" /* yacc.c:1646  */
+#line 686 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiArrayType_create((yyvsp[-3]).pContext, (yyvsp[0]).pContext);
 }
-#line 3955 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3807 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 128:
-#line 690 "delphi_y.y" /* yacc.c:1646  */
+#line 690 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiArrayType_create(0, (yyvsp[0]).pContext);
 }
-#line 3963 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3815 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 129:
-#line 696 "delphi_y.y" /* yacc.c:1646  */
+#line 696 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 3971 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3823 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 130:
-#line 700 "delphi_y.y" /* yacc.c:1646  */
+#line 700 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiOrdinalTypeList_create((yyvsp[0]).pContext);
 }
-#line 3979 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3831 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 131:
-#line 706 "delphi_y.y" /* yacc.c:1646  */
+#line 706 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecType_create((yyvsp[-1]).pContext, 0);
 }
-#line 3987 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3839 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 132:
-#line 710 "delphi_y.y" /* yacc.c:1646  */
+#line 710 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecType_create((yyvsp[-2]).pContext, 0);
 }
-#line 3995 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3847 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 133:
-#line 714 "delphi_y.y" /* yacc.c:1646  */
+#line 714 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecType_create((yyvsp[-2]).pContext, (yyvsp[-1]).pContext);
 }
-#line 4003 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3855 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 134:
-#line 718 "delphi_y.y" /* yacc.c:1646  */
+#line 718 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecType_create((yyvsp[-3]).pContext, (yyvsp[-2]).pContext);
 }
-#line 4011 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3863 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 135:
-#line 722 "delphi_y.y" /* yacc.c:1646  */
+#line 722 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecType_create(0, 0);
 }
-#line 4019 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3871 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 136:
-#line 728 "delphi_y.y" /* yacc.c:1646  */
+#line 728 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4027 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3879 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 137:
-#line 732 "delphi_y.y" /* yacc.c:1646  */
+#line 732 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFieldDeclList_create((yyvsp[0]).pContext);
 }
-#line 4035 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3887 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 138:
-#line 738 "delphi_y.y" /* yacc.c:1646  */
+#line 738 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFieldDecl_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4043 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3895 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 139:
-#line 744 "delphi_y.y" /* yacc.c:1646  */
+#line 744 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 4051 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3903 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 140:
-#line 748 "delphi_y.y" /* yacc.c:1646  */
+#line 748 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVariantSectionList_create((yyvsp[0]).pContext);
 }
-#line 4059 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3911 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 141:
-#line 754 "delphi_y.y" /* yacc.c:1646  */
+#line 754 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVariantSection_create((yyvsp[-5]).pContext, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 4067 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3919 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 142:
-#line 758 "delphi_y.y" /* yacc.c:1646  */
+#line 758 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVariantSection_create((yyvsp[-7]).pContext, (yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 4075 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3927 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 143:
-#line 762 "delphi_y.y" /* yacc.c:1646  */
+#line 762 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVariantSection_create(0, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 4083 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3935 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 144:
-#line 766 "delphi_y.y" /* yacc.c:1646  */
+#line 766 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVariantSection_create(0, (yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 4091 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3943 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 145:
-#line 772 "delphi_y.y" /* yacc.c:1646  */
+#line 772 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecVariant_create((yyvsp[-4]).pContext, (yyvsp[-1]).pContext, 0);
 }
-#line 4099 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3951 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 146:
-#line 776 "delphi_y.y" /* yacc.c:1646  */
+#line 776 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecVariant_create((yyvsp[-5]).pContext, (yyvsp[-2]).pContext, 0);
 }
-#line 4107 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3959 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 147:
-#line 780 "delphi_y.y" /* yacc.c:1646  */
+#line 780 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecVariant_create((yyvsp[-5]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext);
 }
-#line 4115 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3967 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 148:
-#line 784 "delphi_y.y" /* yacc.c:1646  */
+#line 784 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecVariant_create((yyvsp[-6]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext);
 }
-#line 4123 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3975 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 149:
-#line 788 "delphi_y.y" /* yacc.c:1646  */
+#line 788 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRecVariant_create((yyvsp[-3]).pContext, 0, 0);
 }
-#line 4131 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3983 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 150:
-#line 794 "delphi_y.y" /* yacc.c:1646  */
+#line 794 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4139 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3991 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 151:
-#line 798 "delphi_y.y" /* yacc.c:1646  */
+#line 798 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstExprList_create((yyvsp[0]).pContext);
 }
-#line 4147 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 3999 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 152:
-#line 804 "delphi_y.y" /* yacc.c:1646  */
+#line 804 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSetType_create((yyvsp[0]).pContext);
 }
-#line 4155 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4007 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 153:
-#line 810 "delphi_y.y" /* yacc.c:1646  */
+#line 810 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFileType_create(0, (yyvsp[0]).pContext);
 }
-#line 4163 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4015 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 154:
-#line 814 "delphi_y.y" /* yacc.c:1646  */
+#line 814 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFileType_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4171 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4023 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 155:
-#line 820 "delphi_y.y" /* yacc.c:1646  */
+#line 820 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPointerType_create(0, (yyvsp[0]).pContext);
 }
-#line 4179 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4031 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 156:
-#line 824 "delphi_y.y" /* yacc.c:1646  */
+#line 824 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPointerType_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4187 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4039 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 157:
-#line 830 "delphi_y.y" /* yacc.c:1646  */
+#line 830 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureType_create((yyvsp[-2]).pContext, 0, 1);
 }
-#line 4195 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4047 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 158:
-#line 834 "delphi_y.y" /* yacc.c:1646  */
+#line 834 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureType_create((yyvsp[0]).pContext, 0, 0);
 }
-#line 4203 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4055 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 159:
-#line 838 "delphi_y.y" /* yacc.c:1646  */
+#line 838 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureType_create(0, (yyvsp[-2]).pContext, 1);
 }
-#line 4211 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4063 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 160:
-#line 842 "delphi_y.y" /* yacc.c:1646  */
+#line 842 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureType_create(0, (yyvsp[0]).pContext, 0);
 }
-#line 4219 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4071 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 161:
-#line 848 "delphi_y.y" /* yacc.c:1646  */
+#line 848 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVarSection_create((yyvsp[0]).pContext, (yyvsp[-1]).sComment);
 }
-#line 4227 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4079 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 162:
-#line 852 "delphi_y.y" /* yacc.c:1646  */
+#line 852 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 4235 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4087 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 163:
-#line 858 "delphi_y.y" /* yacc.c:1646  */
+#line 858 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 4243 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4095 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 164:
-#line 862 "delphi_y.y" /* yacc.c:1646  */
+#line 862 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVarDeclList_create((yyvsp[0]).pContext);
 }
-#line 4251 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4103 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 165:
-#line 868 "delphi_y.y" /* yacc.c:1646  */
+#line 868 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVarDecl_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, 1);
 }
-#line 4259 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4111 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 166:
-#line 872 "delphi_y.y" /* yacc.c:1646  */
+#line 872 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVarDecl_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext, 1);
 }
-#line 4267 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4119 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 167:
-#line 876 "delphi_y.y" /* yacc.c:1646  */
+#line 876 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVarDecl_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, 0);
 }
-#line 4275 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4127 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 168:
-#line 880 "delphi_y.y" /* yacc.c:1646  */
+#line 880 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVarDecl_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 4283 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4135 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 169:
-#line 884 "delphi_y.y" /* yacc.c:1646  */
+#line 884 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiVarDecl_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, 0, 0);
 }
-#line 4291 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4143 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 170:
-#line 890 "delphi_y.y" /* yacc.c:1646  */
+#line 890 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExpression_create((yyvsp[0]).pContext);
 }
-#line 4299 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4151 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 171:
-#line 896 "delphi_y.y" /* yacc.c:1646  */
+#line 896 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(1, (yyvsp[0]).pContext));
 }
-#line 4307 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4159 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 172:
-#line 900 "delphi_y.y" /* yacc.c:1646  */
+#line 900 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(2, (yyvsp[0]).pContext));
 }
-#line 4315 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4167 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 173:
-#line 904 "delphi_y.y" /* yacc.c:1646  */
+#line 904 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(3, (yyvsp[0]).pContext));
 }
-#line 4323 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4175 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 174:
-#line 908 "delphi_y.y" /* yacc.c:1646  */
+#line 908 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(4, (yyvsp[0]).pContext));
 }
-#line 4331 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4183 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 175:
-#line 912 "delphi_y.y" /* yacc.c:1646  */
+#line 912 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(5, (yyvsp[0]).pContext));
 }
-#line 4339 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4191 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 176:
-#line 916 "delphi_y.y" /* yacc.c:1646  */
+#line 916 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(6, (yyvsp[0]).pContext));
 }
-#line 4347 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4199 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 177:
-#line 920 "delphi_y.y" /* yacc.c:1646  */
+#line 920 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(7, (yyvsp[0]).pContext));
 }
-#line 4355 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4207 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 178:
-#line 924 "delphi_y.y" /* yacc.c:1646  */
+#line 924 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(8, (yyvsp[0]).pContext));
 }
-#line 4363 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4215 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 179:
-#line 928 "delphi_y.y" /* yacc.c:1646  */
+#line 928 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiExpressionRelOp_create(9, (yyvsp[0]).pContext));
 }
-#line 4371 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4223 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 180:
-#line 932 "delphi_y.y" /* yacc.c:1646  */
+#line 932 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExpressionRelOpList_create(adtDelphiExpressionRelOp_create(0, (yyvsp[0]).pContext));
 }
-#line 4379 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4231 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 181:
-#line 938 "delphi_y.y" /* yacc.c:1646  */
+#line 938 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleExpression_create((yyvsp[0]).pContext);
 }
-#line 4387 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4239 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 182:
-#line 944 "delphi_y.y" /* yacc.c:1646  */
+#line 944 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(1, 1, (yyvsp[0]).pContext));
 }
-#line 4395 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4247 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 183:
-#line 948 "delphi_y.y" /* yacc.c:1646  */
+#line 948 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(2, 1, (yyvsp[0]).pContext));
 }
-#line 4403 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4255 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 184:
-#line 952 "delphi_y.y" /* yacc.c:1646  */
+#line 952 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(3, 1, (yyvsp[0]).pContext));
 }
-#line 4411 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4263 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 185:
-#line 956 "delphi_y.y" /* yacc.c:1646  */
+#line 956 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(4, 1, (yyvsp[0]).pContext));
 }
-#line 4419 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4271 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 186:
-#line 960 "delphi_y.y" /* yacc.c:1646  */
+#line 960 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(1, 2, (yyvsp[0]).pContext));
 }
-#line 4427 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4279 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 187:
-#line 964 "delphi_y.y" /* yacc.c:1646  */
+#line 964 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(2, 2, (yyvsp[0]).pContext));
 }
-#line 4435 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4287 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 188:
-#line 968 "delphi_y.y" /* yacc.c:1646  */
+#line 968 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(3, 2, (yyvsp[0]).pContext));
 }
-#line 4443 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4295 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 189:
-#line 972 "delphi_y.y" /* yacc.c:1646  */
+#line 972 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-3]).pContext, adtDelphiSimpleExpressionAddOp_create(4, 2, (yyvsp[0]).pContext));
 }
-#line 4451 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4303 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 190:
-#line 976 "delphi_y.y" /* yacc.c:1646  */
+#line 976 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiSimpleExpressionAddOp_create(1, 0, (yyvsp[0]).pContext));
 }
-#line 4459 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4311 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 191:
-#line 980 "delphi_y.y" /* yacc.c:1646  */
+#line 980 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiSimpleExpressionAddOp_create(2, 0, (yyvsp[0]).pContext));
 }
-#line 4467 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4319 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 192:
-#line 984 "delphi_y.y" /* yacc.c:1646  */
+#line 984 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiSimpleExpressionAddOp_create(3, 0, (yyvsp[0]).pContext));
 }
-#line 4475 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4327 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 193:
-#line 988 "delphi_y.y" /* yacc.c:1646  */
+#line 988 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiSimpleExpressionAddOp_create(4, 0, (yyvsp[0]).pContext));
 }
-#line 4483 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4335 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 194:
-#line 992 "delphi_y.y" /* yacc.c:1646  */
+#line 992 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleExpressionAddOpList_create(adtDelphiSimpleExpressionAddOp_create(0, 1, (yyvsp[0]).pContext));
 }
-#line 4491 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4343 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 195:
-#line 996 "delphi_y.y" /* yacc.c:1646  */
+#line 996 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleExpressionAddOpList_create(adtDelphiSimpleExpressionAddOp_create(0, 2, (yyvsp[0]).pContext));
 }
-#line 4499 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4351 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 196:
-#line 1000 "delphi_y.y" /* yacc.c:1646  */
+#line 1000 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleExpressionAddOpList_create(adtDelphiSimpleExpressionAddOp_create(0, 0, (yyvsp[0]).pContext));
 }
-#line 4507 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4359 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 197:
-#line 1006 "delphi_y.y" /* yacc.c:1646  */
+#line 1006 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTerm_create((yyvsp[0]).pContext);
 }
-#line 4515 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4367 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 198:
-#line 1012 "delphi_y.y" /* yacc.c:1646  */
+#line 1012 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiFactorMulOp_create(1, (yyvsp[0]).pContext));
 }
-#line 4523 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4375 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 199:
-#line 1016 "delphi_y.y" /* yacc.c:1646  */
+#line 1016 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiFactorMulOp_create(2, (yyvsp[0]).pContext));
 }
-#line 4531 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4383 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 200:
-#line 1020 "delphi_y.y" /* yacc.c:1646  */
+#line 1020 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiFactorMulOp_create(3, (yyvsp[0]).pContext));
 }
-#line 4539 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4391 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 201:
-#line 1024 "delphi_y.y" /* yacc.c:1646  */
+#line 1024 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiFactorMulOp_create(4, (yyvsp[0]).pContext));
 }
-#line 4547 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4399 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 202:
-#line 1028 "delphi_y.y" /* yacc.c:1646  */
+#line 1028 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiFactorMulOp_create(5, (yyvsp[0]).pContext));
 }
-#line 4555 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4407 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 203:
-#line 1032 "delphi_y.y" /* yacc.c:1646  */
+#line 1032 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiFactorMulOp_create(6, (yyvsp[0]).pContext));
 }
-#line 4563 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4415 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 204:
-#line 1036 "delphi_y.y" /* yacc.c:1646  */
+#line 1036 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, adtDelphiFactorMulOp_create(7, (yyvsp[0]).pContext));
 }
-#line 4571 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4423 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 205:
-#line 1040 "delphi_y.y" /* yacc.c:1646  */
+#line 1040 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactorMulOpList_create(adtDelphiFactorMulOp_create(0, (yyvsp[0]).pContext));
 }
-#line 4579 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4431 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 206:
-#line 1053 "delphi_y.y" /* yacc.c:1646  */
+#line 1053 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create((yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 4587 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4439 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 207:
-#line 1057 "delphi_y.y" /* yacc.c:1646  */
+#line 1057 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create((yyvsp[0]).pContext, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 4595 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4447 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 208:
-#line 1061 "delphi_y.y" /* yacc.c:1646  */
+#line 1061 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 4603 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4455 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 209:
-#line 1065 "delphi_y.y" /* yacc.c:1646  */
+#line 1065 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0);
 }
-#line 4611 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4463 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 210:
-#line 1069 "delphi_y.y" /* yacc.c:1646  */
+#line 1069 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
 }
-#line 4619 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4471 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 211:
-#line 1073 "delphi_y.y" /* yacc.c:1646  */
+#line 1073 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, 0, 0, 0, (yyvsp[-1]).pContext, 0, 0, 0, 0);
 }
-#line 4627 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4479 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 212:
-#line 1077 "delphi_y.y" /* yacc.c:1646  */
+#line 1077 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 4635 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4487 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 213:
-#line 1081 "delphi_y.y" /* yacc.c:1646  */
+#line 1081 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0);
 }
-#line 4643 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4495 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 214:
-#line 1085 "delphi_y.y" /* yacc.c:1646  */
+#line 1085 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 4651 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4503 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 215:
-#line 1089 "delphi_y.y" /* yacc.c:1646  */
+#line 1089 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFactor_create(0, 0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext);
 }
-#line 4659 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4511 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 216:
-#line 1095 "delphi_y.y" /* yacc.c:1646  */
+#line 1095 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCastExpression_create((yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext);
 }
-#line 4667 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4519 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 217:
-#line 1099 "delphi_y.y" /* yacc.c:1646  */
+#line 1099 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCastExpression_create(0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 4675 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4527 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 218:
-#line 1105 "delphi_y.y" /* yacc.c:1646  */
+#line 1105 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignator_create((yyvsp[0]).pContext);
 }
-#line 4683 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4535 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 219:
-#line 1111 "delphi_y.y" /* yacc.c:1646  */
+#line 1111 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4691 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4543 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 220:
-#line 1115 "delphi_y.y" /* yacc.c:1646  */
+#line 1115 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObjList_create((yyvsp[0]).pContext);
 }
-#line 4699 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4551 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 221:
-#line 1121 "delphi_y.y" /* yacc.c:1646  */
+#line 1121 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0);
 }
-#line 4707 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4559 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 222:
-#line 1125 "delphi_y.y" /* yacc.c:1646  */
+#line 1125 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-3]).pContext, 0, (yyvsp[0]).pContext, 1, 0);
 }
-#line 4715 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4567 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 223:
-#line 1129 "delphi_y.y" /* yacc.c:1646  */
+#line 1129 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-1]).pContext, 0, (yyvsp[0]).pContext, 0, 0);
 }
-#line 4723 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4575 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 224:
-#line 1133 "delphi_y.y" /* yacc.c:1646  */
+#line 1133 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, 0, 0);
 }
-#line 4731 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4583 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 225:
-#line 1137 "delphi_y.y" /* yacc.c:1646  */
+#line 1137 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-2]).pContext, 0, 0, 1, 0);
 }
-#line 4739 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4591 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 226:
-#line 1141 "delphi_y.y" /* yacc.c:1646  */
+#line 1141 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[0]).pContext, 0, 0, 0, 0);
 }
-#line 4747 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4599 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 227:
-#line 1145 "delphi_y.y" /* yacc.c:1646  */
+#line 1145 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 1);
 }
-#line 4755 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4607 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 228:
-#line 1149 "delphi_y.y" /* yacc.c:1646  */
+#line 1149 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-3]).pContext, 0, (yyvsp[0]).pContext, 1, 1);
 }
-#line 4763 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4615 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 229:
-#line 1153 "delphi_y.y" /* yacc.c:1646  */
+#line 1153 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-1]).pContext, 0, (yyvsp[0]).pContext, 0, 1);
 }
-#line 4771 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4623 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 230:
-#line 1157 "delphi_y.y" /* yacc.c:1646  */
+#line 1157 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, 0, 1);
 }
-#line 4779 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4631 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 231:
-#line 1161 "delphi_y.y" /* yacc.c:1646  */
+#line 1161 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[-2]).pContext, 0, 0, 1, 1);
 }
-#line 4787 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4639 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 232:
-#line 1165 "delphi_y.y" /* yacc.c:1646  */
+#line 1165 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorObj_create((yyvsp[0]).pContext, 0, 0, 0, 1);
 }
-#line 4795 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4647 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 233:
-#line 1171 "delphi_y.y" /* yacc.c:1646  */
+#line 1171 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 4803 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4655 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 234:
-#line 1175 "delphi_y.y" /* yacc.c:1646  */
+#line 1175 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorRefList_create((yyvsp[0]).pContext);
 }
-#line 4811 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4663 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 235:
-#line 1181 "delphi_y.y" /* yacc.c:1646  */
+#line 1181 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorRef_create((yyvsp[-1]).pContext);
 }
-#line 4819 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4671 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 236:
-#line 1185 "delphi_y.y" /* yacc.c:1646  */
+#line 1185 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDesignatorRef_create(0);
 }
-#line 4827 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4679 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 237:
-#line 1191 "delphi_y.y" /* yacc.c:1646  */
+#line 1191 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSetConstructor_create((yyvsp[-1]).pContext);
 }
-#line 4835 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4687 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 238:
-#line 1195 "delphi_y.y" /* yacc.c:1646  */
+#line 1195 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSetConstructor_create(0);
 }
-#line 4843 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4695 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 239:
-#line 1201 "delphi_y.y" /* yacc.c:1646  */
+#line 1201 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4851 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4703 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 240:
-#line 1205 "delphi_y.y" /* yacc.c:1646  */
+#line 1205 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSetElementList_create((yyvsp[0]).pContext);
 }
-#line 4859 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4711 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 241:
-#line 1211 "delphi_y.y" /* yacc.c:1646  */
+#line 1211 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSetElement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4867 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4719 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 242:
-#line 1215 "delphi_y.y" /* yacc.c:1646  */
+#line 1215 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSetElement_create((yyvsp[0]).pContext, 0);
 }
-#line 4875 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4727 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 243:
-#line 1221 "delphi_y.y" /* yacc.c:1646  */
+#line 1221 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 4883 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4735 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 244:
-#line 1225 "delphi_y.y" /* yacc.c:1646  */
+#line 1225 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExprList_create((yyvsp[0]).pContext);
 }
-#line 4891 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4743 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 245:
-#line 1231 "delphi_y.y" /* yacc.c:1646  */
+#line 1231 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).sComment);
 }
-#line 4899 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4751 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 246:
-#line 1235 "delphi_y.y" /* yacc.c:1646  */
+#line 1235 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).sComment);
 }
-#line 4907 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4759 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 247:
-#line 1239 "delphi_y.y" /* yacc.c:1646  */
+#line 1239 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, (yyvsp[0]).sComment);
 }
-#line 4915 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4767 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 248:
-#line 1243 "delphi_y.y" /* yacc.c:1646  */
+#line 1243 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, (yyvsp[0]).sComment);
 }
-#line 4923 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4775 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 249:
-#line 1247 "delphi_y.y" /* yacc.c:1646  */
+#line 1247 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, (yyvsp[0]).sComment);
 }
-#line 4931 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4783 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 250:
-#line 1251 "delphi_y.y" /* yacc.c:1646  */
+#line 1251 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, (yyvsp[0]).sComment);
 }
-#line 4939 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4791 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 251:
-#line 1255 "delphi_y.y" /* yacc.c:1646  */
+#line 1255 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, (yyvsp[0]).sComment);
 }
-#line 4947 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4799 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 252:
-#line 1259 "delphi_y.y" /* yacc.c:1646  */
+#line 1259 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, (yyvsp[0]).sComment);
 }
-#line 4955 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4807 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 253:
-#line 1263 "delphi_y.y" /* yacc.c:1646  */
+#line 1263 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, (yyvsp[0]).sComment);
 }
-#line 4963 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4815 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 254:
-#line 1267 "delphi_y.y" /* yacc.c:1646  */
+#line 1267 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-1]).pContext, 0, 0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[-1]).sComment);
 }
-#line 4971 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4823 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 255:
-#line 1271 "delphi_y.y" /* yacc.c:1646  */
+#line 1271 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 4979 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4831 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 256:
-#line 1275 "delphi_y.y" /* yacc.c:1646  */
+#line 1275 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 4987 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4839 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 257:
-#line 1279 "delphi_y.y" /* yacc.c:1646  */
+#line 1279 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 4995 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4847 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 258:
-#line 1283 "delphi_y.y" /* yacc.c:1646  */
+#line 1283 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 5003 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4855 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 259:
-#line 1287 "delphi_y.y" /* yacc.c:1646  */
+#line 1287 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 5011 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4863 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 260:
-#line 1291 "delphi_y.y" /* yacc.c:1646  */
+#line 1291 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 5019 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4871 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 261:
-#line 1295 "delphi_y.y" /* yacc.c:1646  */
+#line 1295 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 5027 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4879 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 262:
-#line 1299 "delphi_y.y" /* yacc.c:1646  */
+#line 1299 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, (yyvsp[-2]).sComment);
 }
-#line 5035 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4887 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 263:
-#line 1303 "delphi_y.y" /* yacc.c:1646  */
+#line 1303 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStatement_create((yyvsp[-2]).pContext, 0, 0, 0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, (yyvsp[-2]).sComment);
 }
-#line 5043 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4895 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 264:
-#line 1309 "delphi_y.y" /* yacc.c:1646  */
+#line 1309 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[-1]).pContext);
 }
-#line 5051 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4903 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 265:
-#line 1313 "delphi_y.y" /* yacc.c:1646  */
+#line 1313 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiStmtList_create((yyvsp[-1]).pContext);
 }
-#line 5059 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4911 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 266:
-#line 1319 "delphi_y.y" /* yacc.c:1646  */
+#line 1319 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExitStatement_create(0);
 }
-#line 5067 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4919 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 267:
-#line 1323 "delphi_y.y" /* yacc.c:1646  */
+#line 1323 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiExitStatement_create(1);
 }
-#line 5075 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4927 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 268:
-#line 1328 "delphi_y.y" /* yacc.c:1646  */
+#line 1328 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create((yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 5083 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4935 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 269:
-#line 1332 "delphi_y.y" /* yacc.c:1646  */
+#line 1332 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 1);
 }
-#line 5091 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4943 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 270:
-#line 1336 "delphi_y.y" /* yacc.c:1646  */
+#line 1336 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 2);
 }
-#line 5099 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4951 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 271:
-#line 1340 "delphi_y.y" /* yacc.c:1646  */
+#line 1340 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 3);
 }
-#line 5107 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4959 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 272:
-#line 1344 "delphi_y.y" /* yacc.c:1646  */
+#line 1344 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 4);
 }
-#line 5115 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4967 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 273:
-#line 1348 "delphi_y.y" /* yacc.c:1646  */
+#line 1348 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 5123 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4975 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 274:
-#line 1352 "delphi_y.y" /* yacc.c:1646  */
+#line 1352 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create((yyvsp[-2]).pContext, 0, 0, 0, 0, 0, 0, 1, 0);
 }
-#line 5131 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4983 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 275:
-#line 1356 "delphi_y.y" /* yacc.c:1646  */
+#line 1356 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, 0, (yyvsp[-1]).pContext, 0, 0, 0, 0, 0, 0);
 }
-#line 5139 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4991 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 276:
-#line 1360 "delphi_y.y" /* yacc.c:1646  */
+#line 1360 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, 0, 0, 0, 0, 0, 0, 1, 0);
 }
-#line 5147 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 4999 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 277:
-#line 1364 "delphi_y.y" /* yacc.c:1646  */
+#line 1364 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 5155 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5007 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 278:
-#line 1368 "delphi_y.y" /* yacc.c:1646  */
+#line 1368 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, (yyvsp[0]).pContext, 0, 0, 0, 0, (yyvsp[-2]).pContext, 0, 1);
 }
-#line 5163 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5015 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 279:
-#line 1372 "delphi_y.y" /* yacc.c:1646  */
+#line 1372 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, (yyvsp[0]).pContext, 0, 0, 0, 0, (yyvsp[-2]).pContext, 0, 2);
 }
-#line 5171 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5023 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 280:
-#line 1376 "delphi_y.y" /* yacc.c:1646  */
+#line 1376 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, (yyvsp[0]).pContext, 0, 0, 0, 0, (yyvsp[-2]).pContext, 0, 3);
 }
-#line 5179 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5031 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 281:
-#line 1380 "delphi_y.y" /* yacc.c:1646  */
+#line 1380 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, (yyvsp[0]).pContext, 0, 0, 0, 0, (yyvsp[-2]).pContext, 0, 4);
 }
-#line 5187 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5039 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 282:
-#line 1384 "delphi_y.y" /* yacc.c:1646  */
+#line 1384 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, (yyvsp[0]).pContext, 0, 0, 0, 0, (yyvsp[-2]).pContext, 0, 0);
 }
-#line 5195 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5047 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 283:
-#line 1388 "delphi_y.y" /* yacc.c:1646  */
+#line 1388 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSimpleStatement_create(0, 0, 0, 0, 0, 0, (yyvsp[-2]).pContext, 1, 0);
 }
-#line 5203 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5055 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 284:
-#line 1394 "delphi_y.y" /* yacc.c:1646  */
+#line 1394 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSizeofType_create((yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 5211 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5063 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 285:
-#line 1398 "delphi_y.y" /* yacc.c:1646  */
+#line 1398 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSizeofType_create(0, (yyvsp[0]).pContext, 0, 0);
 }
-#line 5219 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5071 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 286:
-#line 1402 "delphi_y.y" /* yacc.c:1646  */
+#line 1402 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSizeofType_create(0, 0, (yyvsp[0]).pContext, 0);
 }
-#line 5227 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5079 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 287:
-#line 1406 "delphi_y.y" /* yacc.c:1646  */
+#line 1406 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiSizeofType_create(0, 0, 0, (yyvsp[0]).pContext);
 }
-#line 5235 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5087 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 288:
-#line 1412 "delphi_y.y" /* yacc.c:1646  */
+#line 1412 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCompoundStmt_create((yyvsp[-1]).pContext);
 }
-#line 5243 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5095 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 289:
-#line 1416 "delphi_y.y" /* yacc.c:1646  */
+#line 1416 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCompoundStmt_create(0);
 }
-#line 5251 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5103 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 290:
-#line 1422 "delphi_y.y" /* yacc.c:1646  */
+#line 1422 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiIfStmt_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
 }
-#line 5259 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5111 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 291:
-#line 1426 "delphi_y.y" /* yacc.c:1646  */
+#line 1426 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiIfStmt_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5267 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5119 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 292:
-#line 1432 "delphi_y.y" /* yacc.c:1646  */
+#line 1432 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseStmt_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0);
 }
-#line 5275 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5127 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 293:
-#line 1436 "delphi_y.y" /* yacc.c:1646  */
+#line 1436 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseStmt_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 5283 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5135 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 294:
-#line 1440 "delphi_y.y" /* yacc.c:1646  */
+#line 1440 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseStmt_create((yyvsp[-6]).pContext, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext);
 }
-#line 5291 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5143 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 295:
-#line 1446 "delphi_y.y" /* yacc.c:1646  */
+#line 1446 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 5299 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5151 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 296:
-#line 1450 "delphi_y.y" /* yacc.c:1646  */
+#line 1450 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseSelectorList_create((yyvsp[0]).pContext);
 }
-#line 5307 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5159 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 297:
-#line 1456 "delphi_y.y" /* yacc.c:1646  */
+#line 1456 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseSelector_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5315 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5167 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 298:
-#line 1462 "delphi_y.y" /* yacc.c:1646  */
+#line 1462 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5323 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5175 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 299:
-#line 1466 "delphi_y.y" /* yacc.c:1646  */
+#line 1466 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseLabelList_create((yyvsp[0]).pContext);
 }
-#line 5331 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5183 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 300:
-#line 1472 "delphi_y.y" /* yacc.c:1646  */
+#line 1472 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseLabel_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5339 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5191 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 301:
-#line 1476 "delphi_y.y" /* yacc.c:1646  */
+#line 1476 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiCaseLabel_create((yyvsp[0]).pContext, 0);
 }
-#line 5347 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5199 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 302:
-#line 1482 "delphi_y.y" /* yacc.c:1646  */
+#line 1482 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRepeatStmt_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
 }
-#line 5355 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5207 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 303:
-#line 1486 "delphi_y.y" /* yacc.c:1646  */
+#line 1486 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiRepeatStmt_create(0, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
 }
-#line 5363 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5215 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 304:
-#line 1492 "delphi_y.y" /* yacc.c:1646  */
+#line 1492 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiWhileStmt_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5371 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5223 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 305:
-#line 1498 "delphi_y.y" /* yacc.c:1646  */
+#line 1498 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiForStmt_create((yyvsp[-8]).pContext, (yyvsp[-6]).pContext, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
 }
-#line 5379 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5231 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 306:
-#line 1502 "delphi_y.y" /* yacc.c:1646  */
+#line 1502 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiForStmt_create(0, (yyvsp[-6]).pContext, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
 }
-#line 5387 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5239 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 307:
-#line 1506 "delphi_y.y" /* yacc.c:1646  */
+#line 1506 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiForStmt_create((yyvsp[-8]).pContext, (yyvsp[-6]).pContext, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1);
 }
-#line 5395 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5247 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 308:
-#line 1510 "delphi_y.y" /* yacc.c:1646  */
+#line 1510 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiForStmt_create(0, (yyvsp[-6]).pContext, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1);
 }
-#line 5403 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5255 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 309:
-#line 1516 "delphi_y.y" /* yacc.c:1646  */
+#line 1516 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiWithStmt_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5411 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5263 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 310:
-#line 1522 "delphi_y.y" /* yacc.c:1646  */
+#line 1522 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDeclSection_create((yyvsp[0]).pContext);
 }
-#line 5419 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5271 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 311:
-#line 1526 "delphi_y.y" /* yacc.c:1646  */
+#line 1526 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = 0;
 }
-#line 5427 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5279 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 312:
-#line 1532 "delphi_y.y" /* yacc.c:1646  */
+#line 1532 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 5435 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5287 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 313:
-#line 1536 "delphi_y.y" /* yacc.c:1646  */
+#line 1536 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDeclList_create((yyvsp[0]).pContext);
 }
-#line 5443 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5295 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 314:
-#line 1542 "delphi_y.y" /* yacc.c:1646  */
+#line 1542 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create((yyvsp[-5]).pContext, 0, 0, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 5451 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5303 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 315:
-#line 1546 "delphi_y.y" /* yacc.c:1646  */
+#line 1546 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create((yyvsp[-3]).pContext, 0, 0, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 5459 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5311 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 316:
-#line 1550 "delphi_y.y" /* yacc.c:1646  */
+#line 1550 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create(0, 0, (yyvsp[-5]).pContext, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 5467 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5319 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 317:
-#line 1554 "delphi_y.y" /* yacc.c:1646  */
+#line 1554 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create(0, 0, (yyvsp[-3]).pContext, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 5475 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5327 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 318:
-#line 1558 "delphi_y.y" /* yacc.c:1646  */
+#line 1558 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create(0, 0, 0, (yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 5483 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5335 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 319:
-#line 1562 "delphi_y.y" /* yacc.c:1646  */
+#line 1562 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create(0, 0, 0, (yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext);
 }
-#line 5491 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5343 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 320:
-#line 1566 "delphi_y.y" /* yacc.c:1646  */
+#line 1566 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create(0, (yyvsp[-5]).pContext, 0, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 5499 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5351 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 321:
-#line 1570 "delphi_y.y" /* yacc.c:1646  */
+#line 1570 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureDecl_create(0, (yyvsp[-3]).pContext, 0, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 5507 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5359 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 322:
-#line 1576 "delphi_y.y" /* yacc.c:1646  */
+#line 1576 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, (yyvsp[-6]).sComment);
 }
-#line 5515 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5367 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 323:
-#line 1580 "delphi_y.y" /* yacc.c:1646  */
+#line 1580 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create(0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, (yyvsp[-4]).sComment);
 }
-#line 5523 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5375 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 324:
-#line 1584 "delphi_y.y" /* yacc.c:1646  */
+#line 1584 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0, (yyvsp[-5]).sComment);
 }
-#line 5531 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5383 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 325:
-#line 1588 "delphi_y.y" /* yacc.c:1646  */
+#line 1588 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create(0, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0, (yyvsp[-3]).sComment);
 }
-#line 5539 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5391 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 326:
-#line 1592 "delphi_y.y" /* yacc.c:1646  */
+#line 1592 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, (yyvsp[-6]).sComment);
 }
-#line 5547 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5399 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 327:
-#line 1596 "delphi_y.y" /* yacc.c:1646  */
+#line 1596 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create(0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, (yyvsp[-4]).sComment);
 }
-#line 5555 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5407 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 328:
-#line 1600 "delphi_y.y" /* yacc.c:1646  */
+#line 1600 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, 0, (yyvsp[0]).pContext, (yyvsp[-5]).sComment);
 }
-#line 5563 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5415 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 329:
-#line 1604 "delphi_y.y" /* yacc.c:1646  */
+#line 1604 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create(0, (yyvsp[-2]).pContext, 0, 0, (yyvsp[0]).pContext, (yyvsp[-3]).sComment);
 }
-#line 5571 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5423 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 330:
-#line 1608 "delphi_y.y" /* yacc.c:1646  */
+#line 1608 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, 0, 0, (yyvsp[-6]).sComment);
 }
-#line 5579 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5431 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 331:
-#line 1612 "delphi_y.y" /* yacc.c:1646  */
+#line 1612 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create(0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, 0, 0, (yyvsp[-4]).sComment);
 }
-#line 5587 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5439 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 332:
-#line 1616 "delphi_y.y" /* yacc.c:1646  */
+#line 1616 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, 0, 0, (yyvsp[-5]).sComment);
 }
-#line 5595 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5447 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 333:
-#line 1620 "delphi_y.y" /* yacc.c:1646  */
+#line 1620 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFunctionHeading_create(0, (yyvsp[-2]).pContext, 0, 0, 0, (yyvsp[-3]).sComment);
 }
-#line 5603 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5455 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 334:
-#line 1626 "delphi_y.y" /* yacc.c:1646  */
+#line 1626 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureHeading_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-4]).sComment);
 }
-#line 5611 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5463 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 335:
-#line 1630 "delphi_y.y" /* yacc.c:1646  */
+#line 1630 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureHeading_create(0, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-2]).sComment);
 }
-#line 5619 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5471 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 336:
-#line 1634 "delphi_y.y" /* yacc.c:1646  */
+#line 1634 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureHeading_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, (yyvsp[-3]).sComment);
 }
-#line 5627 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5479 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 337:
-#line 1638 "delphi_y.y" /* yacc.c:1646  */
+#line 1638 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProcedureHeading_create(0, (yyvsp[0]).pContext, 0, (yyvsp[-1]).sComment);
 }
-#line 5635 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5487 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 338:
-#line 1644 "delphi_y.y" /* yacc.c:1646  */
+#line 1644 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParameters_create((yyvsp[-1]).pContext);
 }
-#line 5643 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5495 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 339:
-#line 1648 "delphi_y.y" /* yacc.c:1646  */
+#line 1648 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParameters_create(0);
 }
-#line 5651 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5503 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 340:
-#line 1654 "delphi_y.y" /* yacc.c:1646  */
+#line 1654 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5659 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5511 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 341:
-#line 1658 "delphi_y.y" /* yacc.c:1646  */
+#line 1658 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParamList_create((yyvsp[0]).pContext);
 }
-#line 5667 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5519 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 342:
-#line 1664 "delphi_y.y" /* yacc.c:1646  */
+#line 1664 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParam_create(1, (yyvsp[0]).pContext);
 }
-#line 5675 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5527 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 343:
-#line 1668 "delphi_y.y" /* yacc.c:1646  */
+#line 1668 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParam_create(2, (yyvsp[0]).pContext);
 }
-#line 5683 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5535 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 344:
-#line 1672 "delphi_y.y" /* yacc.c:1646  */
+#line 1672 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParam_create(3, (yyvsp[0]).pContext);
 }
-#line 5691 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5543 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 345:
-#line 1676 "delphi_y.y" /* yacc.c:1646  */
+#line 1676 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParam_create(4, (yyvsp[0]).pContext);
 }
-#line 5699 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5551 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 346:
-#line 1680 "delphi_y.y" /* yacc.c:1646  */
+#line 1680 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiFormalParam_create(0, (yyvsp[0]).pContext);
 }
-#line 5707 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5559 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 347:
-#line 1686 "delphi_y.y" /* yacc.c:1646  */
+#line 1686 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-4]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 1, 0, 0);
 }
-#line 5715 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5567 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 348:
-#line 1690 "delphi_y.y" /* yacc.c:1646  */
+#line 1690 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0);
 }
-#line 5723 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5575 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 349:
-#line 1694 "delphi_y.y" /* yacc.c:1646  */
+#line 1694 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-4]).pContext, 0, (yyvsp[0]).pContext, 0, 0, 1, 0, 0);
 }
-#line 5731 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5583 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 350:
-#line 1698 "delphi_y.y" /* yacc.c:1646  */
+#line 1698 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0);
 }
-#line 5739 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5591 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 351:
-#line 1702 "delphi_y.y" /* yacc.c:1646  */
+#line 1702 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-4]).pContext, 0, 0, 0, 0, 1, 1, 0);
 }
-#line 5747 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5599 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 352:
-#line 1706 "delphi_y.y" /* yacc.c:1646  */
+#line 1706 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-2]).pContext, 0, 0, 0, 0, 0, 1, 0);
 }
-#line 5755 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5607 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 353:
-#line 1710 "delphi_y.y" /* yacc.c:1646  */
+#line 1710 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-4]).pContext, 0, 0, 0, 0, 1, 0, 1);
 }
-#line 5763 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5615 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 354:
-#line 1714 "delphi_y.y" /* yacc.c:1646  */
+#line 1714 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-2]).pContext, 0, 0, 0, 0, 0, 0, 1);
 }
-#line 5771 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5623 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 355:
-#line 1718 "delphi_y.y" /* yacc.c:1646  */
+#line 1718 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0, 0);
 }
-#line 5779 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5631 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 356:
-#line 1722 "delphi_y.y" /* yacc.c:1646  */
+#line 1722 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-6]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0, 1, 0, 0);
 }
-#line 5787 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5639 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 357:
-#line 1726 "delphi_y.y" /* yacc.c:1646  */
+#line 1726 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0, 0, 0, 0);
 }
-#line 5795 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5647 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 358:
-#line 1730 "delphi_y.y" /* yacc.c:1646  */
+#line 1730 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-6]).pContext, 0, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 1, 0, 0);
 }
-#line 5803 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5655 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 359:
-#line 1734 "delphi_y.y" /* yacc.c:1646  */
+#line 1734 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiParameter_create((yyvsp[-4]).pContext, 0, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 5811 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5663 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 360:
-#line 1740 "delphi_y.y" /* yacc.c:1646  */
+#line 1740 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(1);
 }
-#line 5819 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5671 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 361:
-#line 1744 "delphi_y.y" /* yacc.c:1646  */
+#line 1744 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(2);
 }
-#line 5827 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5679 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 362:
-#line 1748 "delphi_y.y" /* yacc.c:1646  */
+#line 1748 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(3);
 }
-#line 5835 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5687 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 363:
-#line 1752 "delphi_y.y" /* yacc.c:1646  */
+#line 1752 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(4);
 }
-#line 5843 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5695 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 364:
-#line 1756 "delphi_y.y" /* yacc.c:1646  */
+#line 1756 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(5);
 }
-#line 5851 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5703 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 365:
-#line 1760 "delphi_y.y" /* yacc.c:1646  */
+#line 1760 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(6);
 }
-#line 5859 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5711 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 366:
-#line 1764 "delphi_y.y" /* yacc.c:1646  */
+#line 1764 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(7);
 }
-#line 5867 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5719 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 367:
-#line 1768 "delphi_y.y" /* yacc.c:1646  */
+#line 1768 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(8);
 }
-#line 5875 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5727 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 368:
-#line 1772 "delphi_y.y" /* yacc.c:1646  */
+#line 1772 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(9);
 }
-#line 5883 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5735 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 369:
-#line 1776 "delphi_y.y" /* yacc.c:1646  */
+#line 1776 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(10);
 }
-#line 5891 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5743 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 370:
-#line 1780 "delphi_y.y" /* yacc.c:1646  */
+#line 1780 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(11);
 }
-#line 5899 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5751 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 371:
-#line 1784 "delphi_y.y" /* yacc.c:1646  */
+#line 1784 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(12);
 }
-#line 5907 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5759 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 372:
-#line 1788 "delphi_y.y" /* yacc.c:1646  */
+#line 1788 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(13);
 }
-#line 5915 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5767 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 373:
-#line 1792 "delphi_y.y" /* yacc.c:1646  */
+#line 1792 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(14);
 }
-#line 5923 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5775 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 374:
-#line 1796 "delphi_y.y" /* yacc.c:1646  */
+#line 1796 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirective_create(15);
 }
-#line 5931 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5783 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 375:
-#line 1802 "delphi_y.y" /* yacc.c:1646  */
+#line 1802 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 5939 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5791 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 376:
-#line 1806 "delphi_y.y" /* yacc.c:1646  */
+#line 1806 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDirectiveList_create((yyvsp[0]).pContext);
 }
-#line 5947 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5799 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 377:
-#line 1812 "delphi_y.y" /* yacc.c:1646  */
+#line 1812 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, 0, 0, 0);
 }
-#line 5955 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5807 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 378:
-#line 1816 "delphi_y.y" /* yacc.c:1646  */
+#line 1816 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 5963 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5815 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 379:
-#line 1820 "delphi_y.y" /* yacc.c:1646  */
+#line 1820 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, 0, (yyvsp[-2]).pContext, 0);
 }
-#line 5971 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5823 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 380:
-#line 1824 "delphi_y.y" /* yacc.c:1646  */
+#line 1824 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 5979 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5831 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 381:
-#line 1828 "delphi_y.y" /* yacc.c:1646  */
+#line 1828 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, 0);
 }
-#line 5987 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5839 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 382:
-#line 1832 "delphi_y.y" /* yacc.c:1646  */
+#line 1832 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, (yyvsp[-2]).pContext, 0, 0);
 }
-#line 5995 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5847 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 383:
-#line 1836 "delphi_y.y" /* yacc.c:1646  */
+#line 1836 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext);
 }
-#line 6003 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5855 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 384:
-#line 1840 "delphi_y.y" /* yacc.c:1646  */
+#line 1840 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, (yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext);
 }
-#line 6011 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5863 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 385:
-#line 1844 "delphi_y.y" /* yacc.c:1646  */
+#line 1844 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create((yyvsp[-6]).pContext, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0);
 }
-#line 6019 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5871 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 386:
-#line 1848 "delphi_y.y" /* yacc.c:1646  */
+#line 1848 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0);
 }
-#line 6027 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5879 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 387:
-#line 1852 "delphi_y.y" /* yacc.c:1646  */
+#line 1852 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create((yyvsp[-7]).pContext, (yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 6035 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5887 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 388:
-#line 1856 "delphi_y.y" /* yacc.c:1646  */
+#line 1856 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjectType_create(0, (yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 6043 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5895 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 389:
-#line 1862 "delphi_y.y" /* yacc.c:1646  */
+#line 1862 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 6051 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5903 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 390:
-#line 1866 "delphi_y.y" /* yacc.c:1646  */
+#line 1866 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethodList_create((yyvsp[0]).pContext);
 }
-#line 6059 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5911 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 391:
-#line 1872 "delphi_y.y" /* yacc.c:1646  */
+#line 1872 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create((yyvsp[-3]).pContext, 0, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 6067 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5919 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 392:
-#line 1876 "delphi_y.y" /* yacc.c:1646  */
+#line 1876 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create((yyvsp[-1]).pContext, 0, 0, 0, 0);
 }
-#line 6075 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5927 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 393:
-#line 1880 "delphi_y.y" /* yacc.c:1646  */
+#line 1880 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create(0, (yyvsp[-3]).pContext, 0, 0, (yyvsp[-1]).pContext);
 }
-#line 6083 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5935 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 394:
-#line 1884 "delphi_y.y" /* yacc.c:1646  */
+#line 1884 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create(0, (yyvsp[-1]).pContext, 0, 0, 0);
 }
-#line 6091 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5943 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 395:
-#line 1888 "delphi_y.y" /* yacc.c:1646  */
+#line 1888 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create(0, 0, (yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext);
 }
-#line 6099 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5951 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 396:
-#line 1892 "delphi_y.y" /* yacc.c:1646  */
+#line 1892 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create(0, 0, (yyvsp[-1]).pContext, 0, 0);
 }
-#line 6107 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5959 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 397:
-#line 1896 "delphi_y.y" /* yacc.c:1646  */
+#line 1896 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create(0, 0, 0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
 }
-#line 6115 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5967 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 398:
-#line 1900 "delphi_y.y" /* yacc.c:1646  */
+#line 1900 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiMethod_create(0, 0, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 6123 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5975 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 399:
-#line 1906 "delphi_y.y" /* yacc.c:1646  */
+#line 1906 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstructorHeading_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-4]).sComment);
 }
-#line 6131 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5983 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 400:
-#line 1910 "delphi_y.y" /* yacc.c:1646  */
+#line 1910 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstructorHeading_create(0, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-2]).sComment);
 }
-#line 6139 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5991 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 401:
-#line 1914 "delphi_y.y" /* yacc.c:1646  */
+#line 1914 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstructorHeading_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, (yyvsp[-3]).sComment);
 }
-#line 6147 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 5999 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 402:
-#line 1918 "delphi_y.y" /* yacc.c:1646  */
+#line 1918 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstructorHeading_create(0, (yyvsp[0]).pContext, 0, (yyvsp[-1]).sComment);
 }
-#line 6155 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6007 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 403:
-#line 1924 "delphi_y.y" /* yacc.c:1646  */
+#line 1924 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDestructorHeading_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-4]).sComment);
 }
-#line 6163 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6015 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 404:
-#line 1928 "delphi_y.y" /* yacc.c:1646  */
+#line 1928 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDestructorHeading_create(0, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, (yyvsp[-2]).sComment);
 }
-#line 6171 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6023 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 405:
-#line 1932 "delphi_y.y" /* yacc.c:1646  */
+#line 1932 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDestructorHeading_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, (yyvsp[-3]).sComment);
 }
-#line 6179 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6031 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 406:
-#line 1936 "delphi_y.y" /* yacc.c:1646  */
+#line 1936 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiDestructorHeading_create(0, (yyvsp[0]).pContext, 0, (yyvsp[-1]).sComment);
 }
-#line 6187 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6039 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 407:
-#line 1942 "delphi_y.y" /* yacc.c:1646  */
+#line 1942 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6195 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6047 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 408:
-#line 1946 "delphi_y.y" /* yacc.c:1646  */
+#line 1946 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjFieldList_create((yyvsp[0]).pContext);
 }
-#line 6203 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6055 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 409:
-#line 1952 "delphi_y.y" /* yacc.c:1646  */
+#line 1952 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiObjField_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6211 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6063 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 410:
-#line 1958 "delphi_y.y" /* yacc.c:1646  */
+#line 1958 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInitSection_create((yyvsp[-1]).pContext, 0, 1, (yyvsp[-2]).sComment);
 }
-#line 6219 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6071 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 411:
-#line 1962 "delphi_y.y" /* yacc.c:1646  */
+#line 1962 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInitSection_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 1, (yyvsp[-4]).sComment);
 }
-#line 6227 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6079 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 412:
-#line 1966 "delphi_y.y" /* yacc.c:1646  */
+#line 1966 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInitSection_create((yyvsp[-1]).pContext, 0, 0, (yyvsp[-2]).sComment);
 }
-#line 6235 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6087 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 413:
-#line 1970 "delphi_y.y" /* yacc.c:1646  */
+#line 1970 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInitSection_create(0, 0, 0, (yyvsp[0]).sComment);
 }
-#line 6243 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6095 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 414:
-#line 1976 "delphi_y.y" /* yacc.c:1646  */
+#line 1976 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, 0, 0, 0);
 }
-#line 6251 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6103 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 415:
-#line 1980 "delphi_y.y" /* yacc.c:1646  */
+#line 1980 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, 0, 0, (yyvsp[-2]).pContext);
 }
-#line 6259 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6111 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 416:
-#line 1984 "delphi_y.y" /* yacc.c:1646  */
+#line 1984 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 6267 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6119 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 417:
-#line 1988 "delphi_y.y" /* yacc.c:1646  */
+#line 1988 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, 0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext);
 }
-#line 6275 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6127 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 418:
-#line 1992 "delphi_y.y" /* yacc.c:1646  */
+#line 1992 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, (yyvsp[-2]).pContext, 0, 0);
 }
-#line 6283 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6135 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 419:
-#line 1996 "delphi_y.y" /* yacc.c:1646  */
+#line 1996 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, (yyvsp[-4]).pContext, 0, (yyvsp[-2]).pContext);
 }
-#line 6291 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6143 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 420:
-#line 2000 "delphi_y.y" /* yacc.c:1646  */
+#line 2000 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0);
 }
-#line 6299 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6151 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 421:
-#line 2004 "delphi_y.y" /* yacc.c:1646  */
+#line 2004 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create(0, (yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext);
 }
-#line 6307 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6159 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 422:
-#line 2008 "delphi_y.y" /* yacc.c:1646  */
+#line 2008 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-2]).pContext, 0, 0, 0);
 }
-#line 6315 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6167 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 423:
-#line 2012 "delphi_y.y" /* yacc.c:1646  */
+#line 2012 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-4]).pContext, 0, 0, (yyvsp[-2]).pContext);
 }
-#line 6323 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6175 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 424:
-#line 2016 "delphi_y.y" /* yacc.c:1646  */
+#line 2016 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext, 0);
 }
-#line 6331 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6183 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 425:
-#line 2020 "delphi_y.y" /* yacc.c:1646  */
+#line 2020 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-5]).pContext, 0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext);
 }
-#line 6339 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6191 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 426:
-#line 2024 "delphi_y.y" /* yacc.c:1646  */
+#line 2024 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, 0);
 }
-#line 6347 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6199 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 427:
-#line 2028 "delphi_y.y" /* yacc.c:1646  */
+#line 2028 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-6]).pContext, (yyvsp[-4]).pContext, 0, (yyvsp[-2]).pContext);
 }
-#line 6355 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6207 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 428:
-#line 2032 "delphi_y.y" /* yacc.c:1646  */
+#line 2032 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0);
 }
-#line 6363 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6215 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 429:
-#line 2036 "delphi_y.y" /* yacc.c:1646  */
+#line 2036 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassType_create((yyvsp[-7]).pContext, (yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext);
 }
-#line 6371 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6223 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 430:
-#line 2042 "delphi_y.y" /* yacc.c:1646  */
+#line 2042 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6379 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6231 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 431:
-#line 2046 "delphi_y.y" /* yacc.c:1646  */
+#line 2046 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassFieldList_create((yyvsp[0]).pContext);
 }
-#line 6387 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6239 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 432:
-#line 2052 "delphi_y.y" /* yacc.c:1646  */
+#line 2052 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassField_create(0, (yyvsp[0]).pContext);
 }
-#line 6395 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6247 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 433:
-#line 2056 "delphi_y.y" /* yacc.c:1646  */
+#line 2056 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassField_create(1, (yyvsp[0]).pContext);
 }
-#line 6403 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6255 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 434:
-#line 2060 "delphi_y.y" /* yacc.c:1646  */
+#line 2060 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassField_create(1, (yyvsp[0]).pContext);
 }
-#line 6411 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6263 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 435:
-#line 2064 "delphi_y.y" /* yacc.c:1646  */
+#line 2064 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassField_create(2, (yyvsp[0]).pContext);
 }
-#line 6419 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6271 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 436:
-#line 2068 "delphi_y.y" /* yacc.c:1646  */
+#line 2068 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassField_create(3, (yyvsp[0]).pContext);
 }
-#line 6427 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6279 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 437:
-#line 2074 "delphi_y.y" /* yacc.c:1646  */
+#line 2074 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 6435 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6287 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 438:
-#line 2078 "delphi_y.y" /* yacc.c:1646  */
+#line 2078 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassMethodList_create((yyvsp[0]).pContext);
 }
-#line 6443 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6295 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 439:
-#line 2084 "delphi_y.y" /* yacc.c:1646  */
+#line 2084 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassMethod_create(0, (yyvsp[0]).pContext);
 }
-#line 6451 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6303 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 440:
-#line 2088 "delphi_y.y" /* yacc.c:1646  */
+#line 2088 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassMethod_create(1, (yyvsp[0]).pContext);
 }
-#line 6459 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6311 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 441:
-#line 2092 "delphi_y.y" /* yacc.c:1646  */
+#line 2092 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassMethod_create(2, (yyvsp[0]).pContext);
 }
-#line 6467 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6319 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 442:
-#line 2096 "delphi_y.y" /* yacc.c:1646  */
+#line 2096 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassMethod_create(3, (yyvsp[0]).pContext);
 }
-#line 6475 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6327 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 443:
-#line 2100 "delphi_y.y" /* yacc.c:1646  */
+#line 2100 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassMethod_create(4, (yyvsp[0]).pContext);
 }
-#line 6483 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6335 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 444:
-#line 2106 "delphi_y.y" /* yacc.c:1646  */
+#line 2106 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6491 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6343 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 445:
-#line 2110 "delphi_y.y" /* yacc.c:1646  */
+#line 2110 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassPropertyList_create((yyvsp[0]).pContext);
 }
-#line 6499 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6351 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 446:
-#line 2116 "delphi_y.y" /* yacc.c:1646  */
+#line 2116 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassProperty_create(0, (yyvsp[0]).pContext);
 }
-#line 6507 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6359 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 447:
-#line 2120 "delphi_y.y" /* yacc.c:1646  */
+#line 2120 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassProperty_create(1, (yyvsp[0]).pContext);
 }
-#line 6515 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6367 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 448:
-#line 2124 "delphi_y.y" /* yacc.c:1646  */
+#line 2124 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassProperty_create(2, (yyvsp[0]).pContext);
 }
-#line 6523 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6375 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 449:
-#line 2128 "delphi_y.y" /* yacc.c:1646  */
+#line 2128 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassProperty_create(3, (yyvsp[0]).pContext);
 }
-#line 6531 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6383 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 450:
-#line 2132 "delphi_y.y" /* yacc.c:1646  */
+#line 2132 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiClassProperty_create(4, (yyvsp[0]).pContext);
 }
-#line 6539 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6391 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 451:
-#line 2138 "delphi_y.y" /* yacc.c:1646  */
+#line 2138 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProperty_create((yyvsp[-6]).pContext, (yyvsp[-1]).pContext, (yyvsp[-4]).pContext, (yyvsp[0]).pContext);
 }
-#line 6547 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6399 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 452:
-#line 2142 "delphi_y.y" /* yacc.c:1646  */
+#line 2142 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProperty_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, (yyvsp[0]).pContext);
 }
-#line 6555 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6407 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 453:
-#line 2146 "delphi_y.y" /* yacc.c:1646  */
+#line 2146 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiProperty_create(0, (yyvsp[-1]).pContext, 0, (yyvsp[0]).pContext);
 }
-#line 6563 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6415 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 454:
-#line 2152 "delphi_y.y" /* yacc.c:1646  */
+#line 2152 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6571 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6423 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 455:
-#line 2156 "delphi_y.y" /* yacc.c:1646  */
+#line 2156 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertyParameterList_create((yyvsp[0]).pContext);
 }
-#line 6579 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6431 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 456:
-#line 2162 "delphi_y.y" /* yacc.c:1646  */
+#line 2162 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertyParameter_create((yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext);
 }
-#line 6587 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6439 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 457:
-#line 2166 "delphi_y.y" /* yacc.c:1646  */
+#line 2166 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertyParameter_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6595 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6447 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 458:
-#line 2176 "delphi_y.y" /* yacc.c:1646  */
+#line 2176 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(1, 0, (yyvsp[0]).pContext, 0, 0);
 }
-#line 6603 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6455 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 459:
-#line 2180 "delphi_y.y" /* yacc.c:1646  */
+#line 2180 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(2, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 6611 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6463 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 460:
-#line 2184 "delphi_y.y" /* yacc.c:1646  */
+#line 2184 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(3, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 6619 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6471 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 461:
-#line 2188 "delphi_y.y" /* yacc.c:1646  */
+#line 2188 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(4, (yyvsp[0]).pContext, 0, 0, 0);
 }
-#line 6627 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6479 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 462:
-#line 2192 "delphi_y.y" /* yacc.c:1646  */
+#line 2192 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(5, 0, (yyvsp[0]).pContext, 0, 0);
 }
-#line 6635 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6487 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 463:
-#line 2196 "delphi_y.y" /* yacc.c:1646  */
+#line 2196 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(6, 0, 0, 0, 0);
 }
-#line 6643 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6495 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 464:
-#line 2200 "delphi_y.y" /* yacc.c:1646  */
+#line 2200 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(7, 0, 0, 0, (yyvsp[0]).pContext);
 }
-#line 6651 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6503 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 465:
-#line 2204 "delphi_y.y" /* yacc.c:1646  */
+#line 2204 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(7, 0, 0, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6659 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6511 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 466:
-#line 2208 "delphi_y.y" /* yacc.c:1646  */
+#line 2208 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiPropertySpecifiers_create(0, 0, 0, 0, 0);
 }
-#line 6667 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6519 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 467:
-#line 2214 "delphi_y.y" /* yacc.c:1646  */
+#line 2214 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create(0, 0, 0, (yyvsp[-1]).sComment);
 }
-#line 6675 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6527 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 468:
-#line 2218 "delphi_y.y" /* yacc.c:1646  */
+#line 2218 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create(0, (yyvsp[-1]).pContext, 0, (yyvsp[-2]).sComment);
 }
-#line 6683 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6535 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 469:
-#line 2222 "delphi_y.y" /* yacc.c:1646  */
+#line 2222 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create(0, 0, (yyvsp[-2]).pContext, (yyvsp[-3]).sComment);
 }
-#line 6691 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6543 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 470:
-#line 2226 "delphi_y.y" /* yacc.c:1646  */
+#line 2226 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create(0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-4]).sComment);
 }
-#line 6699 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6551 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 471:
-#line 2230 "delphi_y.y" /* yacc.c:1646  */
+#line 2230 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create((yyvsp[-2]).pContext, 0, 0, (yyvsp[-4]).sComment);
 }
-#line 6707 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6559 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 472:
-#line 2234 "delphi_y.y" /* yacc.c:1646  */
+#line 2234 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, (yyvsp[-5]).sComment);
 }
-#line 6715 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6567 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 473:
-#line 2238 "delphi_y.y" /* yacc.c:1646  */
+#line 2238 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create((yyvsp[-4]).pContext, 0, (yyvsp[-2]).pContext, (yyvsp[-6]).sComment);
 }
-#line 6723 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6575 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 474:
-#line 2242 "delphi_y.y" /* yacc.c:1646  */
+#line 2242 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiInterfaceType_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-7]).sComment);
 }
-#line 6731 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6583 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 475:
-#line 2248 "delphi_y.y" /* yacc.c:1646  */
+#line 2248 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 6739 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6591 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 476:
-#line 2252 "delphi_y.y" /* yacc.c:1646  */
+#line 2252 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiIdentList_create((yyvsp[0]).pContext);
 }
-#line 6747 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6599 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 477:
-#line 2264 "delphi_y.y" /* yacc.c:1646  */
+#line 2264 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstExpr_create((yyvsp[0]).sValue, 1);
 }
-#line 6755 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6607 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 478:
-#line 2268 "delphi_y.y" /* yacc.c:1646  */
+#line 2268 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstExpr_create((yyvsp[0]).sValue, 1);
 }
-#line 6763 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6615 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 479:
-#line 2272 "delphi_y.y" /* yacc.c:1646  */
+#line 2272 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiConstExpr_create((yyvsp[0]).sValue, 0);
 }
-#line 6771 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6623 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 480:
-#line 2278 "delphi_y.y" /* yacc.c:1646  */
+#line 2278 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiTypeId_create((yyvsp[0]).sValue);
 }
-#line 6779 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6631 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 481:
-#line 2284 "delphi_y.y" /* yacc.c:1646  */
+#line 2284 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiUnitId_create((yyvsp[0]).sValue);
 }
-#line 6787 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6639 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 482:
-#line 2290 "delphi_y.y" /* yacc.c:1646  */
+#line 2290 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiIdent_create((yyvsp[0]).sValue);
 }
-#line 6795 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6647 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 483:
-#line 2296 "delphi_y.y" /* yacc.c:1646  */
+#line 2296 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiLabelId_create((yyvsp[0]).sValue);
 }
-#line 6803 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6655 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 484:
-#line 2302 "delphi_y.y" /* yacc.c:1646  */
+#line 2302 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiNumber_create((yyvsp[0]).sValue, 0);
 }
-#line 6811 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6663 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 485:
-#line 2306 "delphi_y.y" /* yacc.c:1646  */
+#line 2306 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiNumber_create((yyvsp[0]).sValue, 1);
 }
-#line 6819 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6671 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 486:
-#line 2310 "delphi_y.y" /* yacc.c:1646  */
+#line 2310 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiNumber_create((yyvsp[0]).sValue, 2);
 }
-#line 6827 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6679 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
   case 487:
-#line 2316 "delphi_y.y" /* yacc.c:1646  */
+#line 2316 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtDelphiString_create((yyvsp[0]).sValue);
 }
-#line 6835 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6687 "..\\src\\delphi_y.c" /* yacc.c:1646  */
     break;
 
 
-#line 6839 "../../src/delphi_y.c" /* yacc.c:1646  */
+#line 6691 "..\\src\\delphi_y.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

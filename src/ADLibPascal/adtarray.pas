@@ -422,9 +422,9 @@ type
   public
     DefaultStackSize : longint; static;
 
-    constructor create();
-    constructor create(pCopy : PAdtArrays; bShallow : boolean = true);
-    destructor  destroy() ; override; overload;
+    constructor create(); overload;
+    constructor create(pCopy : PAdtArrays; bShallow : boolean = true); overload;
+    destructor  destroy(); override; overload;
 
     function stackInfo(pStack : pchar) : PAdtStackInfo ; inline;
     function memAllocator() : AdtMemAllocator ; inline;
@@ -3620,7 +3620,7 @@ implementation
 
   //  ----------------------------------------------------------------------------
 
-  destructor AdtArrays.destroy();overload;
+  destructor AdtArrays.destroy();
 
   begin
     if (not IsShallowCopy) then

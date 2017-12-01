@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "make_y.y" /* yacc.c:339  */
+#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:339  */
 
 /*
  * make.y
@@ -134,7 +134,7 @@
 #define YYSTYPE   makeType
 
 
-#line 138 "../../src/make_y.c" /* yacc.c:339  */
+#line 138 "..\\src\\make_y.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -153,9 +153,9 @@
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "y.tab.h".  */
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+   by #include "make_y.h".  */
+#ifndef YY_YY_SRC_MAKE_Y_H_INCLUDED
+# define YY_YY_SRC_MAKE_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -210,46 +210,6 @@ extern int yydebug;
     M_MULTILINE_COMMENT = 296
   };
 #endif
-/* Tokens.  */
-#define M_AD 258
-#define M_BEGIN 259
-#define M_BOUNDS 260
-#define M_CHECK 261
-#define M_END 262
-#define M_SOURCE 263
-#define M_OUTPUT 264
-#define M_FILE 265
-#define M_FILES 266
-#define M_WORKING 267
-#define M_DIRECTORY 268
-#define M_FUNCTION 269
-#define M_VAR 270
-#define M_OUTVAR 271
-#define M_MODE 272
-#define M_USER 273
-#define M_PRAGMAS 274
-#define M_PATHS 275
-#define M_CLASS 276
-#define M_OPTIONS 277
-#define M_PASCAL 278
-#define M_CPP 279
-#define M_FORTRAN 280
-#define M_INCLUDE 281
-#define M_SWITCHES 282
-#define M_BLACKBOX 283
-#define M_PRE 284
-#define M_POST 285
-#define M_COMMA 286
-#define M_SEMICOLON 287
-#define M_COLON 288
-#define M_EQUALS 289
-#define M_LBRACKET 290
-#define M_RBRACKET 291
-#define M_TEXT 292
-#define M_FILENAME 293
-#define M_IDENT 294
-#define M_SINGLELINE_COMMENT 295
-#define M_MULTILINE_COMMENT 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -263,11 +223,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SRC_MAKE_Y_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 271 "../../src/make_y.c" /* yacc.c:358  */
+#line 231 "..\\src\\make_y.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1462,303 +1422,303 @@ yyreduce:
   switch (yyn)
     {
         case 15:
-#line 112 "make_y.y" /* yacc.c:1646  */
+#line 112 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_MakeCommandOpen();
 }
-#line 1470 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1430 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 118 "make_y.y" /* yacc.c:1646  */
+#line 118 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_MakeCommandClose();
 }
-#line 1478 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1438 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 124 "make_y.y" /* yacc.c:1646  */
+#line 124 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PathsClose();
 }
-#line 1486 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1446 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 130 "make_y.y" /* yacc.c:1646  */
+#line 130 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PathsOpen();
 }
-#line 1494 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1454 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 136 "make_y.y" /* yacc.c:1646  */
+#line 136 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_BlackBoxClose();
 }
-#line 1502 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1462 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 142 "make_y.y" /* yacc.c:1646  */
+#line 142 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_BlackBoxOpen();
 }
-#line 1510 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1470 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 148 "make_y.y" /* yacc.c:1646  */
+#line 148 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_SourceFilesClose();
 }
-#line 1518 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1478 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 154 "make_y.y" /* yacc.c:1646  */
+#line 154 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_SourceFilesOpen();
 }
-#line 1526 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1486 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 160 "make_y.y" /* yacc.c:1646  */
+#line 160 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PushString((yyvsp[0]).sValue);
 }
-#line 1534 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1494 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 164 "make_y.y" /* yacc.c:1646  */
+#line 164 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PushString((yyvsp[0]).sValue);
 }
-#line 1542 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1502 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 170 "make_y.y" /* yacc.c:1646  */
+#line 170 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_WorkingDirectory((yyvsp[-1]).sValue);
 }
-#line 1550 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1510 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 176 "make_y.y" /* yacc.c:1646  */
+#line 176 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_SourceOptionsFile((yyvsp[-1]).sValue, 0);
 }
-#line 1558 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1518 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 182 "make_y.y" /* yacc.c:1646  */
+#line 182 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_SourceOptionsFile((yyvsp[-1]).sValue, 1);
 }
-#line 1566 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1526 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 188 "make_y.y" /* yacc.c:1646  */
+#line 188 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_SwitchesClose();
 }
-#line 1574 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1534 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 194 "make_y.y" /* yacc.c:1646  */
+#line 194 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_SwitchesOpen();
 }
-#line 1582 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1542 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 200 "make_y.y" /* yacc.c:1646  */
+#line 200 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_FortranIncludeFilesClose();
 }
-#line 1590 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1550 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 206 "make_y.y" /* yacc.c:1646  */
+#line 206 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_FortranIncludeFilesOpen();
 }
-#line 1598 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1558 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 220 "make_y.y" /* yacc.c:1646  */
+#line 220 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassOpen((yyvsp[-12]).sValue, (yyvsp[-10]).sValue, (yyvsp[-5]).sValue, 0, (yyvsp[-1]).sValue, 0);
 }
-#line 1606 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1566 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 224 "make_y.y" /* yacc.c:1646  */
+#line 224 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassOpen((yyvsp[-13]).sValue, (yyvsp[-11]).sValue, (yyvsp[-6]).sValue, 0, (yyvsp[-2]).sValue, (yyvsp[-1]).sValue);
 }
-#line 1614 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1574 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 228 "make_y.y" /* yacc.c:1646  */
+#line 228 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassOpen((yyvsp[-13]).sValue, (yyvsp[-11]).sValue, (yyvsp[-6]).sValue, (yyvsp[-5]).sValue, (yyvsp[-1]).sValue, 0);
 }
-#line 1622 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1582 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 232 "make_y.y" /* yacc.c:1646  */
+#line 232 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassOpen((yyvsp[-14]).sValue, (yyvsp[-12]).sValue, (yyvsp[-7]).sValue, (yyvsp[-6]).sValue, (yyvsp[-2]).sValue, (yyvsp[-1]).sValue);
 }
-#line 1630 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1590 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 238 "make_y.y" /* yacc.c:1646  */
+#line 238 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassClose();
 }
-#line 1638 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1598 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 248 "make_y.y" /* yacc.c:1646  */
+#line 248 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandClose();
 }
-#line 1646 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1606 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 254 "make_y.y" /* yacc.c:1646  */
+#line 254 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandOpClose();
 }
-#line 1654 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1614 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 258 "make_y.y" /* yacc.c:1646  */
+#line 258 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandOpClose();
 }
-#line 1662 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1622 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 274 "make_y.y" /* yacc.c:1646  */
+#line 274 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandFunction((yyvsp[0]).sValue);
 }
-#line 1670 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1630 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 283 "make_y.y" /* yacc.c:1646  */
+#line 283 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandVarOpen();
 }
-#line 1678 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1638 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 292 "make_y.y" /* yacc.c:1646  */
+#line 292 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandOutVarOpen();
 }
-#line 1686 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1646 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 298 "make_y.y" /* yacc.c:1646  */
+#line 298 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandMode((yyvsp[0]).sValue);
 }
-#line 1694 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1654 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 304 "make_y.y" /* yacc.c:1646  */
+#line 304 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandUser((yyvsp[0]).sValue);
 }
-#line 1702 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1662 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 310 "make_y.y" /* yacc.c:1646  */
+#line 310 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandPre((yyvsp[0]).sValue);
 }
-#line 1710 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1670 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 316 "make_y.y" /* yacc.c:1646  */
+#line 316 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandPost((yyvsp[0]).sValue);
 }
-#line 1718 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1678 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 322 "make_y.y" /* yacc.c:1646  */
+#line 322 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandPragmas((yyvsp[0]).sValue);
 }
-#line 1726 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1686 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 328 "make_y.y" /* yacc.c:1646  */
+#line 328 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassBoundsCheckClose();
 }
-#line 1734 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1694 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 334 "make_y.y" /* yacc.c:1646  */
+#line 334 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassBoundsCheckOpen();
 }
-#line 1742 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1702 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 340 "make_y.y" /* yacc.c:1646  */
+#line 340 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PushString((yyvsp[0]).sValue);
 }
-#line 1750 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1710 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 344 "make_y.y" /* yacc.c:1646  */
+#line 344 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PushString((yyvsp[0]).sValue);
 }
-#line 1758 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1718 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
 
-#line 1762 "../../src/make_y.c" /* yacc.c:1646  */
+#line 1722 "..\\src\\make_y.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

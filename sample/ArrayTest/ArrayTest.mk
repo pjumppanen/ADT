@@ -15,5 +15,9 @@ AD BEGIN
     FUNCTION=polySumB OUTVAR=polySumB VAR=X MODE=r;
     FUNCTION=polySumC OUTVAR=polySumC VAR=X MODE=r;
     FUNCTION=ifTest OUTVAR=ifTest VAR=X MODE=r;
+    FUNCTION=test_one_if OUTVAR=test_one_if VAR=v MODE=f;
+    FUNCTION=test_one_if OUTVAR=test_one_if VAR=v MODE=r;
+    FUNCTION=test_one_if_internal OUTVAR=test_one_if_internal VAR=v MODE=f;
+    FUNCTION=test_one_if_internal OUTVAR=test_one_if_internal VAR=v MODE=r;
   END
 END

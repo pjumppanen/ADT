@@ -240,13 +240,73 @@ AT.nt.SUM_BX <- function(Context, X, xb1_x, sumb1_x)
   return (.Call('_AT.nt.SUM_BX', Context, X, xb1_x, sumb1_x))
 }
 
-AT.sumA1_B <- function(Context)
+AT.sumA1_D <- function(Context)
 {
-  return (.Call('_AT.sumA1_B', Context))
+  return (.Call('_AT.sumA1_D', Context))
 }
 
-AT.nt.sumA1_B <- function(Context)
+AT.nt.sumA1_D <- function(Context)
 {
-  return (.Call('_AT.nt.sumA1_B', Context))
+  return (.Call('_AT.nt.sumA1_D', Context))
+}
+
+AT.test_one_if <- function(Context, v)
+{
+  return (.Call('_AT.test_one_if', Context, v))
+}
+
+AT.nt.test_one_if <- function(Context, v)
+{
+  return (.Call('_AT.nt.test_one_if', Context, v))
+}
+
+AT.TEST_ONE_IF_BV <- function(Context, v, vb7_v, test_one_ifb7_v)
+{
+  return (.Call('_AT.TEST_ONE_IF_BV', Context, v, vb7_v, test_one_ifb7_v))
+}
+
+AT.nt.TEST_ONE_IF_BV <- function(Context, v, vb7_v, test_one_ifb7_v)
+{
+  return (.Call('_AT.nt.TEST_ONE_IF_BV', Context, v, vb7_v, test_one_ifb7_v))
+}
+
+AT.TEST_ONE_IF_DV <- function(Context, v, vd6_v, test_one_if)
+{
+  return (.Call('_AT.TEST_ONE_IF_DV', Context, v, vd6_v, test_one_if))
+}
+
+AT.nt.TEST_ONE_IF_DV <- function(Context, v, vd6_v, test_one_if)
+{
+  return (.Call('_AT.nt.TEST_ONE_IF_DV', Context, v, vd6_v, test_one_if))
+}
+
+AT.test_one_if_internal <- function(Context, v)
+{
+  return (.Call('_AT.test_one_if_internal', Context, v))
+}
+
+AT.nt.test_one_if_internal <- function(Context, v)
+{
+  return (.Call('_AT.nt.test_one_if_internal', Context, v))
+}
+
+AT.TEST_ONE_IF_INTERNAL_BV <- function(Context, v, vb9_v, test_one_if_internalb9_v)
+{
+  return (.Call('_AT.TEST_ONE_IF_INTERNAL_BV', Context, v, vb9_v, test_one_if_internalb9_v))
+}
+
+AT.nt.TEST_ONE_IF_INTERNAL_BV <- function(Context, v, vb9_v, test_one_if_internalb9_v)
+{
+  return (.Call('_AT.nt.TEST_ONE_IF_INTERNAL_BV', Context, v, vb9_v, test_one_if_internalb9_v))
+}
+
+AT.TEST_ONE_IF_INTERNAL_DV <- function(Context, v, vd8_v, test_one_if_internal)
+{
+  return (.Call('_AT.TEST_ONE_IF_INTERNAL_DV', Context, v, vd8_v, test_one_if_internal))
+}
+
+AT.nt.TEST_ONE_IF_INTERNAL_DV <- function(Context, v, vd8_v, test_one_if_internal)
+{
+  return (.Call('_AT.nt.TEST_ONE_IF_INTERNAL_DV', Context, v, vd8_v, test_one_if_internal))
 }
 

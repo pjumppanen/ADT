@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_______SRC_CPP_Y_H_INCLUDED
-# define YY_YY_______SRC_CPP_Y_H_INCLUDED
+#ifndef YY_YY_SRC_CPP_Y_H_INCLUDED
+# define YY_YY_SRC_CPP_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -151,111 +151,6 @@ extern int yydebug;
     ADDVARIABLES = 361
   };
 #endif
-/* Tokens.  */
-#define OR_EQ 258
-#define MOD 259
-#define PROD 260
-#define XOR 261
-#define DOT 262
-#define XOR_EQ 263
-#define LT_EQ 264
-#define NEQ 265
-#define ELLIPSIS 266
-#define LBRACKET 267
-#define RBRACKET 268
-#define LSBRACKET 269
-#define RSBRACKET 270
-#define LSQBRACKET 271
-#define RSQBRACKET 272
-#define AND_EQ 273
-#define LT 274
-#define GT 275
-#define DECR 276
-#define INCR 277
-#define PLUS 278
-#define MINUS 279
-#define SHR_EQ 280
-#define SHL_EQ 281
-#define GT_EQ 282
-#define COLON 283
-#define COMMA 284
-#define LAND 285
-#define LOR 286
-#define LNOT 287
-#define NOT 288
-#define SEMICOLON 289
-#define LITERAL 290
-#define AND 291
-#define EQEQ 292
-#define SHR 293
-#define M_EQ 294
-#define P_EQ 295
-#define SHL 296
-#define QUESTION 297
-#define MOD_EQ 298
-#define DIV_EQ 299
-#define DIV 300
-#define PROD_EQ 301
-#define EQ 302
-#define OR 303
-#define STRING_LITERAL 304
-#define TYPENAME 305
-#define DOUBLE 306
-#define FLOAT 307
-#define MUTABLE 308
-#define PUBLIC 309
-#define PRIVATE 310
-#define PROTECTED 311
-#define EXTERN 312
-#define DEFAULT 313
-#define WHILE 314
-#define SWITCH 315
-#define ENUM 316
-#define RETURN 317
-#define UNSIGNED 318
-#define ASM 319
-#define DO 320
-#define AUTO 321
-#define CONTINUE 322
-#define BOOL 323
-#define WCHAR_T 324
-#define EXPLICIT 325
-#define IF 326
-#define SIZEOF 327
-#define UNION 328
-#define CHAR 329
-#define CLASS 330
-#define USING 331
-#define VOLATILE 332
-#define SIGNED 333
-#define CONST 334
-#define LONG 335
-#define STATIC 336
-#define INT 337
-#define ELSE 338
-#define SHORT 339
-#define NAMESPACE 340
-#define REGISTER 341
-#define TYPEDEF 342
-#define FRIEND 343
-#define FOR 344
-#define GOTO 345
-#define VIRTUAL 346
-#define INLINE 347
-#define CASE 348
-#define VOID 349
-#define STRUCT 350
-#define BREAK 351
-#define IDENTIFIER 352
-#define QUALIFIED_IDENTIFIER 353
-#define DTOR 354
-#define QUALIFIED_DTOR 355
-#define OBJ_IDENTIFIER 356
-#define QUALIFIED_OBJ_IDENTIFIER 357
-#define SINGLELINE_COMMENT 358
-#define MULTILINE_COMMENT 359
-#define EMBEDDED_COMMANDS 360
-#define ADDVARIABLES 361
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -269,4 +164,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_______SRC_CPP_Y_H_INCLUDED  */
+#endif /* !YY_YY_SRC_CPP_Y_H_INCLUDED  */

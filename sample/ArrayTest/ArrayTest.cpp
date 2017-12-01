@@ -64,6 +64,24 @@ double ArrayTest::polyC(double x)
 
 // ----------------------------------------------------------------------------
 
+int ArrayTest::t_one_if(bool bTrue)
+{
+  int nIndex;
+
+  if (bTrue)
+  {
+    nIndex = 1;
+  }
+  else
+  {
+    nIndex = 0;
+  }
+
+  return nIndex;
+}
+
+// ----------------------------------------------------------------------------
+
 double ArrayTest::ifTest(double x)
 {
   double dValue;
@@ -103,7 +121,7 @@ ArrayTest::ArrayTest(
 
 // ----------------------------------------------------------------------------
 
-double ArrayTest::sumA1_B()
+double ArrayTest::sumA1_D()
 {
   int     cn;
   double  dSum;
@@ -112,7 +130,7 @@ double ArrayTest::sumA1_B()
 
   for (cn = 1 ; cn <= ix ; cn++)
   {
-    dSum += A1_B[cn];
+    dSum += A1_D[cn];
   }
 
   return (dSum);
@@ -196,4 +214,26 @@ double ArrayTest::boundsCheckTest(const ARRAY_1D X/*1:ix*/)
   }
 
   return (dSum);
+}
+
+// ----------------------------------------------------------------------------
+
+double ArrayTest::test_one_if(double v)
+{
+  double dResult;
+
+  dResult = pow((t_one_if(v > 0.0) - t_one_if(v > 30.0)) * v, 5);
+
+  return (dResult);
+}
+
+// ----------------------------------------------------------------------------
+
+double ArrayTest::test_one_if_internal(double v)
+{
+  double dResult;
+
+  dResult = pow((one_if(v > 0.0) - one_if(v > 30.0)) * v, 5);
+
+  return (dResult);
 }

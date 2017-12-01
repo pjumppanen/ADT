@@ -55,6 +55,12 @@ class AdtArrays;
 class AdtMutex;
 
 //  ----------------------------------------------------------------------------
+//  null pointer required for bounds check context
+//  ----------------------------------------------------------------------------
+#define nil 0
+
+
+//  ----------------------------------------------------------------------------
 //  Bounds checking context
 //  ----------------------------------------------------------------------------
 typedef const AdtArrayPlanActor* CHECK_CONTEXT;
@@ -457,6 +463,15 @@ template<> inline AdtVarType varType<ARRAY_7D>(ARRAY_7D Array){ return (AdtVarTy
 template<> inline AdtVarType varType<ARRAY_8D>(ARRAY_8D Array){ return (AdtVarType_DOUBLE); };
 template<> inline AdtVarType varType<ARRAY_9D>(ARRAY_9D Array){ return (AdtVarType_DOUBLE); };
 template<> inline AdtVarType varType<ARRAY_10D>(ARRAY_10D Array){ return (AdtVarType_DOUBLE); };
+
+
+//  ----------------------------------------------------------------------------
+//  one_if() logical array indice selection
+//  ----------------------------------------------------------------------------
+inline int one_if(bool bTrue)
+{
+  return (bTrue ? 1 : 0);
+}
 
 
 //  ----------------------------------------------------------------------------
