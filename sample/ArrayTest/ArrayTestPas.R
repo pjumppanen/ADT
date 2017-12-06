@@ -147,3 +147,6 @@ AT.POLYSUMC_BX(Context, AT.A1_D, AT.A1_DDC, 1.0)
 # check they are the same
 if (sum(AT.A1_DDA - AT.A1_DDB) != 0) print("AT.POLYSUMA_BX() produces different result to AT.POLYSUMB_BX() : failed") else print("AT.POLYSUMA_BX() produces same result to AT.POLYSUMB_BX() : succeeded")
 if (sum(AT.A1_DDC - AT.A1_DDB) != 0) print("AT.POLYSUMC_BX() produces different result to AT.POLYSUMB_BX() : failed") else print("AT.POLYSUMC_BX() produces same result to AT.POLYSUMB_BX() : succeeded")
+
+# bounds check test - should throw error in R
+AT.boundsCheckTest(Context, AT.A1_D)

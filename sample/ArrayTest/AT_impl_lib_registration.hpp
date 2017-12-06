@@ -48,8 +48,20 @@ static const R_CallMethodDef callMethods[] =
   {"_AT.nt.sum", (DL_FUNC)&AT_R_nt_sum, 2},
   {"_AT.SUM_BX", (DL_FUNC)&AT_R_SUM_BX, 4},
   {"_AT.nt.SUM_BX", (DL_FUNC)&AT_R_nt_SUM_BX, 4},
-  {"_AT.sumA1_B", (DL_FUNC)&AT_R_sumA1_B, 1},
-  {"_AT.nt.sumA1_B", (DL_FUNC)&AT_R_nt_sumA1_B, 1},
+  {"_AT.sumA1_D", (DL_FUNC)&AT_R_sumA1_D, 1},
+  {"_AT.nt.sumA1_D", (DL_FUNC)&AT_R_nt_sumA1_D, 1},
+  {"_AT.test_one_if", (DL_FUNC)&AT_R_test_one_if, 2},
+  {"_AT.nt.test_one_if", (DL_FUNC)&AT_R_nt_test_one_if, 2},
+  {"_AT.TEST_ONE_IF_BV", (DL_FUNC)&AT_R_TEST_ONE_IF_BV, 4},
+  {"_AT.nt.TEST_ONE_IF_BV", (DL_FUNC)&AT_R_nt_TEST_ONE_IF_BV, 4},
+  {"_AT.TEST_ONE_IF_DV", (DL_FUNC)&AT_R_TEST_ONE_IF_DV, 4},
+  {"_AT.nt.TEST_ONE_IF_DV", (DL_FUNC)&AT_R_nt_TEST_ONE_IF_DV, 4},
+  {"_AT.test_one_if_internal", (DL_FUNC)&AT_R_test_one_if_internal, 2},
+  {"_AT.nt.test_one_if_internal", (DL_FUNC)&AT_R_nt_test_one_if_internal, 2},
+  {"_AT.TEST_ONE_IF_INTERNAL_BV", (DL_FUNC)&AT_R_TEST_ONE_IF_INTERNAL_BV, 4},
+  {"_AT.nt.TEST_ONE_IF_INTERNAL_BV", (DL_FUNC)&AT_R_nt_TEST_ONE_IF_INTERNAL_BV, 4},
+  {"_AT.TEST_ONE_IF_INTERNAL_DV", (DL_FUNC)&AT_R_TEST_ONE_IF_INTERNAL_DV, 4},
+  {"_AT.nt.TEST_ONE_IF_INTERNAL_DV", (DL_FUNC)&AT_R_nt_TEST_ONE_IF_INTERNAL_DV, 4},
   0
 };
 

@@ -1111,3 +1111,193 @@ begin
                                 nBaseIndex10, nSize10,
                                 pExisting);
 end;
+
+procedure AdtArrays.check1(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_1<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 1, bThrowException, [ix1, n1]);
+end;
+
+procedure AdtArrays.check2(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_2<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 2, bThrowException, [ix1, n1, ix2, n2]);
+end;
+
+procedure AdtArrays.check3(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_3<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString ;
+                           ix3 : integer ;
+                           n3 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 3, bThrowException, [ix1, n1, ix2, n2, ix3, n3]);
+end;
+
+procedure AdtArrays.check4(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_4<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString ;
+                           ix3 : integer ;
+                           n3 : AnsiString ;
+                           ix4 : integer ;
+                           n4 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 4, bThrowException, [ix1, n1, ix2, n2, ix3, n3, ix4, n4]);
+end;
+
+procedure AdtArrays.check5(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_5<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString ;
+                           ix3 : integer ;
+                           n3 : AnsiString ;
+                           ix4 : integer ;
+                           n4 : AnsiString ;
+                           ix5 : integer ;
+                           n5 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 5, bThrowException, [ix1, n1, ix2, n2, ix3, n3, ix4, n4, ix5, n5]);
+end;
+
+procedure AdtArrays.check6(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_6<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString ;
+                           ix3 : integer ;
+                           n3 : AnsiString ;
+                           ix4 : integer ;
+                           n4 : AnsiString ;
+                           ix5 : integer ;
+                           n5 : AnsiString ;
+                           ix6 : integer ;
+                           n6 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 6, bThrowException, [ix1, n1, ix2, n2, ix3, n3, ix4, n4, ix5, n5, ix6, n6]);
+end;
+
+procedure AdtArrays.check7(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_7<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString ;
+                           ix3 : integer ;
+                           n3 : AnsiString ;
+                           ix4 : integer ;
+                           n4 : AnsiString ;
+                           ix5 : integer ;
+                           n5 : AnsiString ;
+                           ix6 : integer ;
+                           n6 : AnsiString ;
+                           ix7 : integer ;
+                           n7 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 7, bThrowException, [ix1, n1, ix2, n2, ix3, n3, ix4, n4, ix5, n5, ix6, n6, ix7, n7]);
+end;
+
+procedure AdtArrays.check8(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_8<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString ;
+                           ix3 : integer ;
+                           n3 : AnsiString ;
+                           ix4 : integer ;
+                           n4 : AnsiString ;
+                           ix5 : integer ;
+                           n5 : AnsiString ;
+                           ix6 : integer ;
+                           n6 : AnsiString ;
+                           ix7 : integer ;
+                           n7 : AnsiString ;
+                           ix8 : integer ;
+                           n8 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 8, bThrowException, [ix1, n1, ix2, n2, ix3, n3, ix4, n4, ix5, n5, ix6, n6, ix7, n7, ix8, n8]);
+end;
+
+procedure AdtArrays.check9(var pContext : AdtArrayPlanActor ;
+                           pArray : ARRAY_9<T> ;
+                           sArrayName, sFileName, pFileLine : AnsiString ;
+                           bThrowException : boolean ;
+                           ix1 : integer ;
+                           n1 : AnsiString ;
+                           ix2 : integer ;
+                           n2 : AnsiString ;
+                           ix3 : integer ;
+                           n3 : AnsiString ;
+                           ix4 : integer ;
+                           n4 : AnsiString ;
+                           ix5 : integer ;
+                           n5 : AnsiString ;
+                           ix6 : integer ;
+                           n6 : AnsiString ;
+                           ix7 : integer ;
+                           n7 : AnsiString ;
+                           ix8 : integer ;
+                           n8 : AnsiString ;
+                           ix9 : integer ;
+                           n9 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 9, bThrowException, [ix1, n1, ix2, n2, ix3, n3, ix4, n4, ix5, n5, ix6, n6, ix7, n7, ix8, n8, ix9, n9]);
+end;
+
+procedure AdtArrays.check10(var pContext : AdtArrayPlanActor ;
+                            pArray : ARRAY_10<T> ;
+                            sArrayName, sFileName, pFileLine : AnsiString ;
+                            bThrowException : boolean ;
+                            ix1 : integer ;
+                            n1 : AnsiString ;
+                            ix2 : integer ;
+                            n2 : AnsiString ;
+                            ix3 : integer ;
+                            n3 : AnsiString ;
+                            ix4 : integer ;
+                            n4 : AnsiString ;
+                            ix5 : integer ;
+                            n5 : AnsiString ;
+                            ix6 : integer ;
+                            n6 : AnsiString ;
+                            ix7 : integer ;
+                            n7 : AnsiString ;
+                            ix8 : integer ;
+                            n8 : AnsiString ;
+                            ix9 : integer ;
+                            n9 : AnsiString ;
+                            ix10 : integer ;
+                            n10 : AnsiString) ; inline;
+begin
+  check(pContext, _MemAllocator, pchar(pArray), sArrayName, sFileName, pFileLine, 10, bThrowException, [ix1, n1, ix2, n2, ix3, n3, ix4, n4, ix5, n5, ix6, n6, ix7, n7, ix8, n8, ix9, n9, ix10, n10]);
+end;

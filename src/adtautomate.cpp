@@ -882,8 +882,9 @@ void AdtAutoHelper::writeDelphiR_InterfaceDeclMethods(AdtFile& rFile,
                                                       const AdtAutoAttributePtrList& rArgumentList) const
 {
   int         cn;
-  const char* sPrefix[3] = {"internal_", "", "nt_"};
-  const char* sArgs[3]   = {"; bTranslate : boolean", "", ""};
+  const char* pTranslateTxt = (rArgumentList.size() > 0) ? "; bTranslate : boolean" : "bTranslate : boolean";
+  const char* sPrefix[3]    = {"internal_", "", "nt_"};
+  const char* sArgs[3]      = {pTranslateTxt, "", ""};
 
   for (cn = 0 ; cn < 3 ; cn++)
   {
@@ -1023,7 +1024,7 @@ void AdtAutoHelper::writeDelphiR_InterfaceImplMethods(AdtFile& rFile,
     }
   }
 
-  rFile.write("; bTranslate : boolean) : SEXP;");
+  rFile.write((rArgumentList.size() > 0) ? "; bTranslate : boolean) : SEXP;" : "bTranslate : boolean) : SEXP;");
   rFile.newline();
 
   for (int nPass = 0 ; nPass < 2 ; nPass++)
@@ -1452,7 +1453,11 @@ void AdtAutoHelper::writeDelphiR_InterfaceImplMethods(AdtFile& rFile,
       }
     }
 
-    rFile.write(", ");
+    if (rArgumentList.size() > 0)
+    {
+      rFile.write(", ");
+    }
+
     rFile.write(sTranslate[cn]);
     rFile.write(");");
     rFile.decrementIndent();

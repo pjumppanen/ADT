@@ -14,11 +14,11 @@ class D_OperatingModelBase  : public OperatingModelBase
 {
 protected: 
   
-  ARRAY_2D movnd1_par/* nareas,nsim */;
   ARRAY_2D fmd1_par/* nfleets,nsim */;
+  ARRAY_2D movnd1_par/* nareas,nsim */;
   ARRAY_4D eforyeard1_par/* nfleets,nareas,nsubyears,nsim */;
-  ARRAY_2D movnb2_par/* nareas,nsim */;
   ARRAY_2D fmb2_par/* nfleets,nsim */;
+  ARRAY_2D movnb2_par/* nareas,nsim */;
   ARRAY_4D eforyearb2_par/* nfleets,nareas,nsubyears,nsim */;
   ARRAY_1I i4stack_1_2/* dim_stack */;
   int i4stack_1_2i;

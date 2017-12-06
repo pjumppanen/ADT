@@ -467,24 +467,156 @@ EXPORT SEXP AT_R_nt_SUM_BX(SEXP rInstance, SEXP X, SEXP xb1_x, SEXP sumb1_x)
   return (Result);
 }
 
-EXPORT SEXP AT_R_sumA1_B(SEXP rInstance)
+EXPORT SEXP AT_R_sumA1_D(SEXP rInstance)
 {
   ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
   
   R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
   
-  SEXP Result = pContext->R_sumA1_B();
+  SEXP Result = pContext->R_sumA1_D();
   
   return (Result);
 }
 
-EXPORT SEXP AT_R_nt_sumA1_B(SEXP rInstance)
+EXPORT SEXP AT_R_nt_sumA1_D(SEXP rInstance)
 {
   ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
   
   R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
   
-  SEXP Result = pContext->R_nt_sumA1_B();
+  SEXP Result = pContext->R_nt_sumA1_D();
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_test_one_if(SEXP rInstance, SEXP v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_test_one_if(v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_nt_test_one_if(SEXP rInstance, SEXP v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_nt_test_one_if(v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_TEST_ONE_IF_BV(SEXP rInstance, SEXP v, SEXP vb7_v, SEXP test_one_ifb7_v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_TEST_ONE_IF_BV(v, vb7_v, test_one_ifb7_v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_nt_TEST_ONE_IF_BV(SEXP rInstance, SEXP v, SEXP vb7_v, SEXP test_one_ifb7_v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_nt_TEST_ONE_IF_BV(v, vb7_v, test_one_ifb7_v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_TEST_ONE_IF_DV(SEXP rInstance, SEXP v, SEXP vd6_v, SEXP test_one_if)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_TEST_ONE_IF_DV(v, vd6_v, test_one_if);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_nt_TEST_ONE_IF_DV(SEXP rInstance, SEXP v, SEXP vd6_v, SEXP test_one_if)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_nt_TEST_ONE_IF_DV(v, vd6_v, test_one_if);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_test_one_if_internal(SEXP rInstance, SEXP v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_test_one_if_internal(v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_nt_test_one_if_internal(SEXP rInstance, SEXP v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_nt_test_one_if_internal(v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_TEST_ONE_IF_INTERNAL_BV(SEXP rInstance, SEXP v, SEXP vb9_v, SEXP test_one_if_internalb9_v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_TEST_ONE_IF_INTERNAL_BV(v, vb9_v, test_one_if_internalb9_v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_nt_TEST_ONE_IF_INTERNAL_BV(SEXP rInstance, SEXP v, SEXP vb9_v, SEXP test_one_if_internalb9_v)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_nt_TEST_ONE_IF_INTERNAL_BV(v, vb9_v, test_one_if_internalb9_v);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_TEST_ONE_IF_INTERNAL_DV(SEXP rInstance, SEXP v, SEXP vd8_v, SEXP test_one_if_internal)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_TEST_ONE_IF_INTERNAL_DV(v, vd8_v, test_one_if_internal);
+  
+  return (Result);
+}
+
+EXPORT SEXP AT_R_nt_TEST_ONE_IF_INTERNAL_DV(SEXP rInstance, SEXP v, SEXP vd8_v, SEXP test_one_if_internal)
+{
+  ASSERT_TYPE_TAG(rInstance, R_ArrayTest);
+  
+  R_ArrayTest* pContext = (R_ArrayTest*)R_ExternalPtrAddr(rInstance);
+  
+  SEXP Result = pContext->R_nt_TEST_ONE_IF_INTERNAL_DV(v, vd8_v, test_one_if_internal);
   
   return (Result);
 }

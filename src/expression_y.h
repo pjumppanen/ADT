@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_______SRC_EXPRESSION_Y_H_INCLUDED
-# define YY_YY_______SRC_EXPRESSION_Y_H_INCLUDED
+#ifndef YY_YY_SRC_EXPRESSION_Y_H_INCLUDED
+# define YY_YY_SRC_EXPRESSION_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -60,20 +60,6 @@ extern int yydebug;
     COMMA = 270
   };
 #endif
-/* Tokens.  */
-#define LPARENTHESIS 258
-#define RPARENTHESIS 259
-#define PLUS 260
-#define MINUS 261
-#define MULTIPLY 262
-#define DIVIDE 263
-#define IDENTIFIER 264
-#define NUMBER 265
-#define LT 266
-#define GT 267
-#define SLBRACKET 268
-#define SRBRACKET 269
-#define COMMA 270
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -87,4 +73,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_______SRC_EXPRESSION_Y_H_INCLUDED  */
+#endif /* !YY_YY_SRC_EXPRESSION_Y_H_INCLUDED  */

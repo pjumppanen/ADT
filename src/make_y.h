@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_______SRC_MAKE_Y_H_INCLUDED
-# define YY_YY_______SRC_MAKE_Y_H_INCLUDED
+#ifndef YY_YY_SRC_MAKE_Y_H_INCLUDED
+# define YY_YY_SRC_MAKE_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -86,46 +86,6 @@ extern int yydebug;
     M_MULTILINE_COMMENT = 296
   };
 #endif
-/* Tokens.  */
-#define M_AD 258
-#define M_BEGIN 259
-#define M_BOUNDS 260
-#define M_CHECK 261
-#define M_END 262
-#define M_SOURCE 263
-#define M_OUTPUT 264
-#define M_FILE 265
-#define M_FILES 266
-#define M_WORKING 267
-#define M_DIRECTORY 268
-#define M_FUNCTION 269
-#define M_VAR 270
-#define M_OUTVAR 271
-#define M_MODE 272
-#define M_USER 273
-#define M_PRAGMAS 274
-#define M_PATHS 275
-#define M_CLASS 276
-#define M_OPTIONS 277
-#define M_PASCAL 278
-#define M_CPP 279
-#define M_FORTRAN 280
-#define M_INCLUDE 281
-#define M_SWITCHES 282
-#define M_BLACKBOX 283
-#define M_PRE 284
-#define M_POST 285
-#define M_COMMA 286
-#define M_SEMICOLON 287
-#define M_COLON 288
-#define M_EQUALS 289
-#define M_LBRACKET 290
-#define M_RBRACKET 291
-#define M_TEXT 292
-#define M_FILENAME 293
-#define M_IDENT 294
-#define M_SINGLELINE_COMMENT 295
-#define M_MULTILINE_COMMENT 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -139,4 +99,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_______SRC_MAKE_Y_H_INCLUDED  */
+#endif /* !YY_YY_SRC_MAKE_Y_H_INCLUDED  */

@@ -915,7 +915,7 @@ SEXP R_ArrayTest::R_nt_SUM_BX(SEXP X, SEXP xb1_x, SEXP sumb1_x)
   return (R_internal_SUM_BX(X, xb1_x, sumb1_x, false));
 }
 
-SEXP R_ArrayTest::R_internal_sumA1_B(bool bTranslate)
+SEXP R_ArrayTest::R_internal_sumA1_D(bool bTranslate)
 {
   if (bTranslate)
   {
@@ -927,19 +927,313 @@ SEXP R_ArrayTest::R_internal_sumA1_B(bool bTranslate)
   SEXP Result = Rf_allocVector(REALSXP, 1);
   
   PROTECT(Result);
-  REAL(Result)[0] = sumA1_B();
+  REAL(Result)[0] = sumA1_D();
   
   UNPROTECT(1);
   
   return (Result);
 }
 
-SEXP R_ArrayTest::R_sumA1_B()
+SEXP R_ArrayTest::R_sumA1_D()
 {
-  return (R_internal_sumA1_B(true));
+  return (R_internal_sumA1_D(true));
 }
 
-SEXP R_ArrayTest::R_nt_sumA1_B()
+SEXP R_ArrayTest::R_nt_sumA1_D()
 {
-  return (R_internal_sumA1_B(false));
+  return (R_internal_sumA1_D(false));
+}
+
+SEXP R_ArrayTest::R_internal_test_one_if(SEXP v, bool bTranslate)
+{
+  double arg_v;
+  
+  R_CheckArgument("v", "REALSXP", REALSXP, v, __FILE__, __LINE__);
+  
+  if (bTranslate)
+  {
+    arg_v = REAL(v)[0];
+  }
+  else
+  {
+    arg_v = REAL(v)[0];
+  }
+  
+  SEXP Result = Rf_allocVector(REALSXP, 1);
+  
+  PROTECT(Result);
+  REAL(Result)[0] = test_one_if(arg_v);
+  
+  
+  UNPROTECT(1);
+  
+  return (Result);
+}
+
+SEXP R_ArrayTest::R_test_one_if(SEXP v)
+{
+  return (R_internal_test_one_if(v, true));
+}
+
+SEXP R_ArrayTest::R_nt_test_one_if(SEXP v)
+{
+  return (R_internal_test_one_if(v, false));
+}
+
+SEXP R_ArrayTest::R_internal_TEST_ONE_IF_BV(SEXP v, SEXP vb7_v, SEXP test_one_ifb7_v, bool bTranslate)
+{
+  double arg_v;
+  double arg_vb7_v;
+  double arg_test_one_ifb7_v;
+  
+  R_CheckArgument("v", "REALSXP", REALSXP, v, __FILE__, __LINE__);
+  
+  R_CheckArgument("vb7_v", "REALSXP", REALSXP, vb7_v, __FILE__, __LINE__);
+  
+  R_CheckArgument("test_one_ifb7_v", "REALSXP", REALSXP, test_one_ifb7_v, __FILE__, __LINE__);
+  
+  if (bTranslate)
+  {
+    arg_v = REAL(v)[0];
+    arg_vb7_v = REAL(vb7_v)[0];
+    arg_test_one_ifb7_v = REAL(test_one_ifb7_v)[0];
+  }
+  else
+  {
+    arg_v = REAL(v)[0];
+    arg_vb7_v = REAL(vb7_v)[0];
+    arg_test_one_ifb7_v = REAL(test_one_ifb7_v)[0];
+  }
+  
+  SEXP Result = Rf_allocVector(REALSXP, 1);
+  
+  PROTECT(Result);
+  REAL(Result)[0] = 0.0;
+  TEST_ONE_IF_BV(arg_v, arg_vb7_v, arg_test_one_ifb7_v);
+  
+  if (bTranslate)
+  {
+    REAL(vb7_v)[0] = arg_vb7_v;
+    REAL(test_one_ifb7_v)[0] = arg_test_one_ifb7_v;
+  }
+  else
+  {
+    REAL(vb7_v)[0] = arg_vb7_v;
+    REAL(test_one_ifb7_v)[0] = arg_test_one_ifb7_v;
+  }
+  
+  UNPROTECT(1);
+  
+  return (Result);
+}
+
+SEXP R_ArrayTest::R_TEST_ONE_IF_BV(SEXP v, SEXP vb7_v, SEXP test_one_ifb7_v)
+{
+  return (R_internal_TEST_ONE_IF_BV(v, vb7_v, test_one_ifb7_v, true));
+}
+
+SEXP R_ArrayTest::R_nt_TEST_ONE_IF_BV(SEXP v, SEXP vb7_v, SEXP test_one_ifb7_v)
+{
+  return (R_internal_TEST_ONE_IF_BV(v, vb7_v, test_one_ifb7_v, false));
+}
+
+SEXP R_ArrayTest::R_internal_TEST_ONE_IF_DV(SEXP v, SEXP vd6_v, SEXP test_one_if, bool bTranslate)
+{
+  double arg_v;
+  double arg_vd6_v;
+  double arg_test_one_if;
+  
+  R_CheckArgument("v", "REALSXP", REALSXP, v, __FILE__, __LINE__);
+  
+  R_CheckArgument("vd6_v", "REALSXP", REALSXP, vd6_v, __FILE__, __LINE__);
+  
+  R_CheckArgument("test_one_if", "REALSXP", REALSXP, test_one_if, __FILE__, __LINE__);
+  
+  if (bTranslate)
+  {
+    arg_v = REAL(v)[0];
+    arg_vd6_v = REAL(vd6_v)[0];
+    arg_test_one_if = REAL(test_one_if)[0];
+  }
+  else
+  {
+    arg_v = REAL(v)[0];
+    arg_vd6_v = REAL(vd6_v)[0];
+    arg_test_one_if = REAL(test_one_if)[0];
+  }
+  
+  SEXP Result = Rf_allocVector(REALSXP, 1);
+  
+  PROTECT(Result);
+  REAL(Result)[0] = TEST_ONE_IF_DV(arg_v, arg_vd6_v, arg_test_one_if);
+  
+  if (bTranslate)
+  {
+    REAL(test_one_if)[0] = arg_test_one_if;
+  }
+  else
+  {
+    REAL(test_one_if)[0] = arg_test_one_if;
+  }
+  
+  UNPROTECT(1);
+  
+  return (Result);
+}
+
+SEXP R_ArrayTest::R_TEST_ONE_IF_DV(SEXP v, SEXP vd6_v, SEXP test_one_if)
+{
+  return (R_internal_TEST_ONE_IF_DV(v, vd6_v, test_one_if, true));
+}
+
+SEXP R_ArrayTest::R_nt_TEST_ONE_IF_DV(SEXP v, SEXP vd6_v, SEXP test_one_if)
+{
+  return (R_internal_TEST_ONE_IF_DV(v, vd6_v, test_one_if, false));
+}
+
+SEXP R_ArrayTest::R_internal_test_one_if_internal(SEXP v, bool bTranslate)
+{
+  double arg_v;
+  
+  R_CheckArgument("v", "REALSXP", REALSXP, v, __FILE__, __LINE__);
+  
+  if (bTranslate)
+  {
+    arg_v = REAL(v)[0];
+  }
+  else
+  {
+    arg_v = REAL(v)[0];
+  }
+  
+  SEXP Result = Rf_allocVector(REALSXP, 1);
+  
+  PROTECT(Result);
+  REAL(Result)[0] = test_one_if_internal(arg_v);
+  
+  
+  UNPROTECT(1);
+  
+  return (Result);
+}
+
+SEXP R_ArrayTest::R_test_one_if_internal(SEXP v)
+{
+  return (R_internal_test_one_if_internal(v, true));
+}
+
+SEXP R_ArrayTest::R_nt_test_one_if_internal(SEXP v)
+{
+  return (R_internal_test_one_if_internal(v, false));
+}
+
+SEXP R_ArrayTest::R_internal_TEST_ONE_IF_INTERNAL_BV(SEXP v, SEXP vb9_v, SEXP test_one_if_internalb9_v, bool bTranslate)
+{
+  double arg_v;
+  double arg_vb9_v;
+  double arg_test_one_if_internalb9_v;
+  
+  R_CheckArgument("v", "REALSXP", REALSXP, v, __FILE__, __LINE__);
+  
+  R_CheckArgument("vb9_v", "REALSXP", REALSXP, vb9_v, __FILE__, __LINE__);
+  
+  R_CheckArgument("test_one_if_internalb9_v", "REALSXP", REALSXP, test_one_if_internalb9_v, __FILE__, __LINE__);
+  
+  if (bTranslate)
+  {
+    arg_v = REAL(v)[0];
+    arg_vb9_v = REAL(vb9_v)[0];
+    arg_test_one_if_internalb9_v = REAL(test_one_if_internalb9_v)[0];
+  }
+  else
+  {
+    arg_v = REAL(v)[0];
+    arg_vb9_v = REAL(vb9_v)[0];
+    arg_test_one_if_internalb9_v = REAL(test_one_if_internalb9_v)[0];
+  }
+  
+  SEXP Result = Rf_allocVector(REALSXP, 1);
+  
+  PROTECT(Result);
+  REAL(Result)[0] = 0.0;
+  TEST_ONE_IF_INTERNAL_BV(arg_v, arg_vb9_v, arg_test_one_if_internalb9_v);
+  
+  if (bTranslate)
+  {
+    REAL(vb9_v)[0] = arg_vb9_v;
+    REAL(test_one_if_internalb9_v)[0] = arg_test_one_if_internalb9_v;
+  }
+  else
+  {
+    REAL(vb9_v)[0] = arg_vb9_v;
+    REAL(test_one_if_internalb9_v)[0] = arg_test_one_if_internalb9_v;
+  }
+  
+  UNPROTECT(1);
+  
+  return (Result);
+}
+
+SEXP R_ArrayTest::R_TEST_ONE_IF_INTERNAL_BV(SEXP v, SEXP vb9_v, SEXP test_one_if_internalb9_v)
+{
+  return (R_internal_TEST_ONE_IF_INTERNAL_BV(v, vb9_v, test_one_if_internalb9_v, true));
+}
+
+SEXP R_ArrayTest::R_nt_TEST_ONE_IF_INTERNAL_BV(SEXP v, SEXP vb9_v, SEXP test_one_if_internalb9_v)
+{
+  return (R_internal_TEST_ONE_IF_INTERNAL_BV(v, vb9_v, test_one_if_internalb9_v, false));
+}
+
+SEXP R_ArrayTest::R_internal_TEST_ONE_IF_INTERNAL_DV(SEXP v, SEXP vd8_v, SEXP test_one_if_internal, bool bTranslate)
+{
+  double arg_v;
+  double arg_vd8_v;
+  double arg_test_one_if_internal;
+  
+  R_CheckArgument("v", "REALSXP", REALSXP, v, __FILE__, __LINE__);
+  
+  R_CheckArgument("vd8_v", "REALSXP", REALSXP, vd8_v, __FILE__, __LINE__);
+  
+  R_CheckArgument("test_one_if_internal", "REALSXP", REALSXP, test_one_if_internal, __FILE__, __LINE__);
+  
+  if (bTranslate)
+  {
+    arg_v = REAL(v)[0];
+    arg_vd8_v = REAL(vd8_v)[0];
+    arg_test_one_if_internal = REAL(test_one_if_internal)[0];
+  }
+  else
+  {
+    arg_v = REAL(v)[0];
+    arg_vd8_v = REAL(vd8_v)[0];
+    arg_test_one_if_internal = REAL(test_one_if_internal)[0];
+  }
+  
+  SEXP Result = Rf_allocVector(REALSXP, 1);
+  
+  PROTECT(Result);
+  REAL(Result)[0] = TEST_ONE_IF_INTERNAL_DV(arg_v, arg_vd8_v, arg_test_one_if_internal);
+  
+  if (bTranslate)
+  {
+    REAL(test_one_if_internal)[0] = arg_test_one_if_internal;
+  }
+  else
+  {
+    REAL(test_one_if_internal)[0] = arg_test_one_if_internal;
+  }
+  
+  UNPROTECT(1);
+  
+  return (Result);
+}
+
+SEXP R_ArrayTest::R_TEST_ONE_IF_INTERNAL_DV(SEXP v, SEXP vd8_v, SEXP test_one_if_internal)
+{
+  return (R_internal_TEST_ONE_IF_INTERNAL_DV(v, vd8_v, test_one_if_internal, true));
+}
+
+SEXP R_ArrayTest::R_nt_TEST_ONE_IF_INTERNAL_DV(SEXP v, SEXP vd8_v, SEXP test_one_if_internal)
+{
+  return (R_internal_TEST_ONE_IF_INTERNAL_DV(v, vd8_v, test_one_if_internal, false));
 }

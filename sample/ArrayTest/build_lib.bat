@@ -8,7 +8,7 @@ del /Q .\lib\*.*
 del /Q .\ArrayTestPas.dll
 del /Q .\R_ArrayTest_Unit.pas
 del /Q .\ArrayTestPas.dch
-..\..\objs\Release\ADT ArrayTestPas.mk
+..\..\objs\Win32\Release\ADT ArrayTestPas.mk
 fpc -Mobjfpc -Scghi -O3 -gl -vewnhi -l -Fi.\lib -Fi..\common -Fu. -FU.\lib ..\..\src\ADLibPascal\fcl-stl\gutil.pp
 fpc -Mobjfpc -Scghi -O3 -gl -vewnhi -l -Fi.\lib -Fi..\common -Fu. -FU.\lib ..\..\src\ADLibPascal\fcl-stl\gset.pp
 fpc -Mobjfpc -Scghi -O3 -gl -vewnhi -l -Fi.\lib -Fi..\common -Fu. -FU.\lib ..\..\src\ADLibPascal\fcl-stl\gmap.pp
