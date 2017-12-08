@@ -1,7 +1,7 @@
 AD BEGIN
   PATHS: "../include", "../../src/ADLib";
   WORKING DIRECTORY: "./work/";
-  SWITCHES: "rebuild","Oarray";
+  SWITCHES: "rebuild","Oarray";//,"ThrowException";
   BLACKBOX: ArrayTest.bbdef;
   CPP OPTIONS FILE: cpp_macros.txt;
   PASCAL OPTIONS FILE: pascal_macros.txt;

@@ -32,9 +32,15 @@ Plan_1.create(MemAllocator, A1_US);
 
 zero(A1_US);
 
-Plan_2.initialise(1,1+ix+1-(1));
+Plan_2.initialise(1,0+1-(1));
 
-Plan_2.create(MemAllocator, A1_I);
+Plan_2.create(MemAllocator, N1_D);
+
+zero(N1_D);
+
+Plan_3.initialise(1,1+ix+1-(1));
+
+Plan_3.create(MemAllocator, A1_I);
 
 R_to_ADlib(arg_A1_I, A1_I);
 
@@ -42,15 +48,15 @@ Plan_1.create(MemAllocator, A1_D);
 
 R_to_ADlib(arg_A1_D, A1_D);
 
-Plan_3.initialise(1,1+ix+1-(1),-1,iy+1-(-1));
+Plan_4.initialise(1,1+ix+1-(1),-1,iy+1-(-1));
 
-Plan_3.create(MemAllocator, A2_IA);
+Plan_4.create(MemAllocator, A2_IA);
 
 R_to_ADlib(arg_A2_IA, A2_IA);
 
-Plan_4.initialise(-1,iy+1-(-1),1,1+ix+1-(1));
+Plan_5.initialise(-1,iy+1-(-1),1,1+ix+1-(1));
 
-Plan_4.create(MemAllocator, A2_IB);
+Plan_5.create(MemAllocator, A2_IB);
 
 R_to_ADlib(arg_A2_IB, A2_IB);
 

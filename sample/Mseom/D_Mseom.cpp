@@ -16,11 +16,11 @@
 D_OperatingModelBase::D_OperatingModelBase(int arg_nsim, int arg_npop, int arg_nages, int arg_nsubyears, int arg_nareas, int arg_nfleets, const ARRAY_1I arg_Recsubyr)
  : OperatingModelBase(arg_nsim,arg_npop,arg_nages,arg_nsubyears,arg_nareas,arg_nfleets,arg_Recsubyr)
 {
-  create(fmd1_par,FM);
   create(movnd1_par,MovN);
+  create(fmd1_par,FM);
   create(eforyeard1_par,EforYear);
-  create(fmb2_par,FM);
   create(movnb2_par,MovN);
+  create(fmb2_par,FM);
   create(eforyearb2_par,EforYear);
   createStack(i4stack_1_2);
   i4stack_1_2i = 0;
@@ -42,11 +42,11 @@ D_OperatingModelBase::D_OperatingModelBase(int arg_nsim, int arg_npop, int arg_n
 D_OperatingModelBase::D_OperatingModelBase(const D_OperatingModelBase& rCopy)
  : OperatingModelBase(rCopy)
 {
-  create(fmd1_par,FM);
   create(movnd1_par,MovN);
+  create(fmd1_par,FM);
   create(eforyeard1_par,EforYear);
-  create(fmb2_par,FM);
   create(movnb2_par,MovN);
+  create(fmb2_par,FM);
   create(eforyearb2_par,EforYear);
   createStack(i4stack_1_2);
   i4stack_1_2i = 0;
@@ -67,11 +67,11 @@ D_OperatingModelBase::D_OperatingModelBase(const D_OperatingModelBase& rCopy)
 
 D_OperatingModelBase::~D_OperatingModelBase()
 {
-  destroy(fmd1_par);
   destroy(movnd1_par);
+  destroy(fmd1_par);
   destroy(eforyeard1_par);
-  destroy(fmb2_par);
   destroy(movnb2_par);
+  destroy(fmb2_par);
   destroy(eforyearb2_par);
   destroy(i4stack_1_2);
   destroy(r4stack_1_2);

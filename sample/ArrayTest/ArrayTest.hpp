@@ -9,6 +9,12 @@
 #include <adtarrays.hpp>
 #include "adtR.hpp"
 
+// ----------------------------------------------------------------------------
+
+
+// Test enumerated types in C++
+enum Sex {male=1, female=2};
+
 
 // ----------------------------------------------------------------------------
 
@@ -42,6 +48,9 @@ protected:
   ARRAY_1UI A1_UI/*1:ix*/;
   ARRAY_1UL A1_UL/*1:ix*/;
   ARRAY_1US A1_US/*1:ix*/;
+
+  // Check for null sized arrays
+  ARRAY_1D  N1_D /*1:0*/;
 
 #include "AT_array_plans.hpp"
 

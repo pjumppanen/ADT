@@ -1010,11 +1010,14 @@ implementation
           AppendStr(sBuffer, IntToStr(pCoord^.IndexBase - 1));
           AppendStr(sBuffer, '.');
 
-          log_error(sBuffer);
-
           if (bThrowException) then
           begin
+            log_warning(sBuffer);
             raise Exception.Create(sBuffer);
+          end
+          else
+          begin
+            log_error(sBuffer);
           end;
           break;
         end
@@ -1038,11 +1041,14 @@ implementation
           AppendStr(sBuffer, IntToStr(pCoord^.IndexBase + pCoord^.Size));
           AppendStr(sBuffer, '.');
 
-          log_error(sBuffer);
-
           if (bThrowException) then
           begin
+            log_warning(sBuffer);
             raise Exception.Create(sBuffer);
+          end
+          else
+          begin
+            log_error(sBuffer);
           end;
           break;
         end;
@@ -1359,6 +1365,7 @@ implementation
     nSizeOf       : longint;
     pUserData     : pchar;
     bForceCreate  : boolean;
+    nExtraSize    : longint;
     nDataSize     : longint;
     nMemBlockSize : longint;
 
@@ -1367,6 +1374,7 @@ implementation
     nSizeOf       := elementSizeFromVarType(nVarType);
     pUserData     := nil;
     bForceCreate  := false;
+    nExtraSize    := 0;
     nDataSize     := arraySize(nSizeOf);
 
     if (pExisting = nil) then
@@ -1384,9 +1392,16 @@ implementation
       nIndexOffset := -_Coord.IndexBase * SizeOf(pchar);
     end;
 
-    if ((nMemBlockSize > 0) or bForceCreate) then
+    if ((nMemBlockSize = 0) and not bForceCreate) then
     begin
-      pArray := rAllocator.alloc(nMemBlockSize,
+      // To allow zero sized arrays to be allocated at some extra space to
+      // the MemBlock.
+      nExtraSize := SizeOf(pchar);
+    end;
+
+    if ((nMemBlockSize >= 0) or bForceCreate) then
+    begin
+      pArray := rAllocator.alloc(nMemBlockSize + nExtraSize,
                                  AdtAllocType_ARRAY,
                                  nIndexOffset,
                                  @AdtArrayPlanActor_destroyArrayInfo,

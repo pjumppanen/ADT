@@ -786,7 +786,8 @@ protected:
                                                      AdtParser*& pReplacementContainer);
 
   void                          addBoundsChecking(AdtParser* pFuncOrSubObj,
-                                                  const AdtFortranVariableInfo& rVariableInfo);
+                                                  const AdtFortranVariableInfo& rVariableInfo,
+                                                  bool bThrowException);
 
 public:
   AdtFortranExecutableProgram(AdtParser* pProgramUnitObj);
@@ -813,7 +814,8 @@ public:
                                                const AdtStringList& rBoundsCheckList,
                                                const AdtStringList& rGlobalBoundsCheckList,
                                                const char* pClassPrefix,
-                                               AdtFile* pFile = 0);
+                                               AdtFile* pFile = 0,
+                                               bool bThrowException = true);
 
   void                          boundsCheck(const AdtStringList& rBoundsCheckList);
 

@@ -11,7 +11,6 @@
       <MainUnit Value="0"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
-      <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <i18n>
       <EnableI18N LFM="False"/>
@@ -30,7 +29,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <HostApplicationFilename Value="C:\Program Files\R\R-2.15.1\bin\i386\Rgui.exe"/>
+        <HostApplicationFilename Value="C:\Program Files\R\R-3.3.1\bin\i386\Rgui.exe"/>
         <WorkingDirectory Value="C:\cygwin\usr\src\adt\sample\ArrayTest"/>
       </local>
     </RunParams>
@@ -38,10 +37,6 @@
       <Unit0>
         <Filename Value="ArrayTestPas.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ArrayTestPas"/>
-        <EditorIndex Value="0"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
         <CursorPos X="5" Y="9"/>
         <UsageCount Value="266"/>
         <Loaded Value="True"/>
@@ -50,11 +45,9 @@
       <Unit1>
         <Filename Value="ArrayTest_Unit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ArrayTest_Unit"/>
         <EditorIndex Value="2"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="50"/>
-        <CursorPos X="1" Y="65"/>
+        <CursorPos Y="65"/>
         <UsageCount Value="265"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -62,11 +55,9 @@
       <Unit2>
         <Filename Value="R_ArrayTest_Unit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="R_ArrayTest_Unit"/>
         <EditorIndex Value="5"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="15"/>
-        <CursorPos X="1" Y="31"/>
+        <CursorPos Y="31"/>
         <UsageCount Value="265"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -74,219 +65,180 @@
       <Unit3>
         <Filename Value="..\..\src\ADLibPascal\adtalias.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="adtalias"/>
         <EditorIndex Value="6"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="..\..\src\ADLibPascal\adtalloc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="adtalloc"/>
         <EditorIndex Value="7"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="229"/>
-        <CursorPos X="1" Y="249"/>
-        <UsageCount Value="119"/>
+        <CursorPos Y="249"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\src\ADLibPascal\adtarray.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="adtarray"/>
         <EditorIndex Value="8"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="3290"/>
-        <CursorPos X="1" Y="3304"/>
-        <UsageCount Value="119"/>
+        <CursorPos Y="3304"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\src\ADLibPascal\adtcommon.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="adtcommon"/>
         <EditorIndex Value="14"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="573"/>
-        <CursorPos X="1" Y="590"/>
-        <UsageCount Value="119"/>
+        <CursorPos Y="590"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="adtR"/>
         <EditorIndex Value="15"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1134"/>
-        <CursorPos X="1" Y="1155"/>
-        <UsageCount Value="119"/>
+        <TopLine Value="1066"/>
+        <CursorPos Y="1077"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
         <Filename Value="..\..\src\ADLibPascal\Raccess.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Raccess"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="16"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="203"/>
-        <CursorPos X="1" Y="231"/>
-        <UsageCount Value="119"/>
+        <CursorPos Y="231"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\garrayutils.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="garrayutils"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\gdeque.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gdeque"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\ghashmap.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ghashmap"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\ghashset.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ghashset"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\gmap.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gmap"/>
         <EditorIndex Value="4"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="93"/>
-        <CursorPos X="1" Y="107"/>
-        <UsageCount Value="119"/>
+        <CursorPos Y="107"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\gpriorityqueue.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gpriorityqueue"/>
         <EditorIndex Value="1"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="27"/>
         <CursorPos X="41" Y="47"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit14>
       <Unit15>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\gqueue.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gqueue"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\gset.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gset"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\gstack.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gstack"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit17>
       <Unit18>
         <Filename Value="..\..\src\ADLibPascal\fcl-stl\gutil.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gutil"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="121"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
         <Filename Value="AT_impl_lib_interface_constructor.pas"/>
-        <UnitName Value="AT_impl_lib_interface_constructor"/>
         <EditorIndex Value="3"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="43"/>
-        <CursorPos X="1" Y="62"/>
-        <UsageCount Value="11"/>
+        <CursorPos Y="62"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
         <Filename Value="AT_constructor_scalars_phase_1.pas"/>
-        <UnitName Value="AT_constructor_scalars_phase_1"/>
         <EditorIndex Value="9"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="2"/>
-        <UsageCount Value="11"/>
+        <CursorPos Y="2"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit20>
       <Unit21>
         <Filename Value="AT_constructor_arrays_phase_1.pas"/>
-        <UnitName Value="AT_constructor_arrays_phase_1"/>
         <EditorIndex Value="10"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="24"/>
-        <CursorPos X="1" Y="51"/>
-        <UsageCount Value="11"/>
+        <CursorPos Y="51"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
       <Unit22>
         <Filename Value="AT_constructor_arrays_phase_2.pas"/>
-        <UnitName Value="AT_constructor_arrays_phase_2"/>
         <EditorIndex Value="11"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="96"/>
         <CursorPos X="97" Y="96"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
         <Filename Value="AT_impl_lib_interface_globals.pas"/>
-        <UnitName Value="AT_impl_lib_interface_globals"/>
         <EditorIndex Value="12"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="1" Y="23"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="89"/>
+        <CursorPos Y="104"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
         <Filename Value="AT_impl_lib_interface_methods.pas"/>
-        <UnitName Value="AT_impl_lib_interface_methods"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="13"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="3"/>
-        <CursorPos X="1" Y="17"/>
-        <UsageCount Value="10"/>
+        <CursorPos Y="17"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
@@ -294,123 +246,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1085" Column="1" TopLine="1062"/>
+        <Caret Line="1097" TopLine="1083"/>
       </Position1>
       <Position2>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1087" Column="1" TopLine="1064"/>
+        <Caret Line="1099" TopLine="1083"/>
       </Position2>
       <Position3>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1089" Column="1" TopLine="1066"/>
+        <Caret Line="1101" TopLine="1083"/>
       </Position3>
       <Position4>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1097" Column="1" TopLine="1083"/>
+        <Caret Line="1148" TopLine="1134"/>
       </Position4>
       <Position5>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1099" Column="1" TopLine="1083"/>
+        <Caret Line="1150" TopLine="1134"/>
       </Position5>
       <Position6>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1101" Column="1" TopLine="1083"/>
+        <Caret Line="1155" Column="72" TopLine="1134"/>
       </Position6>
       <Position7>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1148" Column="1" TopLine="1134"/>
+        <Caret Line="1156" Column="52" TopLine="1065"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1150" Column="1" TopLine="1134"/>
+        <Filename Value="AT_impl_lib_interface_globals.pas"/>
+        <Caret Line="87" TopLine="73"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1155" Column="72" TopLine="1134"/>
+        <Filename Value="AT_impl_lib_interface_globals.pas"/>
+        <Caret Line="103" TopLine="89"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1156" Column="52" TopLine="1065"/>
+        <Filename Value="AT_impl_lib_interface_globals.pas"/>
+        <Caret Line="23" TopLine="9"/>
       </Position10>
       <Position11>
-        <Filename Value="AT_impl_lib_interface_globals.pas"/>
-        <Caret Line="87" Column="1" TopLine="73"/>
+        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
+        <Caret Line="560" TopLine="546"/>
       </Position11>
       <Position12>
-        <Filename Value="AT_impl_lib_interface_globals.pas"/>
-        <Caret Line="103" Column="1" TopLine="89"/>
+        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
+        <Caret Line="1077" TopLine="1062"/>
       </Position12>
       <Position13>
-        <Filename Value="AT_impl_lib_interface_globals.pas"/>
-        <Caret Line="23" Column="1" TopLine="9"/>
+        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
+        <Caret Line="1078" TopLine="1062"/>
       </Position13>
       <Position14>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="560" Column="1" TopLine="546"/>
+        <Caret Line="1079" TopLine="1062"/>
       </Position14>
       <Position15>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1077" Column="1" TopLine="1062"/>
+        <Caret Line="1081" TopLine="1062"/>
       </Position15>
       <Position16>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1078" Column="1" TopLine="1062"/>
+        <Caret Line="1083" TopLine="1062"/>
       </Position16>
       <Position17>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1079" Column="1" TopLine="1062"/>
+        <Caret Line="1084" TopLine="1062"/>
       </Position17>
       <Position18>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1081" Column="1" TopLine="1062"/>
+        <Caret Line="1085" TopLine="1062"/>
       </Position18>
       <Position19>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1083" Column="1" TopLine="1062"/>
+        <Caret Line="1087" TopLine="1064"/>
       </Position19>
       <Position20>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1084" Column="1" TopLine="1062"/>
+        <Caret Line="1089" TopLine="1066"/>
       </Position20>
       <Position21>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1085" Column="1" TopLine="1062"/>
+        <Caret Line="1097" TopLine="1083"/>
       </Position21>
       <Position22>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1087" Column="1" TopLine="1064"/>
+        <Caret Line="1099" TopLine="1083"/>
       </Position22>
       <Position23>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1089" Column="1" TopLine="1066"/>
+        <Caret Line="1101" TopLine="1083"/>
       </Position23>
       <Position24>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1097" Column="1" TopLine="1083"/>
+        <Caret Line="1148" TopLine="1134"/>
       </Position24>
       <Position25>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1099" Column="1" TopLine="1083"/>
+        <Caret Line="1150" TopLine="1134"/>
       </Position25>
       <Position26>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1101" Column="1" TopLine="1083"/>
+        <Caret Line="1146" Column="68" TopLine="1134"/>
       </Position26>
       <Position27>
         <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1148" Column="1" TopLine="1134"/>
+        <Caret Line="1152" TopLine="1134"/>
       </Position27>
       <Position28>
-        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1150" Column="1" TopLine="1134"/>
+        <Filename Value="AT_impl_lib_interface_methods.pas"/>
+        <Caret Line="17" TopLine="3"/>
       </Position28>
       <Position29>
-        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1146" Column="68" TopLine="1134"/>
+        <Filename Value="AT_impl_lib_interface_globals.pas"/>
+        <Caret Line="103" TopLine="89"/>
       </Position29>
       <Position30>
-        <Filename Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Caret Line="1152" Column="1" TopLine="1134"/>
+        <Filename Value="AT_impl_lib_interface_globals.pas"/>
+        <Caret Line="104" TopLine="89"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -441,18 +393,14 @@
       </Options>
     </Linking>
     <Other>
-      <CompilerMessages>
-        <UseMsgFile Value="True"/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
-        <Command Value="..\..\obj\release\ADT.exe ArrayTestPas.mk"/>
+        <Command Value="..\..\objs\Win32\release\ADT.exe ArrayTestPas.mk"/>
         <CompileReasons Run="False"/>
       </ExecuteBefore>
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="4">
+    <BreakPoints Count="2">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
@@ -465,22 +413,8 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="AT_impl_lib_interface_globals.pas"/>
-        <Line Value="103"/>
-      </Item2>
-      <Item3>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="AT_impl_lib_interface_globals.pas"/>
         <Line Value="23"/>
-      </Item3>
-      <Item4>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="..\..\src\ADLibPascal\adtR.pas"/>
-        <Line Value="1077"/>
-      </Item4>
+      </Item2>
     </BreakPoints>
     <Watches Count="1">
       <Item1>
@@ -488,5 +422,4 @@
       </Item1>
     </Watches>
   </Debugging>
-  <EditorMacros Count="0"/>
 </CONFIG>

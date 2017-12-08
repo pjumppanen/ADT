@@ -146,7 +146,7 @@ AT.set.A2_IB(Context,99, 0, 3)
 if (sum(AT.A2_IB_new - AT.get.A2_IB(Context)) != 0) print("AT.set.A2_IB(0,3) failed") else print("AT.set.A2_IB(0,3) succeeded")
 AT.set.A2_IB(Context,AT.A2_IB)
 
-if (AT.sum(Context,AT.get.A1_D(Context)) - sum(AT.get.A1_D(Context)) != 0) print("AT.sum() failed") else print("AT.sum() succeeded")
+if (AT.sum(Context,AT.get.A1_D(Context)) - sum(AT.get.A1_D(Context)) - AT.get.A1_D(Context)[1] - AT.get.A1_D(Context)[2] != 0) print("AT.sum() failed") else print("AT.sum() succeeded")
 
 if ((AT.polySumA(Context, AT.A1_D) - AT.polySumB(Context, AT.A1_D)) != 0) print("AT.polySumA() produces different result to AT.polySumB() : failed") else print("AT.polySumA() produces same result to AT.polySumB() : succeeded")
 

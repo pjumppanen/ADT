@@ -100,24 +100,24 @@ AT.nt.boundsCheckTest <- function(Context, X)
   return (.Call('_AT.nt.boundsCheckTest', Context, X))
 }
 
-AT.GLOBAL_SUM_BX <- function(Context, X, xb1_x, nBase, nCount, global_sumb1_x)
+AT.GLOBAL_SUM_BX <- function(Context, x, xb1_x, nbase, ncount, global_sumb1_x)
 {
-  return (.Call('_AT.GLOBAL_SUM_BX', Context, X, xb1_x, nBase, nCount, global_sumb1_x))
+  return (.Call('_AT.GLOBAL_SUM_BX', Context, x, xb1_x, nbase, ncount, global_sumb1_x))
 }
 
-AT.nt.GLOBAL_SUM_BX <- function(Context, X, xb1_x, nBase, nCount, global_sumb1_x)
+AT.nt.GLOBAL_SUM_BX <- function(Context, x, xb1_x, nbase, ncount, global_sumb1_x)
 {
-  return (.Call('_AT.nt.GLOBAL_SUM_BX', Context, X, xb1_x, nBase, nCount, global_sumb1_x))
+  return (.Call('_AT.nt.GLOBAL_SUM_BX', Context, x, xb1_x, nbase, ncount, global_sumb1_x))
 }
 
-AT.IFTEST_BX <- function(Context, X, xb5_x, iftestb5_x)
+AT.IFTEST_BX <- function(Context, x, xb5_x, iftestb5_x)
 {
-  return (.Call('_AT.IFTEST_BX', Context, X, xb5_x, iftestb5_x))
+  return (.Call('_AT.IFTEST_BX', Context, x, xb5_x, iftestb5_x))
 }
 
-AT.nt.IFTEST_BX <- function(Context, X, xb5_x, iftestb5_x)
+AT.nt.IFTEST_BX <- function(Context, x, xb5_x, iftestb5_x)
 {
-  return (.Call('_AT.nt.IFTEST_BX', Context, X, xb5_x, iftestb5_x))
+  return (.Call('_AT.nt.IFTEST_BX', Context, x, xb5_x, iftestb5_x))
 }
 
 AT.get.ix <- function(Context)
@@ -140,24 +140,24 @@ AT.set.iy <- function(Context, Arg)
   return (.Call('_AT.set.iy', Context, as.integer(Arg)))
 }
 
-AT.POLYB_BX <- function(Context, X, xb3_x, polybb3_x)
+AT.POLYB_BX <- function(Context, x, xb3_x, polybb3_x)
 {
-  return (.Call('_AT.POLYB_BX', Context, X, xb3_x, polybb3_x))
+  return (.Call('_AT.POLYB_BX', Context, x, xb3_x, polybb3_x))
 }
 
-AT.nt.POLYB_BX <- function(Context, X, xb3_x, polybb3_x)
+AT.nt.POLYB_BX <- function(Context, x, xb3_x, polybb3_x)
 {
-  return (.Call('_AT.nt.POLYB_BX', Context, X, xb3_x, polybb3_x))
+  return (.Call('_AT.nt.POLYB_BX', Context, x, xb3_x, polybb3_x))
 }
 
-AT.POLYB_BX0 <- function(Context, X, xb5_x, polybb5_x)
+AT.POLYB_BX0 <- function(Context, x, xb5_x, polybb5_x)
 {
-  return (.Call('_AT.POLYB_BX0', Context, X, xb5_x, polybb5_x))
+  return (.Call('_AT.POLYB_BX0', Context, x, xb5_x, polybb5_x))
 }
 
-AT.nt.POLYB_BX0 <- function(Context, X, xb5_x, polybb5_x)
+AT.nt.POLYB_BX0 <- function(Context, x, xb5_x, polybb5_x)
 {
-  return (.Call('_AT.nt.POLYB_BX0', Context, X, xb5_x, polybb5_x))
+  return (.Call('_AT.nt.POLYB_BX0', Context, x, xb5_x, polybb5_x))
 }
 
 AT.polySumA <- function(Context, X)
@@ -170,14 +170,14 @@ AT.nt.polySumA <- function(Context, X)
   return (.Call('_AT.nt.polySumA', Context, X))
 }
 
-AT.POLYSUMA_BX <- function(Context, X, xb2_x, polysumab2_x)
+AT.POLYSUMA_BX <- function(Context, x, xb2_x, polysumab2_x)
 {
-  return (.Call('_AT.POLYSUMA_BX', Context, X, xb2_x, polysumab2_x))
+  return (.Call('_AT.POLYSUMA_BX', Context, x, xb2_x, polysumab2_x))
 }
 
-AT.nt.POLYSUMA_BX <- function(Context, X, xb2_x, polysumab2_x)
+AT.nt.POLYSUMA_BX <- function(Context, x, xb2_x, polysumab2_x)
 {
-  return (.Call('_AT.nt.POLYSUMA_BX', Context, X, xb2_x, polysumab2_x))
+  return (.Call('_AT.nt.POLYSUMA_BX', Context, x, xb2_x, polysumab2_x))
 }
 
 AT.polySumB <- function(Context, X)
@@ -190,14 +190,14 @@ AT.nt.polySumB <- function(Context, X)
   return (.Call('_AT.nt.polySumB', Context, X))
 }
 
-AT.POLYSUMB_BX <- function(Context, X, xb3_x, polysumbb3_x)
+AT.POLYSUMB_BX <- function(Context, x, xb3_x, polysumbb3_x)
 {
-  return (.Call('_AT.POLYSUMB_BX', Context, X, xb3_x, polysumbb3_x))
+  return (.Call('_AT.POLYSUMB_BX', Context, x, xb3_x, polysumbb3_x))
 }
 
-AT.nt.POLYSUMB_BX <- function(Context, X, xb3_x, polysumbb3_x)
+AT.nt.POLYSUMB_BX <- function(Context, x, xb3_x, polysumbb3_x)
 {
-  return (.Call('_AT.nt.POLYSUMB_BX', Context, X, xb3_x, polysumbb3_x))
+  return (.Call('_AT.nt.POLYSUMB_BX', Context, x, xb3_x, polysumbb3_x))
 }
 
 AT.polySumC <- function(Context, X)
@@ -210,14 +210,14 @@ AT.nt.polySumC <- function(Context, X)
   return (.Call('_AT.nt.polySumC', Context, X))
 }
 
-AT.POLYSUMC_BX <- function(Context, X, xb4_x, polysumcb4_x)
+AT.POLYSUMC_BX <- function(Context, x, xb4_x, polysumcb4_x)
 {
-  return (.Call('_AT.POLYSUMC_BX', Context, X, xb4_x, polysumcb4_x))
+  return (.Call('_AT.POLYSUMC_BX', Context, x, xb4_x, polysumcb4_x))
 }
 
-AT.nt.POLYSUMC_BX <- function(Context, X, xb4_x, polysumcb4_x)
+AT.nt.POLYSUMC_BX <- function(Context, x, xb4_x, polysumcb4_x)
 {
-  return (.Call('_AT.nt.POLYSUMC_BX', Context, X, xb4_x, polysumcb4_x))
+  return (.Call('_AT.nt.POLYSUMC_BX', Context, x, xb4_x, polysumcb4_x))
 }
 
 AT.sum <- function(Context, X)
@@ -230,14 +230,14 @@ AT.nt.sum <- function(Context, X)
   return (.Call('_AT.nt.sum', Context, X))
 }
 
-AT.SUM_BX <- function(Context, X, xb1_x, sumb1_x)
+AT.SUM_BX <- function(Context, x, xb1_x, sumb1_x)
 {
-  return (.Call('_AT.SUM_BX', Context, X, xb1_x, sumb1_x))
+  return (.Call('_AT.SUM_BX', Context, x, xb1_x, sumb1_x))
 }
 
-AT.nt.SUM_BX <- function(Context, X, xb1_x, sumb1_x)
+AT.nt.SUM_BX <- function(Context, x, xb1_x, sumb1_x)
 {
-  return (.Call('_AT.nt.SUM_BX', Context, X, xb1_x, sumb1_x))
+  return (.Call('_AT.nt.SUM_BX', Context, x, xb1_x, sumb1_x))
 }
 
 AT.sumA1_D <- function(Context)
