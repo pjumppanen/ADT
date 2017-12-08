@@ -862,6 +862,14 @@ enum_specifier_name
 
   $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 1, $1.sComment);
 }
+ | ENUM OBJ_IDENTIFIER
+{
+  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 0, $1.sComment);
+}
+ | ENUM QUALIFIED_OBJ_IDENTIFIER
+{
+  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 1, $1.sComment);
+}
 ;
 
 enum_specifier

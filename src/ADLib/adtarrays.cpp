@@ -1108,6 +1108,7 @@ char* AdtArrayPlanActor::create(const AdtMemAllocator& rAllocator,
   size_t  nSizeOf       = elementSizeFromVarType(nVarType);
   char*   pUserData     = 0;
   bool    bForceCreate  = false;
+  size_t  nExtraSize    = 0;
   size_t  nDataSize     = arraySize(nSizeOf);
   size_t  nMemBlockSize = (pExisting == 0) ? LookupSize + nDataSize
                                            : LookupSize;
@@ -1122,9 +1123,16 @@ char* AdtArrayPlanActor::create(const AdtMemAllocator& rAllocator,
     nIndexOffset = -Coord.IndexBase * sizeof(char*);
   }
 
-  if ((nMemBlockSize > 0) || bForceCreate)
+  if ((nMemBlockSize == 0) && !bForceCreate)
   {
-    pArray = rAllocator.alloc(nMemBlockSize,
+    // To allow zero sized arrays to be allocated at some extra space to
+    // the MemBlock.
+    nExtraSize = sizeof(double);
+  }
+
+  if ((nMemBlockSize >= 0) || bForceCreate)
+  {
+    pArray = rAllocator.alloc(nMemBlockSize + nExtraSize,
                               AdtAllocType_ARRAY,
                               nIndexOffset,
                               AdtArrayPlanActor::destroyArrayInfo,
@@ -1247,6 +1255,7 @@ void check(const AdtArrayPlanActor*& pContext,
     va_list                   arglist;
     const AdtArrayPlanActor*  pActor = pContext;
     const AdtArrayCoord*      pCoord = &(pActor->Coord);
+    int*                      pNull  = 0;
 
     va_start(arglist, bThrowException);
 
@@ -1257,7 +1266,7 @@ void check(const AdtArrayPlanActor*& pContext,
 
       if (nIndex < pCoord->IndexBase)
       {
-        char sBuffer[256] = {0};
+        static char sBuffer[256] = {0};
 
         // Index too small
         snprintf(sBuffer,
@@ -1273,17 +1282,24 @@ void check(const AdtArrayPlanActor*& pContext,
 
         if (bThrowException)
         {
-          throw(std::runtime_error(sBuffer));
+          ts_warning(sBuffer);
+
+          // Force an exception by assigning to a null pointer. We do this instead
+          // of using throw() because VC debugger loses the code context through
+          // the macro wrapping check for some mysterious reason. Doing it this
+          // way and it finds the right context and drops the debugger into a
+          // frame whereby you can see the origin of the exception in stack trace.
+          pNull[0] = 0;
         }
         else
         {
-          log_error(sBuffer);
+          ts_error(sBuffer);
         }
         break;
       }
       else if (nIndex - pCoord->IndexBase >= pCoord->Size)
       {
-        char sBuffer[256] = {0};
+        static char sBuffer[256] = {0};
 
         // Index too large
         snprintf(sBuffer,
@@ -1299,11 +1315,18 @@ void check(const AdtArrayPlanActor*& pContext,
 
         if (bThrowException)
         {
-          throw(std::runtime_error(sBuffer));
+          ts_warning(sBuffer);
+
+          // Force an exception by assigning to a null pointer. We do this instead
+          // of using throw() because VC debugger loses the code context through
+          // the macro wrapping check for some mysterious reason. Doing it this
+          // way and it finds the right context and drops the debugger into a
+          // frame whereby you can see the origin of the exception in stack trace.
+          pNull[0] = 0;
         }
         else
         {
-          log_error(sBuffer);
+          ts_error(sBuffer);
         }
         break;
       }

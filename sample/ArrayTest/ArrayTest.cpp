@@ -142,7 +142,7 @@ double ArrayTest::sum(const ARRAY_1D X/*1:ix*/)
 {
   double dSum;
 
-  dSum = global_sum(X, 1, ix);
+  dSum = global_sum(X, 1, ix) + X[male] + X[female];
 
   return dSum;
 }

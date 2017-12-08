@@ -3108,7 +3108,8 @@ implType(AdtFortranBase, AdtParser);
 //  AdtFortranExecutableProgram method implementations
 //  ----------------------------------------------------------------------------
 void AdtFortranExecutableProgram::addBoundsChecking(AdtParser* pFuncOrSubObj,
-                                                    const AdtFortranVariableInfo& rVariableInfo)
+                                                    const AdtFortranVariableInfo& rVariableInfo,
+                                                    bool bThrowException)
 {
   if (pFuncOrSubObj)
   {
@@ -3163,11 +3164,12 @@ void AdtFortranExecutableProgram::addBoundsChecking(AdtParser* pFuncOrSubObj,
 
             // Construct a call to do the bounds check and insert it in the code.
             sprintf(sBuffer,
-                    "CALL check%zd(%s, %s, '%s', __FILE__, __LINE__, .TRUE.",
+                    "CALL check%zd(%s, %s, '%s', __FILE__, __LINE__, %s",
                     pSectionSubscriptList->objList().size(),
                     sContextVar.c_str(),
                     pObj->name().c_str(),
-                    pObj->name().c_str());
+                    pObj->name().c_str(),
+                    bThrowException ? ".TRUE." : ".FALSE.");
 
             // Note that in a delphi context __FILE__ and __LINE__ need to
             // be somehow mapped to {$I %FILE%} and {$I %LINE%}. Given that
@@ -3502,7 +3504,8 @@ void AdtFortranExecutableProgram::addSliceFixups(const AdtStringByStringMap& rNe
                                                  const AdtStringList& rBoundsCheckList,
                                                  const AdtStringList& rGlobalBoundsCheckList,
                                                  const char* pClassPrefix,
-                                                 AdtFile* pFile)
+                                                 AdtFile* pFile,
+                                                 bool bThrowException)
 {
   // Make a map of bounds checked functions indexed by function.
   AdtStringByStringMap  BoundsCheckMap;
@@ -3645,7 +3648,7 @@ void AdtFortranExecutableProgram::addSliceFixups(const AdtStringByStringMap& rNe
 
       if (BoundsCheckMap.find(pFuncOrSubObj->name()) != BoundsCheckMap.end())
       {
-        addBoundsChecking(pFuncOrSubObj, VariableInfo);
+        addBoundsChecking(pFuncOrSubObj, VariableInfo, bThrowException);
 
         if (bMakeVirtual)
         {

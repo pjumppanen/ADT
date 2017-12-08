@@ -14,6 +14,10 @@ uses
   Raccess,
   Math;
 
+const
+  male   = 1;
+  female = 2;
+
 type
   ArrayTest = class(AdtArrays)
   protected
@@ -193,7 +197,7 @@ implementation
   function ArrayTest.sum(const X{1:ix} : ARRAY_1D) : double;
 
   begin
-    Result := global_sum(X, 1, ix);
+    Result := global_sum(X, 1, ix) + X[male] + X[female];
   end;
 
 // ----------------------------------------------------------------------------

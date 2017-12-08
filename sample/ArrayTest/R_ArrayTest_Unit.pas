@@ -24,7 +24,7 @@ interface
       //  ----------------------------------------------------------------------------
       procedure SUM_BX(const x{ix} : ARRAY_1D ; var xb1_x{ix} : ARRAY_1D ; var sumb1_x : double);
       //   Differentiation of global_sum in reverse (adjoint) mode:
-      //    gradient     of useful results: global_sum
+      //    gradient     of useful results: x global_sum
       //    with respect to varying inputs: x
       //  ----------------------------------------------------------------------------
       procedure GLOBAL_SUM_BX(const x{ix} : ARRAY_1D ; var xb1_x{ix} : ARRAY_1D ; const nbase : integer ; const ncount : integer ; var global_sumb1_x : double);
@@ -155,25 +155,11 @@ implementation
   //  ----------------------------------------------------------------------------
   procedure R_ArrayTest.SUM_BX(const x{ix} : ARRAY_1D ; var xb1_x{ix} : ARRAY_1D ; var sumb1_x : double);
   
-  begin
-    GLOBAL_SUM_BX(x,xb1_x,1,ix,sumb1_x);
-  end;
-  
-  { ---------------------------------------------------------------------------- }
-  
-  //   Differentiation of global_sum in reverse (adjoint) mode:
-  //    gradient     of useful results: global_sum
-  //    with respect to varying inputs: x
-  //  ----------------------------------------------------------------------------
-  procedure R_ArrayTest.GLOBAL_SUM_BX(const x{ix} : ARRAY_1D ; var xb1_x{ix} : ARRAY_1D ; const nbase : integer ; const ncount : integer ; var global_sumb1_x : double);
-  
   var 
-    cn : integer;
-    dsumb1_x : double;
     ix_0___ : integer;
+    result1b1_x : double;
   
   begin
-    dsumb1_x:=global_sumb1_x;
     ix_0___:=1 - (1);
     
     while add_to(ix_0___,1) <= ix do
@@ -181,6 +167,26 @@ implementation
       xb1_x[ix_0___]:=0.0;
     end;
     
+    result1b1_x:=sumb1_x;
+    xb1_x[male]:=xb1_x[male] + sumb1_x;
+    xb1_x[female]:=xb1_x[female] + sumb1_x;
+    GLOBAL_SUM_BX(x,xb1_x,1,ix,result1b1_x);
+  end;
+  
+  { ---------------------------------------------------------------------------- }
+  
+  //   Differentiation of global_sum in reverse (adjoint) mode:
+  //    gradient     of useful results: x global_sum
+  //    with respect to varying inputs: x
+  //  ----------------------------------------------------------------------------
+  procedure R_ArrayTest.GLOBAL_SUM_BX(const x{ix} : ARRAY_1D ; var xb1_x{ix} : ARRAY_1D ; const nbase : integer ; const ncount : integer ; var global_sumb1_x : double);
+  
+  var 
+    cn : integer;
+    dsumb1_x : double;
+  
+  begin
+    dsumb1_x:=global_sumb1_x;
     cn:=nbase + ncount - 1 - (-1);
     
     while add_to(cn,-1) >= nbase do
@@ -536,7 +542,7 @@ implementation
     
     while add_to(cn,1) <= ix + 5 do
     begin
-      check1(CHECK_X_1,X,'X',{$I %FILE%},{$I %LINE%},true,cn,'cn');
+      check1(CHECK_X_1,X,'X',{$I %FILE%},{$I %LINE%},false,cn,'cn');
       dSum:=dSum + X[cn];
     end;
     

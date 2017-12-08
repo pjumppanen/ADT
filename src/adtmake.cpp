@@ -1577,6 +1577,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
       SourcePath.join(SourceFolder);
 
       AdtAutoClass::enableAutomation(true, true);
+      AdtCppScopeManager::globalScopeManager()->pushScope("Preprocess", false);
 
       ::printf("Preprocess %s\n", SourceFile.c_str());
 
@@ -1593,6 +1594,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
       // all files yet because we need to do all the AD operations first.
       AdtAutoClass::exportConstructorArgsFiles(SourceFileType, SourceFolder);
       AdtAutoClass::enableAutomation(false, false);
+      AdtCppScopeManager::globalScopeManager()->popScope();
 
       ::printf("Compiling %s\n", SourceFile.c_str());
 
@@ -2110,6 +2112,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                   {
                     AdtFile* pVariablesDebugFile  = 0;
                     bool     bVariablesDebug      = false;
+                    bool     bThrowException      = rParent.switchDefined("ThrowException");
 
                     if (bVariablesDebug)
                     {
@@ -2158,7 +2161,8 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                                                  BoundsCheckList,
                                                  GlobalBoundsCheckList,
                                                  sClassPrefix,
-                                                 pVariablesDebugFile);
+                                                 pVariablesDebugFile,
+                                                 bThrowException);
 
                     if (bVariablesDebug)
                     {
