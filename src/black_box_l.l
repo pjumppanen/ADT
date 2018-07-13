@@ -17,13 +17,20 @@
  * translated into a form that tapenade understands. For example,
  * this is a definition in a Pascal comment field:
  *
- * {D/D(.) INV(X+Y),
+ * {<
+ *  D/D(.) INV(X+Y),
  *  D/D(X) .*X,
- *  D/D(Y) .*(1/Y);}
+ *  D/D(Y) .*(1/Y);
+ *  >}
  *
  * You can alos include a black box dependency specification with, for example,
  *
- * {BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);}
+ * {<BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);>}
+ *
+ * < and > symbols are used to indicate the start and end of a black box
+ * definition and must be supplied for inline definitions. This allows the
+ * black box definition to be embedded within existing comments and not break
+ * the parsing of the definition.
  */
 
 
@@ -83,6 +90,7 @@ void yyBlackBox_releaseBuffer(void)
 {
   yy_delete_buffer(YY_CURRENT_BUFFER);
 }
+
 
 int yyBlackBox_lineNumber(void)
 {
@@ -182,88 +190,130 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
 
 %}
 
+%option stack
+%x BLACKBOXDEF
+
 DECIMAL_LITERAL         ([0-9]+)
 FLOATING_POINT_LITERAL  ((([0-9]+\.[0-9]*)|(\.[0-9]+))([eE][+-]?[0-9]+)?(f|F|l|L)?)
+NAME_ID                 [a-zA-Z_]([a-zA-Z0-9_])*
+QUALIFIED_NAME_ID       ((({NAME_ID}::)+{NAME_ID})|(({NAME_ID}\.)+{NAME_ID}))
+
 
 %%
+<INITIAL,BLACKBOXDEF>\<                 {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          yyBlackBox_push_state(BLACKBOXDEF);
+                                        }
 
-                            /* tokenise comment delimiters and ignore them. This has the effect of treating the entire
-                               comment block less the comment delimiters as a command field to be parsed */
-"{"                         {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
-"}"                         {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
-"/*"                        {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
-"*/"                        {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
-"//"                        {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
-\{\ *\-+\ *\}               {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
-\/\/\ *\-+                  {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
+<INITIAL,BLACKBOXDEF>\>                {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          yyBlackBox_pop_state();
+                                        }
 
-                            /* single line comment. This allows comments in standalone definition files */
-\#.*\n                      {
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
-                              adtBlackBox_nLineNumber++;
-                            }
+                                        /* tokenise comment delimiters and ignore them. This has the effect of treating the entire
+                                           comment block less the comment delimiters as a command field to be parsed */
+<INITIAL,BLACKBOXDEF>\{                 {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
+<INITIAL,BLACKBOXDEF>\}                 {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
+<INITIAL,BLACKBOXDEF>\/\*               {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
+<INITIAL,BLACKBOXDEF>\*\/               {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
+<INITIAL,BLACKBOXDEF>\/\/               {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
 
-"function"                  return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, FUNCTION));
-"procedure"                 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PROCEDURE));
-"result"                    return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, RESULT));
-"in"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, IN));
-"out"                       return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, OUT));
-"begin"                     return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, F_BEGIN));
-"end"                       return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, F_END));
-"real"                      return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, REAL));
-"integer"                   return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER));
-"complex"                   return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMPLEX));
-"character"                 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, CHARACTER));
-"boolean"                   return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN));
-"real_array"                return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, REAL_ARRAY));
-"integer_array"             return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER_ARRAY));
-"complex_array"             return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMPLEX_ARRAY));
-"character_array"           return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, CHARACTER_ARRAY));
-"boolean_array"             return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN_ARRAY));
-"BLACKBOX"                  return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BLACKBOX));
-"ReadNotWritten"            return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, READ_NOT_WRITTEN));
-"NotReadThenWritten"        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, NOT_READ_THEN_WRITTEN));
-"NotReadNotWritten"         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, NOT_READ_NOT_WRITTEN));
-"ReadThenWritten"           return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, READ_THEN_WRITTEN));
-"deps"                      return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DEPS));
-"D/D"                       return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DERIV_OP));
-"id"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, ID));
-":"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COLON));
-";"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, SEMICOLON));
-","                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
-"("                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, LBRACKET));
-")"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, RBRACKET));
-"+"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
-"-"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
-"*"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
-"**"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, POWER));
-"^"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, POWER));
-"/"                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DIVIDE));
-"."                         return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PERIOD));
-[a-zA-Z_]([a-zA-Z0-9_])*    return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, IDENTIFIER));
-{DECIMAL_LITERAL}           return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FIXED, NUMBER_FIXED));
-{FLOATING_POINT_LITERAL}    return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FLOAT, NUMBER_FLOAT));
+                                        /* single line comment. This allows comments in standalone definition files */
+<BLACKBOXDEF>\#.*\n                     {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          adtBlackBox_nLineNumber++;
+                                        }
 
-[ \t\f\r]                   {
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
-                            }
+<BLACKBOXDEF>"function"                 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, FUNCTION));
+<BLACKBOXDEF>"procedure"                return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PROCEDURE));
+<BLACKBOXDEF>"result"                   return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, RESULT));
+<BLACKBOXDEF>"in"                       return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, IN));
+<BLACKBOXDEF>"out"                      return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, OUT));
+<BLACKBOXDEF>"begin"                    return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, F_BEGIN));
+<BLACKBOXDEF>"end"                      return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, F_END));
+<BLACKBOXDEF>"real"                     return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, REAL));
+<BLACKBOXDEF>"integer"                  return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER));
+<BLACKBOXDEF>"complex"                  return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMPLEX));
+<BLACKBOXDEF>"character"                return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, CHARACTER));
+<BLACKBOXDEF>"boolean"                  return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN));
+<BLACKBOXDEF>"real_array"               return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, REAL_ARRAY));
+<BLACKBOXDEF>"integer_array"            return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER_ARRAY));
+<BLACKBOXDEF>"complex_array"            return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMPLEX_ARRAY));
+<BLACKBOXDEF>"character_array"          return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, CHARACTER_ARRAY));
+<BLACKBOXDEF>"boolean_array"            return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN_ARRAY));
+<BLACKBOXDEF>"BLACKBOX"                 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BLACKBOX));
+<BLACKBOXDEF>"ReadNotWritten"           return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, READ_NOT_WRITTEN));
+<BLACKBOXDEF>"NotReadThenWritten"       return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, NOT_READ_THEN_WRITTEN));
+<BLACKBOXDEF>"NotReadNotWritten"        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, NOT_READ_NOT_WRITTEN));
+<BLACKBOXDEF>"ReadThenWritten"          return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, READ_THEN_WRITTEN));
+<BLACKBOXDEF>"deps"                     return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DEPS));
+<BLACKBOXDEF>"D/D"                      return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DERIV_OP));
+<BLACKBOXDEF>"id"                       return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, ID));
+<BLACKBOXDEF>":"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COLON));
+<BLACKBOXDEF>";"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, SEMICOLON));
+<BLACKBOXDEF>","                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
+<BLACKBOXDEF>"("                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, LBRACKET));
+<BLACKBOXDEF>")"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, RBRACKET));
+<BLACKBOXDEF>"+"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
+<BLACKBOXDEF>"-"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
+<BLACKBOXDEF>"*"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
+<BLACKBOXDEF>"**"                       return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, POWER));
+<BLACKBOXDEF>"^"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, POWER));
+<BLACKBOXDEF>"/"                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DIVIDE));
+<BLACKBOXDEF>"."                        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PERIOD));
+<BLACKBOXDEF>{NAME_ID}                  return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, IDENTIFIER));
+<BLACKBOXDEF>{QUALIFIED_NAME_ID}        return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, QUALIFIED_IDENTIFIER));
+<BLACKBOXDEF>{DECIMAL_LITERAL}          return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FIXED, NUMBER_FIXED));
+<BLACKBOXDEF>{FLOATING_POINT_LITERAL}   return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FLOAT, NUMBER_FLOAT));
 
-[\n]                        {
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
-                              adtBlackBox_nLineNumber++;
-                            }
+<BLACKBOXDEF>[ \t\f\r]                  {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                        }
 
-.                           {
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+<BLACKBOXDEF>[\n]                       {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          adtBlackBox_nLineNumber++;
+                                        }
 
-                              sprintf(sTempBuffer, "illegal character '%c' (0x%x) in black box definition", yytext[0], yytext[0]);
+<BLACKBOXDEF>.                          {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
 
-                              adtBlackBox_nError    = 1;
-                              adtBlackBox_pErrorMsg = adtBlackBox_AllocString(adtBlackBox_pContext, sTempBuffer);
-                            }
+                                          sprintf(sTempBuffer, "illegal character '%c' (0x%x) in black box definition", yytext[0], yytext[0]);
+
+                                          adtBlackBox_nError    = 1;
+                                          adtBlackBox_pErrorMsg = adtBlackBox_AllocString(adtBlackBox_pContext, sTempBuffer);
+                                        }
+
+<INITIAL>[\n]                           {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          adtBlackBox_nLineNumber++;
+                                        }
+
+<INITIAL>.                              {
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                        }
 %%
+
 
 int yywrap()
 {
   return (1);
+}
+
+
+void yyBlackBox_pushState(int nState)
+{
+  yyBlackBox_push_state(nState);
+}
+
+
+void yyBlackBox_popState(void)
+{
+  yyBlackBox_pop_state();
+}
+
+
+int yyBlackBox_topState(void)
+{
+  return (yyBlackBox_top_state());
 }

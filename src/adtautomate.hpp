@@ -144,6 +144,11 @@ public:
                                                    const char* pR_TypeName,
                                                    bool bScalar) const;
 
+  void                writeDelphiR_GlobalGetter(AdtFile& rFile,
+                                                const char* pName,
+                                                const char* pAliasName,
+                                                AdtAutoType nType) const;
+
   void                writeDelphiR_InterfaceDeclMethods(AdtFile& rFile,
                                                         const char* pName,
                                                         const AdtAutoAttributePtrList& rArgumentList) const;
@@ -200,6 +205,11 @@ public:
                                                 const char* pAliasName,
                                                 const char* pR_TypeName,
                                                 bool bScalar) const;
+
+  void                writeCppR_GlobalGetter(AdtFile& rFile,
+                                             const char* pName,
+                                             const char* pAliasName,
+                                             AdtAutoType nType) const;
 
   void                writeCppR_InterfaceDeclMethods(AdtFile& rFile,
                                                      const char* pName,
@@ -259,6 +269,7 @@ inline AdtAutoHelper::~AdtAutoHelper()
 //  ----------------------------------------------------------------------------
 enum AdtAtributeType
 {
+  AttributeTypeGlobalScalar,
   AttributeTypeScalar,
   AttributeTypeArray,
   AttributeTypeFunction,
@@ -304,7 +315,8 @@ protected:
 
   virtual void        writeDelphiDeclLibInterfaceMethods(AdtFile& rFile) const;
 
-  virtual void        writeDelphiDeclLibInterfaceGlobals(AdtFile& rFile, const char* pAliasName) const;
+  virtual void        writeDelphiDeclLibInterfaceGlobals(AdtFile& rFile,
+                                                         const char* pAliasName) const;
 
   virtual void        writeDelphiImplLibInterfaceMethods(AdtFile& rFile,
                                                          const char* pClassName,
@@ -540,6 +552,100 @@ inline int AdtAutoAttribute::lineNumber() const
 
 
 //  ----------------------------------------------------------------------------
+//  class AdtAutoGlobalScalar
+//  ----------------------------------------------------------------------------
+class AdtAutoGlobalScalar : public AdtAutoAttribute
+{
+private:
+
+protected:
+  virtual void        writeDelphiVarCheckType(AdtFile& rFile,
+                                              bool bPrefix,
+                                              bool bInConstructor) const;
+
+  virtual void        writeDelphiVarDeclaration(AdtFile& rFile,
+                                                bool bConstructor,
+                                                bool bPrependSeperator) const;
+
+  virtual void        writeDelphiVarInitialisation(AdtFile& rFile,
+                                                   AdtStringByStringMap& rLocalsMap,
+                                                   const char* pClassName,
+                                                   bool bWithTranslation) const;
+
+  virtual void        writeDelphiVarReturn(AdtFile& rFile,
+                                           const char* pClassName) const;
+
+  virtual void        writeDelphiVarDestroy(AdtFile& rFile) const;
+
+  virtual void        writeDelphiImplLibInterfaceMethods(AdtFile& rFile,
+                                                         const char* pClassName,
+                                                         const char* pAliasName,
+                                                         const char* pR_TypeName) const;
+
+  virtual void        writeDelphiDeclLibInterfaceGlobals(AdtFile& rFile,
+                                                         const char* pAliasName) const;
+
+  virtual void        writeDelphiImplLibInterfaceGlobals(AdtFile& rFile,
+                                                         const char* pClassName,
+                                                         const char* pAliasName,
+                                                         const char* pR_TypeName) const;
+
+  virtual void        writeCppVarCheckType(AdtFile& rFile,
+                                           bool bPrefix,
+                                           bool bInConstructor) const;
+
+  virtual void        writeCppVarDeclaration(AdtFile& rFile,
+                                             bool bConstructor,
+                                             bool bPrependSeperator) const;
+
+  virtual void        writeCppVarInitialisation(AdtFile& rFile,
+                                                AdtStringByStringMap& rLocalsMap,
+                                                const char* pClassName,
+                                                bool bWithTranslation) const;
+
+  virtual void        writeCppVarReturn(AdtFile& rFile,
+                                        const char* pClassName) const;
+
+  virtual void        writeCppVarDestroy(AdtFile& rFile) const;
+
+  virtual void        writeCppImplLibInterfaceMethods(AdtFile& rFile,
+                                                      const char* pClassName,
+                                                      const char* pAliasName,
+                                                      const char* pR_TypeName) const;
+
+  virtual void        writeCppDeclLibInterfaceGlobals(AdtFile& rFile,
+                                                      const char* pAliasName) const;
+
+  virtual void        writeCppImplLibInterfaceGlobals(AdtFile& rFile,
+                                                      const char* pClassName,
+                                                      const char* pAliasName,
+                                                      const char* pR_TypeName) const;
+
+public:
+  AdtAutoGlobalScalar(const char* pName,
+                      AdtAutoType nType,
+                      const char* pFileName,
+                      int nLineNumber);
+
+  AdtAutoGlobalScalar(const AdtAutoGlobalScalar& rCopy);
+  virtual ~AdtAutoGlobalScalar();
+
+  virtual int         dimensions() const;
+
+  virtual bool        isScalar() const;
+  virtual bool        isRagged() const;
+  virtual bool        strictlyBefore(int nPhase) const;
+  virtual bool        checkDependencies(const AdtAutoAttributePtrByStringMap rMap,
+                                        const AdtAutoAttributePtrByStringMap* pSecondaryMap = 0) const;
+  virtual bool        checkSize(const string& rMustMatchSize) const;
+
+  virtual void        writeRInterface(AdtFile& rFile,
+                                      const char* pClassName,
+                                      const char* pAliasName) const;
+};
+
+
+//  ----------------------------------------------------------------------------
 //  class AdtAutoScalar
 //  ----------------------------------------------------------------------------
 class AdtAutoScalar : public AdtAutoAttribute
@@ -731,6 +837,7 @@ private:
   mutable bool                            IsRagged;
   mutable bool                            RefreshSizeSpecification;
   mutable bool                            HasLocalDependencies;
+  mutable bool                            HasGlobalDependencies;
   mutable string                          SizeSpecification;
   mutable AdtIntByStringMap               ArrayDependencies;
   mutable AdtIntByStringMap               ArrayDependancyLocal;
@@ -761,7 +868,8 @@ protected:
                                         int& nSmallestIndex) const;
 
   void                arrayBoundsArguments(string& rArguments,
-                                           bool bInConstructor) const;
+                                           bool bInConstructor,
+                                           bool bR_Prefix) const;
 
   void                arraySizesAndBaseIndices(string& rArraySizes,
                                                string& rBaseIndices) const;
@@ -1057,33 +1165,34 @@ inline bool AdtAutoFunction::isRagged() const
 class AdtAutoClass : public UtlReferenceCount
 {
 private:
-  AdtSizeTBySizeTMap                InheritedMap;
-  AdtAutoAttributePtrByStringMap    AttributeByNameMap;
-  AdtAutoAttributePtrByIntMultimap  AttributeByPhaseMap;
-  AdtIntByIntMap                    DefinedPhasesMap;
-  AdtStringList                     ArgumentList;
-  AdtAutoMode                       Mode;
-  bool                              NoInterface;
-  int                               Phase;
-  int                               MaxPhase;
-  mutable int                       MaxCounter;
-  string                            ClassName;
-  string                            AliasName;
-  string                            ParentClassName;
-  string                            R_TypeName;
-  string                            ParentConstructorCallArgsFileName;
+  AdtSizeTBySizeTMap                    InheritedMap;
+  AdtAutoAttributePtrByStringMap        AttributeByNameMap;
+  AdtAutoAttributePtrByIntMultimap      AttributeByPhaseMap;
+  AdtIntByIntMap                        DefinedPhasesMap;
+  AdtStringList                         ArgumentList;
+  AdtAutoMode                           Mode;
+  bool                                  NoInterface;
+  int                                   Phase;
+  int                                   MaxPhase;
+  mutable int                           MaxCounter;
+  string                                ClassName;
+  string                                AliasName;
+  string                                ParentClassName;
+  string                                R_TypeName;
+  string                                ParentConstructorCallArgsFileName;
 
-  static AdtAutoClassPtrByStringMap ClassMap;
-  static AdtAutoClass*              CurrentClass;
-  static bool                       AddExitHandler;
-  static bool                       Enabled;
-  static bool                       AttributeDefsEnabled;
-  static bool                       IncludeDisabled;
-  static string                     LibName;
-  static string                     RegistrationCodeBuffer;
-  static AdtFile                    RegistrationCodeFile;
-  static string                     ExternalsCodeBuffer;
-  static AdtFile                    ExternalsCodeFile;
+  static AdtAutoAttributePtrByStringMap GlobalsMap;
+  static AdtAutoClassPtrByStringMap     ClassMap;
+  static AdtAutoClass*                  CurrentClass;
+  static bool                           AddExitHandler;
+  static bool                           Enabled;
+  static bool                           AttributeDefsEnabled;
+  static bool                           IncludeDisabled;
+  static string                         LibName;
+  static string                         RegistrationCodeBuffer;
+  static AdtFile                        RegistrationCodeFile;
+  static string                         ExternalsCodeBuffer;
+  static AdtFile                        ExternalsCodeFile;
 
 protected:
   void                  inherit(const AdtAutoAttribute* pAttribute);
@@ -1112,12 +1221,14 @@ protected:
 
   bool                  openFile(AdtFile& rFile,
                                  const char* pDestFolder,
-                                 const char* pFileName) const;
+                                 const char* pFileName,
+                                 bool bWrite) const;
 
   bool                  openFile(AdtFile& rFile,
                                  const char* pDestFolder,
                                  const char* pFileNameBase,
-                                 AdtSourceFileType nDestType) const;
+                                 AdtSourceFileType nDestType,
+                                 bool bWrite) const;
 
   void                  writeConstructorDecl(AdtFile& rFile,
                                              AdtSourceFileType nDestType,
@@ -1183,6 +1294,7 @@ protected:
 
   static void           writeIncludeStatement(AdtFile& rFile,
                                               const char* pWhich,
+                                              const char* pPathPrefix,
                                               AdtSourceFileType nDestType,
                                               const char* pClassName);
 
@@ -1191,6 +1303,13 @@ protected:
 public:
   AdtAutoClass();
   virtual ~AdtAutoClass();
+
+  static bool           isGlobalScalar(const char* pName);
+
+  static bool           addGlobalScalar(const char* pName,
+                                        AdtAutoType nType,
+                                        const char* pFileName,
+                                        int nLineNumber);
 
   static bool           addLibName(const char* pLibName,
                                    const char* pFileName,
@@ -1221,37 +1340,45 @@ public:
 
   static void           exportAutomationFiles(AdtSourceFileType nDestType,
                                               const char* pDestFolder,
+                                              const char* pDestIncludeFolder,
                                               const char* pConstructorClassName,
                                               int nClassNumber);
 
   static bool           buildClassConstructor(AdtStringList& rConstructorList,
                                               const char* pClassName,
                                               const char* pParentClassName,
+                                              const char* pPathPrefix,
                                               AdtSourceFileType nAsFileType);
 
   static void           writeInterfaceMethodsDeclInclude(AdtFile& rFile,
                                                          AdtSourceFileType nDestType,
-                                                         const char* pClassName);
+                                                         const char* pClassName,
+                                                         const char* pPathPrefix);
 
   static void           writeInterfaceMethodsImplInclude(AdtFile& rFile,
                                                          AdtSourceFileType nDestType,
-                                                         const char* pClassName);
+                                                         const char* pClassName,
+                                                         const char* pPathPrefix);
 
   static void           writeInterfaceGlobalsDeclInclude(AdtFile& rFile,
                                                          AdtSourceFileType nDestType,
-                                                         const char* pClassName);
+                                                         const char* pClassName,
+                                                         const char* pPathPrefix);
 
   static void           writeInterfaceGlobalsImplInclude(AdtFile& rFile,
                                                          AdtSourceFileType nDestType,
-                                                         const char* pClassName);
+                                                         const char* pClassName,
+                                                         const char* pPathPrefix);
 
   static void           writeConstructorDeclInclude(AdtFile& rFile,
                                                     AdtSourceFileType nDestType,
-                                                    const char* pClassName);
+                                                    const char* pClassName,
+                                                    const char* pPathPrefix);
 
   static void           writeConstructorImplInclude(AdtFile& rFile,
                                                     AdtSourceFileType nDestType,
-                                                    const char* pClassName);
+                                                    const char* pClassName,
+                                                    const char* pPathPrefix);
 
   static AdtAutoClass*  findClass(const char* pClassName);
 
@@ -1305,6 +1432,7 @@ public:
 
   bool                  writeAutomationFiles(AdtSourceFileType nDestType,
                                              const char* pDestFolder,
+                                             const char* pDestIncludeFolder,
                                              const char* pConstructorClassName,
                                              int nClassNumber) const;
 

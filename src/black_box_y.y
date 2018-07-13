@@ -17,17 +17,24 @@
  * and then translated into a form that tapenade understands. For example,
  * this is a definition in a Pascal comment field:
  *
- * {D/D(.) INV(X+Y),
+ * {<
+ *  D/D(.) INV(X+Y),
  *  D/D(X) .*X,
- *  D/D(Y) .*(1/Y);}
+ *  D/D(Y) .*(1/Y);
+ *  >}
  *
- * You can also include a black box dependency specification with, for example,
+ * You can alos include a black box dependency specification with, for example,
  *
- * {BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);}
+ * {<BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);>}
  *
+ * < and > symbols are used to indicate the start and end of a black box
+ * definition and must be supplied for inline definitions. This allows the
+ * black box definition to be embedded within existing comments and not break
+ * the parsing of the definition.
  *
- * For stand alone black box definition files you can have something like,
- *   MyFunction(X : real_array in, Y : real_array in) : real_array
+ * For stand alone black box definition files the braces are not required and
+ * you can have something like,
+ *   function MyFunction(X : real_array in, Y : real_array in) : real_array
  *   begin
  *     D/D(.) INV(X+Y),
  *     D/D(X) .*X,
@@ -64,13 +71,14 @@ typedef struct blackBoxDefBeginInfo
 
 
 /* expression keyword tokens */
-%token LBRACKET RBRACKET PLUS MINUS MULTIPLY DIVIDE POWER PERIOD IDENTIFIER
+%token LBRACKET RBRACKET PLUS MINUS MULTIPLY DIVIDE POWER PERIOD IDENTIFIER QUALIFIED_IDENTIFIER
 %token NUMBER_FIXED NUMBER_FLOAT COMMA COLON SEMICOLON DERIV_OP BLACKBOX
 %token READ_NOT_WRITTEN NOT_READ_THEN_WRITTEN NOT_READ_NOT_WRITTEN
 %token READ_THEN_WRITTEN DEPS ID
 %token REAL INTEGER COMPLEX CHARACTER BOOLEAN
 %token REAL_ARRAY INTEGER_ARRAY COMPLEX_ARRAY CHARACTER_ARRAY BOOLEAN_ARRAY
 %token IN OUT F_BEGIN F_END FUNCTION PROCEDURE RESULT
+%token BB_BEGIN BB_END
 
 
 %%
@@ -188,7 +196,31 @@ defBegin
 
   yyBlackBoxReentrancyCount++;
 }
+ | PROCEDURE QUALIFIED_IDENTIFIER LBRACKET argDefList RBRACKET F_BEGIN
+{
+  static struct blackBoxDefBeginInfo  Info = {0};
+
+  Info.pIdentifier  = $2.sValue;
+  Info.pArgDefList  = $4.pContext;
+  Info.nArgType     = -1;
+
+  $$.pContext = (void*)&Info;
+
+  yyBlackBoxReentrancyCount++;
+}
  | FUNCTION IDENTIFIER LBRACKET argDefList RBRACKET COLON argType F_BEGIN
+{
+  static struct blackBoxDefBeginInfo  Info = {0};
+
+  Info.pIdentifier  = $2.sValue;
+  Info.pArgDefList  = $4.pContext;
+  Info.nArgType     = $7.nValue;
+
+  $$.pContext = (void*)&Info;
+
+  yyBlackBoxReentrancyCount++;
+}
+ | FUNCTION QUALIFIED_IDENTIFIER LBRACKET argDefList RBRACKET COLON argType F_BEGIN
 {
   static struct blackBoxDefBeginInfo  Info = {0};
 

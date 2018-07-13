@@ -20,6 +20,7 @@
  *     PATHS: Path1,Path2,…,PathN;
  *     SOURCE FILES: File1,File2,…,FileN;
  *     WORKING DIRECTORY: Path;
+ *     [INCLUDE DIRECTORY: Path;] //Optional
  *     CPP OPTIONS FILE: FileBlah2;
  *     PASCAL OPTIONS FILE: FileBlah2;
  *     FORTRAN INCLUDE FILES: File1,File2,…,FileN;
@@ -101,6 +102,7 @@ MakeOptionsList : MakeOption
 MakeOption : Paths
            | SourceFiles
            | WorkingDirectory
+           | IncludeDirectory
            | CppOptionsFile
            | DelphiOptionsFile
            | FortranIncludeFiles
@@ -169,6 +171,12 @@ FileNameList : M_FILENAME
 WorkingDirectory : M_WORKING M_DIRECTORY M_COLON M_FILENAME M_SEMICOLON
 {
   make_WorkingDirectory($4.sValue);
+}
+;
+
+IncludeDirectory : M_INCLUDE M_DIRECTORY M_COLON M_FILENAME M_SEMICOLON
+{
+  make_IncludeDirectory($4.sValue);
 }
 ;
 

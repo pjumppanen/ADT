@@ -11,10 +11,10 @@
 
 // ----------------------------------------------------------------------------
 
-
-// Test enumerated types in C++
-enum Sex {male=1, female=2};
-
+// Test global constants
+extern const int male;
+extern const int female;
+extern const int n_sex;
 
 // ----------------------------------------------------------------------------
 
@@ -32,6 +32,19 @@ protected:
   ARRAY_1D  A1_D /*1:ix*/;
   ARRAY_2I  A2_IA /*1+ix,-1:iy*/;
   ARRAY_2I  A2_IB /*-1:iy,1+ix*/;
+  ARRAY_2D  A2_DA /*1+ix,1:n_sex*/;
+
+  // Test longbool arrays
+  ARRAY_2LB A2_LB /*1+ix,-1:iy*/;
+
+  // Test Raw array types
+  ARRAY_2C  A2_C /*1+ix,-1:iy*/;
+  ARRAY_2UC A2_UC /*1+ix,-1:iy*/;
+  ARRAY_2B  A2_B /*1+ix,-1:iy*/;
+
+  // Bool and longbool singulars
+  bool      SingularBool;
+  longbool  SingularLongbool;
 
   /* AUTODEC 2 */
   ARRAY_3D  A3_DA /*-1:iy,1+ix,A2_IA[<2>,<1>]+A2_IB[<1>,<2>]*/;
@@ -52,7 +65,7 @@ protected:
   // Check for null sized arrays
   ARRAY_1D  N1_D /*1:0*/;
 
-#include "AT_array_plans.hpp"
+#include "include/AT_array_plans.hpp"
 
 protected:
   // D/D(x) (4 * x) - 5;
@@ -70,7 +83,7 @@ protected:
 
 public:
   ArrayTest(
-#include "AT_constructor_args.hpp"
+#include "include/AT_constructor_args.hpp"
   );
 
   // Function to test the interface generation on functions with no args
@@ -80,9 +93,13 @@ public:
   double polySumA(const ARRAY_1D X/*1:ix*/);
   double polySumB(const ARRAY_1D X/*1:ix*/);
   double polySumC(const ARRAY_1D X/*1:ix*/);
+  double polySum3D(const ARRAY_1D X/*1:1+ix*/);
   virtual double boundsCheckTest(const ARRAY_1D X/*1:ix*/);
   double test_one_if(double v);
   double test_one_if_internal(double v);
+
+  bool     isNegative(double dValue);
+  longbool isPositive(double dValue);
 };
 
 

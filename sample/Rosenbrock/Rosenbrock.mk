@@ -1,5 +1,5 @@
 AD BEGIN
-  PATHS: "../include","../common", "../../src/ADLib";
+  PATHS: "../include", "../../src/ADLib";
   WORKING DIRECTORY: "./work/";
   SWITCHES: "rebuild","Oarray";
   BLACKBOX: common.bbdef;

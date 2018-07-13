@@ -337,7 +337,7 @@ public:
   AdtJavaBase(const AdtJavaBase& rCopy);
   virtual ~AdtJavaBase();
 
-  static void                   initialise();
+  static void                   rootBindComments(AdtCommon* pCompilerBase);
 
   static void                   addFortranTypeMap(const string& rJavaType,
                                                   const string& rFortranType,
@@ -411,7 +411,8 @@ public:
 
   virtual bool                  buildBlackBoxFile(const char* pBlackBoxFileName,
                                                   AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap);
+                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                                  double dVersionNumber);
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rRootList,
@@ -425,6 +426,7 @@ public:
   virtual bool                  extractClassConstructors(AdtStringList& rConstructorList,
                                                          const char* pClassName,
                                                          const char* pParentClassName,
+                                                         const char* pPathPrefix,
                                                          AdtSourceFileType nAsFileType) const;
 
   virtual AdtFile&              writeClassMethodsAsFortran(AdtFile& rOutFile,

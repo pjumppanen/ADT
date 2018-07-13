@@ -628,6 +628,24 @@ size_t adtParse_wordLength(const char* pText, const char* pWordDelimiters, const
 
 //  ----------------------------------------------------------------------------
 
+int adtParse_stepOverWord(const char* pWordDelimiters, const char** rpText)
+{
+  int nDone = AdtParse::stepOverWord(pWordDelimiters, *rpText) ? 1 : 0;
+
+  return (nDone);
+}
+
+//  ----------------------------------------------------------------------------
+
+int adtParse_extractWord2(const char** ppWordDelimiters, const char** rpText)
+{
+  int nDone = AdtParse::stepOverWord(ppWordDelimiters, *rpText) ? 1 : 0;
+
+  return (nDone);
+}
+
+//  ----------------------------------------------------------------------------
+
 int adtParse_extractWord(char** pWord, const char* pWordDelimiters, const char** rpText)
 {
   int     nExtracted;
@@ -765,9 +783,9 @@ const char* adtParse_previousWord(const char* pChar, const char* pFirstChar, siz
 
 //  ----------------------------------------------------------------------------
 
-const char* adtParse_nextWord(const char* pChar, size_t* pnCount)
+const char* adtParse_nextWord(const char* pChar, size_t* pnCount, int bIncludeNewline)
 {
-  return (AdtParse::nextWord(pChar, pnCount));
+  return (AdtParse::nextWord(pChar, pnCount, bIncludeNewline != 0));
 }
 
 //  ----------------------------------------------------------------------------
@@ -779,29 +797,13 @@ const char* adtParse_nextLine(const char* pChar, size_t* pnCount)
 
 //  ----------------------------------------------------------------------------
 
-const char* adtDelphi_ExtractComment(void* pContext)
-{
-  const char* pComment = 0;
-
-  if (pContext != 0)
-  {
-    AdtDelphi*  DelphiContext = (AdtDelphi*)pContext;
-
-    pComment = DelphiContext->extractComment();
-  }
-
-  return (pComment);
-}
-
-//  ----------------------------------------------------------------------------
-
-void adtDelphi_AppendComment(void* pContext, const char* pTokenText)
+void adtDelphi_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber)
 {
   if (pContext != 0)
   {
     AdtDelphi*  DelphiContext = (AdtDelphi*)pContext;
 
-    DelphiContext->appendComment(pTokenText);
+    DelphiContext->appendComment(pTokenText, pFileName, nLineNumber);
   }
 }
 
@@ -860,29 +862,13 @@ void  adtDelphi_LogFlush(void* pContext)
 
 //  ----------------------------------------------------------------------------
 
-const char* adtFortran_ExtractComment(void* pContext)
-{
-  const char* pComment = 0;
-
-  if (pContext != 0)
-  {
-    AdtFortran* FortranContext = (AdtFortran*)pContext;
-
-    pComment = FortranContext->extractComment();
-  }
-
-  return (pComment);
-}
-
-//  ----------------------------------------------------------------------------
-
-void adtFortran_AppendComment(void* pContext, const char* pTokenText)
+void adtFortran_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber)
 {
   if (pContext != 0)
   {
     AdtFortran* FortranContext = (AdtFortran*)pContext;
 
-    FortranContext->appendComment(pTokenText);
+    FortranContext->appendComment(pTokenText, pFileName, nLineNumber);
   }
 }
 
@@ -929,29 +915,13 @@ void  adtFortran_LogFlush(void* pContext)
 
 //  ----------------------------------------------------------------------------
 
-const char* adtCpp_ExtractComment(void* pContext)
-{
-  const char* pComment = 0;
-
-  if (pContext != 0)
-  {
-    AdtCpp*  CppContext = (AdtCpp*)pContext;
-
-    pComment = CppContext->extractComment();
-  }
-
-  return (pComment);
-}
-
-//  ----------------------------------------------------------------------------
-
-void adtCpp_AppendComment(void* pContext, const char* pTokenText)
+void adtCpp_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber)
 {
   if (pContext != 0)
   {
-    AdtCpp*  CppContext = (AdtCpp*)pContext;
+    AdtCpp* CppContext = (AdtCpp*)pContext;
 
-    CppContext->appendComment(pTokenText);
+    CppContext->appendComment(pTokenText, pFileName, nLineNumber);
   }
 }
 
@@ -1010,29 +980,13 @@ void  adtCpp_LogFlush(void* pContext)
 
 //  ----------------------------------------------------------------------------
 
-const char* adtJava_ExtractComment(void* pContext)
-{
-  const char* pComment = 0;
-
-  if (pContext != 0)
-  {
-    AdtJava*  JavaContext = (AdtJava*)pContext;
-
-    pComment = JavaContext->extractComment();
-  }
-
-  return (pComment);
-}
-
-//  ----------------------------------------------------------------------------
-
-void adtJava_AppendComment(void* pContext, const char* pTokenText)
+void adtJava_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber)
 {
   if (pContext != 0)
   {
-    AdtJava*  JavaContext = (AdtJava*)pContext;
+    AdtJava* JavaContext = (AdtJava*)pContext;
 
-    JavaContext->appendComment(pTokenText);
+    JavaContext->appendComment(pTokenText, pFileName, nLineNumber);
   }
 }
 
@@ -1086,6 +1040,54 @@ void  adtJava_LogFlush(void* pContext)
     AdtJava*  JavaContext = (AdtJava*)pContext;
 
     JavaContext->logFlush();
+  }
+}
+
+
+//  ----------------------------------------------------------------------------
+//  AdtTapenadeVersion method implementions
+//  ----------------------------------------------------------------------------
+double AdtTapenadeVersion::TapenadeVersion = 0.0;
+
+//  ----------------------------------------------------------------------------
+
+AdtTapenadeVersion::AdtTapenadeVersion(bool bInit)
+{
+  if (bInit)
+  {
+    AdtTapenadeVersion::TapenadeVersion = 0.0;
+
+    FILE* pPipe = popen("tapenade -d", "r");
+
+    if (pPipe != 0)
+    {
+      char pBuffer[128] = {0};
+
+      while(!feof(pPipe))
+      {
+        if (::fgets(pBuffer, 128, pPipe) != 0)
+        {
+          char   sName[16] = {0};
+          double dVersion  = 0.0;
+
+          if (::sscanf(pBuffer, "%9s%lf", sName, &dVersion) == 2)
+          {
+            for (int cn = 0 ; cn < 9 ; cn++)
+            {
+              sName[cn] = tolower(sName[cn]);
+            }
+
+            if (::strcmp(sName, "tapenade") == 0)
+            {
+              AdtTapenadeVersion::TapenadeVersion = dVersion;
+              break;
+            }
+          }
+        }
+      }
+
+      int nExitCode = pclose(pPipe);
+    }
   }
 }
 
@@ -2272,40 +2274,50 @@ void AdtFile::write(const char* pString) const
 {
   if ((pString != 0) && isOpen() && IsEnabled)
   {
-    const char* pComment = 0;
-
-    if (IsFortranFile)
-    {
-      pComment = ::strchr(pString, '!');
-    }
-
     if (IsFortranFile && !IsComment)
     {
-      size_t  nWriteableChars = 72 - LineCharCount - 1;
-      size_t  nStringLength   = ::strlen(pString);
-      size_t  nComment        = (pComment != 0) ? (pComment - pString) / sizeof(char) : nWriteableChars + 1;
+      size_t      nWriteableChars = 72 - LineCharCount - 1;
+      size_t      nComment        = 0;
+      const char* pComment        = ::strchr(pString, '!');
 
-      while ((nStringLength > nWriteableChars) && (nComment > nWriteableChars))
+      if (!IsComment && (pComment != 0))
       {
-        writeString(pString, nWriteableChars);
-
-        pString += nWriteableChars;
-
-        writeChar('&');
-
-        newline();
-
-        writeChar('&');
-
-        nWriteableChars = 72 - LineCharCount - 1;
-        nStringLength   = ::strlen(pString);
-        nComment        = (pComment != 0) ? (pComment - pString) / sizeof(char) : nWriteableChars + 1;
+        nComment  = (pComment - pString) / sizeof(char);
+        IsComment = (nComment <= nWriteableChars);
       }
 
-      writeString(pString, nStringLength);
+      if (IsComment)
+      {
+        writeString(pString);
+      }
+      else
+      {
+        size_t  nStringLength = ::strlen(pString) - nComment;
 
-      LineCharCount += nStringLength;
-      IsComment      = (nComment <= nWriteableChars);
+        while (nStringLength > nWriteableChars)
+        {
+          writeString(pString, nWriteableChars);
+
+          pString += nWriteableChars;
+
+          writeChar('&');
+
+          newline();
+
+          writeChar('&');
+
+          LineCharCount++;
+
+          nWriteableChars = 72 - LineCharCount - 1;
+          nStringLength   = ::strlen(pString) - nComment;
+        }
+
+        nStringLength = ::strlen(pString);
+
+        writeString(pString, nStringLength);
+
+        LineCharCount += nStringLength;
+      }
     }
     else
     {
@@ -2320,7 +2332,7 @@ void AdtFile::write(char nChar) const
 {
   if (isOpen() && IsEnabled)
   {
-    if (IsFortranFile)
+    if (IsFortranFile && !IsComment)
     {
       IsComment = (nChar == '!');
     }
@@ -2336,11 +2348,47 @@ void AdtFile::write(char nChar) const
         newline();
 
         writeChar('&');
+
+        LineCharCount = 1;
       }
     }
 
     writeChar(nChar);
     LineCharCount++;
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtFile::readLines(AdtStringList& rStringList)
+{
+  string sString;
+
+  if (isOpen() && IsEnabled)
+  {
+    bool  bMore = true;
+
+    while (bMore)
+    {
+      char  sBuffer[1024] = {0};
+
+      bMore = (::fscanf(Handle, "%1024[^\n]", sBuffer) != EOF);
+
+      sString += sBuffer;
+
+      if (bMore)
+      {
+        char  sDelimeter[2] = {0};
+
+        bMore = (::fscanf(Handle, "%1c", sDelimeter) != EOF);
+
+        if (sDelimeter[0] == '\n')
+        {
+          rStringList.push_back(sString);
+          sString.clear();
+        }
+      }
+    }
   }
 }
 
@@ -2591,6 +2639,36 @@ size_t AdtParse::bracketedWordLength(const char* pText,
   }
 
   return (nLength);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtParse::stepOverWord(const char* pWordDelimiters,
+                            const char*& rpText,
+                            bool bMustBeDelimited)
+{
+  size_t      nLength;
+  const char* pEndWord = rpText;
+
+  nLength = wordLength(rpText, pWordDelimiters, &pEndWord, bMustBeDelimited);
+  rpText  = pEndWord;
+
+  return (nLength > 0);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtParse::stepOverWord(const char** ppWordDelimiters,
+                            const char*& rpText,
+                            bool bMustBeDelimited)
+{
+  size_t      nLength;
+  const char* pEndWord = rpText;
+
+  nLength = wordLength(rpText, ppWordDelimiters, &pEndWord, bMustBeDelimited);
+  rpText  = pEndWord;
+
+  return (nLength > 0);
 }
 
 //  ----------------------------------------------------------------------------
@@ -2875,7 +2953,7 @@ const char* AdtParse::previousWord(const char* pChar,
 
 //  ----------------------------------------------------------------------------
 
-const char* AdtParse::nextWord(const char* pChar, size_t* pnCount)
+const char* AdtParse::nextWord(const char* pChar, size_t* pnCount, bool bIncludeNewline)
 {
   const char* pWord     = pChar;
   bool        bContinue = true;
@@ -2885,10 +2963,19 @@ const char* AdtParse::nextWord(const char* pChar, size_t* pnCount)
   {
     switch (*pWord)
     {
-      case ' ':
-      case '\t':
       case '\n':
       case '\r':
+      {
+        if (!bIncludeNewline)
+        {
+          bContinue = false;
+          break;
+        }
+        // fall thru
+      }
+
+      case ' ':
+      case '\t':
       {
         bContinue = true;
         pWord++;
@@ -3877,6 +3964,80 @@ bool AdtGenericCommandBlock::execute(AdtJava& rParent,
 
 
 //  ----------------------------------------------------------------------------
+//  AdtCommentCollection method implementations
+//  ----------------------------------------------------------------------------
+AdtCommentCollection::AdtCommentCollection(const char* pFileName)
+ : FileName(pFileName),
+   CommentMap()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtCommentCollection::~AdtCommentCollection()
+{
+  flush();
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtCommentCollection::addComment(const char* pComment, int nLineNumber)
+{
+  AdtStringByIntMapIter Iter = CommentMap.find(nLineNumber);
+
+  if (Iter == CommentMap.end())
+  {
+    CommentMap[nLineNumber] = string(pComment);
+  }
+  else
+  {
+    CommentMap[nLineNumber] = Iter->second + string(pComment);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtCommentCollection::extractComment(string& rComment, int nUpToLineNumber)
+{
+  bool bExtracted = false;
+
+  rComment.clear();
+
+  AdtStringByIntMapIter EraseBegin;
+  AdtStringByIntMapIter EraseEnd = CommentMap.end();
+  bool                  bErase   = false;
+
+  for (AdtStringByIntMapIter Iter = CommentMap.begin() ; Iter != CommentMap.end() ; ++Iter)
+  {
+    if (Iter->first <= nUpToLineNumber)
+    {
+      if (!bErase)
+      {
+        EraseBegin = Iter;
+        bErase     = true;
+      }
+
+      rComment  += Iter->second;
+      bExtracted = true;
+    }
+    else
+    {
+      EraseEnd = Iter;
+      break;
+    }
+  }
+
+  if (bErase)
+  {
+    CommentMap.erase(EraseBegin, EraseEnd);
+  }
+
+  return (bExtracted);
+}
+
+
+//  ----------------------------------------------------------------------------
 //  AdtCommon method implementations
 //  ----------------------------------------------------------------------------
 AdtStringCache        AdtCommon::StringCache;
@@ -3924,17 +4085,34 @@ bool AdtCommon::endParseString(FILE*& rFile, string& sFileName)
 
 //  ----------------------------------------------------------------------------
 
-AdtCommon::AdtCommon()
+void AdtCommon::flush()
 {
-  Log     = 0;
-  Comment = 0;
+  for (AdtCommentCollectionPtrByStringMapIter Iter = CommentCollectionMap.begin() ;Iter != CommentCollectionMap.end() ; ++Iter)
+  {
+    AdtCommentCollection* pCommentCollection = Iter->second;
+
+    if (pCommentCollection != 0)
+    {
+      delete pCommentCollection;
+    }
+  }
+
+  CommentCollectionMap.clear();
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtCommon::AdtCommon()
+ : CommentCollectionMap()
+{
+  Log = 0;
 }
 
 //  ----------------------------------------------------------------------------
 
 AdtCommon::~AdtCommon()
 {
-
+  flush();
 }
 
 //  ----------------------------------------------------------------------------
@@ -3960,92 +4138,75 @@ bool AdtCommon::closeLog()
     bClosed = true;
   }
 
-  Comment = 0;
-
   return (bClosed);
 }
 
 //  ----------------------------------------------------------------------------
 
-const char* AdtCommon::extractComment()
+void AdtCommon::appendComment(const char* pCommentText, const char* pFileName, int nLineNumber)
 {
-  const char* pComment;
+  if ((pCommentText != 0) && (pFileName != 0))
+  {
+    AdtCommentCollection*                   pCommentCollection = 0;
+    AdtCommentCollectionPtrByStringMapIter  Iter               = CommentCollectionMap.find(pFileName);
 
-  pComment  = Comment;
-  Comment   = 0;
+    if (Iter == CommentCollectionMap.end())
+    {
+      pCommentCollection              = new AdtCommentCollection(pFileName);
+      CommentCollectionMap[pFileName] = pCommentCollection;
+    }
+    else
+    {
+      pCommentCollection = Iter->second;
+    }
 
-  return (pComment);
+    if (pCommentCollection != 0)
+    {
+      pCommentCollection->addComment(pCommentText, nLineNumber);
+    }
+  }
 }
 
 //  ----------------------------------------------------------------------------
 
-void AdtCommon::appendComment(const char* pTokenText)
+bool AdtCommon::extractComment(const string** ppComment, const char* pFileName, int nUpToLineNumber)
 {
-  //This function needs to add comment lines from multiline and single line
-  //comments. For single line comments we don't want the terminal line feed
-  //return appearing in the appended comment. The loop below is for removing
-  //that terminal line feed.
-  const char* pComment = (Comment != 0) ? Comment : "";
+  bool bExtracted = false;
 
-  if (pTokenText != 0)
+  if (ppComment != 0)
   {
-    string  sComment(pComment);
-    string  sTokenText(pTokenText);
-    char*   pToken    = (char*)((const char*)sTokenText);
-    char*   pChar     = pToken;
-    char*   pNewLine  = 0;
+    string rComment;
 
-    while (*pChar != 0)
+    if (pFileName != 0)
     {
-      switch(*pChar)
+      AdtCommentCollectionPtrByStringMapIter  Iter = CommentCollectionMap.find(pFileName);
+
+      if (Iter != CommentCollectionMap.end())
       {
-        case '\r':
+        AdtCommentCollection* pCommentCollection = Iter->second;
+
+        if (pCommentCollection != 0)
         {
-          pNewLine = pChar;
-
-          pChar++;
-
-          if (*pChar == '\n')
-          {
-            pChar++;
-          }
-          break;
-        }
-
-        case '\n':
-        {
-          pNewLine = pChar;
-
-          pChar++;
-          break;
-        }
-
-        case ' ':
-        case '\t':
-        {
-          pChar++;
-          break;
-        }
-
-        default:
-        {
-          pChar++;
-
-          pNewLine = 0;
-          break;
+          bExtracted = pCommentCollection->extractComment(rComment, nUpToLineNumber);
         }
       }
+      else
+      {
+        rComment.clear();
+      }
     }
-
-    if (pNewLine != 0)
+    else
     {
-      *pNewLine = 0;
+      rComment.clear();
     }
 
-    sComment += pToken;
-    sComment += "\r\n";
-    Comment   = StringCache.add(sComment);
+    if (rComment.length() > 0)
+    {
+      allocString(rComment.c_str(), ppComment, false);
+    }
   }
+
+  return (bExtracted);
 }
 
 //  ----------------------------------------------------------------------------
@@ -5428,6 +5589,11 @@ bool AdtFortran::parse(const char* pFilename,
                   yyFortrandebug,
                   yyFortranparse);
 
+  if (bResult)
+  {
+    AdtFortranBase::rootBindComments(this);
+  }
+
   Lex_SearchPaths = 0;
 
   return (bResult);
@@ -5735,6 +5901,11 @@ bool AdtDelphi::parse(const char* pFilename,
                   pCommandBlockName,
                   bForwardMode);
 
+  if (bResult)
+  {
+    AdtDelphiBase::rootBindComments(this);
+  }
+
   Lex_SearchPaths = 0;
 
   return (bResult);
@@ -5803,7 +5974,6 @@ bool AdtCpp::parse(void*& pCppContext,
 
   CommandBlock.isForwardMode(bForwardMode);
   CommandBlock.reset();
-  AdtCppBase::initialise();
 
   if (pCommandBlock != 0)
   {
@@ -5981,6 +6151,11 @@ bool AdtCpp::parse(const char* pFilename,
                   pCommandBlockName,
                   bForwardMode);
 
+  if (bResult)
+  {
+    AdtCppBase::rootBindComments(this);
+  }
+
   Lex_SearchPaths = 0;
 
   return (bResult);
@@ -6049,7 +6224,6 @@ bool AdtJava::parse(void*& pJavaContext,
 
   CommandBlock.isForwardMode(bForwardMode);
   CommandBlock.reset();
-  AdtJavaBase::initialise();
 
   if (pCommandBlock != 0)
   {
@@ -6225,6 +6399,11 @@ bool AdtJava::parse(const char* pFilename,
                   pCommandBlock,
                   pCommandBlockName,
                   bForwardMode);
+
+  if (bResult)
+  {
+    AdtJavaBase::rootBindComments(this);
+  }
 
   Lex_SearchPaths = 0;
 

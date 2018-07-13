@@ -12,8 +12,6 @@
 
 class D_OperatingModelMin  : public OperatingModelMin
 {
-protected: 
-  
 public: 
   
   #include "Om_decl_lib_interface_methods.hpp"
@@ -22,6 +20,7 @@ public:
   virtual ~D_OperatingModelMin();
   
 };
+
 
 #include "Om_decl_lib_interface_globals.hpp"
 #include "Om_decl_lib_interface_constructor.hpp"

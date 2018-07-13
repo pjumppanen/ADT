@@ -58,6 +58,12 @@ size_t elementSizeFromVarType(AdtVarType nVarType)
       break;
     }
 
+    case AdtVarType_LONGBOOL:
+    {
+      nSizeOf = sizeof(longbool);
+      break;
+    }
+
     case AdtVarType_CHAR:
     {
       nSizeOf = sizeof(char);
@@ -121,6 +127,98 @@ size_t elementSizeFromVarType(AdtVarType nVarType)
 
   return (nSizeOf);
 }
+
+//  ----------------------------------------------------------------------------
+
+const char* varTypeName(AdtVarType nVarType)
+{
+  const char* pTypeName;
+
+  switch (nVarType)
+  {
+    default:
+    case AdtVarType_UNDEFINED:
+    {
+      pTypeName = "AdtVarType_UNDEFINED";
+      break;
+    }
+
+    case AdtVarType_BOOL:
+    {
+      pTypeName = "AdtVarType_BOOL";
+      break;
+    }
+
+    case AdtVarType_LONGBOOL:
+    {
+      pTypeName = "AdtVarType_LONGBOOL";
+      break;
+    }
+
+    case AdtVarType_CHAR:
+    {
+      pTypeName = "AdtVarType_CHAR";
+      break;
+    }
+
+    case AdtVarType_UCHAR:
+    {
+      pTypeName = "AdtVarType_UCHAR";
+      break;
+    }
+
+    case AdtVarType_INT:
+    {
+      pTypeName = "AdtVarType_INT";
+      break;
+    }
+
+    case AdtVarType_UINT:
+    {
+      pTypeName = "AdtVarType_UINT";
+      break;
+    }
+
+    case AdtVarType_LONG:
+    {
+      pTypeName = "AdtVarType_LONG";
+      break;
+    }
+
+    case AdtVarType_ULONG:
+    {
+      pTypeName = "AdtVarType_ULONG";
+      break;
+    }
+
+    case AdtVarType_SHORT:
+    {
+      pTypeName = "AdtVarType_SHORT";
+      break;
+    }
+
+    case AdtVarType_USHORT:
+    {
+      pTypeName = "AdtVarType_USHORT";
+      break;
+    }
+
+    case AdtVarType_FLOAT:
+    {
+      pTypeName = "AdtVarType_FLOAT";
+      break;
+    }
+
+    case AdtVarType_DOUBLE:
+    {
+      pTypeName = "AdtVarType_DOUBLE";
+      break;
+    }
+  }
+
+  return (pTypeName);
+}
+
 
 //  ----------------------------------------------------------------------------
 //  AdtArrayCoord method implementations

@@ -824,9 +824,9 @@ void* adtFortranReturnStmt_create(void* pLblDefObj, void* pExprObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtFortranLblDef_create(void* pIconObj, const char* pComment)
+void* adtFortranLblDef_create(void* pIconObj)
 {
-  return (Hnd(new AdtFortranLblDef(ObjAndRelease(pIconObj), pComment), yyFortran_lineNumber(), yyFortran_fileName()));
+  return (Hnd(new AdtFortranLblDef(ObjAndRelease(pIconObj)), yyFortran_lineNumber(), yyFortran_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -1753,22 +1753,25 @@ bool AdtFortranDeclarations::extractDeclarations(AdtParser* pParentObj,
           pParameterTypeDeclObj = (AdtFortranTypeDeclarationStmt*)((AdtParser*)((*Iter).second));
         }
 
-        if ((ConstVarMap.find(pObj->name()) != ConstVarMap.end()) && (pParameterTypeDeclObj != 0))
+        if (!pParameterTypeDeclObj->hasIntent())
         {
-          pParameterTypeDeclObj->isConst(true, false);
-        }
-        else if ((OutVarMap.find(pObj->name()) != OutVarMap.end()) && (pParameterTypeDeclObj != 0))
-        {
-          pParameterTypeDeclObj->isConst(false, true);
-        }
-        else if ((NonConstVarMap.find(pObj->name()) != NonConstVarMap.end()) && (pParameterTypeDeclObj != 0))
-        {
-          pParameterTypeDeclObj->isConst(false, false);
-        }
-        else if (pParameterTypeDeclObj != 0)
-        {
-          // Make anything unspecified non-const
-          pParameterTypeDeclObj->isConst(false, false);
+          if ((ConstVarMap.find(pObj->name()) != ConstVarMap.end()) && (pParameterTypeDeclObj != 0))
+          {
+            pParameterTypeDeclObj->isConst(true, false);
+          }
+          else if ((OutVarMap.find(pObj->name()) != OutVarMap.end()) && (pParameterTypeDeclObj != 0))
+          {
+            pParameterTypeDeclObj->isConst(false, true);
+          }
+          else if ((NonConstVarMap.find(pObj->name()) != NonConstVarMap.end()) && (pParameterTypeDeclObj != 0))
+          {
+            pParameterTypeDeclObj->isConst(false, false);
+          }
+          else if (pParameterTypeDeclObj != 0)
+          {
+            // Make anything unspecified non-const
+            pParameterTypeDeclObj->isConst(false, false);
+          }
         }
       }
     }
@@ -1890,6 +1893,7 @@ void AdtFortranDeclarations::dump(AdtFile* pFile) const
   if (pFile != 0)
   {
     pFile->incrementIndent();
+    pFile->homeline();
 
     AdtIntByStringMapConstIter  Iter;
 
@@ -1900,9 +1904,18 @@ void AdtFortranDeclarations::dump(AdtFile* pFile) const
     }
 
     pFile->decrementIndent();
+    pFile->homeline();
   }
 }
 
+//  ----------------------------------------------------------------------------
+
+bool AdtFortranDeclarations::hasVarDeclarations() const
+{
+  bool bHasVarDeclarations = ((DimensionStmtList.size() > 0) || (TypeDeclarationMap.size() > 0));
+
+  return (bHasVarDeclarations);
+}
 
 //  ----------------------------------------------------------------------------
 
@@ -2513,7 +2526,7 @@ AdtFile& AdtFortranDeclarations::writeDelphiAllocations(AdtFile& pOutFile,
 
         if (pDestroyList != 0)
         {
-          string  sVarDestroy = sPlanName + ".destroy()";
+          string  sVarDestroy = sPlanName + ".destroy();";
 
           pDestroyList->push_back(sVarDestroy);
         }
@@ -2642,6 +2655,16 @@ AdtFortranBase::AdtFortranBase()
 AdtFortranBase::~AdtFortranBase()
 {
   flush();
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtFortranBase::rootBindComments(AdtCommon* pCompilerBase)
+{
+  if (FortranRootObject != 0)
+  {
+    FortranRootObject->bindComments(pCompilerBase);
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -2813,7 +2836,7 @@ AdtFortranTypeDeclarationStmt* AdtFortranBase::createSimpleTypeDeclarationStmt(c
                                                                                AdtFortranExpr* pExprObj)
 {
   AdtFortranIcon*                 pIconObj            = new AdtFortranIcon("");
-  AdtFortranLblDef*               pLblDefObj          = new AdtFortranLblDef(pIconObj, 0);
+  AdtFortranLblDef*               pLblDefObj          = new AdtFortranLblDef(pIconObj);
   AdtFortranTypeSpec*             pTypeSpecObj        = new AdtFortranTypeSpec(nType, 0);
   AdtFortranName*                 pNameObj            = new AdtFortranName(pVarName);
 
@@ -2974,9 +2997,9 @@ AdtFortranExecutableConstruct* AdtFortranBase::createDoConstruct(const char* pLo
       (pEndExpr             != 0))
   {
     AdtFortranIcon*             pIcon             = new AdtFortranIcon(pLabel);
-    AdtFortranLblDef*           pLblDef           = new AdtFortranLblDef(pIcon, 0);
+    AdtFortranLblDef*           pLblDef           = new AdtFortranLblDef(pIcon);
     AdtFortranIcon*             pNullIcon         = new AdtFortranIcon("");
-    AdtFortranLblDef*           pNullLblDef       = new AdtFortranLblDef(pNullIcon, 0);
+    AdtFortranLblDef*           pNullLblDef       = new AdtFortranLblDef(pNullIcon);
     AdtFortranEndDoStmt*        pEndDoStmt        = new AdtFortranEndDoStmt(pNullLblDef, 0);
     AdtFortranName*             pLoopIdxName      = new AdtFortranName(pLoopVarName);
     AdtFortranConditionalBody*  pConditionalBody  = new AdtFortranConditionalBody(pExecutableConstruct);
@@ -3183,7 +3206,7 @@ void AdtFortranExecutableProgram::addBoundsChecking(AdtParser* pFuncOrSubObj,
 
             for (IndexIter = pSectionSubscriptList->objList().begin() ; IndexIter != pSectionSubscriptList->objList().end() ; ++IndexIter)
             {
-              AdtFile     TextFile(true);
+              AdtFile     TextFile;
               string      sIndex;
 
               TextFile.open(sIndex);
@@ -3215,7 +3238,7 @@ void AdtFortranExecutableProgram::addBoundsChecking(AdtParser* pFuncOrSubObj,
               if (0)
               {
                 string  sTest;
-                AdtFile FortranOut(true);
+                AdtFile FortranOut;
 
                 if (FortranOut.open(sTest))
                 {
@@ -3615,7 +3638,7 @@ void AdtFortranExecutableProgram::addSliceFixups(const AdtStringByStringMap& rNe
           {
             // Debug code to see the statement form
             string  sBuffer;
-            AdtFile File(true);
+            AdtFile File;
 
             File.open(sBuffer);
             pAssignmentStmt->writeFortran(File);
@@ -3785,26 +3808,33 @@ const AdtFortranExecutableProgram::PushPopCall  AdtFortranExecutableProgram::Pus
                                                                                                {"PUSHREAL16",         PushCall     , Real16VarType   , 1, "r16stack",  "REAL(16)"},
                                                                                                {"LOOKREAL16",         LookCall     , Real16VarType   , 1, "r16stack",  "REAL(16)"},
                                                                                                {"POPREAL16",          PopCall      , Real16VarType   , 1, "r16stack",  "REAL(16)"},
-                                                                                               {"PUSHCONTROL1BARRAY", PushArrayCall, BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
-                                                                                               {"POPCONTROL1BARRAY",  PopArrayCall , BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
                                                                                                {"PUSHCONTROL1B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
                                                                                                {"LOOKCONTROL1B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
                                                                                                {"POPCONTROL1B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
-                                                                                               {"PUSHCONTROL2BARRAY", PushArrayCall, BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
-                                                                                               {"POPCONTROL2BARRAY",  PopArrayCall , BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
                                                                                                {"PUSHCONTROL2B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
                                                                                                {"LOOKCONTROL2B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
                                                                                                {"POPCONTROL2B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
-                                                                                               {"PUSHCONTROL3BARRAY", PushArrayCall, BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
-                                                                                               {"POPCONTROL3BARRAY",  PopArrayCall , BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
                                                                                                {"PUSHCONTROL3B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
                                                                                                {"LOOKCONTROL3B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
                                                                                                {"POPCONTROL3B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
-                                                                                               {"PUSHCONTROL4BARRAY", PushArrayCall, BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
-                                                                                               {"POPCONTROL4BARRAY",  PopArrayCall , BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
                                                                                                {"PUSHCONTROL4B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
                                                                                                {"LOOKCONTROL4B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
-                                                                                               {"POPCONTROL4B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"}};
+                                                                                               {"POPCONTROL4B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL5B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL5B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL5B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL6B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL6B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL6B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL7B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL7B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL7B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL8B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL8B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL8B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL9B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL9B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL9B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"}};
 //  ----------------------------------------------------------------------------
 
 void AdtFortranExecutableProgram::createStackVarNames(string& rStackName,
@@ -3896,7 +3926,7 @@ AdtFortranBase* AdtFortranExecutableProgram::expressionBuild(const char* pCodeSt
     if (0)
     {
       string  sTest;
-      AdtFile FortranOut(true);
+      AdtFile FortranOut;
 
       if (FortranOut.open(sTest))
       {
@@ -3960,7 +3990,7 @@ AdtFortranBase* AdtFortranExecutableProgram::expressionBuildInner(const char* pC
     if (0)
     {
       string  sTest;
-      AdtFile FortranOut(true);
+      AdtFile FortranOut;
 
       if (FortranOut.open(sTest))
       {
@@ -4166,7 +4196,7 @@ bool AdtFortranExecutableProgram::translatePushPopArrayCall(AdtFortranCallStmt* 
           {
             string                        sArg1;
             string                        sArg2;
-            AdtFile                       FortranOut(true);
+            AdtFile                       FortranOut;
 
             FortranOut.open(sArg1);
             pArg1_Subscript->writeFortran(FortranOut);
@@ -4285,7 +4315,7 @@ bool AdtFortranExecutableProgram::removePushPopCall(AdtFortranCallStmt* pCallObj
   if (pCallObj != 0)
   {
     string                          sCallExpression;
-    AdtFile                         StringFile(true);
+    AdtFile                         StringFile;
     AdtFortranSectionSubscriptList* pSectionSubscriptList = (AdtFortranSectionSubscriptList*)pCallObj->findDescendant("SectionSubscriptList");
 
     StringFile.open(sCallExpression);
@@ -4319,7 +4349,7 @@ bool AdtFortranExecutableProgram::removePushPopCall(AdtFortranCallStmt* pCallObj
             string                        sStackName;
             string                        sArg1;
             string                        sArg2;
-            AdtFile                       FortranOut(true);
+            AdtFile                       FortranOut;
             AdtStringByStringMapIter      Iter;
             AdtFortran                    FortranContext;
             AdtFortranLblDef*             pLblDef = (AdtFortranLblDef*)pCallObj->findDescendant("LblDef");
@@ -5260,12 +5290,77 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
 
 //  ----------------------------------------------------------------------------
 
+void AdtFortranExecutableProgram::writeCPP_MethodDeclarations(AdtFile& pOutFile,
+                                                              bool bPublic,
+                                                              const AdtParserPtrByStringMap& rFunctionObjectMap,
+                                                              const AdtParserPtrByStringMap& rSubroutineObjectMap,
+                                                              const AdtStringByStringMap& rPublicMethodsMap,
+                                                              const AdtStringList& rMethodList,
+                                                              const char* pParentClassName) const
+{
+  AdtStringListConstIter  Iter;
+  string                  sClassPrefix(pParentClassName);
+
+  sClassPrefix += "__";
+
+  AdtFortranName::setClearPrefix(sClassPrefix);
+  AdtFortranBase::setChangePrefix(sClassPrefix, 0);
+
+  for (Iter = rMethodList.begin() ; Iter != rMethodList.end() ; ++Iter)
+  {
+    const string& rMethodName = *Iter;
+    bool          bWrite      = false;
+
+    if (bPublic)
+    {
+      bWrite = (rPublicMethodsMap.find(rMethodName) != rPublicMethodsMap.end());
+    }
+    else
+    {
+      bWrite = (rPublicMethodsMap.find(rMethodName) == rPublicMethodsMap.end());
+    }
+
+    if (bWrite)
+    {
+      const AdtFortranBase*             pSubprogramObj  = 0;
+      AdtParserPtrByStringMapConstIter  ObjIter         = rFunctionObjectMap.find(rMethodName);
+
+      if (ObjIter != rFunctionObjectMap.end())
+      {
+        pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
+      }
+
+      if (pSubprogramObj == 0)
+      {
+        ObjIter = rSubroutineObjectMap.find(rMethodName);
+
+        if (ObjIter != rSubroutineObjectMap.end())
+        {
+          pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
+        }
+      }
+
+      if (pSubprogramObj != 0)
+      {
+        pSubprogramObj->writeCPP(pOutFile, CPP_MODE_FUNCTION_DECLARATION);
+      }
+    }
+  }
+
+  AdtFortranName::setClearPrefix(0);
+  AdtFortranBase::setChangePrefix(0, 0);
+}
+
+//  ----------------------------------------------------------------------------
+
 void AdtFortranExecutableProgram::writeCPP_ClassHeader(AdtFile& pOutFile,
                                                        const char* pParentIncludeName,
+                                                       const AdtStringByStringMap& rPublicMethodsMap,
                                                        const AdtStringList& rMethodList,
                                                        const AdtStringList& rAttributeList,
                                                        const char* pClassName,
                                                        const char* pParentClassName,
+                                                       const char* pPathPrefix,
                                                        AdtStringList& rCPP_ConstructorList,
                                                        string& sPreText,
                                                        string& sPostText) const
@@ -5305,9 +5400,6 @@ void AdtFortranExecutableProgram::writeCPP_ClassHeader(AdtFile& pOutFile,
     pOutFile.newline();
     pOutFile.write("{");
     pOutFile.newline();
-    pOutFile.write("protected:");
-    pOutFile.incrementIndent();
-    pOutFile.newline();
 
     // To speed up the process of building the class we pre-cache required
     // objects into maps rather than doing repeated scans of the parse tree.
@@ -5343,6 +5435,13 @@ void AdtFortranExecutableProgram::writeCPP_ClassHeader(AdtFile& pOutFile,
                 "AdtFortranSubroutineSubprogram");
 
     listToMap(rSubroutineObjectMap, rSubroutineObjectList);
+
+    if (rAttributeList.size() > 0)
+    {
+      pOutFile.write("protected:");
+      pOutFile.incrementIndent();
+      pOutFile.newline();
+    }
 
     //Write class variable attributes
     for (Iter = rAttributeList.begin() ; Iter != rAttributeList.end() ; ++Iter)
@@ -5421,6 +5520,15 @@ void AdtFortranExecutableProgram::writeCPP_ClassHeader(AdtFile& pOutFile,
     }
 
     pOutFile.newline();
+    pOutFile.newline();
+
+    writeCPP_MethodDeclarations(pOutFile,
+                                false,
+                                rFunctionObjectMap,
+                                rSubroutineObjectMap,
+                                rPublicMethodsMap,
+                                rMethodList,
+                                pParentClassName);
 
     pOutFile.newline();
     pOutFile.decrementIndent();
@@ -5436,7 +5544,8 @@ void AdtFortranExecutableProgram::writeCPP_ClassHeader(AdtFile& pOutFile,
     // lost because there is no object to bind it to.
     AdtAutoClass::writeInterfaceMethodsDeclInclude(pOutFile,
                                                    CppSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     //Write class constructors
     for (Iter = rCPP_ConstructorList.begin() ; Iter != rCPP_ConstructorList.end() ; ++Iter)
@@ -5458,45 +5567,13 @@ void AdtFortranExecutableProgram::writeCPP_ClassHeader(AdtFile& pOutFile,
     pOutFile.newline();
 
     //Write class method attributes
-    string  sClassPrefix(pParentClassName);
-    string  sNewClassPrefix(pClassName);
-
-    sClassPrefix += "__";
-    sNewClassPrefix += "::";
-
-    AdtFortranName::setClearPrefix(sClassPrefix);
-    AdtFortranBase::setChangePrefix(sClassPrefix, 0);
-
-    for (Iter = rMethodList.begin() ; Iter != rMethodList.end() ; ++Iter)
-    {
-      const string&         rMethodName     = *Iter;
-      const AdtFortranBase* pSubprogramObj  = 0;
-
-      ObjIter = rFunctionObjectMap.find(rMethodName);
-
-      if (ObjIter != rFunctionObjectMap.end())
-      {
-        pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
-      }
-
-      if (pSubprogramObj == 0)
-      {
-        ObjIter = rSubroutineObjectMap.find(rMethodName);
-
-        if (ObjIter != rSubroutineObjectMap.end())
-        {
-          pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
-        }
-      }
-
-      if (pSubprogramObj != 0)
-      {
-        pSubprogramObj->writeCPP(pOutFile, CPP_MODE_FUNCTION_DECLARATION);
-      }
-    }
-
-    AdtFortranName::setClearPrefix(0);
-    AdtFortranBase::setChangePrefix(0, 0);
+    writeCPP_MethodDeclarations(pOutFile,
+                                true,
+                                rFunctionObjectMap,
+                                rSubroutineObjectMap,
+                                rPublicMethodsMap,
+                                rMethodList,
+                                pParentClassName);
 
     pOutFile.decrementIndent();
     pOutFile.newline();
@@ -5512,11 +5589,13 @@ void AdtFortranExecutableProgram::writeCPP_ClassHeader(AdtFile& pOutFile,
 
     AdtAutoClass::writeInterfaceGlobalsDeclInclude(sTextFile,
                                                    CppSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     AdtAutoClass::writeConstructorDeclInclude(sTextFile,
                                               CppSourceFileType,
-                                              pClassName);
+                                              pClassName,
+                                              pPathPrefix);
 
     sTextFile.close();
 
@@ -5535,6 +5614,7 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
                                                                const AdtStringList& rAttributeList,
                                                                const char* pClassName,
                                                                const char* pParentClassName,
+                                                               const char* pPathPrefix,
                                                                AdtStringList& rCPP_ConstructorList,
                                                                AdtStringList* pVarSuffixList,
                                                                string& sPreText,
@@ -5909,7 +5989,7 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
 
       pOutFile.decrementIndent();
       pOutFile.newline();
-      pOutFile.write("};");
+      pOutFile.write("}");
       pOutFile.newline();
     }
 
@@ -6048,15 +6128,18 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
 
     AdtAutoClass::writeInterfaceMethodsImplInclude(sTextFile,
                                                    CppSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     AdtAutoClass::writeInterfaceGlobalsImplInclude(sTextFile,
                                                    CppSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     AdtAutoClass::writeConstructorImplInclude(sTextFile,
                                               CppSourceFileType,
-                                              pClassName);
+                                              pClassName,
+                                              pPathPrefix);
 
     sTextFile.close();
 
@@ -6067,11 +6150,76 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
 
 //  ----------------------------------------------------------------------------
 
+void AdtFortranExecutableProgram::writeDelphi_MethodDeclarations(AdtFile& pOutFile,
+                                                                 bool bPublic,
+                                                                 const AdtParserPtrByStringMap& rFunctionObjectMap,
+                                                                 const AdtParserPtrByStringMap& rSubroutineObjectMap,
+                                                                 const AdtStringByStringMap& rPublicMethodsMap,
+                                                                 const AdtStringList& rMethodList,
+                                                                 const char* pParentClassName) const
+{
+  AdtStringListConstIter  Iter;
+  string                  sClassPrefix(pParentClassName);
+
+  sClassPrefix += "__";
+
+  AdtFortranName::setClearPrefix(sClassPrefix);
+  AdtFortranBase::setChangePrefix(sClassPrefix, 0);
+
+  for (Iter = rMethodList.begin() ; Iter != rMethodList.end() ; ++Iter)
+  {
+    const string& rMethodName = *Iter;
+    bool          bWrite      = false;
+
+    if (bPublic)
+    {
+      bWrite = (rPublicMethodsMap.find(rMethodName) != rPublicMethodsMap.end());
+    }
+    else
+    {
+      bWrite = (rPublicMethodsMap.find(rMethodName) == rPublicMethodsMap.end());
+    }
+
+    if (bWrite)
+    {
+      const AdtFortranBase*             pSubprogramObj  = 0;
+      AdtParserPtrByStringMapConstIter  ObjIter         = rFunctionObjectMap.find(rMethodName);
+
+      if (ObjIter != rFunctionObjectMap.end())
+      {
+        pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
+      }
+
+      if (pSubprogramObj == 0)
+      {
+        ObjIter = rSubroutineObjectMap.find(rMethodName);
+
+        if (ObjIter != rSubroutineObjectMap.end())
+        {
+          pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
+        }
+      }
+
+      if (pSubprogramObj != 0)
+      {
+        pSubprogramObj->writeDelphi(pOutFile, DELPHI_MODE_FUNCTION_DECLARATION);
+      }
+    }
+  }
+
+  AdtFortranName::setClearPrefix(0);
+  AdtFortranBase::setChangePrefix(0, 0);
+}
+
+//  ----------------------------------------------------------------------------
+
 void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
+                                                   const AdtStringByStringMap& rPublicMethodsMap,
                                                    const AdtStringList& rMethodList,
                                                    const AdtStringList& rAttributeList,
                                                    const char* pClassName,
                                                    const char* pParentClassName,
+                                                   const char* pPathPrefix,
                                                    AdtStringList& rDelphiConstructorList,
                                                    const char* pUsesList,
                                                    AdtStringList* pVarSuffixList) const
@@ -6090,7 +6238,7 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
     sParentUnitName  = pParentClassName;
     sParentUnitName += "_Unit";
 
-    pOutFile.write("{$mode delphi}{$H+}");
+    pOutFile.write("{$mode objfpc}{$modeswitch autoderef}{$modeswitch duplicatelocals}{$H+}");
     pOutFile.newline();
     pOutFile.write("unit ");
     pOutFile.write(sUnitName);
@@ -6127,8 +6275,6 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
     pOutFile.write(" = class(");
     pOutFile.write(pParentClassName);
     pOutFile.write(")");
-
-    pOutFile.incrementIndent();
     pOutFile.newline();
     pOutFile.newline();
 
@@ -6166,6 +6312,14 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
                 "AdtFortranSubroutineSubprogram");
 
     listToMap(rSubroutineObjectMap, rSubroutineObjectList);
+
+    if (rAttributeList.size() > 0)
+    {
+      pOutFile.write("protected");
+      pOutFile.incrementIndent();
+      pOutFile.newline();
+      pOutFile.newline();
+    }
 
     //Write class variable attributes
     for (Iter = rAttributeList.begin() ; Iter != rAttributeList.end() ; ++Iter)
@@ -6244,6 +6398,22 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
     }
 
     pOutFile.newline();
+    pOutFile.newline();
+
+    writeDelphi_MethodDeclarations(pOutFile,
+                                   false,
+                                   rFunctionObjectMap,
+                                   rSubroutineObjectMap,
+                                   rPublicMethodsMap,
+                                   rMethodList,
+                                   pParentClassName);
+
+    pOutFile.newline();
+    pOutFile.decrementIndent();
+    pOutFile.newline();
+    pOutFile.write("public");
+    pOutFile.incrementIndent();
+    pOutFile.newline();
 
     // Write class interface methods include here. Note that we must write it
     // before the class constructor because this include gets interpreted as a
@@ -6252,7 +6422,8 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
     // lost because there is no object to bind it to.
     AdtAutoClass::writeInterfaceMethodsDeclInclude(pOutFile,
                                                    DelphiSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     //Write class constructors
     for (Iter = rDelphiConstructorList.begin() ; Iter != rDelphiConstructorList.end() ; ++Iter)
@@ -6272,45 +6443,19 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
     pOutFile.newline();
 
     //Write class method attributes
+    writeDelphi_MethodDeclarations(pOutFile,
+                                   true,
+                                   rFunctionObjectMap,
+                                   rSubroutineObjectMap,
+                                   rPublicMethodsMap,
+                                   rMethodList,
+                                   pParentClassName);
+
     string  sClassPrefix(pParentClassName);
     string  sNewClassPrefix(pClassName);
 
     sClassPrefix += "__";
     sNewClassPrefix += ".";
-
-    AdtFortranName::setClearPrefix(sClassPrefix);
-    AdtFortranBase::setChangePrefix(sClassPrefix, 0);
-
-    for (Iter = rMethodList.begin() ; Iter != rMethodList.end() ; ++Iter)
-    {
-      const string&         rMethodName     = *Iter;
-      const AdtFortranBase* pSubprogramObj  = 0;
-
-      ObjIter = rFunctionObjectMap.find(rMethodName);
-
-      if (ObjIter != rFunctionObjectMap.end())
-      {
-        pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
-      }
-
-      if (pSubprogramObj == 0)
-      {
-        ObjIter = rSubroutineObjectMap.find(rMethodName);
-
-        if (ObjIter != rSubroutineObjectMap.end())
-        {
-          pSubprogramObj = (const AdtFortranBase*)(const AdtParser*)(*ObjIter).second;
-        }
-      }
-
-      if (pSubprogramObj != 0)
-      {
-        pSubprogramObj->writeDelphi(pOutFile, DELPHI_MODE_FUNCTION_DECLARATION);
-      }
-    }
-
-    AdtFortranName::setClearPrefix(0);
-    AdtFortranBase::setChangePrefix(0, 0);
 
     pOutFile.decrementIndent();
     pOutFile.newline();
@@ -6319,11 +6464,13 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
 
     AdtAutoClass::writeInterfaceGlobalsDeclInclude(pOutFile,
                                                    DelphiSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     AdtAutoClass::writeConstructorDeclInclude(pOutFile,
                                               DelphiSourceFileType,
-                                              pClassName);
+                                              pClassName,
+                                              pPathPrefix);
 
     pOutFile.decrementIndent();
     pOutFile.decrementIndent();
@@ -6830,15 +6977,18 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
 
     AdtAutoClass::writeInterfaceMethodsImplInclude(pOutFile,
                                                    DelphiSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     AdtAutoClass::writeInterfaceGlobalsImplInclude(pOutFile,
                                                    DelphiSourceFileType,
-                                                   pClassName);
+                                                   pClassName,
+                                                   pPathPrefix);
 
     AdtAutoClass::writeConstructorImplInclude(pOutFile,
                                               DelphiSourceFileType,
-                                              pClassName);
+                                              pClassName,
+                                              pPathPrefix);
 
     pOutFile.decrementIndent();
     pOutFile.newline();
@@ -6888,7 +7038,8 @@ bool AdtFortranExecutableProgram::hasClass(const char* pClassName,
 
 bool AdtFortranExecutableProgram::buildBlackBoxFile(const char* pBlackBoxFileName,
                                                     AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                                    AdtStringByStringMap& rRegardAsClassSubroutineMap)
+                                                    AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                                    double dVersionNumber)
 {
   bool bBuilt = false;
 
@@ -6924,6 +7075,7 @@ bool AdtFortranExecutableProgram::expandMacros()
 bool AdtFortranExecutableProgram::extractClassConstructors(AdtStringList& rConstructorList,
                                                            const char* pClassName,
                                                            const char* pParentClassName,
+                                                           const char* pPathPrefix,
                                                            AdtSourceFileType nAsFileType) const
 {
   return (false);
@@ -7530,6 +7682,8 @@ AdtFortranProgramConstruct::AdtFortranProgramConstruct(AdtParser* pLblDefObj,
   initObject(Name,        pNameObj,       AdtFortranName,   true);
   initObject(Body,        pBodyObj,       AdtFortranBody,   true);
   initObject(EndLblDef,   pEndLblDefObj,  AdtFortranLblDef, true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -7541,6 +7695,8 @@ AdtFortranProgramConstruct::AdtFortranProgramConstruct(const AdtFortranProgramCo
   copyObject(Name,        rCopy,  AdtFortranName);
   copyObject(Body,        rCopy,  AdtFortranBody);
   copyObject(EndLblDef,   rCopy,  AdtFortranLblDef);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -7557,6 +7713,11 @@ AdtFortranProgramConstruct::~AdtFortranProgramConstruct()
 
 AdtFile& AdtFortranProgramConstruct::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -7564,6 +7725,11 @@ AdtFile& AdtFortranProgramConstruct::writeCPP(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranProgramConstruct::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -7571,6 +7737,8 @@ AdtFile& AdtFortranProgramConstruct::writeDelphi(AdtFile& pOutFile, int nMode) c
 
 AdtFile& AdtFortranProgramConstruct::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -7994,7 +8162,11 @@ AdtFile& AdtFortranFunctionSubprogram::writeDelphi(AdtFile& pOutFile, int nMode)
 
         if (VarList.size() > 0)
         {
-          write(pOutFile, "Var");
+          if (!FunctionStmt->hasVarDeclarations())
+          {
+            write(pOutFile, "Var");
+          }
+
           pOutFile.incrementIndent();
           pOutFile.newline();
 
@@ -8208,7 +8380,11 @@ AdtFile& AdtFortranSubroutineSubprogram::writeDelphi(AdtFile& pOutFile, int nMod
 
         if (VarList.size() > 0)
         {
-          write(pOutFile, "Var");
+          if (!SubroutineStmt->hasVarDeclarations())
+          {
+            write(pOutFile, "Var");
+          }
+
           pOutFile.incrementIndent();
           pOutFile.newline();
 
@@ -9465,6 +9641,49 @@ implType(AdtFortranRelOp, AdtFortranBase);
 //  ----------------------------------------------------------------------------
 //  AdtFortranTypeDeclarationStmt method implementations
 //  ----------------------------------------------------------------------------
+void AdtFortranTypeDeclarationStmt::initIntent()
+{
+  if (AttrSpecSeq != 0)
+  {
+    const AdtParser* pObj = AttrSpecSeq->findObject("AdtFortranIntentSpec");
+
+    if (pObj != 0)
+    {
+      const AdtFortranIntentSpec* pIntentSpec = (const AdtFortranIntentSpec*)pObj;
+
+      switch(pIntentSpec->intent())
+      {
+        case ForIntent_IN:
+        {
+          IsConst   = true;
+          IsOutOnly = false;
+          break;
+        }
+
+        case ForIntent_OUT:
+        {
+          IsConst   = false;
+          IsOutOnly = true;
+          break;
+        }
+
+        case ForIntent_INOUT:
+        case ForIntent_IN_OUT:
+        default:
+        {
+          IsConst   = false;
+          IsOutOnly = false;
+          break;
+        }
+      }
+
+      HasIntent = true;
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtFortranTypeDeclarationStmt::AdtFortranTypeDeclarationStmt(AdtParser* pLblDefObj,
                                                              AdtParser* pTypeSpecObj,
                                                              AdtParser* pAttrSpecSeqObj,
@@ -9479,6 +9698,11 @@ AdtFortranTypeDeclarationStmt::AdtFortranTypeDeclarationStmt(AdtParser* pLblDefO
   Dimensions  = 0;
   IsConst     = false;
   IsOutOnly   = false;
+  HasIntent   = false;
+
+  initIntent();
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -9494,6 +9718,9 @@ AdtFortranTypeDeclarationStmt::AdtFortranTypeDeclarationStmt(const AdtFortranTyp
   Dimensions  = rCopy.Dimensions;
   IsConst     = rCopy.IsConst;
   IsOutOnly   = rCopy.IsOutOnly;
+  HasIntent   = rCopy.HasIntent;
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -9678,6 +9905,11 @@ void AdtFortranTypeDeclarationStmt::splitAndEnumerate(AdtParser* pParentObj, Adt
 
 AdtFile& AdtFortranTypeDeclarationStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if ((EntityDeclList != 0) && (EntityDeclList->listSize() == 0) || ((TypeSpec != 0) && TypeSpec->isUnknown()))
   {
     //Do nothing
@@ -9819,6 +10051,11 @@ AdtFile& AdtFortranTypeDeclarationStmt::writeCPP(AdtFile& pOutFile, int nMode) c
 
 AdtFile& AdtFortranTypeDeclarationStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if ((EntityDeclList != 0) && (EntityDeclList->listSize() == 0) || ((TypeSpec != 0) && TypeSpec->isUnknown()))
   {
     //Do nothing
@@ -9902,6 +10139,8 @@ AdtFile& AdtFortranTypeDeclarationStmt::writeDelphi(AdtFile& pOutFile, int nMode
 
 AdtFile& AdtFortranTypeDeclarationStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if ((EntityDeclList != 0) && (EntityDeclList->listSize() == 0) || ((TypeSpec != 0) && TypeSpec->isUnknown()))
   {
     //Do nothing
@@ -10169,7 +10408,25 @@ AdtFile& AdtFortranTypeSpec::writeCPP(AdtFile& pOutFile, int nMode) const
 
     case ForType_LOGICAL:
     {
-      write(pOutFile, "bool ");
+      const char* pTypeName = 0;
+
+      switch (ByteLength)
+      {
+        case 0:
+        default:
+        {
+          pTypeName = "bool ";
+          break;
+        }
+
+        case 4:
+        {
+          pTypeName = "longbool ";
+          break;
+        }
+      }
+
+      write(pOutFile, pTypeName);
       break;
     }
 
@@ -10337,7 +10594,25 @@ AdtFile& AdtFortranTypeSpec::writeDelphi(AdtFile& pOutFile, int nMode) const
 
     case ForType_LOGICAL:
     {
-      write(pOutFile, "boolean ");
+      const char* pTypeName = 0;
+
+      switch (ByteLength)
+      {
+        case 0:
+        default:
+        {
+          pTypeName = "boolean ";
+          break;
+        }
+
+        case 4:
+        {
+          pTypeName = "longbool ";
+          break;
+        }
+      }
+
+      write(pOutFile, pTypeName);
       break;
     }
 
@@ -10441,7 +10716,25 @@ AdtFile& AdtFortranTypeSpec::writeFortran(AdtFile& pOutFile, int nMode) const
 
     case ForType_LOGICAL:
     {
-      write(pOutFile, "LOGICAL ");
+      const char* pTypeName = 0;
+
+      switch (ByteLength)
+      {
+        case 0:
+        default:
+        {
+          pTypeName = "LOGICAL ";
+          break;
+        }
+
+        case 4:
+        {
+          pTypeName = "LOGICAL(4) ";
+          break;
+        }
+      }
+
+      write(pOutFile, pTypeName);
       break;
     }
 
@@ -10573,43 +10866,43 @@ AdtFile& AdtFortranAttrSpec::writeFortran(AdtFile& pOutFile, int nMode) const
   {
     case ForAttr_PARAMETER:
     {
-      write(pOutFile, "parameter ");
+      write(pOutFile, "PARAMETER ");
       break;
     }
 
     case ForAttr_PUBLIC:
     {
-      write(pOutFile, "public ");
+      write(pOutFile, "PUBLIC ");
       break;
     }
 
     case ForAttr_PROTECTED:
     {
-      write(pOutFile, "protected ");
+      write(pOutFile, "PROTECTED ");
       break;
     }
 
     case ForAttr_PRIVATE:
     {
-      write(pOutFile, "private ");
+      write(pOutFile, "PRIVATE ");
       break;
     }
 
     case ForAttr_INTRINSIC:
     {
-      write(pOutFile, "intrinsic ");
+      write(pOutFile, "INTRINSIC ");
       break;
     }
 
     case ForAttr_EXTERNAL:
     {
-      write(pOutFile, "external ");
+      write(pOutFile, "EXTERNAL ");
       break;
     }
 
     case ForAttr_DIMENSION:
     {
-      write(pOutFile, "dimension (");
+      write(pOutFile, "DIMENSION (");
 
       if (ShapeSpecList != 0)
       {
@@ -10622,7 +10915,7 @@ AdtFile& AdtFortranAttrSpec::writeFortran(AdtFile& pOutFile, int nMode) const
 
     case ForAttr_INTENT:
     {
-      write(pOutFile, "intent ");
+      write(pOutFile, "INTENT ");
 
       if (IntentSpec != 0)
       {
@@ -11350,6 +11643,8 @@ AdtFortranDimensionStmt::AdtFortranDimensionStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,              pLblDefObj,               AdtFortranLblDef,               true);
   initObject(ArrayDeclaratorList, pArrayDeclaratorListObj,  AdtFortranArrayDeclaratorList,  true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -11359,6 +11654,8 @@ AdtFortranDimensionStmt::AdtFortranDimensionStmt(const AdtFortranDimensionStmt& 
 {
   copyObject(LblDef,              rCopy,  AdtFortranLblDef);
   copyObject(ArrayDeclaratorList, rCopy,  AdtFortranArrayDeclaratorList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -11373,6 +11670,11 @@ AdtFortranDimensionStmt::~AdtFortranDimensionStmt()
 
 AdtFile& AdtFortranDimensionStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (nMode == 1)
   {
     pOutFile.newline();
@@ -11390,6 +11692,11 @@ AdtFile& AdtFortranDimensionStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranDimensionStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (nMode == 1)
   {
     pOutFile.newline();
@@ -11407,6 +11714,8 @@ AdtFile& AdtFortranDimensionStmt::writeDelphi(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranDimensionStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -11570,6 +11879,8 @@ AdtFortranParameterStmt::AdtFortranParameterStmt(const AdtFortranParameterStmt& 
 {
   copyObject(LblDef,                rCopy,  AdtFortranLblDef);
   copyObject(NamedConstantDefList,  rCopy,  AdtFortranNamedConstantDefList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -11578,12 +11889,19 @@ AdtFortranParameterStmt::~AdtFortranParameterStmt()
 {
   UtlReleaseReference(LblDef);
   UtlReleaseReference(NamedConstantDefList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
 
 AdtFile& AdtFortranParameterStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (nMode == 1)
   {
     if (NamedConstantDefList != 0)
@@ -11599,6 +11917,11 @@ AdtFile& AdtFortranParameterStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranParameterStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (nMode == 1)
   {
     if (NamedConstantDefList != 0)
@@ -11614,6 +11937,8 @@ AdtFile& AdtFortranParameterStmt::writeDelphi(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranParameterStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -12261,7 +12586,7 @@ bool AdtFortranSubscriptTriplet::lowerIndex(string& sLowerIndex) const
 
   if (pExpr != 0)
   {
-    AdtFile StringFile(true);
+    AdtFile StringFile;
 
     sLowerIndex = "";
 
@@ -12322,7 +12647,7 @@ bool AdtFortranSubscriptTriplet::upperIndex(string& sUpperIndex) const
 
   if (pExpr != 0)
   {
-    AdtFile StringFile(true);
+    AdtFile StringFile;
 
     sUpperIndex = "";
 
@@ -12386,7 +12711,7 @@ bool AdtFortranSubscriptTriplet::stride(string& sStride) const
 
   if (pExpr != 0)
   {
-    AdtFile StringFile(true);
+    AdtFile StringFile;
 
     sStride = "";
 
@@ -12895,6 +13220,16 @@ void AdtFortranPrimary::implementSliceFixups(const AdtFortranVariableInfo& rVarI
     }
 
     UtlReleaseReference(pSectionSubscriptList);
+  }
+
+  if (Expr != 0)
+  {
+    Expr->implementSliceFixups(rVarInfo, rSliceLoopVars);
+  }
+
+  if (Expr2 != 0)
+  {
+    Expr2->implementSliceFixups(rVarInfo, rSliceLoopVars);
   }
 }
 
@@ -14605,6 +14940,8 @@ AdtFortranAssignmentStmt::AdtFortranAssignmentStmt(AdtParser* pLblDefObj,
   {
     name(Name->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -14622,6 +14959,8 @@ AdtFortranAssignmentStmt::AdtFortranAssignmentStmt(const AdtFortranAssignmentStm
   {
     name(Name->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -14699,7 +15038,7 @@ bool AdtFortranAssignmentStmt::implementSliceFixups(AdtStringByStringMap& rAdded
     // Do we have slices or is the destination an array without indexing, ie A instead of A(3)
     if (hasSlice(nTriplets) || bNonIndexedArray)
     {
-      AdtFile                         StringFile(true);
+      AdtFile                         StringFile;
       string                          OriginalConstruct;
       string                          NewConstruct;
       string                          sLabel;
@@ -15066,6 +15405,11 @@ bool AdtFortranAssignmentStmt::replace(AdtFortranPrimary* pPrimaryObj)
 
 AdtFile& AdtFortranAssignmentStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -15116,6 +15460,11 @@ AdtFile& AdtFortranAssignmentStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranAssignmentStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -15166,6 +15515,8 @@ AdtFile& AdtFortranAssignmentStmt::writeDelphi(AdtFile& pOutFile, int nMode) con
 
 AdtFile& AdtFortranAssignmentStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -15724,6 +16075,8 @@ AdtFortranWhereBodyConstructBlock::AdtFortranWhereBodyConstructBlock(AdtParser* 
  : AdtFortranBase()
 {
   add(pWhereBodyConstructObj);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -15731,7 +16084,7 @@ AdtFortranWhereBodyConstructBlock::AdtFortranWhereBodyConstructBlock(AdtParser* 
 AdtFortranWhereBodyConstructBlock::AdtFortranWhereBodyConstructBlock(const AdtFortranWhereBodyConstructBlock& rCopy)
  : AdtFortranBase(rCopy)
 {
-
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -15773,6 +16126,8 @@ AdtFile& AdtFortranWhereBodyConstructBlock::writeDelphi(AdtFile& pOutFile, int n
 
 AdtFile& AdtFortranWhereBodyConstructBlock::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   pOutFile.incrementIndent();
   pOutFile.newline();
 
@@ -15981,6 +16336,8 @@ AdtFortranMaskedElsewhereStmt::AdtFortranMaskedElsewhereStmt(AdtParser* pLblDefO
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Expr,    pExprObj,   AdtFortranExpr,   true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -15991,6 +16348,8 @@ AdtFortranMaskedElsewhereStmt::AdtFortranMaskedElsewhereStmt(const AdtFortranMas
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Expr,    rCopy,  AdtFortranExpr);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16034,6 +16393,8 @@ AdtFile& AdtFortranMaskedElsewhereStmt::writeDelphi(AdtFile& pOutFile, int nMode
 
 AdtFile& AdtFortranMaskedElsewhereStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -16072,6 +16433,8 @@ AdtFortranElsewhereStmt::AdtFortranElsewhereStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16081,6 +16444,8 @@ AdtFortranElsewhereStmt::AdtFortranElsewhereStmt(const AdtFortranElsewhereStmt& 
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16123,6 +16488,8 @@ AdtFile& AdtFortranElsewhereStmt::writeDelphi(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranElsewhereStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -16154,6 +16521,8 @@ AdtFortranEndWhereStmt::AdtFortranEndWhereStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16163,6 +16532,8 @@ AdtFortranEndWhereStmt::AdtFortranEndWhereStmt(const AdtFortranEndWhereStmt& rCo
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16205,6 +16576,8 @@ AdtFile& AdtFortranEndWhereStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranEndWhereStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -16815,6 +17188,8 @@ AdtFortranIfThenStmt::AdtFortranIfThenStmt(AdtParser* pLblDefObj,
   {
     name(Name->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16825,6 +17200,8 @@ AdtFortranIfThenStmt::AdtFortranIfThenStmt(const AdtFortranIfThenStmt& rCopy)
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Expr,    rCopy,  AdtFortranExpr);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16840,6 +17217,11 @@ AdtFortranIfThenStmt::~AdtFortranIfThenStmt()
 
 AdtFile& AdtFortranIfThenStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -16871,6 +17253,11 @@ AdtFile& AdtFortranIfThenStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranIfThenStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -16902,6 +17289,8 @@ AdtFile& AdtFortranIfThenStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranIfThenStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -16945,6 +17334,8 @@ AdtFortranElseIfStmt::AdtFortranElseIfStmt(AdtParser* pLblDefObj,
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Expr,    pExprObj,   AdtFortranExpr,   true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16955,6 +17346,8 @@ AdtFortranElseIfStmt::AdtFortranElseIfStmt(const AdtFortranElseIfStmt& rCopy)
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Expr,    rCopy,  AdtFortranExpr);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -16970,6 +17363,11 @@ AdtFortranElseIfStmt::~AdtFortranElseIfStmt()
 
 AdtFile& AdtFortranElseIfStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -16998,6 +17396,11 @@ AdtFile& AdtFortranElseIfStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranElseIfStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -17026,6 +17429,8 @@ AdtFile& AdtFortranElseIfStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranElseIfStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -17064,6 +17469,8 @@ AdtFortranElseStmt::AdtFortranElseStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17073,6 +17480,8 @@ AdtFortranElseStmt::AdtFortranElseStmt(const AdtFortranElseStmt& rCopy)
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17087,6 +17496,11 @@ AdtFortranElseStmt::~AdtFortranElseStmt()
 
 AdtFile& AdtFortranElseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -17108,6 +17522,11 @@ AdtFile& AdtFortranElseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranElseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -17129,6 +17548,8 @@ AdtFile& AdtFortranElseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranElseStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -17165,6 +17586,8 @@ AdtFortranEndIfStmt::AdtFortranEndIfStmt(AdtParser* pLblDefObj,
   {
     name(Name->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17174,6 +17597,8 @@ AdtFortranEndIfStmt::AdtFortranEndIfStmt(const AdtFortranEndIfStmt& rCopy)
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17188,6 +17613,11 @@ AdtFortranEndIfStmt::~AdtFortranEndIfStmt()
 
 AdtFile& AdtFortranEndIfStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   return (pOutFile);
@@ -17197,6 +17627,11 @@ AdtFile& AdtFortranEndIfStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranEndIfStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   return (pOutFile);
@@ -17206,6 +17641,8 @@ AdtFile& AdtFortranEndIfStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranEndIfStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -17381,7 +17818,7 @@ AdtFile& AdtFortranIfStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 void AdtFortranIfStmt::equivalentIfThenCode(string& rCodeString) const
 {
-  AdtFile File(true);
+  AdtFile File;
 
   File.open(rCodeString);
 
@@ -17781,6 +18218,8 @@ AdtFortranSelectCaseStmt::AdtFortranSelectCaseStmt(AdtParser* pLblDefObj,
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
   initObject(Expr,    pExprObj,   AdtFortranExpr,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17791,6 +18230,8 @@ AdtFortranSelectCaseStmt::AdtFortranSelectCaseStmt(const AdtFortranSelectCaseStm
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Name,    rCopy,  AdtFortranName);
   copyObject(Expr,    rCopy,  AdtFortranExpr);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17806,6 +18247,11 @@ AdtFortranSelectCaseStmt::~AdtFortranSelectCaseStmt()
 
 AdtFile& AdtFortranSelectCaseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -17842,6 +18288,11 @@ AdtFile& AdtFortranSelectCaseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranSelectCaseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -17873,6 +18324,8 @@ AdtFile& AdtFortranSelectCaseStmt::writeDelphi(AdtFile& pOutFile, int nMode) con
 
 AdtFile& AdtFortranSelectCaseStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -17916,6 +18369,8 @@ AdtFortranCaseStmt::AdtFortranCaseStmt(AdtParser* pLblDefObj,
   initObject(LblDef,        pLblDefObj,       AdtFortranLblDef,       true);
   initObject(CaseSelector,  pCaseSelectorObj, AdtFortranCaseSelector, true);
   initObject(Name,          pNameObj,         AdtFortranName,         true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17926,6 +18381,8 @@ AdtFortranCaseStmt::AdtFortranCaseStmt(const AdtFortranCaseStmt& rCopy)
   copyObject(LblDef,        rCopy,  AdtFortranLblDef);
   copyObject(CaseSelector,  rCopy,  AdtFortranCaseSelector);
   copyObject(Name,          rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -17941,6 +18398,11 @@ AdtFortranCaseStmt::~AdtFortranCaseStmt()
 
 AdtFile& AdtFortranCaseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -17964,6 +18426,11 @@ AdtFile& AdtFortranCaseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranCaseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -17985,6 +18452,8 @@ AdtFile& AdtFortranCaseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranCaseStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -18044,6 +18513,11 @@ AdtFortranEndSelectStmt::~AdtFortranEndSelectStmt()
 
 AdtFile& AdtFortranEndSelectStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -18064,6 +18538,11 @@ AdtFile& AdtFortranEndSelectStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranEndSelectStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -18081,6 +18560,8 @@ AdtFile& AdtFortranEndSelectStmt::writeDelphi(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranEndSelectStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -18362,6 +18843,8 @@ AdtFortranDoConstruct::AdtFortranDoConstruct(AdtParser* pLblDefObj,
   {
     name(Name->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -18376,7 +18859,8 @@ AdtFortranDoConstruct::AdtFortranDoConstruct(const AdtFortranDoConstruct& rCopy)
   copyObject(ConditionalBody, rCopy,  AdtFortranConditionalBody);
   copyObject(EndDoStmt,       rCopy,  AdtFortranEndDoStmt);
 
-  HasComma = rCopy.HasComma;
+  HasComma        = rCopy.HasComma;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -18395,6 +18879,11 @@ AdtFortranDoConstruct::~AdtFortranDoConstruct()
 
 AdtFile& AdtFortranDoConstruct::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   if (LoopControl != 0)
@@ -18452,6 +18941,11 @@ AdtFile& AdtFortranDoConstruct::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranDoConstruct::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   if (LoopControl != 0)
@@ -18509,6 +19003,8 @@ AdtFile& AdtFortranDoConstruct::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranDoConstruct::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -18893,6 +19389,11 @@ AdtFortranEndDoStmt::~AdtFortranEndDoStmt()
 
 AdtFile& AdtFortranEndDoStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.decrementIndent();
   pOutFile.homeline();
 
@@ -18913,6 +19414,11 @@ AdtFile& AdtFortranEndDoStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranEndDoStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.decrementIndent();
   pOutFile.homeline();
 
@@ -18933,6 +19439,8 @@ AdtFile& AdtFortranEndDoStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranEndDoStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   pOutFile.decrementIndent();
   pOutFile.homeline();
 
@@ -18968,6 +19476,8 @@ AdtFortranCycleStmt::AdtFortranCycleStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -18977,6 +19487,8 @@ AdtFortranCycleStmt::AdtFortranCycleStmt(const AdtFortranCycleStmt& rCopy)
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -18991,6 +19503,11 @@ AdtFortranCycleStmt::~AdtFortranCycleStmt()
 
 AdtFile& AdtFortranCycleStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
   write(pOutFile, "continue;");
   pOutFile.newline();
@@ -19002,6 +19519,11 @@ AdtFile& AdtFortranCycleStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranCycleStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
   write(pOutFile, "continue()");
   pOutFile.newline();
@@ -19013,6 +19535,8 @@ AdtFile& AdtFortranCycleStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranCycleStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19044,6 +19568,8 @@ AdtFortranExitStmt::AdtFortranExitStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(Name,    pNameObj,   AdtFortranName,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19053,6 +19579,8 @@ AdtFortranExitStmt::AdtFortranExitStmt(const AdtFortranExitStmt& rCopy)
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(Name,    rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19067,6 +19595,11 @@ AdtFortranExitStmt::~AdtFortranExitStmt()
 
 AdtFile& AdtFortranExitStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
   write(pOutFile, "break;");
   pOutFile.newline();
@@ -19078,6 +19611,11 @@ AdtFile& AdtFortranExitStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranExitStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
   write(pOutFile, "break()");
   pOutFile.newline();
@@ -19089,6 +19627,8 @@ AdtFile& AdtFortranExitStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranExitStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19120,6 +19660,8 @@ AdtFortranGotoStmt::AdtFortranGotoStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,  pLblDefObj, AdtFortranLblDef, true);
   initObject(LblRef,  pLblRefObj, AdtFortranLblRef, true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19129,6 +19671,8 @@ AdtFortranGotoStmt::AdtFortranGotoStmt(const AdtFortranGotoStmt& rCopy)
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
   copyObject(LblRef,  rCopy,  AdtFortranLblRef);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19143,6 +19687,11 @@ AdtFortranGotoStmt::~AdtFortranGotoStmt()
 
 AdtFile& AdtFortranGotoStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -19165,6 +19714,11 @@ AdtFile& AdtFortranGotoStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranGotoStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -19187,6 +19741,8 @@ AdtFile& AdtFortranGotoStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranGotoStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19224,6 +19780,8 @@ AdtFortranArithmeticIfStmt::AdtFortranArithmeticIfStmt(AdtParser* pLblDefObj,
   initObject(LblRef,  pLblRefObj,   AdtFortranLblRef, true);
   initObject(LblRef2, pLblRef2Obj,  AdtFortranLblRef, true);
   initObject(LblRef3, pLblRef3Obj,  AdtFortranLblRef, true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19236,6 +19794,8 @@ AdtFortranArithmeticIfStmt::AdtFortranArithmeticIfStmt(const AdtFortranArithmeti
   copyObject(LblRef,  rCopy,  AdtFortranLblRef);
   copyObject(LblRef2, rCopy,  AdtFortranLblRef);
   copyObject(LblRef3, rCopy,  AdtFortranLblRef);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19253,12 +19813,98 @@ AdtFortranArithmeticIfStmt::~AdtFortranArithmeticIfStmt()
 
 AdtFile& AdtFortranArithmeticIfStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  pOutFile.newline();
-  ::printf("ERROR: Arithmetic IF not supported on "
-           "line %d in file %s\n", lineNumber(),
-                                   fileName());
-  AdtExit(-1);
-  pOutFile.newline();
+  if ((Expr    != 0) &&
+      (LblRef  != 0) &&
+      (LblRef2 != 0) &&
+      (LblRef3 != 0))
+  {
+    string rComment;
+
+    pOutFile.newline();
+
+    translateComment(rComment, AdtParserCodeCPP, true);
+    writeExpanded(pOutFile, rComment);
+
+    if (LblDef != 0)
+    {
+      LblDef->writeCPP(pOutFile, nMode);
+    }
+
+    write(pOutFile, "if ((");
+
+    Expr->writeCPP(pOutFile, nMode);
+
+    write(pOutFile, ") < 0)");
+
+    pOutFile.newline();
+
+    write(pOutFile, "{");
+
+    pOutFile.incrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "goto ");
+
+    LblRef->writeCPP(pOutFile, nMode);
+
+    write(pOutFile, ";");
+
+    pOutFile.decrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "}");
+
+    pOutFile.newline();
+
+    write(pOutFile, "else if ((");
+
+    Expr->writeCPP(pOutFile, nMode);
+
+    write(pOutFile, ") == 0)");
+
+    pOutFile.newline();
+
+    write(pOutFile, "{");
+
+    pOutFile.incrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "goto ");
+
+    LblRef2->writeCPP(pOutFile, nMode);
+
+    write(pOutFile, ";");
+
+    pOutFile.decrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "}");
+
+    pOutFile.newline();
+
+    write(pOutFile, "else");
+
+    pOutFile.newline();
+
+    write(pOutFile, "{");
+
+    pOutFile.incrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "goto ");
+
+    LblRef3->writeCPP(pOutFile, nMode);
+
+    write(pOutFile, ";");
+
+    pOutFile.decrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "}");
+
+    pOutFile.newline();
+    pOutFile.newline();
+  }
 
   return (pOutFile);
 }
@@ -19267,12 +19913,98 @@ AdtFile& AdtFortranArithmeticIfStmt::writeCPP(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranArithmeticIfStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  pOutFile.newline();
-  ::printf("ERROR: Arithmetic IF not supported on "
-           "line %d in file %s\n", lineNumber(),
-                                   fileName());
-  AdtExit(-1);
-  pOutFile.newline();
+  if ((Expr    != 0) &&
+      (LblRef  != 0) &&
+      (LblRef2 != 0) &&
+      (LblRef3 != 0))
+  {
+    string rComment;
+
+    pOutFile.newline();
+
+    translateComment(rComment, AdtParserCodeDelphi, true);
+    writeExpanded(pOutFile, rComment);
+
+    if (LblDef != 0)
+    {
+      LblDef->writeDelphi(pOutFile, nMode);
+    }
+
+    write(pOutFile, "if ((");
+
+    Expr->writeDelphi(pOutFile, nMode);
+
+    write(pOutFile, ") < 0) then");
+
+    pOutFile.newline();
+
+    write(pOutFile, "begin");
+
+    pOutFile.incrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "goto ");
+
+    LblRef->writeDelphi(pOutFile, nMode);
+
+    write(pOutFile, ";");
+
+    pOutFile.decrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "end");
+
+    pOutFile.newline();
+
+    write(pOutFile, "else if ((");
+
+    Expr->writeDelphi(pOutFile, nMode);
+
+    write(pOutFile, ") = 0) then");
+
+    pOutFile.newline();
+
+    write(pOutFile, "begin");
+
+    pOutFile.incrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "goto ");
+
+    LblRef2->writeDelphi(pOutFile, nMode);
+
+    write(pOutFile, ";");
+
+    pOutFile.decrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "end");
+
+    pOutFile.newline();
+
+    write(pOutFile, "else");
+
+    pOutFile.newline();
+
+    write(pOutFile, "begin");
+
+    pOutFile.incrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "goto ");
+
+    LblRef3->writeDelphi(pOutFile, nMode);
+
+    write(pOutFile, ";");
+
+    pOutFile.decrementIndent();
+    pOutFile.newline();
+
+    write(pOutFile, "end;");
+
+    pOutFile.newline();
+    pOutFile.newline();
+  }
 
   return (pOutFile);
 }
@@ -19281,38 +20013,35 @@ AdtFile& AdtFortranArithmeticIfStmt::writeDelphi(AdtFile& pOutFile, int nMode) c
 
 AdtFile& AdtFortranArithmeticIfStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  if (LblDef != 0)
+  if ((Expr    != 0) &&
+      (LblRef  != 0) &&
+      (LblRef2 != 0) &&
+      (LblRef3 != 0))
   {
-    LblDef->writeFortran(pOutFile, nMode);
-  }
+    writeExpanded(pOutFile, comment());
 
-  write(pOutFile, "IF (");
+    if (LblDef != 0)
+    {
+      LblDef->writeFortran(pOutFile, nMode);
+    }
 
-  if (Expr != 0)
-  {
+    write(pOutFile, "IF (");
+
     Expr->writeFortran(pOutFile, nMode);
-  }
 
-  write(pOutFile, ") ");
+    write(pOutFile, ") ");
 
-  if (LblRef != 0)
-  {
     LblRef->writeFortran(pOutFile, nMode);
-  }
 
-  if (LblRef2 != 0)
-  {
     write(pOutFile, ",");
     LblRef2->writeFortran(pOutFile, nMode);
-  }
 
-  if (LblRef3 != 0)
-  {
     write(pOutFile, ",");
     LblRef3->writeFortran(pOutFile, nMode);
-  }
 
-  pOutFile.newline();
+    pOutFile.newline();
+    pOutFile.newline();
+  }
 
   return (pOutFile);
 }
@@ -19329,6 +20058,8 @@ AdtFortranContinueStmt::AdtFortranContinueStmt(AdtParser* pLblDefObj)
  : AdtFortranBase()
 {
   initObject(LblDef,  pLblDefObj,   AdtFortranLblDef, true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19337,6 +20068,8 @@ AdtFortranContinueStmt::AdtFortranContinueStmt(const AdtFortranContinueStmt& rCo
  : AdtFortranBase(rCopy)
 {
   copyObject(LblDef,  rCopy,  AdtFortranLblDef);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19350,6 +20083,11 @@ AdtFortranContinueStmt::~AdtFortranContinueStmt()
 
 AdtFile& AdtFortranContinueStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19357,6 +20095,11 @@ AdtFile& AdtFortranContinueStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranContinueStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19364,6 +20107,8 @@ AdtFile& AdtFortranContinueStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranContinueStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19395,6 +20140,8 @@ AdtFortranModuleStmt::AdtFortranModuleStmt(AdtParser* pLblDefObj,
   {
     name(ModuleName->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19404,6 +20151,8 @@ AdtFortranModuleStmt::AdtFortranModuleStmt(const AdtFortranModuleStmt& rCopy)
 {
   copyObject(LblDef,      rCopy,  AdtFortranLblDef);
   copyObject(ModuleName,  rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19446,6 +20195,8 @@ AdtFile& AdtFortranModuleStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranModuleStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19533,6 +20284,8 @@ AdtFile& AdtFortranEndModuleStmt::writeDelphi(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranEndModuleStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19569,6 +20322,8 @@ AdtFortranUseStmt::AdtFortranUseStmt(AdtParser* pLblDefObj,
   {
     name(Name->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19578,6 +20333,8 @@ AdtFortranUseStmt::AdtFortranUseStmt(const AdtFortranUseStmt& rCopy)
 {
   copyObject(LblDef,    rCopy,  AdtFortranLblDef);
   copyObject(Name,      rCopy,  AdtFortranName);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19592,6 +20349,11 @@ AdtFortranUseStmt::~AdtFortranUseStmt()
 
 AdtFile& AdtFortranUseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19599,6 +20361,11 @@ AdtFile& AdtFortranUseStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranUseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19606,6 +20373,8 @@ AdtFile& AdtFortranUseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranUseStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19641,7 +20410,8 @@ AdtFortranIntentStmt::AdtFortranIntentStmt(AdtParser* pLblDefObj,
   initObject(IntentSpec,  pIntentSpecObj, AdtFortranIntentSpec, true);
   initObject(NameList,    pNameListObj,   AdtFortranNameList,   true);
 
-  HasColonColon = bHasColonColon;
+  HasColonColon   = bHasColonColon;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19653,7 +20423,8 @@ AdtFortranIntentStmt::AdtFortranIntentStmt(const AdtFortranIntentStmt& rCopy)
   copyObject(IntentSpec,  rCopy,  AdtFortranIntentSpec);
   copyObject(NameList,    rCopy,  AdtFortranNameList);
 
-  HasColonColon = rCopy.HasColonColon;
+  HasColonColon   = rCopy.HasColonColon;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19669,6 +20440,11 @@ AdtFortranIntentStmt::~AdtFortranIntentStmt()
 
 AdtFile& AdtFortranIntentStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19676,6 +20452,11 @@ AdtFile& AdtFortranIntentStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranIntentStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19683,6 +20464,8 @@ AdtFile& AdtFortranIntentStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranIntentStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19808,6 +20591,8 @@ AdtFortranIntrinsicStmt::AdtFortranIntrinsicStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,    pLblDefObj,   AdtFortranLblDef,   true);
   initObject(NameList,  pNameListObj, AdtFortranNameList, true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19817,6 +20602,8 @@ AdtFortranIntrinsicStmt::AdtFortranIntrinsicStmt(const AdtFortranIntrinsicStmt& 
 {
   copyObject(LblDef,    rCopy,  AdtFortranLblDef);
   copyObject(NameList,  rCopy,  AdtFortranNameList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19831,6 +20618,11 @@ AdtFortranIntrinsicStmt::~AdtFortranIntrinsicStmt()
 
 AdtFile& AdtFortranIntrinsicStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19838,6 +20630,11 @@ AdtFile& AdtFortranIntrinsicStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranIntrinsicStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19845,6 +20642,8 @@ AdtFile& AdtFortranIntrinsicStmt::writeDelphi(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtFortranIntrinsicStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19878,7 +20677,8 @@ AdtFortranExternalStmt::AdtFortranExternalStmt(AdtParser* pLblDefObj,
   initObject(LblDef,    pLblDefObj,   AdtFortranLblDef,   true);
   initObject(NameList,  pNameListObj, AdtFortranNameList, true);
 
-  HasColon = bHasColon;
+  HasColon        = bHasColon;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19889,7 +20689,8 @@ AdtFortranExternalStmt::AdtFortranExternalStmt(const AdtFortranExternalStmt& rCo
   copyObject(LblDef,    rCopy,  AdtFortranLblDef);
   copyObject(NameList,  rCopy,  AdtFortranNameList);
 
-  HasColon = rCopy.HasColon;
+  HasColon        = rCopy.HasColon;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19904,6 +20705,11 @@ AdtFortranExternalStmt::~AdtFortranExternalStmt()
 
 AdtFile& AdtFortranExternalStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19911,6 +20717,11 @@ AdtFile& AdtFortranExternalStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranExternalStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -19918,6 +20729,8 @@ AdtFile& AdtFortranExternalStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranExternalStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -19961,6 +20774,8 @@ AdtFortranCallStmt::AdtFortranCallStmt(AdtParser* pLblDefObj,
   {
     name(Name->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19971,6 +20786,8 @@ AdtFortranCallStmt::AdtFortranCallStmt(const AdtFortranCallStmt& rCopy)
   copyObject(LblDef,                rCopy,  AdtFortranLblDef);
   copyObject(Name,                  rCopy,  AdtFortranName);
   copyObject(SectionSubscriptList,  rCopy,  AdtFortranSectionSubscriptList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -19986,6 +20803,11 @@ AdtFortranCallStmt::~AdtFortranCallStmt()
 
 AdtFile& AdtFortranCallStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -20013,6 +20835,11 @@ AdtFile& AdtFortranCallStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranCallStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -20040,6 +20867,8 @@ AdtFile& AdtFortranCallStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranCallStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (Name != 0)
   {
     if (LblDef != 0)
@@ -20096,6 +20925,8 @@ AdtFortranFunctionStmt::AdtFortranFunctionStmt(AdtParser* pLblDefObj,
   {
     name(FunctionName->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -20113,6 +20944,7 @@ AdtFortranFunctionStmt::AdtFortranFunctionStmt(const AdtFortranFunctionStmt& rCo
   EmptyParameterList  = rCopy.EmptyParameterList;
   Recursive           = rCopy.Recursive;
   IsVirtual           = rCopy.IsVirtual;
+  CanBindComments     = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -20340,6 +21172,11 @@ AdtFile& AdtFortranFunctionStmt::writeDelphiDeallocations(AdtFile& pOutFile) con
 
 AdtFile& AdtFortranFunctionStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -20412,6 +21249,11 @@ AdtFile& AdtFortranFunctionStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranFunctionStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -20481,6 +21323,8 @@ AdtFile& AdtFortranFunctionStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranFunctionStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -20786,6 +21630,11 @@ AdtFortranEndFunctionStmt::~AdtFortranEndFunctionStmt()
 
 AdtFile& AdtFortranEndFunctionStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -20793,6 +21642,11 @@ AdtFile& AdtFortranEndFunctionStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranEndFunctionStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -20800,6 +21654,8 @@ AdtFile& AdtFortranEndFunctionStmt::writeDelphi(AdtFile& pOutFile, int nMode) co
 
 AdtFile& AdtFortranEndFunctionStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -20845,6 +21701,8 @@ AdtFortranSubroutineStmt::AdtFortranSubroutineStmt(AdtParser* pLblDefObj,
   {
     name(SubroutineName->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -20860,6 +21718,7 @@ AdtFortranSubroutineStmt::AdtFortranSubroutineStmt(const AdtFortranSubroutineStm
   EmptyParameterList  = rCopy.EmptyParameterList;
   Recursive           = rCopy.Recursive;
   IsVirtual           = rCopy.IsVirtual;
+  CanBindComments     = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -21018,6 +21877,11 @@ AdtFile& AdtFortranSubroutineStmt::writeDelphiDeallocations(AdtFile& pOutFile) c
 
 AdtFile& AdtFortranSubroutineStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeCPP(pOutFile, nMode);
@@ -21071,6 +21935,11 @@ AdtFile& AdtFortranSubroutineStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranSubroutineStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   if (LblDef != 0)
   {
     LblDef->writeDelphi(pOutFile, nMode);
@@ -21118,6 +21987,8 @@ AdtFile& AdtFortranSubroutineStmt::writeDelphi(AdtFile& pOutFile, int nMode) con
 
 AdtFile& AdtFortranSubroutineStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -21196,6 +22067,11 @@ AdtFortranEndSubroutineStmt::~AdtFortranEndSubroutineStmt()
 
 AdtFile& AdtFortranEndSubroutineStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -21203,6 +22079,11 @@ AdtFile& AdtFortranEndSubroutineStmt::writeCPP(AdtFile& pOutFile, int nMode) con
 
 AdtFile& AdtFortranEndSubroutineStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -21210,6 +22091,8 @@ AdtFile& AdtFortranEndSubroutineStmt::writeDelphi(AdtFile& pOutFile, int nMode) 
 
 AdtFile& AdtFortranEndSubroutineStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -21241,6 +22124,8 @@ AdtFortranReturnStmt::AdtFortranReturnStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,    pLblDefObj,   AdtFortranLblDef, true);
   initObject(Expr,      pExprObj,     AdtFortranExpr,   true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -21250,6 +22135,8 @@ AdtFortranReturnStmt::AdtFortranReturnStmt(const AdtFortranReturnStmt& rCopy)
 {
   copyObject(LblDef,    rCopy, AdtFortranLblDef);
   copyObject(Expr,      rCopy, AdtFortranExpr);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -21264,6 +22151,11 @@ AdtFortranReturnStmt::~AdtFortranReturnStmt()
 
 AdtFile& AdtFortranReturnStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   if ((LblDef != 0) && !LblDef->isEmpty())
   {
     ::printf("ERROR: FORTRAN labelled return lost in translation to C++ on "
@@ -21287,6 +22179,11 @@ AdtFile& AdtFortranReturnStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranReturnStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   pOutFile.newline();
 
   if (LblDef != 0)
@@ -21312,6 +22209,8 @@ AdtFile& AdtFortranReturnStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranReturnStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);
@@ -21337,13 +22236,10 @@ implType(AdtFortranReturnStmt, AdtFortranBase);
 //  ----------------------------------------------------------------------------
 //  AdtFortranLblDef method implementations
 //  ----------------------------------------------------------------------------
-AdtFortranLblDef::AdtFortranLblDef(AdtParser* pIconObj,
-                                   const char* pComment)
+AdtFortranLblDef::AdtFortranLblDef(AdtParser* pIconObj)
  : AdtFortranBase()
 {
   initObject(Icon,  pIconObj, AdtFortranIcon, true);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -21411,11 +22307,10 @@ AdtFile& AdtFortranLblDef::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranLblDef::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Icon != 0)
   {
     Icon->writeFortran(pOutFile, nMode);
+    write(pOutFile, " ");
   }
 
   return (pOutFile);
@@ -21435,6 +22330,8 @@ AdtFortranImplicitStmt::AdtFortranImplicitStmt(AdtParser* pLblDefObj,
 {
   initObject(LblDef,            pLblDefObj,           AdtFortranLblDef,           true);
   initObject(ImplicitSpecList,  pImplicitSpecListObj, AdtFortranImplicitSpecList, true);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -21444,6 +22341,8 @@ AdtFortranImplicitStmt::AdtFortranImplicitStmt(const AdtFortranImplicitStmt& rCo
 {
   copyObject(LblDef,            rCopy, AdtFortranLblDef);
   copyObject(ImplicitSpecList,  rCopy, AdtFortranImplicitSpecList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -21458,6 +22357,11 @@ AdtFortranImplicitStmt::~AdtFortranImplicitStmt()
 
 AdtFile& AdtFortranImplicitStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeCPP, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -21465,6 +22369,11 @@ AdtFile& AdtFortranImplicitStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranImplicitStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
+  string rComment;
+
+  translateComment(rComment, AdtParserCodeDelphi, true);
+  writeExpanded(pOutFile, rComment);
+
   return (pOutFile);
 }
 
@@ -21472,6 +22381,8 @@ AdtFile& AdtFortranImplicitStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtFortranImplicitStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
+  writeExpanded(pOutFile, comment());
+
   if (LblDef != 0)
   {
     LblDef->writeFortran(pOutFile, nMode);

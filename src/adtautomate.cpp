@@ -133,8 +133,13 @@ const char* AdtAutoHelper::delphiType(AdtAutoType nType, int nDimensions) const
 
     case AdtAutoType_BOOL:
     {
-      pType = "";
-      FAIL();
+      pType = "ARRAY_%dB";
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = "ARRAY_%dLB";
       break;
     }
 
@@ -202,14 +207,13 @@ const char* AdtAutoHelper::delphiConstructorType(AdtAutoType nType) const
 
     case AdtAutoType_CHAR:
     {
-      pType = "";
+      pType = "pshortint";
       break;
     }
 
     case AdtAutoType_UNSIGNED_CHAR:
     {
-      pType = "";
-      FAIL();
+      pType = "pbyte";
       break;
     }
 
@@ -229,8 +233,13 @@ const char* AdtAutoHelper::delphiConstructorType(AdtAutoType nType) const
 
     case AdtAutoType_BOOL:
     {
-      pType = "";
-      FAIL();
+      pType = "pboolean";
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = "plongbool";
       break;
     }
 
@@ -317,6 +326,12 @@ const char* AdtAutoHelper::delphiType(AdtAutoType nType) const
     case AdtAutoType_BOOL:
     {
       pType = "boolean";
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = "longbool";
       break;
     }
 
@@ -413,6 +428,12 @@ const char* AdtAutoHelper::cppType(AdtAutoType nType, int nDimensions) const
     case AdtAutoType_BOOL:
     {
       pType = "ARRAY_%dB";
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = "ARRAY_%dLB";
       break;
     }
 
@@ -515,6 +536,12 @@ const char* AdtAutoHelper::cppType(AdtAutoType nType) const
       break;
     }
 
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = "longbool";
+      break;
+    }
+
     default:
     {
       FAIL();
@@ -548,11 +575,22 @@ const char* AdtAutoHelper::R_Type(AdtAutoType nType) const
     case AdtAutoType_LONG:
     case AdtAutoType_UNSIGNED_INT:
     case AdtAutoType_UNSIGNED_LONG:
+    {
+      pType = "INTSXP";
+      break;
+    }
+
     case AdtAutoType_CHAR:
     case AdtAutoType_UNSIGNED_CHAR:
     case AdtAutoType_BOOL:
     {
-      pType = "INTSXP";
+      pType = "RAWSXP";
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = "LGLSXP";
       break;
     }
 
@@ -583,17 +621,38 @@ const char* AdtAutoHelper::R_AccessType(AdtAutoType nType) const
       break;
     }
 
-    case AdtAutoType_SHORT:
     case AdtAutoType_UNSIGNED_SHORT:
+    case AdtAutoType_UNSIGNED_CHAR:
+    {
+      pType = "RAW";
+      break;
+    }
+
+    case AdtAutoType_SHORT:
+    case AdtAutoType_CHAR:
+    {
+      pType = "RAWCHAR";
+      break;
+    }
+
+    case AdtAutoType_BOOL:
+    {
+      pType = "RAWBOOL";
+      break;
+    }
+
     case AdtAutoType_INT:
     case AdtAutoType_LONG:
     case AdtAutoType_UNSIGNED_INT:
     case AdtAutoType_UNSIGNED_LONG:
-    case AdtAutoType_CHAR:
-    case AdtAutoType_UNSIGNED_CHAR:
-    case AdtAutoType_BOOL:
     {
       pType = "INTEGER";
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = "LONGBOOL";
       break;
     }
 
@@ -630,11 +689,22 @@ const char* AdtAutoHelper::R_CheckType(AdtAutoType nType, bool bIsCpp) const
     case AdtAutoType_LONG:
     case AdtAutoType_UNSIGNED_INT:
     case AdtAutoType_UNSIGNED_LONG:
+    {
+      pType = "Rf_isIntegerOrFactor";
+      break;
+    }
+
     case AdtAutoType_CHAR:
     case AdtAutoType_UNSIGNED_CHAR:
     case AdtAutoType_BOOL:
     {
-      pType = bIsCpp ? "isInteger" : "Rf_isInteger";
+      pType = bIsCpp ? "isRaw" : "Rf_isRaw";
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      pType = bIsCpp ? "isLogical" : "Rf_isLogical";
       break;
     }
 
@@ -710,7 +780,7 @@ void AdtAutoHelper::writeDelphiR_CheckType(AdtFile& rFile,
     rFile.write(R_CheckType(nType, false));
     rFile.write("(");
     rFile.write(pVar);
-    rFile.write(") = 0) then");
+    rFile.write(") = false) then");
     rFile.newline();
     rFile.write("begin");
     rFile.incrementIndent();
@@ -810,13 +880,38 @@ void AdtAutoHelper::writeDelphiR_GetterAndSetter(AdtFile& rFile,
     rFile.newline();
     rFile.write("function ");
     rFile.write(FunctionName);
-    rFile.write(bScalar ? "(rInstance : SEXP) : SEXP; cdecl;"
-                        : "(rInstance : SEXP; sArgList : SEXP) : SEXP; cdecl;");
+    rFile.write("(args : SEXP) : SEXP; cdecl;");
     rFile.newline();
     rFile.newline();
+    rFile.write("var");
+    rFile.incrementIndent();
+    rFile.newline();
+    rFile.write("rInstance : SEXP;");
+    rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("sArgList: SEXP;");
+      rFile.newline();
+    }
+
+    rFile.decrementIndent();
+    rFile.newline();
+
     rFile.write("begin");
     rFile.incrementIndent();
     rFile.newline();
+    rFile.write("args := R_CDR(args); rInstance := R_CAR(args);");
+    rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("args := R_CDR(args); sArgList := R_CAR(args);");
+      rFile.newline();
+    }
+
+    rFile.newline();
+
     writeDelphiR_CheckInstance(rFile, pClassName, pAliasName);
     rFile.newline();
     rFile.write("Result := ");
@@ -849,14 +944,44 @@ void AdtAutoHelper::writeDelphiR_GetterAndSetter(AdtFile& rFile,
 
     rFile.write("function ");
     rFile.write(FunctionName);
-    rFile.write("(rInstance, arg_");
+    rFile.write("(args : SEXP) : SEXP; cdecl;");
+    rFile.newline();
+    rFile.newline();
+    rFile.write("var");
+    rFile.incrementIndent();
+    rFile.newline();
+    rFile.write("rInstance : SEXP;");
+    rFile.newline();
+    rFile.write("arg_");
     rFile.write(pName);
-    rFile.write(bScalar ? " : SEXP) : SEXP; cdecl;"
-                        : " : SEXP; sArgList : SEXP) : SEXP; cdecl;");
+    rFile.write(" : SEXP;");
     rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("sArgList : SEXP;");
+      rFile.newline();
+    }
+
+    rFile.decrementIndent();
     rFile.newline();
+
     rFile.write("begin");
     rFile.incrementIndent();
+    rFile.newline();
+    rFile.write("args := R_CDR(args); rInstance := R_CAR(args);");
+    rFile.newline();
+    rFile.write("args := R_CDR(args); arg_");
+    rFile.write(pName);
+    rFile.write(" := R_CAR(args);");
+    rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("args := R_CDR(args); sArgList := R_CAR(args);");
+      rFile.newline();
+    }
+
     rFile.newline();
     writeDelphiR_CheckInstance(rFile, pClassName, pAliasName);
     rFile.newline();
@@ -872,7 +997,51 @@ void AdtAutoHelper::writeDelphiR_GetterAndSetter(AdtFile& rFile,
     rFile.newline();
     rFile.write("end;");
     rFile.newline();
+    rFile.newline();
   }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoHelper::writeDelphiR_GlobalGetter(AdtFile& rFile,
+                                              const char* pName,
+                                              const char* pAliasName,
+                                              AdtAutoType nType) const
+{
+  string  FunctionName;
+  string  ExportName;
+
+  // implement getter function
+  FunctionName  = pAliasName;
+  FunctionName += "_get_";
+  FunctionName += pName;
+
+  ExportName  = "_";
+  ExportName += pAliasName;
+  ExportName += ".get.";
+  ExportName += pName;
+
+  DelphiR_registerInterfaceRoutine(ExportName,
+                                   FunctionName,
+                                   0);
+
+  rFile.newline();
+  rFile.write("function ");
+  rFile.write(FunctionName);
+  rFile.write("() : SEXP; cdecl;");
+  rFile.newline();
+  rFile.newline();
+  rFile.write("begin");
+  rFile.incrementIndent();
+  rFile.newline();
+
+  writeDelphiR_Return(rFile, nType, pName);
+
+  rFile.decrementIndent();
+  rFile.newline();
+  rFile.write("end;");
+  rFile.newline();
+  rFile.newline();
 }
 
 //  ----------------------------------------------------------------------------
@@ -941,36 +1110,13 @@ void AdtAutoHelper::writeDelphiR_InterfaceDeclGlobals(AdtFile& rFile,
 
   for (cn = 0 ; cn < 2 ; cn++)
   {
-    AdtAutoAttributePtrListConstIter  Iter;
-    bool                              bFirst = true;
-
     // declare interface wrapper function
     rFile.write("function ");
     rFile.write(pAliasName);
     rFile.write("_R_");
     rFile.write(sPrefix[cn]);
     rFile.write(pName);
-    rFile.write("(rInstance : SEXP");
-
-    // declare function arguments
-    for (Iter = rArgumentList.begin() ; Iter != rArgumentList.end() ; ++Iter)
-    {
-      const AdtAutoAttribute* pAttribute = *Iter;
-
-      if (pAttribute != 0)
-      {
-        rFile.write("; ");
-        rFile.write(pAttribute->name().c_str());
-        rFile.write(" : SEXP");
-      }
-      else
-      {
-        // Should never happen
-        FAIL();
-      }
-    }
-
-    rFile.write(") : SEXP; cdecl;");
+    rFile.write("(args : SEXP) : SEXP; cdecl;");
     rFile.newline();
   }
 }
@@ -1508,31 +1654,62 @@ void AdtAutoHelper::writeDelphiR_InterfaceImplGlobals(AdtFile& rFile,
     // implement interface wrapper function
     rFile.write("function ");
     rFile.write(FunctionName);
-    rFile.write("(rInstance : SEXP");
+    rFile.write("(args : SEXP) : SEXP; cdecl;");
 
-    // declare function arguments
+    // declare locals for arguments
+    rFile.newline();
+    rFile.newline();
+    rFile.write("var");
+    rFile.incrementIndent();
+    rFile.newline();
+    rFile.write("rInstance : SEXP;");
+    rFile.newline();
+
     for (Iter = rArgumentList.begin() ; Iter != rArgumentList.end() ; ++Iter)
     {
       const AdtAutoAttribute* pAttribute = *Iter;
 
       if (pAttribute != 0)
       {
-        rFile.write("; ");
+        if (Iter != rArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
         rFile.write(pAttribute->name().c_str());
-        rFile.write(" : SEXP");
-      }
-      else
-      {
-        // Should never happen
-        FAIL();
+        rFile.write(" : SEXP;");
       }
     }
 
-    rFile.write(") : SEXP; cdecl;");
+    rFile.decrementIndent();
     rFile.newline();
     rFile.newline();
     rFile.write("begin");
     rFile.incrementIndent();
+    rFile.newline();
+
+    // Read .External args
+    rFile.write("args := R_CDR(args); rInstance := R_CAR(args);");
+    rFile.newline();
+
+    for (Iter = rArgumentList.begin() ; Iter != rArgumentList.end() ; ++Iter)
+    {
+      const AdtAutoAttribute* pAttribute = *Iter;
+
+      if (pAttribute != 0)
+      {
+        if (Iter != rArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
+        rFile.write("args := R_CDR(args); ");
+        rFile.write(pAttribute->name().c_str());
+        rFile.write(" := R_CAR(args);");
+      }
+    }
+
+    rFile.newline();
     rFile.newline();
     writeDelphiR_CheckInstance(rFile, pClassName, pAliasName);
     rFile.newline();
@@ -1752,11 +1929,31 @@ void AdtAutoHelper::writeCppR_GetterAndSetter(AdtFile& rFile,
     rFile.newline();
     rFile.write("EXPORT SEXP ");
     rFile.write(FunctionName);
-    rFile.write(bScalar ? "(SEXP rInstance)" : "(SEXP rInstance, SEXP sArgList)");
+    rFile.write("(SEXP args)");
     rFile.newline();
     rFile.write("{");
     rFile.incrementIndent();
     rFile.newline();
+    rFile.write("SEXP rInstance;");
+    rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("SEXP sArgList;");
+      rFile.newline();
+    }
+
+    rFile.write("args = CDR(args); rInstance = CAR(args);");
+    rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("args = CDR(args); sArgList = CAR(args);");
+      rFile.newline();
+    }
+
+    rFile.newline();
+
     writeCppR_CheckInstance(rFile, pR_TypeName);
     rFile.newline();
     rFile.write(pClassName);
@@ -1793,12 +1990,39 @@ void AdtAutoHelper::writeCppR_GetterAndSetter(AdtFile& rFile,
 
     rFile.write("EXPORT SEXP ");
     rFile.write(FunctionName);
-    rFile.write("(SEXP rInstance, SEXP arg_");
-    rFile.write(pName);
-    rFile.write(bScalar ? ")" : ", SEXP sArgList)");
+    rFile.write("(SEXP args)");
     rFile.newline();
     rFile.write("{");
     rFile.incrementIndent();
+    rFile.newline();
+    rFile.write("SEXP rInstance;");
+    rFile.newline();
+    rFile.write("SEXP arg_");
+    rFile.write(pName);
+    rFile.write(";");
+    rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("SEXP sArgList;");
+      rFile.newline();
+    }
+
+    rFile.newline();
+    rFile.newline();
+    rFile.write("args = CDR(args); rInstance = CAR(args);");
+    rFile.newline();
+    rFile.write("args = CDR(args); arg_");
+    rFile.write(pName);
+    rFile.write(" = CAR(args);");
+    rFile.newline();
+
+    if (!bScalar)
+    {
+      rFile.write("args = CDR(args); sArgList = CAR(args);");
+      rFile.newline();
+    }
+
     rFile.newline();
     writeCppR_CheckInstance(rFile, pR_TypeName);
     rFile.newline();
@@ -1818,7 +2042,50 @@ void AdtAutoHelper::writeCppR_GetterAndSetter(AdtFile& rFile,
     rFile.newline();
     rFile.write("}");
     rFile.newline();
+    rFile.newline();
   }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoHelper::writeCppR_GlobalGetter(AdtFile& rFile,
+                                           const char* pName,
+                                           const char* pAliasName,
+                                           AdtAutoType nType) const
+{
+  string  FunctionName;
+  string  ExportName;
+
+  // implement getter function
+  FunctionName  = pAliasName;
+  FunctionName += "_get_";
+  FunctionName += pName;
+
+  ExportName  = "_";
+  ExportName += pAliasName;
+  ExportName += ".get.";
+  ExportName += pName;
+
+  CppR_registerInterfaceRoutine(ExportName,
+                                FunctionName,
+                                0);
+
+  rFile.newline();
+  rFile.write("EXPORT SEXP ");
+  rFile.write(FunctionName);
+  rFile.write("()");
+  rFile.newline();
+  rFile.write("{");
+  rFile.incrementIndent();
+  rFile.newline();
+
+  writeCppR_Return(rFile, nType, pName);
+
+  rFile.decrementIndent();
+  rFile.newline();
+  rFile.write("}");
+  rFile.newline();
+  rFile.newline();
 }
 
 //  ----------------------------------------------------------------------------
@@ -1896,26 +2163,7 @@ void AdtAutoHelper::writeCppR_InterfaceDeclGlobals(AdtFile& rFile,
     rFile.write("_R_");
     rFile.write(sPrefix[cn]);
     rFile.write(pName);
-    rFile.write("(SEXP rInstance");
-
-    // declare function arguments
-    for (Iter = rArgumentList.begin() ; Iter != rArgumentList.end() ; ++Iter)
-    {
-      const AdtAutoAttribute* pAttribute = *Iter;
-
-      if (pAttribute != 0)
-      {
-        rFile.write(", SEXP ");
-        rFile.write(pAttribute->name().c_str());
-      }
-      else
-      {
-        // Should never happen
-        FAIL();
-      }
-    }
-
-    rFile.write(");");
+    rFile.write("(SEXP args);");
     rFile.newline();
   }
 }
@@ -2433,29 +2681,56 @@ void AdtAutoHelper::writeCppR_InterfaceImplGlobals(AdtFile& rFile,
     rFile.newline();
     rFile.write("EXPORT SEXP ");
     rFile.write(FunctionName);
-    rFile.write("(SEXP rInstance");
+    rFile.write("(SEXP args)");
+    rFile.newline();
+    rFile.write("{");
+    rFile.incrementIndent();
+    rFile.newline();
+    rFile.write("SEXP rInstance;");
+    rFile.newline();
 
-    // declare function arguments
     for (Iter = rArgumentList.begin() ; Iter != rArgumentList.end() ; ++Iter)
     {
       const AdtAutoAttribute* pAttribute = *Iter;
 
       if (pAttribute != 0)
       {
-        rFile.write(", SEXP ");
+        if (Iter != rArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
+        rFile.write("SEXP ");
         rFile.write(pAttribute->name().c_str());
-      }
-      else
-      {
-        // Should never happen
-        FAIL();
+        rFile.write(";");
       }
     }
 
-    rFile.write(")");
     rFile.newline();
-    rFile.write("{");
-    rFile.incrementIndent();
+    rFile.newline();
+
+    // Read .External args
+    rFile.write("args = CDR(args); rInstance = CAR(args);");
+    rFile.newline();
+
+    for (Iter = rArgumentList.begin() ; Iter != rArgumentList.end() ; ++Iter)
+    {
+      const AdtAutoAttribute* pAttribute = *Iter;
+
+      if (pAttribute != 0)
+      {
+        if (Iter != rArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
+        rFile.write("args = CDR(args); ");
+        rFile.write(pAttribute->name().c_str());
+        rFile.write(" = CAR(args);");
+      }
+    }
+
+    rFile.newline();
     rFile.newline();
     writeCppR_CheckInstance(rFile, pR_TypeName);
     rFile.newline();
@@ -2538,9 +2813,31 @@ void AdtAutoHelper::writeR_typeCast(AdtFile& rFile,
                "type to R but this type is not portable between 64 and 32 bit "
                "platforms. Use INT/int instead.\n", pContext);
     }
+
     case AdtAutoType_INT:
     {
       rFile.write("as.integer(");
+      rFile.write(pVar);
+      rFile.write(")");
+      break;
+    }
+
+    // It's essential to have something for 1-byte data. Not entirely sure it's
+    // just OK to do this with BOOLs too. TRUE/FALSE are OK but NA is coerced
+    // to FALSE in R
+    case AdtAutoType_CHAR:
+    case AdtAutoType_UNSIGNED_CHAR:
+    case AdtAutoType_BOOL:
+    {
+      rFile.write("as.raw(");
+      rFile.write(pVar);
+      rFile.write(")");
+      break;
+    }
+
+    case AdtAutoType_LONGBOOL:
+    {
+      rFile.write("as.logical(");
       rFile.write(pVar);
       rFile.write(")");
       break;
@@ -2551,9 +2848,6 @@ void AdtAutoHelper::writeR_typeCast(AdtFile& rFile,
     case AdtAutoType_UNSIGNED_LONG_LONG:
     case AdtAutoType_SHORT:
     case AdtAutoType_UNSIGNED_SHORT:
-    case AdtAutoType_CHAR:
-    case AdtAutoType_UNSIGNED_CHAR:
-    case AdtAutoType_BOOL:
     case AdtAutoType_UNSIGNED_INT:
     case AdtAutoType_UNSIGNED_LONG:
     {
@@ -2636,6 +2930,10 @@ AdtAutoType AdtAutoAttribute::fortranTypeToAutoType(const char* pType)
   {
     nType = AdtAutoType_BOOL;
   }
+  else if (caseless_string_comparison("LOGICAL(4)", pType) == 0)
+  {
+    nType = AdtAutoType_LONGBOOL;
+  }
 
   return (nType);
 }
@@ -2704,18 +3002,14 @@ void AdtAutoAttribute::writeDelphiDeclLibInterfaceGlobals(AdtFile& rFile,
       rFile.write("_get_");
       rFile.write(sTypeC[cn]);
       rFile.write(name());
-      rFile.write(this->isScalar() ? "(rInstance : SEXP) : SEXP;"
-                                   : "(rInstance : SEXP; sArgList : SEXP) : SEXP;");
+      rFile.write("(args : SEXP) : SEXP; cdecl;");
       rFile.newline();
       rFile.write("function ");
       rFile.write(pAliasName);
       rFile.write("_set_");
       rFile.write(sTypeC[cn]);
       rFile.write(name());
-      rFile.write("(rInstance : SEXP; arg_");
-      rFile.write(name());
-      rFile.write(this->isScalar() ? " : SEXP) : SEXP; cdecl;"
-                                   : " : SEXP; sArgList : SEXP) : SEXP; cdecl;");
+      rFile.write("(args : SEXP) : SEXP; cdecl;");
       rFile.newline();
     }
   }
@@ -2765,16 +3059,14 @@ void AdtAutoAttribute::writeCppDeclLibInterfaceGlobals(AdtFile& rFile,
       rFile.write("_get_");
       rFile.write(sTypeC[cn]);
       rFile.write(name());
-      rFile.write(this->isScalar() ? "(SEXP rInstance);" : "(SEXP rInstance, SEXP sArgList);");
+      rFile.write("(SEXP args);");
       rFile.newline();
       rFile.write("EXPORT SEXP ");
       rFile.write(pAliasName);
       rFile.write("_set_");
       rFile.write(sTypeC[cn]);
       rFile.write(name());
-      rFile.write("(SEXP rInstance, SEXP arg_");
-      rFile.write(name());
-      rFile.write(this->isScalar() ? ");" : ", SEXP sArgList);");
+      rFile.write("(SEXP args);");
       rFile.newline();
     }
   }
@@ -3261,6 +3553,276 @@ void AdtAutoAttribute::writeImplLibInterfaceGlobals(AdtFile& rFile,
 
 
 //  ----------------------------------------------------------------------------
+//  AdtAutoGlobalScalar method implementations
+//  ----------------------------------------------------------------------------
+void AdtAutoGlobalScalar::writeDelphiVarCheckType(AdtFile& rFile,
+                                                  bool bPrefix,
+                                                  bool bInConstructor) const
+{
+  // do nothing
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeDelphiVarDeclaration(AdtFile& rFile,
+                                                    bool bConstructor,
+                                                    bool bPrependSeperator) const
+{
+  // do nothing
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeDelphiVarInitialisation(AdtFile& rFile,
+                                                       AdtStringByStringMap& rLocalsMap,
+                                                       const char* pClassName,
+                                                       bool bWithTranslation) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeDelphiVarReturn(AdtFile& rFile,
+                                               const char* pClassName) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeDelphiVarDestroy(AdtFile& rFile) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeDelphiImplLibInterfaceMethods(AdtFile& rFile,
+                                                             const char* pClassName,
+                                                             const char* pAliasName,
+                                                             const char* pR_TypeName) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void  AdtAutoGlobalScalar::writeDelphiDeclLibInterfaceGlobals(AdtFile& rFile,
+                                                              const char* pAliasName) const
+{
+  // Declare get global functions
+  rFile.write("function ");
+  rFile.write(pAliasName);
+  rFile.write("_get_");
+  rFile.write(name());
+  rFile.write("() : SEXP; cdecl;");
+  rFile.newline();
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeDelphiImplLibInterfaceGlobals(AdtFile& rFile,
+                                                             const char* pClassName,
+                                                             const char* pAliasName,
+                                                             const char* pR_TypeName) const
+{
+  // implement get routine using .External interface
+  AdtAutoHelper Helper;
+
+  Helper.writeDelphiR_GlobalGetter(rFile, name().c_str(), pAliasName, this->type());
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeCppVarCheckType(AdtFile& rFile,
+                                               bool bPrefix,
+                                               bool bInConstructor) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeCppVarDeclaration(AdtFile& rFile,
+                                                 bool bConstructor,
+                                                 bool bPrependSeperator) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeCppVarInitialisation(AdtFile& rFile,
+                                                    AdtStringByStringMap& rLocalsMap,
+                                                    const char* pClassName,
+                                                    bool bWithTranslation) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeCppVarReturn(AdtFile& rFile,
+                                            const char* pClassName) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeCppVarDestroy(AdtFile& rFile) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeCppImplLibInterfaceMethods(AdtFile& rFile,
+                                                          const char* pClassName,
+                                                          const char* pAliasName,
+                                                          const char* pR_TypeName) const
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void  AdtAutoGlobalScalar::writeCppDeclLibInterfaceGlobals(AdtFile& rFile,
+                                                           const char* pAliasName) const
+{
+  // Declare get global functions
+  rFile.write("EXPORT SEXP ");
+  rFile.write(pAliasName);
+  rFile.write("_get_");
+  rFile.write(name());
+  rFile.write("();");
+  rFile.newline();
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeCppImplLibInterfaceGlobals(AdtFile& rFile,
+                                                          const char* pClassName,
+                                                          const char* pAliasName,
+                                                          const char* pR_TypeName) const
+{
+  // implement get routine using .External interface
+  AdtAutoHelper Helper;
+
+  Helper.writeCppR_GlobalGetter(rFile, name().c_str(), pAliasName, this->type());
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtAutoGlobalScalar::AdtAutoGlobalScalar(const char* pName,
+                                         AdtAutoType nType,
+                                         const char* pFileName,
+                                         int nLineNumber)
+ : AdtAutoAttribute(pName,
+                    "",
+                    AttributeTypeGlobalScalar,
+                    nType,
+                    AdtAutoMode_GLOBAL,
+                    AdtAutoDir_OUT,
+                    0,
+                    false,
+                    false,
+                    pFileName,
+                    nLineNumber)
+{
+  // Do nothing
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtAutoGlobalScalar::AdtAutoGlobalScalar(const AdtAutoGlobalScalar& rCopy)
+ : AdtAutoAttribute(rCopy)
+{
+  // Do nothing
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtAutoGlobalScalar::~AdtAutoGlobalScalar()
+{
+  // Do nothing
+}
+
+//  ----------------------------------------------------------------------------
+
+int AdtAutoGlobalScalar::dimensions() const
+{
+  return (0);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtAutoGlobalScalar::isScalar() const
+{
+  return (true);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtAutoGlobalScalar::isRagged() const
+{
+  return (false);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtAutoGlobalScalar::strictlyBefore(int nPhase) const
+{
+  return (true);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtAutoGlobalScalar::checkDependencies(const AdtAutoAttributePtrByStringMap rMap,
+                                            const AdtAutoAttributePtrByStringMap* pSecondaryMap) const
+{
+  return (true);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtAutoGlobalScalar::checkSize(const string& rMustMatchSize) const
+{
+  return (true);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoGlobalScalar::writeRInterface(AdtFile& rFile,
+                                          const char* pClassName,
+                                          const char* pAliasName) const
+{
+  AdtAutoHelper Helper;
+
+  // Write get function
+  rFile.write(pAliasName);
+  rFile.write(".get.");
+  rFile.write(name());
+  rFile.write(" <- function()");
+  rFile.newline();
+  rFile.write("{");
+  rFile.incrementIndent();
+  rFile.newline();
+  rFile.write("return (.External('_");
+  rFile.write(pAliasName);
+  rFile.write(".get.");
+  rFile.write(name());
+  rFile.write("'))");
+  rFile.decrementIndent();
+  rFile.newline();
+  rFile.write("}");
+  rFile.newline();
+  rFile.newline();
+}
+
+
+//  ----------------------------------------------------------------------------
 //  AdtAutoScalar method implementations
 //  ----------------------------------------------------------------------------
 void AdtAutoScalar::writeDelphiVarCheckType(AdtFile& rFile,
@@ -3363,6 +3925,12 @@ void AdtAutoScalar::writeDelphiVarInitialisation(AdtFile& rFile,
         }
 
         case AdtAutoType_BOOL:
+        {
+          pInitialiser = "false;";
+          break;
+        }
+
+        case AdtAutoType_LONGBOOL:
         {
           pInitialiser = "false;";
           break;
@@ -3530,7 +4098,7 @@ void AdtAutoScalar::writeDelphiImplLibInterfaceGlobals(AdtFile& rFile,
                                                        const char* pAliasName,
                                                        const char* pR_TypeName) const
 {
-  // implement get and set export routines using .Call interface
+  // implement get and set export routines using .External interface
   writeDelphiR_GetterAndSetter(rFile, pClassName, pAliasName, pR_TypeName);
 }
 
@@ -3636,6 +4204,12 @@ void AdtAutoScalar::writeCppVarInitialisation(AdtFile& rFile,
         }
 
         case AdtAutoType_BOOL:
+        {
+          pInitialiser = "false;";
+          break;
+        }
+
+        case AdtAutoType_LONGBOOL:
         {
           pInitialiser = "false;";
           break;
@@ -3801,7 +4375,7 @@ void AdtAutoScalar::writeCppImplLibInterfaceGlobals(AdtFile& rFile,
                                                     const char* pAliasName,
                                                     const char* pR_TypeName) const
 {
-  // implement get and set export routines using .Call interface
+  // implement get and set export routines using .External interface
   writeCppR_GetterAndSetter(rFile, pClassName, pAliasName, pR_TypeName);
 }
 
@@ -3913,7 +4487,7 @@ void AdtAutoScalar::writeRInterface(AdtFile& rFile,
   rFile.write("{");
   rFile.incrementIndent();
   rFile.newline();
-  rFile.write("return (.Call('_");
+  rFile.write("return (.External('_");
   rFile.write(pAliasName);
   rFile.write(".get.");
   rFile.write(name());
@@ -3933,7 +4507,7 @@ void AdtAutoScalar::writeRInterface(AdtFile& rFile,
   rFile.write("{");
   rFile.incrementIndent();
   rFile.newline();
-  rFile.write("return (.Call('_");
+  rFile.write("return (.External('_");
   rFile.write(pAliasName);
   rFile.write(".set.");
   rFile.write(name());
@@ -4221,16 +4795,28 @@ void AdtAutoArray::checkDependencies(bool& bOk,
           bOk = false;
         }
 
-        bAgain  = false;
+        if (bAgain)
+        {
+          // Add dependency to local dependency map. We use the integer value
+          // stored under the key of the dependency name to signify if it is
+          // a global constant or not. If 0 then it is a argument list local
+          // and if 1 it is a global. When 1 we do not want to assume it is
+          // an SEXP.
+          int nType = (pObj->attributeType() == AttributeTypeGlobalScalar) ? 1 : 0;
+
+          ArrayDependancyLocal[rDependency] = nType;
+          HasLocalDependencies              = HasLocalDependencies  || (nType == 0);
+          HasGlobalDependencies             = HasGlobalDependencies || (nType == 1);
+        }
+
+        bAgain = false;
       }
       else
       {
         if (!bAgain && (pSecondaryMap != 0))
         {
-          pMap                              = pSecondaryMap;
-          bAgain                            = true;
-          HasLocalDependencies              = true;
-          ArrayDependancyLocal[rDependency] = 1;
+          pMap    = pSecondaryMap;
+          bAgain  = true;
         }
         else
         {
@@ -4252,7 +4838,8 @@ void AdtAutoArray::checkDependencies(bool& bOk,
 //  ----------------------------------------------------------------------------
 
 void AdtAutoArray::arrayBoundsArguments(string& rArguments,
-                                        bool bInConstructor) const
+                                        bool bInConstructor,
+                                        bool bR_Prefix) const
 {
   for (int cn = 0 ; cn < dimensions() ; cn++)
   {
@@ -4274,7 +4861,7 @@ void AdtAutoArray::arrayBoundsArguments(string& rArguments,
                                                sIndexExpression,
                                                ArrayDependancyLocal,
                                                bInConstructor,
-                                               bInConstructor);
+                                               bR_Prefix);
 
       rArguments += sIndexExpression + ", ";
     }
@@ -4294,7 +4881,7 @@ void AdtAutoArray::arrayBoundsArguments(string& rArguments,
                                                sIndexExpression,
                                                ArrayDependancyLocal,
                                                bInConstructor,
-                                               bInConstructor);
+                                               bR_Prefix);
 
       rArguments += sIndexExpression;
     }
@@ -4811,7 +5398,7 @@ void AdtAutoArray::writeDelphiVarCheckType(AdtFile& rFile,
     Prefixed = "arg_" + name();
   }
 
-  arrayBoundsArguments(sArguments, bInConstructor);
+  arrayBoundsArguments(sArguments, bInConstructor, true);
 
   Helper.writeDelphiVarCheckType(rFile,
                                  Prefixed.c_str(),
@@ -4925,11 +5512,11 @@ void AdtAutoArray::writeDelphiVarInitialisation(AdtFile& rFile,
 
         if (mode() == AdtAutoMode_AUTOINIT)
         {
-          rFile.write("R_to_ADlib(arg_");
+          rFile.write("AdtArrayPlanActor_R_to_ADlib(_MemAllocator, pchar(arg_");
           rFile.write(name());
-          rFile.write(", ");
+          rFile.write("), pchar(");
           rFile.write(name());
-          rFile.write(");");
+          rFile.write("));");
           rFile.newline();
         }
         else
@@ -4962,11 +5549,11 @@ void AdtAutoArray::writeDelphiVarInitialisation(AdtFile& rFile,
         rFile.newline();
         rFile.newline();
 
-        if (HasLocalDependencies)
+        if (HasLocalDependencies || HasGlobalDependencies)
         {
           string  sArrayBounds;
 
-          arrayBoundsArguments(sArrayBounds, false);
+          arrayBoundsArguments(sArrayBounds, false, true);
 
           rFile.write("AdtArrayPlan_create(MemAllocator, ");
           rFile.write("arg_");
@@ -5119,7 +5706,7 @@ void AdtAutoArray::writeDelphiCreatePlan(AdtFile& rFile,
                  fileName().c_str(),
                  lineNumber());
       }
-      else if (!HasLocalDependencies)
+      else if (!(HasLocalDependencies || HasGlobalDependencies))
       {
         rFile.write(sPlan);
         rFile.write(" := AdtArrayPlan.create(");
@@ -5305,7 +5892,7 @@ void AdtAutoArray::writeDelphiImplLibInterfaceGlobals(AdtFile& rFile,
 {
   if (!IsRagged)
   {
-    // implement get and set export routines using .Call interface
+    // implement get and set export routines using .External interface
     writeDelphiR_GetterAndSetter(rFile, pClassName, pAliasName, pR_TypeName);
   }
 }
@@ -5325,7 +5912,7 @@ void AdtAutoArray::writeCppVarCheckType(AdtFile& rFile,
     Prefixed = "arg_" + name();
   }
 
-  arrayBoundsArguments(sArguments, bInConstructor);
+  arrayBoundsArguments(sArguments, bInConstructor, false);
 
   Helper.writeCppVarCheckType(rFile,
                               Prefixed.c_str(),
@@ -5432,9 +6019,9 @@ void AdtAutoArray::writeCppVarInitialisation(AdtFile& rFile,
 
         if (mode() == AdtAutoMode_AUTOINIT)
         {
-          rFile.write("R_to_ADlib(arg_");
+          rFile.write("AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)arg_");
           rFile.write(name());
-          rFile.write(", ");
+          rFile.write(", (char*)");
           rFile.write(name());
           rFile.write(");");
           rFile.newline();
@@ -5469,11 +6056,11 @@ void AdtAutoArray::writeCppVarInitialisation(AdtFile& rFile,
         rFile.newline();
         rFile.newline();
 
-        if (HasLocalDependencies)
+        if (HasLocalDependencies || HasGlobalDependencies)
         {
           string  sArrayBounds;
 
-          arrayBoundsArguments(sArrayBounds, false);
+          arrayBoundsArguments(sArrayBounds, false, false);
 
           rFile.write("AdtArrayPlan::create(MemAllocator, ");
           rFile.write("arg_");
@@ -5617,7 +6204,7 @@ void AdtAutoArray::writeCppCreatePlan(AdtFile& rFile,
                  fileName().c_str(),
                  lineNumber());
       }
-      else if (!HasLocalDependencies)
+      else if (!(HasLocalDependencies || HasGlobalDependencies))
       {
         rFile.write(sPlan);
         rFile.write(".initialise(");
@@ -5810,7 +6397,7 @@ void AdtAutoArray::writeCppImplLibInterfaceGlobals(AdtFile& rFile,
 {
   if (!IsRagged)
   {
-    // implement get and set export routines using .Call interface
+    // implement get and set export routines using .External interface
     writeCppR_GetterAndSetter(rFile, pClassName, pAliasName, pR_TypeName);
   }
 }
@@ -5850,6 +6437,7 @@ AdtAutoArray::AdtAutoArray(const char* pName,
   LastScalar                = -1;
   RefreshSizeSpecification  = true;
   HasLocalDependencies      = false;
+  HasGlobalDependencies     = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -5867,6 +6455,7 @@ AdtAutoArray::AdtAutoArray(const AdtAutoArray& rCopy)
   LastScalar                = rCopy.LastScalar;
   RefreshSizeSpecification  = true;
   HasLocalDependencies      = false;
+  HasGlobalDependencies     = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -6051,6 +6640,7 @@ bool AdtAutoArray::checkDependencies(const AdtAutoAttributePtrByStringMap rMap,
   SmallestIndex         = NO_INDEX;
   IsRagged              = false;
   HasLocalDependencies  = false;
+  HasGlobalDependencies = false;
 
   ArrayDependencies.clear();
   ArrayDependancyLocal.clear();
@@ -6231,7 +6821,7 @@ void AdtAutoArray::writeRInterface(AdtFile& rFile,
       rFile.write("{");
       rFile.incrementIndent();
       rFile.newline();
-      rFile.write("return (.Call('_");
+      rFile.write("return (.External('_");
       rFile.write(pAliasName);
       rFile.write(".get.");
       rFile.write(sTypeR[cn]);
@@ -6253,7 +6843,7 @@ void AdtAutoArray::writeRInterface(AdtFile& rFile,
       rFile.write("{");
       rFile.incrementIndent();
       rFile.newline();
-      rFile.write("return (.Call('_");
+      rFile.write("return (.External('_");
       rFile.write(pAliasName);
       rFile.write(".set.");
       rFile.write(sTypeR[cn]);
@@ -6582,8 +7172,21 @@ bool AdtAutoFunction::strictlyBefore(int nPhase) const
 bool AdtAutoFunction::checkDependencies(const AdtAutoAttributePtrByStringMap rMap,
                                         const AdtAutoAttributePtrByStringMap* pSecondaryMap) const
 {
-  bool                              bOk = true;
-  AdtAutoAttributePtrListConstIter  Iter;
+  bool                                  bOk = true;
+  AdtAutoAttributePtrListConstIter      Iter;
+  AdtAutoAttributePtrByStringMap        ExtraMap(ArgumentMap);
+
+  if (pSecondaryMap != 0)
+  {
+    AdtAutoAttributePtrByStringMapConstIter AddIter;
+
+    for (AddIter = pSecondaryMap->begin() ; AddIter != pSecondaryMap->end() ; ++AddIter)
+    {
+      AdtAutoAttribute* pObj = (AdtAutoAttribute*)AddIter->second;
+
+      ExtraMap[pObj->name()] = pObj;
+    }
+  }
 
   for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
   {
@@ -6591,7 +7194,7 @@ bool AdtAutoFunction::checkDependencies(const AdtAutoAttributePtrByStringMap rMa
 
     if (pAttribute != 0)
     {
-      if (!pAttribute->checkDependencies(rMap, &ArgumentMap))
+      if (!pAttribute->checkDependencies(rMap, &ExtraMap))
       {
         bOk = false;
         break;
@@ -6667,7 +7270,7 @@ void AdtAutoFunction::writeRInterface(AdtFile& rFile,
     rFile.write("{");
     rFile.incrementIndent();
     rFile.newline();
-    rFile.write("return (.Call('_");
+    rFile.write("return (.External('_");
     rFile.write(pAliasName);
     rFile.write(".");
     rFile.write(sPrefix[cn]);
@@ -6795,17 +7398,18 @@ AdtAutoArray* AdtAutoFunction::addArray(const char* pName,
 //  ----------------------------------------------------------------------------
 //  AdtAutoClass method implementations
 //  ----------------------------------------------------------------------------
-AdtAutoClassPtrByStringMap AdtAutoClass::ClassMap;
-AdtAutoClass*              AdtAutoClass::CurrentClass         = 0;
-bool                       AdtAutoClass::AddExitHandler       = true;
-bool                       AdtAutoClass::Enabled              = false;
-bool                       AdtAutoClass::AttributeDefsEnabled = false;
-bool                       AdtAutoClass::IncludeDisabled      = false;
-string                     AdtAutoClass::LibName;
-string                     AdtAutoClass::RegistrationCodeBuffer;
-AdtFile                    AdtAutoClass::RegistrationCodeFile;
-string                     AdtAutoClass::ExternalsCodeBuffer;
-AdtFile                    AdtAutoClass::ExternalsCodeFile;
+AdtAutoAttributePtrByStringMap  AdtAutoClass::GlobalsMap;
+AdtAutoClassPtrByStringMap      AdtAutoClass::ClassMap;
+AdtAutoClass*                   AdtAutoClass::CurrentClass         = 0;
+bool                            AdtAutoClass::AddExitHandler       = true;
+bool                            AdtAutoClass::Enabled              = false;
+bool                            AdtAutoClass::AttributeDefsEnabled = false;
+bool                            AdtAutoClass::IncludeDisabled      = false;
+string                          AdtAutoClass::LibName;
+string                          AdtAutoClass::RegistrationCodeBuffer;
+AdtFile                         AdtAutoClass::RegistrationCodeFile;
+string                          AdtAutoClass::ExternalsCodeBuffer;
+AdtFile                         AdtAutoClass::ExternalsCodeFile;
 
 
 //  ----------------------------------------------------------------------------
@@ -6824,6 +7428,52 @@ void AdtAutoClass::flushAutoClasses()
   }
 
   ClassMap.clear();
+
+  AdtAutoAttributePtrByStringMapIter  GlobalsIter;
+
+  for (GlobalsIter = GlobalsMap.begin() ; GlobalsIter != GlobalsMap.end() ; ++GlobalsIter)
+  {
+    AdtAutoAttribute* pAttribute = (*GlobalsIter).second;
+
+    UtlReleaseReference(pAttribute);
+  }
+
+  GlobalsMap.clear();
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtAutoClass::addGlobalScalar(const char* pName,
+                                   AdtAutoType nType,
+                                   const char* pFileName,
+                                   int nLineNumber)
+{
+  bool bAdded = false;
+
+  if (automationEnabled()       &&
+      (pName              != 0) &&
+      (strlen(pName)       > 0))
+  {
+    AdtAutoAttributePtrByStringMapIter  Iter = GlobalsMap.find(pName);
+
+    if (Iter != GlobalsMap.end())
+    {
+      ::printf("WARNING: Global variable %s is being redefined in file %s on line %d\n", pName, pFileName, nLineNumber);
+    }
+    else
+    {
+      AdtAutoAttribute* pGlobal = new AdtAutoGlobalScalar(pName,
+                                                          nType,
+                                                          pFileName,
+                                                          nLineNumber);
+
+      GlobalsMap[pName] = pGlobal;
+    }
+
+    bAdded  = true;
+  }
+
+  return (bAdded);
 }
 
 //  ----------------------------------------------------------------------------
@@ -7008,12 +7658,13 @@ void AdtAutoClass::exportConstructorArgsFiles(AdtSourceFileType nDestType,
 
 void AdtAutoClass::exportAutomationFiles(AdtSourceFileType nDestType,
                                          const char* pDestFolder,
+                                         const char* pDestIncludeFolder,
                                          const char* pConstructorClassName,
                                          int nClassNumber)
 {
   if (CurrentClass != 0)
   {
-    CurrentClass->writeAutomationFiles(nDestType, pDestFolder, pConstructorClassName, nClassNumber);
+    CurrentClass->writeAutomationFiles(nDestType, pDestFolder, pDestIncludeFolder, pConstructorClassName, nClassNumber);
   }
 }
 
@@ -7022,6 +7673,7 @@ void AdtAutoClass::exportAutomationFiles(AdtSourceFileType nDestType,
 bool AdtAutoClass::buildClassConstructor(AdtStringList& rConstructorList,
                                          const char* pClassName,
                                          const char* pParentClassName,
+                                         const char* pPathPrefix,
                                          AdtSourceFileType nAsFileType)
 {
   bool          bDone   = false;
@@ -7039,6 +7691,7 @@ bool AdtAutoClass::buildClassConstructor(AdtStringList& rConstructorList,
       case DelphiSourceFileType:
       {
         rConstructorDeclaration  = "create({$I ";
+        rConstructorDeclaration += pPathPrefix;
         rConstructorDeclaration += pClass->AliasName;
         rConstructorDeclaration += CONSTRUCTOR_ARGS;
         rConstructorDeclaration += ".pas});";
@@ -7048,12 +7701,14 @@ bool AdtAutoClass::buildClassConstructor(AdtStringList& rConstructorList,
         if (pClass->ParentConstructorCallArgsFileName.length() > 0)
         {
           rConstructorCall += "{$I ";
+          rConstructorCall += pPathPrefix;
           rConstructorCall += pClass->ParentConstructorCallArgsFileName;
           rConstructorCall += ".pas}";
         }
         else
         {
           rConstructorCall += "{$I ";
+          rConstructorCall += pPathPrefix;
           rConstructorCall += pClass->AliasName + CONSTRUCTOR_CALL_ARGS;
           rConstructorCall += ".pas}";
         }
@@ -7072,6 +7727,7 @@ bool AdtAutoClass::buildClassConstructor(AdtStringList& rConstructorList,
       case CppHeaderFileType:
       {
         rConstructorDeclaration  = "(\n#include \"";
+        rConstructorDeclaration += pPathPrefix;
         rConstructorDeclaration += pClass->AliasName;
         rConstructorDeclaration += CONSTRUCTOR_ARGS;
         rConstructorDeclaration += ".hpp\"\n)";
@@ -7082,12 +7738,14 @@ bool AdtAutoClass::buildClassConstructor(AdtStringList& rConstructorList,
         if (pClass->ParentConstructorCallArgsFileName.length() > 0)
         {
           rConstructorCall += "\n#include \"";
+          rConstructorCall += pPathPrefix;
           rConstructorCall += pClass->ParentConstructorCallArgsFileName;
           rConstructorCall += ".hpp\"\n";
         }
         else
         {
           rConstructorCall += "\n#include \"";
+          rConstructorCall += pPathPrefix;
           rConstructorCall += pClass->AliasName + CONSTRUCTOR_CALL_ARGS;
           rConstructorCall += ".hpp\"\n";
         }
@@ -7127,6 +7785,7 @@ bool AdtAutoClass::buildClassConstructor(AdtStringList& rConstructorList,
 
 void AdtAutoClass::writeIncludeStatement(AdtFile& rFile,
                                          const char* pWhich,
+                                         const char* pPathPrefix,
                                          AdtSourceFileType nDestType,
                                          const char* pClassName)
 {
@@ -7141,6 +7800,7 @@ void AdtAutoClass::writeIncludeStatement(AdtFile& rFile,
         case DelphiSourceFileType:
         {
           rFile.write("{$I ");
+          rFile.write(pPathPrefix);
           rFile.write(pClass->AliasName);
           rFile.write(pWhich);
           rFile.write(".pas}");
@@ -7152,6 +7812,7 @@ void AdtAutoClass::writeIncludeStatement(AdtFile& rFile,
         case CppHeaderFileType:
         {
           rFile.write("#include \"");
+          rFile.write(pPathPrefix);
           rFile.write(pClass->AliasName);
           rFile.write(pWhich);
           rFile.write(".hpp\"");
@@ -7175,10 +7836,12 @@ void AdtAutoClass::writeIncludeStatement(AdtFile& rFile,
 
 void AdtAutoClass::writeInterfaceMethodsDeclInclude(AdtFile& rFile,
                                                     AdtSourceFileType nDestType,
-                                                    const char* pClassName)
+                                                    const char* pClassName,
+                                                    const char* pPathPrefix)
 {
   writeIncludeStatement(rFile,
                         DECL_LIB_INTERFACE_METHODS,
+                        pPathPrefix,
                         nDestType,
                         pClassName);
 }
@@ -7187,10 +7850,12 @@ void AdtAutoClass::writeInterfaceMethodsDeclInclude(AdtFile& rFile,
 
 void AdtAutoClass::writeInterfaceMethodsImplInclude(AdtFile& rFile,
                                                     AdtSourceFileType nDestType,
-                                                    const char* pClassName)
+                                                    const char* pClassName,
+                                                    const char* pPathPrefix)
 {
   writeIncludeStatement(rFile,
                         IMPL_LIB_INTERFACE_METHODS,
+                        pPathPrefix,
                         nDestType,
                         pClassName);
 }
@@ -7199,10 +7864,12 @@ void AdtAutoClass::writeInterfaceMethodsImplInclude(AdtFile& rFile,
 
 void AdtAutoClass::writeInterfaceGlobalsDeclInclude(AdtFile& rFile,
                                                     AdtSourceFileType nDestType,
-                                                    const char* pClassName)
+                                                    const char* pClassName,
+                                                    const char* pPathPrefix)
 {
   writeIncludeStatement(rFile,
                         DECL_LIB_INTERFACE_GLOBALS,
+                        pPathPrefix,
                         nDestType,
                         pClassName);
 }
@@ -7211,10 +7878,12 @@ void AdtAutoClass::writeInterfaceGlobalsDeclInclude(AdtFile& rFile,
 
 void AdtAutoClass::writeInterfaceGlobalsImplInclude(AdtFile& rFile,
                                                     AdtSourceFileType nDestType,
-                                                    const char* pClassName)
+                                                    const char* pClassName,
+                                                    const char* pPathPrefix)
 {
   writeIncludeStatement(rFile,
                         IMPL_LIB_INTERFACE_GLOBALS,
+                        pPathPrefix,
                         nDestType,
                         pClassName);
 }
@@ -7223,10 +7892,12 @@ void AdtAutoClass::writeInterfaceGlobalsImplInclude(AdtFile& rFile,
 
 void AdtAutoClass::writeConstructorDeclInclude(AdtFile& rFile,
                                                AdtSourceFileType nDestType,
-                                               const char* pClassName)
+                                               const char* pClassName,
+                                               const char* pPathPrefix)
 {
   writeIncludeStatement(rFile,
                         DECL_LIB_INTERFACE_CONSTRUCTOR,
+                        pPathPrefix,
                         nDestType,
                         pClassName);
 }
@@ -7235,10 +7906,12 @@ void AdtAutoClass::writeConstructorDeclInclude(AdtFile& rFile,
 
 void AdtAutoClass::writeConstructorImplInclude(AdtFile& rFile,
                                                AdtSourceFileType nDestType,
-                                               const char* pClassName)
+                                               const char* pClassName,
+                                               const char* pPathPrefix)
 {
   writeIncludeStatement(rFile,
                         IMPL_LIB_INTERFACE_CONSTRUCTOR,
+                        pPathPrefix,
                         nDestType,
                         pClassName);
 }
@@ -7341,41 +8014,12 @@ void AdtAutoClass::appendFileToStringList(AdtStringList& rStringList,
                                           const char* pFileNameBase,
                                           AdtSourceFileType nDestType) const
 {
-  string  FileName;
-  string  sString;
-  FILE*   Handle;
+  AdtFile rFile;
 
-  createFileName(FileName, pFileNameBase, nDestType);
-
-  Handle = ::fopen(FileName, "rt");
-
-  if (Handle != 0)
+  if (openFile(rFile, pDestFolder, pFileNameBase, nDestType, false))
   {
-    bool  bMore = true;
-
-    while (bMore)
-    {
-      char  sBuffer[1024] = {0};
-
-      bMore = (::fscanf(Handle, "%1024[^\n]", sBuffer) != EOF);
-
-      sString += sBuffer;
-
-      if (bMore)
-      {
-        char  sDelimeter[2] = {0};
-
-        bMore = (::fscanf(Handle, "%1c", sDelimeter) != EOF);
-
-        if (sDelimeter[0] == '\n')
-        {
-          rStringList.push_back(sString);
-          sString.clear();
-        }
-      }
-    }
-
-    ::fclose(Handle);
+    rFile.readLines(rStringList);
+    rFile.close();
   }
 }
 
@@ -7402,7 +8046,7 @@ void AdtAutoClass::writeIncrementalCompileFile(const string& sBufferToWrite,
 
     sRegFileName += sBuffer;
 
-    if (openFile(rRegFile, pDestFolder, sRegFileName, nDestType))
+    if (openFile(rRegFile, pDestFolder, sRegFileName, nDestType, true))
     {
       rRegFile.write(sBufferToWrite);
       rRegFile.close();
@@ -7445,7 +8089,8 @@ void AdtAutoClass::readIncrementalCompileFiles(AdtStringList& rStringList,
 
 bool AdtAutoClass::openFile(AdtFile& rFile,
                             const char* pDestFolder,
-                            const char* pFileName) const
+                            const char* pFileName,
+                            bool bWrite) const
 {
   bool bOpened = false;
 
@@ -7455,7 +8100,7 @@ bool AdtAutoClass::openFile(AdtFile& rFile,
 
     FileName += pFileName;
 
-    bOpened = rFile.open(FileName, "wt");
+    bOpened = bWrite ? rFile.open(FileName, "wt") : rFile.open(FileName, "rt");
   }
 
   return (bOpened);
@@ -7466,14 +8111,15 @@ bool AdtAutoClass::openFile(AdtFile& rFile,
 bool AdtAutoClass::openFile(AdtFile& rFile,
                             const char* pDestFolder,
                             const char* pFileNameBase,
-                            AdtSourceFileType nDestType) const
+                            AdtSourceFileType nDestType,
+                            bool bWrite) const
 {
   bool    bOpened = false;
   string  FileName;
 
   createFileName(FileName, pFileNameBase, nDestType);
 
-  bOpened = openFile(rFile, pDestFolder, FileName);
+  bOpened = openFile(rFile, pDestFolder, FileName, bWrite);
 
   return (bOpened);
 }
@@ -7488,7 +8134,6 @@ void AdtAutoClass::writeConstructorDecl(AdtFile& rFile,
   {
     case DelphiSourceFileType:
     {
-      size_t                  nCount;
       AdtStringListConstIter  Iter;
       AdtAutoHelper           Helper;
 
@@ -7496,39 +8141,13 @@ void AdtAutoClass::writeConstructorDecl(AdtFile& rFile,
       rFile.write("function ");
       rFile.write(AliasName);
       rFile.write("_destroy");
-      rFile.write("(rInstance : SEXP) : SEXP; cdecl;");
+      rFile.write("(args : SEXP) : SEXP; cdecl;");
       rFile.newline();
 
       // Write constructor interface code
       rFile.write("function ");
       rFile.write(AliasName);
-      rFile.write("_create");
-      rFile.write("(");
-      rFile.incrementIndent();
-      rFile.incrementIndent();
-      rFile.newline();
-
-      nCount = ArgumentList.size();
-
-      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
-      {
-        const string& rArg = *Iter;
-
-        rFile.write("arg_");
-        rFile.write(rArg);
-
-        if (nCount != 1)
-        {
-          rFile.write(", ");
-          rFile.newline();
-        }
-
-        nCount--;
-      }
-
-      rFile.write(" : SEXP) : SEXP; cdecl;");
-      rFile.decrementIndent();
-      rFile.decrementIndent();
+      rFile.write("_create(args : SEXP) : SEXP; cdecl;");
       rFile.newline();
       break;
     }
@@ -7536,7 +8155,6 @@ void AdtAutoClass::writeConstructorDecl(AdtFile& rFile,
     case CppSourceFileType:
     case CppHeaderFileType:
     {
-      size_t                  nCount;
       AdtStringListConstIter  Iter;
       AdtAutoHelper           Helper;
 
@@ -7544,39 +8162,13 @@ void AdtAutoClass::writeConstructorDecl(AdtFile& rFile,
       rFile.write("EXPORT SEXP ");
       rFile.write(AliasName);
       rFile.write("_destroy");
-      rFile.write("(SEXP rInstance);");
+      rFile.write("(SEXP args);");
       rFile.newline();
 
       // Write constructor interface code
       rFile.write("EXPORT SEXP ");
       rFile.write(AliasName);
-      rFile.write("_create");
-      rFile.write("(");
-      rFile.incrementIndent();
-      rFile.incrementIndent();
-      rFile.newline();
-
-      nCount = ArgumentList.size();
-
-      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
-      {
-        const string& rArg = *Iter;
-
-        rFile.write("SEXP arg_");
-        rFile.write(rArg);
-
-        if (nCount != 1)
-        {
-          rFile.write(", ");
-          rFile.newline();
-        }
-
-        nCount--;
-      }
-
-      rFile.write(");");
-      rFile.decrementIndent();
-      rFile.decrementIndent();
+      rFile.write("_create(SEXP args);");
       rFile.newline();
       break;
     }
@@ -7619,7 +8211,7 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.newline();
       Helper.writeDelphiR_CheckInstance(rFile, ClassName, AliasName);
       rFile.newline();
-      rFile.write("if (R_ExternalPtrAddr(rInstance) <> Null) then");
+      rFile.write("if (R_ExternalPtrAddr(rInstance) <> nil) then");
       rFile.newline();
       rFile.write("begin");
       rFile.incrementIndent();
@@ -7647,17 +8239,28 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.newline();
       rFile.write("Function ");
       rFile.write(FunctionName);
-      rFile.write("(rInstance : SEXP) : SEXP; cdecl;");
+      rFile.write("(args : SEXP) : SEXP; cdecl;");
+      rFile.newline();
+      rFile.newline();
+      rFile.write("var");
+      rFile.incrementIndent();
+      rFile.newline();
+      rFile.write("rInstance : SEXP;");
+      rFile.newline();
+      rFile.decrementIndent();
       rFile.newline();
       rFile.write("begin");
       rFile.incrementIndent();
+      rFile.newline();
+      rFile.write("args := R_CDR(args); rInstance := R_CAR(args);");
       rFile.newline();
       rFile.write(AliasName);
       rFile.write("_destroy_handler(rInstance);");
       rFile.newline();
       rFile.newline();
-      rFile.write(FunctionName);
-      rFile.write(" := rInstance;");
+
+      Helper.writeDelphiR_Return(rFile, AdtAutoType_INT, "0");
+
       rFile.decrementIndent();
       rFile.newline();
       rFile.write("end;");
@@ -7678,10 +8281,7 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.newline();
       rFile.write("function ");
       rFile.write(FunctionName);
-      rFile.write("(");
-      rFile.incrementIndent();
-      rFile.incrementIndent();
-      rFile.newline();
+      rFile.write("(args : SEXP) : SEXP; cdecl;");
 
       nCount = ArgumentList.size();
 
@@ -7689,25 +8289,6 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
                                               FunctionName,
                                               nCount);
 
-      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
-      {
-        const string& rArg = *Iter;
-
-        rFile.write("arg_");
-        rFile.write(rArg);
-
-        if (nCount != 1)
-        {
-          rFile.write(", ");
-          rFile.newline();
-        }
-
-        nCount--;
-      }
-
-      rFile.write(" : SEXP) : SEXP; cdecl;");
-      rFile.decrementIndent();
-      rFile.decrementIndent();
       rFile.newline();
       rFile.newline();
       rFile.write("var");
@@ -7716,11 +8297,45 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.write("Context : ");
       rFile.write(pConstructorClassName);
       rFile.write(";");
+      rFile.newline();
+
+      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
+      {
+        const string& rArg = *Iter;
+
+        if (Iter != ArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
+        rFile.write("arg_");
+        rFile.write(rArg);
+        rFile.write(" : SEXP;");
+      }
+
       rFile.decrementIndent();
       rFile.newline();
       rFile.newline();
       rFile.write("begin");
       rFile.incrementIndent();
+      rFile.newline();
+
+      // Read .External args
+      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
+      {
+        const string& rArg = *Iter;
+
+        if (Iter != ArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
+        rFile.write("args := R_CDR(args); arg_");
+        rFile.write(rArg);
+        rFile.write(" := R_CAR(args);");
+      }
+
+      rFile.newline();
       rFile.newline();
 
       // Check argument types
@@ -7739,8 +8354,7 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
         {
           const AdtAutoAttribute* pAttribute = (*AttrIter).second;
 
-          Helper.writeDelphiR_CheckType(rFile, pAttribute->type(), sVar);
-          rFile.newline();
+          pAttribute->writeVarCheckType(rFile, DelphiSourceFileType, true, true);
           rFile.newline();
         }
         else
@@ -7758,13 +8372,17 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.incrementIndent();
       rFile.newline();
 
-      nCount = ArgumentList.size();
-
       for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
       {
         AdtAutoAttributePtrByStringMapConstIter AttrIter;
 
         const string& rArg = *Iter;
+
+        if (Iter != ArgumentList.begin())
+        {
+          rFile.write(", ");
+          rFile.newline();
+        }
 
         AttrIter = AttributeByNameMap.find(rArg);
 
@@ -7789,14 +8407,6 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
           // Should never happen
           FAIL();
         }
-
-        if (nCount != 1)
-        {
-          rFile.write(", ");
-          rFile.newline();
-        }
-
-        nCount--;
       }
 
       rFile.write(");");
@@ -7813,7 +8423,7 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.newline();
       rFile.write("Rf_protect(Result);");
       rFile.newline();
-      rFile.write("R_RegisterCFinalizer(Result, ");
+      rFile.write("R_RegisterCFinalizer(Result, @");
       rFile.write(AliasName);
       rFile.write("_destroy_handler);");
       rFile.newline();
@@ -7877,16 +8487,22 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.newline();
       rFile.write("EXPORT SEXP ");
       rFile.write(FunctionName);
-      rFile.write("(SEXP rInstance)");
+      rFile.write("(SEXP args)");
       rFile.newline();
       rFile.write("{");
       rFile.incrementIndent();
+      rFile.newline();
+      rFile.write("SEXP rInstance;");
+      rFile.newline();
+      rFile.write("args = CDR(args); rInstance = CAR(args);");
       rFile.newline();
       rFile.write(AliasName);
       rFile.write("_destroy_handler(rInstance);");
       rFile.newline();
       rFile.newline();
-      rFile.write("return (rInstance);");
+
+      Helper.writeCppR_Return(rFile, AdtAutoType_INT, "0");
+
       rFile.decrementIndent();
       rFile.newline();
       rFile.write("}");
@@ -7907,8 +8523,9 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.newline();
       rFile.write("EXPORT SEXP ");
       rFile.write(FunctionName);
-      rFile.write("(");
-      rFile.incrementIndent();
+      rFile.write("(SEXP args)");
+      rFile.newline();
+      rFile.write("{");
       rFile.incrementIndent();
       rFile.newline();
 
@@ -7918,33 +8535,45 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
                                            FunctionName,
                                            nCount);
 
-      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
-      {
-        const string& rArg = *Iter;
-
-        rFile.write("SEXP arg_");
-        rFile.write(rArg);
-
-        if (nCount != 1)
-        {
-          rFile.write(", ");
-          rFile.newline();
-        }
-
-        nCount--;
-      }
-
-      rFile.write(")");
-      rFile.decrementIndent();
-      rFile.decrementIndent();
-      rFile.newline();
-      rFile.write("{");
-      rFile.incrementIndent();
-      rFile.newline();
       rFile.write("SEXP Result = {0};");
       rFile.newline();
       rFile.write(pConstructorClassName);
       rFile.write("* pContext = 0;");
+      rFile.newline();
+      rFile.newline();
+
+      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
+      {
+        const string& rArg = *Iter;
+
+        if (Iter != ArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
+        rFile.write("SEXP arg_");
+        rFile.write(rArg);
+        rFile.write(";");
+      }
+
+      rFile.newline();
+      rFile.newline();
+
+      // Read .External args
+      for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
+      {
+        const string& rArg = *Iter;
+
+        if (Iter != ArgumentList.begin())
+        {
+          rFile.newline();
+        }
+
+        rFile.write("args = CDR(args); arg_");
+        rFile.write(rArg);
+        rFile.write(" = CAR(args);");
+      }
+
       rFile.newline();
       rFile.newline();
 
@@ -7981,13 +8610,17 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
       rFile.incrementIndent();
       rFile.newline();
 
-      nCount = ArgumentList.size();
-
       for (Iter = ArgumentList.begin() ; Iter != ArgumentList.end() ; ++Iter)
       {
         AdtAutoAttributePtrByStringMapConstIter AttrIter;
 
         const string& rArg = *Iter;
+
+        if (Iter != ArgumentList.begin())
+        {
+          rFile.write(", ");
+          rFile.newline();
+        }
 
         AttrIter = AttributeByNameMap.find(rArg);
 
@@ -8010,14 +8643,6 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
           // Should never happen
           FAIL();
         }
-
-        if (nCount != 1)
-        {
-          rFile.write(", ");
-          rFile.newline();
-        }
-
-        nCount--;
       }
 
       rFile.write(");");
@@ -8100,7 +8725,7 @@ void AdtAutoClass::writeCommonR_Code(AdtFile& rFile) const
   rFile.incrementIndent();
   rFile.newline();
 
-  rFile.write("return (.Call('_");
+  rFile.write("return (.External('_");
   rFile.write(AliasName);
   rFile.write(".destroy', Context))");
   rFile.decrementIndent();
@@ -8149,7 +8774,7 @@ void AdtAutoClass::writeCommonR_Code(AdtFile& rFile) const
   rFile.newline();
 
   // Construct the object
-  rFile.write("return (.Call('_");
+  rFile.write("return (.External('_");
   rFile.write(AliasName);
   rFile.write(".create', ");
 
@@ -8211,7 +8836,7 @@ bool AdtAutoClass::writeConstructorArgsFile(AdtSourceFileType nDestType,
     sFileName += CONSTRUCTOR_ARGS;
   }
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     AdtStringListConstIter  Iter;
     bool                    bPrependSeperator = false;
@@ -8275,7 +8900,7 @@ bool AdtAutoClass::writeConstructorLocalsFile(AdtSourceFileType nDestType,
 
   sFileName += CONSTRUCTOR_LOCALS;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     char                      sBuffer[256] = {0};
     AdtStringByStringMapIter  Iter;
@@ -8319,7 +8944,7 @@ bool AdtAutoClass::writeConstructorPhaseFiles(AdtSourceFileType nDestType,
 
       sFileName += sBuffer;
 
-      if (openFile(rFile, pDestFolder, sFileName, nDestType))
+      if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
       {
         AdtAutoAttributePtrByIntMultimapConstIter Iter;
         AdtAutoAttributePtrByIntMultimapConstIter UpperBound = AttributeByPhaseMap.upper_bound(cn);
@@ -8389,7 +9014,7 @@ bool AdtAutoClass::writeArrayPlansInitFile(AdtSourceFileType nDestType,
 
   sFileName += ARRAY_PLANS_INIT;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     AdtAutoArray::writeCreatePlans(rFile, nDestType, ClassName, rLocalsMap);
 
@@ -8412,7 +9037,7 @@ bool AdtAutoClass::writeArrayPlansCopyFile(AdtSourceFileType nDestType,
 
   sFileName += ARRAY_PLANS_COPY;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     AdtAutoArray::writeCopyPlans(rFile, nDestType, ClassName);
 
@@ -8435,7 +9060,7 @@ bool AdtAutoClass::writeDeclLibInterfaceMethodsFile(AdtSourceFileType nDestType,
 
   sFileName += DECL_LIB_INTERFACE_METHODS;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     AdtAutoAttributePtrByStringMapConstIter Iter;
 
@@ -8468,7 +9093,7 @@ bool AdtAutoClass::writeDeclLibInterfaceGlobalsFile(AdtSourceFileType nDestType,
 
   sFileName += DECL_LIB_INTERFACE_GLOBALS;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     switch (nDestType)
     {
@@ -8510,6 +9135,16 @@ bool AdtAutoClass::writeDeclLibInterfaceGlobalsFile(AdtSourceFileType nDestType,
       }
     }
 
+    for (Iter = GlobalsMap.begin() ; Iter != GlobalsMap.end() ; ++Iter)
+    {
+      const AdtAutoAttribute* pAttribute = (*Iter).second;
+
+      if ((pAttribute != 0) && !pAttribute->noInterface() && !isInherited(pAttribute))
+      {
+        pAttribute->writeDeclLibInterfaceGlobals(rFile, nDestType, AliasName);
+      }
+    }
+
     rFile.close();
 
     bWritten = true;
@@ -8530,7 +9165,7 @@ bool AdtAutoClass::writeDeclLibInterfaceConstructorFile(AdtSourceFileType nDestT
 
   sFileName += DECL_LIB_INTERFACE_CONSTRUCTOR;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     writeConstructorDecl(rFile, nDestType, pConstructorClassName);
 
@@ -8554,7 +9189,7 @@ bool AdtAutoClass::writeImplLibInterfaceConstructorFile(AdtSourceFileType nDestT
 
   sFileName += IMPL_LIB_INTERFACE_CONSTRUCTOR;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     writeConstructorImpl(rFile, nDestType, pConstructorClassName);
 
@@ -8577,7 +9212,7 @@ bool AdtAutoClass::writeImplLibInterfaceMethodsFile(AdtSourceFileType nDestType,
 
   sFileName += IMPL_LIB_INTERFACE_METHODS;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     AdtAutoAttributePtrByStringMapConstIter Iter;
 
@@ -8610,7 +9245,7 @@ bool AdtAutoClass::writeImplLibInterfaceGlobalsFile(AdtSourceFileType nDestType,
 
   sFileName += IMPL_LIB_INTERFACE_GLOBALS;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     switch (nDestType)
     {
@@ -8643,6 +9278,16 @@ bool AdtAutoClass::writeImplLibInterfaceGlobalsFile(AdtSourceFileType nDestType,
     AdtAutoAttributePtrByStringMapConstIter Iter;
 
     for (Iter = AttributeByNameMap.begin() ; Iter != AttributeByNameMap.end() ; ++Iter)
+    {
+      const AdtAutoAttribute* pAttribute = (*Iter).second;
+
+      if ((pAttribute != 0) && !pAttribute->noInterface() && !isInherited(pAttribute))
+      {
+        pAttribute->writeImplLibInterfaceGlobals(rFile, nDestType, ClassName, AliasName, R_TypeName);
+      }
+    }
+
+    for (Iter = GlobalsMap.begin() ; Iter != GlobalsMap.end() ; ++Iter)
     {
       const AdtAutoAttribute* pAttribute = (*Iter).second;
 
@@ -8691,7 +9336,7 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
                               nClassNumber);
 
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     const char* LibPrefix[] = {"", "lib"};
 
@@ -8705,7 +9350,7 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
 
         sExportsFileName += LIB_EXPORTS;
 
-        if (openFile(rExportsFile, pDestFolder, sExportsFileName, nDestType))
+        if (openFile(rExportsFile, pDestFolder, sExportsFileName, nDestType, true))
         {
           // Compile the externals definitions
           writeIncrementalCompileFile(ExternalsCodeBuffer,
@@ -8743,7 +9388,10 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
 
         for (int cn = 0 ; cn < 2 ; cn++)
         {
-          char sBuffer[32] = {0};
+          char    sBuffer[32] = {0};
+          string  rUseArrayClassName;
+
+          getUseArrayClassName(rUseArrayClassName);
 
           ::sprintf(sBuffer, "%zd", RegistrationCodeList.size());
 
@@ -8753,7 +9401,7 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
           rFile.write("(VAR pInfo : Pointer); cdecl;");
           rFile.newline();
           rFile.newline();
-          rFile.write("const callMethods : array[0..");
+          rFile.write("const extMethods : array[0..");
           rFile.write(sBuffer);
           rFile.write("] of CallMethodDef = ");
           rFile.newline();
@@ -8778,7 +9426,11 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
           rFile.write("begin");
           rFile.incrementIndent();
           rFile.newline();
-          rFile.write("R_registerRoutines(pInfo, nil, @callMethods, nil, nil);");
+          rFile.write("R_SetArrayClass(ArrayClass_");
+          rFile.write(rUseArrayClassName);
+          rFile.write(");");
+          rFile.newline();
+          rFile.write("R_registerRoutines(pInfo, nil, nil, nil, @extMethods);");
           rFile.decrementIndent();
           rFile.newline();
           rFile.write("end;");
@@ -8792,7 +9444,7 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
       case CppSourceFileType:
       case CppHeaderFileType:
       {
-        rFile.write("static const R_CallMethodDef callMethods[] = ");
+        rFile.write("static const R_CallMethodDef extMethods[] = ");
         rFile.newline();
         rFile.write("{");
         rFile.incrementIndent();
@@ -8832,7 +9484,7 @@ bool AdtAutoClass::writeImplLibRegistrationFile(AdtSourceFileType nDestType,
           rFile.write(rUseArrayClassName);
           rFile.write(");");
           rFile.newline();
-          rFile.write("R_registerRoutines(pInfo, 0, callMethods, 0, 0);");
+          rFile.write("R_registerRoutines(pInfo, 0, 0, 0, extMethods);");
           rFile.decrementIndent();
           rFile.newline();
           rFile.write("}");
@@ -8872,7 +9524,7 @@ bool AdtAutoClass::writeArrayPlansFile(AdtSourceFileType nDestType,
 
   sFileName += ARRAY_PLANS;
 
-  if (openFile(rFile, pDestFolder, sFileName, nDestType))
+  if (openFile(rFile, pDestFolder, sFileName, nDestType, true))
   {
     AdtAutoArray::writeArrayPlans(rFile, nDestType, ClassName);
     rFile.close();
@@ -8893,13 +9545,23 @@ bool AdtAutoClass::writeRInterfaceFile(const char* pDestFolder) const
 
   sFileName += "_R_interface.r";
 
-  if (openFile(rFile, pDestFolder, sFileName))
+  if (openFile(rFile, pDestFolder, sFileName, true))
   {
     writeCommonR_Code(rFile);
 
     AdtAutoAttributePtrByStringMapConstIter Iter;
 
     for (Iter = AttributeByNameMap.begin() ; Iter != AttributeByNameMap.end() ; ++Iter)
+    {
+      const AdtAutoAttribute* pAttribute = (*Iter).second;
+
+      if ((pAttribute != 0) && !pAttribute->noInterface() && !isInherited(pAttribute))
+      {
+        pAttribute->writeRInterface(rFile, ClassName, AliasName);
+      }
+    }
+
+    for (Iter = GlobalsMap.begin() ; Iter != GlobalsMap.end() ; ++Iter)
     {
       const AdtAutoAttribute* pAttribute = (*Iter).second;
 
@@ -8928,7 +9590,7 @@ bool AdtAutoClass::checkDependencies() const
   {
     AdtAutoAttribute* pAttribute = (*Iter).second;
 
-    if (!pAttribute->checkDependencies(AttributeByNameMap))
+    if (!pAttribute->checkDependencies(AttributeByNameMap, &GlobalsMap))
     {
       bOk = false;
     }
@@ -9254,6 +9916,7 @@ bool AdtAutoClass::writeConstructorArgsFiles(AdtSourceFileType nDestType,
 
 bool AdtAutoClass::writeAutomationFiles(AdtSourceFileType nDestType,
                                         const char* pDestFolder,
+                                        const char* pDestIncludeFolder,
                                         const char* pConstructorClassName,
                                         int nClassNumber) const
 {
@@ -9266,20 +9929,20 @@ bool AdtAutoClass::writeAutomationFiles(AdtSourceFileType nDestType,
     clearRegistrationCode();
     checkDependencies();
 
-    writeConstructorArgsFile(nDestType, pDestFolder, false);
-    writeConstructorArgsFile(nDestType, pDestFolder, true);
-    writeConstructorPhaseFiles(nDestType, LocalsMap, pDestFolder);
-    writeDeclLibInterfaceMethodsFile(nDestType, pDestFolder);
-    writeDeclLibInterfaceConstructorFile(nDestType, pDestFolder, pConstructorClassName);
-    writeImplLibInterfaceConstructorFile(nDestType, pDestFolder, pConstructorClassName);
-    writeImplLibInterfaceMethodsFile(nDestType, pDestFolder);
-    writeImplLibInterfaceGlobalsFile(nDestType, pDestFolder);
-    writeImplLibRegistrationFile(nDestType, pDestFolder, nClassNumber);
-    writeArrayPlansInitFile(nDestType, LocalsMap, pDestFolder);
-    writeArrayPlansCopyFile(nDestType, pDestFolder);
-    writeConstructorLocalsFile(nDestType, LocalsMap, pDestFolder);
-    writeDeclLibInterfaceGlobalsFile(nDestType, pDestFolder);
-    writeArrayPlansFile(nDestType, pDestFolder);
+    writeConstructorArgsFile(nDestType, pDestIncludeFolder, false);
+    writeConstructorArgsFile(nDestType, pDestIncludeFolder, true);
+    writeConstructorPhaseFiles(nDestType, LocalsMap, pDestIncludeFolder);
+    writeDeclLibInterfaceMethodsFile(nDestType, pDestIncludeFolder);
+    writeDeclLibInterfaceConstructorFile(nDestType, pDestIncludeFolder, pConstructorClassName);
+    writeImplLibInterfaceConstructorFile(nDestType, pDestIncludeFolder, pConstructorClassName);
+    writeImplLibInterfaceMethodsFile(nDestType, pDestIncludeFolder);
+    writeImplLibInterfaceGlobalsFile(nDestType, pDestIncludeFolder);
+    writeImplLibRegistrationFile(nDestType, pDestIncludeFolder, nClassNumber);
+    writeArrayPlansInitFile(nDestType, LocalsMap, pDestIncludeFolder);
+    writeArrayPlansCopyFile(nDestType, pDestIncludeFolder);
+    writeConstructorLocalsFile(nDestType, LocalsMap, pDestIncludeFolder);
+    writeDeclLibInterfaceGlobalsFile(nDestType, pDestIncludeFolder);
+    writeArrayPlansFile(nDestType, pDestIncludeFolder);
     writeRInterfaceFile(pDestFolder);
 
     bWritten = true;

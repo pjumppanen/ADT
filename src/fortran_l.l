@@ -53,7 +53,6 @@ int           adtFortran_nLineNumber     = 1;
 const char*   adtFortran_pFileName       = "";
 int           adtFortran_nBlockDepth     = 0;
 void*         adtFortran_pFortranContext = 0;
-const char*   adtFortran_pLastComment    = 0;
 char          adtFortran_sLastLine[512]  = {0};
 int           adtFortran_nLastLineCount  = 0;
 
@@ -100,7 +99,6 @@ void yyFortran_endParse(void)
 
   adtFortran_nLineNumber     = 1;
   adtFortran_nBlockDepth     = 0;
-  adtFortran_pLastComment    = 0;
 }
 
 
@@ -131,7 +129,6 @@ void yyFortran_resetLineNumber(const char* pFileName)
 {
   adtFortran_nError       = 0;
   adtFortran_nLineNumber  = 1;
-  adtFortran_pLastComment = 0;
   adtFortran_pFileName    = "";
 
   if (pFileName)
@@ -158,20 +155,14 @@ void yyFortranerror(char const* sErrorMessage)
 }
 
 
-const char* yyFortran_LastComment(void)
-{
-  return (adtFortran_pLastComment);
-}
-
-
 int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int nType, int nToken)
 {
   if (p_yylval != 0)
   {
     p_yylval->pContext    = pContext;
     p_yylval->dValue      = 0.0;
+    p_yylval->nValue      = 0;
     p_yylval->sValue      = 0;
-    p_yylval->sComment    = 0;
     p_yylval->nBlockDepth = adtFortran_nBlockDepth;
 
     switch (nType)
@@ -190,19 +181,14 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
 
           case COMMENT:
           {
-            adtFortran_AppendComment(pContext, pTokenText);
+            adtFortran_AppendComment(pContext, pTokenText, adtFortran_pFileName, adtFortran_nLineNumber);
             break;
           }
 
           default:
           {
             p_yylval->sValue = adtFortran_AllocString(pContext, pTokenText, 0);
-
-            if (nType == TOKEN_KEYWORD)
-            {
-              p_yylval->sComment      = adtFortran_ExtractComment(pContext);
-              adtFortran_pLastComment = p_yylval->sComment;
-            }
+            break;
           }
         }
         break;
@@ -340,13 +326,8 @@ char* mallocScanComment(const char* pClosingBrace)
 
 
 %%
-  /* This is a hack to work around a bug in the way Tapenade does fortran continuation
-     lines. I don't like putting this in because it is non-standard and may break at
-     some point but until the Tapenade bug is fixed there isn't much else I can do.
-     Below is what the regex should be. What follows that is the hack that eats up
-     any leading wihtespace after the continuation mark.
-  .*\&.*\n[ \t\f]*\&                                  {*/
-.*\&.*\n[ \t\f]*\&[ \t\f]*                                  {
+ /* Undo continuation lines */
+.*\&[ \t\f\r]*\n[ \t\f\r]*\&                        {
                                                       const char* pAmpersand = 0;
 
                                                       dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_TEXT, LINE_CONTINUATION);

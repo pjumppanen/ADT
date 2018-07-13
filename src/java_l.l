@@ -216,8 +216,8 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
   {
     p_yylval->pContext    = pContext;
     p_yylval->dValue      = 0.0;
+    p_yylval->nValue      = 0;
     p_yylval->sValue      = 0;
-    p_yylval->sComment    = 0;
     p_yylval->nBlockDepth = adtJava_nBlockDepth;
 
     switch (nType)
@@ -236,18 +236,14 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
           case SINGLELINE_COMMENT:
           case MULTILINE_COMMENT:
           {
-            adtJava_AppendComment(pContext, pTokenText);
+            adtJava_AppendComment(pContext, pTokenText, adtJava_pFileName, adtJava_nLineNumber);
             break;
           }
 
           default:
           {
             p_yylval->sValue = adtJava_AllocString(pContext, pTokenText, 1);
-
-            if (nType == TOKEN_KEYWORD)
-            {
-              p_yylval->sComment = adtJava_ExtractComment(pContext);
-            }
+            break;
           }
         }
         break;
@@ -379,11 +375,11 @@ char* mallocScanComment(const char* pClosingBrace, int nToUpper)
 
                                   while (*pChar != '\0')
                                   {
-                                    pChar = adtParse_nextWord(pChar, 0);
+                                    pChar = adtParse_nextWord(pChar, 0, 1);
 
                                     if (adtParse_matchWord(&pChar, "#ifdef", 1))
                                     {
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_matchWord(&pChar, "AD", 1))
                                       {
@@ -396,7 +392,7 @@ char* mallocScanComment(const char* pClosingBrace, int nToUpper)
                                     }
                                     else if (adtParse_matchWord(&pChar, "#ifndef", 1))
                                     {
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_matchWord(&pChar, "AD", 1))
                                       {

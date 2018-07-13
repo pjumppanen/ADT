@@ -677,6 +677,7 @@ void AdtParser::translateComment(string& rResult,
                                  AdtParserCodeType nResultCodeType,
                                  bool bDropSimpleComments) const
 {
+  bool        bOk      = true;
   const char* pComment = comment();
 
   rResult = "";
@@ -703,16 +704,17 @@ void AdtParser::translateComment(string& rResult,
 
       default:
       {
+        bOk = false;
         FAIL();
         break;
       }
     }
 
-    if (pLinePrefix != 0)
+    if ((pLinePrefix != 0) && bOk)
     {
       const char* pChar = AdtParse::nextWord(pComment);
 
-      while (*pChar != 0)
+      while ((*pChar != 0) && bOk)
       {
         string sCommentLines;
 
@@ -748,6 +750,7 @@ void AdtParser::translateComment(string& rResult,
             }
             else
             {
+              bOk = false;
               FAIL();
             }
             break;
@@ -781,6 +784,7 @@ void AdtParser::translateComment(string& rResult,
             }
             else
             {
+              bOk = false;
               FAIL();
             }
             break;
@@ -800,9 +804,19 @@ void AdtParser::translateComment(string& rResult,
             break;
           }
 
+          case '\r':
+          case '\n':
+          case '\t':
+          case ' ':
+          {
+            pChar++;
+            break;
+          }
+
           default:
           {
             // Unknown format
+            bOk = false;
             FAIL();
             break;
           }
@@ -832,9 +846,11 @@ void AdtParser::translateComment(string& rResult,
 
 //  ----------------------------------------------------------------------------
 
-AdtFile& AdtParser::writeExpanded(AdtFile& pOutFile, const char* pString)
+AdtFile& AdtParser::writeExpanded(AdtFile& pOutFile,
+                                  const char* pString,
+                                  bool bExcludeLast)
 {
-  if (pOutFile.isOpen() && (pString != 0))
+  if (pOutFile.isOpen() && (pString != 0) && (pString[0] != 0))
   {
     string  sCopy(pString);
     char*   pStart    = (char*)((const char*)sCopy);
@@ -889,7 +905,10 @@ AdtFile& AdtParser::writeExpanded(AdtFile& pOutFile, const char* pString)
 
       pStart = pEnd;
 
-      pOutFile.newline();
+      if ((!bExcludeLast || (*pEnd != 0)) && !bContinue)
+      {
+        pOutFile.newline();
+      }
     }
   }
 
@@ -916,28 +935,80 @@ AdtFile& AdtParser::write(AdtFile& pOutFile, char nChar)
 
 //  ----------------------------------------------------------------------------
 
+void AdtParser::bindComments(AdtCommon* pCompilerBase)
+{
+  if (CanBindComments && (pCompilerBase != 0))
+  {
+    const string* pComment = 0;
+
+    pCompilerBase->extractComment(&pComment, FileName, LineNumber);
+    this->bindComment(pComment);
+  }
+
+  AdtStringListConstIter  ObjNameIter;
+  const AdtStringList&    rObjList = descendantObjNameList();
+
+  for (ObjNameIter = rObjList.begin() ; ObjNameIter != rObjList.end() ; ++ObjNameIter)
+  {
+    AdtSizeTByStringMapConstIter  MapIter = descendantObjMap().find(*ObjNameIter);
+    AdtParser*                    pObj    = object(MapIter);
+
+    if (pObj != 0)
+    {
+      pObj->bindComments(pCompilerBase);
+    }
+  }
+
+  AdtParserPtrListConstIter Iter;
+  const AdtParserPtrList&   rList = objList();
+
+  for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+  {
+    AdtParser* pObj = *Iter;
+
+    if (pObj != 0)
+    {
+      pObj->bindComments(pCompilerBase);
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtParser::bindComment(const string* pComment)
+{
+  if (pComment != 0)
+  {
+    Comment = pComment;
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtParser::AdtParser()
 {
-  ObjList     = 0;
-  ObjName     = 0;
-  Comment     = 0;
-  Parent      = 0;
-  Depth       = 0;
-  LineNumber  = 0;
-  FileName    = 0;
+  ObjList         = 0;
+  ObjName         = 0;
+  Comment         = 0;
+  Parent          = 0;
+  Depth           = 0;
+  LineNumber      = 0;
+  FileName        = 0;
+  CanBindComments = false;
 }
 
 //  ----------------------------------------------------------------------------
 
 AdtParser::AdtParser(const AdtParser& rCopy)
 {
-  ObjList     = 0;
-  ObjName     = rCopy.ObjName;
-  Comment     = rCopy.Comment;
-  Parent      = 0;
-  Depth       = rCopy.Depth;
-  LineNumber  = rCopy.LineNumber;
-  FileName    = rCopy.FileName;
+  ObjList         = 0;
+  ObjName         = rCopy.ObjName;
+  Comment         = rCopy.Comment;
+  Parent          = 0;
+  Depth           = rCopy.Depth;
+  LineNumber      = rCopy.LineNumber;
+  FileName        = rCopy.FileName;
+  CanBindComments = rCopy.CanBindComments;
 
   copyList(rCopy.ObjList);
 }
@@ -951,6 +1022,56 @@ AdtParser::~AdtParser()
   if (ObjList != 0)
   {
     delete ObjList;
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtParser::lineNumberAndFileName(int nLineNumber,
+                                      const char* pFileName)
+{
+  // This is a hacky solution to get around the issue of finding the right
+  // starting line number of compound solutions. As in a Pascal IMPLEMENTATION
+  // section, we pass the start line number in the object constructor and set
+  // LineNmber to that.
+  if ((LineNumber == 0) || (LineNumber > nLineNumber))
+  {
+    LineNumber = nLineNumber;
+  }
+
+  FileName = pFileName;
+
+  // If this object contains others then we need to find the minimum linenumber
+  // of all contained objects. This is used for both error contexts and in
+  // re-binding comments with code.
+  AdtParserPtrListConstIter Iter;
+  const AdtParserPtrList&   rList = objList();
+
+  for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+  {
+    AdtParser* pObj = *Iter;
+
+    if ((pObj             != 0         ) &&
+        (pObj->FileName   == FileName  ) &&
+        (pObj->LineNumber <  LineNumber))
+    {
+      LineNumber = pObj->LineNumber;
+    }
+  }
+
+  AdtSizeTByStringMapConstIter  MapIter;
+  const AdtSizeTByStringMap&    rMap = descendantObjMap();
+
+  for (MapIter = rMap.begin() ; MapIter != rMap.end() ; ++MapIter)
+  {
+    AdtParser* pObj = object(MapIter);
+
+    if ((pObj             != 0         ) &&
+        (pObj->FileName   == FileName  ) &&
+        (pObj->LineNumber <  LineNumber))
+    {
+      LineNumber = pObj->LineNumber;
+    }
   }
 }
 
@@ -2449,6 +2570,16 @@ void AdtSourceRoot::addBlackBox(const AdtBlackBoxDefinition* pBlackBox,
     {
       rRegardAsClassSubroutineMap[pBlackBox->baseName()] = pBlackBox->baseName();
     }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtSourceRoot::appendIsBlackBoxMap(AdtIntByStringMap& rIsBlackBoxMap) const
+{
+  for (AdtIntByStringMapConstIter Iter = IsBlackBoxMap.begin() ; Iter != IsBlackBoxMap.end() ; ++Iter)
+  {
+    rIsBlackBoxMap[Iter->first] = 1;
   }
 }
 

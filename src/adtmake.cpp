@@ -27,25 +27,6 @@
 #include "adtmake.hpp"
 #include "adtcpp.hpp"
 #include "adtautomate.hpp"
-#include <stdio.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <errno.h>
-
-
-#if defined(_MSC_VER)
-
-  #include <direct.h>
-
-  #define popen           _popen
-  #define pclose          _pclose
-  #define adt_mkdir(Dir)  mkdir(Dir)
-
-#else
-
-  #define adt_mkdir(Dir)  mkdir(Dir, S_IRWXO | S_IRWXG | S_IRWXU)
-
-#endif
 
 
 //  ----------------------------------------------------------------------------
@@ -204,6 +185,13 @@ void make_SourceFilesClose()
 void make_WorkingDirectory(const char* pString)
 {
   MakeSystem.workingDirectory(unifyFilePath(pString));
+}
+
+//  ----------------------------------------------------------------------------
+
+void make_IncludeDirectory(const char* pString)
+{
+  MakeSystem.includeDirectory(unifyFilePath(pString));
 }
 
 //  ----------------------------------------------------------------------------
@@ -886,6 +874,8 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
                                       const char* pClassName,
                                       int nIteration) const
 {
+  AdtTapenadeVersion TapenadeVersion;
+
   bool bDone = false;
 
   if (pSourceFile != 0)
@@ -897,6 +887,7 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
     string                  sNewFunctionName;
     string                  sFunctionName;
     string                  sOutputFileName;
+    string                  sDeleteFileName;
     string                  sTestOutputFileName;
 
     VarSuffix     = "";
@@ -1062,6 +1053,11 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
 
     CopySubSuffix.toUpper();
 
+    if (TapenadeVersion > 3.12)
+    {
+      Arguments += "-tgtmodulename _d -adjmodulename _b -copyname _c ";
+    }
+
     //Special option to force more error message reporting
     Arguments += "-debug 1 ";
 
@@ -1149,6 +1145,21 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
       executeCommandLine(rParent, PreCommand, pSourceFile, "pre-step");
     }
 
+    // delete previous output files so we can be sure we know when Tapenade
+    // has run correctly. As it doesn't return a non-zero exit code we won't
+    // know when it has failed otherwise.
+    rParent.prefixWorkingDirectory(sDeleteFileName,
+                                   sOutputFileName + ".f95",
+                                   false);
+
+    unlink(sDeleteFileName);
+
+    rParent.prefixWorkingDirectory(sDeleteFileName,
+                                   sOutputFileName + ".f90",
+                                   false);
+
+    unlink(sDeleteFileName);
+
     ::printf("\nrunning TAPENADE with:\n%s\n", Arguments.c_str());
 
     //Run tapenade through a pipe so we can capture stdout and redirect it here
@@ -1182,6 +1193,33 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
       int nExitCode = pclose(pPipe);
 
       ::printf("\nexit code: %d\n\n", nExitCode);
+
+      // Test for output file existence. If non-exstent there is a problem.
+      sTestOutputFileName = sOutputFileName + ".f95";
+
+      rParent.prefixWorkingDirectory(rOutputFileName,
+                                     sTestOutputFileName,
+                                     false);
+
+      struct stat finfo = {0};
+
+      if (::stat(rOutputFileName, &finfo) != 0)
+      {
+        sTestOutputFileName = sOutputFileName + ".f90";
+
+        rParent.prefixWorkingDirectory(rOutputFileName,
+                                       sTestOutputFileName,
+                                       false);
+
+        ::printf("WARNING: Expected .f95 output not found. Trying .f90 extension.\n");
+
+        if (::stat(rOutputFileName, &finfo) != 0)
+        {
+          ::printf("ERROR: Tapenade output file %s (.f95 / .f90) not found.\n", sOutputFileName.c_str());
+
+          bErrorMessages = true;
+        }
+      }
 
       if ((nExitCode != 0) || bErrorMessages)
       {
@@ -1235,25 +1273,6 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
       }
 
       bDone = true;
-    }
-
-    sTestOutputFileName = sOutputFileName + ".f95";
-
-    rParent.prefixWorkingDirectory(rOutputFileName,
-                                   sTestOutputFileName,
-                                   false);
-
-    struct stat finfo = {0};
-
-    if (::stat(rOutputFileName, &finfo) != 0)
-    {
-      sTestOutputFileName = sOutputFileName + ".f90";
-
-      rParent.prefixWorkingDirectory(rOutputFileName,
-                                     sTestOutputFileName,
-                                     false);
-
-      ::printf("WARNING: Expected .f95 output not found. Trying .f90 extension.\n");
     }
 
     sOutputFileName = sTestOutputFileName;
@@ -1349,6 +1368,7 @@ void AdtMakeClass::reset()
   DestFileType      = DelphiSourceFileType;
   LastModifiedTime  = 0;
 
+  IsBlackBoxMap.clear();
   OperationsList.clear();
   BoundsCheckList.clear();
 }
@@ -1509,6 +1529,7 @@ AdtMakeClass::AdtMakeClass()
    OutputHeaderFile(),
    WorkingFile(),
    BlackBoxFile(),
+   IsBlackBoxMap(),
    OperationsList(),
    BoundsCheckList()
 {
@@ -1528,6 +1549,7 @@ AdtMakeClass::AdtMakeClass(const AdtMakeClass& rCopy)
    OutputHeaderFile(rCopy.OutputHeaderFile),
    WorkingFile(rCopy.WorkingFile),
    BlackBoxFile(rCopy.BlackBoxFile),
+   IsBlackBoxMap(rCopy.IsBlackBoxMap),
    OperationsList(rCopy.OperationsList),
    BoundsCheckList(rCopy.BoundsCheckList)
 {
@@ -1545,6 +1567,29 @@ AdtMakeClass::~AdtMakeClass()
 
 //  ----------------------------------------------------------------------------
 
+string AdtMakeClass::constructIncludeDirectory(const AdtMakeCommand& rMakeCommand,
+                                               const string& rRootPath) const
+{
+  string      sIncludeFolder;
+  const char* pChar = AdtParse::nextWord(rMakeCommand.includeDirectory());
+
+  AdtParse::matchWord(pChar, "./") || AdtParse::matchWord(pChar, ".\\");
+
+  if (strlen(pChar) > 0)
+  {
+    if (rRootPath.length() > 0)
+    {
+      sIncludeFolder += rRootPath + "/";
+    }
+
+    sIncludeFolder += pChar;
+  }
+
+  return (unixifyFilePath(sIncludeFolder));
+}
+
+//  ----------------------------------------------------------------------------
+
 int AdtMakeClass::make(AdtMakeCommand& rParent,
                        AdtParserPtrList& rCodeList,
                        AdtMakeClassPtrByStringMap& rWorkingMakeByClass,
@@ -1555,9 +1600,10 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                        AdtMakeIncremental& rBuildCheck,
                        int nClassNumber)
 {
-  int               nReturnCode    = 0;
-  AdtSourceRoot*    pGoal          = 0;
-  string            rFileAndPath;
+  int                 nReturnCode    = 0;
+  AdtSourceRoot*      pGoal          = 0;
+  string              rFileAndPath;
+  AdtTapenadeVersion  TapenadeVersion;
 
   //Parse source
   if (rParent.findFile(SourceFile, rFileAndPath))
@@ -1576,6 +1622,8 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
       SourcePath.extension("");
       SourcePath.join(SourceFolder);
 
+      string sIncludeFolder(constructIncludeDirectory(rParent, SourceFolder));
+
       AdtAutoClass::enableAutomation(true, true);
       AdtCppScopeManager::globalScopeManager()->pushScope("Preprocess", false);
 
@@ -1592,7 +1640,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
       // Fix the chicken and egg problem of needing the constructor args files
       // to compile the makefile correctly but not being in a position to export
       // all files yet because we need to do all the AD operations first.
-      AdtAutoClass::exportConstructorArgsFiles(SourceFileType, SourceFolder);
+      AdtAutoClass::exportConstructorArgsFiles(SourceFileType, sIncludeFolder);
       AdtAutoClass::enableAutomation(false, false);
       AdtCppScopeManager::globalScopeManager()->popScope();
 
@@ -1674,6 +1722,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
           // Merge source and translate to fortran working file
           AdtStringByStringMap  rRegardAsClassFunctionsMap;
           AdtStringByStringMap  rRegardAsClassSubroutineMap;
+          AdtStringByStringMap  rPublicMethodsMap;
           AdtStringList         ConstructorList;
           AdtParserPtrList      IdentList;
           AdtParserPtrListIter  Iter;
@@ -1721,7 +1770,8 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
             // rCodeList which may contain black box definitions
             pGoal->buildBlackBoxFile(0,
                                      rRegardAsClassFunctionsMap,
-                                     rRegardAsClassSubroutineMap);
+                                     rRegardAsClassSubroutineMap,
+                                     TapenadeVersion);
 
             struct stat StatBuf;
 
@@ -1736,12 +1786,15 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
             // rCodeList which may contain black box definitions
             bHasBlackBoxFile      = pGoal->buildBlackBoxFile(BlackBoxFile,
                                                              rRegardAsClassFunctionsMap,
-                                                             rRegardAsClassSubroutineMap);
+                                                             rRegardAsClassSubroutineMap,
+                                                             TapenadeVersion);
+
             bHaveSavedWorkingRoot = false;
           }
 
+          pGoal->appendIsBlackBoxMap(IsBlackBoxMap);
           pGoal->expandMacros();
-          pGoal->extractClassConstructors(ConstructorList, ClassName, ParentClassName, destFileType());
+          pGoal->extractClassConstructors(ConstructorList, ClassName, ParentClassName, sIncludeFolder, destFileType());
 
           //Write merged and flattened source
           string  OutputFileTemp(OutputFile);
@@ -1821,6 +1874,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
               }
 
               // translate the entire module to fortran
+              pGoal->isBlackBoxMap(IsBlackBoxMap);
               pGoal->regardAsClassFunctions(rRegardAsClassFunctionsMap);
               pGoal->regardAsClassSubroutines(rRegardAsClassSubroutineMap);
               pGoal->writeClassMethodsAsFortran(FortranOut,
@@ -2084,6 +2138,13 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
 
                       adtFortran_releaseRoot();
                     }
+
+                    string  sClassPrefix(parentClassName());
+
+                    sClassPrefix += "__";
+
+                    AdtParser::nameListToNameMap(rPublicMethodsMap, rNewFunctionsList);
+                    AdtParser::nameListToNameMap(rPublicMethodsMap, BoundsCheckList, sClassPrefix);
                   }
                   else
                   {
@@ -2208,10 +2269,12 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
 
                         pWorkingRoot->writeCPP_ClassHeader(CppHeader,
                                                            SourceHeaderFile,
+                                                           rPublicMethodsMap,
                                                            NewMethodList,
                                                            NewAttributeList,
                                                            ClassName,
                                                            ParentClassName,
+                                                           sIncludeFolder,
                                                            ConstructorList,
                                                            sPreText,
                                                            sPostText);
@@ -2236,7 +2299,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                                    NewMethodList,
                                    NewMethodMap);
 
-                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, ClassName, nClassNumber);
+                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, sIncludeFolder, ClassName, nClassNumber);
                         AdtAutoClass::enableAutomation(false, false);
                       }
                       else
@@ -2259,6 +2322,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                                                                    NewAttributeList,
                                                                    ClassName,
                                                                    ParentClassName,
+                                                                   sIncludeFolder,
                                                                    ConstructorList,
                                                                    &rVarSuffixList,
                                                                    sPreText,
@@ -2290,10 +2354,12 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                         ::printf("Building output file %s\n", OutputFileTemp.c_str());
 
                         pWorkingRoot->writeDelphiClass(FileOut,
+                                                       rPublicMethodsMap,
                                                        NewMethodList,
                                                        NewAttributeList,
                                                        ClassName,
                                                        ParentClassName,
+                                                       sIncludeFolder,
                                                        ConstructorList,
                                                        UsesList,
                                                        &rVarSuffixList);
@@ -2323,7 +2389,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                                    NewMethodList,
                                    NewMethodMap);
 
-                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, ClassName, nClassNumber);
+                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, sIncludeFolder, ClassName, nClassNumber);
                         AdtAutoClass::enableAutomation(false, false);
 
                         AdtCommon::removeTranslation("__FILE__");
@@ -2419,6 +2485,8 @@ void AdtMakeClass::newMakeClass(const AdtMakeCommand& rMakeCommand,
 {
   reset();
 
+  AdtTapenadeVersion  TapenadeVersion(true);
+
   if (pNewClassName != 0)
   {
     ClassName = pNewClassName;
@@ -2474,7 +2542,7 @@ void AdtMakeClass::newMakeClass(const AdtMakeCommand& rMakeCommand,
 
     // Compile definition file into Tapenade compatible format and append it
     // to the output file.
-    AdtBlackBoxCompiler::makeBlackBoxFile(rFileAndPath, BlackBoxFile, true);
+    AdtBlackBoxCompiler::makeBlackBoxFile(rFileAndPath, BlackBoxFile, IsBlackBoxMap, true, TapenadeVersion);
   }
 }
 
@@ -2525,6 +2593,7 @@ bool AdtMakeClass::lastWorkingFile(string& rWorkingFile) const
 void AdtMakeCommand::reset()
 {
   WorkingDirectory  = "";
+  IncludeDirectory  = "";
   SourceFileType    = UnknownSourceFileType;
 
   Switches.clear();
@@ -2595,8 +2664,170 @@ void AdtMakeCommand::addDefaultPaths()
 
 //  ----------------------------------------------------------------------------
 
+void AdtMakeCommand::fixDirectory(string& rDirectory,
+                                  const char* pDirectory,
+                                  const char* pTypeName,
+                                  bool bNoSubDirectories)
+{
+  // Make sure the directory path ends in a slash
+  if (pDirectory != 0)
+  {
+    int   nOffset;
+    char  nLastChar;
+
+    rDirectory = pDirectory;
+
+    switch (pDirectory[0])
+    {
+      case '\"':
+      case '\'':
+      {
+        rDirectory.trim("\"\'");
+        nOffset = 2;
+        break;
+      }
+
+      default:
+      {
+        nOffset = 1;
+        break;
+      }
+    }
+
+    if (bNoSubDirectories)
+    {
+      bool        bOk;
+      string      sWord;
+      const char* pDirectory  = rDirectory.c_str();
+      const char* pChar       = AdtParse::nextWord(pDirectory);
+
+    #if defined(_MSC_VER)
+      AdtParse::matchWord(pChar, "./") || AdtParse::matchWord(pChar, ".\\");
+      AdtParse::extractWord(sWord, "/\\", pChar, false);
+
+      pChar = AdtParse::nextWord(pChar);
+
+      AdtParse::matchWord(pChar, "/") || AdtParse::matchWord(pChar, "\\");
+    #else
+      AdtParse::matchWord(pChar, "./");
+      AdtParse::extractWord(sWord, "/", pChar, false);
+
+      pChar = AdtParse::nextWord(pChar);
+
+      AdtParse::matchWord(pChar, "/");
+    #endif
+
+      bOk   = (*pChar == 0) && (sWord.length() > 0);
+
+      if (!bOk)
+      {
+        // Working has sub-directories
+         ::printf("MAKE ERROR : %s folder %s must be only one level deep and relative to the project folder\n\n",
+                 pTypeName,
+                 rDirectory.c_str());
+
+        AdtExit(-1);
+      }
+    }
+
+    nLastChar = pDirectory[::strlen(pDirectory) - nOffset];
+
+    switch (nLastChar)
+    {
+      case '\\':
+      case '/':
+      {
+        break;
+      }
+
+      default:
+      {
+        rDirectory += "/";
+        break;
+      }
+    }
+
+    // Make sure the working directory exists and if not create it.
+    struct stat status = {0};
+    string      TestDir(rDirectory);
+
+    TestDir.trimRight("/\\");
+
+    if (stat(TestDir, &status) == 0)
+    {
+      if ((status.st_mode & S_IFDIR) != S_IFDIR)
+      {
+        // Working directory exists but it isn't a directory.
+        ::printf("MAKE ERROR : %s folder %s is a file\nchange the name of the %s folder\n\n",
+                 pTypeName,
+                 TestDir.c_str(),
+                 pTypeName);
+
+        AdtExit(-1);
+      }
+    }
+    else
+    {
+      if (adt_mkdir(TestDir) != 0)
+      {
+        // mkdir failed
+        ::printf("MAKE ERROR : Cannot create %s folder %s\nCheck folder permissions\nerror number %d\n\n",
+                 pTypeName,
+                 TestDir.c_str(), errno);
+
+        AdtExit(-1);
+      }
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeCommand::prefixDirectory(const string& rDirectory,
+                                     string& rResultFileName,
+                                     const char* pFileName,
+                                     bool bQuote) const
+{
+  if ((pFileName != 0) && (pFileName[0] != 0))
+  {
+    string StrippedFileName(pFileName);
+
+    StrippedFileName.trim("\"\'");
+
+    if (rDirectory.length() > 0)
+    {
+      string StrippedDirectory(rDirectory);
+
+      StrippedDirectory.trim("\"\'");
+
+      if (bQuote)
+      {
+        rResultFileName = "\"" + StrippedDirectory + StrippedFileName + "\"";
+      }
+      else
+      {
+        rResultFileName = StrippedDirectory + StrippedFileName;
+      }
+    }
+    else
+    {
+      if (bQuote)
+      {
+        rResultFileName = "\"" + StrippedFileName + "\"";
+      }
+      else
+      {
+        rResultFileName = StrippedFileName;
+      }
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtMakeCommand::AdtMakeCommand()
  : WorkingDirectory(),
+   IncludeDirectory(),
    Switches(),
    Paths(),
    BlackBoxList(),
@@ -2611,6 +2842,7 @@ AdtMakeCommand::AdtMakeCommand()
 
 AdtMakeCommand::AdtMakeCommand(const AdtMakeCommand& rCopy)
  : WorkingDirectory(rCopy.WorkingDirectory),
+   IncludeDirectory(rCopy.IncludeDirectory),
    Switches(rCopy.Switches),
    Paths(rCopy.Paths),
    BlackBoxList(rCopy.BlackBoxList),
@@ -2637,73 +2869,14 @@ AdtMakeCommand::~AdtMakeCommand()
 
 void AdtMakeCommand::workingDirectory(const char* pWorkingDirectory)
 {
-  // Make sure the directory path ends in a slash
-  if (pWorkingDirectory != 0)
-  {
-    int   nOffset;
-    char  nLastChar;
+  fixDirectory(WorkingDirectory, pWorkingDirectory, "Working", true);
+}
 
-    WorkingDirectory = pWorkingDirectory;
+//  ----------------------------------------------------------------------------
 
-    switch (pWorkingDirectory[0])
-    {
-      case '\"':
-      case '\'':
-      {
-        WorkingDirectory.trim("\"\'");
-        nOffset = 2;
-        break;
-      }
-
-      default:
-      {
-        nOffset = 1;
-        break;
-      }
-    }
-
-    nLastChar = pWorkingDirectory[::strlen(pWorkingDirectory) - nOffset];
-
-    switch (nLastChar)
-    {
-      case '\\':
-      case '/':
-      {
-        break;
-      }
-
-      default:
-      {
-        WorkingDirectory += "/";
-        break;
-      }
-    }
-
-    // Make sure the working directory exists and if not create it.
-    struct stat status = {0};
-    string      TestWorkingDir(WorkingDirectory);
-
-    TestWorkingDir.trimRight("/\\");
-
-    if (stat(TestWorkingDir, &status) == 0)
-    {
-      if ((status.st_mode & S_IFDIR) != S_IFDIR)
-      {
-        // Working directory exists but it isn't a directory.
-        ::printf("MAKE ERROR : Working folder %s is a file\nchange the name of the working folder\n\n",
-                 TestWorkingDir.c_str());
-      }
-    }
-    else
-    {
-      if (adt_mkdir(TestWorkingDir) != 0)
-      {
-        // mkdir failed
-        ::printf("MAKE ERROR : Cannot create working folder %s\nCheck folder permissions\nerror number %d\n\n",
-                 TestWorkingDir.c_str(), errno);
-      }
-    }
-  }
+void AdtMakeCommand::includeDirectory(const char* pIncludeDirectory)
+{
+  fixDirectory(IncludeDirectory, pIncludeDirectory, "Include", true);
 }
 
 //  ----------------------------------------------------------------------------
@@ -2712,39 +2885,22 @@ void AdtMakeCommand::prefixWorkingDirectory(string& rResultFileName,
                                             const char* pFileName,
                                             bool bQuote) const
 {
-  if ((pFileName != 0) && (pFileName[0] != 0))
-  {
-    string StrippedFileName(pFileName);
+  prefixDirectory(WorkingDirectory,
+                  rResultFileName,
+                  pFileName,
+                  bQuote);
+}
 
-    StrippedFileName.trim("\"\'");
+//  ----------------------------------------------------------------------------
 
-    if (WorkingDirectory.length() > 0)
-    {
-      string StrippedDirectory(WorkingDirectory);
-
-      StrippedDirectory.trim("\"\'");
-
-      if (bQuote)
-      {
-        rResultFileName = "\"" + StrippedDirectory + StrippedFileName + "\"";
-      }
-      else
-      {
-        rResultFileName = StrippedDirectory + StrippedFileName;
-      }
-    }
-    else
-    {
-      if (bQuote)
-      {
-        rResultFileName = "\"" + StrippedFileName + "\"";
-      }
-      else
-      {
-        rResultFileName = StrippedFileName;
-      }
-    }
-  }
+void AdtMakeCommand::prefixIncludeDirectory(string& rResultFileName,
+                                            const char* pFileName,
+                                            bool bQuote) const
+{
+  prefixDirectory(IncludeDirectory,
+                  rResultFileName,
+                  pFileName,
+                  bQuote);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3658,6 +3814,13 @@ void AdtMakeSystem::sourceFilesClose()
 void AdtMakeSystem::workingDirectory(const char* pString)
 {
   CurrentCommand.workingDirectory(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeSystem::includeDirectory(const char* pString)
+{
+  CurrentCommand.includeDirectory(pString);
 }
 
 //  ----------------------------------------------------------------------------

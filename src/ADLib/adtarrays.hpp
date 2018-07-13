@@ -165,6 +165,104 @@ UNPROTECT(1)\
 
 
 //  ----------------------------------------------------------------------------
+//  struct longbool
+//  ----------------------------------------------------------------------------
+//  need to define a longbool struct to act as longbool type. Cannot use typedef
+//  because that is only an alias and will conflict with int in the overloading
+//  of methods in the AdtArrays class.
+//  ----------------------------------------------------------------------------
+union longbool
+{
+  int Val;
+
+  longbool& operator =(longbool a_longbool);
+  longbool& operator =(bool a_bool);
+  longbool& operator =(int a_int);
+
+  operator bool() const;
+  operator int() const;
+
+  friend longbool operator !(longbool a_longbool);
+  friend longbool operator &&(longbool a_longbool_A, longbool a_longbool_B);
+  friend longbool operator ||(longbool a_longbool_A, longbool a_longbool_B);
+};
+
+//  ----------------------------------------------------------------------------
+
+inline longbool& longbool::operator =(longbool a_longbool)
+{
+  Val = a_longbool.Val;
+
+  return (*this);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline longbool& longbool::operator =(bool a_bool)
+{
+  Val = a_bool ? 1 : 0;
+
+  return (*this);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline longbool& longbool::operator =(int a_int)
+{
+  Val = (a_int != 0) ? 1 : 0;
+
+  return (*this);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline longbool::operator bool() const
+{
+  return (Val != 0);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline longbool::operator int() const
+{
+  return (Val);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline longbool operator !(longbool a_longbool)
+{
+  longbool Result;
+
+  Result.Val = (a_longbool.Val == 0) ? 1 : 0;
+
+  return (Result);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline longbool operator &&(longbool a_longbool_A, longbool a_longbool_B)
+{
+  longbool Result;
+
+  Result.Val = ((a_longbool_A.Val != 0) && (a_longbool_B.Val != 0)) ? 1 : 0;
+
+  return (Result);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline longbool operator ||(longbool a_longbool_A, longbool a_longbool_B)
+{
+  longbool Result;
+
+  Result.Val = ((a_longbool_A.Val != 0) || (a_longbool_B.Val != 0)) ? 1 : 0;
+
+  return (Result);
+}
+
+
+//  ----------------------------------------------------------------------------
 //  The maximum number of array co-ordinates supported in this library. If you
 //  add more then please update this.
 //  ----------------------------------------------------------------------------
@@ -184,6 +282,19 @@ typedef bool*******                 ARRAY_7B;
 typedef bool********                ARRAY_8B;
 typedef bool*********               ARRAY_9B;
 typedef bool**********              ARRAY_10B;
+
+//  ----------------------------------------------------------------------------
+
+typedef longbool*                   ARRAY_1LB;
+typedef longbool**                  ARRAY_2LB;
+typedef longbool***                 ARRAY_3LB;
+typedef longbool****                ARRAY_4LB;
+typedef longbool*****               ARRAY_5LB;
+typedef longbool******              ARRAY_6LB;
+typedef longbool*******             ARRAY_7LB;
+typedef longbool********            ARRAY_8LB;
+typedef longbool*********           ARRAY_9LB;
+typedef longbool**********          ARRAY_10LB;
 
 //  ----------------------------------------------------------------------------
 
@@ -323,6 +434,7 @@ enum AdtVarType
 {
   AdtVarType_UNDEFINED,
   AdtVarType_BOOL,
+  AdtVarType_LONGBOOL,
   AdtVarType_CHAR,
   AdtVarType_UCHAR,
   AdtVarType_INT,
@@ -335,134 +447,145 @@ enum AdtVarType
   AdtVarType_DOUBLE
 };
 
-size_t elementSizeFromVarType(AdtVarType nVarType);
+size_t      elementSizeFromVarType(AdtVarType nVarType);
+const char* varTypeName(AdtVarType nVarType);
 
 
 //  ----------------------------------------------------------------------------
-//  Template function to convert array to varType. We need this for template
+//  function to convert array to varType. We need this for template
 //  function implementations to eliminate template parameters.
 //  ----------------------------------------------------------------------------
-template<class T> inline AdtVarType varType(T Array){ return (AdtVarType_UNDEFINED); };
-template<> inline AdtVarType varType<ARRAY_1B>(ARRAY_1B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_2B>(ARRAY_2B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_3B>(ARRAY_3B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_4B>(ARRAY_4B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_5B>(ARRAY_5B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_6B>(ARRAY_6B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_7B>(ARRAY_7B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_8B>(ARRAY_8B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_9B>(ARRAY_9B Array){ return (AdtVarType_BOOL); };
-template<> inline AdtVarType varType<ARRAY_10B>(ARRAY_10B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_1B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_2B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_3B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_4B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_5B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_6B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_7B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_8B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_9B Array){ return (AdtVarType_BOOL); };
+inline AdtVarType varType(ARRAY_10B Array){ return (AdtVarType_BOOL); };
 
-template<> inline AdtVarType varType<ARRAY_1C>(ARRAY_1C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_2C>(ARRAY_2C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_3C>(ARRAY_3C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_4C>(ARRAY_4C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_5C>(ARRAY_5C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_6C>(ARRAY_6C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_7C>(ARRAY_7C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_8C>(ARRAY_8C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_9C>(ARRAY_9C Array){ return (AdtVarType_CHAR); };
-template<> inline AdtVarType varType<ARRAY_10C>(ARRAY_10C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_1LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_2LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_3LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_4LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_5LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_6LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_7LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_8LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_9LB Array){ return (AdtVarType_LONGBOOL); };
+inline AdtVarType varType(ARRAY_10LB Array){ return (AdtVarType_LONGBOOL); };
 
-template<> inline AdtVarType varType<ARRAY_1UC>(ARRAY_1UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_2UC>(ARRAY_2UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_3UC>(ARRAY_3UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_4UC>(ARRAY_4UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_5UC>(ARRAY_5UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_6UC>(ARRAY_6UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_7UC>(ARRAY_7UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_8UC>(ARRAY_8UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_9UC>(ARRAY_9UC Array){ return (AdtVarType_UCHAR); };
-template<> inline AdtVarType varType<ARRAY_10UC>(ARRAY_10UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_1C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_2C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_3C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_4C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_5C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_6C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_7C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_8C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_9C Array){ return (AdtVarType_CHAR); };
+inline AdtVarType varType(ARRAY_10C Array){ return (AdtVarType_CHAR); };
 
-template<> inline AdtVarType varType<ARRAY_1I>(ARRAY_1I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_2I>(ARRAY_2I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_3I>(ARRAY_3I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_4I>(ARRAY_4I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_5I>(ARRAY_5I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_6I>(ARRAY_6I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_7I>(ARRAY_7I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_8I>(ARRAY_8I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_9I>(ARRAY_9I Array){ return (AdtVarType_INT); };
-template<> inline AdtVarType varType<ARRAY_10I>(ARRAY_10I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_1UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_2UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_3UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_4UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_5UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_6UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_7UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_8UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_9UC Array){ return (AdtVarType_UCHAR); };
+inline AdtVarType varType(ARRAY_10UC Array){ return (AdtVarType_UCHAR); };
 
-template<> inline AdtVarType varType<ARRAY_1UI>(ARRAY_1UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_2UI>(ARRAY_2UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_3UI>(ARRAY_3UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_4UI>(ARRAY_4UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_5UI>(ARRAY_5UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_6UI>(ARRAY_6UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_7UI>(ARRAY_7UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_8UI>(ARRAY_8UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_9UI>(ARRAY_9UI Array){ return (AdtVarType_UINT); };
-template<> inline AdtVarType varType<ARRAY_10UI>(ARRAY_10UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_1I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_2I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_3I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_4I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_5I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_6I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_7I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_8I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_9I Array){ return (AdtVarType_INT); };
+inline AdtVarType varType(ARRAY_10I Array){ return (AdtVarType_INT); };
 
-template<> inline AdtVarType varType<ARRAY_1S>(ARRAY_1S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_2S>(ARRAY_2S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_3S>(ARRAY_3S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_4S>(ARRAY_4S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_5S>(ARRAY_5S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_6S>(ARRAY_6S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_7S>(ARRAY_7S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_8S>(ARRAY_8S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_9S>(ARRAY_9S Array){ return (AdtVarType_SHORT); };
-template<> inline AdtVarType varType<ARRAY_10S>(ARRAY_10S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_1UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_2UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_3UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_4UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_5UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_6UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_7UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_8UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_9UI Array){ return (AdtVarType_UINT); };
+inline AdtVarType varType(ARRAY_10UI Array){ return (AdtVarType_UINT); };
 
-template<> inline AdtVarType varType<ARRAY_1US>(ARRAY_1US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_2US>(ARRAY_2US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_3US>(ARRAY_3US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_4US>(ARRAY_4US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_5US>(ARRAY_5US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_6US>(ARRAY_6US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_7US>(ARRAY_7US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_8US>(ARRAY_8US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_9US>(ARRAY_9US Array){ return (AdtVarType_USHORT); };
-template<> inline AdtVarType varType<ARRAY_10US>(ARRAY_10US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_1S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_2S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_3S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_4S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_5S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_6S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_7S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_8S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_9S Array){ return (AdtVarType_SHORT); };
+inline AdtVarType varType(ARRAY_10S Array){ return (AdtVarType_SHORT); };
 
-template<> inline AdtVarType varType<ARRAY_1L>(ARRAY_1L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_2L>(ARRAY_2L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_3L>(ARRAY_3L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_4L>(ARRAY_4L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_5L>(ARRAY_5L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_6L>(ARRAY_6L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_7L>(ARRAY_7L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_8L>(ARRAY_8L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_9L>(ARRAY_9L Array){ return (AdtVarType_LONG); };
-template<> inline AdtVarType varType<ARRAY_10L>(ARRAY_10L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_1US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_2US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_3US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_4US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_5US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_6US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_7US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_8US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_9US Array){ return (AdtVarType_USHORT); };
+inline AdtVarType varType(ARRAY_10US Array){ return (AdtVarType_USHORT); };
 
-template<> inline AdtVarType varType<ARRAY_1UL>(ARRAY_1UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_2UL>(ARRAY_2UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_3UL>(ARRAY_3UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_4UL>(ARRAY_4UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_5UL>(ARRAY_5UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_6UL>(ARRAY_6UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_7UL>(ARRAY_7UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_8UL>(ARRAY_8UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_9UL>(ARRAY_9UL Array){ return (AdtVarType_ULONG); };
-template<> inline AdtVarType varType<ARRAY_10UL>(ARRAY_10UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_1L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_2L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_3L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_4L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_5L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_6L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_7L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_8L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_9L Array){ return (AdtVarType_LONG); };
+inline AdtVarType varType(ARRAY_10L Array){ return (AdtVarType_LONG); };
 
-template<> inline AdtVarType varType<ARRAY_1F>(ARRAY_1F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_2F>(ARRAY_2F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_3F>(ARRAY_3F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_4F>(ARRAY_4F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_5F>(ARRAY_5F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_6F>(ARRAY_6F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_7F>(ARRAY_7F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_8F>(ARRAY_8F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_9F>(ARRAY_9F Array){ return (AdtVarType_FLOAT); };
-template<> inline AdtVarType varType<ARRAY_10F>(ARRAY_10F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_1UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_2UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_3UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_4UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_5UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_6UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_7UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_8UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_9UL Array){ return (AdtVarType_ULONG); };
+inline AdtVarType varType(ARRAY_10UL Array){ return (AdtVarType_ULONG); };
 
-template<> inline AdtVarType varType<ARRAY_1D>(ARRAY_1D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_2D>(ARRAY_2D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_3D>(ARRAY_3D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_4D>(ARRAY_4D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_5D>(ARRAY_5D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_6D>(ARRAY_6D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_7D>(ARRAY_7D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_8D>(ARRAY_8D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_9D>(ARRAY_9D Array){ return (AdtVarType_DOUBLE); };
-template<> inline AdtVarType varType<ARRAY_10D>(ARRAY_10D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_1F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_2F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_3F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_4F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_5F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_6F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_7F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_8F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_9F Array){ return (AdtVarType_FLOAT); };
+inline AdtVarType varType(ARRAY_10F Array){ return (AdtVarType_FLOAT); };
+
+inline AdtVarType varType(ARRAY_1D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_2D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_3D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_4D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_5D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_6D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_7D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_8D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_9D Array){ return (AdtVarType_DOUBLE); };
+inline AdtVarType varType(ARRAY_10D Array){ return (AdtVarType_DOUBLE); };
 
 
 //  ----------------------------------------------------------------------------
@@ -1351,32 +1474,6 @@ public:
   static void             xcopy(const T& rSrcArrayOriginValue, T& rDestArrayOriginValue, int nCount)
   {
     ::memcpy((void*)&rDestArrayOriginValue, (void*)&rSrcArrayOriginValue, nCount * sizeof(T));
-  }
-
-  // R_to_ADlib methods
-  template<class T>
-  void                    R_to_ADlib(int* pArraySrc, T pArrayDest)
-  {
-    AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)pArraySrc, (char*)pArrayDest);
-  }
-
-  template<class T>
-  void                    R_to_ADlib(double* pArraySrc, T pArrayDest)
-  {
-    AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)pArraySrc, (char*)pArrayDest);
-  }
-
-  // ADlib_to_R methods
-  template<class T>
-  void                    ADlib_to_R(T pArraySrc, int* pArrayDest) const
-  {
-    AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)pArraySrc, (char*)pArrayDest);
-  }
-
-  template<class T>
-  void                    ADlib_to_R(T pArraySrc, double* pArrayDest) const
-  {
-    AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)pArraySrc, (char*)pArrayDest);
   }
 
   // zero methods

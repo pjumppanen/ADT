@@ -51,13 +51,37 @@ string unifyFilePath(const char* pFilePath)
       sUnifiedPath[cn] = '\\';
     }
   #else
-    if ((nChar == '\\') &&
-        (cn + 1 < nLen) &&
+    if ((nChar  == '\\') &&
+        (cn + 1 <= nLen) &&
         (sUnifiedPath[cn + 1] != ' '))
     {
       sUnifiedPath[cn] = '/';
     }
   #endif
+  }
+
+  return (sUnifiedPath);
+}
+
+
+//  ----------------------------------------------------------------------------
+
+string unixifyFilePath(const char* pFilePath)
+{
+  string    sUnifiedPath(pFilePath);
+  size_t    nPos = 0;
+  size_t    nLen = sUnifiedPath.length();
+
+  for (size_t cn = 0 ; cn < nLen ; cn++)
+  {
+    char nChar = sUnifiedPath[cn];
+
+    if ((nChar  == '\\') &&
+        (cn + 1 <= nLen) &&
+        (sUnifiedPath[cn + 1] != ' '))
+    {
+      sUnifiedPath[cn] = '/';
+    }
   }
 
   return (sUnifiedPath);

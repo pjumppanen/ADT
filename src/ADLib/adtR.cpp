@@ -44,6 +44,33 @@ void R_SetArrayClass(R_UseArrayClass nClass)
 
 //  ----------------------------------------------------------------------------
 
+longbool* LONGBOOL(SEXP x)
+{
+  longbool* pLB = (longbool*)LOGICAL(x);
+
+  return (pLB);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool* RAWBOOL(SEXP x)
+{
+  bool* pB = (bool*)RAW(x);
+
+  return (pB);
+}
+
+//  ----------------------------------------------------------------------------
+
+char* RAWCHAR(SEXP x)
+{
+  char* pC = (char*)RAW(x);
+
+  return (pC);
+}
+
+//  ----------------------------------------------------------------------------
+
 bool ReadIndices(SEXP sArgList, int* pIndices, unsigned int nArgs, unsigned int& rErrorIndex)
 {
   bool bRead = true;
@@ -53,7 +80,7 @@ bool ReadIndices(SEXP sArgList, int* pIndices, unsigned int nArgs, unsigned int&
   {
     SEXP Element = VECTOR_ELT(sArgList, cn);
 
-    if (Rf_isInteger(Element))
+    if (Rf_isIntegerOrFactor(Element))
     {
       pIndices[cn] = INTEGER(Element)[0];
     }
@@ -113,168 +140,229 @@ SEXP R_ImplGetter(const AdtMemAllocator& rAllocator,
     // Read indices from argument list
     if (!ReadIndices(sArgList, aIndices, nArgs, nErrorIndex))
     {
-      Rf_error("ERROR: Indexing argument %d in the getter argument list is not an integer for %s. See line %d in file %s", pName, nErrorIndex + 1, nLineNumber, pFileName);
+      Rf_error("ERROR: Indexing argument %d in the getter argument list is not an integer for %s. See line %d in file %s", pName, nErrorIndex + 2, nLineNumber, pFileName);
     }
 
-    if ((pInfo->VarType != AdtVarType_INT) && (pInfo->VarType != AdtVarType_DOUBLE))
+    switch (pInfo->VarType)
     {
-      std::runtime_error("R_ImplGetter called on array of type not supported in R\n");
-    }
-    else if (nArgs == 0)
-    {
-      try
+      case AdtVarType_INT:
+      case AdtVarType_DOUBLE:
+      case AdtVarType_LONGBOOL:
+      case AdtVarType_CHAR:
+      case AdtVarType_UCHAR:
+      case AdtVarType_BOOL:
       {
-        // Full array get operation
-        switch(pInfo->VarType)
+        if (nArgs == 0)
         {
-          case AdtVarType_INT:
+          try
           {
-            Result  = R_CreateArray(nCoords, aCoords, INTSXP);
+            char* pResultData = 0;
 
-            if (bNoTranslation)
+            // Full array get operation
+            switch(pInfo->VarType)
             {
-              ::memcpy((char*)INTEGER(Result), pInfo->firstData(), pInfo->lengthOfData());
+              case AdtVarType_INT:
+              {
+                Result      = R_CreateArray(nCoords, aCoords, INTSXP);
+                pResultData = (char*)INTEGER(Result);
+                break;
+              }
+
+              case AdtVarType_DOUBLE:
+              {
+                Result      = R_CreateArray(nCoords, aCoords, REALSXP);
+                pResultData = (char*)REAL(Result);
+                break;
+              }
+
+              case AdtVarType_LONGBOOL:
+              {
+                Result      = R_CreateArray(nCoords, aCoords, LGLSXP);
+                pResultData = (char*)LOGICAL(Result);
+                break;
+              }
+
+              case AdtVarType_CHAR:
+              case AdtVarType_UCHAR:
+              case AdtVarType_BOOL:
+              {
+                Result      = R_CreateArray(nCoords, aCoords, RAWSXP);
+                pResultData = (char*)RAW(Result);
+                break;
+              }
+
+              default:
+              {
+                break;
+              }
             }
-            else
+
+            if (pResultData != 0)
             {
-              AdtArrayPlanActor::ADlib_to_R(rAllocator, pArray, (char*)INTEGER(Result));
+              if (bNoTranslation)
+              {
+                ::memcpy(pResultData, pInfo->firstData(), pInfo->lengthOfData());
+              }
+              else
+              {
+                AdtArrayPlanActor::ADlib_to_R(rAllocator, pArray, pResultData);
+              }
             }
-            break;
           }
-
-          case AdtVarType_DOUBLE:
+          catch (std::runtime_error &e)
           {
-            Result  = R_CreateArray(nCoords, aCoords, REALSXP);
-
-            if (bNoTranslation)
-            {
-              ::memcpy((char*)REAL(Result), pInfo->firstData(), pInfo->lengthOfData());
-            }
-            else
-            {
-              AdtArrayPlanActor::ADlib_to_R(rAllocator, pArray, (char*)REAL(Result));
-            }
-            break;
-          }
-
-          default:
-          {
-            break;
+            Rf_error("ERROR: R_ImplGetter threw a runtime exception, %s", e.what());
           }
         }
-      }
-      catch (std::runtime_error &e)
-      {
-        Rf_error("ERROR: R_ImplGetter threw a runtime exception, %s", e.what());
-      }
-    }
-    else if (nArgs == nCoords)
-    {
-      const AdtArrayPlanActor*  pActor = 0;
-
-      try
-      {
-        // scalar element get operation
-        char* pData = pInfo->Actor->indexArray(aIndices,
-                                               nArgs,
-                                               pArray,
-                                               pInfo->SizeOf,
-                                               &pActor);
-
-        switch(pInfo->VarType)
+        else if (nArgs == nCoords)
         {
-          case AdtVarType_INT:
-          {
-            int* pInt;
+          const AdtArrayPlanActor*  pActor = 0;
 
-            pInt    = (int*)pData;
-            Result  = R_Scalar(*pInt);
-            break;
+          try
+          {
+            // scalar element get operation
+            char* pData = pInfo->Actor->indexArray(aIndices,
+                                                   nArgs,
+                                                   pArray,
+                                                   pInfo->SizeOf,
+                                                   &pActor);
+
+            switch(pInfo->VarType)
+            {
+              case AdtVarType_INT:
+              {
+                int* pInt;
+
+                pInt    = (int*)pData;
+                Result  = R_Scalar(*pInt);
+                break;
+              }
+
+              case AdtVarType_DOUBLE:
+              {
+                double* pDouble;
+
+                pDouble = (double*)pData;
+                Result  = R_Scalar(*pDouble);
+                break;
+              }
+
+              case AdtVarType_LONGBOOL:
+              {
+                longbool* pLongBool;
+
+                pLongBool = (longbool*)pData;
+                Result    = R_Scalar(*pLongBool);
+                break;
+              }
+
+              case AdtVarType_CHAR:
+              case AdtVarType_UCHAR:
+              case AdtVarType_BOOL:
+              {
+                char* pChar;
+
+                pChar   = (char*)pData;
+                Result  = R_Scalar(*pChar);
+                break;
+              }
+
+              default:
+              {
+                break;
+              }
+            }
           }
-
-          case AdtVarType_DOUBLE:
+          catch (std::runtime_error &e)
           {
-            double* pDouble;
-
-            pDouble = (double*)pData;
-            Result  = R_Scalar(*pDouble);
-            break;
-          }
-
-          default:
-          {
-            break;
+            Rf_error("ERROR: R_ImplGetter threw a runtime exception, %s", e.what());
           }
         }
-      }
-      catch (std::runtime_error &e)
-      {
-        Rf_error("ERROR: R_ImplGetter threw a runtime exception, %s", e.what());
-      }
-    }
-    else
-    {
-      char* pSliceArray = 0;
-
-      try
-      {
-        // Slice array get operation
-        pSliceArray = AdtArrayPlanActor::createSlice(rAllocator,
-                                                     pArray,
-                                                     aIndices,
-                                                     nArgs);
-
-        AdtArrayInfo* pSliceInfo    = AdtArrayPlanActor::arrayInfo(rAllocator, pSliceArray);
-        unsigned int  nSliceCoords  = pSliceInfo->Actor->getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
-
-        switch(pInfo->VarType)
+        else
         {
-          case AdtVarType_INT:
-          {
-            Result = R_CreateArray(nSliceCoords, aCoords, INTSXP);
+          char* pSliceArray = 0;
 
-            if (bNoTranslation)
+          try
+          {
+            // Slice array get operation
+            pSliceArray = AdtArrayPlanActor::createSlice(rAllocator,
+                                                         pArray,
+                                                         aIndices,
+                                                         nArgs);
+
+            AdtArrayInfo* pSliceInfo    = AdtArrayPlanActor::arrayInfo(rAllocator, pSliceArray);
+            unsigned int  nSliceCoords  = pSliceInfo->Actor->getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
+            char*         pResultData   = 0;
+
+            switch(pInfo->VarType)
             {
-              ::memcpy((char*)INTEGER(Result), pSliceInfo->firstData(), pSliceInfo->lengthOfData());
+              case AdtVarType_INT:
+              {
+                Result      = R_CreateArray(nSliceCoords, aCoords, INTSXP);
+                pResultData = (char*)INTEGER(Result);
+                break;
+              }
+
+              case AdtVarType_DOUBLE:
+              {
+                Result      = R_CreateArray(nSliceCoords, aCoords, REALSXP);
+                pResultData = (char*)REAL(Result);
+                break;
+              }
+
+              case AdtVarType_LONGBOOL:
+              {
+                Result      = R_CreateArray(nSliceCoords, aCoords, LGLSXP);
+                pResultData = (char*)LOGICAL(Result);
+                break;
+              }
+
+              case AdtVarType_CHAR:
+              case AdtVarType_UCHAR:
+              case AdtVarType_BOOL:
+              {
+                Result      = R_CreateArray(nSliceCoords, aCoords, RAWSXP);
+                pResultData = (char*)RAW(Result);
+                break;
+              }
+
+              default:
+              {
+                break;
+              }
             }
-            else
+
+            if (pResultData != 0)
             {
-              AdtArrayPlanActor::ADlib_to_R(rAllocator, pSliceArray, (char*)INTEGER(Result));
+              if (bNoTranslation)
+              {
+                ::memcpy(pResultData, pSliceInfo->firstData(), pSliceInfo->lengthOfData());
+              }
+              else
+              {
+                AdtArrayPlanActor::ADlib_to_R(rAllocator, pSliceArray, pResultData);
+              }
             }
-            break;
+
+            rAllocator.free(pSliceArray);
           }
-
-          case AdtVarType_DOUBLE:
+          catch (std::runtime_error &e)
           {
-            Result = R_CreateArray(nSliceCoords, aCoords, REALSXP);
+            Rf_error("ERROR: R_ImplGetter threw a runtime exception, %s", e.what());
 
-            if (bNoTranslation)
+            if (pSliceArray != 0)
             {
-              ::memcpy((char*)REAL(Result), pSliceInfo->firstData(), pSliceInfo->lengthOfData());
+              rAllocator.free(pSliceArray);
             }
-            else
-            {
-              AdtArrayPlanActor::ADlib_to_R(rAllocator, pSliceArray, (char*)REAL(Result));
-            }
-            break;
-          }
-
-          default:
-          {
-            break;
           }
         }
-
-        rAllocator.free(pSliceArray);
+        break;
       }
-      catch (std::runtime_error &e)
-      {
-        Rf_error("ERROR: R_ImplGetter threw a runtime exception, %s", e.what());
 
-        if (pSliceArray != 0)
-        {
-          rAllocator.free(pSliceArray);
-        }
+      default:
+      {
+        Rf_error("ERROR: R_ImplGetter called on array of type %s not supported in R\n", varTypeName(pInfo->VarType));
+        break;
       }
     }
   }
@@ -314,214 +402,296 @@ SEXP R_ImplSetter(const AdtMemAllocator& rAllocator,
     // Read indices from argument list
     if (!ReadIndices(sArgList, aIndices, nArgs, nErrorIndex))
     {
-      Rf_error("ERROR: Indexing argument %d in the setter argument list is not an integer for %s. See line %d in file %s", pName, nErrorIndex + 1, nLineNumber, pFileName);
+      Rf_error("ERROR: Indexing argument %d in the setter argument list is not an integer for %s. See line %d in file %s", nErrorIndex + 3, pName, nLineNumber, pFileName);
     }
 
-    if ((pInfo->VarType != AdtVarType_INT) && (pInfo->VarType != AdtVarType_DOUBLE))
+    switch (pInfo->VarType)
     {
-      std::runtime_error("R_ImplSetter called on array of type not supported in R\n");
-    }
-    else if (nArgs == 0)
-    {
-      try
+      case AdtVarType_INT:
+      case AdtVarType_DOUBLE:
+      case AdtVarType_LONGBOOL:
+      case AdtVarType_CHAR:
+      case AdtVarType_UCHAR:
+      case AdtVarType_BOOL:
       {
-        // Full array set operation
-        switch(pInfo->VarType)
+        if (nArgs == 0)
         {
-          case AdtVarType_INT:
+          try
           {
-            R_CheckArgument(pName,
-                            sSrcArg,
-                            pFileName,
-                            nLineNumber,
-                            nCoords,
-                            aCoords,
-                            "INTSXP",
-                            INTSXP);
+            // Full array set operation
+            char*       pSrcArgData     = 0;
+            SEXPTYPE    nSrcArgType     = 0;
+            const char* pSrcArgTypeName = "";
 
-            if (bNoTranslation)
+            switch(pInfo->VarType)
             {
-              ::memcpy(pInfo->firstData(), (char*)INTEGER(sSrcArg), pInfo->lengthOfData());
+              case AdtVarType_INT:
+              {
+                pSrcArgData     = (char*)INTEGER(sSrcArg);
+                nSrcArgType     = INTSXP;
+                pSrcArgTypeName = "INTSXP";
+                break;
+              }
+
+              case AdtVarType_DOUBLE:
+              {
+                pSrcArgData     = (char*)REAL(sSrcArg);
+                nSrcArgType     = REALSXP;
+                pSrcArgTypeName = "REALSXP";
+                break;
+              }
+
+              case AdtVarType_LONGBOOL:
+              {
+                pSrcArgData     = (char*)LOGICAL(sSrcArg);
+                nSrcArgType     = LGLSXP;
+                pSrcArgTypeName = "LGLSXP";
+                break;
+              }
+
+              case AdtVarType_CHAR:
+              case AdtVarType_UCHAR:
+              case AdtVarType_BOOL:
+              {
+                pSrcArgData     = (char*)RAW(sSrcArg);
+                nSrcArgType     = RAWSXP;
+                pSrcArgTypeName = "RAWSXP";
+                break;
+              }
+
+              default:
+              {
+                break;
+              }
             }
-            else
+
+            if (pSrcArgData != 0)
             {
-              AdtArrayPlanActor::R_to_ADlib(rAllocator, (char*)INTEGER(sSrcArg), pArray);
+              R_CheckArgument(pName,
+                              sSrcArg,
+                              pFileName,
+                              nLineNumber,
+                              nCoords,
+                              aCoords,
+                              pSrcArgTypeName,
+                              nSrcArgType);
+
+              if (bNoTranslation)
+              {
+                ::memcpy(pInfo->firstData(), pSrcArgData, pInfo->lengthOfData());
+              }
+              else
+              {
+                AdtArrayPlanActor::R_to_ADlib(rAllocator, pSrcArgData, pArray);
+              }
             }
-            break;
           }
-
-          case AdtVarType_DOUBLE:
+          catch (std::runtime_error &e)
           {
-            R_CheckArgument(pName,
-                            sSrcArg,
-                            pFileName,
-                            nLineNumber,
-                            nCoords,
-                            aCoords,
-                            "REALSXP",
-                            REALSXP);
-
-            if (bNoTranslation)
-            {
-              ::memcpy(pInfo->firstData(), (char*)REAL(sSrcArg), pInfo->lengthOfData());
-            }
-            else
-            {
-              AdtArrayPlanActor::R_to_ADlib(rAllocator, (char*)REAL(sSrcArg), pArray);
-            }
-            break;
-          }
-
-          default:
-          {
-            break;
+            Rf_error("ERROR: R_ImplSetter threw a runtime exception, %s", e.what());
           }
         }
-      }
-      catch (std::runtime_error &e)
-      {
-        Rf_error("ERROR: R_ImplSetter threw a runtime exception, %s", e.what());
-      }
-    }
-    else if (nArgs == nCoords)
-    {
-      const AdtArrayPlanActor*  pActor = 0;
-
-      try
-      {
-        // scalar element set operation
-        char* pData = pInfo->Actor->indexArray(aIndices,
-                                               nArgs,
-                                               pArray,
-                                               pInfo->SizeOf,
-                                               &pActor);
-
-        switch(pInfo->VarType)
+        else if (nArgs == nCoords)
         {
-          case AdtVarType_INT:
+          const AdtArrayPlanActor*  pActor = 0;
+
+          try
           {
-            int* pInt;
+            // scalar element set operation
+            char* pData = pInfo->Actor->indexArray(aIndices,
+                                                   nArgs,
+                                                   pArray,
+                                                   pInfo->SizeOf,
+                                                   &pActor);
 
-            R_CheckArgument(pName,
-                            sSrcArg,
-                            pFileName,
-                            nLineNumber,
-                            0,
-                            aCoords,
-                            "INTSXP",
-                            INTSXP);
+            switch(pInfo->VarType)
+            {
+              case AdtVarType_INT:
+              {
+                int* pInt;
 
-            pInt    = (int*)pData;
-            pInt[0] = INTEGER(sSrcArg)[0];
-            break;
+                R_CheckArgument(pName,
+                                sSrcArg,
+                                pFileName,
+                                nLineNumber,
+                                0,
+                                aCoords,
+                                "INTSXP",
+                                INTSXP);
+
+                pInt    = (int*)pData;
+                pInt[0] = INTEGER(sSrcArg)[0];
+                break;
+              }
+
+              case AdtVarType_DOUBLE:
+              {
+                double* pDouble;
+
+                R_CheckArgument(pName,
+                                sSrcArg,
+                                pFileName,
+                                nLineNumber,
+                                0,
+                                aCoords,
+                                "REALSXP",
+                                REALSXP);
+
+                pDouble     = (double*)pData;
+                pDouble[0]  = REAL(sSrcArg)[0];
+                break;
+              }
+
+              case AdtVarType_LONGBOOL:
+              {
+                longbool* pLongBool;
+
+                R_CheckArgument(pName,
+                                sSrcArg,
+                                pFileName,
+                                nLineNumber,
+                                0,
+                                aCoords,
+                                "LGLSXP",
+                                LGLSXP);
+
+                pLongBool     = (longbool*)pData;
+                pLongBool[0]  = LOGICAL(sSrcArg)[0];
+                break;
+              }
+
+              case AdtVarType_CHAR:
+              case AdtVarType_UCHAR:
+              case AdtVarType_BOOL:
+              {
+                unsigned char* pUChar;
+
+                R_CheckArgument(pName,
+                                sSrcArg,
+                                pFileName,
+                                nLineNumber,
+                                0,
+                                aCoords,
+                                "RAWSXP",
+                                RAWSXP);
+
+                pUChar    = (unsigned char*)pData;
+                pUChar[0] = RAW(sSrcArg)[0];
+                break;
+              }
+
+              default:
+              {
+                break;
+              }
+            }
           }
-
-          case AdtVarType_DOUBLE:
+          catch (std::runtime_error &e)
           {
-            double* pDouble;
-
-            R_CheckArgument(pName,
-                            sSrcArg,
-                            pFileName,
-                            nLineNumber,
-                            0,
-                            aCoords,
-                            "REALSXP",
-                            REALSXP);
-
-            pDouble     = (double*)pData;
-            pDouble[0]  = REAL(sSrcArg)[0];
-            break;
-          }
-
-          default:
-          {
-            break;
+            Rf_error("ERROR: R_ImplSetter threw a runtime exception, %s", e.what());
           }
         }
-      }
-      catch (std::runtime_error &e)
-      {
-        Rf_error("ERROR: R_ImplSetter threw a runtime exception, %s", e.what());
-      }
-    }
-    else
-    {
-      char* pSliceArray = 0;
-
-      try
-      {
-        // Slice array get operation
-        pSliceArray = AdtArrayPlanActor::createSlice(rAllocator,
-                                                     pArray,
-                                                     aIndices,
-                                                     nArgs);
-
-        AdtArrayInfo* pSliceInfo    = AdtArrayPlanActor::arrayInfo(rAllocator, pSliceArray);
-        unsigned int  nSliceCoords  = pSliceInfo->Actor->getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
-
-        switch(pInfo->VarType)
+        else
         {
-          case AdtVarType_INT:
-          {
-            R_CheckArgument(pName,
-                            sSrcArg,
-                            pFileName,
-                            nLineNumber,
-                            nSliceCoords,
-                            aCoords,
-                            "INTSXP",
-                            INTSXP);
+          char* pSliceArray = 0;
 
-            if (bNoTranslation)
+          try
+          {
+            // Slice array get operation
+            pSliceArray = AdtArrayPlanActor::createSlice(rAllocator,
+                                                         pArray,
+                                                         aIndices,
+                                                         nArgs);
+
+            AdtArrayInfo* pSliceInfo      = AdtArrayPlanActor::arrayInfo(rAllocator, pSliceArray);
+            unsigned int  nSliceCoords    = pSliceInfo->Actor->getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
+            char*         pSrcArgData     = 0;
+            SEXPTYPE      nSrcArgType     = 0;
+            const char*   pSrcArgTypeName = "";
+
+            // Full array get operation
+            switch(pInfo->VarType)
             {
-              ::memcpy(pSliceInfo->firstData(), (char*)INTEGER(sSrcArg), pSliceInfo->lengthOfData());
+              case AdtVarType_INT:
+              {
+                pSrcArgData     = (char*)INTEGER(sSrcArg);
+                nSrcArgType     = INTSXP;
+                pSrcArgTypeName = "INTSXP";
+                break;
+              }
+
+              case AdtVarType_DOUBLE:
+              {
+                pSrcArgData     = (char*)REAL(sSrcArg);
+                nSrcArgType     = REALSXP;
+                pSrcArgTypeName = "REALSXP";
+                break;
+              }
+
+              case AdtVarType_LONGBOOL:
+              {
+                pSrcArgData     = (char*)LOGICAL(sSrcArg);
+                nSrcArgType     = LGLSXP;
+                pSrcArgTypeName = "LGLSXP";
+                break;
+              }
+
+              case AdtVarType_CHAR:
+              case AdtVarType_UCHAR:
+              case AdtVarType_BOOL:
+              {
+                pSrcArgData     = (char*)RAW(sSrcArg);
+                nSrcArgType     = RAWSXP;
+                pSrcArgTypeName = "RAWSXP";
+                break;
+              }
+
+              default:
+              {
+                break;
+              }
             }
-            else
+
+            if (pSrcArgData != 0)
             {
-              AdtArrayPlanActor::R_to_ADlib(rAllocator, (char*)INTEGER(sSrcArg), pSliceArray);
+              R_CheckArgument(pName,
+                              sSrcArg,
+                              pFileName,
+                              nLineNumber,
+                              nSliceCoords,
+                              aCoords,
+                              pSrcArgTypeName,
+                              nSrcArgType);
+
+              if (bNoTranslation)
+              {
+                ::memcpy(pInfo->firstData(), pSrcArgData, pInfo->lengthOfData());
+              }
+              else
+              {
+                AdtArrayPlanActor::R_to_ADlib(rAllocator, pSrcArgData, pSliceArray);
+              }
             }
-            break;
+
+            rAllocator.free(pSliceArray);
           }
-
-          case AdtVarType_DOUBLE:
+          catch (std::runtime_error &e)
           {
-            R_CheckArgument(pName,
-                            sSrcArg,
-                            pFileName,
-                            nLineNumber,
-                            nSliceCoords,
-                            aCoords,
-                            "REALSXP",
-                            REALSXP);
+            Rf_error("ERROR: R_ImplSetter threw a runtime exception, %s", e.what());
 
-            if (bNoTranslation)
+            if (pSliceArray != 0)
             {
-              ::memcpy(pSliceInfo->firstData(), (char*)REAL(sSrcArg), pSliceInfo->lengthOfData());
+              rAllocator.free(pSliceArray);
             }
-            else
-            {
-              AdtArrayPlanActor::R_to_ADlib(rAllocator, (char*)REAL(sSrcArg), pSliceArray);
-            }
-            break;
-          }
-
-          default:
-          {
-            break;
           }
         }
-
-        rAllocator.free(pSliceArray);
+        break;
       }
-      catch (std::runtime_error &e)
-      {
-        Rf_error("ERROR: R_ImplSetter threw a runtime exception, %s", e.what());
 
-        if (pSliceArray != 0)
-        {
-          rAllocator.free(pSliceArray);
-        }
+      default:
+      {
+        Rf_error("ERROR: R_ImplSetter called on array of type %s not supported in R\n", varTypeName(pInfo->VarType));
+        break;
       }
     }
   }
@@ -907,6 +1077,32 @@ SEXP R_Scalar(const double& dResult)
 
   PROTECT(Result);
   REAL(Result)[0] = dResult;
+  UNPROTECT(1);
+
+  return(Result);
+}
+
+//  ----------------------------------------------------------------------------
+
+SEXP R_Scalar(const longbool& lbResult)
+{
+  SEXP Result = allocVector(LGLSXP, 1);
+
+  PROTECT(Result);
+  LOGICAL(Result)[0] = lbResult;
+  UNPROTECT(1);
+
+  return(Result);
+}
+
+//  ----------------------------------------------------------------------------
+
+SEXP R_Scalar(const char& cResult)
+{
+  SEXP Result = allocVector(RAWSXP, 1);
+
+  PROTECT(Result);
+  RAW(Result)[0] = (unsigned char)cResult;
   UNPROTECT(1);
 
   return(Result);

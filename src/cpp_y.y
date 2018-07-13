@@ -32,14 +32,15 @@
 #endif
 
 #define stderr            stdout
-
-#define YYSTYPE   cppType
+#define YYSTYPE           cppType
+#define YYTYPE_INT16      short
 
 const char* adtCpp_pLastFunctionName        = 0;
-const char* adtCpp_pLastFunctionComment     = 0;
 int         adtCpp_pLastFunctionIsObj       = 0;
 int         adtCpp_pLastFunctionIsQualified = 0;
 int         adtCpp_pLastFunctionIsVirtual   = 0;
+int*        adtCpp_yyState                  = 0;
+
 
 %}
 
@@ -50,7 +51,7 @@ int         adtCpp_pLastFunctionIsVirtual   = 0;
 %token SHL QUESTION MOD_EQ DIV_EQ DIV PROD_EQ EQ OR STRING_LITERAL TYPENAME
 %token DOUBLE FLOAT MUTABLE PUBLIC PRIVATE PROTECTED EXTERN DEFAULT
 %token WHILE SWITCH ENUM RETURN UNSIGNED ASM DO AUTO
-%token CONTINUE BOOL WCHAR_T EXPLICIT IF SIZEOF UNION CHAR
+%token CONTINUE BOOL LONGBOOL WCHAR_T EXPLICIT IF SIZEOF UNION CHAR
 %token CLASS USING VOLATILE SIGNED CONST LONG STATIC INT ELSE SHORT NAMESPACE
 %token REGISTER TYPEDEF FRIEND FOR GOTO VIRTUAL INLINE
 %token CASE VOID STRUCT BREAK
@@ -59,7 +60,7 @@ int         adtCpp_pLastFunctionIsVirtual   = 0;
 %token OBJ_IDENTIFIER QUALIFIED_OBJ_IDENTIFIER
 
 /* Other tokens */
-%token SINGLELINE_COMMENT MULTILINE_COMMENT EMBEDDED_COMMANDS
+%token SINGLELINE_COMMENT MULTILINE_COMMENT EMBEDDED_COMMANDS PREPROCESSOR WHITESPACE
 
 %token ADDVARIABLES
 
@@ -162,51 +163,51 @@ directed_expression
 declarator_expression
  : IDENTIFIER
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 0, 0);
 }
  | QUALIFIED_IDENTIFIER
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 1, 0, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 1, 0);
 }
  | IDENTIFIER LBRACKET RBRACKET
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 0, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 0, 1);
 }
  | QUALIFIED_IDENTIFIER LBRACKET RBRACKET
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 1, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, 0, 1, 1);
 }
  | IDENTIFIER LBRACKET expression_list RBRACKET
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, 0, 0, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, 0, 0, 1);
 }
  | QUALIFIED_IDENTIFIER LBRACKET expression_list RBRACKET
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, 0, 1, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, 0, 1, 1);
 }
  | IDENTIFIER declarator_expression_dims
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $2.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $2.pContext, 0, 0);
 }
  | QUALIFIED_IDENTIFIER declarator_expression_dims
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $2.pContext, 1, 0, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $2.pContext, 1, 0);
 }
  | IDENTIFIER LBRACKET RBRACKET declarator_expression_dims
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $4.pContext, 0, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $4.pContext, 0, 1);
 }
  | QUALIFIED_IDENTIFIER LBRACKET RBRACKET declarator_expression_dims
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $4.pContext, 1, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, 0, $4.pContext, 1, 1);
 }
  | IDENTIFIER LBRACKET expression_list RBRACKET declarator_expression_dims
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, $5.pContext, 0, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, $5.pContext, 0, 1);
 }
  | QUALIFIED_IDENTIFIER LBRACKET expression_list RBRACKET declarator_expression_dims
 {
-  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, $5.pContext, 1, 1, $1.sComment);
+  $$.pContext = adtCppDeclaratorExpression_create($1.sValue, $3.pContext, $5.pContext, 1, 1);
 }
 ;
 
@@ -526,37 +527,37 @@ statement
 labeled_statement
  : IDENTIFIER COLON statement
 {
-  $$.pContext = adtCppLabeledStatement_create(0, $3.pContext, $1.sValue, 0, $1.sComment);
+  $$.pContext = adtCppLabeledStatement_create(0, $3.pContext, $1.sValue, 0);
 }
  | CASE constant_expression COLON statement
 {
-  $$.pContext = adtCppLabeledStatement_create($2.pContext, $4.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtCppLabeledStatement_create($2.pContext, $4.pContext, 0, 0);
 }
  | DEFAULT COLON statement
 {
-  $$.pContext = adtCppLabeledStatement_create(0, $3.pContext, 0, 1, $1.sComment);
+  $$.pContext = adtCppLabeledStatement_create(0, $3.pContext, 0, 1);
 }
 ;
 
 expression_statement
  : SEMICOLON
 {
-  $$.pContext = adtCppExpressionStatement_create(0, $1.sComment);
+  $$.pContext = adtCppExpressionStatement_create(0);
 }
  | expression SEMICOLON
 {
-  $$.pContext = adtCppExpressionStatement_create($1.pContext, $2.sComment);
+  $$.pContext = adtCppExpressionStatement_create($1.pContext);
 }
 ;
 
 compound_statement
  : LSBRACKET RSBRACKET
 {
-  $$.pContext = adtCppCompoundStatement_create(0, $1.sComment);
+  $$.pContext = adtCppCompoundStatement_create(0);
 }
  | LSBRACKET statement_seq RSBRACKET
 {
-  $$.pContext = adtCppCompoundStatement_create($2.pContext, $1.sComment);
+  $$.pContext = adtCppCompoundStatement_create($2.pContext);
 }
 ;
 
@@ -578,42 +579,42 @@ statement_seq
 selection_statement
  : IF LBRACKET expression RBRACKET statement
 {
-  $$.pContext = adtCppSelectionStatement_create($3.pContext, $5.pContext, 0, 1, $1.sComment);
+  $$.pContext = adtCppSelectionStatement_create($3.pContext, $5.pContext, 0, 1);
 }
  | IF LBRACKET expression RBRACKET statement ELSE statement
 {
-  $$.pContext = adtCppSelectionStatement_create($3.pContext, $5.pContext, $7.pContext, 1, $1.sComment);
+  $$.pContext = adtCppSelectionStatement_create($3.pContext, $5.pContext, $7.pContext, 1);
 }
  | SWITCH LBRACKET expression RBRACKET statement
 {
-  $$.pContext = adtCppSelectionStatement_create($3.pContext, $5.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtCppSelectionStatement_create($3.pContext, $5.pContext, 0, 0);
 }
 ;
 
 iteration_statement
  : WHILE LBRACKET expression RBRACKET statement
 {
-  $$.pContext = adtCppIterationStatement_create(0, $3.pContext, 0, $5.pContext, 0, $1.sComment);
+  $$.pContext = adtCppIterationStatement_create(0, $3.pContext, 0, $5.pContext, 0);
 }
  | DO statement WHILE LBRACKET expression RBRACKET SEMICOLON
 {
-  $$.pContext = adtCppIterationStatement_create(0, $5.pContext, 0, $2.pContext, 1, $1.sComment);
+  $$.pContext = adtCppIterationStatement_create(0, $5.pContext, 0, $2.pContext, 1);
 }
  | FOR LBRACKET for_init_statement SEMICOLON RBRACKET statement
 {
-  $$.pContext = adtCppIterationStatement_create($3.pContext, 0, 0, $6.pContext, 0, $1.sComment);
+  $$.pContext = adtCppIterationStatement_create($3.pContext, 0, 0, $6.pContext, 0);
 }
  | FOR LBRACKET for_init_statement SEMICOLON expression RBRACKET statement
 {
-  $$.pContext = adtCppIterationStatement_create($3.pContext, 0, $5.pContext, $7.pContext, 0, $1.sComment);
+  $$.pContext = adtCppIterationStatement_create($3.pContext, 0, $5.pContext, $7.pContext, 0);
 }
  | FOR LBRACKET for_init_statement expression SEMICOLON RBRACKET statement
 {
-  $$.pContext = adtCppIterationStatement_create($3.pContext, $4.pContext, 0, $7.pContext, 0, $1.sComment);
+  $$.pContext = adtCppIterationStatement_create($3.pContext, $4.pContext, 0, $7.pContext, 0);
 }
  | FOR LBRACKET for_init_statement expression SEMICOLON expression RBRACKET statement
 {
-  $$.pContext = adtCppIterationStatement_create($3.pContext, $4.pContext, $6.pContext, $8.pContext, 0, $1.sComment);
+  $$.pContext = adtCppIterationStatement_create($3.pContext, $4.pContext, $6.pContext, $8.pContext, 0);
 }
 ;
 
@@ -631,23 +632,23 @@ for_init_statement
 jump_statement
  : BREAK SEMICOLON
 {
-  $$.pContext = adtCppJumpStatement_create(0, 0, 0, $1.sComment);
+  $$.pContext = adtCppJumpStatement_create(0, 0, 0);
 }
  | CONTINUE SEMICOLON
 {
-  $$.pContext = adtCppJumpStatement_create(0, 0, 1, $1.sComment);
+  $$.pContext = adtCppJumpStatement_create(0, 0, 1);
 }
  | RETURN SEMICOLON
 {
-  $$.pContext = adtCppJumpStatement_create(0, 0, 2, $1.sComment);
+  $$.pContext = adtCppJumpStatement_create(0, 0, 2);
 }
  | RETURN expression SEMICOLON
 {
-  $$.pContext = adtCppJumpStatement_create($2.pContext, 0, 2, $1.sComment);
+  $$.pContext = adtCppJumpStatement_create($2.pContext, 0, 2);
 }
  | GOTO IDENTIFIER SEMICOLON
 {
-  $$.pContext = adtCppJumpStatement_create(0, $2.sValue, 3, $1.sComment);
+  $$.pContext = adtCppJumpStatement_create(0, $2.sValue, 3);
 }
 ;
 
@@ -672,23 +673,23 @@ declaration_seq
 declaration
  : block_declaration
 {
-  $$.pContext = adtCppDeclaration_create($1.pContext, 0, 0, 0, 0);
+  $$.pContext = adtCppDeclaration_create($1.pContext, 0, 0, 0);
 }
  | function_definition
 {
-  $$.pContext = adtCppDeclaration_create(0, $1.pContext, 0, 0, 0);
+  $$.pContext = adtCppDeclaration_create(0, $1.pContext, 0, 0);
 }
  | linkage_specification
 {
-  $$.pContext = adtCppDeclaration_create(0, 0, $1.pContext, 0, 0);
+  $$.pContext = adtCppDeclaration_create(0, 0, $1.pContext, 0);
 }
  | namespace_definition
 {
-  $$.pContext = adtCppDeclaration_create(0, 0, 0, $1.pContext, 0);
+  $$.pContext = adtCppDeclaration_create(0, 0, 0, $1.pContext);
 }
  | SEMICOLON
 {
-  $$.pContext = adtCppDeclaration_create(0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtCppDeclaration_create(0, 0, 0, 0);
 }
 ;
 
@@ -718,20 +719,20 @@ block_declaration
 simple_declaration
  : class_specifier SEMICOLON
 {
-  $$.pContext = adtCppSimpleDeclaration_create($1.pContext, 0, 0, 0, 0, 0, 0);
+  $$.pContext = adtCppSimpleDeclaration_create($1.pContext, 0, 0, 0, 0, 0);
 }
  | enum_specifier SEMICOLON
 {
-  $$.pContext = adtCppSimpleDeclaration_create(0, $1.pContext, 0, 0, 0, 0, 0);
+  $$.pContext = adtCppSimpleDeclaration_create(0, $1.pContext, 0, 0, 0, 0);
 }
  | simple_type_specifier init_declarator_list SEMICOLON
 {
-  $$.pContext = adtCppSimpleDeclaration_create(0, 0, $1.pContext, $2.pContext, 0, 0, 0);
+  $$.pContext = adtCppSimpleDeclaration_create(0, 0, $1.pContext, $2.pContext, 0, 0);
 }
  | TYPEDEF simple_type_specifier init_declarator_list SEMICOLON
 {
   const char* pAliasName                = 0;
-  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, $2.pContext, $3.pContext, 0, 1, $1.sComment);
+  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, $2.pContext, $3.pContext, 0, 1);
 
   $$.pContext = pCppSimpleDeclarationObj;
 
@@ -742,12 +743,12 @@ simple_declaration
 }
  | decl_modifier_list simple_type_specifier init_declarator_list SEMICOLON
 {
-  $$.pContext = adtCppSimpleDeclaration_create(0, 0, $2.pContext, $3.pContext, $1.pContext, 0, 0);
+  $$.pContext = adtCppSimpleDeclaration_create(0, 0, $2.pContext, $3.pContext, $1.pContext, 0);
 }
  | TYPEDEF decl_modifier_list simple_type_specifier init_declarator_list SEMICOLON
 {
   const char* pAliasName                = 0;
-  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, $3.pContext, $4.pContext, $2.pContext, 1, $1.sComment);
+  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, $3.pContext, $4.pContext, $2.pContext, 1);
 
   $$.pContext = pCppSimpleDeclarationObj;
 
@@ -761,47 +762,47 @@ simple_declaration
 decl_modifier
  : AUTO
 {
-  $$.pContext = adtCppDeclModifier_create(0, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(0);
 }
  | REGISTER
 {
-  $$.pContext = adtCppDeclModifier_create(1, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(1);
 }
  | STATIC
 {
-  $$.pContext = adtCppDeclModifier_create(2, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(2);
 }
  | EXTERN
 {
-  $$.pContext = adtCppDeclModifier_create(3, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(3);
 }
  | MUTABLE
 {
-  $$.pContext = adtCppDeclModifier_create(4, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(4);
 }
  | INLINE
 {
-  $$.pContext = adtCppDeclModifier_create(5, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(5);
 }
  | VIRTUAL
 {
-  $$.pContext = adtCppDeclModifier_create(6, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(6);
 }
  | EXPLICIT
 {
-  $$.pContext = adtCppDeclModifier_create(7, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(7);
 }
  | CONST
 {
-  $$.pContext = adtCppDeclModifier_create(8, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(8);
 }
  | VOLATILE
 {
-  $$.pContext = adtCppDeclModifier_create(9, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(9);
 }
  | FRIEND
 {
-  $$.pContext = adtCppDeclModifier_create(10, $1.sComment);
+  $$.pContext = adtCppDeclModifier_create(10);
 }
 ;
 
@@ -854,21 +855,21 @@ enum_specifier_name
 {
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
 
-  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 0);
 }
  | ENUM QUALIFIED_IDENTIFIER
 {
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
 
-  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 1);
 }
  | ENUM OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 0);
 }
  | ENUM QUALIFIED_OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppEnumSpecifierName_create($2.sValue, 1);
 }
 ;
 
@@ -897,251 +898,259 @@ enum_specifier
 simple_type_specifier
  : OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 0, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 0, 0);
 }
  | QUALIFIED_OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 1, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 1, 0);
 }
  | WCHAR_T
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 2, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 2, 0);
 }
  | CHAR
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 3, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 3, 0);
 }
  | BOOL
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 4, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 4, 0);
 }
  | INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 5, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 5, 0);
 }
  | SHORT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 6, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 6, 0);
 }
  | SHORT INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 7, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 7, 0);
 }
  | LONG
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 8, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 8, 0);
 }
  | LONG INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 9, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 9, 0);
 }
  | SIGNED
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 10, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 10, 0);
 }
  | SIGNED INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 11, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 11, 0);
 }
  | SIGNED SHORT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 12, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 12, 0);
 }
  | SIGNED SHORT INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 13, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 13, 0);
 }
  | SIGNED LONG
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 14, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 14, 0);
 }
  | SIGNED LONG INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 15, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 15, 0);
 }
  | SIGNED CHAR
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 16, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 16, 0);
 }
  | UNSIGNED
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 17, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 17, 0);
 }
  | UNSIGNED INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 18, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 18, 0);
 }
  | UNSIGNED SHORT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 19, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 19, 0);
 }
  | UNSIGNED SHORT INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 20, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 20, 0);
 }
  | UNSIGNED LONG
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 21, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 21, 0);
 }
  | UNSIGNED LONG INT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 22, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 22, 0);
 }
  | UNSIGNED CHAR
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 23, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 23, 0);
 }
  | FLOAT
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 24, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 24, 0);
 }
  | DOUBLE
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 25, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 25, 0);
 }
  | LONG DOUBLE
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 26, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 26, 0);
 }
  | LONG LONG
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 27, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 27, 0);
 }
  | SIGNED LONG LONG
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 28, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 28, 0);
 }
  | UNSIGNED LONG LONG
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 29, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 29, 0);
 }
  | VOID
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 30, 0, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 30, 0);
+}
+ | LONGBOOL
+{
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 31, 0);
 }
  | OBJ_IDENTIFIER AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 0, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 0, 1);
 }
  | QUALIFIED_OBJ_IDENTIFIER AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 1, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create($1.sValue, 1, 1);
 }
  | WCHAR_T AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 2, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 2, 1);
 }
  | CHAR AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 3, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 3, 1);
 }
  | BOOL AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 4, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 4, 1);
 }
  | INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 5, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 5, 1);
 }
  | SHORT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 6, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 6, 1);
 }
  | SHORT INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 7, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 7, 1);
 }
  | LONG AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 8, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 8, 1);
 }
  | LONG INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 9, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 9, 1);
 }
  | SIGNED AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 10, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 10, 1);
 }
  | SIGNED INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 11, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 11, 1);
 }
  | SIGNED SHORT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 12, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 12, 1);
 }
  | SIGNED SHORT INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 13, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 13, 1);
 }
  | SIGNED LONG AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 14, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 14, 1);
 }
  | SIGNED LONG INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 15, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 15, 1);
 }
  | SIGNED CHAR AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 16, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 16, 1);
 }
  | UNSIGNED AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 17, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 17, 1);
 }
  | UNSIGNED INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 18, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 18, 1);
 }
  | UNSIGNED SHORT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 19, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 19, 1);
 }
  | UNSIGNED SHORT INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 20, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 20, 1);
 }
  | UNSIGNED LONG AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 21, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 21, 1);
 }
  | UNSIGNED LONG INT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 22, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 22, 1);
 }
  | UNSIGNED CHAR AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 23, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 23, 1);
 }
  | FLOAT AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 24, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 24, 1);
 }
  | DOUBLE AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 25, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 25, 1);
 }
  | LONG DOUBLE AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 26, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 26, 1);
 }
  | LONG LONG AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 27, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 27, 1);
 }
  | SIGNED LONG LONG AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 28, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 28, 1);
 }
  | UNSIGNED LONG LONG AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 29, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 29, 1);
 }
  | VOID AND
 {
-  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 30, 1, $1.sComment);
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 30, 1);
+}
+ | LONGBOOL AND
+{
+  $$.pContext = adtCppSimpleTypeSpecifier_create(0, 31, 1);
 }
 ;
 
@@ -1159,24 +1168,24 @@ enumerator_list
 enumerator_definition
  : IDENTIFIER
 {
-  $$.pContext = adtCppEnumeratorDefinition_create(0, $1.sValue, $1.sComment);
+  $$.pContext = adtCppEnumeratorDefinition_create(0, $1.sValue);
 }
  | IDENTIFIER EQ constant_expression
 {
-  $$.pContext = adtCppEnumeratorDefinition_create($3.pContext, $1.sValue, $1.sComment);
+  $$.pContext = adtCppEnumeratorDefinition_create($3.pContext, $1.sValue);
 }
 ;
 
 namespace_definition
  : namespace_identifier LSBRACKET declaration_seq RSBRACKET
 {
-  $$.pContext = adtCppNamespaceDefinition_create($3.pContext, $1.sValue, $1.sComment);
+  $$.pContext = adtCppNamespaceDefinition_create($3.pContext, $1.sValue);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
  | NAMESPACE LSBRACKET declaration_seq RSBRACKET
 {
-  $$.pContext = adtCppNamespaceDefinition_create($3.pContext, 0, $1.sComment);
+  $$.pContext = adtCppNamespaceDefinition_create($3.pContext, 0);
 }
 ;
 
@@ -1185,27 +1194,26 @@ namespace_identifier
 {
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 
-  $$.sValue   = $2.sValue;
-  $$.sComment = $1.sComment;
+  $$.sValue = $2.sValue;
 };
 
 namespace_alias_definition
  : NAMESPACE IDENTIFIER EQ QUALIFIED_IDENTIFIER SEMICOLON
 {
-  $$.pContext = adtCppNamespaceAliasDefinition_create($2.sValue, $4.sValue, $1.sComment);
+  $$.pContext = adtCppNamespaceAliasDefinition_create($2.sValue, $4.sValue);
 }
 ;
 
 using_declaration
  : USING QUALIFIED_IDENTIFIER SEMICOLON
 {
-  $$.pContext = adtCppUsingDeclaration_create($2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppUsingDeclaration_create($2.sValue, 0);
 
   scopeManager_addUsingDeclaration(adtCpp_ScopeManager, $2.sValue);
 }
  | USING TYPENAME QUALIFIED_IDENTIFIER SEMICOLON
 {
-  $$.pContext = adtCppUsingDeclaration_create($3.sValue, 1, $1.sComment);
+  $$.pContext = adtCppUsingDeclaration_create($3.sValue, 1);
 
   scopeManager_addUsingDeclaration(adtCpp_ScopeManager, $3.sValue);
 }
@@ -1214,13 +1222,13 @@ using_declaration
 using_directive
  : USING NAMESPACE OBJ_IDENTIFIER SEMICOLON
 {
-  $$.pContext = adtCppUsingDirective_create($3.sValue, 0, $1.sComment);
+  $$.pContext = adtCppUsingDirective_create($3.sValue, 0);
 
   scopeManager_addUsing(adtCpp_ScopeManager, $3.sValue);
 }
  | USING NAMESPACE QUALIFIED_OBJ_IDENTIFIER SEMICOLON
 {
-  $$.pContext = adtCppUsingDirective_create($3.sValue, 1, $1.sComment);
+  $$.pContext = adtCppUsingDirective_create($3.sValue, 1);
 
   scopeManager_addUsing(adtCpp_ScopeManager, $3.sValue);
 }
@@ -1229,22 +1237,22 @@ using_directive
 asm_definition
  : ASM LSBRACKET STRING_LITERAL RSBRACKET SEMICOLON
 {
-  $$.pContext = adtCppAsmDefinition_create($3.sValue, $1.sComment);
+  $$.pContext = adtCppAsmDefinition_create($3.sValue);
 }
 ;
 
 linkage_specification
  : EXTERN STRING_LITERAL LSBRACKET RSBRACKET
 {
-  $$.pContext = adtCppLinkageSpecification_create(0, 0, $2.sValue, $1.sComment);
+  $$.pContext = adtCppLinkageSpecification_create(0, 0, $2.sValue);
 }
  | EXTERN STRING_LITERAL LSBRACKET declaration_seq RSBRACKET
 {
-  $$.pContext = adtCppLinkageSpecification_create($4.pContext, 0, $2.sValue, $1.sComment);
+  $$.pContext = adtCppLinkageSpecification_create($4.pContext, 0, $2.sValue);
 }
  | EXTERN STRING_LITERAL declaration
 {
-  $$.pContext = adtCppLinkageSpecification_create(0, $3.pContext, $2.sValue, $1.sComment);
+  $$.pContext = adtCppLinkageSpecification_create(0, $3.pContext, $2.sValue);
 }
 ;
 
@@ -1286,27 +1294,27 @@ declarator
 var_declarator
  : IDENTIFIER
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 0, 0, 0, 0, $1.sComment, 1);
+  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 0, 0, 0, 0, 1);
 }
  | OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 0, 1, 0, 0, $1.sComment, 0);
+  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 0, 1, 0, 0, 0);
 }
  | QUALIFIED_IDENTIFIER
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 1, 0, 0, 0, $1.sComment, 1);
+  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 1, 0, 0, 0, 1);
 }
  | QUALIFIED_OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 1, 1, 0, 0, $1.sComment, 0);
+  $$.pContext = adtCppDeclarator_create(0, 0, 0, $1.sValue, 0, 1, 1, 0, 0, 0);
 }
  | IDENTIFIER declarator_dims
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, $2.pContext, $1.sValue, 0, 0, 0, 0, 0, $1.sComment, 1);
+  $$.pContext = adtCppDeclarator_create(0, 0, $2.pContext, $1.sValue, 0, 0, 0, 0, 0, 1);
 }
  | QUALIFIED_IDENTIFIER declarator_dims
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, $2.pContext, $1.sValue, 0, 1, 0, 0, 0, $1.sComment, 1);
+  $$.pContext = adtCppDeclarator_create(0, 0, $2.pContext, $1.sValue, 0, 1, 0, 0, 0, 1);
 };
 /*
  These rules dealing with function variable declarations are excluded because
@@ -1314,13 +1322,13 @@ var_declarator
  that hides function calls.
  | IDENTIFIER LBRACKET expression_list RBRACKET
 {
-  $$.pContext = adtCppDeclarator_create(0, $3.pContext, 0, $1.sValue, 1, 0, 0, 0, 0, $1.sComment, 1);
+  $$.pContext = adtCppDeclarator_create(0, $3.pContext, 0, $1.sValue, 1, 0, 0, 0, 0, 1);
 
   adtCpp_pLastFunctionName = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue);
 }
  | QUALIFIED_IDENTIFIER LBRACKET expression_list RBRACKET
 {
-  $$.pContext = adtCppDeclarator_create(0, $3.pContext, 0, $1.sValue, 1, 1, 0, 0, 0, $1.sComment, 1);
+  $$.pContext = adtCppDeclarator_create(0, $3.pContext, 0, $1.sValue, 1, 1, 0, 0, 0, 1);
 
   adtCpp_pLastFunctionName = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue);
 }
@@ -1344,7 +1352,6 @@ fn_declarator_begin
  : IDENTIFIER LBRACKET
 {
   adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue, 0);
-  adtCpp_pLastFunctionComment     = adtCpp_AllocString(adtCpp_pCppContext, $1.sComment, 0);
   adtCpp_pLastFunctionIsObj       = 0;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 0;
@@ -1354,7 +1361,6 @@ fn_declarator_begin
  | OBJ_IDENTIFIER LBRACKET
 {
   adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue, 0);
-  adtCpp_pLastFunctionComment     = adtCpp_AllocString(adtCpp_pCppContext, $1.sComment, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 0;
@@ -1364,7 +1370,6 @@ fn_declarator_begin
  | QUALIFIED_IDENTIFIER LBRACKET
 {
   adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue, 0);
-  adtCpp_pLastFunctionComment     = adtCpp_AllocString(adtCpp_pCppContext, $1.sComment, 0);
   adtCpp_pLastFunctionIsObj       = 0;
   adtCpp_pLastFunctionIsQualified = 1;
   adtCpp_pLastFunctionIsVirtual   = 0;
@@ -1374,7 +1379,6 @@ fn_declarator_begin
  | QUALIFIED_OBJ_IDENTIFIER LBRACKET
 {
   adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue, 0);
-  adtCpp_pLastFunctionComment     = adtCpp_AllocString(adtCpp_pCppContext, $1.sComment, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 1;
   adtCpp_pLastFunctionIsVirtual   = 0;
@@ -1384,7 +1388,6 @@ fn_declarator_begin
  | DTOR LBRACKET
 {
   adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue, 0);
-  adtCpp_pLastFunctionComment     = adtCpp_AllocString(adtCpp_pCppContext, $1.sComment, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 0;
@@ -1394,7 +1397,6 @@ fn_declarator_begin
  | QUALIFIED_DTOR LBRACKET
 {
   adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, $1.sValue, 0);
-  adtCpp_pLastFunctionComment     = adtCpp_AllocString(adtCpp_pCppContext, $1.sComment, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 1;
   adtCpp_pLastFunctionIsVirtual   = 0;
@@ -1404,7 +1406,6 @@ fn_declarator_begin
  | VIRTUAL DTOR LBRACKET
 {
   adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, $2.sValue, 0);
-  adtCpp_pLastFunctionComment     = adtCpp_AllocString(adtCpp_pCppContext, $2.sComment, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 1;
@@ -1416,37 +1417,37 @@ fn_declarator_begin
 fn_declarator_end
  : RBRACKET
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, adtCpp_pLastFunctionComment, 0);
+  $$.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
  | RBRACKET CONST
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, adtCpp_pLastFunctionComment, 0);
+  $$.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
  | RBRACKET VOLATILE
 {
-  $$.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, adtCpp_pLastFunctionComment, 0);
+  $$.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
  | parameter_declaration_clause RBRACKET
 {
-  $$.pContext = adtCppDeclarator_create($1.pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, adtCpp_pLastFunctionComment, 0);
+  $$.pContext = adtCppDeclarator_create($1.pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
  | parameter_declaration_clause RBRACKET CONST
 {
-  $$.pContext = adtCppDeclarator_create($1.pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, adtCpp_pLastFunctionComment, 0);
+  $$.pContext = adtCppDeclarator_create($1.pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
  | parameter_declaration_clause RBRACKET VOLATILE
 {
-  $$.pContext = adtCppDeclarator_create($1.pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, adtCpp_pLastFunctionComment, 0);
+  $$.pContext = adtCppDeclarator_create($1.pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
@@ -1610,13 +1611,13 @@ function_body_start
 function_body_end
  : RSBRACKET
 {
-  $$.pContext = adtCppCompoundStatement_create(0, 0);
+  $$.pContext = adtCppCompoundStatement_create(0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
  | statement_seq RSBRACKET
 {
-  $$.pContext = adtCppCompoundStatement_create($1.pContext, 0);
+  $$.pContext = adtCppCompoundStatement_create($1.pContext);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
@@ -1666,84 +1667,84 @@ initializer_list
 class_key
  : CLASS IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(0, $2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppClassKey_create(0, $2.sValue, 0);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | CLASS OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(0, $2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppClassKey_create(0, $2.sValue, 0);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | CLASS QUALIFIED_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(0, $2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppClassKey_create(0, $2.sValue, 1);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | CLASS QUALIFIED_OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(0, $2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppClassKey_create(0, $2.sValue, 1);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | STRUCT IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(1, $2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppClassKey_create(1, $2.sValue, 0);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | STRUCT OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(1, $2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppClassKey_create(1, $2.sValue, 0);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | STRUCT QUALIFIED_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(1, $2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppClassKey_create(1, $2.sValue, 1);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | STRUCT QUALIFIED_OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(1, $2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppClassKey_create(1, $2.sValue, 1);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | UNION IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(2, $2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppClassKey_create(2, $2.sValue, 0);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | UNION OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(2, $2.sValue, 0, $1.sComment);
+  $$.pContext = adtCppClassKey_create(2, $2.sValue, 0);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | UNION QUALIFIED_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(2, $2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppClassKey_create(2, $2.sValue, 1);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
 }
  | UNION QUALIFIED_OBJ_IDENTIFIER
 {
-  $$.pContext = adtCppClassKey_create(2, $2.sValue, 1, $1.sComment);
+  $$.pContext = adtCppClassKey_create(2, $2.sValue, 1);
 
   scopeManager_addType(adtCpp_ScopeManager, $2.sValue);
   scopeManager_pushScope(adtCpp_ScopeManager, $2.sValue, 0);
@@ -2015,3 +2016,6 @@ mem_initializer_id
   $$.pContext = adtCppMemInitializerId_create(1, $1.sValue);
 }
 ;
+
+
+%%

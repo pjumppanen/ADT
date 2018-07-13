@@ -59,6 +59,7 @@ C_FUNCTION void         make_BlackBoxClose();
 C_FUNCTION void         make_SourceFilesOpen();
 C_FUNCTION void         make_SourceFilesClose();
 C_FUNCTION void         make_WorkingDirectory(const char* pString);
+C_FUNCTION void         make_IncludeDirectory(const char* pString);
 C_FUNCTION void         make_SourceOptionsFile(const char* pString, int nType);
 C_FUNCTION void         make_FortranIncludeFilesOpen();
 C_FUNCTION void         make_FortranIncludeFilesClose();
@@ -478,6 +479,7 @@ private:
   string                      OutputHeaderFile;
   string                      WorkingFile;
   string                      BlackBoxFile;
+  AdtIntByStringMap           IsBlackBoxMap;
   AdtSourceFileType           SourceFileType;
   AdtSourceFileType           DestFileType;
   AdtMakeCommandOperationList OperationsList;
@@ -501,6 +503,9 @@ protected:
                                   AdtSourceFileType& rFileType,
                                   const char* pFile,
                                   const char* pFile2);
+
+  string                constructIncludeDirectory(const AdtMakeCommand& rMakeCommand,
+                                                  const string& rRootPath) const;
 
 public:
   AdtMakeClass();
@@ -688,6 +693,7 @@ class AdtMakeCommand
 {
 private:
   string                    WorkingDirectory;
+  string                    IncludeDirectory;
   string                    SourceOptionsFile[NUM_SOURCE_TYPES];
   AdtIntByStringMap         Switches;
   AdtStringList             Paths;
@@ -700,6 +706,15 @@ private:
 protected:
   void                      reset();
   void                      addDefaultPaths();
+  void                      fixDirectory(string& rDirectory,
+                                         const char* pDirectory,
+                                         const char* pTypeName,
+                                         bool bNoSubDirectories);
+
+  void                      prefixDirectory(const string& rDirectory,
+                                            string& rResultFileName,
+                                            const char* pFileName,
+                                            bool bQuote) const;
 
 public:
   AdtMakeCommand();
@@ -716,6 +731,7 @@ public:
   void                      newMakeCommand();
   void                      addClass(const AdtMakeClass& rClass);
   void                      workingDirectory(const char* pWorkingDirectory);
+  void                      includeDirectory(const char* pIncludeDirectory);
   void                      sourceOptionsFile(const char* pOptionsFile, AdtSourceFileType nType);
   void                      paths(const AdtStringList& rPaths);
   void                      switches(const AdtStringList& rSwitches);
@@ -727,7 +743,12 @@ public:
                                                    const char* pFileName,
                                                    bool bQuote) const;
 
+  void                      prefixIncludeDirectory(string& rResultFileName,
+                                                   const char* pFileName,
+                                                   bool bQuote) const;
+
   const string&             workingDirectory() const;
+  const string&             includeDirectory() const;
   const string&             sourceOptionsFile(AdtSourceFileType nType) const;
   const AdtStringList&      paths() const;
   const AdtStringList&      blackBoxList() const;
@@ -771,6 +792,13 @@ inline void AdtMakeCommand::fortranIncludeFiles(const AdtStringList& rSourceFile
 inline const string& AdtMakeCommand::workingDirectory() const
 {
   return (WorkingDirectory);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline const string& AdtMakeCommand::includeDirectory() const
+{
+  return (IncludeDirectory);
 }
 
 //  ----------------------------------------------------------------------------
@@ -861,6 +889,7 @@ public:
   static void                   sourceFilesClose();
 
   static void                   workingDirectory(const char* pString);
+  static void                   includeDirectory(const char* pString);
   static void                   sourceOptionsFile(const char* pString, int nType);
 
   static void                   fortranIncludeFilesOpen();

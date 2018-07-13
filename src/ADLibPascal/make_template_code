@@ -25,6 +25,17 @@ sed 's/<T>/ARRAY_8B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
 sed 's/<T>/ARRAY_9B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
 sed 's/<T>/ARRAY_10B/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
 
+sed 's/<T>/ARRAY_1LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_2LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_3LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_4LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_5LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_6LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_7LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_8LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_9LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+sed 's/<T>/ARRAY_10LB/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
+
 sed 's/<T>/ARRAY_1C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
 sed 's/<T>/ARRAY_2C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
 sed 's/<T>/ARRAY_3C/g' adtarrayplan1_decl_base.inc >> adtarrayplan_decl.inc
@@ -136,6 +147,17 @@ sed 's/<T>/ARRAY_7B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_8B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_9B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_10B/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10LB/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
 
 sed 's/<T>/ARRAY_1C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_2C/g' adtarrayplan1_impl_base.inc >> adtarray_impl.inc
@@ -249,6 +271,17 @@ sed 's/<T>/ARRAY_8B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/ARRAY_9B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/ARRAY_10B/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
 
+sed 's/<T>/ARRAY_1LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_2LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_3LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_4LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_5LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_6LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_7LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_8LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_9LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/ARRAY_10LB/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
+
 sed 's/<T>/ARRAY_1C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/ARRAY_2C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/ARRAY_3C/g' adtarrayplan1_static_decl_base.inc >> adtarray_decl.inc
@@ -361,6 +394,17 @@ sed 's/<T>/ARRAY_8B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_9B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_10B/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
 
+sed 's/<T>/ARRAY_1LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10LB/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
+
 sed 's/<T>/ARRAY_1C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_2C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_3C/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
@@ -463,6 +507,7 @@ sed 's/<T>/ARRAY_10D/g' adtarrayplan1_static_impl_base.inc >> adtarray_impl.inc
 
 # create adtarrayplan2_static_decl_base.inc declarations
 sed 's/<T>/B/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/LB/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/C/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/UC/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/I/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
@@ -475,6 +520,7 @@ sed 's/<T>/D/g' adtarrayplan2_static_decl_base.inc >> adtarray_decl.inc
 
 # create adtarrayplan2_static_impl_base.inc implementations
 sed 's/<T>/B/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/LB/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/C/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/UC/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/I/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
@@ -487,6 +533,7 @@ sed 's/<T>/D/g' adtarrayplan2_static_impl_base.inc >> adtarray_impl.inc
 
 # create adtarrays1_static_decl_base.inc declarations
 sed 's/<T>/boolean/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
+sed 's/<T>/longbool/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/shortint/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
 sed 's/<T>/byte/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
 #Need to comment this out cos Free pascal doesn't recognise integer and longint as different types
@@ -500,6 +547,7 @@ sed 's/<T>/double/g' adtarrays1_static_decl_base.inc >> adtarray_decl.inc
 
 # create adtarrays1_static_impl_base.inc implementations
 sed 's/<T>/boolean/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/longbool/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/shortint/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/byte/g' adtarrays1_static_impl_base.inc >> adtarray_impl.inc
 #Need to comment this out cos Free pascal doesn't recognise integer and longint as different types
@@ -523,6 +571,17 @@ sed 's/<T>/ARRAY_7B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/ARRAY_8B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/ARRAY_9B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/ARRAY_10B/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10LB/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
 
 sed 's/<T>/ARRAY_1C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/ARRAY_2C/g' adtarrays1_decl_base.inc >> adtarrays_decl.inc
@@ -636,6 +695,17 @@ sed 's/<T>/ARRAY_8B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_9B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_10B/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
 
+sed 's/<T>/ARRAY_1LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10LB/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
+
 sed 's/<T>/ARRAY_1C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_2C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_3C/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
@@ -737,6 +807,28 @@ sed 's/<T>/ARRAY_10D/g' adtarrays1_impl_base.inc >> adtarray_impl.inc
 
 
 # create adtarrays2_decl_base.inc declarations
+sed 's/<T>/ARRAY_1B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10B/g;s/<D>/boolean/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+
+sed 's/<T>/ARRAY_1LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_2LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_3LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_4LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_5LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_6LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_7LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_8LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_9LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/ARRAY_10LB/g;s/<D>/longbool/g' adtarrays2bool_decl_base.inc >> adtarrays_decl.inc
+
 sed 's/<T>/ARRAY_1C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/ARRAY_2C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/ARRAY_3C/g;s/<D>/shortint/g' adtarrays2_decl_base.inc >> adtarrays_decl.inc
@@ -838,6 +930,28 @@ sed 's/<T>/ARRAY_10D/g;s/<D>/double/g' adtarrays2_decl_base.inc >> adtarrays_dec
 
 
 # create adtarrays2_impl_base.inc declarations
+sed 's/<T>/ARRAY_1B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10B/g;s/<D>/boolean/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+
+sed 's/<T>/ARRAY_1LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_2LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_3LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_4LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_5LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_6LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_7LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_8LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_9LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/ARRAY_10LB/g;s/<D>/longbool/g' adtarrays2bool_impl_base.inc >> adtarray_impl.inc
+
 sed 's/<T>/ARRAY_1C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_2C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/ARRAY_3C/g;s/<D>/shortint/g' adtarrays2_impl_base.inc >> adtarray_impl.inc
@@ -988,6 +1102,7 @@ sed 's/<T>/ARRAY_10D/g;s/<D>/double/g' adtarrays2b_impl_base.inc >> adtarray_imp
 
 # create adtarrays3_decl_base.inc declarations
 sed 's/<T>/B/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
+sed 's/<T>/LB/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/C/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/UC/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
 sed 's/<T>/I/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
@@ -1000,6 +1115,7 @@ sed 's/<T>/D/g' adtarrays3_decl_base.inc >> adtarrays_decl.inc
 
 # create adtarrays3_impl_base.inc implementations
 sed 's/<T>/B/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
+sed 's/<T>/LB/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/C/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/UC/g' adtarrays3_impl_base.inc >> adtarray_impl.inc
 sed 's/<T>/I/g' adtarrays3_impl_base.inc >> adtarray_impl.inc

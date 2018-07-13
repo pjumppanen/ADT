@@ -1,29 +1,3 @@
-// R_to_ADlib methods
-procedure AdtArrays.R_to_ADlib(pArraySrc : plongint ; pArrayDest : <T>) ; overload;
-
-begin
-  AdtArrayPlanActor_R_to_ADlib(_MemAllocator, pchar(pArraySrc), pchar(pArrayDest));
-end;
-
-procedure AdtArrays.R_to_ADlib(pArraySrc : pdouble ; pArrayDest : <T>) ; overload;
-
-begin
-  AdtArrayPlanActor_R_to_ADlib(_MemAllocator, pchar(pArraySrc), pchar(pArrayDest));
-end;
-
-// ADlib_to_R methods
-procedure AdtArrays.ADlib_to_R(pArraySrc : <T> ; pArrayDest : plongint) ; overload;
-
-begin
-  AdtArrayPlanActor_R_to_ADlib(_MemAllocator, pchar(pArraySrc), pchar(pArrayDest));
-end;
-
-procedure AdtArrays.ADlib_to_R(pArraySrc : <T> ; pArrayDest : pdouble) ; overload;
-
-begin
-  AdtArrayPlanActor_R_to_ADlib(_MemAllocator, pchar(pArraySrc), pchar(pArrayDest));
-end;
-
 // zero methods
 procedure AdtArrays.zero(pArray : <T>) ; overload;
 
@@ -63,4 +37,3 @@ procedure AdtArrays.destroy(var pArray : <T>) ; overload;
 begin
   AdtArrayPlan_destroy(_MemAllocator, pArray);
 end;
-

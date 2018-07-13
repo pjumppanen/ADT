@@ -457,6 +457,14 @@ xTypeSpec : INTEGER
 {
   $$.pContext = adtFortranTypeSpec_create(5, 0);
 }
+          | LOGICAL LBRACKET XICON RBRACKET
+{
+  $$.pContext = adtFortranTypeSpec_create(5, $3.sValue);
+}
+          | LOGICAL MULTIPLY XICON
+{
+  $$.pContext = adtFortranTypeSpec_create(5, $3.sValue);
+}
           | CHARACTER
 {
   $$.pContext = adtFortranTypeSpec_create(6, 0);
@@ -1022,11 +1030,11 @@ xWhereBodyConstructBlock : xWhereBodyConstruct
 /* % R740 */
 xWhereConstructStmt : xLblDef xName COLON WHERE LBRACKET xExpr RBRACKET xEOS
 {
-  $$.pContext = adtFortranWhereBodyConstructBlock_create($1.pContext);
+  $$.pContext = adtFortranWhereConstructStmt_create($1.pContext, $2.pContext, $6.pContext);
 }
                     | xLblDef WHERE LBRACKET xExpr RBRACKET xEOS
 {
-  $$.pContext = adtFortranWhereBodyConstructBlock_create($1.pContext);
+  $$.pContext = adtFortranWhereConstructStmt_create($1.pContext, 0, $4.pContext);
 }
 ;
 
@@ -1780,11 +1788,11 @@ xReturnStmt : xLblDef RETURN xEOS
 
 xLblDef :
 {
-  $$.pContext = adtFortranLblDef_create(0, yyFortran_LastComment());
+  $$.pContext = adtFortranLblDef_create(0);
 }
         | xIcon
 {
-  $$.pContext = adtFortranLblDef_create($1.pContext, $1.sComment);
+  $$.pContext = adtFortranLblDef_create($1.pContext);
 }
 ;
 

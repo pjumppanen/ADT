@@ -82,17 +82,24 @@
  * and then translated into a form that tapenade understands. For example,
  * this is a definition in a Pascal comment field:
  *
- * {D/D(.) INV(X+Y),
+ * {<
+ *  D/D(.) INV(X+Y),
  *  D/D(X) .*X,
- *  D/D(Y) .*(1/Y);}
+ *  D/D(Y) .*(1/Y);
+ *  >}
  *
- * You can also include a black box dependency specification with, for example,
+ * You can alos include a black box dependency specification with, for example,
  *
- * {BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);}
+ * {<BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);>}
  *
+ * < and > symbols are used to indicate the start and end of a black box
+ * definition and must be supplied for inline definitions. This allows the
+ * black box definition to be embedded within existing comments and not break
+ * the parsing of the definition.
  *
- * For stand alone black box definition files you can have something like,
- *   MyFunction(X : real_array in, Y : real_array in) : real_array
+ * For stand alone black box definition files the braces are not required and
+ * you can have something like,
+ *   function MyFunction(X : real_array in, Y : real_array in) : real_array
  *   begin
  *     D/D(.) INV(X+Y),
  *     D/D(X) .*X,
@@ -126,7 +133,7 @@ typedef struct blackBoxDefBeginInfo
 
 
 
-#line 130 "..\\src\\black_box_y.c" /* yacc.c:339  */
+#line 137 "..\\src\\black_box_y.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -150,7 +157,7 @@ typedef struct blackBoxDefBeginInfo
 # define YY_YY_SRC_BLACK_BOX_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -170,36 +177,39 @@ extern int yydebug;
     POWER = 264,
     PERIOD = 265,
     IDENTIFIER = 266,
-    NUMBER_FIXED = 267,
-    NUMBER_FLOAT = 268,
-    COMMA = 269,
-    COLON = 270,
-    SEMICOLON = 271,
-    DERIV_OP = 272,
-    BLACKBOX = 273,
-    READ_NOT_WRITTEN = 274,
-    NOT_READ_THEN_WRITTEN = 275,
-    NOT_READ_NOT_WRITTEN = 276,
-    READ_THEN_WRITTEN = 277,
-    DEPS = 278,
-    ID = 279,
-    REAL = 280,
-    INTEGER = 281,
-    COMPLEX = 282,
-    CHARACTER = 283,
-    BOOLEAN = 284,
-    REAL_ARRAY = 285,
-    INTEGER_ARRAY = 286,
-    COMPLEX_ARRAY = 287,
-    CHARACTER_ARRAY = 288,
-    BOOLEAN_ARRAY = 289,
-    IN = 290,
-    OUT = 291,
-    F_BEGIN = 292,
-    F_END = 293,
-    FUNCTION = 294,
-    PROCEDURE = 295,
-    RESULT = 296
+    QUALIFIED_IDENTIFIER = 267,
+    NUMBER_FIXED = 268,
+    NUMBER_FLOAT = 269,
+    COMMA = 270,
+    COLON = 271,
+    SEMICOLON = 272,
+    DERIV_OP = 273,
+    BLACKBOX = 274,
+    READ_NOT_WRITTEN = 275,
+    NOT_READ_THEN_WRITTEN = 276,
+    NOT_READ_NOT_WRITTEN = 277,
+    READ_THEN_WRITTEN = 278,
+    DEPS = 279,
+    ID = 280,
+    REAL = 281,
+    INTEGER = 282,
+    COMPLEX = 283,
+    CHARACTER = 284,
+    BOOLEAN = 285,
+    REAL_ARRAY = 286,
+    INTEGER_ARRAY = 287,
+    COMPLEX_ARRAY = 288,
+    CHARACTER_ARRAY = 289,
+    BOOLEAN_ARRAY = 290,
+    IN = 291,
+    OUT = 292,
+    F_BEGIN = 293,
+    F_END = 294,
+    FUNCTION = 295,
+    PROCEDURE = 296,
+    RESULT = 297,
+    BB_BEGIN = 298,
+    BB_END = 299
   };
 #endif
 
@@ -219,7 +229,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 223 "..\\src\\black_box_y.c" /* yacc.c:358  */
+#line 233 "..\\src\\black_box_y.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -459,23 +469,23 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  20
+#define YYFINAL  22
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   156
+#define YYLAST   168
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  42
+#define YYNTOKENS  45
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  22
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  64
+#define YYNRULES  66
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  138
+#define YYNSTATES  150
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   296
+#define YYMAXUTOK   299
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -513,20 +523,20 @@ static const yytype_uint8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41
+      35,    36,    37,    38,    39,    40,    41,    42,    43,    44
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    77,    77,    84,    88,    95,   106,   117,   128,   139,
-     150,   179,   191,   206,   215,   219,   223,   227,   231,   235,
-     239,   243,   247,   251,   258,   262,   266,   270,   277,   281,
-     285,   292,   296,   303,   310,   314,   321,   325,   329,   333,
-     337,   344,   348,   355,   359,   366,   370,   377,   381,   385,
-     392,   396,   400,   407,   411,   418,   422,   426,   433,   437,
-     441,   445,   449,   456,   460
+       0,    85,    85,    92,    96,   103,   114,   125,   136,   147,
+     158,   187,   199,   211,   223,   238,   247,   251,   255,   259,
+     263,   267,   271,   275,   279,   283,   290,   294,   298,   302,
+     309,   313,   317,   324,   328,   335,   342,   346,   353,   357,
+     361,   365,   369,   376,   380,   387,   391,   398,   402,   409,
+     413,   417,   424,   428,   432,   439,   443,   450,   454,   458,
+     465,   469,   473,   477,   481,   488,   492
 };
 #endif
 
@@ -536,17 +546,19 @@ static const yytype_uint16 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "LBRACKET", "RBRACKET", "PLUS", "MINUS",
-  "MULTIPLY", "DIVIDE", "POWER", "PERIOD", "IDENTIFIER", "NUMBER_FIXED",
-  "NUMBER_FLOAT", "COMMA", "COLON", "SEMICOLON", "DERIV_OP", "BLACKBOX",
-  "READ_NOT_WRITTEN", "NOT_READ_THEN_WRITTEN", "NOT_READ_NOT_WRITTEN",
-  "READ_THEN_WRITTEN", "DEPS", "ID", "REAL", "INTEGER", "COMPLEX",
-  "CHARACTER", "BOOLEAN", "REAL_ARRAY", "INTEGER_ARRAY", "COMPLEX_ARRAY",
-  "CHARACTER_ARRAY", "BOOLEAN_ARRAY", "IN", "OUT", "F_BEGIN", "F_END",
-  "FUNCTION", "PROCEDURE", "RESULT", "$accept", "root", "derivativeList",
-  "derivative", "defBegin", "defEnd", "argType", "dirType", "argDef",
-  "argDefList", "derivativeExtended", "blackBoxSpecList", "blackBoxSpec",
-  "ident", "identList", "derivativeExtendedList", "exprAdditive",
-  "exprMultiplicative", "exprPower", "exprUnary", "exprPostfix", "argList", YY_NULLPTR
+  "MULTIPLY", "DIVIDE", "POWER", "PERIOD", "IDENTIFIER",
+  "QUALIFIED_IDENTIFIER", "NUMBER_FIXED", "NUMBER_FLOAT", "COMMA", "COLON",
+  "SEMICOLON", "DERIV_OP", "BLACKBOX", "READ_NOT_WRITTEN",
+  "NOT_READ_THEN_WRITTEN", "NOT_READ_NOT_WRITTEN", "READ_THEN_WRITTEN",
+  "DEPS", "ID", "REAL", "INTEGER", "COMPLEX", "CHARACTER", "BOOLEAN",
+  "REAL_ARRAY", "INTEGER_ARRAY", "COMPLEX_ARRAY", "CHARACTER_ARRAY",
+  "BOOLEAN_ARRAY", "IN", "OUT", "F_BEGIN", "F_END", "FUNCTION",
+  "PROCEDURE", "RESULT", "BB_BEGIN", "BB_END", "$accept", "root",
+  "derivativeList", "derivative", "defBegin", "defEnd", "argType",
+  "dirType", "argDef", "argDefList", "derivativeExtended",
+  "blackBoxSpecList", "blackBoxSpec", "ident", "identList",
+  "derivativeExtendedList", "exprAdditive", "exprMultiplicative",
+  "exprPower", "exprUnary", "exprPostfix", "argList", YY_NULLPTR
 };
 #endif
 
@@ -559,14 +571,14 @@ static const yytype_uint16 yytoknum[] =
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,   296
+     295,   296,   297,   298,   299
 };
 # endif
 
-#define YYPACT_NINF -69
+#define YYPACT_NINF -75
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-69)))
+  (!!((Yystate) == (-75)))
 
 #define YYTABLE_NINF -1
 
@@ -577,20 +589,21 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -12,     6,    -6,    19,    22,    57,   -12,   -69,   -12,    68,
-     -69,    23,    61,    73,   105,   108,    71,   -69,    50,    79,
-     -69,   -69,   -14,   -69,   120,   121,   123,   124,   125,   126,
-     127,   -69,   -69,    -9,    -9,   -69,    49,    49,    -4,    -4,
-      -4,    -4,    -4,   116,   117,   -69,     8,    17,    49,    53,
-      53,   130,   -69,   -69,    69,   103,   128,   -69,   -69,    13,
-     -69,   -69,   -69,    54,    55,    59,    63,    66,    15,    75,
-     119,    -9,    35,    80,   -69,   -69,    49,    49,    49,   118,
-      49,    49,    49,   -69,   -69,    -4,   -69,   -69,   -69,   -69,
-     -69,   -69,   -69,   -69,   -69,   -69,   -69,   -69,   -69,   -69,
-     100,   104,    77,    75,   -69,    75,   -69,   -69,   -69,   109,
-      67,   103,   103,   135,   -69,    20,   128,   128,   -69,   -69,
-     -69,   -69,   -69,   -69,   106,   -69,    49,   129,   118,   -69,
-     -69,   109,   137,   -69,   132,   138,    49,   109
+     -13,     7,    68,    91,    93,    38,   -13,   -75,   -13,   108,
+     -75,    24,    79,    90,   116,   117,    77,   -75,    81,   131,
+     132,   133,   -75,   -75,   -15,   -75,    89,   134,   136,   137,
+     138,   139,   140,   -75,   -75,    -9,    -9,    -9,    -9,   -75,
+       9,     9,    -4,    -4,    -4,    -4,    -4,   121,   128,   -75,
+      27,    54,    55,    56,     9,    53,    53,   142,   -75,   -75,
+      72,   113,    48,   -75,   -75,     2,   -75,   -75,   -75,    57,
+      58,    59,    61,    64,    18,    82,   130,    -9,   135,   109,
+     110,    12,   -75,   -75,     9,     9,     9,   141,     9,     9,
+       9,   -75,   -75,    -4,   -75,   -75,   -75,   -75,   -75,   -75,
+     -75,   -75,   -75,   -75,   -75,   -75,   -75,   -75,   112,   114,
+      86,    82,   -75,    82,   -75,    82,   -75,   -75,   -75,   119,
+      71,   113,   113,   149,   -75,    15,    48,    48,   -75,   -75,
+     -75,   -75,   -75,   -75,   115,   118,   -75,     9,   143,   141,
+     -75,   -75,   -75,   119,   151,   -75,   147,   153,     9,   119
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -599,35 +612,36 @@ static const yytype_int16 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     0,     0,     0,     0,     0,     2,     3,     0,     0,
-       9,     0,     0,     0,     0,     0,     0,    34,     0,     0,
-       1,     4,     0,    10,     0,     0,     0,     0,     0,     0,
-       0,     8,    35,     0,     0,    13,     7,     0,     0,     0,
-       0,     0,     0,     0,     0,    31,     0,     0,     0,     0,
-       0,    60,    58,    59,     0,    47,    50,    53,    55,     0,
-      42,    41,    43,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    56,    57,     0,     0,     0,     0,
-       0,     0,     0,     6,    36,     0,    37,    38,    39,    40,
-      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
-      24,    25,     0,     0,    30,     0,    32,    11,    62,    63,
-       0,    48,    49,     0,    45,     0,    51,    52,    54,    44,
-      26,    27,    28,    29,     0,    61,     0,     0,     0,     5,
-      12,    64,     0,    46,     0,     0,     0,    33
+       9,     0,     0,     0,     0,     0,     0,    36,     0,     0,
+       0,     0,     1,     4,     0,    10,     0,     0,     0,     0,
+       0,     0,     0,     8,    37,     0,     0,     0,     0,    15,
+       7,     0,     0,     0,     0,     0,     0,     0,     0,    33,
+       0,     0,     0,     0,     0,     0,     0,    62,    60,    61,
+       0,    49,    52,    55,    57,     0,    44,    43,    45,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    58,    59,     0,     0,     0,     0,     0,     0,
+       0,     6,    38,     0,    39,    40,    41,    42,    16,    17,
+      18,    19,    20,    21,    22,    23,    24,    25,    26,    27,
+       0,     0,    32,     0,    34,     0,    11,    12,    64,    65,
+       0,    50,    51,     0,    47,     0,    53,    54,    56,    46,
+      28,    29,    30,    31,     0,     0,    63,     0,     0,     0,
+       5,    13,    14,    66,     0,    48,     0,     0,     0,    35
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -69,   -69,   136,     1,   -69,   -69,   -68,    44,    76,   114,
-      21,   -69,   134,    70,    56,   -69,   -37,    39,    38,    74,
-      72,   -69
+     -75,   -75,   150,     5,   -75,   -75,   -74,    51,    85,    -2,
+      25,   -75,   152,    70,    37,   -75,   -41,    41,    40,    76,
+      75,   -75
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     5,     6,     7,     8,    23,   102,   103,    45,    46,
-     114,    16,    17,    62,    63,   115,    54,    55,    56,    57,
-      58,   110
+      -1,     5,     6,     7,     8,    25,   110,   111,    49,    50,
+     124,    16,    17,    68,    69,   125,    60,    61,    62,    63,
+      64,   120
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -635,86 +649,89 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      59,   104,    43,     1,     2,     1,     2,    21,    60,     9,
-      10,    73,    70,    11,    12,    13,    14,    15,    77,    78,
-      61,    72,    71,    21,    35,     3,     4,     3,     4,    83,
-      18,    71,    44,    19,   128,   123,   129,   124,    26,   109,
-      90,    91,    92,    93,    94,    95,    96,    97,    98,    99,
-     100,   101,    48,    33,    49,    50,    48,    20,    84,    86,
-      51,    52,    53,    87,    51,    52,    53,    88,    85,    85,
-      89,   125,   107,    85,    77,    78,    27,    85,    24,    25,
-      85,   126,    34,    79,   108,    77,    78,    31,    28,   131,
-      11,    12,    13,    14,    15,    64,    65,    66,    67,   137,
-      90,    91,    92,    93,    94,    95,    96,    97,    98,    99,
-      80,    81,   100,   101,    77,    78,   111,   112,   116,   117,
-      29,    74,    75,    30,    36,    37,    38,    39,    40,    41,
-      42,    68,    69,    76,   105,   113,   120,    82,   127,   121,
-     132,   134,   135,   130,    22,   136,   122,   106,    47,   133,
-      32,     0,     0,     0,     0,   119,   118
+      65,   112,    47,     1,     2,     1,     2,    85,    86,    66,
+       9,    23,    54,    81,    55,    56,   118,    85,    86,    91,
+      57,    67,    58,    59,    39,     3,     4,     3,     4,    23,
+     139,    76,   140,    48,    51,    52,    53,   133,    22,   134,
+      28,   135,    77,   119,    98,    99,   100,   101,   102,   103,
+     104,   105,   106,   107,   108,   109,    54,    90,    78,    79,
+      80,    92,    94,    95,    57,    96,    58,    59,    97,    77,
+      77,    77,    93,    93,    93,   136,    93,    85,    86,    93,
+      70,    71,    72,    73,    35,    10,   137,    87,    11,    12,
+      13,    14,    15,    40,    33,    29,   143,    11,    12,    13,
+      14,    15,    18,    19,    20,    21,    30,   149,    98,    99,
+     100,   101,   102,   103,   104,   105,   106,   107,    26,    27,
+      88,    89,   108,   109,    85,    86,   121,   122,   126,   127,
+      82,    83,    31,    32,    36,    37,    38,    74,    41,    42,
+      43,    44,    45,    46,    75,    84,   113,   116,   117,   130,
+     131,   115,   138,   141,   144,   146,   142,   147,    24,   123,
+     148,   132,   114,   129,   145,     0,   128,     0,    34
 };
 
 static const yytype_int16 yycheck[] =
 {
-      37,    69,    11,    17,    18,    17,    18,     6,    12,     3,
-      16,    48,     4,    19,    20,    21,    22,    23,     5,     6,
-      24,     4,    14,    22,    38,    39,    40,    39,    40,    16,
-      11,    14,    41,    11,    14,   103,    16,   105,    15,    76,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,     3,     3,     5,     6,     3,     0,     4,     4,
-      11,    12,    13,     4,    11,    12,    13,     4,    14,    14,
-       4,     4,    37,    14,     5,     6,    15,    14,    10,    11,
-      14,    14,     3,    14,     4,     5,     6,    16,    15,   126,
-      19,    20,    21,    22,    23,    39,    40,    41,    42,   136,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-       7,     8,    35,    36,     5,     6,    77,    78,    80,    81,
-      15,    49,    50,    15,     4,     4,     3,     3,     3,     3,
-       3,    15,    15,     3,    15,    17,    36,     9,     3,    35,
-      11,     4,    10,    37,     8,     7,   102,    71,    34,   128,
-      16,    -1,    -1,    -1,    -1,    85,    82
+      41,    75,    11,    18,    19,    18,    19,     5,     6,    13,
+       3,     6,     3,    54,     5,     6,     4,     5,     6,    17,
+      11,    25,    13,    14,    39,    40,    41,    40,    41,    24,
+      15,     4,    17,    42,    36,    37,    38,   111,     0,   113,
+      16,   115,    15,    84,    26,    27,    28,    29,    30,    31,
+      32,    33,    34,    35,    36,    37,     3,     9,     4,     4,
+       4,     4,     4,     4,    11,     4,    13,    14,     4,    15,
+      15,    15,    15,    15,    15,     4,    15,     5,     6,    15,
+      43,    44,    45,    46,     3,    17,    15,    15,    20,    21,
+      22,    23,    24,     4,    17,    16,   137,    20,    21,    22,
+      23,    24,    11,    12,    11,    12,    16,   148,    26,    27,
+      28,    29,    30,    31,    32,    33,    34,    35,    10,    11,
+       7,     8,    36,    37,     5,     6,    85,    86,    88,    89,
+      55,    56,    16,    16,     3,     3,     3,    16,     4,     3,
+       3,     3,     3,     3,    16,     3,    16,    38,    38,    37,
+      36,    16,     3,    38,    11,     4,    38,    10,     8,    18,
+       7,   110,    77,    93,   139,    -1,    90,    -1,    16
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    17,    18,    39,    40,    43,    44,    45,    46,     3,
-      16,    19,    20,    21,    22,    23,    53,    54,    11,    11,
-       0,    45,    44,    47,    10,    11,    15,    15,    15,    15,
-      15,    16,    54,     3,     3,    38,     4,     4,     3,     3,
-       3,     3,     3,    11,    41,    50,    51,    51,     3,     5,
-       6,    11,    12,    13,    58,    59,    60,    61,    62,    58,
-      12,    24,    55,    56,    56,    56,    56,    56,    15,    15,
-       4,    14,     4,    58,    62,    62,     3,     5,     6,    14,
-       7,     8,     9,    16,     4,    14,     4,     4,     4,     4,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    48,    49,    48,    15,    50,    37,     4,    58,
-      63,    59,    59,    17,    52,    57,    60,    60,    61,    55,
-      36,    35,    49,    48,    48,     4,    14,     3,    14,    16,
-      37,    58,    11,    52,     4,    10,     7,    58
+       0,    18,    19,    40,    41,    46,    47,    48,    49,     3,
+      17,    20,    21,    22,    23,    24,    56,    57,    11,    12,
+      11,    12,     0,    48,    47,    50,    10,    11,    16,    16,
+      16,    16,    16,    17,    57,     3,     3,     3,     3,    39,
+       4,     4,     3,     3,     3,     3,     3,    11,    42,    53,
+      54,    54,    54,    54,     3,     5,     6,    11,    13,    14,
+      61,    62,    63,    64,    65,    61,    13,    25,    58,    59,
+      59,    59,    59,    59,    16,    16,     4,    15,     4,     4,
+       4,    61,    65,    65,     3,     5,     6,    15,     7,     8,
+       9,    17,     4,    15,     4,     4,     4,     4,    26,    27,
+      28,    29,    30,    31,    32,    33,    34,    35,    36,    37,
+      51,    52,    51,    16,    53,    16,    38,    38,     4,    61,
+      66,    62,    62,    18,    55,    60,    63,    63,    64,    58,
+      37,    36,    52,    51,    51,    51,     4,    15,     3,    15,
+      17,    38,    38,    61,    11,    55,     4,    10,     7,    61
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    42,    43,    44,    44,    45,    45,    45,    45,    45,
-      45,    46,    46,    47,    48,    48,    48,    48,    48,    48,
-      48,    48,    48,    48,    49,    49,    49,    49,    50,    50,
-      50,    51,    51,    52,    53,    53,    54,    54,    54,    54,
-      54,    55,    55,    56,    56,    57,    57,    58,    58,    58,
-      59,    59,    59,    60,    60,    61,    61,    61,    62,    62,
-      62,    62,    62,    63,    63
+       0,    45,    46,    47,    47,    48,    48,    48,    48,    48,
+      48,    49,    49,    49,    49,    50,    51,    51,    51,    51,
+      51,    51,    51,    51,    51,    51,    52,    52,    52,    52,
+      53,    53,    53,    54,    54,    55,    56,    56,    57,    57,
+      57,    57,    57,    58,    58,    59,    59,    60,    60,    61,
+      61,    61,    62,    62,    62,    63,    63,    64,    64,    64,
+      65,    65,    65,    65,    65,    66,    66
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     1,     2,     8,     6,     4,     3,     2,
-       2,     6,     8,     2,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     2,     2,     4,     4,
-       3,     1,     3,     7,     1,     2,     5,     5,     5,     5,
-       5,     1,     1,     1,     3,     1,     3,     1,     3,     3,
-       1,     3,     3,     1,     3,     1,     2,     2,     1,     1,
-       1,     4,     3,     1,     3
+       2,     6,     6,     8,     8,     2,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     2,     2,
+       4,     4,     3,     1,     3,     7,     1,     2,     5,     5,
+       5,     5,     5,     1,     1,     1,     3,     1,     3,     1,
+       3,     3,     1,     3,     3,     1,     3,     1,     2,     2,
+       1,     1,     1,     4,     3,     1,     3
 };
 
 
@@ -1391,31 +1408,31 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 78 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 86 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   adtBlackBox_SetRoot((yyvsp[0]).pContext);
 }
-#line 1399 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1416 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 85 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 93 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtBlackBoxDerivativeList_create((yyvsp[0]).pContext);
 }
-#line 1407 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1424 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 89 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 97 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtBlackBoxList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 1415 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1432 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 96 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 104 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   if ((yyBlackBoxIsFile != 0) && (yyBlackBoxReentrancyCount == 0))
   {
@@ -1426,11 +1443,11 @@ yyreduce:
   /* multi-part derivative def */
   (yyval).pContext = adtBlackBoxDerivative_create(0, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 0, 0, 0, 0);
 }
-#line 1430 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1447 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 107 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 115 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   if ((yyBlackBoxIsFile != 0) && (yyBlackBoxReentrancyCount == 0))
   {
@@ -1441,11 +1458,11 @@ yyreduce:
   /* complete derivative def */
   (yyval).pContext = adtBlackBoxDerivative_create((yyvsp[-3]).sValue, (yyvsp[-1]).pContext, 0, 0, 0, 0, 0);
 }
-#line 1445 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1462 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 118 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 126 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   if ((yyBlackBoxIsFile != 0) && (yyBlackBoxReentrancyCount == 0))
   {
@@ -1456,11 +1473,11 @@ yyreduce:
   /* null derivative def */
   (yyval).pContext = adtBlackBoxDerivative_create(0, 0, 0, 0, 0, 1, 0);
 }
-#line 1460 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1477 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 129 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 137 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   if ((yyBlackBoxIsFile != 0) && (yyBlackBoxReentrancyCount == 0))
   {
@@ -1471,11 +1488,11 @@ yyreduce:
   /* black box def */
   (yyval).pContext = adtBlackBoxDerivative_create(0, 0, 0, (yyvsp[-1]).pContext, 0, 0, 0);
 }
-#line 1475 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1492 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 140 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 148 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   if ((yyBlackBoxIsFile != 0) && (yyBlackBoxReentrancyCount == 0))
   {
@@ -1486,11 +1503,11 @@ yyreduce:
   /* black box def */
   (yyval).pContext = adtBlackBoxDerivative_create(0, 0, 0, 0, 0, 0, 0);
 }
-#line 1490 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1507 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 151 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 159 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   if (yyBlackBoxIsFile != 0)
   {
@@ -1516,11 +1533,11 @@ yyreduce:
     YYERROR;
   }
 }
-#line 1520 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1537 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 180 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 188 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   static struct blackBoxDefBeginInfo  Info = {0};
 
@@ -1532,11 +1549,27 @@ yyreduce:
 
   yyBlackBoxReentrancyCount++;
 }
-#line 1536 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1553 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 192 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 200 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  static struct blackBoxDefBeginInfo  Info = {0};
+
+  Info.pIdentifier  = (yyvsp[-4]).sValue;
+  Info.pArgDefList  = (yyvsp[-2]).pContext;
+  Info.nArgType     = -1;
+
+  (yyval).pContext = (void*)&Info;
+
+  yyBlackBoxReentrancyCount++;
+}
+#line 1569 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 13:
+#line 212 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   static struct blackBoxDefBeginInfo  Info = {0};
 
@@ -1548,429 +1581,445 @@ yyreduce:
 
   yyBlackBoxReentrancyCount++;
 }
-#line 1552 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1585 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
-  case 13:
-#line 207 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+  case 14:
+#line 224 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  static struct blackBoxDefBeginInfo  Info = {0};
+
+  Info.pIdentifier  = (yyvsp[-6]).sValue;
+  Info.pArgDefList  = (yyvsp[-4]).pContext;
+  Info.nArgType     = (yyvsp[-1]).nValue;
+
+  (yyval).pContext = (void*)&Info;
+
+  yyBlackBoxReentrancyCount++;
+}
+#line 1601 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 15:
+#line 239 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = (yyvsp[-1]).pContext;
 
   yyBlackBoxReentrancyCount--;
 }
-#line 1562 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 14:
-#line 216 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 0;
-}
-#line 1570 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 15:
-#line 220 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 1;
-}
-#line 1578 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1611 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 224 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 248 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).nValue = 2;
+  (yyval).nValue = 0;
 }
-#line 1586 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1619 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 228 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 3;
-}
-#line 1594 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 18:
-#line 232 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 4;
-}
-#line 1602 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 19:
-#line 236 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 5;
-}
-#line 1610 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 20:
-#line 240 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 6;
-}
-#line 1618 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 21:
-#line 244 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 7;
-}
-#line 1626 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 22:
-#line 248 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 8;
-}
-#line 1634 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 23:
 #line 252 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).nValue = 9;
-}
-#line 1642 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 24:
-#line 259 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   (yyval).nValue = 1;
 }
-#line 1650 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1627 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
-  case 25:
-#line 263 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+  case 18:
+#line 256 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   (yyval).nValue = 2;
 }
-#line 1658 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1635 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 19:
+#line 260 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).nValue = 3;
+}
+#line 1643 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 20:
+#line 264 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).nValue = 4;
+}
+#line 1651 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 21:
+#line 268 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).nValue = 5;
+}
+#line 1659 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 22:
+#line 272 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).nValue = 6;
+}
+#line 1667 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 23:
+#line 276 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).nValue = 7;
+}
+#line 1675 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 24:
+#line 280 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).nValue = 8;
+}
+#line 1683 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 284 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).nValue = 9;
+}
+#line 1691 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 267 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 291 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).nValue = 0;
+  (yyval).nValue = 1;
 }
-#line 1666 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1699 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 271 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 295 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).nValue = 0;
+  (yyval).nValue = 2;
 }
-#line 1674 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1707 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 278 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 299 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxArgDef_create((yyvsp[-3]).sValue, (yyvsp[-1]).nValue, (yyvsp[0]).nValue);
+  (yyval).nValue = 0;
 }
-#line 1682 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1715 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 282 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 303 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxArgDef_create((yyvsp[-3]).sValue, (yyvsp[0]).nValue, (yyvsp[-1]).nValue);
+  (yyval).nValue = 0;
 }
-#line 1690 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1723 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 286 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 310 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxArgDef_create("result", (yyvsp[0]).nValue, 2);
+  (yyval).pContext = adtBlackBoxArgDef_create((yyvsp[-3]).sValue, (yyvsp[-1]).nValue, (yyvsp[0]).nValue);
 }
-#line 1698 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1731 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 293 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 314 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxArgDefList_create((yyvsp[0]).pContext);
+  (yyval).pContext = adtBlackBoxArgDef_create((yyvsp[-3]).sValue, (yyvsp[0]).nValue, (yyvsp[-1]).nValue);
 }
-#line 1706 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1739 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 297 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 318 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+  (yyval).pContext = adtBlackBoxArgDef_create("result", (yyvsp[0]).nValue, 2);
 }
-#line 1714 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1747 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 304 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 325 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxDerivative_create((yyvsp[-4]).sValue, (yyvsp[0]).pContext, 0, 0, 1, 0, 0);
+  (yyval).pContext = adtBlackBoxArgDefList_create((yyvsp[0]).pContext);
 }
-#line 1722 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1755 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 311 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 329 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxSpecList_create((yyvsp[0]).pContext);
+  (yyval).pContext = adtBlackBoxList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 1730 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1763 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 315 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 336 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+  (yyval).pContext = adtBlackBoxDerivative_create((yyvsp[-4]).sValue, (yyvsp[0]).pContext, 0, 0, 1, 0, 0);
 }
-#line 1738 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1771 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 322 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 343 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 0);
+  (yyval).pContext = adtBlackBoxSpecList_create((yyvsp[0]).pContext);
 }
-#line 1746 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1779 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 326 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 347 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 1);
+  (yyval).pContext = adtBlackBoxList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
 }
-#line 1754 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1787 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 330 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 354 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 2);
+  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 0);
 }
-#line 1762 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1795 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 334 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 358 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 3);
+  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 1);
 }
-#line 1770 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1803 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 338 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 362 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 4);
+  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 2);
 }
-#line 1778 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1811 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 345 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 366 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxIdent_create(-1);
+  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 3);
 }
-#line 1786 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1819 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 349 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 370 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxIdent_create((yyvsp[0]).nValue);
+  (yyval).pContext = adtBlackBoxSpec_create((yyvsp[-1]).pContext, 4);
 }
-#line 1794 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1827 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 356 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 377 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxIdentList_create((yyvsp[0]).pContext);
+  (yyval).pContext = adtBlackBoxIdent_create(-1);
 }
-#line 1802 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1835 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 360 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 381 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+  (yyval).pContext = adtBlackBoxIdent_create((yyvsp[0]).nValue);
 }
-#line 1810 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1843 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 367 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 388 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxDerivativeList_create((yyvsp[0]).pContext);
+  (yyval).pContext = adtBlackBoxIdentList_create((yyvsp[0]).pContext);
 }
-#line 1818 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1851 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 371 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 392 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtBlackBoxList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 1826 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1859 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 378 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 399 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
-  (yyval).pContext = adtBlackBoxExprAdditive_create(0, (yyvsp[0]).pContext, 0);
+  (yyval).pContext = adtBlackBoxDerivativeList_create((yyvsp[0]).pContext);
 }
-#line 1834 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1867 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 382 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprAdditive_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1);
-}
-#line 1842 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 49:
-#line 386 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprAdditive_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
-}
-#line 1850 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 50:
-#line 393 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprMultiplicative_create(0, (yyvsp[0]).pContext, 0);
-}
-#line 1858 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 51:
-#line 397 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprMultiplicative_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1);
-}
-#line 1866 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 52:
-#line 401 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprMultiplicative_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
-}
-#line 1874 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 53:
-#line 408 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprPower_create(0, (yyvsp[0]).pContext);
-}
-#line 1882 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 54:
-#line 412 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprPower_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
-}
-#line 1890 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 55:
-#line 419 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprUnary_create((yyvsp[0]).pContext, 0, 0);
-}
-#line 1898 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 56:
-#line 423 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprUnary_create((yyvsp[0]).pContext, 1, 1);
-}
-#line 1906 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 57:
-#line 427 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprUnary_create((yyvsp[0]).pContext, 1, 0);
-}
-#line 1914 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 58:
-#line 434 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprPostfix_create(0, (yyvsp[0]).nValue, 0, 0, 0, 0);
-}
-#line 1922 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 59:
-#line 438 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprPostfix_create(1, 0, (yyvsp[0]).dValue, 0, 0, 0);
-}
-#line 1930 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 60:
-#line 442 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprPostfix_create(2, 0, 0, (yyvsp[0]).sValue, 0, 0);
-}
-#line 1938 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 61:
-#line 446 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprPostfix_create(3, 0, 0, (yyvsp[-3]).sValue, (yyvsp[-1]).pContext, 0);
-}
-#line 1946 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 62:
-#line 450 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxExprPostfix_create(4, 0, 0, 0, 0, (yyvsp[-1]).pContext);
-}
-#line 1954 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 63:
-#line 457 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtBlackBoxArgList_create((yyvsp[0]).pContext);
-}
-#line 1962 "..\\src\\black_box_y.c" /* yacc.c:1646  */
-    break;
-
-  case 64:
-#line 461 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+#line 403 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
     {
   (yyval).pContext = adtBlackBoxList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
 }
-#line 1970 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 1875 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 49:
+#line 410 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprAdditive_create(0, (yyvsp[0]).pContext, 0);
+}
+#line 1883 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 50:
+#line 414 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprAdditive_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1);
+}
+#line 1891 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 51:
+#line 418 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprAdditive_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
+}
+#line 1899 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 52:
+#line 425 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprMultiplicative_create(0, (yyvsp[0]).pContext, 0);
+}
+#line 1907 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 53:
+#line 429 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprMultiplicative_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1);
+}
+#line 1915 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 433 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprMultiplicative_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
+}
+#line 1923 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 440 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprPower_create(0, (yyvsp[0]).pContext);
+}
+#line 1931 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 56:
+#line 444 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprPower_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+}
+#line 1939 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 57:
+#line 451 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprUnary_create((yyvsp[0]).pContext, 0, 0);
+}
+#line 1947 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 58:
+#line 455 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprUnary_create((yyvsp[0]).pContext, 1, 1);
+}
+#line 1955 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 459 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprUnary_create((yyvsp[0]).pContext, 1, 0);
+}
+#line 1963 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 60:
+#line 466 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprPostfix_create(0, (yyvsp[0]).nValue, 0, 0, 0, 0);
+}
+#line 1971 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 61:
+#line 470 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprPostfix_create(1, 0, (yyvsp[0]).dValue, 0, 0, 0);
+}
+#line 1979 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 62:
+#line 474 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprPostfix_create(2, 0, 0, (yyvsp[0]).sValue, 0, 0);
+}
+#line 1987 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 63:
+#line 478 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprPostfix_create(3, 0, 0, (yyvsp[-3]).sValue, (yyvsp[-1]).pContext, 0);
+}
+#line 1995 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 64:
+#line 482 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxExprPostfix_create(4, 0, 0, 0, 0, (yyvsp[-1]).pContext);
+}
+#line 2003 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 65:
+#line 489 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxArgList_create((yyvsp[0]).pContext);
+}
+#line 2011 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+    break;
+
+  case 66:
+#line 493 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_y.y" /* yacc.c:1646  */
+    {
+  (yyval).pContext = adtBlackBoxList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+}
+#line 2019 "..\\src\\black_box_y.c" /* yacc.c:1646  */
     break;
 
 
-#line 1974 "..\\src\\black_box_y.c" /* yacc.c:1646  */
+#line 2023 "..\\src\\black_box_y.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

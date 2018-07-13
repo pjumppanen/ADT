@@ -12,8 +12,6 @@
 
 class DR_MinRosenbrock  : public R_MinRosenbrock
 {
-protected: 
-  
 public: 
   
   #include "RRb_decl_lib_interface_methods.hpp"
@@ -22,6 +20,7 @@ public:
   virtual ~DR_MinRosenbrock();
   
 };
+
 
 #include "RRb_decl_lib_interface_globals.hpp"
 #include "RRb_decl_lib_interface_constructor.hpp"

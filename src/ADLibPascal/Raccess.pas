@@ -23,7 +23,7 @@ interface
     Math;
 
   const
-    {$ifdef win32}
+    {$ifdef windows}
       R_Lib = 'R.dll';
     {$else}
       R_Lib = 'libR.so';
@@ -41,7 +41,7 @@ interface
     M_PI_2          = 1.570796326794896619231321691640; // pi/2
     M_PI_4          = 0.785398163397448309615660845820; // pi/4
     M_1_PI          = 0.318309886183790671537767526745; // 1/pi
-    M_2_PI		      = 0.636619772367581343075535053490; // 2/pi
+    M_2_PI          = 0.636619772367581343075535053490; // 2/pi
     M_2_SQRTPI      = 1.128379167095512573896158903122; // 2/sqrt(pi)
     M_SQRT2         = 1.414213562373095048801688724210; // sqrt(2)
     M_SQRT1_2       = 0.707106781186547524400844362105; // 1/sqrt(2)
@@ -62,39 +62,39 @@ interface
     // -----------------------------------------------------------------------
     //  enum SEXPTYPE
     // -----------------------------------------------------------------------
-    SEXPTYPE  = (NILSXP	    = 0,	  // nil = NULL
-                 SYMSXP	    = 1,	  // symbols
-                 LISTSXP	  = 2,	  // lists of dotted pairs
-                 CLOSXP	    = 3,	  // closures
-                 ENVSXP	    = 4,	  // environments
-                 PROMSXP	  = 5,	  // promises: [un]evaluated closure arguments
-                 LANGSXP	  = 6,	  // language constructs (special lists)
-                 SPECIALSXP	= 7,	  // special forms
-                 BUILTINSXP	= 8,	  // builtin non-special forms
-                 CHARSXP	  = 9,	  // "scalar" string type (internal only)
-                 LGLSXP	    = 10,	  // logical vectors
-                 INTSXP	    = 13,	  // integer vectors
-                 REALSXP	  = 14,	  // real variables
-                 CPLXSXP	  = 15,	  // complex variables
-                 STRSXP	    = 16,	  // string vectors
-                 DOTSXP	    = 17,	  // dot-dot-dot object
-                 ANYSXP	    = 18,	  // make "any" args work
-                 VECSXP	    = 19,	  // generic vectors
-                 EXPRSXP	  = 20,	  // expressions vectors
-                 BCODESXP	  = 21,	  // byte code
-                 EXTPTRSXP	= 22,	  // external pointer
-                 WEAKREFSXP	= 23,	  // weak reference
-                 RAWSXP	    = 24,	  // raw bytes
-                 S4SXP	    = 25,	  // S4 non-vector
+    SEXPTYPE  = (NILSXP     = 0,    // nil = NULL
+                 SYMSXP     = 1,    // symbols
+                 LISTSXP    = 2,    // lists of dotted pairs
+                 CLOSXP     = 3,    // closures
+                 ENVSXP     = 4,    // environments
+                 PROMSXP    = 5,    // promises: [un]evaluated closure arguments
+                 LANGSXP    = 6,    // language constructs (special lists)
+                 SPECIALSXP = 7,    // special forms
+                 BUILTINSXP = 8,    // builtin non-special forms
+                 CHARSXP    = 9,    // "scalar" string type (internal only)
+                 LGLSXP     = 10,   // logical vectors
+                 INTSXP     = 13,   // integer vectors
+                 REALSXP    = 14,   // real variables
+                 CPLXSXP    = 15,   // complex variables
+                 STRSXP     = 16,   // string vectors
+                 DOTSXP     = 17,   // dot-dot-dot object
+                 ANYSXP     = 18,   // make "any" args work
+                 VECSXP     = 19,   // generic vectors
+                 EXPRSXP    = 20,   // expressions vectors
+                 BCODESXP   = 21,   // byte code
+                 EXTPTRSXP  = 22,   // external pointer
+                 WEAKREFSXP = 23,   // weak reference
+                 RAWSXP     = 24,   // raw bytes
+                 S4SXP      = 25,   // S4 non-vector
                  NEWSXP     = 30,   // fresh node creaed in new page
                  FREESXP    = 31,   // node released by GC
-                 FUNSXP	    = 99);	// Closure or Builtin
+                 FUNSXP     = 99);  // Closure or Builtin
 
 {$IFDEF FPC}
 {$PACKRECORDS C}
 {$ENDIF}
     R_len_t         = longint;
-    Rboolean        = longint;
+    Rboolean        = longbool;
     SEXP            = pointer;
     PSEXP           = ^SEXP;
 
@@ -107,7 +107,7 @@ interface
 
     PPointer        = ^Pointer;
     PChar           = ^char;
-    PRboolean       = ^longint;
+    PRboolean       = ^longbool;
     PInteger        = ^longint;
     PDouble         = ^double;
     PRcomplex       = ^Rcomplex;
@@ -121,6 +121,7 @@ interface
 
     PCallMethodDef  = ^CallMethodDef;
 
+{$ifdef NO_MATHSAD}
   threadvar
     last_exp_x            : double;
     last_exp_result       : double;
@@ -128,6 +129,7 @@ interface
     last_inv_result       : double;
     last_inv_logit_x      : double;
     last_inv_logit_result : double;
+{$endif}
 
   var
     type_adt_tag : SEXP = nil;
@@ -154,7 +156,7 @@ interface
   procedure R_SET_TRUELENGTH(x:SEXP;v:longint);cdecl;external R_Lib name 'SET_TRUELENGTH';
   function R_LEVELS(x:SEXP):longint;cdecl;external R_Lib name 'LEVELS';
   function R_SETLEVELS(x:SEXP;v:longint):longint;cdecl;external R_Lib name 'SETLEVELS';
-  function R_LOGICAL(x:SEXP):PInteger;cdecl;external R_Lib name 'LOGICAL';
+  function R_LOGICAL(x:SEXP):PLongbool;cdecl;external R_Lib name 'LOGICAL';
   function R_INTEGER(x:SEXP):PInteger;cdecl;external R_Lib name 'INTEGER';
   function R_RAW(x:SEXP):PRbyte;cdecl;external R_Lib name 'RAW';
   function R_REAL(x:SEXP):PDouble;cdecl;external R_Lib name 'REAL';
@@ -210,6 +212,8 @@ interface
   procedure Rf_unprotect_ptr(_para1:SEXP);cdecl;external R_Lib;
   function Rf_isArray(_para1:SEXP):Rboolean;cdecl;external R_Lib;
   function Rf_isInteger(_para1:SEXP):Rboolean;cdecl;external R_Lib;
+  function Rf_isIntegerOrFactor(rInt:SEXP):Rboolean;
+  function Rf_isFactor(_para1:SEXP):Rboolean;cdecl;external R_Lib;
   function Rf_isList(_para1:SEXP):Rboolean;cdecl;external R_Lib;
   function Rf_isMatrix(_para1:SEXP):Rboolean;cdecl;external R_Lib;
   function Rf_isNewList(_para1:SEXP):Rboolean;cdecl;external R_Lib;
@@ -269,8 +273,24 @@ interface
 
   //  ----------------------------------------------------------------------------
 
+{$ifdef NO_MATHSAD}
   function expm1(const x : double) : double;
   function log1p(const x : double) : double;
+  function logit(const x : double) : double;
+  function inv_logit(const x : double) : double;
+  function scal_logit(const x : double) : double;
+  function scal_inv_logit(const x : double) : double;
+  function dinv_logit(const x : double) : double;
+  function LIL(const x : double) : double;
+
+  // ----------------------------------------------------------------------------
+
+  function exp_cached(const x : double) : double;
+  function inv_cached(const x : double) : double;
+  function inv_logit_cached(const x : double) : double;
+
+{$endif}
+
   function isinf(const x : double) : boolean;
   function sign(const x : double) : double;
   function inv(const x : double) : double;
@@ -284,22 +304,17 @@ interface
   function pwr(const x : double; const y : byte) : double ; overload;
   function pwr(const x : double; const y : word) : double ; overload;
   function pwr(const x : double; const y : longword) : double ; overload;
-  function logit(const x : double) : double;
-  function inv_logit(const x : double) : double;
-  function scal_logit(const x : double) : double;
-  function scal_inv_logit(const x : double) : double;
-  function dinv_logit(const x : double) : double;
-  function LIL(const x : double) : double;
+
   function rel_delta(const a, b : double) : double;
-
-  // ----------------------------------------------------------------------------
-
-  function exp_cached(const x : double) : double;
-  function inv_cached(const x : double) : double;
-  function inv_logit_cached(const x : double) : double;
 
 
 implementation
+
+  function Rf_isIntegerOrFactor(rInt:SEXP) : Rboolean;
+
+  begin
+    Rf_isIntegerOrFactor := Rf_isInteger(rInt) OR Rf_isFactor(rInt);
+  end;
 
   // ---------------------------------------------------------------------
 
@@ -325,6 +340,7 @@ implementation
 
   // ----------------------------------------------------------------------------
 
+{$ifdef NO_MATHSAD}
   function expm1(const x : double) : double ; inline;
 
   begin
@@ -338,6 +354,124 @@ implementation
   begin
     log1p := lnxp1(x);
   end;
+
+  // ----------------------------------------------------------------------------
+
+  function logit(const x : double) : double;
+
+  begin
+    if x = 0 then
+      logit := MINF
+    else
+    begin
+      if x = 1 then
+        logit := INF
+      else
+        logit := ln(x / (1.0 - x));
+    end;
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function inv_logit(const x : double) : double;
+
+  begin
+    // roughly log( double_neg_eps), but this is exact
+    if x < -36.7363124075975981959901 then
+      inv_logit := 1.0
+    else
+      inv_logit := 1.0 / (1.0 + exp(-x));
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function scal_logit(const x : double) : double;
+
+  begin
+    scal_logit := logit(0.5 + (255.0 / 256.0) * (x - 0.5));
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function scal_inv_logit(const x : double) : double;
+
+  begin
+    scal_inv_logit := ((1.0 + 255.0 * inv_logit(x)) / 256.0);
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function dinv_logit(const x : double) : double;
+
+  var
+    y : double;
+
+  begin
+    if x > 88.0 then
+      dinv_logit := 0.0
+    else
+    begin
+      y           := 1.0 / (1.0 + exp(x));
+      dinv_logit  := y * (1.0 - y);
+    end;
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function LIL(const x : double) : double;
+
+  begin
+    if x < 0 then
+      LIL := x - log1p(exp(x))
+    else
+      LIL := -log1p(exp(-x));
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function exp_cached(const x : double) : double;
+
+  begin
+    if x = last_exp_x then
+      exp_cached      := last_exp_result
+    else
+    begin
+      last_exp_result := exp(x);
+      last_exp_x      := x;
+      exp_cached      := last_exp_result;
+    end;
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function inv_cached(const x : double) : double;
+
+  begin
+    if x = last_inv_x then
+      inv_cached      := last_inv_result
+    else
+    begin
+      last_inv_result := 1.0 / x;
+      last_inv_x      := x;
+      inv_cached      := last_inv_result;
+    end;
+  end;
+
+  // ----------------------------------------------------------------------------
+
+  function inv_logit_cached(const x : double) : double;
+
+  begin
+    if x = last_inv_logit_x then
+      inv_logit_cached      := last_inv_logit_result
+    else
+    begin
+      last_inv_logit_result := inv_logit(x);
+      last_inv_logit_x      := x;
+      inv_logit_cached      := last_inv_logit_result;
+    end;
+  end;
+{$endif}
 
   // ----------------------------------------------------------------------------
 
@@ -481,123 +615,6 @@ implementation
 
   // ----------------------------------------------------------------------------
 
-  function logit(const x : double) : double;
-
-  begin
-    if x = 0 then
-      logit := MINF
-    else
-    begin
-      if x = 1 then
-        logit := INF
-      else
-        logit := ln(x / (1.0 - x));
-    end;
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function inv_logit(const x : double) : double;
-
-  begin
-    // roughly log( double_neg_eps), but this is exact
-    if x < -36.7363124075975981959901 then
-      inv_logit := 1.0
-    else
-      inv_logit := 1.0 / (1.0 + exp(-x));
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function scal_logit(const x : double) : double;
-
-  begin
-    scal_logit := logit(0.5 + (255.0 / 256.0) * (x - 0.5));
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function scal_inv_logit(const x : double) : double;
-
-  begin
-    scal_inv_logit := ((1.0 + 255.0 * inv_logit(x)) / 256.0);
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function dinv_logit(const x : double) : double;
-
-  var
-    y : double;
-
-  begin
-    if x > 88.0 then
-      dinv_logit := 0.0
-    else
-    begin
-      y           := 1.0 / (1.0 + exp(x));
-      dinv_logit  := y * (1.0 - y);
-    end;
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function LIL(const x : double) : double;
-
-  begin
-    if x < 0 then
-      LIL := x - log1p(exp(x))
-    else
-      LIL := -log1p(exp(-x));
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function exp_cached(const x : double) : double;
-
-  begin
-    if x = last_exp_x then
-      exp_cached      := last_exp_result
-    else
-    begin
-      last_exp_result := exp(x);
-      last_exp_x      := x;
-      exp_cached      := last_exp_result;
-    end;
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function inv_cached(const x : double) : double;
-
-  begin
-    if x = last_inv_x then
-      inv_cached      := last_inv_result
-    else
-    begin
-      last_inv_result := 1.0 / x;
-      last_inv_x      := x;
-      inv_cached      := last_inv_result;
-    end;
-  end;
-
-  // ----------------------------------------------------------------------------
-
-  function inv_logit_cached(const x : double) : double;
-
-  begin
-    if x = last_inv_logit_x then
-      inv_logit_cached      := last_inv_logit_result
-    else
-    begin
-      last_inv_logit_result := inv_logit(x);
-      last_inv_logit_x      := x;
-      inv_logit_cached      := last_inv_logit_result;
-    end;
-  end;
-
-  // ----------------------------------------------------------------------------
-
   function rel_delta(const a, b : double) : double;
 
   var
@@ -624,12 +641,13 @@ implementation
 
 
 initialization
+{$ifdef NO_MATHSAD}
   last_exp_x            := 0.0;
   last_exp_result       := 1.0;
   last_inv_x            := 1.0;
   last_inv_result       := 1.0;
   last_inv_logit_x      := 0.0;
   last_inv_logit_result := 0.5;
-
+{$endif}
 
 end.

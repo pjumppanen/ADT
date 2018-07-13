@@ -44,12 +44,25 @@ const char*                                  AdtDelphiBase::TypeScope         = 
 AdtDelphiGoal*                               AdtDelphiBase::DelphiRootObject  = 0;
 AdtDelphiToFortranTypeConversionByStringMap  AdtDelphiBase::FortranTypeMap;
 AdtDelphiToFortranTypeConversionByStringMap  AdtDelphiBase::DelphiTypeMap;
+AdtParserPtrList                             AdtDelphiGoal::BlackBoxCommentsList;
 AdtVisibility                                AdtDelphiClassType::GlobalVisibility = AdtVisibility_PUBLIC;
 
 
 //  ----------------------------------------------------------------------------
 //  "C" callable function implementations
 //  ----------------------------------------------------------------------------
+void adtDelphi_setComment(void* pObj, const char* pComment)
+{
+  AdtParser* pParserObj = Obj(pObj);
+
+  if (pParserObj != 0)
+  {
+    pParserObj->comment(pComment);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 void adtDelphi_setTypeScope(void* pIdent)
 {
   AdtDelphiBase::typeScope(Obj(pIdent));
@@ -122,44 +135,51 @@ void* adtDelphiMacro_create(void* pIdentObj, void* pExprListObj, void* pExpressi
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiProgram_create(void* pIdentObj, void* pIdentListObj, void* pUsesClauseObj, void* pBlockObj, const char* pComment)
+void* adtDelphiModuleEnd_create()
 {
-  return (Hnd(new AdtDelphiProgram(ObjAndRelease(pIdentObj), ObjAndRelease(pIdentListObj), ObjAndRelease(pUsesClauseObj), ObjAndRelease(pBlockObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiModuleEnd(), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiUnit_create(void* pIdentObj, void* pInterfaceSectionObj, void* pImplementationSectionObj, void* pInitSectionObj, const char* pComment)
+void* adtDelphiProgram_create(void* pIdentObj, void* pIdentListObj, void* pUsesClauseObj, void* pBlockObj, void* pModuleEndObj)
 {
-  return (Hnd(new AdtDelphiUnit(ObjAndRelease(pIdentObj), ObjAndRelease(pInterfaceSectionObj), ObjAndRelease(pImplementationSectionObj), ObjAndRelease(pInitSectionObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiProgram(ObjAndRelease(pIdentObj), ObjAndRelease(pIdentListObj), ObjAndRelease(pUsesClauseObj), ObjAndRelease(pBlockObj), ObjAndRelease(pModuleEndObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiPackage_create(void* pIdentObj, void* pRequiresIdentListObj, void* pContainsIdentListObj, const char* pComment)
+void* adtDelphiUnit_create(void* pIdentObj, void* pInterfaceSectionObj, void* pImplementationSectionObj, void* pInitSectionObj, int nStartLineNumber, void* pModuleEndObj)
 {
-  return (Hnd(new AdtDelphiPackage(ObjAndRelease(pIdentObj), ObjAndRelease(pRequiresIdentListObj), ObjAndRelease(pContainsIdentListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiUnit(ObjAndRelease(pIdentObj), ObjAndRelease(pInterfaceSectionObj), ObjAndRelease(pImplementationSectionObj), ObjAndRelease(pInitSectionObj), ObjAndRelease(pModuleEndObj), nStartLineNumber), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiLibrary_create(void* pIdentObj, void* pUsesClauseObj, void* pBlockObj, const char* pComment)
+void* adtDelphiPackage_create(void* pIdentObj, void* pRequiresIdentListObj, void* pContainsIdentListObj, void* pModuleEndObj)
 {
-  return (Hnd(new AdtDelphiLibrary(ObjAndRelease(pIdentObj), ObjAndRelease(pUsesClauseObj), ObjAndRelease(pBlockObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiPackage(ObjAndRelease(pIdentObj), ObjAndRelease(pRequiresIdentListObj), ObjAndRelease(pContainsIdentListObj), ObjAndRelease(pModuleEndObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiUsesClause_create(void* pIdentListObj, const char* pComment)
+void* adtDelphiLibrary_create(void* pIdentObj, void* pUsesClauseObj, void* pBlockObj, void* pModuleEndObj)
 {
-  return (Hnd(new AdtDelphiUsesClause(ObjAndRelease(pIdentListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiLibrary(ObjAndRelease(pIdentObj), ObjAndRelease(pUsesClauseObj), ObjAndRelease(pBlockObj), ObjAndRelease(pModuleEndObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiInterfaceSection_create(void* pUsesClauseObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pExportedHeadingListObj, const char* pComment)
+void* adtDelphiUsesClause_create(void* pIdentListObj, int nStartLineNumber)
 {
-  return (Hnd(new AdtDelphiInterfaceSection(ObjAndRelease(pUsesClauseObj), ObjAndRelease(pConstSectionObj), ObjAndRelease(pTypeSectionObj), ObjAndRelease(pVarSectionObj), ObjAndRelease(pExportedHeadingListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiUsesClause(ObjAndRelease(pIdentListObj), nStartLineNumber), yyDelphi_lineNumber(), yyDelphi_fileName()));
+}
+
+//  ----------------------------------------------------------------------------
+
+void* adtDelphiInterfaceSection_create(void* pUsesClauseObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pExportedHeadingListObj, int nStartLineNumber)
+{
+  return (Hnd(new AdtDelphiInterfaceSection(ObjAndRelease(pUsesClauseObj), ObjAndRelease(pConstSectionObj), ObjAndRelease(pTypeSectionObj), ObjAndRelease(pVarSectionObj), ObjAndRelease(pExportedHeadingListObj), nStartLineNumber), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -171,30 +191,30 @@ void* adtDelphiExportedHeadingList_create(void* pExportedHeadingObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiExportedHeading_create(void* pProcedureHeadingObj, void* pFunctionHeadingObj, void* pDirectiveListObj, const char* pComment)
+void* adtDelphiExportedHeading_create(void* pProcedureHeadingObj, void* pFunctionHeadingObj, void* pDirectiveListObj)
 {
-  return (Hnd(new AdtDelphiExportedHeading(ObjAndRelease(pProcedureHeadingObj), ObjAndRelease(pFunctionHeadingObj), ObjAndRelease(pDirectiveListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiExportedHeading(ObjAndRelease(pProcedureHeadingObj), ObjAndRelease(pFunctionHeadingObj), ObjAndRelease(pDirectiveListObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiImplementationSection_create(void* pUsesClauseObj, void* pDeclSectionObj, const char* pComment)
+void* adtDelphiImplementationSection_create(void* pUsesClauseObj, void* pDeclSectionObj, int nStartLineNumber)
 {
-  return (Hnd(new AdtDelphiImplementationSection(ObjAndRelease(pUsesClauseObj), ObjAndRelease(pDeclSectionObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiImplementationSection(ObjAndRelease(pUsesClauseObj), ObjAndRelease(pDeclSectionObj), nStartLineNumber), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiBlock_create(void* pDeclSectionObj, void* pCompoundStmtObj, const char* pComment)
+void* adtDelphiBlock_create(void* pDeclSectionObj, void* pCompoundStmtObj)
 {
-  return (Hnd(new AdtDelphiBlock(ObjAndRelease(pDeclSectionObj), ObjAndRelease(pCompoundStmtObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiBlock(ObjAndRelease(pDeclSectionObj), ObjAndRelease(pCompoundStmtObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiDeclSection_create(void* pLabelDeclSectionObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pProcedureDeclSectionObj, const char* pComment)
+void* adtDelphiDeclSection_create(void* pLabelDeclSectionObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pProcedureDeclSectionObj)
 {
-  return (Hnd(new AdtDelphiDeclSection(ObjAndRelease(pLabelDeclSectionObj), ObjAndRelease(pConstSectionObj), ObjAndRelease(pTypeSectionObj), ObjAndRelease(pVarSectionObj), ObjAndRelease(pProcedureDeclSectionObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiDeclSection(ObjAndRelease(pLabelDeclSectionObj), ObjAndRelease(pConstSectionObj), ObjAndRelease(pTypeSectionObj), ObjAndRelease(pVarSectionObj), ObjAndRelease(pProcedureDeclSectionObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -213,16 +233,16 @@ void* adtDelphiLabelDeclList_create(void* pLabelDeclObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiLabelDecl_create(void* pLabelIdObj, const char* pComment)
+void* adtDelphiLabelDecl_create(void* pLabelIdObj)
 {
-  return (Hnd(new AdtDelphiLabelDecl(ObjAndRelease(pLabelIdObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiLabelDecl(ObjAndRelease(pLabelIdObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiConstSection_create(void* pConstantDeclListObj, const char* pComment)
+void* adtDelphiConstSection_create(void* pConstantDeclListObj)
 {
-  return (Hnd(new AdtDelphiConstSection(ObjAndRelease(pConstantDeclListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiConstSection(ObjAndRelease(pConstantDeclListObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -241,9 +261,9 @@ void* adtDelphiConstantDecl_create(void* pIdentObj, void* pTypeIdObj, void* pUni
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiTypeSection_create(void* pTypeDeclListObj, const char* pComment)
+void* adtDelphiTypeSection_create(void* pTypeDeclListObj, int nStartLineNumber)
 {
-  return (Hnd(new AdtDelphiTypeSection(ObjAndRelease(pTypeDeclListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiTypeSection(ObjAndRelease(pTypeDeclListObj), nStartLineNumber), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -493,9 +513,9 @@ void* adtDelphiProcedureType_create(void* pProcedureHeadingObj, void* pFunctionH
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiVarSection_create(void* pVarDeclListObj, const char* pComment)
+void* adtDelphiVarSection_create(void* pVarDeclListObj)
 {
-  return (Hnd(new AdtDelphiVarSection(ObjAndRelease(pVarDeclListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiVarSection(ObjAndRelease(pVarDeclListObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -654,9 +674,9 @@ void* adtDelphiExprList_create(void* pExprObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiStatement_create(void* pLabelIdObj, void* pExitStatementObj, void* pSimpleStatementObj, void* pCompoundStmtObj, void* pIfStmtObj, void* pCaseStmtObj, void* pRepeatStmtObj, void* pWhileStmtObj, void* pForStmtObj, void* pWithStmtObj, const char* pComment)
+void* adtDelphiStatement_create(void* pLabelIdObj, void* pExitStatementObj, void* pSimpleStatementObj, void* pCompoundStmtObj, void* pIfStmtObj, void* pCaseStmtObj, void* pRepeatStmtObj, void* pWhileStmtObj, void* pForStmtObj, void* pWithStmtObj)
 {
-  return (Hnd(new AdtDelphiStatement(ObjAndRelease(pLabelIdObj), ObjAndRelease(pExitStatementObj), ObjAndRelease(pSimpleStatementObj), ObjAndRelease(pCompoundStmtObj), ObjAndRelease(pIfStmtObj), ObjAndRelease(pCaseStmtObj), ObjAndRelease(pRepeatStmtObj), ObjAndRelease(pWhileStmtObj), ObjAndRelease(pForStmtObj), ObjAndRelease(pWithStmtObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiStatement(ObjAndRelease(pLabelIdObj), ObjAndRelease(pExitStatementObj), ObjAndRelease(pSimpleStatementObj), ObjAndRelease(pCompoundStmtObj), ObjAndRelease(pIfStmtObj), ObjAndRelease(pCaseStmtObj), ObjAndRelease(pRepeatStmtObj), ObjAndRelease(pWhileStmtObj), ObjAndRelease(pForStmtObj), ObjAndRelease(pWithStmtObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -689,9 +709,9 @@ void* adtDelphiSizeofType_create(void* pOrdIdentObj, void* pRealTypeObj, void* p
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiCompoundStmt_create(void* pStmtListObj)
+void* adtDelphiCompoundStmt_create(void* pStmtListObj, int nNoEnd)
 {
-  return (Hnd(new AdtDelphiCompoundStmt(ObjAndRelease(pStmtListObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiCompoundStmt(ObjAndRelease(pStmtListObj), nNoEnd != 0), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -787,16 +807,16 @@ void* adtDelphiProcedureDecl_create(void* pProcedureHeadingObj, void* pFunctionH
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiFunctionHeading_create(void* pClassIdentObj, void* pFunctionIdentObj, void* pFormalParametersObj, void* pSimpleTypeObj, void* pTypeIdObj, const char* pComment)
+void* adtDelphiFunctionHeading_create(void* pClassIdentObj, void* pFunctionIdentObj, void* pFormalParametersObj, void* pSimpleTypeObj, void* pTypeIdObj)
 {
-  return (Hnd(new AdtDelphiFunctionHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pFunctionIdentObj), ObjAndRelease(pFormalParametersObj), ObjAndRelease(pSimpleTypeObj), ObjAndRelease(pTypeIdObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiFunctionHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pFunctionIdentObj), ObjAndRelease(pFormalParametersObj), ObjAndRelease(pSimpleTypeObj), ObjAndRelease(pTypeIdObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiProcedureHeading_create(void* pClassIdentObj, void* pProcedureIdentObj, void* pFormalParametersObj, const char* pComment)
+void* adtDelphiProcedureHeading_create(void* pClassIdentObj, void* pProcedureIdentObj, void* pFormalParametersObj)
 {
-  return (Hnd(new AdtDelphiProcedureHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pProcedureIdentObj), ObjAndRelease(pFormalParametersObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiProcedureHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pProcedureIdentObj), ObjAndRelease(pFormalParametersObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -864,16 +884,16 @@ void* adtDelphiMethod_create(void* pProcedureHeadingObj, void* pFunctionHeadingO
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiConstructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj, const char* pComment)
+void* adtDelphiConstructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj)
 {
-  return (Hnd(new AdtDelphiConstructorHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pMethodIdentObj), ObjAndRelease(pFormalParametersObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiConstructorHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pMethodIdentObj), ObjAndRelease(pFormalParametersObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiDestructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj, const char* pComment)
+void* adtDelphiDestructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj)
 {
-  return (Hnd(new AdtDelphiDestructorHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pMethodIdentObj), ObjAndRelease(pFormalParametersObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiDestructorHeading(ObjAndRelease(pClassIdentObj), ObjAndRelease(pMethodIdentObj), ObjAndRelease(pFormalParametersObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -892,9 +912,9 @@ void* adtDelphiObjField_create(void* pIdentListObj, void* pTypeObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiInitSection_create(void* pStmtListObj, void* pFinalStmtListObj, int bHasInit, const char* pComment)
+void* adtDelphiInitSection_create(void* pStmtListObj, void* pFinalStmtListObj, int bHasInit)
 {
-  return (Hnd(new AdtDelphiInitSection(ObjAndRelease(pStmtListObj), ObjAndRelease(pFinalStmtListObj), bHasInit != 0, pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiInitSection(ObjAndRelease(pStmtListObj), ObjAndRelease(pFinalStmtListObj), bHasInit != 0), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -976,9 +996,9 @@ void* adtDelphiPropertySpecifiers_create(int nType, void* pIdentObj, void* pCons
 
 //  ----------------------------------------------------------------------------
 
-void* adtDelphiInterfaceType_create(void* pIdentListObj, void* pClassMethodListObj, void* pClassPropertyListObj, const char* pComment)
+void* adtDelphiInterfaceType_create(void* pIdentListObj, void* pClassMethodListObj, void* pClassPropertyListObj)
 {
-  return (Hnd(new AdtDelphiInterfaceType(ObjAndRelease(pIdentListObj), ObjAndRelease(pClassMethodListObj), ObjAndRelease(pClassPropertyListObj), pComment), yyDelphi_lineNumber(), yyDelphi_fileName()));
+  return (Hnd(new AdtDelphiInterfaceType(ObjAndRelease(pIdentListObj), ObjAndRelease(pClassMethodListObj), ObjAndRelease(pClassPropertyListObj)), yyDelphi_lineNumber(), yyDelphi_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -1220,129 +1240,143 @@ AdtFile& AdtDelphiBase::writePragmas(AdtFile& pOutFile) const
       (comment().length() > 0))
   {
     string  sCopy(comment());
-    int         nCount    = 0;
-    const char* pWord     = 0;
-    char*       pStart    = (char*)(sCopy.c_str());
-    char*       pEnd      = pStart;
-    int         nStrip    = 0;
+    int         nCount      = 0;
+    const char* pWord       = 0;
+    const char* pStart      = sCopy.c_str();
+    const char* pEnd        = pStart;
+    bool        bHasPragmas = false;
 
     while (*pEnd != 0)
     {
-      bool  bContinue     = true;
-      bool  bStartComment = true;
-      bool  bIsPragma     = false;
+      pEnd = AdtParse::nextWord(pEnd);
 
-      switch(*pEnd)
+      int  nCommentType  = 0;
+      bool bStartComment = false;
+
+      if (AdtParse::matchWord(pEnd, "{", false))
       {
-        case '{':
-        {
-          nStrip = 1;
-          pEnd++;
-          break;
-        }
-
-        case '(':
-        {
-          nStrip = 2;
-          pEnd++;
-
-          if (*pEnd == '*')
-          {
-            pEnd++;
-          }
-          break;
-        }
-
-        case '/':
-        {
-          nStrip = 0;
-          pEnd++;
-
-          if (*pEnd == '/')
-          {
-            pEnd++;
-          }
-          break;
-        }
-
-        default:
-        {
-          bStartComment = false;
-          break;
-        }
+        bStartComment = true;
+        nCommentType  = 1;
+      }
+      else if (AdtParse::matchWord(pEnd, "(*", false))
+      {
+        bStartComment = true;
+        nCommentType  = 2;
+      }
+      else if (AdtParse::matchWord(pEnd, "//", false))
+      {
+        bStartComment = true;
+        nCommentType  = 0;
       }
 
-      pEnd  = (char*)AdtParse::nextWord(pEnd);
+      pEnd  = AdtParse::nextWord(pEnd);
       pWord = pEnd;
 
-      if (bStartComment && AdtParse::matchWord(pWord, "!$AD", false))
+      if (bStartComment)
       {
-        pStart    = pEnd;
-        bIsPragma = true;
-      }
-
-      while ((*pEnd != 0) && bContinue)
-      {
-        switch (*pEnd)
+        if (AdtParse::matchWord(pWord, "$AD", false))
         {
-          case '\n':
-          {
-            nStrip++;
-            *pEnd = 0;
+          bool bContinue = true;
 
-            if (*(pEnd + 1) == '\r')
+          pStart = pEnd;
+          pEnd   = pWord;
+
+          while ((*pEnd != 0) && bContinue)
+          {
+            bool bMatched = false;
+
+            pWord = pEnd;
+
+            switch (nCommentType)
             {
-              nStrip++;
-              pEnd++;
-              *pEnd = 0;
+              default:
+              case 0:
+              {
+                bMatched = AdtParse::matchWord(pEnd, "\n", false);
+                break;
+              }
+
+              case 1:
+              {
+                bMatched = AdtParse::matchWord(pEnd, "}", false);
+                break;
+              }
+
+              case 2:
+              {
+                bMatched = AdtParse::matchWord(pEnd, "*)", false);
+                break;
+              }
             }
 
-            bContinue = false;
-            break;
-          }
-
-          case '\r':
-          {
-            nStrip++;
-            *pEnd = 0;
-
-            if (*(pEnd + 1) == '\n')
+            if (bMatched)
             {
-              nStrip++;
+              pEnd      = pWord;
+              bContinue = false;
+            }
+            else
+            {
               pEnd++;
-              *pEnd = 0;
+              pEnd = AdtParse::nextWord(pEnd, 0, false);
             }
 
-            bContinue = false;
-            break;
-          }
+            if (!bContinue)
+            {
+              char* pTerminate = (char*)pEnd;
 
+              pTerminate[0] = 0;
+
+              pOutFile.newline();
+              pOutFile.write("!");
+              pOutFile.write(pStart);
+
+              bHasPragmas = true;
+            }
+          }
+        }
+
+        switch (nCommentType)
+        {
           default:
+          case 0:
           {
+            AdtParse::stepOverWord("\n", pEnd, false);
+            break;
+          }
+
+          case 1:
+          {
+            AdtParse::stepOverWord("}", pEnd, false);
+            break;
+          }
+
+          case 2:
+          {
+            AdtParse::stepOverWord("*)", pEnd, false);
             break;
           }
         }
-
-        pEnd++;
       }
 
-      if (bIsPragma)
+      if (pEnd[0] != 0)
       {
-        int nLastIndent = pOutFile.indent();
-
-        if ((*pEnd == 0) && (nStrip > 0))
-        {
-          char* pEOL = pEnd - nStrip;
-
-          *pEOL = 0;
-        }
-
-        pOutFile.newline();
-        pOutFile.write(pStart);
-        pOutFile.newline();
+        pEnd++;
+        pEnd = AdtParse::nextWord(pEnd, 0, false);
       }
 
       pStart = pEnd;
+    }
+
+    if (bHasPragmas)
+    {
+      pOutFile.newline();
+    }
+    else
+    {
+      string sComment;
+
+      translateComment(sComment, AdtParserCodeFortran, false);
+      writeExpanded(pOutFile, sComment);
     }
   }
 
@@ -1362,6 +1396,31 @@ AdtDelphiBase::AdtDelphiBase()
 AdtDelphiBase::~AdtDelphiBase()
 {
   flush();
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtDelphiBase::rootBindComments(AdtCommon* pCompilerBase)
+{
+  if (DelphiRootObject != 0)
+  {
+    DelphiRootObject->bindComments(pCompilerBase);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtDelphiBase::qualifiedName(string& rName, const char* pPrefix)
+{
+  bool bQualified = false;
+
+  if ((rName.find('.') == string::npos) && (pPrefix != 0))
+  {
+    rName      = string(pPrefix) + "." + rName;
+    bQualified = true;
+  }
+
+  return (bQualified);
 }
 
 //  ----------------------------------------------------------------------------
@@ -1561,10 +1620,22 @@ AdtDelphiGoal::~AdtDelphiGoal()
   LocalConstMap.clear();
   ImplementedProcedureMap.clear();
 
+  BlackBoxCommentsList.clear();
+
   UtlReleaseReference(Program);
   UtlReleaseReference(Package);
   UtlReleaseReference(Library);
   UtlReleaseReference(Unit);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtDelphiGoal::addBlackBoxCommentsObject(AdtParser* pObj)
+{
+  if (pObj != 0)
+  {
+    BlackBoxCommentsList.push_back(pObj);
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -1701,25 +1772,18 @@ void AdtDelphiGoal::addDimensionVars(const char* pClassName,
 
     if (pClass != 0)
     {
-      AdtParserPtrList      rList;
-      AdtParserPtrListIter  Iter;
+      AdtParserPtrByStringMap     rDimsMap;
+      AdtParserPtrByStringMapIter Iter;
 
-      pClass->findDimensionVars(rVarsMap, rList);
+      pClass->findDimensionVars(rVarsMap, rDimsMap);
 
-      for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+      for (Iter = rDimsMap.begin() ; Iter != rDimsMap.end() ; ++Iter)
       {
-        const AdtParser*  pExternal = *Iter;
+        const AdtParser*  pDimObj = Iter->second;
 
-        if (pExternal != 0)
+        if (pDimObj != 0)
         {
-          char  sKeyName[32]  = {0};
-
-          //Quick and dirty hack to build a unique key name to stop the same
-          //object being inserted more than once.
-          ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
-          //Is a class variable
-          rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+          rVarsMap.insert(AdtParserPtrByStringMap::value_type(Iter->first, AdtParserContext((AdtParser*)pDimObj)));
         }
       }
     }
@@ -1788,21 +1852,13 @@ bool AdtDelphiGoal::compile(const AdtDelphiProcedureDecl* pProcedureDecl,
 
           if (findConst(rName, pExternal))
           {
-            //Quick and dirty hack to build a unique key name to stop the same
-            //object being inserted more than once.
-            ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
             //Is a constant
-            rConstMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+            rConstMap.insert(AdtParserPtrByStringMap::value_type(rName, AdtParserContext((AdtParser*)pExternal)));
           }
           else if (findVar(rName, pExternal))
           {
-            //Quick and dirty hack to build a unique key name to stop the same
-            //object being inserted more than once.
-            ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
             //Is a variable
-            rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+            rVarsMap.insert(AdtParserPtrByStringMap::value_type(rName, AdtParserContext((AdtParser*)pExternal)));
           }
           else if (findProc(rName, ClassName, pExternal, sMatchName))
           {
@@ -1827,12 +1883,8 @@ bool AdtDelphiGoal::compile(const AdtDelphiProcedureDecl* pProcedureDecl,
           }
           else if (findField(rName, ClassName, pExternal))
           {
-            //Quick and dirty hack to build a unique key name to stop the same
-            //object being inserted more than once.
-            ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
             //Is a class variable
-            rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+            rVarsMap.insert(AdtParserPtrByStringMap::value_type(rName, AdtParserContext((AdtParser*)pExternal)));
           }
           else
           {
@@ -1978,101 +2030,74 @@ bool AdtDelphiGoal::hasClass(const char* pClassName,
 
 bool AdtDelphiGoal::buildBlackBoxFile(const char* pBlackBoxFileName,
                                       AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                      AdtStringByStringMap& rRegardAsClassSubroutineMap)
+                                      AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                      double dVersionNumber)
 {
   bool    bBuilt = false;
   string  sBlackBoxDefs;
 
-  //Find all black box containing objects
-  AdtBlackBoxDefinitionPtrByStringMap BlackBoxMap;
-  AdtParserPtrList                    rBlackBoxList;
-  AdtParserPtrListConstIter           Iter;
-
-  findObjects(rBlackBoxList, "AdtDelphiFunctionHeading");
-
-  for (Iter = rBlackBoxList.begin() ; Iter != rBlackBoxList.end() ; ++Iter)
+  if (BlackBoxCommentsList.size() > 0)
   {
-    const AdtDelphiFunctionHeading* pFunctionHeading = (const AdtDelphiFunctionHeading*)Iter->object();
+    //Find all black box containing objects
+    AdtBlackBoxDefinitionPtrByStringMap BlackBoxMap;
+    AdtParserPtrListIter                Iter;
 
-    if ((pFunctionHeading != 0) && (pFunctionHeading->blackBox() != 0))
+    for (Iter = BlackBoxCommentsList.begin() ; Iter != BlackBoxCommentsList.end() ; ++Iter)
     {
-      AdtBlackBoxDefinition*  pBlackBox = pFunctionHeading->blackBox();
-      AdtFile                 DefFile;
-      string                  sDef;
+      AdtParser* pObj = *Iter;
 
-      if (DefFile.open(sDef))
+      if (pObj != 0)
       {
-        AdtBlackBoxDefinitionPtrByStringMapIter BlackBoxIter;
+        AdtBlackBoxDefinition* pBlackBox = 0;
 
-        pBlackBox->writeDefinition(DefFile);
-        DefFile.close();
-
-        BlackBoxIter = BlackBoxMap.find(pBlackBox->name());
-
-        if (BlackBoxIter == BlackBoxMap.end())
+        if (pObj->isType("AdtDelphiFunctionHeading"))
         {
-          BlackBoxMap[pBlackBox->name()] = pBlackBox;
-          addBlackBox(pBlackBox,
-                      rRegardAsClassFunctionMap,
-                      rRegardAsClassSubroutineMap);
+          AdtDelphiFunctionHeading* pFunctionHeading = (AdtDelphiFunctionHeading*)pObj;
+
+          pBlackBox = pFunctionHeading->compileBlackBoxDefinition();
         }
-        else
+        else if (pObj->isType("AdtDelphiProcedureHeading"))
         {
-          ::printf("ERROR: The black box definition in file %s on line %d is already defined in file %s on line %d.\n",
-                   pBlackBox->fileName(),
-                   pBlackBox->lineNumber(),
-                   BlackBoxIter->second->fileName(),
-                   BlackBoxIter->second->lineNumber());
+          AdtDelphiProcedureHeading* pProcedureHeading = (AdtDelphiProcedureHeading*)pObj;
 
-          AdtExit(-1);
+          pBlackBox = pProcedureHeading->compileBlackBoxDefinition();
         }
 
-        sBlackBoxDefs += sDef;
-      }
-    }
-  }
-
-  rBlackBoxList.clear();
-  findObjects(rBlackBoxList, "AdtDelphiProcedureHeading");
-
-  for (Iter = rBlackBoxList.begin() ; Iter != rBlackBoxList.end() ; ++Iter)
-  {
-    const AdtDelphiProcedureHeading* pProcedureHeading = (const AdtDelphiProcedureHeading*)Iter->object();
-
-    if ((pProcedureHeading != 0) && (pProcedureHeading->blackBox() != 0))
-    {
-      AdtBlackBoxDefinition*  pBlackBox = pProcedureHeading->blackBox();
-      AdtFile                 DefFile;
-      string                  sDef;
-
-      if (DefFile.open(sDef))
-      {
-        AdtBlackBoxDefinitionPtrByStringMapIter BlackBoxIter;
-
-        pBlackBox->writeDefinition(DefFile);
-        DefFile.close();
-
-        BlackBoxIter = BlackBoxMap.find(pBlackBox->name());
-
-        if (BlackBoxIter == BlackBoxMap.end())
+        if (pBlackBox != 0)
         {
-          BlackBoxMap[pBlackBox->name()] = pBlackBox;
-          addBlackBox(pBlackBox,
-                      rRegardAsClassFunctionMap,
-                      rRegardAsClassSubroutineMap);
-        }
-        else
-        {
-          ::printf("ERROR: The black box definition in file %s on line %d is already defined in file %s on line %d.\n",
-                   pBlackBox->fileName(),
-                   pBlackBox->lineNumber(),
-                   BlackBoxIter->second->fileName(),
-                   BlackBoxIter->second->lineNumber());
+          AdtFile                 DefFile;
+          string                  sDef;
 
-          AdtExit(-1);
-        }
+          if (DefFile.open(sDef))
+          {
+            AdtBlackBoxDefinitionPtrByStringMapIter BlackBoxIter;
 
-        sBlackBoxDefs += sDef;
+            pBlackBox->writeDefinition(DefFile, dVersionNumber);
+            DefFile.close();
+
+            BlackBoxIter = BlackBoxMap.find(pBlackBox->name());
+
+            if (BlackBoxIter == BlackBoxMap.end())
+            {
+              BlackBoxMap[pBlackBox->name()] = pBlackBox;
+              addBlackBox(pBlackBox,
+                          rRegardAsClassFunctionMap,
+                          rRegardAsClassSubroutineMap);
+            }
+            else
+            {
+              ::printf("ERROR: The black box definition in file %s on line %d is already defined in file %s on line %d.\n",
+                       pBlackBox->fileName(),
+                       pBlackBox->lineNumber(),
+                       BlackBoxIter->second->fileName(),
+                       BlackBoxIter->second->lineNumber());
+
+              AdtExit(-1);
+            }
+
+            sBlackBoxDefs += sDef;
+          }
+        }
       }
     }
   }
@@ -2552,8 +2577,6 @@ AdtFile& AdtDelphiGoal::writeDelphi(AdtFile& pOutFile, const char* pFunctionName
 {
   const AdtDelphiProcedureDecl* pProcedureDecl = findProcedureDeclaration(pFunctionName);
 
-  writeExpanded(pOutFile, comment());
-
   if ((pOutFile.isOpen()) && (pProcedureDecl != 0))
   {
     pProcedureDecl->writeDelphi(pOutFile);
@@ -2566,8 +2589,6 @@ AdtFile& AdtDelphiGoal::writeDelphi(AdtFile& pOutFile, const char* pFunctionName
 
 AdtFile& AdtDelphiGoal::writeDelphi(AdtFile& pOutFile) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Program != 0)
   {
     Program->writeDelphi(pOutFile);
@@ -2686,11 +2707,13 @@ void AdtDelphiGoal::extractClassConstructorName(const char* pConstructorDeclarat
 bool AdtDelphiGoal::extractClassConstructors(AdtStringList& rConstructorList,
                                              const char* pClassName,
                                              const char* pParentClassName,
+                                             const char* pPathPrefix,
                                              AdtSourceFileType nAsFileType) const
 {
   bool bExtracted = AdtAutoClass::buildClassConstructor(rConstructorList,
                                                         pClassName,
                                                         pParentClassName,
+                                                        pPathPrefix,
                                                         nAsFileType);
 
   if (!bExtracted)
@@ -2849,26 +2872,72 @@ implType(AdtDelphiGoal, AdtDelphiBase);
 
 
 //  ----------------------------------------------------------------------------
+//  AdtDelphiModuleEnd class
+//  ----------------------------------------------------------------------------
+//  This is an artifical construct to give comments at the end of a module def
+//  something to bind to.
+//  ----------------------------------------------------------------------------
+AdtDelphiModuleEnd::AdtDelphiModuleEnd()
+ : AdtDelphiBase()
+{
+  CanBindComments = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtDelphiModuleEnd::AdtDelphiModuleEnd(const AdtDelphiModuleEnd& rCopy)
+ : AdtDelphiBase(rCopy)
+{
+  CanBindComments = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtDelphiModuleEnd::~AdtDelphiModuleEnd()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtFile& AdtDelphiModuleEnd::writeDelphi(AdtFile& pOutFile, int nMode) const
+{
+  writeExpanded(pOutFile, comment());
+
+  write(pOutFile, "end.");
+  pOutFile.newline();
+
+  return (pOutFile);
+}
+
+//  ----------------------------------------------------------------------------
+
+implType(AdtDelphiModuleEnd, AdtDelphiBase);
+
+
+
+//  ----------------------------------------------------------------------------
 //  AdtDelphiProgram method implementations
 //  ----------------------------------------------------------------------------
 AdtDelphiProgram::AdtDelphiProgram(AdtParser* pIdentObj,
                                    AdtParser* pIdentListObj,
                                    AdtParser* pUsesClauseObj,
                                    AdtParser* pBlockObj,
-                                   const char* pComment)
+                                   AdtParser* pModuleEndObj)
  : AdtDelphiBase()
 {
   initObject(Identifier,      pIdentObj,      AdtDelphiIdent,       true);
   initObject(IdentifierList,  pIdentListObj,  AdtDelphiIdentList,   true);
   initObject(UsesClause,      pUsesClauseObj, AdtDelphiUsesClause,  true);
   initObject(Block,           pBlockObj,      AdtDelphiBlock,       true);
+  initObject(ModuleEnd,       pModuleEndObj,  AdtDelphiModuleEnd,   true);
 
   if (Identifier != 0)
   {
     name(Identifier->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -2880,6 +2949,9 @@ AdtDelphiProgram::AdtDelphiProgram(const AdtDelphiProgram& rCopy)
   copyObject(IdentifierList, rCopy, AdtDelphiIdentList);
   copyObject(UsesClause,     rCopy, AdtDelphiUsesClause);
   copyObject(Block,          rCopy, AdtDelphiBlock);
+  copyObject(ModuleEnd,      rCopy, AdtDelphiModuleEnd);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -2890,6 +2962,7 @@ AdtDelphiProgram::~AdtDelphiProgram()
   UtlReleaseReference(IdentifierList);
   UtlReleaseReference(UsesClause);
   UtlReleaseReference(Block);
+  UtlReleaseReference(ModuleEnd);
 }
 
 //  ----------------------------------------------------------------------------
@@ -2897,6 +2970,7 @@ AdtDelphiProgram::~AdtDelphiProgram()
 AdtFile& AdtDelphiProgram::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   writeExpanded(pOutFile, comment());
+
   write(pOutFile, "program ");
 
   if (Identifier != 0)
@@ -2927,8 +3001,10 @@ AdtFile& AdtDelphiProgram::writeDelphi(AdtFile& pOutFile, int nMode) const
     pOutFile.newline();
   }
 
-  write(pOutFile, ".");
-  pOutFile.newline();
+  if (ModuleEnd != 0)
+  {
+    ModuleEnd->writeDelphi(pOutFile, nMode);
+  }
 
   return (pOutFile);
 }
@@ -2945,20 +3021,23 @@ AdtDelphiUnit::AdtDelphiUnit(AdtParser* pIdentObj,
                              AdtParser* pInterfaceSectionObj,
                              AdtParser* pImplementationSectionObj,
                              AdtParser* pInitSectionObj,
-                             const char* pComment)
+                             AdtParser* pModuleEndObj,
+                             int nStartLineNumber)
  : AdtDelphiBase()
 {
   initObject(Identifier,            pIdentObj,                  AdtDelphiIdent,                 true);
   initObject(InterfaceSection,      pInterfaceSectionObj,       AdtDelphiInterfaceSection,      true);
   initObject(ImplementationSection, pImplementationSectionObj,  AdtDelphiImplementationSection, true);
   initObject(InitSection,           pInitSectionObj,            AdtDelphiInitSection,           true);
+  initObject(ModuleEnd,             pModuleEndObj,              AdtDelphiModuleEnd,             true);
 
   if (Identifier != 0)
   {
     name(Identifier->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
+  LineNumber      = nStartLineNumber;
 }
 
 //  ----------------------------------------------------------------------------
@@ -2970,6 +3049,9 @@ AdtDelphiUnit::AdtDelphiUnit(const AdtDelphiUnit& rCopy)
   copyObject(InterfaceSection,      rCopy, AdtDelphiInterfaceSection);
   copyObject(ImplementationSection, rCopy, AdtDelphiImplementationSection);
   copyObject(InitSection,           rCopy, AdtDelphiInitSection);
+  copyObject(ModuleEnd,             rCopy, AdtDelphiModuleEnd);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -2980,6 +3062,7 @@ AdtDelphiUnit::~AdtDelphiUnit()
   UtlReleaseReference(InterfaceSection);
   UtlReleaseReference(ImplementationSection);
   UtlReleaseReference(InitSection);
+  UtlReleaseReference(ModuleEnd);
 }
 
 //  ----------------------------------------------------------------------------
@@ -2987,6 +3070,7 @@ AdtDelphiUnit::~AdtDelphiUnit()
 AdtFile& AdtDelphiUnit::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   writeExpanded(pOutFile, comment());
+
   write(pOutFile, "unit ");
 
   if (Identifier != 0)
@@ -3013,8 +3097,10 @@ AdtFile& AdtDelphiUnit::writeDelphi(AdtFile& pOutFile, int nMode) const
     InitSection->writeDelphi(pOutFile, nMode);
   }
 
-  write(pOutFile, ".");
-  pOutFile.newline();
+  if (ModuleEnd != 0)
+  {
+    ModuleEnd->writeDelphi(pOutFile, nMode);
+  }
 
   return (pOutFile);
 }
@@ -3030,19 +3116,20 @@ implType(AdtDelphiUnit, AdtDelphiBase);
 AdtDelphiPackage::AdtDelphiPackage(AdtParser* pIdentObj,
                                    AdtParser* pRequiresIdentListObj,
                                    AdtParser* pContainsIdentListObj,
-                                   const char* pComment)
+                                   AdtParser* pModuleEndObj)
 : AdtDelphiBase()
 {
   initObject(Identifier,        pIdentObj,             AdtDelphiIdent,     true);
   initObject(RequiresIdentList, pRequiresIdentListObj, AdtDelphiIdentList, true);
   initObject(ContainsIdentList, pContainsIdentListObj, AdtDelphiIdentList, true);
+  initObject(ModuleEnd,         pModuleEndObj,         AdtDelphiModuleEnd, true);
 
   if (Identifier != 0)
   {
     name(Identifier->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3053,6 +3140,9 @@ AdtDelphiPackage::AdtDelphiPackage(const AdtDelphiPackage& rCopy)
   copyObject(Identifier,        rCopy, AdtDelphiIdent);
   copyObject(RequiresIdentList, rCopy, AdtDelphiIdentList);
   copyObject(ContainsIdentList, rCopy, AdtDelphiIdentList);
+  copyObject(ModuleEnd,         rCopy, AdtDelphiModuleEnd);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3062,6 +3152,7 @@ AdtDelphiPackage::~AdtDelphiPackage()
   UtlReleaseReference(Identifier);
   UtlReleaseReference(RequiresIdentList);
   UtlReleaseReference(ContainsIdentList);
+  UtlReleaseReference(ModuleEnd);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3069,6 +3160,7 @@ AdtDelphiPackage::~AdtDelphiPackage()
 AdtFile& AdtDelphiPackage::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   writeExpanded(pOutFile, comment());
+
   write(pOutFile, "package ");
 
   pOutFile.incrementIndent();
@@ -3104,10 +3196,12 @@ AdtFile& AdtDelphiPackage::writeDelphi(AdtFile& pOutFile, int nMode) const
   }
 
   pOutFile.decrementIndent();
+  pOutFile.homeline();
 
-  write(pOutFile, "end.");
-
-  pOutFile.newline();
+  if (ModuleEnd != 0)
+  {
+    ModuleEnd->writeDelphi(pOutFile, nMode);
+  }
 
   return (pOutFile);
 }
@@ -3123,19 +3217,20 @@ implType(AdtDelphiPackage, AdtDelphiBase);
 AdtDelphiLibrary::AdtDelphiLibrary(AdtParser* pIdentObj,
                                    AdtParser* pUsesClauseObj,
                                    AdtParser* pBlockObj,
-                                   const char* pComment)
+                                   AdtParser* pModuleEndObj)
 : AdtDelphiBase()
 {
   initObject(Identifier,  pIdentObj,      AdtDelphiIdent,       true);
   initObject(UsesClause,  pUsesClauseObj, AdtDelphiUsesClause,  true);
   initObject(Block,       pBlockObj,      AdtDelphiBlock,       true);
+  initObject(ModuleEnd,   pModuleEndObj,  AdtDelphiModuleEnd,   true);
 
   if (Identifier != 0)
   {
     name(Identifier->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3146,6 +3241,9 @@ AdtDelphiLibrary::AdtDelphiLibrary(const AdtDelphiLibrary& rCopy)
   copyObject(Identifier, rCopy, AdtDelphiIdent);
   copyObject(UsesClause, rCopy, AdtDelphiUsesClause);
   copyObject(Block,      rCopy, AdtDelphiBlock);
+  copyObject(ModuleEnd,  rCopy, AdtDelphiModuleEnd);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3155,6 +3253,7 @@ AdtDelphiLibrary::~AdtDelphiLibrary()
   UtlReleaseReference(Identifier);
   UtlReleaseReference(UsesClause);
   UtlReleaseReference(Block);
+  UtlReleaseReference(ModuleEnd);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3162,6 +3261,7 @@ AdtDelphiLibrary::~AdtDelphiLibrary()
 AdtFile& AdtDelphiLibrary::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   writeExpanded(pOutFile, comment());
+
   write(pOutFile, "library ");
 
   pOutFile.incrementIndent();
@@ -3193,10 +3293,12 @@ AdtFile& AdtDelphiLibrary::writeDelphi(AdtFile& pOutFile, int nMode) const
   }
 
   pOutFile.decrementIndent();
+  pOutFile.homeline();
 
-  write(pOutFile, ".");
-
-  pOutFile.newline();
+  if (ModuleEnd != 0)
+  {
+    ModuleEnd->writeDelphi(pOutFile, nMode);
+  }
 
   return (pOutFile);
 }
@@ -3653,13 +3755,13 @@ implType(AdtDelphiMacro, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiUsesClause method implementations
 //  ----------------------------------------------------------------------------
-AdtDelphiUsesClause::AdtDelphiUsesClause(AdtParser* pIdentListObj,
-                                         const char* pComment)
+AdtDelphiUsesClause::AdtDelphiUsesClause(AdtParser* pIdentListObj, int nStartLineNumber)
 : AdtDelphiBase()
 {
   initObject(IdentifierList, pIdentListObj, AdtDelphiIdentList, true);
 
-  comment(pComment);
+  LineNumber      = nStartLineNumber;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3668,6 +3770,8 @@ AdtDelphiUsesClause::AdtDelphiUsesClause(const AdtDelphiUsesClause& rCopy)
 : AdtDelphiBase(rCopy)
 {
   copyObject(IdentifierList, rCopy, AdtDelphiIdentList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3709,7 +3813,7 @@ AdtDelphiInterfaceSection::AdtDelphiInterfaceSection(AdtParser* pUsesClauseObj,
                                                      AdtParser* pTypeSectionObj,
                                                      AdtParser* pVarSectionObj,
                                                      AdtParser* pExportedHeadingListObj,
-                                                     const char* pComment)
+                                                     int nStartLineNumber)
 : AdtDelphiBase()
 {
   initObject(UsesClause,          pUsesClauseObj,           AdtDelphiUsesClause,          true);
@@ -3718,7 +3822,23 @@ AdtDelphiInterfaceSection::AdtDelphiInterfaceSection(AdtParser* pUsesClauseObj,
   initObject(VarSection,          pVarSectionObj,           AdtDelphiVarSection,          true);
   initObject(ExportedHeadingList, pExportedHeadingListObj,  AdtDelphiExportedHeadingList, true);
 
-  comment(pComment);
+  if (ConstSection != 0)
+  {
+    AdtParserPtrListIter  Iter;
+    AdtParserPtrList      List;
+
+    ConstSection->findObjects(List, "AdtDelphiConstantDecl");
+
+    for (Iter = List.begin() ; Iter != List.end() ; ++Iter)
+    {
+      AdtDelphiConstantDecl* pObject = (AdtDelphiConstantDecl*)(AdtParser*)*Iter;
+
+      pObject->addAutomationConstants();
+    }
+  }
+
+  CanBindComments = true;
+  LineNumber      = nStartLineNumber;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3731,6 +3851,8 @@ AdtDelphiInterfaceSection::AdtDelphiInterfaceSection(const AdtDelphiInterfaceSec
   copyObject(TypeSection,         rCopy, AdtDelphiTypeSection);
   copyObject(VarSection,          rCopy, AdtDelphiVarSection);
   copyObject(ExportedHeadingList, rCopy, AdtDelphiExportedHeadingList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3749,6 +3871,7 @@ AdtDelphiInterfaceSection::~AdtDelphiInterfaceSection()
 AdtFile& AdtDelphiInterfaceSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   writeExpanded(pOutFile, comment());
+
   write(pOutFile, "interface ");
 
   pOutFile.incrementIndent();
@@ -3834,8 +3957,7 @@ implType(AdtDelphiExportedHeadingList, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 AdtDelphiExportedHeading::AdtDelphiExportedHeading(AdtParser* pProcedureHeadingObj,
                                                    AdtParser* pFunctionHeadingObj,
-                                                   AdtParser* pDirectiveListObj,
-                                                   const char* pComment)
+                                                   AdtParser* pDirectiveListObj)
 : AdtDelphiBase()
 {
   initObject(ProcedureHeading,  pProcedureHeadingObj, AdtDelphiProcedureHeading,  true);
@@ -3850,8 +3972,6 @@ AdtDelphiExportedHeading::AdtDelphiExportedHeading(AdtParser* pProcedureHeadingO
   {
     name(FunctionHeading->name());
   }
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3877,8 +3997,6 @@ AdtDelphiExportedHeading::~AdtDelphiExportedHeading()
 
 AdtFile& AdtDelphiExportedHeading::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ProcedureHeading != 0)
   {
     ProcedureHeading->writeDelphi(pOutFile, nMode);
@@ -3913,13 +4031,14 @@ implType(AdtDelphiExportedHeading, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 AdtDelphiImplementationSection::AdtDelphiImplementationSection(AdtParser* pUsesClauseObj,
                                                                AdtParser* pDeclSectionObj,
-                                                               const char* pComment)
+                                                               int nStartLineNumber)
  : AdtDelphiBase()
 {
   initObject(UsesClause,  pUsesClauseObj,   AdtDelphiUsesClause,  true);
   initObject(DeclSection, pDeclSectionObj,  AdtDelphiDeclSection, true);
 
-  comment(pComment);
+  CanBindComments = true;
+  LineNumber      = nStartLineNumber;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3929,6 +4048,8 @@ AdtDelphiImplementationSection::AdtDelphiImplementationSection(const AdtDelphiIm
 {
   copyObject(UsesClause,  rCopy, AdtDelphiUsesClause);
   copyObject(DeclSection, rCopy, AdtDelphiDeclSection);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3944,6 +4065,7 @@ AdtDelphiImplementationSection::~AdtDelphiImplementationSection()
 AdtFile& AdtDelphiImplementationSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   writeExpanded(pOutFile, comment());
+
   write(pOutFile, "implementation");
 
   pOutFile.incrementIndent();
@@ -3962,6 +4084,7 @@ AdtFile& AdtDelphiImplementationSection::writeDelphi(AdtFile& pOutFile, int nMod
   }
 
   pOutFile.decrementIndent();
+  pOutFile.homeline();
 
   return (pOutFile);
 }
@@ -3975,14 +4098,11 @@ implType(AdtDelphiImplementationSection, AdtDelphiBase);
 //  AdtDelphiBlock method implementations
 //  ----------------------------------------------------------------------------
 AdtDelphiBlock::AdtDelphiBlock(AdtParser* pDeclSectionObj,
-                               AdtParser* pCompoundStmtObj,
-                               const char* pComment)
+                               AdtParser* pCompoundStmtObj)
  : AdtDelphiBase()
 {
   initObject(DeclSection,   pDeclSectionObj,  AdtDelphiDeclSection,   true);
   initObject(CompoundStmt,  pCompoundStmtObj, AdtDelphiCompoundStmt,  true);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -4006,8 +4126,6 @@ AdtDelphiBlock::~AdtDelphiBlock()
 
 AdtFile& AdtDelphiBlock::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (DeclSection != 0)
   {
     DeclSection->writeFortran(pOutFile, nMode);
@@ -4027,8 +4145,6 @@ AdtFile& AdtDelphiBlock::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiBlock::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (DeclSection != 0)
   {
     DeclSection->writeDelphi(pOutFile, nMode);
@@ -4056,8 +4172,7 @@ AdtDelphiDeclSection::AdtDelphiDeclSection(AdtParser* pLabelDeclSectionObj,
                                            AdtParser* pConstSectionObj,
                                            AdtParser* pTypeSectionObj,
                                            AdtParser* pVarSectionObj,
-                                           AdtParser* pProcedureDeclSectionObj,
-                                           const char* pComment)
+                                           AdtParser* pProcedureDeclSectionObj)
  : AdtDelphiBase()
 {
   initObject(LabelDeclSection,      pLabelDeclSectionObj,     AdtDelphiLabelDeclSection,      true);
@@ -4065,8 +4180,6 @@ AdtDelphiDeclSection::AdtDelphiDeclSection(AdtParser* pLabelDeclSectionObj,
   initObject(TypeSection,           pTypeSectionObj,          AdtDelphiTypeSection,           true);
   initObject(VarSection,            pVarSectionObj,           AdtDelphiVarSection,            true);
   initObject(ProcedureDeclSection,  pProcedureDeclSectionObj, AdtDelphiProcedureDeclSection,  true);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -4096,8 +4209,6 @@ AdtDelphiDeclSection::~AdtDelphiDeclSection()
 
 AdtFile& AdtDelphiDeclSection::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (LabelDeclSection != 0)
   {
     ::printf("WARNING: Translation of Pascal labels on line %d in file %s into "
@@ -4134,8 +4245,6 @@ AdtFile& AdtDelphiDeclSection::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiDeclSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (LabelDeclSection != 0)
   {
     LabelDeclSection->writeDelphi(pOutFile, nMode);
@@ -4207,8 +4316,6 @@ AdtDelphiLabelDeclSection::~AdtDelphiLabelDeclSection()
 
 AdtFile& AdtDelphiLabelDeclSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (LabelDeclList != 0)
   {
     LabelDeclList->writeDelphi(pOutFile, nMode);
@@ -4256,8 +4363,7 @@ implType(AdtDelphiLabelDeclList, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiLabelDecl method implementations
 //  ----------------------------------------------------------------------------
-AdtDelphiLabelDecl::AdtDelphiLabelDecl(AdtParser* pLabelIdObj,
-                                       const char* pComment)
+AdtDelphiLabelDecl::AdtDelphiLabelDecl(AdtParser* pLabelIdObj)
  : AdtDelphiBase()
 {
   initObject(LabelId, pLabelIdObj, AdtDelphiLabelId, true);
@@ -4266,8 +4372,6 @@ AdtDelphiLabelDecl::AdtDelphiLabelDecl(AdtParser* pLabelIdObj,
   {
     name(LabelId->name());
   }
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -4289,8 +4393,6 @@ AdtDelphiLabelDecl::~AdtDelphiLabelDecl()
 
 AdtFile& AdtDelphiLabelDecl::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (LabelId != 0)
   {
     write(pOutFile, "label ");
@@ -4308,13 +4410,10 @@ implType(AdtDelphiLabelDecl, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiConstSection method implementations
 //  ----------------------------------------------------------------------------
-AdtDelphiConstSection::AdtDelphiConstSection(AdtParser* pConstantDeclListObj,
-                                             const char* pComment)
+AdtDelphiConstSection::AdtDelphiConstSection(AdtParser* pConstantDeclListObj)
  : AdtDelphiBase()
 {
   initObject(ConstantDeclList, pConstantDeclListObj, AdtDelphiConstantDeclList, true);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -4336,8 +4435,6 @@ AdtDelphiConstSection::~AdtDelphiConstSection()
 
 AdtFile& AdtDelphiConstSection::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (ConstantDeclList != 0)
   {
     ConstantDeclList->writeFortran(pOutFile, nMode);
@@ -4353,8 +4450,6 @@ AdtFile& AdtDelphiConstSection::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiConstSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ConstantDeclList != 0)
   {
     write(pOutFile, "const");
@@ -4452,11 +4547,29 @@ AdtDelphiConstantDecl::~AdtDelphiConstantDecl()
 
 //  ----------------------------------------------------------------------------
 
+void AdtDelphiConstantDecl::addAutomationConstants() const
+{
+  if (ConstExpr != 0)
+  {
+    AdtAutoType nType = ConstExpr->autoType();
+
+    if (nType != AdtAutoType_UNDEFINED)
+    {
+      AdtAutoClass::addGlobalScalar(Ident->name(),
+                                    nType,
+                                    fileName(),
+                                    lineNumber());
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtFile& AdtDelphiConstantDecl::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  string  sPrefix;
-
-  writePragmas(pOutFile);
+  string      sPrefix;
+  const char* sType         = 0;
+  const char* sDimension    = 0;
 
   if (UnitId != 0)
   {
@@ -4466,8 +4579,19 @@ AdtFile& AdtDelphiConstantDecl::writeFortran(AdtFile& pOutFile, int nMode) const
 
   if (TypeId != 0)
   {
-    sPrefix += TypeId->name();
-    sPrefix += "__";
+    //We do this to map MB arrays into equivalent fortran ones
+    delphiRootObject()->mapTypesToFortran(TypeId->name(), sType, sDimension);
+
+    if ((sType != 0) && (sDimension == 0))
+    {
+      pOutFile.write(sType);
+      pOutFile.write(" ");
+      pOutFile.write(sPrefix.c_str());
+
+      Ident->writeFortran(pOutFile);
+
+      pOutFile.newline();
+    }
   }
 
   if (ConstExpr != 0)
@@ -4489,9 +4613,7 @@ AdtFile& AdtDelphiConstantDecl::writeFortran(AdtFile& pOutFile, int nMode) const
   }
   else if (TypedConstant != 0)
   {
-    ::printf("WARNING: Translation of Pascal Typed constant on line %d in file %s into "
-             "Fortran not supported\n", lineNumber(),
-                                        fileName());
+    TypedConstant->writeFortran(pOutFile, nMode);
   }
 
   write(pOutFile, ")");
@@ -4503,17 +4625,15 @@ AdtFile& AdtDelphiConstantDecl::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiConstantDecl::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
+  if (TypeId != 0)
+  {
+    TypeId->writeDelphi(pOutFile, nMode);
+    write(pOutFile, " : ");
+  }
 
   if (UnitId != 0)
   {
     UnitId->writeDelphi(pOutFile, nMode);
-    write(pOutFile, ".");
-  }
-
-  if (TypeId != 0)
-  {
-    TypeId->writeDelphi(pOutFile, nMode);
     write(pOutFile, ".");
   }
 
@@ -4543,13 +4663,13 @@ implType(AdtDelphiConstantDecl, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiTypeSection method implementations
 //  ----------------------------------------------------------------------------
-AdtDelphiTypeSection::AdtDelphiTypeSection(AdtParser* pTypeDeclListObj,
-                                           const char* pComment)
+AdtDelphiTypeSection::AdtDelphiTypeSection(AdtParser* pTypeDeclListObj, int nStartLineNumber)
  : AdtDelphiBase()
 {
   initObject(TypeDeclList, pTypeDeclListObj, AdtDelphiTypeDeclList, true);
 
-  comment(pComment);
+  LineNumber      = nStartLineNumber;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -4558,6 +4678,8 @@ AdtDelphiTypeSection::AdtDelphiTypeSection(const AdtDelphiTypeSection& rCopy)
  : AdtDelphiBase(rCopy)
 {
   copyObject(TypeDeclList, rCopy, AdtDelphiTypeDeclList);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -4638,6 +4760,8 @@ AdtDelphiTypeDecl::AdtDelphiTypeDecl(AdtParser* pIdentObj,
   {
     name(Ident->name());
   }
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -4647,6 +4771,8 @@ AdtDelphiTypeDecl::AdtDelphiTypeDecl(const AdtDelphiTypeDecl& rCopy)
   copyObject(Ident,          rCopy, AdtDelphiIdent);
   copyObject(Type,           rCopy, AdtDelphiType);
   copyObject(RestrictedType, rCopy, AdtDelphiRestrictedType);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -4723,10 +4849,32 @@ AdtDelphiTypedConstant::~AdtDelphiTypedConstant()
 
 //  ----------------------------------------------------------------------------
 
+AdtFile& AdtDelphiTypedConstant::writeFortran(AdtFile& pOutFile, int nMode) const
+{
+  if (ConstExpr != 0)
+  {
+    ConstExpr->writeFortran(pOutFile, nMode);
+  }
+  else if (ArrayConstant != 0)
+  {
+    ::printf("WARNING: Translation of Pascal array constants on line %d in file %s into "
+             "Fortran not supported\n", lineNumber(),
+                                        fileName());
+  }
+  else if (RecordConstant != 0)
+  {
+    ::printf("WARNING: Translation of Pascal record constants on line %d in file %s into "
+             "Fortran not supported\n", lineNumber(),
+                                        fileName());
+  }
+
+  return (pOutFile);
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtFile& AdtDelphiTypedConstant::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ConstExpr != 0)
   {
     ConstExpr->writeDelphi(pOutFile, nMode);
@@ -4776,8 +4924,6 @@ AdtDelphiArrayConstant::~AdtDelphiArrayConstant()
 
 AdtFile& AdtDelphiArrayConstant::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (TypedConstantList != 0)
   {
     write(pOutFile, "(");
@@ -4850,8 +4996,6 @@ AdtDelphiRecordConstant::~AdtDelphiRecordConstant()
 
 AdtFile& AdtDelphiRecordConstant::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (RecordFieldConstantList != 0)
   {
     write(pOutFile, "(");
@@ -4928,8 +5072,6 @@ AdtDelphiRecordFieldConstant::~AdtDelphiRecordFieldConstant()
 
 AdtFile& AdtDelphiRecordFieldConstant::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Ident != 0)
   {
     Ident->writeDelphi(pOutFile, nMode);
@@ -5131,8 +5273,6 @@ AdtFile& AdtDelphiType::writeFortran(AdtFile& pOutFile, int nMode) const
   const char* sDimension = 0;
   bool        bKeep      = true;
 
-  writePragmas(pOutFile);
-
   return (writeFortran(pOutFile, nMode, sDimension, bKeep));
 }
 
@@ -5140,8 +5280,6 @@ AdtFile& AdtDelphiType::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (UnitId != 0)
   {
     UnitId->writeDelphi(pOutFile, nMode);
@@ -5225,8 +5363,6 @@ AdtDelphiRestrictedType::~AdtDelphiRestrictedType()
 
 AdtFile& AdtDelphiRestrictedType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ObjectType != 0)
   {
     ObjectType->writeDelphi(pOutFile, nMode);
@@ -5280,8 +5416,6 @@ AdtDelphiClassRefType::~AdtDelphiClassRefType()
 
 AdtFile& AdtDelphiClassRefType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (TypeId != 0)
   {
     write(pOutFile, "class of ");
@@ -5374,8 +5508,6 @@ AdtAutoType AdtDelphiSimpleType::autoType() const
 
 AdtFile& AdtDelphiSimpleType::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (OrdinalType != 0)
   {
     OrdinalType->writeCPP(pOutFile, nMode);
@@ -5392,8 +5524,6 @@ AdtFile& AdtDelphiSimpleType::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiSimpleType::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (OrdinalType != 0)
   {
     OrdinalType->writeFortran(pOutFile, nMode);
@@ -5410,8 +5540,6 @@ AdtFile& AdtDelphiSimpleType::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiSimpleType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (OrdinalType != 0)
   {
     OrdinalType->writeDelphi(pOutFile, nMode);
@@ -5528,8 +5656,6 @@ AdtFile& AdtDelphiRealType::writeCPP(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
 
-  writePragmas(pOutFile);
-
   switch (RealType)
   {
     case AdtType_REAL48:
@@ -5569,8 +5695,6 @@ AdtFile& AdtDelphiRealType::writeFortran(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
 
-  writePragmas(pOutFile);
-
   switch (RealType)
   {
     case AdtType_REAL48:
@@ -5609,8 +5733,6 @@ AdtFile& AdtDelphiRealType::writeFortran(AdtFile& pOutFile, int nMode) const
 AdtFile& AdtDelphiRealType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
-
-  writeExpanded(pOutFile, comment());
 
   switch (RealType)
   {
@@ -5755,8 +5877,6 @@ AdtAutoType AdtDelphiOrdinalType::autoType() const
 
 AdtFile& AdtDelphiOrdinalType::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (SubrangeType)
   {
       ::printf("ERROR: Translation of Pascal subrange type on line %d in file %s into "
@@ -5785,8 +5905,6 @@ AdtFile& AdtDelphiOrdinalType::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiOrdinalType::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (SubrangeType)
   {
       ::printf("ERROR: Translation of Pascal subrange type on line %d in file %s into "
@@ -5815,8 +5933,6 @@ AdtFile& AdtDelphiOrdinalType::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiOrdinalType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (SubrangeType)
   {
     SubrangeType->writeDelphi(pOutFile, nMode);
@@ -5883,6 +5999,7 @@ AdtBlackBoxArgType AdtDelphiOrdIdent::blackBoxArgType() const
     }
 
     case AdtType_BOOLEAN:
+    case AdtType_LONGBOOL:
     {
       nType = AdtBlackBox_boolean;
       break;
@@ -5956,6 +6073,12 @@ AdtAutoType AdtDelphiOrdIdent::autoType() const
       break;
     }
 
+    case AdtType_LONGBOOL:
+    {
+      nType = AdtAutoType_LONGBOOL;
+      break;
+    }
+
     case AdtType_CHAR:
     {
       nType = AdtAutoType_CHAR;
@@ -5986,8 +6109,6 @@ AdtAutoType AdtDelphiOrdIdent::autoType() const
 AdtFile& AdtDelphiOrdIdent::writeCPP(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
-
-  writePragmas(pOutFile);
 
   switch (OrdType)
   {
@@ -6029,6 +6150,12 @@ AdtFile& AdtDelphiOrdIdent::writeCPP(AdtFile& pOutFile, int nMode) const
       break;
     }
 
+    case AdtType_LONGBOOL:
+    {
+      pType = "longbool";
+      break;
+    }
+
     case AdtType_CHAR:
     {
       pType = "char";
@@ -6062,8 +6189,6 @@ AdtFile& AdtDelphiOrdIdent::writeCPP(AdtFile& pOutFile, int nMode) const
 AdtFile& AdtDelphiOrdIdent::writeFortran(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
-
-  writePragmas(pOutFile);
 
   switch (OrdType)
   {
@@ -6105,6 +6230,12 @@ AdtFile& AdtDelphiOrdIdent::writeFortran(AdtFile& pOutFile, int nMode) const
       break;
     }
 
+    case AdtType_LONGBOOL:
+    {
+      pType = "LOGICAL(4)";
+      break;
+    }
+
     case AdtType_CHAR:
     {
       pType = "CHARACTER*1";
@@ -6138,8 +6269,6 @@ AdtFile& AdtDelphiOrdIdent::writeFortran(AdtFile& pOutFile, int nMode) const
 AdtFile& AdtDelphiOrdIdent::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
-
-  writeExpanded(pOutFile, comment());
 
   switch (OrdType)
   {
@@ -6182,6 +6311,12 @@ AdtFile& AdtDelphiOrdIdent::writeDelphi(AdtFile& pOutFile, int nMode) const
     case AdtType_BOOLEAN:
     {
       pType = "boolean";
+      break;
+    }
+
+    case AdtType_LONGBOOL:
+    {
+      pType = "longbool";
       break;
     }
 
@@ -6264,8 +6399,6 @@ AdtFile& AdtDelphiVariantType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
 
-  writeExpanded(pOutFile, comment());
-
   switch (Type)
   {
     case AdtType_VARIANT:
@@ -6331,8 +6464,6 @@ AdtDelphiSubrangeType::~AdtDelphiSubrangeType()
 
 AdtFile& AdtDelphiSubrangeType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (FromConstExpr)
   {
     FromConstExpr->writeDelphi(pOutFile, nMode);
@@ -6380,8 +6511,6 @@ AdtDelphiEnumeratedType::~AdtDelphiEnumeratedType()
 
 AdtFile& AdtDelphiEnumeratedType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (EnumeratedTypeElementList)
   {
     write(pOutFile, "(");
@@ -6458,8 +6587,6 @@ AdtDelphiEnumeratedTypeElement::~AdtDelphiEnumeratedTypeElement()
 
 AdtFile& AdtDelphiEnumeratedTypeElement::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Ident)
   {
     Ident->writeDelphi(pOutFile, nMode);
@@ -6512,8 +6639,6 @@ AdtDelphiStringType::~AdtDelphiStringType()
 
 AdtFile& AdtDelphiStringType::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (ConstExpr != 0)
   {
     ::printf("ERROR: Translation of Pascal string type on line %d in file %s into "
@@ -6556,8 +6681,6 @@ AdtFile& AdtDelphiStringType::writeFortran(AdtFile& pOutFile, int nMode) const
 AdtFile& AdtDelphiStringType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
-
-  writeExpanded(pOutFile, comment());
 
   switch (Type)
   {
@@ -6650,8 +6773,6 @@ AdtDelphiStructType::~AdtDelphiStructType()
 
 AdtFile& AdtDelphiStructType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (IsPacked)
   {
     write(pOutFile, "packed ");
@@ -6717,8 +6838,6 @@ AdtDelphiArrayType::~AdtDelphiArrayType()
 
 AdtFile& AdtDelphiArrayType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Type != 0)
   {
     write(pOutFile, "array");
@@ -6805,7 +6924,6 @@ AdtDelphiRecType::~AdtDelphiRecType()
 
 AdtFile& AdtDelphiRecType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, "record");
 
   pOutFile.incrementIndent();
@@ -6895,8 +7013,6 @@ AdtDelphiFieldDecl::~AdtDelphiFieldDecl()
 
 AdtFile& AdtDelphiFieldDecl::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (IdentList != 0)
   {
     IdentList->writeDelphi(pOutFile, nMode);
@@ -6985,8 +7101,6 @@ AdtDelphiVariantSection::~AdtDelphiVariantSection()
 
 AdtFile& AdtDelphiVariantSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (TypeId != 0)
   {
     write(pOutFile, "case ");
@@ -7059,8 +7173,6 @@ AdtDelphiRecVariant::~AdtDelphiRecVariant()
 
 AdtFile& AdtDelphiRecVariant::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ConstExprList != 0)
   {
     ConstExprList->writeDelphi(pOutFile, nMode);
@@ -7147,8 +7259,6 @@ AdtDelphiSetType::~AdtDelphiSetType()
 
 AdtFile& AdtDelphiSetType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (OrdinalType != 0)
   {
     write(pOutFile, "set of ");
@@ -7195,8 +7305,6 @@ AdtDelphiFileType::~AdtDelphiFileType()
 
 AdtFile& AdtDelphiFileType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (TypeId != 0)
   {
     write(pOutFile, "file of ");
@@ -7253,8 +7361,6 @@ AdtDelphiPointerType::~AdtDelphiPointerType()
 
 AdtFile& AdtDelphiPointerType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (TypeId != 0)
   {
     write(pOutFile, "^");
@@ -7316,8 +7422,6 @@ AdtDelphiProcedureType::~AdtDelphiProcedureType()
 
 AdtFile& AdtDelphiProcedureType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ProcedureHeading != 0)
   {
     ProcedureHeading->writeDelphi(pOutFile, nMode);
@@ -7339,13 +7443,10 @@ implType(AdtDelphiProcedureType, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiVarSection method implementations
 //  ----------------------------------------------------------------------------
-AdtDelphiVarSection::AdtDelphiVarSection(AdtParser* pVarDeclListObj,
-                                         const char* pComment)
+AdtDelphiVarSection::AdtDelphiVarSection(AdtParser* pVarDeclListObj)
  : AdtDelphiBase()
 {
   initObject(VarDeclList, pVarDeclListObj, AdtDelphiVarDeclList, true);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -7367,8 +7468,6 @@ AdtDelphiVarSection::~AdtDelphiVarSection()
 
 AdtFile& AdtDelphiVarSection::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (VarDeclList != 0)
   {
     VarDeclList->writeFortran(pOutFile, nMode);
@@ -7381,8 +7480,6 @@ AdtFile& AdtDelphiVarSection::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiVarSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (VarDeclList != 0)
   {
     write(pOutFile, "var ");
@@ -7491,8 +7588,6 @@ AdtFile& AdtDelphiVarDecl::writeFortran(AdtFile& pOutFile, int nMode) const
   const char* sDimension = 0;
   bool        bKeep      = true;
 
-  writePragmas(pOutFile);
-
   if (Type != 0)
   {
     Type->writeFortran(pOutFile, nMode, sDimension, bKeep);
@@ -7545,8 +7640,6 @@ AdtFile& AdtDelphiVarDecl::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiVarDecl::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (IdentList != 0)
   {
     IdentList->writeDelphi(pOutFile, nMode);
@@ -7612,8 +7705,6 @@ AdtDelphiExpression::~AdtDelphiExpression()
 
 AdtFile& AdtDelphiExpression::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (ExpressionRelOpList != 0)
   {
     ExpressionRelOpList->writeFortran(pOutFile, nMode);
@@ -7626,8 +7717,6 @@ AdtFile& AdtDelphiExpression::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiExpression::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ExpressionRelOpList != 0)
   {
     ExpressionRelOpList->writeDelphi(pOutFile, nMode);
@@ -7705,8 +7794,6 @@ AdtFile& AdtDelphiExpressionRelOp::writeFortran(AdtFile& pOutFile, int nMode) co
 {
   const char* pRelOp = 0;
 
-  writePragmas(pOutFile);
-
   switch (RelOp)
   {
     case AdtRelOp_GT:
@@ -7777,8 +7864,6 @@ AdtFile& AdtDelphiExpressionRelOp::writeFortran(AdtFile& pOutFile, int nMode) co
 AdtFile& AdtDelphiExpressionRelOp::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   const char* pRelOp = 0;
-
-  writeExpanded(pOutFile, comment());
 
   switch (RelOp)
   {
@@ -7888,8 +7973,6 @@ AdtDelphiSimpleExpression::~AdtDelphiSimpleExpression()
 
 AdtFile& AdtDelphiSimpleExpression::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (SimpleExpressionAddOpList != 0)
   {
     SimpleExpressionAddOpList->writeFortran(pOutFile, nMode);
@@ -7902,8 +7985,6 @@ AdtFile& AdtDelphiSimpleExpression::writeFortran(AdtFile& pOutFile, int nMode) c
 
 AdtFile& AdtDelphiSimpleExpression::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (SimpleExpressionAddOpList != 0)
   {
     SimpleExpressionAddOpList->writeDelphi(pOutFile, nMode);
@@ -7985,8 +8066,6 @@ AdtFile& AdtDelphiSimpleExpressionAddOp::writeFortran(AdtFile& pOutFile, int nMo
   const char* pAddOp = 0;
   const char* pSign  = 0;
 
-  writePragmas(pOutFile);
-
   switch (Sign)
   {
     case AdtSign_PLUS:
@@ -8063,8 +8142,6 @@ AdtFile& AdtDelphiSimpleExpressionAddOp::writeDelphi(AdtFile& pOutFile, int nMod
 {
   const char* pAddOp = 0;
   const char* pSign  = 0;
-
-  writeExpanded(pOutFile, comment());
 
   switch (Sign)
   {
@@ -8169,8 +8246,6 @@ AdtDelphiTerm::~AdtDelphiTerm()
 
 AdtFile& AdtDelphiTerm::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (FactorMulOpList != 0)
   {
     FactorMulOpList->writeFortran(pOutFile, nMode);
@@ -8183,8 +8258,6 @@ AdtFile& AdtDelphiTerm::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiTerm::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (FactorMulOpList != 0)
   {
     FactorMulOpList->writeDelphi(pOutFile, nMode);
@@ -8261,8 +8334,6 @@ AdtDelphiFactorMulOp::~AdtDelphiFactorMulOp()
 AdtFile& AdtDelphiFactorMulOp::writeFortran(AdtFile& pOutFile, int nMode) const
 {
   const char* pMulOp = 0;
-
-  writePragmas(pOutFile);
 
   switch (MulOp)
   {
@@ -8348,8 +8419,6 @@ AdtFile& AdtDelphiFactorMulOp::writeFortran(AdtFile& pOutFile, int nMode) const
 AdtFile& AdtDelphiFactorMulOp::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   const char* pMulOp = 0;
-
-  writeExpanded(pOutFile, comment());
 
   switch (MulOp)
   {
@@ -8552,8 +8621,6 @@ bool AdtDelphiFactor::substituteMacroDesignator(AdtDelphiDesignator* pDesignator
 
 AdtFile& AdtDelphiFactor::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (HasAt)
   {
     ::printf("ERROR: Translation of Pascal AT keyword on line %d in file %s into "
@@ -8624,8 +8691,6 @@ AdtFile& AdtDelphiFactor::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiFactor::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (HasAt)
   {
     write(pOutFile, "@");
@@ -8722,8 +8787,6 @@ AdtFile& AdtDelphiCastExpression::writeFortran(AdtFile& pOutFile, int nMode) con
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   if ((OrdIdent != 0) || (RealType != 0))
   {
     ::printf("ERROR: Translation of Pascal type casting on line %d in file %s into "
@@ -8745,8 +8808,6 @@ AdtFile& AdtDelphiCastExpression::writeFortran(AdtFile& pOutFile, int nMode) con
 
 AdtFile& AdtDelphiCastExpression::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (OrdIdent != 0)
   {
     OrdIdent->writeDelphi(pOutFile, nMode);
@@ -8799,8 +8860,6 @@ AdtDelphiDesignator::~AdtDelphiDesignator()
 
 AdtFile& AdtDelphiDesignator::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (DesignatorObjList != 0)
   {
     //We don't support array slices for dereferenced objects (too hard).
@@ -8821,8 +8880,6 @@ AdtFile& AdtDelphiDesignator::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiDesignator::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (DesignatorObjList != 0)
   {
     DesignatorObjList->writeDelphi(pOutFile, nMode);
@@ -9014,15 +9071,18 @@ bool AdtDelphiDesignatorObj::buildSliceString(string& rSliceString) const
 
                   for ( ; cn < nDimensions ; cn++)
                   {
-                    char          sBuffer[16] = {0};
                     const string& rLowerBound = *LowerBoundIter;
                     const string& rUpperBound = *UpperBoundIter;
-                    int           nLowerBound = ::atoi(rLowerBound);
 
-                    ::sprintf(sBuffer, "%d:", nLowerBound);
+                    rSliceString += rLowerBound + ":" + rUpperBound;
 
-                    rSliceString += sBuffer;
-                    rSliceString += rUpperBound;
+                    if (cn < nDimensions - 1)
+                    {
+                      rSliceString += ",";
+                    }
+
+                    UpperBoundIter++;
+                    LowerBoundIter++;
                   }
 
                   bBuilt = true;
@@ -9083,7 +9143,7 @@ void AdtDelphiDesignatorObj::writeFortranInner(AdtFile& pOutFile,
       }
       else if (Ident->name().eq("continue"))
       {
-        pOutFile.write("CYLE");
+        pOutFile.write("CYCLE");
 
         bEmptyParenthesis = false;
       }
@@ -9225,8 +9285,6 @@ bool AdtDelphiDesignatorObj::isMacroReplaceable(size_t nListSize, AdtDelphiExprL
 
 AdtFile& AdtDelphiDesignatorObj::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (Ident)
   {
     bool  bWrite            = true;
@@ -9300,15 +9358,15 @@ AdtFile& AdtDelphiDesignatorObj::writeFortran(AdtFile& pOutFile, int nMode) cons
 
         AdtDelphiBase*            pObjB = (AdtDelphiBase*)(AdtParser*)*Iter;
 
-        write(pOutFile, "(");
+        write(pOutFile, "((");
 
         pObjA->writeFortran(pOutFile, nMode);
 
-        write(pOutFile, " ** ");
+        write(pOutFile, ") ** (");
 
         pObjB->writeFortran(pOutFile, nMode);
 
-        write(pOutFile, ")");
+        write(pOutFile, "))");
 
         bWrite = false;
       }
@@ -9330,8 +9388,6 @@ AdtFile& AdtDelphiDesignatorObj::writeFortran(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtDelphiDesignatorObj::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Inherited)
   {
     write(pOutFile, "INHERITED ");
@@ -9419,8 +9475,6 @@ AdtDelphiDesignatorRefList::~AdtDelphiDesignatorRefList()
 
 AdtFile& AdtDelphiDesignatorRefList::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   forAllWriteFortran(pOutFile, nMode, ",", false, true);
 
   return (pOutFile);
@@ -9459,8 +9513,6 @@ AdtDelphiDesignatorRef::~AdtDelphiDesignatorRef()
 
 AdtFile& AdtDelphiDesignatorRef::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (ExprList != 0)
   {
     ExprList->writeFortran(pOutFile, nMode);
@@ -9481,8 +9533,6 @@ AdtFile& AdtDelphiDesignatorRef::writeFortran(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtDelphiDesignatorRef::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ExprList != 0)
   {
     write(pOutFile, "[");
@@ -9535,8 +9585,6 @@ AdtFile& AdtDelphiSetConstructor::writeFortran(AdtFile& pOutFile, int nMode) con
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -9544,7 +9592,6 @@ AdtFile& AdtDelphiSetConstructor::writeFortran(AdtFile& pOutFile, int nMode) con
 
 AdtFile& AdtDelphiSetConstructor::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, "[");
 
   if (SetElementList != 0)
@@ -9622,8 +9669,6 @@ AdtDelphiSetElement::~AdtDelphiSetElement()
 
 AdtFile& AdtDelphiSetElement::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Expression != 0)
   {
     Expression->writeDelphi(pOutFile, nMode);
@@ -9684,8 +9729,7 @@ AdtDelphiStatement::AdtDelphiStatement(AdtParser* pLabelIdObj,
                                        AdtParser* pRepeatStmtObj,
                                        AdtParser* pWhileStmtObj,
                                        AdtParser* pForStmtObj,
-                                       AdtParser* pWithStmtObj,
-                                       const char* pComment)
+                                       AdtParser* pWithStmtObj)
  : AdtDelphiBase()
 {
   initObject(LabelId,         pLabelIdObj,          AdtDelphiLabelId,         true);
@@ -9699,7 +9743,7 @@ AdtDelphiStatement::AdtDelphiStatement(AdtParser* pLabelIdObj,
   initObject(ForStmt,         pForStmtObj,          AdtDelphiForStmt,         true);
   initObject(WithStmt,        pWithStmtObj,         AdtDelphiWithStmt,        true);
 
-  comment(pComment);
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -9717,6 +9761,8 @@ AdtDelphiStatement::AdtDelphiStatement(const AdtDelphiStatement& rCopy)
   copyObject(WhileStmt,       rCopy, AdtDelphiWhileStmt);
   copyObject(ForStmt,         rCopy, AdtDelphiForStmt);
   copyObject(WithStmt,        rCopy, AdtDelphiWithStmt);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -9752,7 +9798,7 @@ bool AdtDelphiStatement::substituteMacroCompoundStatement(AdtDelphiStmtList* pSt
       (ForStmt          == 0) &&
       (WithStmt         == 0))
   {
-    AdtDelphiCompoundStmt* pCompoundStmtObj = new AdtDelphiCompoundStmt(pStatementList);
+    AdtDelphiCompoundStmt* pCompoundStmtObj = new AdtDelphiCompoundStmt(pStatementList, false);
 
     if (pCompoundStmtObj != 0)
     {
@@ -9941,6 +9987,29 @@ bool AdtDelphiStatement::hasType(const char* pType) const
 
 //  ----------------------------------------------------------------------------
 
+bool AdtDelphiStatement::isEmpty() const
+{
+  bool bIsEmpty = false;
+
+  if ((LabelId         == 0) &&
+      (ExitStatement   == 0) &&
+      (SimpleStatement == 0) &&
+      (CompoundStmt    == 0) &&
+      (IfStmt          == 0) &&
+      (CaseStmt        == 0) &&
+      (RepeatStmt      == 0) &&
+      (WhileStmt       == 0) &&
+      (ForStmt         == 0) &&
+      (WithStmt        == 0))
+  {
+    bIsEmpty = true;
+  }
+
+  return (bIsEmpty);
+}
+
+//  ----------------------------------------------------------------------------
+
 implType(AdtDelphiStatement, AdtDelphiBase);
 
 
@@ -9966,6 +10035,39 @@ AdtDelphiStmtList::AdtDelphiStmtList(const AdtDelphiStmtList& rCopy)
 AdtDelphiStmtList::~AdtDelphiStmtList()
 {
 
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtFile& AdtDelphiStmtList::writeDelphi(AdtFile& pOutFile, int nMode) const
+{
+  if (pOutFile.isOpen())
+  {
+    AdtParserPtrListConstIter     Iter;
+    size_t                        nSize = objList().size();
+    int                           cn    = 0;
+
+    for (Iter = objList().begin() ; Iter != objList().end() ; ++Iter)
+    {
+      const AdtDelphiStatement* pObj = (const AdtDelphiStatement*)(AdtParser*)*Iter;
+
+      cn++;
+
+      if (pObj != 0)
+      {
+        pObj->writeDelphi(pOutFile, nMode);
+
+        if (!pObj->isEmpty())
+        {
+          write(pOutFile, ";");
+        }
+
+        pOutFile.newline();
+      }
+    }
+  }
+
+  return (pOutFile);
 }
 
 //  ----------------------------------------------------------------------------
@@ -10001,8 +10103,6 @@ AdtDelphiExitStatement::~AdtDelphiExitStatement()
 
 AdtFile& AdtDelphiExitStatement::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   write(pOutFile, "RETURN");
 
   return (pOutFile);
@@ -10012,8 +10112,6 @@ AdtFile& AdtDelphiExitStatement::writeFortran(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtDelphiExitStatement::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (WithParenthesis)
   {
     write(pOutFile, "exit()");
@@ -10092,8 +10190,6 @@ AdtDelphiSimpleStatement::~AdtDelphiSimpleStatement()
 AdtFile& AdtDelphiSimpleStatement::writeFortran(AdtFile& pOutFile, int nMode) const
 {
   const char* pOperator = 0;
-
-  writePragmas(pOutFile);
 
   switch(OpType)
   {
@@ -10211,8 +10307,6 @@ AdtFile& AdtDelphiSimpleStatement::writeFortran(AdtFile& pOutFile, int nMode) co
 AdtFile& AdtDelphiSimpleStatement::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   bool bAddAssign = false;
-
-  writeExpanded(pOutFile, comment());
 
   if (Designator != 0)
   {
@@ -10370,7 +10464,6 @@ AdtDelphiSizeofType::~AdtDelphiSizeofType()
 
 AdtFile& AdtDelphiSizeofType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, "sizeof(");
 
   if (OrdIdent != 0)
@@ -10406,10 +10499,12 @@ implType(AdtDelphiSizeofType, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiCompoundStmt method implementations
 //  ----------------------------------------------------------------------------
-AdtDelphiCompoundStmt::AdtDelphiCompoundStmt(AdtParser* pStmtListObj)
+AdtDelphiCompoundStmt::AdtDelphiCompoundStmt(AdtParser* pStmtListObj, bool bNoEnd)
  : AdtDelphiBase()
 {
   initObject(StmtList, pStmtListObj, AdtDelphiStmtList, true);
+
+  NoEnd = bNoEnd;
 }
 
 //  ----------------------------------------------------------------------------
@@ -10418,6 +10513,8 @@ AdtDelphiCompoundStmt::AdtDelphiCompoundStmt(const AdtDelphiCompoundStmt& rCopy)
  : AdtDelphiBase(rCopy)
 {
   copyObject(StmtList, rCopy, AdtDelphiStmtList);
+
+  NoEnd = rCopy.NoEnd;
 }
 
 //  ----------------------------------------------------------------------------
@@ -10431,8 +10528,6 @@ AdtDelphiCompoundStmt::~AdtDelphiCompoundStmt()
 
 AdtFile& AdtDelphiCompoundStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (StmtList != 0)
   {
     pOutFile.incrementIndent();
@@ -10450,8 +10545,6 @@ AdtFile& AdtDelphiCompoundStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiCompoundStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   write(pOutFile, "begin");
 
   pOutFile.incrementIndent();
@@ -10465,7 +10558,10 @@ AdtFile& AdtDelphiCompoundStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
   pOutFile.decrementIndent();
   pOutFile.homeline();
 
-  write(pOutFile, "end");
+  if (!NoEnd)
+  {
+    write(pOutFile, "end");
+  }
 
   return (pOutFile);
 }
@@ -10511,8 +10607,6 @@ AdtDelphiIfStmt::~AdtDelphiIfStmt()
 
 AdtFile& AdtDelphiIfStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   pOutFile.newline();
 
   if (Expression != 0)
@@ -10580,7 +10674,6 @@ AdtFile& AdtDelphiIfStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiIfStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.newline();
 
   if (Expression != 0)
@@ -10688,8 +10781,6 @@ AdtFile& AdtDelphiCaseStmt::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -10697,7 +10788,6 @@ AdtFile& AdtDelphiCaseStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiCaseStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.newline();
 
   if (Expression != 0)
@@ -10811,8 +10901,6 @@ AdtFile& AdtDelphiCaseSelector::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -10820,8 +10908,6 @@ AdtFile& AdtDelphiCaseSelector::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiCaseSelector::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (CaseLabelList != 0)
   {
     CaseLabelList->writeDelphi(pOutFile, nMode);
@@ -10914,8 +11000,6 @@ AdtFile& AdtDelphiCaseLabel::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -10923,8 +11007,6 @@ AdtFile& AdtDelphiCaseLabel::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiCaseLabel::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ConstExpr != 0)
   {
     ConstExpr->writeDelphi(pOutFile, nMode);
@@ -10954,12 +11036,11 @@ AdtDelphiRepeatStmt::AdtDelphiRepeatStmt(AdtParser* pStatementObj,
 {
   if ((pStmtListObj != 0) && (pStatementObj == 0))
   {
-    AdtParser*  pCompoundStmtObj = new AdtDelphiCompoundStmt(pStmtListObj);
+    AdtParser*  pCompoundStmtObj = new AdtDelphiCompoundStmt(pStmtListObj, false);
     AdtParser*  pNewStatementObj = new AdtDelphiStatement(0,
                                                           0,
                                                           0,
                                                           pCompoundStmtObj,
-                                                          0,
                                                           0,
                                                           0,
                                                           0,
@@ -11006,8 +11087,6 @@ AdtFile& AdtDelphiRepeatStmt::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -11015,8 +11094,6 @@ AdtFile& AdtDelphiRepeatStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiRepeatStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Statement != 0)
   {
     bool bIndent = !Statement->hasType("AdtDelphiCompoundStmt");
@@ -11089,8 +11166,6 @@ AdtDelphiWhileStmt::~AdtDelphiWhileStmt()
 
 AdtFile& AdtDelphiWhileStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   pOutFile.newline();
   write(pOutFile, "DO WHILE ");
 
@@ -11133,7 +11208,6 @@ AdtFile& AdtDelphiWhileStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiWhileStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.newline();
   write(pOutFile, "while ");
 
@@ -11222,8 +11296,6 @@ AdtDelphiForStmt::~AdtDelphiForStmt()
 
 AdtFile& AdtDelphiForStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   pOutFile.newline();
   write(pOutFile, "DO ");
 
@@ -11288,7 +11360,6 @@ AdtFile& AdtDelphiForStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiForStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.newline();
   write(pOutFile, "for ");
 
@@ -11392,8 +11463,6 @@ AdtFile& AdtDelphiWithStmt::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -11401,7 +11470,6 @@ AdtFile& AdtDelphiWithStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiWithStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.newline();
   write(pOutFile, "with ");
 
@@ -11469,12 +11537,12 @@ AdtDelphiProcedureDeclSection::~AdtDelphiProcedureDeclSection()
 
 AdtFile& AdtDelphiProcedureDeclSection::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (ProcedureDeclList != 0)
   {
     ProcedureDeclList->writeFortran(pOutFile, nMode);
   }
+
+  writePragmas(pOutFile);
 
   return (pOutFile);
 }
@@ -11483,12 +11551,12 @@ AdtFile& AdtDelphiProcedureDeclSection::writeFortran(AdtFile& pOutFile, int nMod
 
 AdtFile& AdtDelphiProcedureDeclSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ProcedureDeclList != 0)
   {
     ProcedureDeclList->writeDelphi(pOutFile, nMode);
   }
+
+  writeExpanded(pOutFile, comment());
 
   return (pOutFile);
 }
@@ -11950,54 +12018,64 @@ const AdtDelphiVarDecl* AdtDelphiProcedureDecl::findVarDecl(const char* pVarName
 
 AdtFile& AdtDelphiProcedureDecl::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  AdtDelphiGoal*  pDelphiRootObject = delphiRootObject();
-  const char*     pClassStart       = name();
-  const char*     pClassEnd         = ::strchr(pClassStart, '.');
-  size_t          nLength           = pClassEnd != 0 ? pClassEnd - pClassStart : 0;
-  string          ClassName(pClassStart, 0, nLength);
+  AdtDelphiGoal*  pRoot        = delphiRootObject();
+  bool            bIsBlackBox  = ((pRoot != 0) && pRoot->isBlackBox(name()));
 
-  writePragmas(pOutFile);
-
-  if (ProcedureHeading != 0)
+  // Only write if it isn't a black box routine. Black boxes aren't meant to be
+  // seen by tapenade and should be ignored.
+  if (!bIsBlackBox)
   {
-    ProcedureHeading->writeFortran(pOutFile, nMode);
-  }
-  else if (FunctionHeading != 0)
-  {
-    FunctionHeading->writeFortran(pOutFile, nMode);
-  }
-  else if ((ConstructorHeading != 0) || (DestructorHeading != 0))
-  {
-    //No supported.
-  }
+    AdtDelphiGoal*  pDelphiRootObject = delphiRootObject();
+    const char*     pClassStart       = name();
+    const char*     pClassEnd         = ::strchr(pClassStart, '.');
+    size_t          nLength           = pClassEnd != 0 ? pClassEnd - pClassStart : 0;
+    string          ClassName(pClassStart, 0, nLength);
 
-  pOutFile.newline();
-  write(pOutFile, "USE Common");
-  pOutFile.newline();
-  pOutFile.newline();
+    writePragmas(pOutFile);
 
-  if (pDelphiRootObject != 0)
-  {
-    pDelphiRootObject->pushClassContext(ClassName);
+    if (comment().length() > 0)
+    {
+      pOutFile.newline();
+    }
+
+    if (ProcedureHeading != 0)
+    {
+      ProcedureHeading->writeFortran(pOutFile, nMode);
+    }
+    else if (FunctionHeading != 0)
+    {
+      FunctionHeading->writeFortran(pOutFile, nMode);
+    }
+    else if ((ConstructorHeading != 0) || (DestructorHeading != 0))
+    {
+      //No supported.
+    }
+
+    pOutFile.newline();
+    write(pOutFile, "USE Common");
+    pOutFile.newline();
+    pOutFile.newline();
+
+    if (pDelphiRootObject != 0)
+    {
+      pDelphiRootObject->pushClassContext(ClassName);
+    }
+
+    if (Block != 0)
+    {
+      Block->writeFortran(pOutFile, nMode);
+    }
+
+    if (pDelphiRootObject != 0)
+    {
+      pDelphiRootObject->popClassContext();
+    }
+
+    pOutFile.newline();
+    write(pOutFile, "END");
+    pOutFile.newline();
+    pOutFile.newline();
   }
-
-  if (Block != 0)
-  {
-    Block->writeFortran(pOutFile, nMode);
-  }
-
-  if (pDelphiRootObject != 0)
-  {
-    pDelphiRootObject->popClassContext();
-  }
-
-  pOutFile.newline();
-  write(pOutFile, "END");
-  pOutFile.newline();
-  pOutFile.newline();
-  write(pOutFile, "! ----------------------------------------------------------------------------");
-  pOutFile.newline();
-  pOutFile.newline();
 
   return (pOutFile);
 }
@@ -12006,54 +12084,44 @@ AdtFile& AdtDelphiProcedureDecl::writeFortran(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtDelphiProcedureDecl::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  AdtDelphiGoal*  pRoot        = delphiRootObject();
-  bool            bIsBlackBox  = ((pRoot != 0) && pRoot->isBlackBox(name()));
-
-  // Only write if it isn't a black box routine. Black boxes aren't meant to be
-  // seen by tapenade and should be ignored.
-  if (!bIsBlackBox)
+  if (ProcedureHeading != 0)
   {
-    writeExpanded(pOutFile, comment());
-
-    if (ProcedureHeading != 0)
-    {
-      ProcedureHeading->writeDelphi(pOutFile, nMode);
-    }
-    else if (FunctionHeading != 0)
-    {
-      FunctionHeading->writeDelphi(pOutFile, nMode);
-    }
-    else if (ConstructorHeading != 0)
-    {
-      ConstructorHeading->writeDelphi(pOutFile, nMode);
-    }
-    else if (DestructorHeading != 0)
-    {
-      DestructorHeading->writeDelphi(pOutFile, nMode);
-    }
-
-    if ((DirectiveList != 0) && (DirectiveList->listSize() > 0))
-    {
-      write(pOutFile, ";");
-      DirectiveList->writeDelphi(pOutFile, nMode);
-    }
-
-    write(pOutFile, ";");
-
-    pOutFile.newline();
-    pOutFile.newline();
-
-    if (Block != 0)
-    {
-      Block->writeDelphi(pOutFile, nMode);
-    }
-
-    write(pOutFile, ";");
-    pOutFile.newline();
-    write(pOutFile, "{ ---------------------------------------------------------------------------- }");
-    pOutFile.newline();
-    pOutFile.newline();
+    ProcedureHeading->writeDelphi(pOutFile, nMode);
   }
+  else if (FunctionHeading != 0)
+  {
+    FunctionHeading->writeDelphi(pOutFile, nMode);
+  }
+  else if (ConstructorHeading != 0)
+  {
+    ConstructorHeading->writeDelphi(pOutFile, nMode);
+  }
+  else if (DestructorHeading != 0)
+  {
+    DestructorHeading->writeDelphi(pOutFile, nMode);
+  }
+
+  if ((DirectiveList != 0) && (DirectiveList->listSize() > 0))
+  {
+    write(pOutFile, ";");
+    DirectiveList->writeDelphi(pOutFile, nMode);
+  }
+
+  write(pOutFile, ";");
+
+  pOutFile.newline();
+  pOutFile.newline();
+
+  if (Block != 0)
+  {
+    Block->writeDelphi(pOutFile, nMode);
+  }
+
+  write(pOutFile, ";");
+
+  pOutFile.newline();
+  pOutFile.newline();
+  pOutFile.newline();
 
   return (pOutFile);
 }
@@ -12092,12 +12160,23 @@ implType(AdtDelphiProcedureDecl, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiFunctionHeading method implementations
 //  ----------------------------------------------------------------------------
+void AdtDelphiFunctionHeading::bindComment(const string* pComment)
+{
+  AdtParser::bindComment(pComment);
+
+  if (AdtBlackBoxCompiler::isBlackBox(comment()))
+  {
+    AdtDelphiGoal::addBlackBoxCommentsObject(this);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtDelphiFunctionHeading::AdtDelphiFunctionHeading(AdtParser* pClassIdentObj,
                                                    AdtParser* pFunctionIdentObj,
                                                    AdtParser* pFormalParametersObj,
                                                    AdtParser* pSimpleTypeObj,
-                                                   AdtParser* pTypeIdObj,
-                                                   const char* pComment)
+                                                   AdtParser* pTypeIdObj)
  : AdtDelphiBase()
 {
   initObject(ClassIdent,        pClassIdentObj,       AdtDelphiIdent,             true);
@@ -12118,7 +12197,53 @@ AdtDelphiFunctionHeading::AdtDelphiFunctionHeading(AdtParser* pClassIdentObj,
     name(name() + FunctionIdent->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtDelphiFunctionHeading::AdtDelphiFunctionHeading(const AdtDelphiFunctionHeading& rCopy)
+ : AdtDelphiBase(rCopy)
+{
+  copyObject(ClassIdent,       rCopy, AdtDelphiIdent);
+  copyObject(FunctionIdent,    rCopy, AdtDelphiIdent);
+  copyObject(FormalParameters, rCopy, AdtDelphiFormalParameters);
+  copyObject(SimpleType,       rCopy, AdtDelphiSimpleType);
+  copyObject(TypeId,           rCopy, AdtDelphiTypeId);
+
+  BlackBox = (rCopy.BlackBox != 0) ? new AdtBlackBoxDefinition(*rCopy.BlackBox) : 0;
+
+  CanBindComments = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtDelphiFunctionHeading::~AdtDelphiFunctionHeading()
+{
+  if (BlackBox != 0)
+  {
+    delete BlackBox;
+  }
+
+  UtlReleaseReference(ClassIdent);
+  UtlReleaseReference(FunctionIdent);
+  UtlReleaseReference(FormalParameters);
+  UtlReleaseReference(SimpleType);
+  UtlReleaseReference(TypeId);
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtBlackBoxDefinition* AdtDelphiFunctionHeading::compileBlackBoxDefinition()
+{
+  if (BlackBox != 0)
+  {
+    delete BlackBox;
+
+    BlackBox = 0;
+  }
+
+  const char* pComment = comment();
 
   if ((FormalParameters != 0) && ((SimpleType != 0) || (TypeId != 0)) && AdtBlackBoxCompiler::isBlackBox(pComment))
   {
@@ -12138,6 +12263,7 @@ AdtDelphiFunctionHeading::AdtDelphiFunctionHeading(AdtParser* pClassIdentObj,
 
     if (BlackBox != 0)
     {
+      AdtTapenadeVersion      TapenadeVersion;
       AdtParserPtrList        ObjList;
       AdtParserPtrListIter    Iter;
 
@@ -12166,39 +12292,11 @@ AdtDelphiFunctionHeading::AdtDelphiFunctionHeading(AdtParser* pClassIdentObj,
         BlackBox->addReturn(nType, bIsArray);
       }
 
-      AdtBlackBoxCompiler::parseComments(*BlackBox, pComment, fileName(), lineNumber());
+      AdtBlackBoxCompiler::parseComments(*BlackBox, pComment, fileName(), lineNumber(), TapenadeVersion);
     }
   }
-}
 
-//  ----------------------------------------------------------------------------
-
-AdtDelphiFunctionHeading::AdtDelphiFunctionHeading(const AdtDelphiFunctionHeading& rCopy)
- : AdtDelphiBase(rCopy)
-{
-  copyObject(ClassIdent,       rCopy, AdtDelphiIdent);
-  copyObject(FunctionIdent,    rCopy, AdtDelphiIdent);
-  copyObject(FormalParameters, rCopy, AdtDelphiFormalParameters);
-  copyObject(SimpleType,       rCopy, AdtDelphiSimpleType);
-  copyObject(TypeId,           rCopy, AdtDelphiTypeId);
-
-  BlackBox = (rCopy.BlackBox != 0) ? new AdtBlackBoxDefinition(*rCopy.BlackBox) : 0;
-}
-
-//  ----------------------------------------------------------------------------
-
-AdtDelphiFunctionHeading::~AdtDelphiFunctionHeading()
-{
-  if (BlackBox != 0)
-  {
-    delete BlackBox;
-  }
-
-  UtlReleaseReference(ClassIdent);
-  UtlReleaseReference(FunctionIdent);
-  UtlReleaseReference(FormalParameters);
-  UtlReleaseReference(SimpleType);
-  UtlReleaseReference(TypeId);
+  return (BlackBox);
 }
 
 //  ----------------------------------------------------------------------------
@@ -12292,10 +12390,21 @@ implType(AdtDelphiFunctionHeading, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 //  AdtDelphiProcedureHeading method implementations
 //  ----------------------------------------------------------------------------
+void AdtDelphiProcedureHeading::bindComment(const string* pComment)
+{
+  AdtParser::bindComment(pComment);
+
+  if (AdtBlackBoxCompiler::isBlackBox(comment()))
+  {
+    AdtDelphiGoal::addBlackBoxCommentsObject(this);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtDelphiProcedureHeading::AdtDelphiProcedureHeading(AdtParser* pClassIdentObj,
                                                      AdtParser* pProcedureIdentObj,
-                                                     AdtParser* pFormalParametersObj,
-                                                     const char* pComment)
+                                                     AdtParser* pFormalParametersObj)
  : AdtDelphiBase()
 {
   initObject(ClassIdent,        pClassIdentObj,       AdtDelphiIdent,             true);
@@ -12314,7 +12423,49 @@ AdtDelphiProcedureHeading::AdtDelphiProcedureHeading(AdtParser* pClassIdentObj,
     name(name() + ProcedureIdent->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtDelphiProcedureHeading::AdtDelphiProcedureHeading(const AdtDelphiProcedureHeading& rCopy)
+ : AdtDelphiBase(rCopy)
+{
+  copyObject(ClassIdent,       rCopy, AdtDelphiIdent);
+  copyObject(ProcedureIdent,   rCopy, AdtDelphiIdent);
+  copyObject(FormalParameters, rCopy, AdtDelphiFormalParameters);
+
+  BlackBox = (rCopy.BlackBox != 0) ? new AdtBlackBoxDefinition(*rCopy.BlackBox) : 0;
+
+  CanBindComments = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtDelphiProcedureHeading::~AdtDelphiProcedureHeading()
+{
+  if (BlackBox != 0)
+  {
+    delete BlackBox;
+  }
+
+  UtlReleaseReference(ClassIdent);
+  UtlReleaseReference(ProcedureIdent);
+  UtlReleaseReference(FormalParameters);
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtBlackBoxDefinition* AdtDelphiProcedureHeading::compileBlackBoxDefinition()
+{
+  if (BlackBox != 0)
+  {
+    delete BlackBox;
+
+    BlackBox = 0;
+  }
+
+  const char* pComment = comment();
 
   if ((FormalParameters != 0) && AdtBlackBoxCompiler::isBlackBox(pComment))
   {
@@ -12334,6 +12485,7 @@ AdtDelphiProcedureHeading::AdtDelphiProcedureHeading(AdtParser* pClassIdentObj,
 
     if (BlackBox != 0)
     {
+      AdtTapenadeVersion      TapenadeVersion;
       AdtParserPtrList        ObjList;
       AdtParserPtrListIter    Iter;
 
@@ -12350,35 +12502,11 @@ AdtDelphiProcedureHeading::AdtDelphiProcedureHeading(AdtParser* pClassIdentObj,
         }
       }
 
-      AdtBlackBoxCompiler::parseComments(*BlackBox, pComment, fileName(), lineNumber());
+      AdtBlackBoxCompiler::parseComments(*BlackBox, pComment, fileName(), lineNumber(), TapenadeVersion);
     }
   }
-}
 
-//  ----------------------------------------------------------------------------
-
-AdtDelphiProcedureHeading::AdtDelphiProcedureHeading(const AdtDelphiProcedureHeading& rCopy)
- : AdtDelphiBase(rCopy)
-{
-  copyObject(ClassIdent,       rCopy, AdtDelphiIdent);
-  copyObject(ProcedureIdent,   rCopy, AdtDelphiIdent);
-  copyObject(FormalParameters, rCopy, AdtDelphiFormalParameters);
-
-  BlackBox = (rCopy.BlackBox != 0) ? new AdtBlackBoxDefinition(*rCopy.BlackBox) : 0;
-}
-
-//  ----------------------------------------------------------------------------
-
-AdtDelphiProcedureHeading::~AdtDelphiProcedureHeading()
-{
-  if (BlackBox != 0)
-  {
-    delete BlackBox;
-  }
-
-  UtlReleaseReference(ClassIdent);
-  UtlReleaseReference(ProcedureIdent);
-  UtlReleaseReference(FormalParameters);
+  return (BlackBox);
 }
 
 //  ----------------------------------------------------------------------------
@@ -12386,7 +12514,6 @@ AdtDelphiProcedureHeading::~AdtDelphiProcedureHeading()
 AdtFile& AdtDelphiProcedureHeading::writeFortran(AdtFile& pOutFile, int nMode) const
 {
   writePragmas(pOutFile);
-
   write(pOutFile, "SUBROUTINE ");
 
   if (ClassIdent != 0)
@@ -12467,7 +12594,6 @@ AdtDelphiFormalParameters::~AdtDelphiFormalParameters()
 
 AdtFile& AdtDelphiFormalParameters::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, '(');
 
   if (FormalParamList != 0)
@@ -12484,8 +12610,6 @@ AdtFile& AdtDelphiFormalParameters::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiFormalParameters::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   write(pOutFile, '(');
 
   if (FormalParamList != 0)
@@ -12500,12 +12624,8 @@ AdtFile& AdtDelphiFormalParameters::writeFortran(AdtFile& pOutFile, int nMode) c
 
   if (FormalParamList != 0)
   {
-    //Write all formal parameter names into a fortran intent list (ie. whether the vars are IN OUT or INOUT).
-    FormalParamList->writeFortran(pOutFile, 2);
-    pOutFile.newline();
-
     //Write all formal parameter names and types into a fortran variable
-    //declaration list.
+    //declaration list with intent attributes.
     FormalParamList->writeFortran(pOutFile, 1);
   }
 
@@ -12518,7 +12638,6 @@ AdtFile& AdtDelphiFormalParameters::writeFortran(AdtFile& pOutFile, int nMode) c
 
 AdtFile& AdtDelphiFormalParameters::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, '(');
 
   if (FormalParamList != 0)
@@ -12575,8 +12694,6 @@ AdtFile& AdtDelphiFormalParamList::writeFortran(AdtFile& pOutFile, int nMode) co
   const char* pDelimiter = 0;
   bool        bNewLine   = false;
 
-  writePragmas(pOutFile);
-
   switch (nMode)
   {
     case 0:
@@ -12586,7 +12703,6 @@ AdtFile& AdtDelphiFormalParamList::writeFortran(AdtFile& pOutFile, int nMode) co
     }
 
     case 1:
-    case 2:
     {
       pDelimiter = "";
       bNewLine   = true;
@@ -12691,8 +12807,6 @@ void AdtDelphiFormalParam::enumerateAddObj(AdtParserPtrByStringMap& rMap, AdtPar
 
 AdtFile& AdtDelphiFormalParam::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Parameter != 0)
   {
     if (nMode == 0)
@@ -12731,11 +12845,11 @@ AdtFile& AdtDelphiFormalParam::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiFormalParam::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if (Parameter != 0)
   {
-    if (nMode == 2)
+    Parameter->writeFortran(pOutFile, nMode);
+
+    if (nMode == 1)
     {
       const char* pIntent = 0;
 
@@ -12743,21 +12857,21 @@ AdtFile& AdtDelphiFormalParam::writeFortran(AdtFile& pOutFile, int nMode) const
       {
         case AdtType_VAR:
         {
-          pIntent = "INTENT (INOUT)";
+          pIntent = ", INTENT (INOUT) ::";
           break;
         }
 
         case AdtType_EMPTY:
         case AdtType_CONST:
         {
-          pIntent = "INTENT (IN)";
+          pIntent = ", INTENT (IN) ::";
           break;
         }
 
         case AdtType_OUT:
         case AdtType_OUTO:
         {
-          pIntent = "INTENT (OUT)";
+          pIntent = ", INTENT (OUT) ::";
           break;
         }
 
@@ -12772,9 +12886,9 @@ AdtFile& AdtDelphiFormalParam::writeFortran(AdtFile& pOutFile, int nMode) const
       {
         write(pOutFile, pIntent);
       }
-    }
 
-    Parameter->writeFortran(pOutFile, nMode);
+      Parameter->writeFortran(pOutFile, 2);
+    }
   }
 
   return (pOutFile);
@@ -12784,8 +12898,6 @@ AdtFile& AdtDelphiFormalParam::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiFormalParam::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (Parameter != 0)
   {
     if (nMode != 1)
@@ -12943,6 +13055,10 @@ void AdtDelphiParameter::enumerateAddObj(AdtParserPtrByStringMap& rMap, AdtParse
   {
     IdentList->enumerateAddByObjList(rMap, pObj);
   }
+  else if (Ident != 0)
+  {
+    rMap.insert(AdtParserPtrByStringMap::value_type(Ident->name(), pObj));
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -12950,8 +13066,6 @@ void AdtDelphiParameter::enumerateAddObj(AdtParserPtrByStringMap& rMap, AdtParse
 AdtFile& AdtDelphiParameter::writeFortran(AdtFile& pOutFile, int nMode, bool& bKeep) const
 {
   bKeep = true;
-
-  writePragmas(pOutFile);
 
   switch (nMode)
   {
@@ -13027,28 +13141,27 @@ AdtFile& AdtDelphiParameter::writeFortran(AdtFile& pOutFile, int nMode, bool& bK
 
           ::AdtExit(-1);
         }
-
-        write(pOutFile, ' ');
-
-        if (IdentList != 0)
-        {
-          IdentList->writeArrayBounds(pOutFile, nMode, sDimension);
-        }
-        else if (Ident != 0)
-        {
-          Ident->writeFortran(pOutFile);
-        }
       }
       break;
     }
 
     case 2:
     {
+      const char* sDimension  = 0;
+      const char* sType       = 0;
+
+      if (TypeId != 0)
+      {
+        //We do this to map MB arrays into equivalent fortran ones
+        delphiRootObject()->mapTypesToFortran(TypeId->name(), sType, sDimension);
+        bKeep = (sType != 0);
+      }
+
       write(pOutFile, ' ');
 
       if (IdentList != 0)
       {
-        IdentList->writeFortran(pOutFile);
+        IdentList->writeArrayBounds(pOutFile, nMode, sDimension);
       }
       else if (Ident != 0)
       {
@@ -13143,8 +13256,6 @@ AdtFile& AdtDelphiParameter::writeCPP_Var(AdtFile& pOutFile, const AdtDelphiBase
 
 AdtFile& AdtDelphiParameter::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (IdentList != 0)
   {
     AdtParserPtrListConstIter Iter;
@@ -13174,8 +13285,6 @@ AdtFile& AdtDelphiParameter::writeCPP(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiParameter::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (IdentList != 0)
   {
     IdentList->writeDelphi(pOutFile, nMode);
@@ -13255,8 +13364,6 @@ AdtDelphiDirective::~AdtDelphiDirective()
 AdtFile& AdtDelphiDirective::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
   const char* pType = 0;
-
-  writeExpanded(pOutFile, comment());
 
   switch (Type)
   {
@@ -13467,8 +13574,6 @@ AdtFile& AdtDelphiObjectType::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -13476,7 +13581,6 @@ AdtFile& AdtDelphiObjectType::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiObjectType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, "object ");
 
   if (UnitId != 0)
@@ -13622,8 +13726,6 @@ AdtFile& AdtDelphiMethod::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -13631,8 +13733,6 @@ AdtFile& AdtDelphiMethod::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiMethod::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (ProcedureHeading != 0)
   {
     ProcedureHeading->writeDelphi(pOutFile, nMode);
@@ -13681,8 +13781,7 @@ implType(AdtDelphiMethod, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 AdtDelphiConstructorHeading::AdtDelphiConstructorHeading(AdtParser* pClassIdentObj,
                                                          AdtParser* pMethodIdentObj,
-                                                         AdtParser* pFormalParametersObj,
-                                                         const char* pComment)
+                                                         AdtParser* pFormalParametersObj)
  : AdtDelphiBase()
 {
   initObject(ClassIdent,        pClassIdentObj,       AdtDelphiIdent,             true);
@@ -13699,7 +13798,7 @@ AdtDelphiConstructorHeading::AdtDelphiConstructorHeading(AdtParser* pClassIdentO
     name("CONSTRUCTOR " + name() + MethodIdent->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -13710,6 +13809,8 @@ AdtDelphiConstructorHeading::AdtDelphiConstructorHeading(const AdtDelphiConstruc
   copyObject(ClassIdent,       rCopy, AdtDelphiIdent);
   copyObject(MethodIdent,      rCopy, AdtDelphiIdent);
   copyObject(FormalParameters, rCopy, AdtDelphiFormalParameters);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -13725,8 +13826,6 @@ AdtDelphiConstructorHeading::~AdtDelphiConstructorHeading()
 
 AdtFile& AdtDelphiConstructorHeading::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (FormalParameters != 0)
   {
     FormalParameters->writeCPP(pOutFile, nMode);
@@ -13771,8 +13870,7 @@ implType(AdtDelphiConstructorHeading, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 AdtDelphiDestructorHeading::AdtDelphiDestructorHeading(AdtParser* pClassIdentObj,
                                                        AdtParser* pMethodIdentObj,
-                                                       AdtParser* pFormalParametersObj,
-                                                       const char* pComment)
+                                                       AdtParser* pFormalParametersObj)
  : AdtDelphiBase()
 {
   initObject(ClassIdent,        pClassIdentObj,       AdtDelphiIdent,             true);
@@ -13789,7 +13887,7 @@ AdtDelphiDestructorHeading::AdtDelphiDestructorHeading(AdtParser* pClassIdentObj
     name("DESTRUCTOR " + name() + MethodIdent->name());
   }
 
-  comment(pComment);
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -13800,6 +13898,8 @@ AdtDelphiDestructorHeading::AdtDelphiDestructorHeading(const AdtDelphiDestructor
   copyObject(ClassIdent,       rCopy, AdtDelphiIdent);
   copyObject(MethodIdent,      rCopy, AdtDelphiIdent);
   copyObject(FormalParameters, rCopy, AdtDelphiFormalParameters);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -13891,6 +13991,8 @@ AdtDelphiObjField::AdtDelphiObjField(AdtParser* pIdentListObj,
   initObject(IdentList, pIdentListObj,  AdtDelphiIdentList, true);
   initObject(Type,      pTypeObj,       AdtDelphiType,      true);
 
+  CanBindComments = true;
+
   if (AdtAutoClass::automationEnabled())
   {
     // Need to add the types and sizes to the CurrentClass
@@ -13977,6 +14079,8 @@ AdtDelphiObjField::AdtDelphiObjField(const AdtDelphiObjField& rCopy)
 {
   copyObject(IdentList, rCopy, AdtDelphiIdentList);
   copyObject(Type,      rCopy, AdtDelphiType);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -14063,16 +14167,13 @@ implType(AdtDelphiObjField, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 AdtDelphiInitSection::AdtDelphiInitSection(AdtParser* pStmtListObj,
                                            AdtParser* pFinalStmtListObj,
-                                           bool bHasInit,
-                                           const char* pComment)
+                                           bool bHasInit)
  : AdtDelphiBase()
 {
   initObject(StmtList,      pStmtListObj,       AdtDelphiStmtList,  true);
   initObject(FinalStmtList, pFinalStmtListObj,  AdtDelphiStmtList,  true);
 
   HasInit = bHasInit;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -14103,8 +14204,6 @@ AdtFile& AdtDelphiInitSection::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -14112,8 +14211,6 @@ AdtFile& AdtDelphiInitSection::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiInitSection::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (HasInit)
   {
     write(pOutFile, "initialization");
@@ -14126,6 +14223,7 @@ AdtFile& AdtDelphiInitSection::writeDelphi(AdtFile& pOutFile, int nMode) const
       StmtList->writeDelphi(pOutFile, nMode);
 
       pOutFile.decrementIndent();
+      pOutFile.homeline();
 
       if (FinalStmtList != 0)
       {
@@ -14161,8 +14259,6 @@ AdtFile& AdtDelphiInitSection::writeDelphi(AdtFile& pOutFile, int nMode) const
       pOutFile.homeline();
     }
   }
-
-  write(pOutFile, "end");
 
   return (pOutFile);
 }
@@ -14443,15 +14539,10 @@ bool AdtDelphiClassType::importClass(const string& rDestClassName,
     FieldMap.clear();
     MethodMap.clear();
     PropertyMap.clear();
-    SymbolMap.clear();
 
     enumerateDescendantMap(FieldMap,    "ClassFieldList");
     enumerateDescendantMap(MethodMap,   "ClassMethodList");
     enumerateDescendantMap(PropertyMap, "ClassPropertyList");
-
-    append(SymbolMap, FieldMap);
-    append(SymbolMap, MethodMap);
-    append(SymbolMap, PropertyMap);
   }
   else
   {
@@ -14499,8 +14590,7 @@ AdtDelphiClassType::AdtDelphiClassType(AdtParser* pIdentListObj,
  : AdtDelphiBase(),
    FieldMap(),
    MethodMap(),
-   PropertyMap(),
-   SymbolMap()
+   PropertyMap()
 {
   initObject(IdentList,         pIdentListObj,          AdtDelphiIdentList,         true);
   initObject(ClassFieldList,    pClassFieldListObj,     AdtDelphiClassFieldList,    true);
@@ -14511,10 +14601,6 @@ AdtDelphiClassType::AdtDelphiClassType(AdtParser* pIdentListObj,
   enumerateDescendantMap(MethodMap,   "ClassMethodList");
   enumerateDescendantMap(PropertyMap, "ClassPropertyList");
 
-  append(SymbolMap, FieldMap);
-  append(SymbolMap, MethodMap);
-  append(SymbolMap, PropertyMap);
-
   AdtDelphiClassType::GlobalVisibility = AdtVisibility_PUBLIC;
 }
 
@@ -14524,8 +14610,7 @@ AdtDelphiClassType::AdtDelphiClassType(const AdtDelphiClassType& rCopy)
  : AdtDelphiBase(rCopy),
    FieldMap(),
    MethodMap(),
-   PropertyMap(),
-   SymbolMap()
+   PropertyMap()
 {
   copyObject(IdentList,         rCopy, AdtDelphiIdentList);
   copyObject(ClassFieldList,    rCopy, AdtDelphiClassFieldList);
@@ -14535,10 +14620,6 @@ AdtDelphiClassType::AdtDelphiClassType(const AdtDelphiClassType& rCopy)
   enumerateDescendantMap(FieldMap,    "ClassFieldList");
   enumerateDescendantMap(MethodMap,   "ClassMethodList");
   enumerateDescendantMap(PropertyMap, "ClassPropertyList");
-
-  append(SymbolMap, FieldMap);
-  append(SymbolMap, MethodMap);
-  append(SymbolMap, PropertyMap);
 }
 
 //  ----------------------------------------------------------------------------
@@ -14548,7 +14629,6 @@ AdtDelphiClassType::~AdtDelphiClassType()
   FieldMap.clear();
   MethodMap.clear();
   PropertyMap.clear();
-  SymbolMap.clear();
 
   UtlReleaseReference(IdentList);
   UtlReleaseReference(ClassFieldList);
@@ -14617,7 +14697,7 @@ AdtDelphiClassType::SymbolType AdtDelphiClassType::defined(const char* pName) co
 //  ----------------------------------------------------------------------------
 
 void AdtDelphiClassType::findDimensionVars(const AdtParserPtrByStringMap& rVarsMap,
-                                           AdtParserPtrList& rList) const
+                                           AdtParserPtrByStringMap& rDimsMap) const
 {
   AdtStringByStringMap              DefinedMap;
   AdtParserPtrByStringMapConstIter  Iter;
@@ -14625,15 +14705,7 @@ void AdtDelphiClassType::findDimensionVars(const AdtParserPtrByStringMap& rVarsM
   // Make map of object names as a check for whether they are already mapped
   for (Iter = rVarsMap.begin() ; Iter != rVarsMap.end() ; ++Iter)
   {
-    const AdtParser* pObj = Iter->second;
-
-    if ((pObj != 0) && pObj->isType("AdtDelphiIdent"))
-    {
-      AdtDelphiIdent* pIdent;
-
-      pIdent                     = (AdtDelphiIdent*)pObj;
-      DefinedMap[pIdent->name()] = pIdent->name();
-    }
+    DefinedMap[Iter->first] = Iter->first;
   }
 
   // For all the mapped variables check for dimension specs and add dim vars
@@ -14641,32 +14713,41 @@ void AdtDelphiClassType::findDimensionVars(const AdtParserPtrByStringMap& rVarsM
   {
     const AdtParser* pObj = Iter->second;
 
-    if ((pObj != 0) && pObj->isType("AdtDelphiIdent"))
+    if (pObj != 0)
     {
-      AdtStringListIter StrIter;
-      AdtStringList     rArrayBoundList;
-      AdtDelphiIdent*   pIdent = (AdtDelphiIdent*)pObj;
-
-      pIdent->enumerateArraySizes(rArrayBoundList, rArrayBoundList);
-
-      for (StrIter = rArrayBoundList.begin() ; StrIter != rArrayBoundList.end() ; ++StrIter)
+      if (pObj->isType("AdtDelphiObjField"))
       {
-        AdtExpressionCompiler Compiler;
-        AdtStringList         rDependencyList;
-        AdtStringListIter     DepIter;
-        const string&         rIndexExpression = *StrIter;
+        pObj = pObj->findObject("AdtDelphiIdent", Iter->first);
+      }
 
-        Compiler.findDependencies(rIndexExpression, rDependencyList);
+      if (pObj->isType("AdtDelphiIdent"))
+      {
+        AdtStringListIter StrIter;
+        AdtStringList     rArrayBoundList;
+        AdtDelphiIdent*   pIdent = (AdtDelphiIdent*)pObj;
 
-        for (DepIter = rDependencyList.begin() ; DepIter != rDependencyList.end() ; ++DepIter)
+        pIdent->enumerateArraySizes(rArrayBoundList, rArrayBoundList);
+
+        for (StrIter = rArrayBoundList.begin() ; StrIter != rArrayBoundList.end() ; ++StrIter)
         {
-          const string&     rDepName = *DepIter;
-          const AdtParser*  pDepObj  = 0;
+          AdtExpressionCompiler Compiler;
+          AdtStringList         rDependencyList;
+          AdtStringListIter     DepIter;
+          const string&         rIndexExpression = *StrIter;
 
-          if ((DefinedMap.find(rDepName) == DefinedMap.end()) && findField(rDepName, pDepObj))
+          Compiler.findDependencies(rIndexExpression, rDependencyList);
+
+          for (DepIter = rDependencyList.begin() ; DepIter != rDependencyList.end() ; ++DepIter)
           {
-            DefinedMap[pDepObj->name()] = pDepObj->name();
-            rList.push_back((AdtParser*)pDepObj);
+            const string&     rDepName = *DepIter;
+            const AdtParser*  pDepObj  = 0;
+
+            if ((DefinedMap.find(rDepName) == DefinedMap.end()) && findField(rDepName, pDepObj))
+            {
+              DefinedMap[rDepName] = rDepName;
+
+              rDimsMap.insert(AdtParserPtrByStringMap::value_type(rDepName, AdtParserContext((AdtParser*)pDepObj)));
+            }
           }
         }
       }
@@ -14710,8 +14791,6 @@ AdtFile& AdtDelphiClassType::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -14719,7 +14798,6 @@ AdtFile& AdtDelphiClassType::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiClassType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, "class ");
 
   if (IdentList != 0)
@@ -14872,8 +14950,6 @@ AdtFile& AdtDelphiClassField::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -14881,9 +14957,10 @@ AdtFile& AdtDelphiClassField::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiClassField::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.decrementIndent();
   pOutFile.homeline();
+
+  writeExpanded(pOutFile, comment());
 
   switch (Visibility)
   {
@@ -15163,8 +15240,6 @@ AdtFile& AdtDelphiClassMethod::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -15172,9 +15247,10 @@ AdtFile& AdtDelphiClassMethod::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiClassMethod::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.decrementIndent();
   pOutFile.homeline();
+
+  writeExpanded(pOutFile, comment());
 
   switch (Visibility)
   {
@@ -15328,8 +15404,6 @@ AdtFile& AdtDelphiClassProperty::writeFortran(AdtFile& pOutFile, int nMode) cons
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -15337,7 +15411,6 @@ AdtFile& AdtDelphiClassProperty::writeFortran(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtDelphiClassProperty::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   pOutFile.decrementIndent();
   pOutFile.homeline();
 
@@ -15439,8 +15512,6 @@ AdtFile& AdtDelphiProperty::writeFortran(AdtFile& pOutFile, int nMode) const
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -15448,7 +15519,6 @@ AdtFile& AdtDelphiProperty::writeFortran(AdtFile& pOutFile, int nMode) const
 
 AdtFile& AdtDelphiProperty::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, "property ");
 
   if (ClassIdent != 0)
@@ -15559,8 +15629,6 @@ AdtFile& AdtDelphiPropertyParameter::writeFortran(AdtFile& pOutFile, int nMode) 
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -15568,8 +15636,6 @@ AdtFile& AdtDelphiPropertyParameter::writeFortran(AdtFile& pOutFile, int nMode) 
 
 AdtFile& AdtDelphiPropertyParameter::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   if (IdentList != 0)
   {
     IdentList->writeDelphi(pOutFile, nMode);
@@ -15645,8 +15711,6 @@ AdtFile& AdtDelphiPropertySpecifiers::writeFortran(AdtFile& pOutFile, int nMode)
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -15654,8 +15718,6 @@ AdtFile& AdtDelphiPropertySpecifiers::writeFortran(AdtFile& pOutFile, int nMode)
 
 AdtFile& AdtDelphiPropertySpecifiers::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
-
   switch (Type)
   {
     case AdtType_INDEX:
@@ -15756,15 +15818,12 @@ implType(AdtDelphiPropertySpecifiers, AdtDelphiBase);
 //  ----------------------------------------------------------------------------
 AdtDelphiInterfaceType::AdtDelphiInterfaceType(AdtParser* pIdentListObj,
                                                AdtParser* pClassMethodListObj,
-                                               AdtParser* pClassPropertyListObj,
-                                               const char* pComment)
+                                               AdtParser* pClassPropertyListObj)
  : AdtDelphiBase()
 {
   initObject(IdentList,         pIdentListObj,          AdtDelphiIdentList,         true);
   initObject(ClassMethodList,   pClassMethodListObj,    AdtDelphiClassMethodList,   true);
   initObject(ClassPropertyList, pClassPropertyListObj,  AdtDelphiClassPropertyList, true);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -15795,8 +15854,6 @@ AdtFile& AdtDelphiInterfaceType::writeFortran(AdtFile& pOutFile, int nMode) cons
                                    fileName());
   AdtExit(-1);
 
-  writePragmas(pOutFile);
-
   return (pOutFile);
 }
 
@@ -15804,7 +15861,6 @@ AdtFile& AdtDelphiInterfaceType::writeFortran(AdtFile& pOutFile, int nMode) cons
 
 AdtFile& AdtDelphiInterfaceType::writeDelphi(AdtFile& pOutFile, int nMode) const
 {
-  writeExpanded(pOutFile, comment());
   write(pOutFile, "interface ");
 
   if (IdentList != 0)
@@ -16195,7 +16251,15 @@ void AdtDelphiIdent::writeArrayBounds(AdtFile& pOutFile, const char* pAbstractBo
                                          pChar);
         }
 
-        pOutFile.write(sName);
+        if (::strchr(sName.c_str(), '<') != 0)
+        {
+          // Ragged array so leave the dimensions open
+          pOutFile.write(":");
+        }
+        else
+        {
+          pOutFile.write(sName);
+        }
 
         if (AdtParse::matchWord(pChar, ","))
         {
@@ -16220,8 +16284,6 @@ void AdtDelphiIdent::writeArrayBounds(AdtFile& pOutFile, const char* pAbstractBo
 
 AdtFile& AdtDelphiIdent::writeFortran(AdtFile& pOutFile, int nMode) const
 {
-  writePragmas(pOutFile);
-
   if ((nMode              == FORTRAN_MODE_CLASS_EXTEND_NAME) &&
       (delphiRootObject() != 0))
   {
@@ -16482,6 +16544,42 @@ AdtFile& AdtDelphiConstExpr::writeFortranTypeDeclaration(AdtFile& pOutFile,
   }
 
   return (pOutFile);
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtAutoType AdtDelphiConstExpr::autoType() const
+{
+  AdtAutoType nType = AdtAutoType_UNDEFINED;
+
+  switch (Type)
+  {
+    case AdtType_BOOL:
+    {
+      nType = AdtAutoType_LONGBOOL;
+      break;
+    }
+
+    case AdtType_INTEGER:
+    {
+      nType = AdtAutoType_INT;
+      break;
+    }
+
+    case AdtType_REAL:
+    {
+      nType = AdtAutoType_DOUBLE;
+      break;
+    }
+
+    case AdtType_TEXT:
+    default:
+    {
+      nType = AdtAutoType_UNDEFINED;
+    }
+  }
+
+  return (nType);
 }
 
 //  ----------------------------------------------------------------------------

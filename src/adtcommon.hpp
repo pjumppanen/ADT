@@ -609,6 +609,7 @@ inline int UtlReferenceCount::lockCount() const
 //  This function maps file path into unified representation
 //  ----------------------------------------------------------------------------
 string unifyFilePath(const char* pFilePath);
+string unixifyFilePath(const char* pFilePath);
 
 
 //  ----------------------------------------------------------------------------
@@ -768,7 +769,8 @@ enum AdtAutoType
   AdtAutoType_LONG_LONG,
   AdtAutoType_UNSIGNED_LONG_LONG,
   AdtAutoType_BOOL,
-  AdtAutoType_UNDEFINED,
+  AdtAutoType_LONGBOOL,
+  AdtAutoType_UNDEFINED
 };
 
 
@@ -781,6 +783,7 @@ enum AdtAutoMode
   AdtAutoMode_AUTODEC     = 1,
   AdtAutoMode_AUTOINIT    = 2,
   AdtAutoMode_FN_ARGUMENT = 3,
+  AdtAutoMode_GLOBAL      = 4
 };
 
 

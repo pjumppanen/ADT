@@ -49,7 +49,7 @@ C_FUNCTION void* adtCppSimpleDeclarationList_create(void* pSimpleDeclarationObj)
 C_FUNCTION void* adtCppPostfixExpression_create(void* pExpressionObj, void* pPostfixExpressionObj, void* pDirectedExpressionObj, int nIncrement, const char* pLiteral);
 C_FUNCTION void* adtCppExpressionList_create(void* pAssignmentExpressionObj);
 C_FUNCTION void* adtCppDirectedExpression_create(void* pDeclaratorExpressionObj);
-C_FUNCTION void* adtCppDeclaratorExpression_create(const char* pIdentifier, void* pExpressionListObj, void* pDeclaratorExpressionDimsObj, int nQualified, int nHasBrackets, const char* pComment);
+C_FUNCTION void* adtCppDeclaratorExpression_create(const char* pIdentifier, void* pExpressionListObj, void* pDeclaratorExpressionDimsObj, int nQualified, int nHasBrackets);
 C_FUNCTION void* adtCppDeclaratorExpressionDims_create(void* pExpressionObj);
 C_FUNCTION void* adtCppUnaryExpression_create(void* pPostfixExpressionObj, void* pUnaryExpressionObj, void* pUnaryOperatorObj, void* pExpressionObj, int nIncrement);
 C_FUNCTION void* adtCppUnaryOperator_create(int nOp);
@@ -69,37 +69,37 @@ C_FUNCTION void* adtCppAssignmentOperator_create(int nOp);
 C_FUNCTION void* adtCppExpression_create(void* pAssignmentExpressionObj, void* pExpressionObj);
 C_FUNCTION void* adtCppConstantExpression_create(void* pConditionalExpressionObj);
 C_FUNCTION void* adtCppStatement_create(void* pLabeledStatementObj, void* pExpressionStatementObj, void* pCompoundStatementObj, void* pSelectionStatementObj, void* pIterationStatementObj, void* pJumpStatementObj, void* pDeclarationStatementObj);
-C_FUNCTION void* adtCppLabeledStatement_create(void* pConstantExpressionObj, void* pStatementObj, const char* pIdentifier, int nIsDefault, const char* pComment);
-C_FUNCTION void* adtCppExpressionStatement_create(void* pExpressionObj, const char* pComment);
-C_FUNCTION void* adtCppCompoundStatement_create(void* pStatementSeqObj, const char* pComment);
+C_FUNCTION void* adtCppLabeledStatement_create(void* pConstantExpressionObj, void* pStatementObj, const char* pIdentifier, int nIsDefault);
+C_FUNCTION void* adtCppExpressionStatement_create(void* pExpressionObj);
+C_FUNCTION void* adtCppCompoundStatement_create(void* pStatementSeqObj);
 C_FUNCTION void* adtCppStatementSeq_create(void* pStatementObj);
-C_FUNCTION void* adtCppSelectionStatement_create(void* pExpressionObj, void* pStatementObj, void* pStatement2Obj, int nIsIf, const char* pComment);
-C_FUNCTION void* adtCppIterationStatement_create(void* pForInitStatementObj, void* pExpressionObj, void* pExpression2Obj, void* pStatementObj, int nIsDo, const char* pComment);
+C_FUNCTION void* adtCppSelectionStatement_create(void* pExpressionObj, void* pStatementObj, void* pStatement2Obj, int nIsIf);
+C_FUNCTION void* adtCppIterationStatement_create(void* pForInitStatementObj, void* pExpressionObj, void* pExpression2Obj, void* pStatementObj, int nIsDo);
 C_FUNCTION void* adtCppForInitStatement_create(void* pExpressionStatementObj, void* pSimpleDeclarationObj);
-C_FUNCTION void* adtCppJumpStatement_create(void* pExpressionObj, const char* pIndentifier, int nType, const char* pComment);
+C_FUNCTION void* adtCppJumpStatement_create(void* pExpressionObj, const char* pIndentifier, int nType);
 C_FUNCTION void* adtCppDeclarationStatement_create(void* pBlockDeclarationObj);
 C_FUNCTION void* adtCppDeclarationSeq_create(void* pDeclarationObj);
-C_FUNCTION void* adtCppDeclaration_create(void* pBlockDeclarationObj, void* pFunctionDefinitionObj, void* pLinkageSpecificationObj, void* pNamespaceDefinitionObj, const char* pComment);
+C_FUNCTION void* adtCppDeclaration_create(void* pBlockDeclarationObj, void* pFunctionDefinitionObj, void* pLinkageSpecificationObj, void* pNamespaceDefinitionObj);
 C_FUNCTION void* adtCppBlockDeclaration_create(void* pSimpleDeclarationObj, void* pAsmDefinitionObj, void* pNamespaceAliasDefinitionObj, void* pUsingDeclarationObj, void* pUsingDirectiveObj);
-C_FUNCTION void* adtCppSimpleDeclaration_create(void* pClassSpecifierObj, void* pEnumSpecifierObj, void* pSimpleTypeSpecifierObj, void* pInitDeclaratorListObj, void* pDeclModifierListObj, int nHasTypeDef, const char* pComment);
+C_FUNCTION void* adtCppSimpleDeclaration_create(void* pClassSpecifierObj, void* pEnumSpecifierObj, void* pSimpleTypeSpecifierObj, void* pInitDeclaratorListObj, void* pDeclModifierListObj, int nHasTypeDef);
 C_FUNCTION int   adtCppSimpleDeclaration_isTypeDef(void* pCppSimpleDeclarationObj, const char** ppAliasName);
-C_FUNCTION void* adtCppDeclModifier_create(int nType, const char* pComment);
+C_FUNCTION void* adtCppDeclModifier_create(int nType);
 C_FUNCTION void* adtCppDeclModifierList_create(void* pDeclModifierObj);
 C_FUNCTION void* adtCppClassSpecifier_create(void* pClassKeyObj, void* pBaseSpecifierListObj, void* pMemberSpecificationObj, int nWithBrackets);
-C_FUNCTION void* adtCppEnumSpecifierName_create(const char* pIdentifier, int nQualified, const char* pComment);
+C_FUNCTION void* adtCppEnumSpecifierName_create(const char* pIdentifier, int nQualified);
 C_FUNCTION void* adtCppEnumSpecifier_create(void* pEnumeratorListObj, void* pEnumSpecifierName, int nWithBrackets);
-C_FUNCTION void* adtCppSimpleTypeSpecifier_create(const char* pIdentifier, int nType, int nByRef, const char* pComment);
+C_FUNCTION void* adtCppSimpleTypeSpecifier_create(const char* pIdentifier, int nType, int nByRef);
 C_FUNCTION void* adtCppEnumeratorList_create(void* pEnumeratorDefinitionObj);
-C_FUNCTION void* adtCppEnumeratorDefinition_create(void* pConstantExpressionObj, const char* pIdentifier, const char* pComment);
-C_FUNCTION void* adtCppNamespaceDefinition_create(void* pDeclarationSeqObj, const char* pIdentifier, const char* pComment);
-C_FUNCTION void* adtCppNamespaceAliasDefinition_create(const char* pIdentifier, const char* pQualifiedIdentifier, const char* pComment);
-C_FUNCTION void* adtCppUsingDeclaration_create(const char* pQualifiedIdentifier, int nWithTypename, const char* pComment);
-C_FUNCTION void* adtCppUsingDirective_create(const char* pIdentifier, int nQualified, const char* pComment);
-C_FUNCTION void* adtCppAsmDefinition_create(const char* pStringLiteral, const char* pComment);
-C_FUNCTION void* adtCppLinkageSpecification_create(void* pDeclarationSeqObj, void* pDeclarationObj, const char* pStringLiteral, const char* pComment);
+C_FUNCTION void* adtCppEnumeratorDefinition_create(void* pConstantExpressionObj, const char* pIdentifier);
+C_FUNCTION void* adtCppNamespaceDefinition_create(void* pDeclarationSeqObj, const char* pIdentifier);
+C_FUNCTION void* adtCppNamespaceAliasDefinition_create(const char* pIdentifier, const char* pQualifiedIdentifier);
+C_FUNCTION void* adtCppUsingDeclaration_create(const char* pQualifiedIdentifier, int nWithTypename);
+C_FUNCTION void* adtCppUsingDirective_create(const char* pIdentifier, int nQualified);
+C_FUNCTION void* adtCppAsmDefinition_create(const char* pStringLiteral);
+C_FUNCTION void* adtCppLinkageSpecification_create(void* pDeclarationSeqObj, void* pDeclarationObj, const char* pStringLiteral);
 C_FUNCTION void* adtCppInitDeclaratorList_create(void* pInitDeclaratorObj);
 C_FUNCTION void* adtCppInitDeclarator_create(void* pDeclaratorObj, void* pInitializerObj);
-C_FUNCTION void* adtCppDeclarator_create(void* pParameterDeclarationClauseObj, void* pExpressionListObj, void* pDeclaratorDimsObj, const char* pIdentifier, int nWithBrackets, int nQualified, int nIsObj, int nVirtual, int nType, const char* pComment, int nInitQualifiedName);
+C_FUNCTION void* adtCppDeclarator_create(void* pParameterDeclarationClauseObj, void* pExpressionListObj, void* pDeclaratorDimsObj, const char* pIdentifier, int nWithBrackets, int nQualified, int nIsObj, int nVirtual, int nType, int nInitQualifiedName);
 C_FUNCTION void* adtCppDeclaratorDims_create(void* pConstantExpressionObj, void* pDeclaratorDimsObj);
 C_FUNCTION void* adtCppParameterDeclarationClause_create(void* pParameterDeclarationListObj, int nHasEllipsis, int nHasComma);
 C_FUNCTION void* adtCppParameterDeclarationList_create(void* pParameterDeclarationObj);
@@ -109,7 +109,7 @@ C_FUNCTION void* adtCppFunctionBody_create(void* pCompoundStatementObj);
 C_FUNCTION void* adtCppInitializer_create(void* pInitializerClauseObj, void* pExpressionListObj);
 C_FUNCTION void* adtCppInitializerClause_create(void* pAssignmentExpressionObj, void* pInitializerListObj, int nHasComma);
 C_FUNCTION void* adtCppInitializerList_create(void* pInitializerClauseObj);
-C_FUNCTION void* adtCppClassKey_create(int nType, const char* pIdentifier, int nQualified, const char* pComment);
+C_FUNCTION void* adtCppClassKey_create(int nType, const char* pIdentifier, int nQualified);
 C_FUNCTION void* adtCppMemberSpecification_create(void* pMemberDeclarationObj);
 C_FUNCTION void* adtCppMemberDeclaration_create(void* pClassSpecifierObj, void* pEnumSpecifierObj, void* pDeclModifierListObj, void* pSimpleTypeSpecifierObj, void* pMemberDeclarationListObj, void* pFunctionDefinitionObj, void* pUsingDeclarationObj, int nType, int nHasSemicolon);
 C_FUNCTION void* adtCppMemberDeclarationList_create(void* pMemberDeclaratorObj);
@@ -310,17 +310,19 @@ protected:
 protected:
   AdtFile&                      forAllWriteFortran(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0) const;
   AdtFile&                      forAllWriteCPP(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false) const;
+  AdtFile&                      writePragmas(AdtFile& rOutFile) const;
 
 public:
   AdtCppBase();
   AdtCppBase(const AdtCppBase& rCopy);
   virtual ~AdtCppBase();
 
-  static void                   initialise();
+  static void                   rootBindComments(AdtCommon* pCompilerBase);
 
   static void                   nameToFortran(const char* pName, string& rConvertedName);
 
   static void                   prefixFromQualifiedName(const char* pName, string& rPrefix);
+  static bool                   qualifiedName(string& rName, const char* pPrefix);
 
   static AdtCppStatementSeq*    expressionBuild(const char* pCodeString);
 
@@ -398,6 +400,7 @@ class AdtCppCheckDeclaration : public AdtCppBase
 {
 protected:
   const string*                 QualifiedName;
+  bool                          IsForwardDeclaration;
 
 protected:
   void                          initialiseQualifiedName();
@@ -407,6 +410,7 @@ public:
   AdtCppCheckDeclaration(const AdtCppCheckDeclaration& rCopy);
   virtual ~AdtCppCheckDeclaration();
 
+  void                          setForwardDeclaration(bool bIsForward);
   virtual bool                  isForwardDeclaration(bool bClassScope) const;
   const string&                 qualifiedName() const;
 
@@ -415,9 +419,16 @@ public:
 
 //  ----------------------------------------------------------------------------
 
+inline void AdtCppCheckDeclaration::setForwardDeclaration(bool bIsForward)
+{
+  IsForwardDeclaration = bIsForward;
+}
+
+//  ----------------------------------------------------------------------------
+
 inline bool AdtCppCheckDeclaration::isForwardDeclaration(bool bClassScope) const
 {
-  return (false);
+  return (IsForwardDeclaration);
 }
 
 //  ----------------------------------------------------------------------------
@@ -471,6 +482,7 @@ class AdtCppTranslationUnit : public AdtCppBase, public AdtSourceRoot
 private:
   static AdtIntByStringMapCS    ProcedureMap;
   static AdtIntByStringMapCS    FunctionMap;
+  static AdtParserPtrList       BlackBoxCommentsList;
   AdtCppDeclarationSeq*         DeclarationSeq;
 
 protected:
@@ -502,6 +514,8 @@ public:
   AdtCppTranslationUnit(AdtParser* pObj);
   AdtCppTranslationUnit(const AdtCppTranslationUnit& rCopy);
   virtual ~AdtCppTranslationUnit();
+
+  static void                   addBlackBoxCommentsObject(AdtParser* pObj);
 
   static bool                   isProcedure(const char* pName);
   static bool                   isFunction(const char* pName);
@@ -536,7 +550,8 @@ public:
 
   virtual bool                  buildBlackBoxFile(const char* pBlackBoxFileName,
                                                   AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap);
+                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                                  double dVersionNumber);
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rRootList,
@@ -550,6 +565,7 @@ public:
   virtual bool                  extractClassConstructors(AdtStringList& rConstructorList,
                                                          const char* pClassName,
                                                          const char* pParentClassName,
+                                                         const char* pPathPrefix,
                                                          AdtSourceFileType nAsFileType) const;
 
   virtual AdtFile&              writeClassMethodsAsFortran(AdtFile& rOutFile,
@@ -965,8 +981,7 @@ public:
                              AdtParser* pExpressionListObj,
                              AdtParser* pDeclaratorExpressionDimsObj,
                              bool bQualified,
-                             bool bHasBrackets,
-                             const char* pComment);
+                             bool bHasBrackets);
 
   AdtCppDeclaratorExpression(const AdtCppDeclaratorExpression& rCopy);
   virtual ~AdtCppDeclaratorExpression();
@@ -1565,8 +1580,25 @@ public:
   virtual AdtFile&              writeCPP(AdtFile& rOutFile, int nMode = 0) const;
   virtual AdtFile&              writeFortran(AdtFile& rOutFile, int nMode = 0) const;
 
+  bool                          isEmpty() const;
+
   declType;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppStatement::isEmpty() const
+{
+  bool bIsEmpty = ((LabeledStatement     == 0) &&
+                   (ExpressionStatement  == 0) &&
+                   (CompoundStatement    == 0) &&
+                   (SelectionStatement   == 0) &&
+                   (IterationStatement   == 0) &&
+                   (JumpStatement        == 0) &&
+                   (DeclarationStatement == 0));
+
+  return (bIsEmpty);
+}
 
 
 //  ----------------------------------------------------------------------------
@@ -1583,8 +1615,7 @@ public:
   AdtCppLabeledStatement(AdtParser* pConstantExpressionObj,
                          AdtParser* pStatementObj,
                          const char* pIdentifier,
-                         bool bIsDefault,
-                         const char* pComment);
+                         bool bIsDefault);
 
   AdtCppLabeledStatement(const AdtCppLabeledStatement& rCopy);
   virtual ~AdtCppLabeledStatement();
@@ -1605,8 +1636,7 @@ private:
   AdtCppExpression*             Expression;
 
 public:
-  AdtCppExpressionStatement(AdtParser* pExpressionObj,
-                            const char* pComment);
+  AdtCppExpressionStatement(AdtParser* pExpressionObj);
 
   AdtCppExpressionStatement(const AdtCppExpressionStatement& rCopy);
   virtual ~AdtCppExpressionStatement();
@@ -1627,8 +1657,7 @@ private:
   AdtCppStatementSeq*           StatementSeq;
 
 public:
-  AdtCppCompoundStatement(AdtParser* pStatementSeqObj,
-                          const char* pComment);
+  AdtCppCompoundStatement(AdtParser* pStatementSeqObj);
 
   AdtCppCompoundStatement(const AdtCppCompoundStatement& rCopy);
   virtual ~AdtCppCompoundStatement();
@@ -1673,8 +1702,7 @@ public:
   AdtCppSelectionStatement(AdtParser* pExpressionObj,
                            AdtParser* pStatementObj,
                            AdtParser* pStatement2Obj,
-                           bool bIsIf,
-                           const char* pComment);
+                           bool bIsIf);
 
   AdtCppSelectionStatement(const AdtCppSelectionStatement& rCopy);
   virtual ~AdtCppSelectionStatement();
@@ -1708,8 +1736,7 @@ public:
                            AdtParser* pExpressionObj,
                            AdtParser* pExpression2Obj,
                            AdtParser* pStatementObj,
-                           bool bIsDo,
-                           const char* pComment);
+                           bool bIsDo);
 
   AdtCppIterationStatement(const AdtCppIterationStatement& rCopy);
   virtual ~AdtCppIterationStatement();
@@ -1771,8 +1798,7 @@ private:
 public:
   AdtCppJumpStatement(AdtParser* pExpressionObj,
                       const char* pIndentifier,
-                      AdtCppJumpType nType,
-                      const char* pComment);
+                      AdtCppJumpType nType);
 
   AdtCppJumpStatement(const AdtCppJumpStatement& rCopy);
   virtual ~AdtCppJumpStatement();
@@ -1822,8 +1848,7 @@ public:
   AdtCppDeclaration(AdtParser* pBlockDeclarationObj,
                     AdtParser* pFunctionDefinitionObj,
                     AdtParser* pLinkageSpecificationObj,
-                    AdtParser* pNamespaceDefinitionObj,
-                    const char* pComment);
+                    AdtParser* pNamespaceDefinitionObj);
 
   AdtCppDeclaration(const AdtCppDeclaration& rCopy);
   virtual ~AdtCppDeclaration();
@@ -1900,7 +1925,7 @@ private:
   AdtCppDeclModifierType        Type;
 
 public:
-  AdtCppDeclModifier(AdtCppDeclModifierType nType, const char* pComment);
+  AdtCppDeclModifier(AdtCppDeclModifierType nType);
   AdtCppDeclModifier(const AdtCppDeclModifier& rCopy);
   virtual ~AdtCppDeclModifier();
 
@@ -1998,8 +2023,7 @@ public:
                           AdtParser* pSimpleTypeSpecifierObj,
                           AdtParser* pInitDeclaratorListObj,
                           AdtParser* pDeclModifierListObj,
-                          bool bHasTypeDef,
-                          const char* pComment);
+                          bool bHasTypeDef);
 
   AdtCppSimpleDeclaration(const AdtCppSimpleDeclaration& rCopy);
   virtual ~AdtCppSimpleDeclaration();
@@ -2061,7 +2085,7 @@ public:
 
   void                          findDimensionVars(const AdtCppTranslationUnit* pRoot,
                                                   const AdtParserPtrByStringMap& rVarsMap,
-                                                  AdtParserPtrList& rList) const;
+                                                  AdtParserPtrByStringMap& rDimsMap) const;
 
   bool                          findField(const AdtCppTranslationUnit* pRoot,
                                           const char* pName,
@@ -2089,7 +2113,7 @@ private:
   bool                          Qualified;
 
 public:
-  AdtCppEnumSpecifierName(const char* pIdentifier, bool bQualified, const char* pComment);
+  AdtCppEnumSpecifierName(const char* pIdentifier, bool bQualified);
   AdtCppEnumSpecifierName(const AdtCppEnumSpecifierName& rCopy);
   virtual ~AdtCppEnumSpecifierName();
 
@@ -2161,7 +2185,8 @@ enum AdtCppSimpleType
   AdtCppSimpleType_LONG_LONG                = 27,
   AdtCppSimpleType_SIGNED_LONG_LONG         = 28,
   AdtCppSimpleType_UNSIGNED_LONG_LONG       = 29,
-  AdtCppSimpleType_VOID                     = 30
+  AdtCppSimpleType_VOID                     = 30,
+  AdtCppSimpleType_LONGBOOL                 = 31
 };
 
 //  ----------------------------------------------------------------------------
@@ -2176,8 +2201,7 @@ private:
 public:
   AdtCppSimpleTypeSpecifier(const char* pIdentifier,
                             AdtCppSimpleType nType,
-                            bool bByRef,
-                            const char* pComment);
+                            bool bByRef);
 
   AdtCppSimpleTypeSpecifier(const AdtCppSimpleTypeSpecifier& rCopy);
   virtual ~AdtCppSimpleTypeSpecifier();
@@ -2265,8 +2289,7 @@ private:
 
 public:
   AdtCppEnumeratorDefinition(AdtParser* pConstantExpressionObj,
-                             const char* pIdentifier,
-                             const char* pComment);
+                             const char* pIdentifier);
 
   AdtCppEnumeratorDefinition(const AdtCppEnumeratorDefinition& rCopy);
   virtual ~AdtCppEnumeratorDefinition();
@@ -2288,8 +2311,7 @@ private:
 
 public:
   AdtCppNamespaceDefinition(AdtParser* pDeclarationSeqObj,
-                             const char* pIdentifier,
-                             const char* pComment);
+                             const char* pIdentifier);
 
   AdtCppNamespaceDefinition(const AdtCppNamespaceDefinition& rCopy);
   virtual ~AdtCppNamespaceDefinition();
@@ -2313,8 +2335,7 @@ private:
 
 public:
   AdtCppNamespaceAliasDefinition(const char* pIdentifier,
-                                 const char* pQualifiedIdentifier,
-                                 const char* pComment);
+                                 const char* pQualifiedIdentifier);
 
   AdtCppNamespaceAliasDefinition(const AdtCppNamespaceAliasDefinition& rCopy);
   virtual ~AdtCppNamespaceAliasDefinition();
@@ -2336,8 +2357,7 @@ private:
 
 public:
   AdtCppUsingDeclaration(const char* pQualifiedIdentifier,
-                         bool bWithTypename,
-                         const char* pComment);
+                         bool bWithTypename);
 
   AdtCppUsingDeclaration(const AdtCppUsingDeclaration& rCopy);
   virtual ~AdtCppUsingDeclaration();
@@ -2359,8 +2379,7 @@ private:
 
 public:
   AdtCppUsingDirective(const char* pIdentifier,
-                       bool bQualified,
-                       const char* pComment);
+                       bool bQualified);
 
   AdtCppUsingDirective(const AdtCppUsingDirective& rCopy);
   virtual ~AdtCppUsingDirective();
@@ -2378,7 +2397,7 @@ public:
 class AdtCppAsmDefinition : public AdtCppBase
 {
 public:
-  AdtCppAsmDefinition(const char* pStringLiteral, const char* pComment);
+  AdtCppAsmDefinition(const char* pStringLiteral);
   AdtCppAsmDefinition(const AdtCppAsmDefinition& rCopy);
   virtual ~AdtCppAsmDefinition();
 
@@ -2401,8 +2420,7 @@ private:
 public:
   AdtCppLinkageSpecification(AdtParser* pDeclarationSeqObj,
                              AdtParser* pDeclarationObj,
-                             const char* pStringLiteral,
-                             const char* pComment);
+                             const char* pStringLiteral);
 
   AdtCppLinkageSpecification(const AdtCppLinkageSpecification& rCopy);
   virtual ~AdtCppLinkageSpecification();
@@ -2493,7 +2511,6 @@ public:
                    bool bIsObj,
                    bool bIsVirtual,
                    AdtCppDeclaratorCV_Type nType,
-                   const char* pComment,
                    bool bInitQualifiedName);
 
   AdtCppDeclarator(const AdtCppDeclarator& rCopy);
@@ -2633,6 +2650,9 @@ private:
   AdtBlackBoxDefinition*        BlackBox;
   bool                          HasSemiColon;
 
+protected:
+  virtual void                  bindComment(const string* pComment);
+
 public:
   AdtCppFunctionDefinition(AdtParser* pDeclModifierListObj,
                            AdtParser* pSimpleTypeSpecifierObj,
@@ -2643,6 +2663,8 @@ public:
 
   AdtCppFunctionDefinition(const AdtCppFunctionDefinition& rCopy);
   virtual ~AdtCppFunctionDefinition();
+
+  AdtBlackBoxDefinition*        compileBlackBoxDefinition();
 
   AdtBlackBoxDefinition*        blackBox() const;
 
@@ -2836,7 +2858,7 @@ private:
   bool                          Qualified;
 
 public:
-  AdtCppClassKey(AdtCppClassKeyType nType, const char* pIdentifier, bool bQualified, const char* pComment);
+  AdtCppClassKey(AdtCppClassKeyType nType, const char* pIdentifier, bool bQualified);
   AdtCppClassKey(const AdtCppClassKey& rCopy);
   virtual ~AdtCppClassKey();
 

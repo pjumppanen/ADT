@@ -54,5 +54,5 @@ Plan_7.initialise(1,nsubyears +1-(1));
 
 Plan_7.create(MemAllocator, Recsubyr);
 
-R_to_ADlib(arg_Recsubyr, Recsubyr);
+AdtArrayPlanActor::R_to_ADlib(MemAllocator, (char*)arg_Recsubyr, (char*)Recsubyr);
 

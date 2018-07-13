@@ -38,6 +38,7 @@
 //  ----------------------------------------------------------------------------
 //  function prototypes
 //  ----------------------------------------------------------------------------
+C_FUNCTION void  adtDelphi_setComment(void* pObj, const char* pComment);
 C_FUNCTION void  adtDelphi_setTypeScope(void* pIdent);
 C_FUNCTION void  adtDelphi_clearTypeScope();
 C_FUNCTION void* adtDelphi_setRoot(void* pRoot);
@@ -47,24 +48,25 @@ C_FUNCTION void  adtDelphi_releaseObject(void* pObj);
 C_FUNCTION void* adtDelphiList_add(void* pList, void* pObj);
 C_FUNCTION void* adtDelphiGoal_create(void* pObj);
 C_FUNCTION void* adtDelphiMacro_create(void* pIdentObj, void* pExprListObj, void* pExpressionObj, void* pStmtListObj, void* pVarDeclListObj);
-C_FUNCTION void* adtDelphiProgram_create(void* pIdentObj, void* pIdentListObj, void* pUsesClauseObj, void* pBlockObj, const char* pComment);
-C_FUNCTION void* adtDelphiUnit_create(void* pIdentObj, void* pInterfaceSectionObj, void* pImplementationSectionObj, void* pInitSectionObj, const char* pComment);
-C_FUNCTION void* adtDelphiPackage_create(void* pIdentObj, void* pRequiresIdentListObj, void* pContainsIdentListObj, const char* pComment);
-C_FUNCTION void* adtDelphiLibrary_create(void* pIdentObj, void* pUsesClauseObj, void* pBlockObj, const char* pComment);
-C_FUNCTION void* adtDelphiUsesClause_create(void* pIdentListObj, const char* pComment);
-C_FUNCTION void* adtDelphiInterfaceSection_create(void* pUsesClauseObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pExportedHeadingListObj, const char* pComment);
+C_FUNCTION void* adtDelphiModuleEnd_create();
+C_FUNCTION void* adtDelphiProgram_create(void* pIdentObj, void* pIdentListObj, void* pUsesClauseObj, void* pBlockObj, void* pModuleEndObj);
+C_FUNCTION void* adtDelphiUnit_create(void* pIdentObj, void* pInterfaceSectionObj, void* pImplementationSectionObj, void* pInitSectionObj, int nStartLineNumber, void* pModuleEndObj);
+C_FUNCTION void* adtDelphiPackage_create(void* pIdentObj, void* pRequiresIdentListObj, void* pContainsIdentListObj, void* pModuleEndObj);
+C_FUNCTION void* adtDelphiLibrary_create(void* pIdentObj, void* pUsesClauseObj, void* pBlockObj, void* pModuleEndObj);
+C_FUNCTION void* adtDelphiUsesClause_create(void* pIdentListObj, int nStartLineNumber);
+C_FUNCTION void* adtDelphiInterfaceSection_create(void* pUsesClauseObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pExportedHeadingListObj, int nStartLineNumber);
 C_FUNCTION void* adtDelphiExportedHeadingList_create(void* pExportedHeadingObj);
-C_FUNCTION void* adtDelphiExportedHeading_create(void* pProcedureHeadingObj, void* pFunctionHeadingObj, void* pDirectiveListObj, const char* pComment);
-C_FUNCTION void* adtDelphiImplementationSection_create(void* pUsesClauseObj, void* pDeclSectionObj, const char* pComment);
-C_FUNCTION void* adtDelphiBlock_create(void* pDeclSectionObj, void* pCompoundStmtObj, const char* pComment);
-C_FUNCTION void* adtDelphiDeclSection_create(void* pLabelDeclSectionObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pProcedureDeclSectionObj, const char* pComment);
+C_FUNCTION void* adtDelphiExportedHeading_create(void* pProcedureHeadingObj, void* pFunctionHeadingObj, void* pDirectiveListObj);
+C_FUNCTION void* adtDelphiImplementationSection_create(void* pUsesClauseObj, void* pDeclSectionObj, int nStartLineNumber);
+C_FUNCTION void* adtDelphiBlock_create(void* pDeclSectionObj, void* pCompoundStmtObj);
+C_FUNCTION void* adtDelphiDeclSection_create(void* pLabelDeclSectionObj, void* pConstSectionObj, void* pTypeSectionObj, void* pVarSectionObj, void* pProcedureDeclSectionObj);
 C_FUNCTION void* adtDelphiLabelDeclSection_create(void* pLabelDeclListObj);
 C_FUNCTION void* adtDelphiLabelDeclList_create(void* pLabelDeclObj);
-C_FUNCTION void* adtDelphiLabelDecl_create(void* pLabelIdObj, const char* pComment);
-C_FUNCTION void* adtDelphiConstSection_create(void* pConstantDeclListObj, const char* pComment);
+C_FUNCTION void* adtDelphiLabelDecl_create(void* pLabelIdObj);
+C_FUNCTION void* adtDelphiConstSection_create(void* pConstantDeclListObj);
 C_FUNCTION void* adtDelphiConstantDeclList_create(void* pConstantDeclObj);
 C_FUNCTION void* adtDelphiConstantDecl_create(void* pIdentObj, void* pTypeIdObj, void* pUnitIdObj, void* pConstExprObj, void* pTypedConstantObj);
-C_FUNCTION void* adtDelphiTypeSection_create(void* pTypeDeclListObj, const char* pComment);
+C_FUNCTION void* adtDelphiTypeSection_create(void* pTypeDeclListObj, int nStartLineNumber);
 C_FUNCTION void* adtDelphiTypeDeclList_create(void* pTypeDeclObj);
 C_FUNCTION void* adtDelphiTypeDecl_create(void* pIdentObj, void* pTypeObj, void* pRestrictedTypeObj);
 C_FUNCTION void* adtDelphiTypedConstant_create(void* pConstExprObj, void* pArrayConstantObj, void* pRecordConstantObj);
@@ -100,7 +102,7 @@ C_FUNCTION void* adtDelphiSetType_create(void* pOrdinalTypeObj);
 C_FUNCTION void* adtDelphiFileType_create(void* pUnitIdObj, void* pTypeIdObj);
 C_FUNCTION void* adtDelphiPointerType_create(void* pUnitIdObj, void* pTypeIdObj);
 C_FUNCTION void* adtDelphiProcedureType_create(void* pProcedureHeadingObj, void* pFunctionHeadingObj, int bOfObject);
-C_FUNCTION void* adtDelphiVarSection_create(void* pVarDeclListObj, const char* pComment);
+C_FUNCTION void* adtDelphiVarSection_create(void* pVarDeclListObj);
 C_FUNCTION void* adtDelphiVarDeclList_create(void* pVarDeclObj);
 C_FUNCTION void* adtDelphiVarDecl_create(void* pIdentListObj, void* pTypeObj, void* pIdentObj, void* pConstExprObj, int nAbsolute);
 C_FUNCTION void* adtDelphiExpression_create(void* pExpressionRelOpListObj);
@@ -123,12 +125,12 @@ C_FUNCTION void* adtDelphiSetConstructor_create(void* pSetElementListObj);
 C_FUNCTION void* adtDelphiSetElementList_create(void* pSetElementObj);
 C_FUNCTION void* adtDelphiSetElement_create(void* pExpressionObj, void* pEndExpressionObj);
 C_FUNCTION void* adtDelphiExprList_create(void* pExprObj);
-C_FUNCTION void* adtDelphiStatement_create(void* pLabelIdObj, void* pExitStatementObj, void* pSimpleStatementObj, void* pCompoundStmtObj, void* pIfStmtObj, void* pCaseStmtObj, void* pRepeatStmtObj, void* pWhileStmtObj, void* pForStmtObj, void* pWithStmtObj, const char* pComment);
+C_FUNCTION void* adtDelphiStatement_create(void* pLabelIdObj, void* pExitStatementObj, void* pSimpleStatementObj, void* pCompoundStmtObj, void* pIfStmtObj, void* pCaseStmtObj, void* pRepeatStmtObj, void* pWhileStmtObj, void* pForStmtObj, void* pWithStmtObj);
 C_FUNCTION void* adtDelphiStmtList_create(void* pStmtObj);
 C_FUNCTION void* adtDelphiExitStatement_create(int nWithParenthesis);
 C_FUNCTION void* adtDelphiSimpleStatement_create(void* pDesignatorObj, void* pExpressionObj, void* pSizeofTypeObj, void* pIdentObj, void* pExprListObj, void* pLabelIdObj, void* pCastExpressionObj, int nInherited, int nOpType);
 C_FUNCTION void* adtDelphiSizeofType_create(void* pOrdIdentObj, void* pRealTypeObj, void* pVariantTypeObj, void* pDesignatorObj);
-C_FUNCTION void* adtDelphiCompoundStmt_create(void* pStmtListObj);
+C_FUNCTION void* adtDelphiCompoundStmt_create(void* pStmtListObj, int nNoEnd);
 C_FUNCTION void* adtDelphiIfStmt_create(void* pExpressionObj, void* pThenStatementObj, void* pElseStatementObj);
 C_FUNCTION void* adtDelphiCaseStmt_create(void* pExpressionObj, void* pCaseSelectorListObj, void* pStmtListObj);
 C_FUNCTION void* adtDelphiCaseSelectorList_create(void* pCaseSelectorObj);
@@ -142,8 +144,8 @@ C_FUNCTION void* adtDelphiWithStmt_create(void* pDesignatorObj, void* pStatement
 C_FUNCTION void* adtDelphiProcedureDeclSection_create(void* pProcedureDeclListObj);
 C_FUNCTION void* adtDelphiProcedureDeclList_create(void* pProcedureDeclObj);
 C_FUNCTION void* adtDelphiProcedureDecl_create(void* pProcedureHeadingObj, void* pFunctionHeadingObj, void* pConstructorHeadingObj, void* pDestructorHeadingObj, void* pDirectiveListObj, void* pBlockObj);
-C_FUNCTION void* adtDelphiFunctionHeading_create(void* pClassIdentObj, void* pFunctionIdentObj, void* pFormalParametersObj, void* pSimpleTypeObj, void* pTypeIdObj, const char* pComment);
-C_FUNCTION void* adtDelphiProcedureHeading_create(void* pClassIdentObj, void* pProcedureIdentObj, void* pFormalParametersObj, const char* pComment);
+C_FUNCTION void* adtDelphiFunctionHeading_create(void* pClassIdentObj, void* pFunctionIdentObj, void* pFormalParametersObj, void* pSimpleTypeObj, void* pTypeIdObj);
+C_FUNCTION void* adtDelphiProcedureHeading_create(void* pClassIdentObj, void* pProcedureIdentObj, void* pFormalParametersObj);
 C_FUNCTION void* adtDelphiFormalParameters_create(void* pFormalParamListObj);
 C_FUNCTION void* adtDelphiFormalParamList_create(void* pFormalParamObj);
 C_FUNCTION void* adtDelphiFormalParam_create(int nType, void* pParameterObj);
@@ -153,11 +155,11 @@ C_FUNCTION void* adtDelphiDirectiveList_create(void* pDirectiveObj);
 C_FUNCTION void* adtDelphiObjectType_create(void* pUnitIdObj, void* pIdentObj, void* pObjFieldListObj, void* pMethodListObj);
 C_FUNCTION void* adtDelphiMethodList_create(void* pMethodObj);
 C_FUNCTION void* adtDelphiMethod_create(void* pProcedureHeadingObj, void* pFunctionHeadingObj, void* pConstructorHeadingObj, void* pDestructorHeadingObj, void* pDirectiveListObj);
-C_FUNCTION void* adtDelphiConstructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj, const char* pComment);
-C_FUNCTION void* adtDelphiDestructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj, const char* pComment);
+C_FUNCTION void* adtDelphiConstructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj);
+C_FUNCTION void* adtDelphiDestructorHeading_create(void* pClassIdentObj, void* pMethodIdentObj, void* pFormalParametersObj);
 C_FUNCTION void* adtDelphiObjFieldList_create(void* pObjFieldObj);
 C_FUNCTION void* adtDelphiObjField_create(void* pIdentListObj, void* pTypeObj);
-C_FUNCTION void* adtDelphiInitSection_create(void* pStmtListObj, void* pFinalStmtListObj, int bHasInit, const char* pComment);
+C_FUNCTION void* adtDelphiInitSection_create(void* pStmtListObj, void* pFinalStmtListObj, int bHasInit);
 C_FUNCTION void* adtDelphiClassType_create(void* pIdentListObj, void* pClassFieldListObj, void* pClassMethodListObj, void* pClassPropertyListObj);
 C_FUNCTION void* adtDelphiClassFieldList_create(void* pClassFieldObj);
 C_FUNCTION void* adtDelphiClassField_create(int nVisibility, void* pObjFieldObj);
@@ -169,7 +171,7 @@ C_FUNCTION void* adtDelphiProperty_create(void* pClassIdentObj, void* pIdentObj,
 C_FUNCTION void* adtDelphiPropertyParameterList_create(void* pPropertyParameterObj);
 C_FUNCTION void* adtDelphiPropertyParameter_create(void* pIdentListObj, void* pUnitIdObj, void* pTypeIdObj);
 C_FUNCTION void* adtDelphiPropertySpecifiers_create(int nType, void* pIdentObj, void* pConstExprObj, void* pUnitIdObj, void* pTypeIdObj);
-C_FUNCTION void* adtDelphiInterfaceType_create(void* pIdentListObj, void* pClassMethodListObj, void* pClassPropertyListObj, const char* pComment);
+C_FUNCTION void* adtDelphiInterfaceType_create(void* pIdentListObj, void* pClassMethodListObj, void* pClassPropertyListObj);
 C_FUNCTION void* adtDelphiIdentList_create(void* pIdentObj);
 C_FUNCTION void* adtDelphiIdent_create(const char* pIdentifier);
 C_FUNCTION void* adtDelphiTypeId_create(const char* pTypeId);
@@ -192,6 +194,7 @@ C_FUNCTION void* adtDelphiConstExpr_create(const char* pConstExpr, int nType);
 //  Forward declarations
 //  ----------------------------------------------------------------------------
 class AdtDelphiGoal;
+class AdtDelphiModuleEnd;
 class AdtDelphiProgram;
 class AdtDelphiPackage;
 class AdtDelphiLibrary;
@@ -425,6 +428,10 @@ public:
   AdtDelphiBase(const AdtDelphiBase& rCopy);
   virtual ~AdtDelphiBase();
 
+  static void                   rootBindComments(AdtCommon* pCompilerBase);
+
+  static bool                   qualifiedName(string& rName, const char* pPrefix);
+
   static void                   addFortranTypeMap(const string& rDelphiType,
                                                   const string& rFortranType,
                                                   const string& rFortranSize);
@@ -501,6 +508,8 @@ private:
   AdtParserPtrByStringMap       LocalConstMap;
   AdtParserPtrByStringMap       ImplementedProcedureMap;
 
+  static AdtParserPtrList       BlackBoxCommentsList;
+
 protected:
   bool                          findConst(const char* pName, const AdtParser*& pExternal) const;
   bool                          findVar(const char* pName, const AdtParser*& pExternal) const;
@@ -542,6 +551,8 @@ public:
   AdtDelphiGoal(const AdtDelphiGoal& rCopy);
   virtual ~AdtDelphiGoal();
 
+  static void                   addBlackBoxCommentsObject(AdtParser* pObj);
+
   bool                          writeClassPrefix(AdtFile& pOutFile, const char* pFunctionName) const;
 
   virtual void                  enumerateMethodNames(AdtStringList& rMethodList) const;
@@ -551,7 +562,8 @@ public:
 
   virtual bool                  buildBlackBoxFile(const char* pBlackBoxFileName,
                                                   AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap);
+                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                                  double dVersionNumber);
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rGoalList,
@@ -578,6 +590,7 @@ public:
   virtual bool                  extractClassConstructors(AdtStringList& rConstructorList,
                                                          const char* pClassName,
                                                          const char* pParentClassName,
+                                                         const char* pPathPrefix,
                                                          AdtSourceFileType nAsFileType) const;
 
   bool                          isProcedure(const char* pProcedureName) const;
@@ -593,6 +606,25 @@ public:
 
 
 //  ----------------------------------------------------------------------------
+//  AdtDelphiModuleEnd class
+//  ----------------------------------------------------------------------------
+//  This is an artifical construct to give comments at the end of a module def
+//  something to bind to.
+//  ----------------------------------------------------------------------------
+class AdtDelphiModuleEnd : public AdtDelphiBase
+{
+public:
+  AdtDelphiModuleEnd();
+  AdtDelphiModuleEnd(const AdtDelphiModuleEnd& rCopy);
+  virtual ~AdtDelphiModuleEnd();
+
+  virtual AdtFile&              writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
+
+  declType;
+};
+
+
+//  ----------------------------------------------------------------------------
 //  Program class
 //  ----------------------------------------------------------------------------
 class AdtDelphiProgram : public AdtDelphiBase
@@ -602,13 +634,14 @@ private:
   AdtDelphiIdentList*   IdentifierList;
   AdtDelphiUsesClause*  UsesClause;
   AdtDelphiBlock*       Block;
+  AdtDelphiModuleEnd*   ModuleEnd;
 
 public:
   AdtDelphiProgram(AdtParser* pIdentObj,
                    AdtParser* pIdentListObj,
                    AdtParser* pUsesClauseObj,
                    AdtParser* pBlockObj,
-                   const char* pComment);
+                   AdtParser* pModuleEndObj);
 
   AdtDelphiProgram(const AdtDelphiProgram& rCopy);
   virtual ~AdtDelphiProgram();
@@ -629,13 +662,15 @@ private:
   AdtDelphiInterfaceSection*      InterfaceSection;
   AdtDelphiImplementationSection* ImplementationSection;
   AdtDelphiInitSection*           InitSection;
+  AdtDelphiModuleEnd*             ModuleEnd;
 
 public:
   AdtDelphiUnit(AdtParser* pIdentObj,
                 AdtParser* pInterfaceSectionObj,
                 AdtParser* pImplementationSectionObj,
                 AdtParser* pInitSectionObj,
-                const char* pComment);
+                AdtParser* pModuleEndObj,
+                int nStartLineNumber);
 
   AdtDelphiUnit(const AdtDelphiUnit& rCopy);
   virtual ~AdtDelphiUnit();
@@ -655,12 +690,13 @@ private:
   AdtDelphiIdent*     Identifier;
   AdtDelphiIdentList* RequiresIdentList;
   AdtDelphiIdentList* ContainsIdentList;
+  AdtDelphiModuleEnd* ModuleEnd;
 
 public:
   AdtDelphiPackage(AdtParser* pIdentObj,
                    AdtParser* pRequiresIdentListObj,
                    AdtParser* pContainsIdentListObj,
-                   const char* pComment);
+                   AdtParser* pModuleEndObj);
 
   AdtDelphiPackage(const AdtDelphiPackage& rCopy);
   virtual ~AdtDelphiPackage();
@@ -680,12 +716,13 @@ private:
   AdtDelphiIdent*       Identifier;
   AdtDelphiUsesClause*  UsesClause;
   AdtDelphiBlock*       Block;
+  AdtDelphiModuleEnd*   ModuleEnd;
 
 public:
   AdtDelphiLibrary(AdtParser* pIdentObj,
                    AdtParser* pUsesClauseObj,
                    AdtParser* pBlockObj,
-                   const char* pComment);
+                   AdtParser* pModuleEndObj);
 
   AdtDelphiLibrary(const AdtDelphiLibrary& rCopy);
   virtual ~AdtDelphiLibrary();
@@ -741,9 +778,7 @@ private:
   AdtDelphiIdentList* IdentifierList;
 
 public:
-  AdtDelphiUsesClause(AdtParser* pIdentListObj,
-                      const char* pComment);
-
+  AdtDelphiUsesClause(AdtParser* pIdentListObj, int nStartLineNumber);
   AdtDelphiUsesClause(const AdtDelphiUsesClause& rCopy);
   virtual ~AdtDelphiUsesClause();
 
@@ -771,7 +806,7 @@ public:
                             AdtParser* pTypeSectionObj,
                             AdtParser* pVarSectionObj,
                             AdtParser* pExportedHeadingListObj,
-                            const char* pComment);
+                            int nStartLineNumber);
 
   AdtDelphiInterfaceSection(const AdtDelphiInterfaceSection& rCopy);
   virtual ~AdtDelphiInterfaceSection();
@@ -819,8 +854,7 @@ protected:
 public:
   AdtDelphiExportedHeading(AdtParser* pProcedureHeadingObj,
                            AdtParser* pFunctionHeadingObj,
-                           AdtParser* pDirectiveListObj,
-                           const char* pComment);
+                           AdtParser* pDirectiveListObj);
 
   AdtDelphiExportedHeading(const AdtDelphiExportedHeading& rCopy);
   virtual ~AdtDelphiExportedHeading();
@@ -843,7 +877,7 @@ protected:
 public:
   AdtDelphiImplementationSection(AdtParser* pUsesClauseObj,
                                  AdtParser* pDeclSectionObj,
-                                 const char* pComment);
+                                 int nStartLineNumber);
 
   AdtDelphiImplementationSection(const AdtDelphiImplementationSection& rCopy);
   virtual ~AdtDelphiImplementationSection();
@@ -865,8 +899,7 @@ protected:
 
 public:
   AdtDelphiBlock(AdtParser* pDeclSectionObj,
-                 AdtParser* pCompoundStmtObj,
-                 const char* pComment);
+                 AdtParser* pCompoundStmtObj);
 
   AdtDelphiBlock(const AdtDelphiBlock& rCopy);
   virtual ~AdtDelphiBlock();
@@ -895,8 +928,7 @@ public:
                        AdtParser* pConstSectionObj,
                        AdtParser* pTypeSectionObj,
                        AdtParser* pVarSectionObj,
-                       AdtParser* pProcedureDeclSectionObj,
-                       const char* pComment);
+                       AdtParser* pProcedureDeclSectionObj);
 
   AdtDelphiDeclSection(const AdtDelphiDeclSection& rCopy);
   virtual ~AdtDelphiDeclSection();
@@ -960,9 +992,7 @@ protected:
   AdtDelphiLabelId*       LabelId;
 
 public:
-  AdtDelphiLabelDecl(AdtParser* pLabelIdObj,
-                    const char* pComment);
-
+  AdtDelphiLabelDecl(AdtParser* pLabelIdObj);
   AdtDelphiLabelDecl(const AdtDelphiLabelDecl& rCopy);
   virtual ~AdtDelphiLabelDecl();
 
@@ -981,9 +1011,7 @@ protected:
   AdtDelphiConstantDeclList*  ConstantDeclList;
 
 public:
-  AdtDelphiConstSection(AdtParser* pConstantDeclListObj,
-                        const char* pComment);
-
+  AdtDelphiConstSection(AdtParser* pConstantDeclListObj);
   AdtDelphiConstSection(const AdtDelphiConstSection& rCopy);
   virtual ~AdtDelphiConstSection();
 
@@ -1048,6 +1076,8 @@ public:
   AdtDelphiConstantDecl(const AdtDelphiConstantDecl& rCopy);
   virtual ~AdtDelphiConstantDecl();
 
+  void                    addAutomationConstants() const;
+
   virtual AdtFile&        writeFortran(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&        writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
 
@@ -1064,9 +1094,7 @@ protected:
   AdtDelphiTypeDeclList*  TypeDeclList;
 
 public:
-  AdtDelphiTypeSection(AdtParser* pTypeDeclListObj,
-                       const char* pComment);
-
+  AdtDelphiTypeSection(AdtParser* pTypeDeclListObj, int nStartLineNumber);
   AdtDelphiTypeSection(const AdtDelphiTypeSection& rCopy);
   virtual ~AdtDelphiTypeSection();
 
@@ -1142,6 +1170,7 @@ public:
   AdtDelphiTypedConstant(const AdtDelphiTypedConstant& rCopy);
   virtual ~AdtDelphiTypedConstant();
 
+  virtual AdtFile&          writeFortran(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&          writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
 
   declType;
@@ -1457,7 +1486,8 @@ enum  AdtType{AdtType_SHORTINT  = 0,
               AdtType_WIDECHAR  = 9,
               AdtType_LONGWORD  = 10,
               AdtType_PCHAR     = 11,
-              AdtType_POINTER   = 12};
+              AdtType_POINTER   = 12,
+              AdtType_LONGBOOL  = 13};
 
 protected:
   AdtType OrdType;
@@ -1953,9 +1983,7 @@ protected:
   AdtDelphiVarDeclList* VarDeclList;
 
 public:
-  AdtDelphiVarSection(AdtParser* pVarDeclListObj,
-                      const char* pComment);
-
+  AdtDelphiVarSection(AdtParser* pVarDeclListObj);
   AdtDelphiVarSection(const AdtDelphiVarSection& rCopy);
   virtual ~AdtDelphiVarSection();
 
@@ -2658,8 +2686,7 @@ public:
                      AdtParser* pRepeatStmtObj,
                      AdtParser* pWhileStmtObj,
                      AdtParser* pForStmtObj,
-                     AdtParser* pWithStmtObj,
-                     const char* pComment);
+                     AdtParser* pWithStmtObj);
 
   AdtDelphiStatement(const AdtDelphiStatement& rCopy);
   virtual ~AdtDelphiStatement();
@@ -2669,6 +2696,8 @@ public:
   virtual AdtFile&          writeFortran(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&          writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
   virtual bool              hasType(const char* pType) const;
+
+  bool                      isEmpty() const;
 
   declType;
 };
@@ -2696,13 +2725,6 @@ public:
 inline AdtFile& AdtDelphiStmtList::writeFortran(AdtFile& pOutFile, int nMode) const
 {
   return (forAllWriteFortran(pOutFile, nMode, "", true, true));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtFile& AdtDelphiStmtList::writeDelphi(AdtFile& pOutFile, int nMode) const
-{
-  return (forAllWriteDelphi(pOutFile, nMode, ";", true));
 }
 
 
@@ -2804,9 +2826,10 @@ class AdtDelphiCompoundStmt : public AdtDelphiBase
 {
 protected:
   AdtDelphiStmtList*    StmtList;
+  bool                  NoEnd;
 
 public:
-  AdtDelphiCompoundStmt(AdtParser* pStmtListObj);
+  AdtDelphiCompoundStmt(AdtParser* pStmtListObj, bool bNoEnd);
   AdtDelphiCompoundStmt(const AdtDelphiCompoundStmt& rCopy);
   virtual ~AdtDelphiCompoundStmt();
 
@@ -3195,18 +3218,22 @@ protected:
   AdtDelphiTypeId*              TypeId;
   AdtBlackBoxDefinition*        BlackBox;
 
+protected:
+  virtual void                  bindComment(const string* pComment);
+
 public:
   AdtDelphiFunctionHeading(AdtParser* pClassIdentObj,
                            AdtParser* pFunctionIdentObj,
                            AdtParser* pFormalParametersObj,
                            AdtParser* pSimpleTypeObj,
-                           AdtParser* pTypeIdObj,
-                           const char* pComment);
+                           AdtParser* pTypeIdObj);
 
   AdtDelphiFunctionHeading(const AdtDelphiFunctionHeading& rCopy);
   virtual ~AdtDelphiFunctionHeading();
 
   AdtBlackBoxDefinition*        blackBox() const;
+
+  AdtBlackBoxDefinition*        compileBlackBoxDefinition();
 
   virtual AdtFile&              writeFortran(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&              writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
@@ -3233,16 +3260,20 @@ protected:
   AdtDelphiFormalParameters*    FormalParameters;
   AdtBlackBoxDefinition*        BlackBox;
 
+protected:
+  virtual void                  bindComment(const string* pComment);
+
 public:
   AdtDelphiProcedureHeading(AdtParser* pClassIdentObj,
                             AdtParser* pProcedureIdentObj,
-                            AdtParser* pFormalParametersObj,
-                            const char* pComment);
+                            AdtParser* pFormalParametersObj);
 
   AdtDelphiProcedureHeading(const AdtDelphiProcedureHeading& rCopy);
   virtual ~AdtDelphiProcedureHeading();
 
   AdtBlackBoxDefinition*        blackBox() const;
+
+  AdtBlackBoxDefinition*        compileBlackBoxDefinition();
 
   virtual AdtFile&              writeFortran(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&              writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
@@ -3639,8 +3670,7 @@ protected:
 public:
   AdtDelphiConstructorHeading(AdtParser* pClassIdentObj,
                               AdtParser* pMethodIdentObj,
-                              AdtParser* pFormalParametersObj,
-                              const char* pComment);
+                              AdtParser* pFormalParametersObj);
 
   AdtDelphiConstructorHeading(const AdtDelphiConstructorHeading& rCopy);
   virtual ~AdtDelphiConstructorHeading();
@@ -3665,8 +3695,7 @@ protected:
 public:
   AdtDelphiDestructorHeading(AdtParser* pClassIdentObj,
                              AdtParser* pMethodIdentObj,
-                             AdtParser* pFormalParametersObj,
-                             const char* pComment);
+                             AdtParser* pFormalParametersObj);
 
   AdtDelphiDestructorHeading(const AdtDelphiDestructorHeading& rCopy);
   virtual ~AdtDelphiDestructorHeading();
@@ -3749,8 +3778,7 @@ protected:
 public:
   AdtDelphiInitSection(AdtParser* pStmtListObj,
                        AdtParser* pFinalStmtListObj,
-                       bool bHasInit,
-                       const char* pComment);
+                       bool bHasInit);
 
   AdtDelphiInitSection(const AdtDelphiInitSection& rCopy);
   virtual ~AdtDelphiInitSection();
@@ -3784,7 +3812,6 @@ protected:
   AdtParserPtrByStringMap         FieldMap;
   AdtParserPtrByStringMap         MethodMap;
   AdtParserPtrByStringMap         PropertyMap;
-  AdtParserPtrByStringMap         SymbolMap;
 
 protected:
   void                            listAddOjects(AdtParser* pDestList,
@@ -3836,7 +3863,7 @@ public:
   AdtDelphiClassType::SymbolType  defined(const char* pName) const;
 
   void                            findDimensionVars(const AdtParserPtrByStringMap& rVarsMap,
-                                                    AdtParserPtrList& rList) const;
+                                                    AdtParserPtrByStringMap& rDimsMap) const;
 
   bool                            findField(const char* pName, const AdtParser*& pExternal) const;
   bool                            findMethod(const char* pName, const AdtParser*& pExternal) const;
@@ -4164,8 +4191,7 @@ protected:
 public:
   AdtDelphiInterfaceType(AdtParser* pIdentListObj,
                          AdtParser* pClassMethodListObj,
-                         AdtParser* pClassPropertyListObj,
-                         const char* pComment);
+                         AdtParser* pClassPropertyListObj);
 
   AdtDelphiInterfaceType(const AdtDelphiInterfaceType& rCopy);
   virtual ~AdtDelphiInterfaceType();
@@ -4513,6 +4539,8 @@ public:
   AdtFile&                    writeFortranTypeDeclaration(AdtFile& pOutFile,
                                                           const string& rPrefix,
                                                           const AdtDelphiIdent* pIdent) const;
+
+  AdtAutoType                 autoType() const;
 
   virtual AdtFile&            writeCPP(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&            writeFortran(AdtFile& pOutFile, int nMode = 0) const;

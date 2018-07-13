@@ -1,4 +1,4 @@
-static const R_CallMethodDef callMethods[] = 
+static const R_CallMethodDef extMethods[] = 
 {
   {"_OmB.destroy", (DL_FUNC)&OmB_destroy, 1},
   {"_OmB.create", (DL_FUNC)&OmB_create, 7},
@@ -80,20 +80,10 @@ static const R_CallMethodDef callMethods[] =
   {"_OmB.set.nsim", (DL_FUNC)&OmB_set_nsim, 2},
   {"_OmB.get.nsubyears", (DL_FUNC)&OmB_get_nsubyears, 1},
   {"_OmB.set.nsubyears", (DL_FUNC)&OmB_set_nsubyears, 2},
-  {"_OmB.POPDYN_MSY_PAR_DPAR", (DL_FUNC)&OmB_R_POPDYN_MSY_PAR_DPAR, 26},
-  {"_OmB.nt.POPDYN_MSY_PAR_DPAR", (DL_FUNC)&OmB_R_nt_POPDYN_MSY_PAR_DPAR, 26},
-  {"_OmB.POPDYN_NEXT_YEAR_DPAR", (DL_FUNC)&OmB_R_POPDYN_NEXT_YEAR_DPAR, 6},
-  {"_OmB.nt.POPDYN_NEXT_YEAR_DPAR", (DL_FUNC)&OmB_R_nt_POPDYN_NEXT_YEAR_DPAR, 6},
   {"_OmB.popdyn_projection_objective", (DL_FUNC)&OmB_R_popdyn_projection_objective, 30},
   {"_OmB.nt.popdyn_projection_objective", (DL_FUNC)&OmB_R_nt_popdyn_projection_objective, 30},
   {"_OmB.POPDYN_PROJECTION_OBJECTIVE_BPAR", (DL_FUNC)&OmB_R_POPDYN_PROJECTION_OBJECTIVE_BPAR, 35},
   {"_OmB.nt.POPDYN_PROJECTION_OBJECTIVE_BPAR", (DL_FUNC)&OmB_R_nt_POPDYN_PROJECTION_OBJECTIVE_BPAR, 35},
-  {"_OmB.POPDYN_PROJECTION_PAR_BPAR", (DL_FUNC)&OmB_R_POPDYN_PROJECTION_PAR_BPAR, 33},
-  {"_OmB.nt.POPDYN_PROJECTION_PAR_BPAR", (DL_FUNC)&OmB_R_nt_POPDYN_PROJECTION_PAR_BPAR, 33},
-  {"_OmB.POPDYN_YEAR_BPAR", (DL_FUNC)&OmB_R_POPDYN_YEAR_BPAR, 26},
-  {"_OmB.nt.POPDYN_YEAR_BPAR", (DL_FUNC)&OmB_R_nt_POPDYN_YEAR_BPAR, 26},
-  {"_OmB.POPDYN_YEAR_DPAR", (DL_FUNC)&OmB_R_POPDYN_YEAR_DPAR, 26},
-  {"_OmB.nt.POPDYN_YEAR_DPAR", (DL_FUNC)&OmB_R_nt_POPDYN_YEAR_DPAR, 26},
   {"_OmB.get.Recsubyr", (DL_FUNC)&OmB_get_Recsubyr, 2},
   {"_OmB.set.Recsubyr", (DL_FUNC)&OmB_set_Recsubyr, 3},
   {"_OmB.get.nt.Recsubyr", (DL_FUNC)&OmB_get_nt_Recsubyr, 2},
@@ -123,14 +113,14 @@ static const R_CallMethodDef callMethods[] =
 EXPORT void R_init_Mseom(DllInfo* pInfo)
 {
   R_SetArrayClass(ArrayClass_Oarray);
-  R_registerRoutines(pInfo, 0, callMethods, 0, 0);
+  R_registerRoutines(pInfo, 0, 0, 0, extMethods);
 }
 
 
 EXPORT void R_init_libMseom(DllInfo* pInfo)
 {
   R_SetArrayClass(ArrayClass_Oarray);
-  R_registerRoutines(pInfo, 0, callMethods, 0, 0);
+  R_registerRoutines(pInfo, 0, 0, 0, extMethods);
 }
 
 

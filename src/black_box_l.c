@@ -352,8 +352,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 52
-#define YY_END_OF_BUFFER 53
+#define YY_NUM_RULES 55
+#define YY_END_OF_BUFFER 56
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -361,31 +361,32 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[208] =
+static const flex_int16_t yy_accept[221] =
     {   0,
-        0,    0,   53,   51,   49,   50,   51,   37,   38,   41,
-       39,   36,   40,   45,   44,   47,   34,   35,   46,   46,
-       46,   46,   46,   43,   46,   46,   46,   46,   46,   46,
-       46,   46,   46,    1,    2,    0,    8,   42,    4,   48,
-        3,    5,   48,   47,   46,   46,    0,   46,   46,   46,
-       46,   46,   46,   46,   46,   46,   33,   12,   46,   46,
-       46,    0,    0,    0,   48,    0,    7,   48,   46,   32,
-       46,   46,   46,   46,   46,   46,   46,   15,   46,   46,
-       13,   46,   46,   46,    0,    6,    0,   48,   46,   46,
-       46,   46,   46,   46,   46,   31,   46,   46,   46,   16,
+        0,    0,    0,    0,   56,   54,   53,   54,   54,    1,
+        2,    3,    4,   52,   50,   51,   52,   37,   38,   41,
+       39,   36,   40,   45,   44,   48,   34,   35,    1,    2,
+       46,   46,   46,   46,   46,   43,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,    3,    4,    6,    5,    7,
+        0,    8,   42,   49,   49,   48,    0,   46,    0,   46,
+        0,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       33,   12,   46,   46,   46,    0,   49,   49,   47,    0,
+       46,   32,   46,   46,   46,   46,   46,   46,   46,   15,
+       46,   46,   13,   46,   46,   46,    0,   49,   47,   47,
 
-       46,   46,   46,   46,   46,   14,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   31,   46,   46,
+       46,   16,   46,   47,   46,   46,   46,   46,   14,   46,
        46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
-       46,   46,   46,   46,   46,   11,   46,   46,   46,   46,
-       20,   46,   18,   46,   17,   46,   46,   26,   46,   46,
-       46,   46,   46,   46,   46,    9,   46,   46,   46,   46,
-       46,   46,   46,   46,   19,   46,   46,   10,   46,   46,
-       46,   46,   46,   46,   46,   46,   46,   21,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   11,   46,
+       46,   46,   46,   20,   46,   18,   46,   17,   46,   46,
+       26,   46,   46,   46,   46,   46,   46,   46,    9,   46,
+       46,   46,   46,   46,   46,   46,   46,   19,   46,   46,
+       10,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       21,   46,   46,   46,   46,   46,   46,   46,   46,   46,
        46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
-       46,   46,   46,   46,   46,   46,   46,   46,   25,   46,
-       23,   22,   46,   46,   27,   46,   46,   46,   46,   30,
 
-       24,   46,   46,   29,   46,   28,    0
+       46,   25,   46,   23,   22,   46,   46,   27,   46,   46,
+       46,   46,   30,   24,   46,   46,   29,   46,   28,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -393,17 +394,17 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    2,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    4,    1,    1,    5,    1,    1,    1,    1,    6,
-        7,    8,    9,   10,   11,   12,   13,   14,   14,   14,
-       14,   14,   14,   14,   14,   14,   14,   15,   16,    1,
-        1,    1,    1,    1,   17,   18,   19,   20,   21,   22,
-       23,   23,   23,   23,   24,   25,   23,   26,   27,   23,
-       23,   28,   23,   29,   23,   23,   30,   31,   23,   23,
-        1,    1,    1,   32,   33,    1,   34,   35,   36,   37,
+        1,    2,    1,    1,    4,    1,    1,    1,    1,    5,
+        6,    7,    8,    9,   10,   11,   12,   13,   13,   13,
+       13,   13,   13,   13,   13,   13,   13,   14,   15,   16,
+        1,   17,    1,    1,   18,   19,   20,   21,   22,   23,
+       24,   24,   24,   24,   25,   26,   24,   27,   28,   24,
+       24,   29,   24,   30,   24,   24,   31,   32,   24,   24,
+        1,    1,    1,   33,   34,    1,   35,   36,   37,   38,
 
-       38,   39,   40,   41,   42,   23,   23,   43,   44,   45,
-       46,   47,   23,   48,   49,   50,   51,   23,   23,   52,
-       53,   23,   54,    1,   55,    1,    1,    1,    1,    1,
+       39,   40,   41,   42,   43,   24,   24,   44,   45,   46,
+       47,   48,   24,   49,   50,   51,   52,   24,   24,   53,
+       54,   24,   55,    1,   56,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -420,146 +421,248 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[56] =
+static const YY_CHAR yy_meta[57] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    2,    1,    1,    2,    2,    2,    2,
-        2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
-        2,    1,    2,    2,    2,    2,    2,    2,    2,    2,
-        2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
-        2,    2,    2,    1,    1
+        2,    1,    3,    4,    1,    1,    1,    5,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
+        5,    5,    1,    5,    5,    5,    5,    5,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
+        5,    5,    5,    5,    1,    1
     } ;
 
-static const flex_int16_t yy_base[210] =
+static const flex_int16_t yy_base[228] =
     {   0,
-        0,    0,  264,  265,  265,  265,  260,  265,  265,   48,
-      265,  265,  265,  248,   49,   46,  265,  265,    0,  236,
-      247,  213,  220,  265,   21,   22,  219,  211,  204,   27,
-      203,  205,  214,   62,  265,  248,  265,  265,  265,   55,
-      265,   67,   61,   67,    0,  233,  229,  198,  213,  206,
-      199,  210,  199,  195,  204,  195,    0,  189,  188,  191,
-       36,   80,   84,   78,  265,   86,  225,   87,  216,  265,
-      206,  196,  190,  188,  182,  182,  179,    0,  191,  188,
-        0,  189,  181,  172,   61,  265,  208,   88,  197,  182,
-       77,  174,  180,  183,  173,    0,  165,  174,  175,  179,
+        0,    2,   58,    0,  160,  713,  713,  147,    1,  713,
+      713,  713,  713,  713,  713,  713,  151,  713,  713,    3,
+      713,  713,  713,  136,   13,   10,  713,  713,  713,  713,
+       13,   15,   19,  104,  105,  713,  106,  110,  111,  112,
+      116,  117,  118,  122,  123,  713,  713,  713,  713,  713,
+      145,  713,  713,  143,  151,   21,    0,   24,  133,   25,
+      120,  124,  132,  165,  167,  174,  175,  182,  183,  187,
+       26,  188,  189,  194,  193,   34,  713,  209,  129,    0,
+       34,  713,  205,  199,  201,  128,  212,  231,  213,   35,
+      236,  241,   39,  240,  245,  246,   39,  252,   40,   14,
 
-      168,  192,  175,  162,  166,    0,  172,  169,  166,  161,
-      164,  164,  166,  149,  171,  160,  146,  157,  149,  143,
-      140,  145,  142,  138,  140,    0,  156,   85,  156,  140,
-      151,  145,  149,  136,  147,  131,  130,    0,  131,  135,
-      127,  144,  139,  124,  137,    0,  136,  131,  134,  117,
-      128,  123,  116,  115,  129,  113,  112,    0,  106,  128,
-      112,  106,  113,  106,  119,  104,  103,    0,  102,  119,
-       98,   97,  112,   97,  110,  109,  100,   90,   99,   86,
-       82,   86,   80,   79,   79,   86,   79,   85,    0,   88,
-        0,    0,   71,   70,    0,   74,   65,   79,   65,    0,
+      256,  255,  257,  271,  272,  277,  279,  286,  288,  290,
+      294,  292,  296,    8,  302,  308,  304,  313,  314,  318,
+      323,  324,  330,  331,  336,  343,  335,  347,  345,  351,
+      353,  355,  357,  365,  366,  370,  371,  376,  377,  382,
+      401,  386,  384,  392,  393,  410,  422,  423,  424,  428,
+      429,  434,  436,  435,  440,  441,  442,  447,  448,  452,
+      453,  458,  469,  474,  475,  483,  484,  485,  489,  490,
+      491,  495,  496,  497,  501,  503,  510,  512,  511,  517,
+      523,  530,  531,  537,  539,  543,  544,  550,  554,  556,
+      558,  562,  560,  566,  570,  572,  580,  581,  586,  591,
 
-        0,   62,   67,    0,   51,    0,  265,  139,   72
+      592,  598,  603,  599,  604,  610,  611,  616,  622,  628,
+      630,  629,  634,  635,  639,  640,  641,  645,  646,  713,
+      691,  696,  700,    6,  704,    1,  707
     } ;
 
-static const flex_int16_t yy_def[210] =
+static const flex_int16_t yy_def[228] =
     {   0,
-      207,    1,  207,  207,  207,  207,  208,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  209,  209,
-      209,  209,  209,  207,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  207,  207,  208,  207,  207,  207,  207,
-      207,  207,  207,  207,  209,  209,  207,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  207,  207,  207,  207,  207,  207,  207,  209,  207,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  207,  207,  207,  207,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
+      221,  221,  220,    3,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  222,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      223,  223,  223,  223,  223,  220,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  220,  220,  220,  220,  220,
+      222,  220,  220,  220,  220,  220,  224,  223,  220,  223,
+      220,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  220,  220,  220,  225,  226,
+      223,  220,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  220,  220,  225,  227,
 
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
-      209,  209,  209,  209,  209,  209,  209,  209,  209,  209,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  227,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
 
-      209,  209,  209,  209,  209,  209,    0,  207,  207
+      223,  223,  223,  223,  223,  223,  223,  223,  223,  223,
+      223,  223,  223,  223,  223,  223,  223,  223,  223,    0,
+      220,  220,  220,  220,  220,  220,  220
     } ;
 
-static const flex_int16_t yy_nxt[321] =
+static const flex_int16_t yy_nxt[770] =
     {   0,
-        4,    5,    6,    5,    7,    8,    9,   10,   11,   12,
-       13,   14,   15,   16,   17,   18,   19,   20,   19,   21,
-       19,   19,   19,   19,   19,   22,   19,   23,   19,   19,
-       19,   24,   19,   19,   25,   26,   27,   28,   29,   19,
-       19,   30,   19,   19,   19,   31,   32,   33,   19,   19,
-       19,   19,   19,   34,   35,   38,   41,   43,   50,   44,
-       39,   42,   52,   57,   85,   62,   51,   53,   40,   83,
-       66,   58,   63,   45,   68,   64,   65,   67,   43,   65,
-       44,   64,   65,   62,   84,   65,   87,   85,   87,   66,
-       63,   88,   64,   65,   63,  206,   67,   65,   64,   65,
+      220,  220,    7,  220,    7,  100,    8,   49,    8,   53,
+       79,    9,   50,    9,   48,   10,   11,   10,   11,   49,
+       55,   59,   56,   57,   50,   57,   59,   59,   59,   57,
+       61,   55,   59,   56,   57,   57,   57,   59,   59,   59,
+       60,   97,   81,   97,   57,   57,   98,   59,   59,   57,
+       57,   98,   59,  101,   12,   13,   12,   13,   14,   15,
+       16,   17,   18,   19,   20,   21,   22,   23,   24,   25,
+       26,   27,   28,   29,   30,   31,   32,   31,   33,   31,
+       31,   31,   31,   31,   34,   31,   35,   31,   31,   31,
+       36,   31,   31,   37,   38,   39,   40,   41,   31,   31,
 
-       68,   88,  104,   65,  205,  105,  204,   64,   65,   65,
-      139,   65,   65,  140,  203,   86,  202,  201,  200,  199,
-      198,  197,  196,  195,   64,   65,   65,  194,  193,   65,
-       65,  192,  191,  190,  189,  188,  187,  186,   86,   36,
-       36,  185,  184,  183,  182,  181,  180,  179,  178,  177,
-      176,  175,  174,  173,  172,  171,  170,  169,  168,  167,
-      166,  165,  164,  163,  162,  161,  160,  159,  158,  157,
-      156,  155,  154,  153,  152,  151,  150,  149,  148,  147,
-      146,  145,  144,  143,  142,  141,  138,  137,  136,  135,
-      134,  133,  132,  131,  130,  129,  128,  127,  126,  125,
+       42,   31,   31,   31,   43,   44,   45,   31,   31,   31,
+       31,   31,   46,   47,   57,   57,   57,   59,   59,   59,
+       57,   57,   57,   59,   59,   59,   57,   57,   57,   59,
+       59,   59,   57,   57,   57,   59,   59,   59,   57,   57,
+       82,   59,   57,   63,   64,   59,   80,   52,   54,   68,
+       62,   66,   65,   52,   71,   54,   67,   69,   48,  220,
+      220,   75,   72,   78,   76,   77,   84,   70,   77,   73,
+       74,  105,   76,   77,   83,   57,   77,   57,   59,  220,
+       59,   76,   77,  220,   57,   57,   77,   59,   59,   76,
+       77,  220,   57,   57,   77,   59,   59,   57,   57,   57,
 
-      124,  123,  122,  121,  120,  119,  118,  117,  116,  115,
-      114,  113,  112,  111,  110,  109,  108,  107,  106,  103,
-      102,   88,  101,  100,   99,   98,   97,   96,   95,   94,
-       93,   92,   91,   90,   89,   67,   82,   81,   80,   79,
-       78,   77,   76,   75,   74,   73,   72,   71,   70,   69,
-       37,   61,   60,   59,   56,   55,   54,   49,   48,   47,
-       46,   40,   37,  207,    3,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
+       59,   59,   59,   57,   57,   85,   59,   59,   87,   57,
+      220,   57,   59,   86,   59,   57,  220,  220,   59,   88,
+       90,   78,   57,   57,  220,   59,   59,   95,  220,   89,
+       76,   77,   91,  102,   77,  220,  103,  220,   92,   93,
+       94,   57,   96,  104,   59,  220,   57,   76,   77,   59,
+       57,   57,   77,   59,   59,   57,   57,  220,   59,   59,
+      106,  220,  108,  220,   98,   57,   57,   57,   59,   59,
+       59,  220,  109,  220,   77,  220,  111,   77,  107,  110,
+      115,   57,   57,  117,   59,   59,  118,   57,  112,   57,
+       59,   77,   59,  116,  220,   77,   57,  113,   57,   59,
 
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207
+       57,   59,   57,   59,   57,   59,   57,   59,  220,   59,
+      120,  121,   57,  220,   57,   59,  119,   59,   57,  220,
+      128,   59,  122,   57,   57,  126,   59,   59,   57,  220,
+      124,   59,  125,   57,   57,  220,   59,   59,  123,  127,
+       57,   57,  129,   59,   59,   57,   57,  220,   59,   59,
+      130,  220,  132,   57,  131,   57,   59,   57,   59,  133,
+       59,   57,  134,   57,   59,   57,   59,   57,   59,  136,
+       59,  220,  135,  137,  140,   57,   57,  138,   59,   59,
+       57,   57,  141,   59,   59,  139,   57,   57,  220,   59,
+       59,  143,   57,  220,   57,   59,   57,   59,  220,   59,
+
+      144,  142,   57,   57,  220,   59,   59,  145,  220,  220,
+      220,   57,  147,  151,   59,  220,  154,  146,  148,  220,
+       57,  220,  149,   59,  150,  156,  220,  152,  220,  155,
+      153,  157,   57,   57,   57,   59,   59,   59,   57,   57,
+      220,   59,   59,  158,   57,   57,   57,   59,   59,   59,
+       57,   57,   57,   59,   59,   59,  160,   57,   57,  220,
+       59,   59,   57,   57,  220,   59,   59,  159,   57,  220,
+      166,   59,  161,  220,  220,  167,  162,  164,  220,   57,
+      163,  169,   59,  165,   57,   57,  170,   59,   59,  220,
+      168,  171,  172,   57,   57,   57,   59,   59,   59,   57,
+
+       57,   57,   59,   59,   59,   57,   57,   57,   59,   59,
+       59,   57,  174,   57,   59,  220,   59,  175,  178,  173,
+       57,   57,   57,   59,   59,   59,  182,   57,  220,  220,
+       59,  176,  177,   57,  220,  220,   59,  179,  180,  220,
+       57,   57,  183,   59,   59,  185,  187,   57,  181,   57,
+       59,  184,   59,   57,   57,  220,   59,   59,  186,  188,
+       57,  191,  220,   59,   57,  189,   57,   59,   57,   59,
+       57,   59,   57,   59,  220,   59,   57,  194,  190,   59,
+       57,  220,   57,   59,  196,   59,  220,  192,  197,  193,
+       57,   57,  195,   59,   59,  220,   57,  220,  198,   59,
+
+      200,   57,   57,  220,   59,   59,  199,  220,   57,   57,
+      201,   59,   59,   57,   57,  220,   59,   59,  203,  202,
+       57,   57,  220,   59,   59,  204,   57,  220,  207,   59,
+      209,  206,   57,  205,  220,   59,  208,  210,   57,   57,
+       57,   59,   59,   59,   57,   57,  220,   59,   59,   57,
+       57,   57,   59,   59,   59,   57,   57,  220,   59,   59,
+      211,  212,  220,  220,  220,  220,  220,  213,  215,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  218,  216,
+      220,  214,  220,  220,  217,  220,  220,  220,  220,  220,
+      219,    6,    6,    6,    6,    6,   51,   51,   51,   51,
+
+       51,   58,   58,   58,   58,   99,   99,  220,   99,  114,
+      114,  114,    5,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220
     } ;
 
-static const flex_int16_t yy_chk[321] =
+static const flex_int16_t yy_chk[770] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,   10,   15,   16,   25,   16,
-       10,   15,   26,   30,   85,   34,   25,   26,   40,   61,
-       42,   30,   34,  209,   43,   40,   40,   42,   44,   40,
-       44,   43,   43,   62,   61,   43,   64,   63,   64,   66,
-       62,   64,   40,   40,   63,  205,   66,   40,   43,   43,
+        0,    0,    1,    0,    2,  226,    1,    9,    2,   20,
+      224,    1,    9,    2,   20,    1,    1,    2,    2,   25,
+       26,  114,   26,   31,   25,   32,   31,  100,   32,   33,
+       33,   56,   33,   56,   58,   60,   71,   58,   60,   71,
+       32,   76,   60,   76,   81,   90,   76,   81,   90,   93,
+       99,   97,   93,   81,    1,    1,    2,    2,    3,    3,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
 
-       68,   88,   91,   43,  203,   91,  202,   68,   68,   88,
-      128,   68,   88,  128,  199,   85,  198,  197,  196,  194,
-      193,  190,  188,  187,   68,   68,   88,  186,  185,   68,
-       88,  184,  183,  182,  181,  180,  179,  178,   63,  208,
-      208,  177,  176,  175,  174,  173,  172,  171,  170,  169,
-      167,  166,  165,  164,  163,  162,  161,  160,  159,  157,
-      156,  155,  154,  153,  152,  151,  150,  149,  148,  147,
-      145,  144,  143,  142,  141,  140,  139,  137,  136,  135,
-      134,  133,  132,  131,  130,  129,  127,  125,  124,  123,
-      122,  121,  120,  119,  118,  117,  116,  115,  114,  113,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
+        3,    3,    3,    3,   34,   35,   37,   34,   35,   37,
+       38,   39,   40,   38,   39,   40,   41,   42,   43,   41,
+       42,   43,   44,   45,   62,   44,   45,   62,   86,   79,
+       61,   86,   63,   35,   37,   63,   59,   51,   24,   39,
+       34,   38,   37,   17,   42,   54,   38,   40,    8,    5,
+        0,   45,   42,   55,   54,   54,   63,   41,   54,   43,
+       44,   86,   55,   55,   62,   64,   55,   65,   64,    0,
+       65,   54,   54,    0,   66,   67,   54,   66,   67,   55,
+       55,    0,   68,   69,   55,   68,   69,   70,   72,   73,
 
-      112,  111,  110,  109,  108,  107,  105,  104,  103,  102,
-      101,  100,   99,   98,   97,   95,   94,   93,   92,   90,
-       89,   87,   84,   83,   82,   80,   79,   77,   76,   75,
-       74,   73,   72,   71,   69,   67,   60,   59,   58,   56,
-       55,   54,   53,   52,   51,   50,   49,   48,   47,   46,
-       36,   33,   32,   31,   29,   28,   27,   23,   22,   21,
-       20,   14,    7,    3,  207,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
+       70,   72,   73,   75,   74,   64,   75,   74,   66,   84,
+        0,   85,   84,   65,   85,   83,    0,    0,   83,   67,
+       69,   78,   87,   89,    0,   87,   89,   75,    0,   68,
+       78,   78,   70,   83,   78,    0,   84,    0,   72,   73,
+       74,   88,   75,   85,   88,    0,   91,   78,   78,   91,
+       94,   92,   78,   94,   92,   95,   96,    0,   95,   96,
+       87,    0,   89,    0,   98,  102,  101,  103,  102,  101,
+      103,    0,   91,    0,   98,    0,   94,   98,   88,   92,
+      101,  104,  105,  103,  104,  105,  103,  106,   95,  107,
+      106,   98,  107,  102,    0,   98,  108,   96,  109,  108,
 
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207,
-      207,  207,  207,  207,  207,  207,  207,  207,  207,  207
+      110,  109,  112,  110,  111,  112,  113,  111,    0,  113,
+      105,  106,  115,    0,  117,  115,  104,  117,  116,    0,
+      115,  116,  107,  118,  119,  112,  118,  119,  120,    0,
+      110,  120,  111,  121,  122,    0,  121,  122,  109,  113,
+      123,  124,  116,  123,  124,  127,  125,    0,  127,  125,
+      117,    0,  120,  126,  118,  129,  126,  128,  129,  121,
+      128,  130,  122,  131,  130,  132,  131,  133,  132,  124,
+      133,    0,  123,  125,  128,  134,  135,  126,  134,  135,
+      136,  137,  129,  136,  137,  127,  138,  139,    0,  138,
+      139,  131,  140,    0,  143,  140,  142,  143,    0,  142,
+
+      132,  130,  144,  145,    0,  144,  145,  133,    0,    0,
+        0,  141,  135,  140,  141,    0,  142,  134,  136,    0,
+      146,    0,  137,  146,  138,  144,    0,  141,    0,  143,
+      141,  145,  147,  148,  149,  147,  148,  149,  150,  151,
+        0,  150,  151,  146,  152,  154,  153,  152,  154,  153,
+      155,  156,  157,  155,  156,  157,  148,  158,  159,    0,
+      158,  159,  160,  161,    0,  160,  161,  147,  162,    0,
+      155,  162,  149,    0,    0,  156,  150,  153,    0,  163,
+      152,  158,  163,  154,  164,  165,  160,  164,  165,    0,
+      157,  161,  162,  166,  167,  168,  166,  167,  168,  169,
+
+      170,  171,  169,  170,  171,  172,  173,  174,  172,  173,
+      174,  175,  164,  176,  175,    0,  176,  165,  168,  163,
+      177,  179,  178,  177,  179,  178,  173,  180,    0,    0,
+      180,  166,  167,  181,    0,    0,  181,  169,  170,    0,
+      182,  183,  174,  182,  183,  176,  178,  184,  172,  185,
+      184,  175,  185,  186,  187,    0,  186,  187,  177,  179,
+      188,  183,    0,  188,  189,  180,  190,  189,  191,  190,
+      193,  191,  192,  193,    0,  192,  194,  186,  182,  194,
+      195,    0,  196,  195,  188,  196,    0,  184,  189,  185,
+      197,  198,  187,  197,  198,    0,  199,    0,  190,  199,
+
+      192,  200,  201,    0,  200,  201,  191,    0,  202,  204,
+      193,  202,  204,  203,  205,    0,  203,  205,  195,  194,
+      206,  207,    0,  206,  207,  196,  208,    0,  199,  208,
+      201,  198,  209,  197,    0,  209,  200,  203,  210,  212,
+      211,  210,  212,  211,  213,  214,    0,  213,  214,  215,
+      216,  217,  215,  216,  217,  218,  219,    0,  218,  219,
+      206,  207,    0,    0,    0,    0,    0,  209,  211,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,  216,  212,
+        0,  210,    0,    0,  215,    0,    0,    0,    0,    0,
+      218,  221,  221,  221,  221,  221,  222,  222,  222,  222,
+
+      222,  223,  223,  223,  223,  225,  225,    0,  225,  227,
+      227,  227,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220,  220,
+      220,  220,  220,  220,  220,  220,  220,  220,  220
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -596,13 +699,20 @@ char *yytext;
  * translated into a form that tapenade understands. For example,
  * this is a definition in a Pascal comment field:
  *
- * {D/D(.) INV(X+Y),
+ * {<
+ *  D/D(.) INV(X+Y),
  *  D/D(X) .*X,
- *  D/D(Y) .*(1/Y);}
+ *  D/D(Y) .*(1/Y);
+ *  >}
  *
  * You can alos include a black box dependency specification with, for example,
  *
- * {BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);}
+ * {<BLACKBOX ReadNotWritten:(1,0,0) NotReadThenWritten:(0,1,0) deps:(1,0,0,id,id);>}
+ *
+ * < and > symbols are used to indicate the start and end of a black box
+ * definition and must be supplied for inline definitions. This allows the
+ * black box definition to be embedded within existing comments and not break
+ * the parsing of the definition.
  */
 
 
@@ -662,6 +772,7 @@ void yyBlackBox_releaseBuffer(void)
 {
   yy_delete_buffer(YY_CURRENT_BUFFER);
 }
+
 
 int yyBlackBox_lineNumber(void)
 {
@@ -759,10 +870,12 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
 }
 
 
-#line 762 "..\\src\\black_box_l.c"
-#line 763 "..\\src\\black_box_l.c"
+#line 873 "..\\src\\black_box_l.c"
+
+#line 875 "..\\src\\black_box_l.c"
 
 #define INITIAL 0
+#define BLACKBOXDEF 1
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -834,6 +947,16 @@ static int input ( void );
 
 #endif
 
+        static int yy_start_stack_ptr = 0;
+        static int yy_start_stack_depth = 0;
+        static int *yy_start_stack = NULL;
+    
+    static void yy_push_state ( int _new_state );
+    
+    static void yy_pop_state ( void );
+    
+    static int yy_top_state ( void );
+    
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
 #ifdef __ia64__
@@ -969,13 +1092,9 @@ YY_DECL
 		}
 
 	{
-#line 188 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 202 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 
-
-#line 191 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
-                            /* tokenise comment delimiters and ignore them. This has the effect of treating the entire
-                               comment block less the comment delimiters as a command field to be parsed */
-#line 978 "..\\src\\black_box_l.c"
+#line 1097 "..\\src\\black_box_l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1002,13 +1121,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 208 )
+				if ( yy_current_state >= 221 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 265 );
+		while ( yy_base[yy_current_state] != 713 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -1034,284 +1153,314 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 193 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
-{dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
+#line 203 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+{
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          yyBlackBox_push_state(BLACKBOXDEF);
+                                        }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 194 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
-{dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
+#line 208 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+{
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          yyBlackBox_pop_state();
+                                        }
 	YY_BREAK
+/* tokenise comment delimiters and ignore them. This has the effect of treating the entire
+                                           comment block less the comment delimiters as a command field to be parsed */
 case 3:
 YY_RULE_SETUP
-#line 195 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 215 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 196 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 216 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 197 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 217 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 198 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 218 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 199 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 219 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);}
 	YY_BREAK
 /* single line comment. This allows comments in standalone definition files */
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 202 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 222 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
-                              adtBlackBox_nLineNumber++;
-                            }
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          adtBlackBox_nLineNumber++;
+                                        }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 207 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 227 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, FUNCTION));
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 208 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 228 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PROCEDURE));
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 209 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 229 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, RESULT));
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 210 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 230 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, IN));
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 211 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 231 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, OUT));
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 212 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 232 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, F_BEGIN));
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 213 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 233 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, F_END));
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 214 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 234 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, REAL));
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 215 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 235 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER));
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 216 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 236 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMPLEX));
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 217 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 237 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, CHARACTER));
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 218 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 238 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN));
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 219 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 239 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, REAL_ARRAY));
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 220 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 240 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER_ARRAY));
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 221 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 241 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMPLEX_ARRAY));
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 222 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 242 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, CHARACTER_ARRAY));
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 223 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 243 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN_ARRAY));
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 224 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 244 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, BLACKBOX));
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 225 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 245 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, READ_NOT_WRITTEN));
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 226 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 246 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, NOT_READ_THEN_WRITTEN));
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 227 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 247 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, NOT_READ_NOT_WRITTEN));
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 228 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 248 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, READ_THEN_WRITTEN));
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 229 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 249 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DEPS));
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 230 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 250 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DERIV_OP));
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 231 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 251 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, ID));
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 232 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 252 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COLON));
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 233 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 253 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, SEMICOLON));
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 234 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 254 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 235 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 255 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, LBRACKET));
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 236 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 256 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, RBRACKET));
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 237 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 257 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 238 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 258 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 239 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 259 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 240 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 260 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, POWER));
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 241 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 261 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, POWER));
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 242 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 262 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, DIVIDE));
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 243 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 263 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, PERIOD));
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 244 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 264 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, IDENTIFIER));
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 245 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
-return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FIXED, NUMBER_FIXED));
+#line 265 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_KEYWORD, QUALIFIED_IDENTIFIER));
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 246 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
-return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FLOAT, NUMBER_FLOAT));
+#line 266 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FIXED, NUMBER_FIXED));
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 248 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
-{
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
-                            }
+#line 267 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+return (dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_NUMBER_FLOAT, NUMBER_FLOAT));
 	YY_BREAK
 case 50:
-/* rule 50 can match eol */
 YY_RULE_SETUP
-#line 252 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 269 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
-                              adtBlackBox_nLineNumber++;
-                            }
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                        }
 	YY_BREAK
 case 51:
+/* rule 51 can match eol */
 YY_RULE_SETUP
-#line 257 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 273 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 {
-                              dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
-
-                              sprintf(sTempBuffer, "illegal character '%c' (0x%x) in black box definition", yytext[0], yytext[0]);
-
-                              adtBlackBox_nError    = 1;
-                              adtBlackBox_pErrorMsg = adtBlackBox_AllocString(adtBlackBox_pContext, sTempBuffer);
-                            }
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          adtBlackBox_nLineNumber++;
+                                        }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 265 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 278 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+{
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+
+                                          sprintf(sTempBuffer, "illegal character '%c' (0x%x) in black box definition", yytext[0], yytext[0]);
+
+                                          adtBlackBox_nError    = 1;
+                                          adtBlackBox_pErrorMsg = adtBlackBox_AllocString(adtBlackBox_pContext, sTempBuffer);
+                                        }
+	YY_BREAK
+case 53:
+/* rule 53 can match eol */
+YY_RULE_SETUP
+#line 287 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+{
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                          adtBlackBox_nLineNumber++;
+                                        }
+	YY_BREAK
+case 54:
+YY_RULE_SETUP
+#line 292 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+{
+                                          dispatchToken(adtBlackBox_pContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                        }
+	YY_BREAK
+case 55:
+YY_RULE_SETUP
+#line 295 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
 ECHO;
 	YY_BREAK
-#line 1313 "..\\src\\black_box_l.c"
+#line 1461 "..\\src\\black_box_l.c"
 case YY_STATE_EOF(INITIAL):
+case YY_STATE_EOF(BLACKBOXDEF):
 	yyterminate();
 
 	case YY_END_OF_BUFFER:
@@ -1607,7 +1756,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 208 )
+			if ( yy_current_state >= 221 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1635,11 +1784,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 208 )
+		if ( yy_current_state >= 221 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 207);
+	yy_is_jam = (yy_current_state == 220);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2108,6 +2257,44 @@ YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
 	return b;
 }
 
+    static void yy_push_state (int  _new_state )
+{
+    	if ( (yy_start_stack_ptr) >= (yy_start_stack_depth) )
+		{
+		yy_size_t new_size;
+
+		(yy_start_stack_depth) += YY_START_STACK_INCR;
+		new_size = (yy_size_t) (yy_start_stack_depth) * sizeof( int );
+
+		if ( ! (yy_start_stack) )
+			(yy_start_stack) = (int *) yyalloc( new_size  );
+
+		else
+			(yy_start_stack) = (int *) yyrealloc(
+					(void *) (yy_start_stack), new_size  );
+
+		if ( ! (yy_start_stack) )
+			YY_FATAL_ERROR( "out of memory expanding start-condition stack" );
+		}
+
+	(yy_start_stack)[(yy_start_stack_ptr)++] = YY_START;
+
+	BEGIN(_new_state);
+}
+
+    static void yy_pop_state  (void)
+{
+    	if ( --(yy_start_stack_ptr) < 0 )
+		YY_FATAL_ERROR( "start-condition stack underflow" );
+
+	BEGIN((yy_start_stack)[(yy_start_stack_ptr)]);
+}
+
+    static int yy_top_state  (void)
+{
+    	return (yy_start_stack)[(yy_start_stack_ptr) - 1];
+}
+
 #ifndef YY_EXIT_FAILURE
 #define YY_EXIT_FAILURE 2
 #endif
@@ -2228,6 +2415,10 @@ static int yy_init_globals (void)
     (yy_init) = 0;
     (yy_start) = 0;
 
+    (yy_start_stack_ptr) = 0;
+    (yy_start_stack_depth) = 0;
+    (yy_start_stack) =  NULL;
+
 /* Defined in main.c */
 #ifdef YY_STDINIT
     yyin = stdin;
@@ -2257,6 +2448,10 @@ int yylex_destroy  (void)
 	/* Destroy the stack itself. */
 	yyfree((yy_buffer_stack) );
 	(yy_buffer_stack) = NULL;
+
+    /* Destroy the start condition stack. */
+        yyfree( (yy_start_stack)  );
+        (yy_start_stack) = NULL;
 
     /* Reset the globals. This is important in a non-reentrant scanner so the next time
      * yylex() is called, initialization will occur. */
@@ -2315,11 +2510,30 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 265 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+#line 295 "C:\\cygwin\\usr\\src\\adt\\src\\black_box_l.l"
+
 
 
 int yywrap()
 {
   return (1);
+}
+
+
+void yyBlackBox_pushState(int nState)
+{
+  yyBlackBox_push_state(nState);
+}
+
+
+void yyBlackBox_popState(void)
+{
+  yyBlackBox_pop_state();
+}
+
+
+int yyBlackBox_topState(void)
+{
+  return (yyBlackBox_top_state());
 }
 

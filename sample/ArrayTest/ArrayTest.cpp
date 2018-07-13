@@ -6,9 +6,13 @@
 #include "ArrayTest.hpp"
 
 
+const int male    = 1;
+const int female  = 2;
+const int n_sex   = 2;
+
 // ----------------------------------------------------------------------------
 
-double global_sum(const ARRAY_1D X/*1:ix*/, int nBase, int nCount)
+double global_sum(const ARRAY_1D Y/*nBase:nCount*/, int nBase, int nCount)
 {
   int     cn;
   double  dSum;
@@ -17,7 +21,7 @@ double global_sum(const ARRAY_1D X/*1:ix*/, int nBase, int nCount)
 
   for (cn = nBase ; cn < nBase + nCount ; cn++)
   {
-    dSum += X[cn];
+    dSum += Y[cn];
   }
 
   return (dSum);
@@ -25,6 +29,7 @@ double global_sum(const ARRAY_1D X/*1:ix*/, int nBase, int nCount)
 
 // ----------------------------------------------------------------------------
 
+// < D/D(x) (4 * x) - 5; >
 double ArrayTest::polyA(double x)
 {
   double dResult;
@@ -107,16 +112,16 @@ double ArrayTest::ifTest(double x)
 // ----------------------------------------------------------------------------
 
 ArrayTest::ArrayTest(
-#include "AT_constructor_args.hpp"
+#include "include/AT_constructor_args.hpp"
 )
  : AdtArrays()
 {
-  #include "AT_constructor_locals.hpp"
-  #include "AT_constructor_scalars_phase_1.hpp"
-  #include "AT_constructor_arrays_phase_1.hpp"
-  #include "AT_constructor_scalars_phase_2.hpp"
-  #include "AT_constructor_arrays_phase_2.hpp"
-  #include "AT_array_plans_init.hpp"
+  #include "include/AT_constructor_locals.hpp"
+  #include "include/AT_constructor_scalars_phase_1.hpp"
+  #include "include/AT_constructor_arrays_phase_1.hpp"
+  #include "include/AT_constructor_scalars_phase_2.hpp"
+  #include "include/AT_constructor_arrays_phase_2.hpp"
+  #include "include/AT_array_plans_init.hpp"
 }
 
 // ----------------------------------------------------------------------------
@@ -149,6 +154,13 @@ double ArrayTest::sum(const ARRAY_1D X/*1:ix*/)
 
 // ----------------------------------------------------------------------------
 
+// Note that putting AD NOCHECKPOINT outside of a function appears to be a
+// bad thing to do from a Tapenade perspective and results in no differential
+// being created. I don't know if this makes any sense and whether the behaviour
+// is errant but Tapenade does not throw any warnings about it. As it breaks
+// my test harness I've put "bad" in front of the pragma to ensure it isn't
+// used as it will break the test harness.
+// $bad AD NOCHECKPOINT
 double ArrayTest::polySumA(const ARRAY_1D X/*1:ix*/)
 {
   int     cn;
@@ -156,6 +168,7 @@ double ArrayTest::polySumA(const ARRAY_1D X/*1:ix*/)
 
   dSum = 0.0;
 
+  // $AD NOCHECKPOINT
   for (cn = 1 ; cn <= ix ; cn++)
   {
     dSum += polyA(X[cn]);
@@ -200,17 +213,40 @@ double ArrayTest::polySumC(const ARRAY_1D X/*1:ix*/)
 
 // ----------------------------------------------------------------------------
 
-double ArrayTest::boundsCheckTest(const ARRAY_1D X/*1:ix*/)
+double ArrayTest::polySum3D(const ARRAY_1D X/*1:1+ix*/)
 {
-  int     cn;
+  int     cx;
+  int     cy;
   double  dSum;
 
   dSum = 0.0;
 
+  for (cx = 1 ; cx <= 1 + ix ; cx++)
+  {
+    for (cy = -1 ; cy <= iy ; cy++)
+    {
+      dSum += polyC(X[cx] * A3_DD[cx][cy][A1_I[cx]]);
+    }
+  }
+
+  return (dSum);
+}
+
+// ----------------------------------------------------------------------------
+
+double ArrayTest::boundsCheckTest(const ARRAY_1D X/*1:ix*/)
+{
+  int     cn;
+  double  dSum;
+  double  dR;
+
+  dSum = 0.0;
+  dR   = 0.9;
+
   // Make indexing step over the line on purpose. Bounds error!
   for (cn = 1 ; cn <= ix + 5 ; cn++)
   {
-    dSum += X[cn];
+    dSum += pow(dR, dSum * pow(dR, X[cn]));
   }
 
   return (dSum);
@@ -236,4 +272,33 @@ double ArrayTest::test_one_if_internal(double v)
   dResult = pow((one_if(v > 0.0) - one_if(v > 30.0)) * v, 5);
 
   return (dResult);
+}
+
+// ----------------------------------------------------------------------------
+
+bool ArrayTest::isNegative(double dValue)
+{
+  bool bResult;
+
+  bResult = (dValue < 0);
+
+  return (bResult);
+}
+
+// ----------------------------------------------------------------------------
+
+longbool ArrayTest::isPositive(double dValue)
+{
+  longbool bResult;
+
+  if (dValue >= 0)
+  {
+    bResult = 1;
+  }
+  else
+  {
+    bResult = 0;
+  }
+
+  return (bResult);
 }

@@ -877,8 +877,8 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
   {
     p_yylval->pContext    = pContext;
     p_yylval->dValue      = 0.0;
+    p_yylval->nValue      = 0;
     p_yylval->sValue      = 0;
-    p_yylval->sComment    = 0;
     p_yylval->nBlockDepth = adtJava_nBlockDepth;
 
     switch (nType)
@@ -897,18 +897,14 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
           case SINGLELINE_COMMENT:
           case MULTILINE_COMMENT:
           {
-            adtJava_AppendComment(pContext, pTokenText);
+            adtJava_AppendComment(pContext, pTokenText, adtJava_pFileName, adtJava_nLineNumber);
             break;
           }
 
           default:
           {
             p_yylval->sValue = adtJava_AllocString(pContext, pTokenText, 1);
-
-            if (nType == TOKEN_KEYWORD)
-            {
-              p_yylval->sComment = adtJava_ExtractComment(pContext);
-            }
+            break;
           }
         }
         break;
@@ -1025,9 +1021,9 @@ char* mallocScanComment(const char* pClosingBrace, int nToUpper)
 }
 
 
-#line 1028 "..\\src\\java_l.c"
+#line 1024 "..\\src\\java_l.c"
 
-#line 1030 "..\\src\\java_l.c"
+#line 1026 "..\\src\\java_l.c"
 
 #define INITIAL 0
 #define NOT_AD_CODE 1
@@ -1237,9 +1233,9 @@ YY_DECL
 		}
 
 	{
-#line 373 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 369 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 
-#line 1242 "..\\src\\java_l.c"
+#line 1238 "..\\src\\java_l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1298,13 +1294,13 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 374 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 370 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_TEXT, SINGLELINE_COMMENT);
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 375 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 371 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   const char* pChar = adtJava_AllocString(adtJava_pJavaContext, yytext, 0);
 
@@ -1312,11 +1308,11 @@ YY_RULE_SETUP
 
                                   while (*pChar != '\0')
                                   {
-                                    pChar = adtParse_nextWord(pChar, 0);
+                                    pChar = adtParse_nextWord(pChar, 0, 1);
 
                                     if (adtParse_matchWord(&pChar, "#ifdef", 1))
                                     {
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_matchWord(&pChar, "AD", 1))
                                       {
@@ -1329,7 +1325,7 @@ YY_RULE_SETUP
                                     }
                                     else if (adtParse_matchWord(&pChar, "#ifndef", 1))
                                     {
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_matchWord(&pChar, "AD", 1))
                                       {
@@ -1366,7 +1362,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 433 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 429 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   char* pComment = mallocScanComment("*/", 0);
 
@@ -1379,7 +1375,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 443 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 439 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   char* pComment = mallocScanComment("*/", 0);
 
@@ -1393,7 +1389,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 453 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 449 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_TEXT, SINGLELINE_COMMENT);
                                   yyJava_resetLastLine();
@@ -1402,372 +1398,372 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 459 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 455 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, ABSTRACT));
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 460 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 456 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, BOOL));
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 461 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 457 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN));
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 462 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 458 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, BREAK));
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 463 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 459 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, BYTE));
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 464 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 460 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, CASE));
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 465 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 461 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, CATCH));
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 466 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 462 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, CHAR));
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 467 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 463 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, CLASS));
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 468 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 464 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, CONST));
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 469 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 465 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, CONTINUE));
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 470 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 466 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, DEFAULT));
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 471 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 467 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, DO));
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 472 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 468 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, DOUBLE));
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 473 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 469 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, ELSE));
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 474 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 470 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, EXTENDS));
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 475 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 471 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, FINALLY));
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 476 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 472 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, FINAL));
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 477 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 473 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, FLOAT));
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 478 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 474 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, FOR));
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 479 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 475 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, IF));
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 480 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 476 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, IMPLEMENTS));
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 481 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 477 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, IMPORT));
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 482 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 478 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, INTERFACE));
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 483 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 479 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, INSTANCEOF));
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 484 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 480 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, INT));
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 485 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 481 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LONG));
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 486 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 482 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, NATIVE));
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 487 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 483 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, NEW));
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 488 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 484 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, PACKAGE));
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 489 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 485 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, PUBLIC));
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 490 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 486 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, PRIVATE));
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 491 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 487 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, PROTECTED));
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 492 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 488 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, RETURN));
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 493 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 489 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SHORT));
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 494 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 490 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, STATIC));
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 495 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 491 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SUPER));
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 496 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 492 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SWITCH));
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 497 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 493 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SYNCHRONIZED));
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 498 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 494 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, THIS));
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 499 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 495 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, THROW));
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 500 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 496 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, THROWS));
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 501 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 497 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, TRANSIENT));
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 502 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 498 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, TRY));
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 503 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 499 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, VOID));
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 504 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 500 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, VOLATILE));
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 505 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 501 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, WHILE));
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 506 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 502 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEANLITERAL));
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 507 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 503 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEANLITERAL));
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 508 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 504 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, NULLLITERAL));
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 509 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 505 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SHR_EQUALS));
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 510 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 506 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SAR_EQUALS));
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 511 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 507 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SAL_EQUALS));
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 512 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 508 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, PLUS_EQUALS));
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 513 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 509 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, MINUS_EQUALS));
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 514 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 510 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, TIMES_EQUALS));
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 515 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 511 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, DIV_EQUALS));
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 516 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 512 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, MOD_EQUALS));
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 517 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 513 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, AND_EQUALS));
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 518 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 514 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, XOR_EQUALS));
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 519 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 515 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, OR_EQUALS));
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 520 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 516 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SHR));
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 521 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 517 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SAR));
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 522 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 518 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SAL));
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 523 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 519 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, INCR));
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 524 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 520 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, DECR));
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 525 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 521 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LAND));
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 526 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 522 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LOR));
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 527 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 523 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LTE));
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 528 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 524 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, GTE));
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 529 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 525 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, EQ));
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 530 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 526 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, NE));
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 531 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 527 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SEMICOLON));
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 532 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 528 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   int nReturn = dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LCBRACKET);
 
@@ -1777,7 +1773,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 538 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 534 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   adtJava_nBlockDepth--;
                                   return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, RCBRACKET));
@@ -1785,165 +1781,165 @@ YY_RULE_SETUP
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 542 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 538 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 543 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 539 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, COLON));
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 544 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 540 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, EQUALS));
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 545 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 541 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LBRACKET));
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 546 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 542 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, RBRACKET));
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 547 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 543 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LSQRBRACKET));
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 548 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 544 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, RSQRBRACKET));
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 549 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 545 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, PERIOD));
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 550 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 546 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, AND));
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 551 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 547 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LNOT));
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 552 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 548 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, NOT));
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 553 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 549 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 554 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 550 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 555 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 551 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 556 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 552 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, DIV));
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 557 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 553 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, MOD));
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 558 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 554 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, LT));
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 559 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 555 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, GT));
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 560 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 556 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, XOR));
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 561 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 557 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, OR));
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 562 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 558 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, QUESTION));
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 563 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 559 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, SCOPE));
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 564 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 560 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, IDENTIFIER));
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 565 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 561 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, INTEGERLITERAL));
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 566 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 562 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, INTEGERLITERAL));
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 567 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 563 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, INTEGERLITERAL));
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 568 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 564 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, FLOATINGPOINTLITERAL));
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 569 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 565 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, FLOATINGPOINTLITERAL));
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 570 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 566 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_KEYWORD, FLOATINGPOINTLITERAL));
 	YY_BREAK
 case 110:
 /* rule 110 can match eol */
 YY_RULE_SETUP
-#line 571 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 567 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_TEXT,    CHARACTERLITERAL));
 	YY_BREAK
 case 111:
 /* rule 111 can match eol */
 YY_RULE_SETUP
-#line 572 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 568 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 return (dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_TEXT,    STRINGLITERAL));
 	YY_BREAK
 case 112:
 /* rule 112 can match eol */
 YY_RULE_SETUP
-#line 573 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 569 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_TEXT, -1);
                                   yyJava_resetLastLine();
@@ -1952,14 +1948,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 578 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 574 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_TEXT, -1);
                                 }
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 581 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 577 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 {
                                   dispatchToken(adtJava_pJavaContext, &yylval, yytext, TOKEN_TEXT, -1);
                                   printf("'%c' (0x%x): illegal character at line %d\n", yytext[0], yytext[0], adtJava_nLineNumber);
@@ -1967,10 +1963,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 586 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 582 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 ECHO;
 	YY_BREAK
-#line 1973 "..\\src\\java_l.c"
+#line 1969 "..\\src\\java_l.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(NOT_AD_CODE):
 	yyterminate();
@@ -2976,7 +2972,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 586 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
+#line 582 "C:\\cygwin\\usr\\src\\adt\\src\\java_l.l"
 
 
 

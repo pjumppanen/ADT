@@ -113,6 +113,30 @@ void yyDelphi_resetLastLine()
 }
 
 
+const char* yyDelphi_appendString(const char* pTextA, const char* pTextB)
+{
+  const char* pResult = 0;
+
+  if ((pTextA != 0) && (pTextB != 0))
+  {
+    int   nLength       = strlen(pTextA) + strlen(pTextB) + 1;
+    char* pAppendedText = (char*)malloc(nLength * sizeof(char));
+
+    if (pAppendedText != 0)
+    {
+      strcpy(pAppendedText, pTextA);
+      strcat(pAppendedText, pTextB);
+
+      pResult = adtDelphi_AllocString(adtDelphi_pDelphiContext, pAppendedText, 0);
+
+      free(pAppendedText);
+    }
+  }
+
+  return (pResult);
+}
+
+
 void yyDelphi_ifDefUpdateActive()
 {
   int cn;
@@ -127,7 +151,7 @@ void yyDelphi_ifDefUpdateActive()
 }
 
 
-void yyDelphi_beginInclude(const char* pFileName)
+void yyDelphi_beginInclude(const char* pFileName, int* pPreserveInclude)
 {
   if (!automate_IgnoreDependency(pFileName))
   {
@@ -164,6 +188,11 @@ void yyDelphi_beginInclude(const char* pFileName)
     else
     {
       printf("WARNING Cannot open include file %s on line %d in file %s\n", pFileName, adtDelphi_nLineNumber, adtDelphi_pFileName);
+    }
+
+    if (pPreserveInclude != 0)
+    {
+      *pPreserveInclude = automate_preserveInclude(pFileName);
     }
   }
 }
@@ -293,8 +322,8 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
   {
     p_yylval->pContext    = pContext;
     p_yylval->dValue      = 0.0;
+    p_yylval->nValue      = 0;
     p_yylval->sValue      = 0;
-    p_yylval->sComment    = 0;
     p_yylval->nBlockDepth = adtDelphi_nBlockDepth;
 
     switch (nType)
@@ -313,18 +342,17 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
           case SINGLELINE_COMMENT:
           case MULTILINE_COMMENT:
           {
-            adtDelphi_AppendComment(pContext, pTokenText);
+            if (adtDelphi_nIfDefCodeActive != 0)
+            {
+              adtDelphi_AppendComment(pContext, pTokenText, adtDelphi_pFileName, adtDelphi_nLineNumber);
+            }
             break;
           }
 
           default:
           {
             p_yylval->sValue = adtDelphi_AllocString(pContext, pTokenText, 1);
-
-            if (nType == TOKEN_KEYWORD)
-            {
-              p_yylval->sComment = adtDelphi_ExtractComment(pContext);
-            }
+            break;
           }
         }
         break;
@@ -406,7 +434,7 @@ char* mallocScanComment(const char* pClosingBrace, int nToUpper)
 
   for (nChar = input() ; nChar != 0 ; nChar = input())
   {
-    if (nCharCount >= nSize - 1)
+    if (nCharCount >= nSize - 2)
     {
       pBuffer = growBuffer(pBuffer, &nSize, nGrowSize);
     }
@@ -426,7 +454,8 @@ char* mallocScanComment(const char* pClosingBrace, int nToUpper)
 
       if (*pMatch == '\0')
       {
-        bMatched = 1;
+        bMatched            = 1;
+        pBuffer[nCharCount] = '\n';
         break;
       }
     }
@@ -469,6 +498,7 @@ BEGIN                                             {
                                                     return (nReturn);
                                                   }
 BOOLEAN                                           return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN));
+LONGBOOL                                          return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LONGBOOL));
 BYTE                                              return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, BYTE));
 CASE                                              {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CASE);
@@ -662,13 +692,13 @@ EXIT                                              return (dispatchToken(adtDelph
 
                                                       while (*pChar != '\0')
                                                       {
-                                                        pChar = adtParse_nextWord(pChar, 0);
+                                                        pChar = adtParse_nextWord(pChar, 0, 1);
 
                                                         if (adtParse_matchWord(&pChar, "{$DEFINE", 0))
                                                         {
                                                           char* pSymbolName = 0;
 
-                                                          pChar = adtParse_nextWord(pChar, 0);
+                                                          pChar = adtParse_nextWord(pChar, 0, 1);
 
                                                           if (adtParse_extractWord(&pSymbolName, " }", &pChar))
                                                           {
@@ -685,7 +715,7 @@ EXIT                                              return (dispatchToken(adtDelph
                                                         {
                                                           char* pSymbolName = 0;
 
-                                                          pChar = adtParse_nextWord(pChar, 0);
+                                                          pChar = adtParse_nextWord(pChar, 0, 1);
 
                                                           if (adtParse_extractWord(&pSymbolName, " }", &pChar))
                                                           {
@@ -702,7 +732,7 @@ EXIT                                              return (dispatchToken(adtDelph
                                                         {
                                                           char* pSymbolName = 0;
 
-                                                          pChar = adtParse_nextWord(pChar, 0);
+                                                          pChar = adtParse_nextWord(pChar, 0, 1);
 
                                                           if (adtParse_extractWord(&pSymbolName, " }", &pChar))
                                                           {
@@ -728,7 +758,7 @@ EXIT                                              return (dispatchToken(adtDelph
                                                         {
                                                           char* pSymbolName = 0;
 
-                                                          pChar = adtParse_nextWord(pChar, 0);
+                                                          pChar = adtParse_nextWord(pChar, 0, 1);
 
                                                           if (adtParse_extractWord(&pSymbolName, " }", &pChar))
                                                           {
@@ -763,11 +793,11 @@ EXIT                                              return (dispatchToken(adtDelph
                                                         {
                                                           char* pIncludePath = 0;
 
-                                                          pChar = adtParse_nextWord(pChar, 0);
+                                                          pChar = adtParse_nextWord(pChar, 0, 1);
 
                                                           if (adtParse_extractWord(&pIncludePath, "}", &pChar))
                                                           {
-                                                            yyDelphi_beginInclude(adtDelphi_AllocString(adtDelphi_pDelphiContext, pIncludePath, 0));
+                                                            yyDelphi_beginInclude(adtDelphi_AllocString(adtDelphi_pDelphiContext, pIncludePath, 0), 0);
                                                             free(pIncludePath);
                                                           }
                                                           else
@@ -803,6 +833,7 @@ EXIT                                              return (dispatchToken(adtDelph
                                                     if (pComment != 0)
                                                     {
                                                       dispatchToken(adtDelphi_pDelphiContext, &yylval, pComment, TOKEN_TEXT, EMBEDDED_COMMANDS);
+
                                                       free(pComment);
                                                     }
                                                   }
@@ -813,6 +844,7 @@ EXIT                                              return (dispatchToken(adtDelph
                                                     if (pComment != 0)
                                                     {
                                                       dispatchToken(adtDelphi_pDelphiContext, &yylval, pComment, TOKEN_TEXT, EMBEDDED_COMMANDS);
+
                                                       free(pComment);
                                                     }
                                                   }
@@ -875,6 +907,7 @@ EXIT                                              return (dispatchToken(adtDelph
 "*"                                               return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
 ([\/][\/].*[\n])                                  {
                                                     dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_TEXT, SINGLELINE_COMMENT);
+
                                                     yyDelphi_resetLastLine();
                                                     adtDelphi_nLineNumber++;
                                                   }

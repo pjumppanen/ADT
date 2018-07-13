@@ -34,6 +34,13 @@ uses
   adtalloc,
   adtarray;
 
+type
+  R_UseArrayClass = (ArrayClass_offarray, ArrayClass_Oarray);
+
+  function R_LONGBOOL(x : SEXP) : plongbool; inline;
+  function R_RAWBOOL(x : SEXP) : pboolean; inline;
+  function R_RAWCHAR(x : SEXP) : pshortint; inline;
+
   //  ----------------------------------------------------------------------------
   //  functions to determine R type from array type
   //  ----------------------------------------------------------------------------
@@ -141,14 +148,21 @@ uses
 
   function R_Scalar(dResult : double) : SEXP;overload;
 
+  function R_Scalar(bResult : longbool) : SEXP;overload;
+
+  function R_Scalar(cResult : char) : SEXP;overload;
+
   function R_Empty() : SEXP;
+
+  procedure R_SetArrayClass(nClass : R_UseArrayClass);
 
 
 implementation
 
   var
-    DropNegativeSymbol  : SEXP = nil;
-    OffsetSymbol        : SEXP = nil;
+    DropNegativeSymbol  : SEXP            = nil;
+    OffsetSymbol        : SEXP            = nil;
+    ArrayClass          : R_UseArrayClass = ArrayClass_offarray;
 
   //  ----------------------------------------------------------------------------
 
@@ -164,6 +178,30 @@ implementation
 
   begin
     Rf_warning(pchar(sMsg));
+  end;
+
+  //  ----------------------------------------------------------------------------
+
+  function R_LONGBOOL(x : SEXP) : plongbool; inline;
+
+  begin
+    R_LONGBOOL := plongbool(R_LOGICAL(x));
+  end;
+
+  //  ----------------------------------------------------------------------------
+
+  function R_RAWBOOL(x : SEXP) : pboolean; inline;
+
+  begin
+    R_RAWBOOL := pboolean(R_RAW(x));
+  end;
+
+  //  ----------------------------------------------------------------------------
+
+  function R_RAWCHAR(x : SEXP) : pshortint; inline;
+
+  begin
+    R_RAWCHAR := pshortint(R_RAW(x));
   end;
 
   //  ----------------------------------------------------------------------------
@@ -473,11 +511,11 @@ implementation
     begin
       Element := R_VECTOR_ELT(sArgList, cn);
 
-      if (Rf_isInteger(Element) <> 0) then
+      if (Rf_isIntegerOrFactor(Element)) then
       begin
         pIndices[cn] := R_INTEGER(Element)[0];
       end
-      else if (Rf_isReal(Element) <> 0) then
+      else if (Rf_isReal(Element)) then
       begin
         dVal := R_REAL(Element)[0];
         nVal := trunc(dVal);
@@ -525,6 +563,9 @@ implementation
     nCoords       : longint;
     pActor        : PAdtArrayPlanActor;
     pData         : pchar;
+    pResultData   : pchar;
+    pLB           : plongbool;
+    pCh           : pchar;
     pInt          : plongint;
     pReal         : pdouble;
     pSliceArray   : pchar;
@@ -535,7 +576,7 @@ implementation
   begin
     pResult := nil;
 
-    if (Rf_isNewList(sArgList) <> 0) then
+    if (Rf_isNewList(sArgList)) then
     begin
       nArgs       := Rf_length(sArgList);
       pInfo       := AdtArrayPlanActor_arrayInfo(rAllocator, pArray);
@@ -550,159 +591,204 @@ implementation
       // Read indices from argument list
       if (not ReadIndices(sArgList, aIndices, nArgs, nErrorIndex)) then
       begin
-        Rf_error('ERROR: Indexing argument %d in the getter argument list is not an integer for %s. See line %s in file %s', pchar(pName), nErrorIndex + 1, pchar(pLineNumber), pchar(pFileName));
+        Rf_error('ERROR: Indexing argument %d in the getter argument list is not an integer for %s. See line %s in file %s', nErrorIndex + 2, pchar(pName), pchar(pLineNumber), pchar(pFileName));
       end;
 
-      if ((pInfo^.VarType <> AdtVarType_INT) and (pInfo^.VarType <> AdtVarType_DOUBLE)) then
-      begin
-        raise Exception.Create('R_ImplGetter called on array of type not supported in R\n');
-      end
-      else if (nArgs = 0) then
-      begin
-        try
+      case pInfo^.VarType of
+        AdtVarType_INT,
+        AdtVarType_DOUBLE,
+        AdtVarType_LONGBOOL,
+        AdtVarType_CHAR,
+        AdtVarType_UCHAR,
+        AdtVarType_BOOL:
+        begin
+          if (nArgs = 0) then
           begin
-            // Full array get operation
-            case (pInfo^.VarType) of
-              AdtVarType_INT:
+            try
               begin
-                pResult := R_CreateArray(nCoords, aCoords, INTSXP);
+                pResultData := nil;
 
-                if (bNoTranslation) then
-                begin
-                  Move(firstData(pInfo^)[0], pchar(R_INTEGER(pResult))[0], lengthOfData(pInfo^) * SizeOf(char));
-                end
+                // Full array get operation
+                case (pInfo^.VarType) of
+                  AdtVarType_INT:
+                  begin
+                    pResult     := R_CreateArray(nCoords, aCoords, INTSXP);
+                    pResultData := pchar(R_INTEGER(pResult));
+                  end;
+
+                  AdtVarType_DOUBLE:
+                  begin
+                    pResult     := R_CreateArray(nCoords, aCoords, REALSXP);
+                    pResultData := pchar(R_REAL(pResult));
+                  end;
+
+                  AdtVarType_LONGBOOL:
+                  begin
+                    pResult     := R_CreateArray(nCoords, aCoords, LGLSXP);
+                    pResultData := pchar(R_LOGICAL(pResult));
+                  end;
+
+                  AdtVarType_CHAR,
+                  AdtVarType_UCHAR,
+                  AdtVarType_BOOL:
+                  begin
+                    pResult     := R_CreateArray(nCoords, aCoords, RAWSXP);
+                    pResultData := pchar(R_RAW(pResult));
+                  end;
                 else
+                  // Do nothing
+                end;
+
+                if (pResultData <> nil) then
                 begin
-                  AdtArrayPlanActor_ADlib_to_R(rAllocator, pArray, pchar(R_INTEGER(pResult)));
+                  if (bNoTranslation) then
+                  begin
+                    Move(firstData(pInfo^)[0], pResultData[0], lengthOfData(pInfo^) * SizeOf(char));
+                  end
+                  else
+                  begin
+                    AdtArrayPlanActor_ADlib_to_R(rAllocator, pArray, pResultData);
+                  end;
                 end;
               end;
-
-              AdtVarType_DOUBLE:
+            except
+              on E: Exception do
               begin
-                pResult := R_CreateArray(nCoords, aCoords, REALSXP);
+                Emessage := E.message;
 
-                if (bNoTranslation) then
-                begin
-                  Move(firstData(pInfo^)[0], pchar(R_REAL(pResult))[0], lengthOfData(pInfo^) * SizeOf(char));
-                end
+                Rf_error('ERROR: R_ImplGetter threw a runtime exception, %s', pchar(Emessage));
+              end;
+            end;
+          end
+          else if (nArgs = nCoords) then
+          begin
+            pActor := nil;
+
+            try
+              begin
+                // scalar element get operation
+                pData := pInfo^.Actor.indexArray(aIndices,
+                                                 nArgs,
+                                                 pArray,
+                                                 pInfo^.SizeOf,
+                                                 pActor);
+
+                case (pInfo^.VarType) of
+                  AdtVarType_INT:
+                  begin
+                    pInt    := plongint(pData);
+                    pResult := R_Scalar(pInt^);
+                  end;
+
+                  AdtVarType_DOUBLE:
+                  begin
+                    pReal   := pdouble(pData);
+                    pResult := R_Scalar(pReal^);
+                  end;
+
+                  AdtVarType_LONGBOOL:
+                  begin
+                    pLB     := plongbool(pData);
+                    pResult := R_Scalar(pLB^);
+                  end;
+
+                  AdtVarType_CHAR,
+                  AdtVarType_UCHAR,
+                  AdtVarType_BOOL:
+                  begin
+                    pCh     := pchar(pData);
+                    pResult := R_Scalar(pCh^);
+                  end;
                 else
-                begin
-                  AdtArrayPlanActor_ADlib_to_R(rAllocator, pArray, pchar(R_REAL(pResult)));
+                  // Do nothing
                 end;
               end;
-            else
-              // Do nothing
+            except
+              on E: Exception do
+              begin
+                Emessage := E.message;
+
+                Rf_error('ERROR: R_ImplGetter threw a runtime exception, %s', pchar(Emessage));
+              end;
+            end;
+          end
+          else
+          begin
+            pSliceArray := nil;
+
+            try
+              begin
+                // Slice array get operation
+                pSliceArray := AdtArrayPlanActor_createSlice(rAllocator,
+                                                             pArray,
+                                                             aIndices,
+                                                             nArgs);
+
+                pSliceInfo    := AdtArrayPlanActor_arrayInfo(rAllocator, pSliceArray);
+                nSliceCoords  := pSliceInfo^.Actor.getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
+                pResultData   := nil;
+
+                case (pInfo^.VarType) of
+                  AdtVarType_INT:
+                  begin
+                    pResult     := R_CreateArray(nSliceCoords, aCoords, INTSXP);
+                    pResultData := pchar(R_INTEGER(pResult));
+                  end;
+
+                  AdtVarType_DOUBLE:
+                  begin
+                    pResult     := R_CreateArray(nSliceCoords, aCoords, REALSXP);
+                    pResultData := pchar(R_REAL(pResult));
+                  end;
+
+                  AdtVarType_LONGBOOL:
+                  begin
+                    pResult     := R_CreateArray(nSliceCoords, aCoords, LGLSXP);
+                    pResultData := pchar(R_LOGICAL(pResult));
+                  end;
+
+                  AdtVarType_CHAR,
+                  AdtVarType_UCHAR,
+                  AdtVarType_BOOL:
+                  begin
+                    pResult     := R_CreateArray(nSliceCoords, aCoords, RAWSXP);
+                    pResultData := pchar(R_RAW(pResult));
+                  end;
+                else
+                  // Do nothing
+                end;
+
+                if (pResultData <> nil) then
+                begin
+                  if (bNoTranslation) then
+                  begin
+                    Move(firstData(pSliceInfo^)[0], pResultData[0], lengthOfData(pSliceInfo^) * SizeOf(char));
+                  end
+                  else
+                  begin
+                    AdtArrayPlanActor_ADlib_to_R(rAllocator, pSliceArray, pResultData);
+                  end;
+                end;
+
+                rAllocator.free(pSliceArray);
+              end;
+            except
+              on E: Exception do
+              begin
+                Emessage := E.message;
+
+                Rf_error('ERROR: R_ImplGetter threw a runtime exception, %s', pchar(Emessage));
+
+                if (pSliceArray <> nil) then
+                begin
+                  rAllocator.free(pSliceArray);
+                end;
+              end;
             end;
           end;
-        except
-          on E: Exception do
-          begin
-            Emessage := E.message;
-
-            Rf_error('ERROR: R_ImplGetter threw a runtime exception, %s', pchar(Emessage));
-          end;
         end;
-      end
-      else if (nArgs = nCoords) then
-      begin
-        pActor := nil;
-
-        try
-          begin
-            // scalar element get operation
-            pData := pInfo^.Actor.indexArray(aIndices,
-                                             nArgs,
-                                             pArray,
-                                             pInfo^.SizeOf,
-                                             pActor);
-
-            case (pInfo^.VarType) of
-              AdtVarType_INT:
-              begin
-                pInt    := plongint(pData);
-                pResult := R_Scalar(pInt^);
-              end;
-
-              AdtVarType_DOUBLE:
-              begin
-                pReal   := pdouble(pData);
-                pResult := R_Scalar(pReal^);
-              end;
-            else
-              // Do nothing
-            end;
-          end;
-        except
-          on E: Exception do
-          begin
-            Emessage := E.message;
-
-            Rf_error('ERROR: R_ImplGetter threw a runtime exception, %s', pchar(Emessage));
-          end;
-        end;
-      end
       else
-      begin
-        pSliceArray := nil;
-
-        try
-          begin
-            // Slice array get operation
-            pSliceArray := AdtArrayPlanActor_createSlice(rAllocator,
-                                                         pArray,
-                                                         aIndices,
-                                                         nArgs);
-
-            pSliceInfo    := AdtArrayPlanActor_arrayInfo(rAllocator, pSliceArray);
-            nSliceCoords  := pSliceInfo^.Actor.getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
-
-            case (pInfo^.VarType) of
-              AdtVarType_INT:
-              begin
-                pResult := R_CreateArray(nSliceCoords, aCoords, INTSXP);
-
-                if (bNoTranslation) then
-                begin
-                  Move(firstData(pSliceInfo^)[0], pchar(R_INTEGER(pResult))[0], lengthOfData(pSliceInfo^) * SizeOf(char));
-                end
-                else
-                begin
-                  AdtArrayPlanActor_ADlib_to_R(rAllocator, pSliceArray, pchar(R_INTEGER(pResult)));
-                end;
-              end;
-
-              AdtVarType_DOUBLE:
-              begin
-                pResult := R_CreateArray(nSliceCoords, aCoords, REALSXP);
-
-                if (bNoTranslation) then
-                begin
-                  Move(firstData(pSliceInfo^)[0], pchar(R_REAL(pResult))[0], lengthOfData(pSliceInfo^) * SizeOf(char));
-                end
-                else
-                begin
-                  AdtArrayPlanActor_ADlib_to_R(rAllocator, pSliceArray, pchar(R_REAL(pResult)));
-                end;
-              end;
-            else
-              // Do nothing
-            end;
-
-            rAllocator.free(pSliceArray);
-          end;
-        except
-          on E: Exception do
-          begin
-            Emessage := E.message;
-
-            Rf_error('ERROR: R_ImplGetter threw a runtime exception, %s', pchar(Emessage));
-
-            if (pSliceArray <> nil) then
-            begin
-              rAllocator.free(pSliceArray);
-            end;
-          end;
-        end;
+        Rf_error('ERROR: R_ImplGetter called on array of type %s not supported in R\n', varTypeName(pInfo^.VarType));
       end;
     end
     else
@@ -725,23 +811,29 @@ implementation
                         pLineNumber : AnsiString) : SEXP;
 
   var
-    nErrorIndex   : longint;
-    nArgs         : longint;
-    aIndices      : array[0..ADLIB_MAX_COORDS] of longint;
-    aCoords       : array[0..ADLIB_MAX_COORDS] of AdtArrayCoord;
-    pInfo         : PAdtArrayInfo;
-    nCoords       : longint;
-    Emessage      : AnsiString;
-    pActor        : PAdtArrayPlanActor;
-    pSliceArray   : pchar;
-    pData         : pchar;
-    pInt          : plongint;
-    pReal         : pdouble;
-    pSliceInfo    : PAdtArrayInfo;
-    nSliceCoords  : longint;
+    nErrorIndex     : longint;
+    nArgs           : longint;
+    aIndices        : array[0..ADLIB_MAX_COORDS] of longint;
+    aCoords         : array[0..ADLIB_MAX_COORDS] of AdtArrayCoord;
+    pInfo           : PAdtArrayInfo;
+    nCoords         : longint;
+    Emessage        : AnsiString;
+    pActor          : PAdtArrayPlanActor;
+    pSliceArray     : pchar;
+    pData           : pchar;
+    pInt            : plongint;
+    pReal           : pdouble;
+    pLB             : plongbool;
+    pRaw            : pbyte;
+    pSrcArgData     : pchar;
+    nSrcArgType     : SEXPTYPE;
+    pSrcArgTypeName : pchar;
+
+    pSliceInfo      : PAdtArrayInfo;
+    nSliceCoords    : longint;
 
   begin
-    if (Rf_isNewList(sArgList) <> 0) then
+    if (Rf_isNewList(sArgList)) then
     begin
       nErrorIndex := 0;
       nArgs       := Rf_length(sArgList);
@@ -756,201 +848,265 @@ implementation
       // Read indices from argument list
       if (not ReadIndices(sArgList, aIndices, nArgs, nErrorIndex)) then
       begin
-        Rf_error('ERROR: Indexing argument %d in the setter argument list is not an integer for %s. See line %s in file %s', pchar(pName), nErrorIndex + 1, pchar(pLineNumber), pchar(pFileName));
+        Rf_error('ERROR: Indexing argument %d in the setter argument list is not an integer for %s. See line %s in file %s', nErrorIndex + 1, pchar(pName), pchar(pLineNumber), pchar(pFileName));
       end;
 
-      if ((pInfo^.VarType <> AdtVarType_INT) and (pInfo^.VarType <> AdtVarType_DOUBLE)) then
-      begin
-        raise Exception.Create('R_ImplSetter called on array of type not supported in R\n');
-      end
-      else if (nArgs = 0) then
-      begin
-        try
+      case pInfo^.VarType of
+        AdtVarType_INT,
+        AdtVarType_DOUBLE,
+        AdtVarType_LONGBOOL,
+        AdtVarType_CHAR,
+        AdtVarType_UCHAR,
+        AdtVarType_BOOL:
+        begin
+          if (nArgs = 0) then
           begin
-            // Full array set operation
-            case (pInfo^.VarType) of
-              AdtVarType_INT:
+            try
               begin
-                R_CheckArgument(pName,
-                                sSrcArg,
-                                pFileName,
-                                pLineNumber,
-                                nCoords,
-                                aCoords,
-                                'INTSXP',
-                                INTSXP);
+                pSrcArgData     := nil;
+                nSrcArgType     := NILSXP;
+                pSrcArgTypeName := '';
 
-                if (bNoTranslation) then
-                begin
-                  Move(pchar(R_INTEGER(sSrcArg))[0], firstData(pInfo^)[0], lengthOfData(pInfo^) * SizeOf(char));
-                end
+                // Full array set operation
+                case (pInfo^.VarType) of
+                  AdtVarType_INT:
+                  begin
+                    pSrcArgData     := pchar(R_INTEGER(sSrcArg));
+                    nSrcArgType     := INTSXP;
+                    pSrcArgTypeName := 'INTSXP';
+                  end;
+
+                  AdtVarType_DOUBLE:
+                  begin
+                    pSrcArgData     := pchar(R_REAL(sSrcArg));
+                    nSrcArgType     := REALSXP;
+                    pSrcArgTypeName := 'REALSXP';
+                  end;
+
+                  AdtVarType_LONGBOOL:
+                  begin
+                    pSrcArgData     := pchar(R_LOGICAL(sSrcArg));
+                    nSrcArgType     := LGLSXP;
+                    pSrcArgTypeName := 'LGLSXP';
+                  end;
+
+                  AdtVarType_CHAR,
+                  AdtVarType_UCHAR,
+                  AdtVarType_BOOL:
+                  begin
+                    pSrcArgData     := pchar(R_RAW(sSrcArg));
+                    nSrcArgType     := RAWSXP;
+                    pSrcArgTypeName := 'RAWSXP';
+                  end;
                 else
+                  // Do nothing
+                end;
+
+                if (pSrcArgData <> nil) then
                 begin
-                  AdtArrayPlanActor_R_to_ADlib(rAllocator, pchar(R_INTEGER(sSrcArg)), pArray);
+                  R_CheckArgument(pName,
+                                  sSrcArg,
+                                  pFileName,
+                                  pLineNumber,
+                                  nCoords,
+                                  aCoords,
+                                  pSrcArgTypeName,
+                                  nSrcArgType);
+
+                  if (bNoTranslation) then
+                  begin
+                    Move(pSrcArgData[0], firstData(pInfo^)[0], lengthOfData(pInfo^) * SizeOf(char));
+                  end
+                  else
+                  begin
+                    AdtArrayPlanActor_R_to_ADlib(rAllocator, pSrcArgData, pArray);
+                  end;
                 end;
               end;
-
-              AdtVarType_DOUBLE:
+            except
+              on E: Exception do
               begin
-                R_CheckArgument(pName,
-                                sSrcArg,
-                                pFileName,
-                                pLineNumber,
-                                nCoords,
-                                aCoords,
-                                'REALSXP',
-                                REALSXP);
+                Emessage := E.message;
 
-                if (bNoTranslation) then
-                begin
-                  Move(pchar(R_REAL(sSrcArg))[0], firstData(pInfo^)[0], lengthOfData(pInfo^) * SizeOf(char));
-                end
+                Rf_error('ERROR: R_ImplSetter threw a runtime exception, %s', pchar(Emessage));
+              end;
+            end;
+          end
+          else if (nArgs = nCoords) then
+          begin
+            pActor := nil;
+
+            try
+              begin
+                // scalar element set operation
+                pData := pInfo^.Actor.indexArray(aIndices,
+                                                 nArgs,
+                                                 pArray,
+                                                 pInfo^.SizeOf,
+                                                 pActor);
+
+                case (pInfo^.VarType) of
+                  AdtVarType_INT:
+                  begin
+                    R_CheckArgument(pName,
+                                    sSrcArg,
+                                    pFileName,
+                                    pLineNumber,
+                                    0,
+                                    aCoords,
+                                    'INTSXP',
+                                    INTSXP);
+
+                    pInt    := plongint(pData);
+                    pInt[0] := R_INTEGER(sSrcArg)[0];
+                  end;
+
+                  AdtVarType_DOUBLE:
+                  begin
+                    R_CheckArgument(pName,
+                                    sSrcArg,
+                                    pFileName,
+                                    pLineNumber,
+                                    0,
+                                    aCoords,
+                                    'REALSXP',
+                                    REALSXP);
+
+                    pReal     := pdouble(pData);
+                    pReal[0]  := R_REAL(sSrcArg)[0];
+                  end;
+
+                  AdtVarType_LONGBOOL:
+                  begin
+                    R_CheckArgument(pName,
+                                    sSrcArg,
+                                    pFileName,
+                                    pLineNumber,
+                                    0,
+                                    aCoords,
+                                    'LGLSXP',
+                                    LGLSXP);
+
+                    pLB     := plongbool(pData);
+                    pLB[0]  := R_LOGICAL(sSrcArg)[0];
+                  end;
+
+                  AdtVarType_CHAR,
+                  AdtVarType_UCHAR,
+                  AdtVarType_BOOL:
+                  begin
+                    R_CheckArgument(pName,
+                                    sSrcArg,
+                                    pFileName,
+                                    pLineNumber,
+                                    0,
+                                    aCoords,
+                                    'RAWSXP',
+                                    RAWSXP);
+
+                    pRaw    := pbyte(pData);
+                    pRaw[0] := R_RAW(sSrcArg)[0];
+                  end;
                 else
-                begin
-                  AdtArrayPlanActor_R_to_ADlib(rAllocator, pchar(R_REAL(sSrcArg)), pArray);
+                  // Do nothing
                 end;
               end;
-            else
-              // Do nothing
+            except
+              on E: Exception do
+              begin
+                Emessage := E.message;
+
+                Rf_error('ERROR: R_ImplSetter threw a runtime exception, %s', pchar(Emessage));
+              end;
+            end;
+          end
+          else
+          begin
+            pSliceArray := nil;
+
+            try
+              begin
+                // Slice array get operation
+                pSliceArray     := AdtArrayPlanActor_createSlice(rAllocator,
+                                                                 pArray,
+                                                                 aIndices,
+                                                                 nArgs);
+
+                pSliceInfo      := AdtArrayPlanActor_arrayInfo(rAllocator, pSliceArray);
+                nSliceCoords    := pSliceInfo^.Actor.getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
+                pSrcArgData     := nil;
+                nSrcArgType     := NILSXP;
+                pSrcArgTypeName := '';
+
+                case (pInfo^.VarType) of
+                  AdtVarType_INT:
+                  begin
+                    pSrcArgData     := pchar(R_INTEGER(sSrcArg));
+                    nSrcArgType     := INTSXP;
+                    pSrcArgTypeName := 'INTSXP';
+                  end;
+
+                  AdtVarType_DOUBLE:
+                  begin
+                    pSrcArgData     := pchar(R_REAL(sSrcArg));
+                    nSrcArgType     := REALSXP;
+                    pSrcArgTypeName := 'REALSXP';
+                  end;
+
+                  AdtVarType_LONGBOOL:
+                  begin
+                    pSrcArgData     := pchar(R_LOGICAL(sSrcArg));
+                    nSrcArgType     := LGLSXP;
+                    pSrcArgTypeName := 'LGLSXP';
+                  end;
+
+                  AdtVarType_CHAR,
+                  AdtVarType_UCHAR,
+                  AdtVarType_BOOL:
+                  begin
+                    pSrcArgData     := pchar(R_RAW(sSrcArg));
+                    nSrcArgType     := RAWSXP;
+                    pSrcArgTypeName := 'RAWSXP';
+                  end;
+                else
+                  // Do nothing
+                end;
+
+                if (pSrcArgData <> nil) then
+                begin
+                  R_CheckArgument(pName,
+                                  sSrcArg,
+                                  pFileName,
+                                  pLineNumber,
+                                  nSliceCoords,
+                                  aCoords,
+                                  pSrcArgTypeName,
+                                  nSrcArgType);
+
+                  if (bNoTranslation) then
+                  begin
+                    Move(pSrcArgData[0], firstData(pSliceInfo^)[0], lengthOfData(pSliceInfo^) * SizeOf(char));
+                  end
+                  else
+                  begin
+                    AdtArrayPlanActor_R_to_ADlib(rAllocator, pSrcArgData, pSliceArray);
+                  end;
+                end;
+
+                rAllocator.free(pSliceArray);
+              end;
+            except
+              on E: Exception do
+              begin
+                Emessage := E.message;
+
+                Rf_error('ERROR: R_ImplSetter threw a runtime exception, %s', pchar(Emessage));
+              end;
             end;
           end;
-        except
-          on E: Exception do
-          begin
-            Emessage := E.message;
-
-            Rf_error('ERROR: R_ImplSetter threw a runtime exception, %s', pchar(Emessage));
-          end;
         end;
-      end
-      else if (nArgs = nCoords) then
-      begin
-        pActor := nil;
-
-        try
-          begin
-            // scalar element set operation
-            pData := pInfo^.Actor.indexArray(aIndices,
-                                             nArgs,
-                                             pArray,
-                                             pInfo^.SizeOf,
-                                             pActor);
-
-            case (pInfo^.VarType) of
-              AdtVarType_INT:
-              begin
-                R_CheckArgument(pName,
-                                sSrcArg,
-                                pFileName,
-                                pLineNumber,
-                                0,
-                                aCoords,
-                                'INTSXP',
-                                INTSXP);
-
-                pInt    := plongint(pData);
-                pInt[0] := R_INTEGER(sSrcArg)[0];
-              end;
-
-              AdtVarType_DOUBLE:
-              begin
-                R_CheckArgument(pName,
-                                sSrcArg,
-                                pFileName,
-                                pLineNumber,
-                                0,
-                                aCoords,
-                                'REALSXP',
-                                REALSXP);
-
-                pReal     := pdouble(pData);
-                pReal[0]  := R_REAL(sSrcArg)[0];
-              end;
-            else
-              // Do nothing
-            end;
-          end;
-        except
-          on E: Exception do
-          begin
-            Emessage := E.message;
-
-            Rf_error('ERROR: R_ImplSetter threw a runtime exception, %s', pchar(Emessage));
-          end;
-        end;
-      end
       else
-      begin
-        pSliceArray := nil;
-
-        try
-          begin
-            // Slice array get operation
-            pSliceArray   := AdtArrayPlanActor_createSlice(rAllocator,
-                                                           pArray,
-                                                           aIndices,
-                                                           nArgs);
-
-            pSliceInfo    := AdtArrayPlanActor_arrayInfo(rAllocator, pSliceArray);
-            nSliceCoords  := pSliceInfo^.Actor.getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
-
-            case (pInfo^.VarType) of
-              AdtVarType_INT:
-              begin
-                R_CheckArgument(pName,
-                                sSrcArg,
-                                pFileName,
-                                pLineNumber,
-                                nSliceCoords,
-                                aCoords,
-                                'INTSXP',
-                                INTSXP);
-
-                if (bNoTranslation) then
-                begin
-                  Move(pchar(R_INTEGER(sSrcArg))[0], firstData(pSliceInfo^)[0], lengthOfData(pSliceInfo^) * SizeOf(char));
-                end
-                else
-                begin
-                  AdtArrayPlanActor_R_to_ADlib(rAllocator, pchar(R_INTEGER(sSrcArg)), pSliceArray);
-                end;
-              end;
-
-              AdtVarType_DOUBLE:
-              begin
-                R_CheckArgument(pName,
-                                sSrcArg,
-                                pFileName,
-                                pLineNumber,
-                                nSliceCoords,
-                                aCoords,
-                                'REALSXP',
-                                REALSXP);
-
-
-                if (bNoTranslation) then
-                begin
-                  Move(pchar(R_REAL(sSrcArg))[0], firstData(pSliceInfo^)[0], lengthOfData(pSliceInfo^) * SizeOf(char));
-                end
-                else
-                begin
-                  AdtArrayPlanActor_R_to_ADlib(rAllocator, pchar(R_REAL(sSrcArg)), pSliceArray);
-                end;
-              end;
-            else
-              // Do nothing
-            end;
-
-            rAllocator.free(pSliceArray);
-          end;
-        except
-          on E: Exception do
-          begin
-            Emessage := E.message;
-
-            Rf_error('ERROR: R_ImplSetter threw a runtime exception, %s', pchar(Emessage));
-          end;
-        end;
+        Rf_error('ERROR: R_ImplSetter called on array of type %s not supported in R\n', varTypeName(pInfo^.VarType));
       end;
     end
     else
@@ -1166,47 +1322,85 @@ implementation
 
       if (bOarray) then
       begin
-        // Add Oarray class attribute
-        sClass := Rf_PROTECT(Rf_allocVector(STRSXP, 1));
+        case ArrayClass of
+          ArrayClass_offarray:
+          begin
+            // Add Oarray class attribute
+            sClass := Rf_PROTECT(Rf_allocVector(STRSXP, 1));
 
-        R_SET_STRING_ELT(sClass, 0, Rf_mkChar('Oarray'));
+            R_SET_STRING_ELT(sClass, 0, Rf_mkChar('offarray'));
 
-        Rf_classgets(pResult, sClass);
-        Rf_UNPROTECT(1);
+            Rf_classgets(pResult, sClass);
+            Rf_UNPROTECT(1);
 
-        // Add attribute names for offset and drop.negative
-        if (OffsetSymbol = nil) then
-        begin
-          OffsetSymbol := Rf_install('offset');
-        end;
+            // Add attribute names for offset and drop.negative
+            if (OffsetSymbol = nil) then
+            begin
+              OffsetSymbol := Rf_install('offset');
+            end;
 
-        if (DropNegativeSymbol = nil) then
-        begin
-          DropNegativeSymbol := Rf_install('drop.negative');
-        end;
+            // Add dim and offset attributes
+            sDim    := Rf_PROTECT(Rf_allocVector(INTSXP, nDims));
+            sOffset := Rf_PROTECT(Rf_allocVector(INTSXP, nDims));
 
-        // Add drop negative attribute
-        if (bNegativeOrZero) then
-          sDropNegative := Rf_PROTECT(Rf_ScalarLogical(0))
+            for cn := 0 to nDims - 1 do
+            begin
+              R_INTEGER(sDim)[cn]    := pCoords[cn].Size;
+              R_INTEGER(sOffset)[cn] := pCoords[cn].IndexBase;
+            end;
+
+            Rf_dimgets(pResult, sDim);
+            Rf_setAttrib(pResult, OffsetSymbol, sOffset);
+            Rf_UNPROTECT(2);
+          end;
+
+          ArrayClass_Oarray:
+          begin
+            // Add Oarray class attribute
+            sClass := Rf_PROTECT(Rf_allocVector(STRSXP, 1));
+
+            R_SET_STRING_ELT(sClass, 0, Rf_mkChar('Oarray'));
+
+            Rf_classgets(pResult, sClass);
+            Rf_UNPROTECT(1);
+
+            // Add attribute names for offset and drop.negative
+            if (OffsetSymbol = nil) then
+            begin
+              OffsetSymbol := Rf_install('offset');
+            end;
+
+            if (DropNegativeSymbol = nil) then
+            begin
+              DropNegativeSymbol := Rf_install('drop.negative');
+            end;
+
+            // Add drop negative attribute
+            if (bNegativeOrZero) then
+              sDropNegative := Rf_PROTECT(Rf_ScalarLogical(0))
+            else
+              sDropNegative := Rf_PROTECT(Rf_ScalarLogical(1));
+
+            Rf_setAttrib(pResult, DropNegativeSymbol, sDropNegative);
+            Rf_UNPROTECT(1);
+
+            // Add dim and offset attributes
+            sDim    := Rf_PROTECT(Rf_allocVector(INTSXP, nDims));
+            sOffset := Rf_PROTECT(Rf_allocVector(INTSXP, nDims));
+
+            for cn := 0 to nDims - 1 do
+            begin
+              R_INTEGER(sDim)[cn]    := pCoords[cn].Size;
+              R_INTEGER(sOffset)[cn] := pCoords[cn].IndexBase;
+            end;
+
+            Rf_dimgets(pResult, sDim);
+            Rf_setAttrib(pResult, OffsetSymbol, sOffset);
+            Rf_UNPROTECT(2);
+          end;
         else
-          sDropNegative := Rf_PROTECT(Rf_ScalarLogical(1));
-
-        Rf_setAttrib(pResult, DropNegativeSymbol, sDropNegative);
-        Rf_UNPROTECT(1);
-
-        // Add dim and offset attributes
-        sDim    := Rf_PROTECT(Rf_allocVector(INTSXP, nDims));
-        sOffset := Rf_PROTECT(Rf_allocVector(INTSXP, nDims));
-
-        for cn := 0 to nDims - 1 do
-        begin
-          R_INTEGER(sDim)[cn]    := pCoords[cn].Size;
-          R_INTEGER(sOffset)[cn] := pCoords[cn].IndexBase;
+          raise Exception.Create('R_CreateArray called with invalid R ArrayClass\n');
         end;
-
-        Rf_dimgets(pResult, sDim);
-        Rf_setAttrib(pResult, OffsetSymbol, sOffset);
-        Rf_UNPROTECT(2);
       end
       else
       begin
@@ -1305,6 +1499,40 @@ implementation
 
   //  ----------------------------------------------------------------------------
 
+  function R_Scalar(bResult : longbool) : SEXP;overload;
+
+  var
+    pResult : SEXP;
+
+  begin
+    pResult := Rf_allocVector(LGLSXP, 1);
+
+    Rf_PROTECT(pResult);
+    R_LOGICAL(pResult)[0] := bResult;
+    Rf_UNPROTECT(1);
+
+    R_Scalar := pResult;
+  end;
+
+  //  ----------------------------------------------------------------------------
+
+  function R_Scalar(cResult : char) : SEXP;overload;
+  var
+    pResult : SEXP;
+
+  begin
+    pResult := Rf_allocVector(RAWSXP, 1);
+
+    Rf_PROTECT(pResult);
+
+    R_RAW(pResult)[0] := byte(cResult);
+    Rf_UNPROTECT(1);
+
+    R_Scalar := pResult;
+  end;
+
+  //  ----------------------------------------------------------------------------
+
   function R_Empty() : SEXP;
 
   var
@@ -1313,6 +1541,14 @@ implementation
   begin
     nEmpty  := 0;
     R_Empty := R_Scalar(nEmpty);
+  end;
+
+  //  ----------------------------------------------------------------------------
+
+  procedure R_SetArrayClass(nClass : R_UseArrayClass);
+
+  begin
+    ArrayClass := nClass;
   end;
 
 end.

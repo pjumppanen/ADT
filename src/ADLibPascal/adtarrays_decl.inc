@@ -1,13 +1,3 @@
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1B) ; overload;
 
@@ -19,17 +9,6 @@ function create(var pArray : ARRAY_1B; pRefArray : ARRAY_1B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2B) ; overload;
 
@@ -41,17 +20,6 @@ function create(var pArray : ARRAY_2B; pRefArray : ARRAY_2B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3B) ; overload;
 
@@ -63,17 +31,6 @@ function create(var pArray : ARRAY_3B; pRefArray : ARRAY_3B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4B) ; overload;
 
@@ -85,17 +42,6 @@ function create(var pArray : ARRAY_4B; pRefArray : ARRAY_4B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5B) ; overload;
 
@@ -107,17 +53,6 @@ function create(var pArray : ARRAY_5B; pRefArray : ARRAY_5B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6B) ; overload;
 
@@ -129,17 +64,6 @@ function create(var pArray : ARRAY_6B; pRefArray : ARRAY_6B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7B) ; overload;
 
@@ -151,17 +75,6 @@ function create(var pArray : ARRAY_7B; pRefArray : ARRAY_7B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8B) ; overload;
 
@@ -173,17 +86,6 @@ function create(var pArray : ARRAY_8B; pRefArray : ARRAY_8B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9B) ; overload;
 
@@ -195,17 +97,6 @@ function create(var pArray : ARRAY_9B; pRefArray : ARRAY_9B) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9B) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10B) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10B) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10B ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10B ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10B) ; overload;
 
@@ -217,17 +108,116 @@ function create(var pArray : ARRAY_10B; pRefArray : ARRAY_10B) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10B) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_1LB) ; overload;
 
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1C) ; overload;
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_1LB) ; overload;
 
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1C) ; overload;
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_1LB; pRefArray : ARRAY_1LB) : boolean ; overload;
 
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1C ; pArrayDest : plongint) ; overload;
+// array destruction method
+procedure destroy(var pArray : ARRAY_1LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_2LB) ; overload;
 
-procedure ADlib_to_R(pArraySrc : ARRAY_1C ; pArrayDest : pdouble) ; overload;
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_2LB) ; overload;
 
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_2LB; pRefArray : ARRAY_2LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_2LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_3LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_3LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_3LB; pRefArray : ARRAY_3LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_3LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_4LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_4LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_4LB; pRefArray : ARRAY_4LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_4LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_5LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_5LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_5LB; pRefArray : ARRAY_5LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_5LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_6LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_6LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_6LB; pRefArray : ARRAY_6LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_6LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_7LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_7LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_7LB; pRefArray : ARRAY_7LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_7LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_8LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_8LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_8LB; pRefArray : ARRAY_8LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_8LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_9LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_9LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_9LB; pRefArray : ARRAY_9LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_9LB) ; overload;
+// zero methods
+procedure zero(pArray : ARRAY_10LB) ; overload;
+
+// xcopy methods
+procedure xcopy(pArraySrc, pArrayDest : ARRAY_10LB) ; overload;
+
+// Same shape array creation method - copying shape from existing array
+function create(var pArray : ARRAY_10LB; pRefArray : ARRAY_10LB) : boolean ; overload;
+
+// array destruction method
+procedure destroy(var pArray : ARRAY_10LB) ; overload;
 // zero methods
 procedure zero(pArray : ARRAY_1C) ; overload;
 
@@ -239,17 +229,6 @@ function create(var pArray : ARRAY_1C; pRefArray : ARRAY_1C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2C) ; overload;
 
@@ -261,17 +240,6 @@ function create(var pArray : ARRAY_2C; pRefArray : ARRAY_2C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3C) ; overload;
 
@@ -283,17 +251,6 @@ function create(var pArray : ARRAY_3C; pRefArray : ARRAY_3C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4C) ; overload;
 
@@ -305,17 +262,6 @@ function create(var pArray : ARRAY_4C; pRefArray : ARRAY_4C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5C) ; overload;
 
@@ -327,17 +273,6 @@ function create(var pArray : ARRAY_5C; pRefArray : ARRAY_5C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6C) ; overload;
 
@@ -349,17 +284,6 @@ function create(var pArray : ARRAY_6C; pRefArray : ARRAY_6C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7C) ; overload;
 
@@ -371,17 +295,6 @@ function create(var pArray : ARRAY_7C; pRefArray : ARRAY_7C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8C) ; overload;
 
@@ -393,17 +306,6 @@ function create(var pArray : ARRAY_8C; pRefArray : ARRAY_8C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9C) ; overload;
 
@@ -415,17 +317,6 @@ function create(var pArray : ARRAY_9C; pRefArray : ARRAY_9C) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10C) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10C) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10C ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10C ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10C) ; overload;
 
@@ -437,17 +328,6 @@ function create(var pArray : ARRAY_10C; pRefArray : ARRAY_10C) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10C) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1UC) ; overload;
 
@@ -459,17 +339,6 @@ function create(var pArray : ARRAY_1UC; pRefArray : ARRAY_1UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2UC) ; overload;
 
@@ -481,17 +350,6 @@ function create(var pArray : ARRAY_2UC; pRefArray : ARRAY_2UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3UC) ; overload;
 
@@ -503,17 +361,6 @@ function create(var pArray : ARRAY_3UC; pRefArray : ARRAY_3UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4UC) ; overload;
 
@@ -525,17 +372,6 @@ function create(var pArray : ARRAY_4UC; pRefArray : ARRAY_4UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5UC) ; overload;
 
@@ -547,17 +383,6 @@ function create(var pArray : ARRAY_5UC; pRefArray : ARRAY_5UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6UC) ; overload;
 
@@ -569,17 +394,6 @@ function create(var pArray : ARRAY_6UC; pRefArray : ARRAY_6UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7UC) ; overload;
 
@@ -591,17 +405,6 @@ function create(var pArray : ARRAY_7UC; pRefArray : ARRAY_7UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8UC) ; overload;
 
@@ -613,17 +416,6 @@ function create(var pArray : ARRAY_8UC; pRefArray : ARRAY_8UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9UC) ; overload;
 
@@ -635,17 +427,6 @@ function create(var pArray : ARRAY_9UC; pRefArray : ARRAY_9UC) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10UC) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10UC) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10UC ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10UC ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10UC) ; overload;
 
@@ -657,17 +438,6 @@ function create(var pArray : ARRAY_10UC; pRefArray : ARRAY_10UC) : boolean ; ove
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10UC) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1I) ; overload;
 
@@ -679,17 +449,6 @@ function create(var pArray : ARRAY_1I; pRefArray : ARRAY_1I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2I) ; overload;
 
@@ -701,17 +460,6 @@ function create(var pArray : ARRAY_2I; pRefArray : ARRAY_2I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3I) ; overload;
 
@@ -723,17 +471,6 @@ function create(var pArray : ARRAY_3I; pRefArray : ARRAY_3I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4I) ; overload;
 
@@ -745,17 +482,6 @@ function create(var pArray : ARRAY_4I; pRefArray : ARRAY_4I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5I) ; overload;
 
@@ -767,17 +493,6 @@ function create(var pArray : ARRAY_5I; pRefArray : ARRAY_5I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6I) ; overload;
 
@@ -789,17 +504,6 @@ function create(var pArray : ARRAY_6I; pRefArray : ARRAY_6I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7I) ; overload;
 
@@ -811,17 +515,6 @@ function create(var pArray : ARRAY_7I; pRefArray : ARRAY_7I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8I) ; overload;
 
@@ -833,17 +526,6 @@ function create(var pArray : ARRAY_8I; pRefArray : ARRAY_8I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9I) ; overload;
 
@@ -855,17 +537,6 @@ function create(var pArray : ARRAY_9I; pRefArray : ARRAY_9I) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10I) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10I) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10I ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10I ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10I) ; overload;
 
@@ -877,17 +548,6 @@ function create(var pArray : ARRAY_10I; pRefArray : ARRAY_10I) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10I) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1S) ; overload;
 
@@ -899,17 +559,6 @@ function create(var pArray : ARRAY_1S; pRefArray : ARRAY_1S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2S) ; overload;
 
@@ -921,17 +570,6 @@ function create(var pArray : ARRAY_2S; pRefArray : ARRAY_2S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3S) ; overload;
 
@@ -943,17 +581,6 @@ function create(var pArray : ARRAY_3S; pRefArray : ARRAY_3S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4S) ; overload;
 
@@ -965,17 +592,6 @@ function create(var pArray : ARRAY_4S; pRefArray : ARRAY_4S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5S) ; overload;
 
@@ -987,17 +603,6 @@ function create(var pArray : ARRAY_5S; pRefArray : ARRAY_5S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6S) ; overload;
 
@@ -1009,17 +614,6 @@ function create(var pArray : ARRAY_6S; pRefArray : ARRAY_6S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7S) ; overload;
 
@@ -1031,17 +625,6 @@ function create(var pArray : ARRAY_7S; pRefArray : ARRAY_7S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8S) ; overload;
 
@@ -1053,17 +636,6 @@ function create(var pArray : ARRAY_8S; pRefArray : ARRAY_8S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9S) ; overload;
 
@@ -1075,17 +647,6 @@ function create(var pArray : ARRAY_9S; pRefArray : ARRAY_9S) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10S) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10S) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10S ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10S ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10S) ; overload;
 
@@ -1097,17 +658,6 @@ function create(var pArray : ARRAY_10S; pRefArray : ARRAY_10S) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10S) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1US) ; overload;
 
@@ -1119,17 +669,6 @@ function create(var pArray : ARRAY_1US; pRefArray : ARRAY_1US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2US) ; overload;
 
@@ -1141,17 +680,6 @@ function create(var pArray : ARRAY_2US; pRefArray : ARRAY_2US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3US) ; overload;
 
@@ -1163,17 +691,6 @@ function create(var pArray : ARRAY_3US; pRefArray : ARRAY_3US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4US) ; overload;
 
@@ -1185,17 +702,6 @@ function create(var pArray : ARRAY_4US; pRefArray : ARRAY_4US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5US) ; overload;
 
@@ -1207,17 +713,6 @@ function create(var pArray : ARRAY_5US; pRefArray : ARRAY_5US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6US) ; overload;
 
@@ -1229,17 +724,6 @@ function create(var pArray : ARRAY_6US; pRefArray : ARRAY_6US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7US) ; overload;
 
@@ -1251,17 +735,6 @@ function create(var pArray : ARRAY_7US; pRefArray : ARRAY_7US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8US) ; overload;
 
@@ -1273,17 +746,6 @@ function create(var pArray : ARRAY_8US; pRefArray : ARRAY_8US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9US) ; overload;
 
@@ -1295,17 +757,6 @@ function create(var pArray : ARRAY_9US; pRefArray : ARRAY_9US) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10US) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10US) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10US ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10US ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10US) ; overload;
 
@@ -1317,17 +768,6 @@ function create(var pArray : ARRAY_10US; pRefArray : ARRAY_10US) : boolean ; ove
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10US) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1L) ; overload;
 
@@ -1339,17 +779,6 @@ function create(var pArray : ARRAY_1L; pRefArray : ARRAY_1L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2L) ; overload;
 
@@ -1361,17 +790,6 @@ function create(var pArray : ARRAY_2L; pRefArray : ARRAY_2L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3L) ; overload;
 
@@ -1383,17 +801,6 @@ function create(var pArray : ARRAY_3L; pRefArray : ARRAY_3L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4L) ; overload;
 
@@ -1405,17 +812,6 @@ function create(var pArray : ARRAY_4L; pRefArray : ARRAY_4L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5L) ; overload;
 
@@ -1427,17 +823,6 @@ function create(var pArray : ARRAY_5L; pRefArray : ARRAY_5L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6L) ; overload;
 
@@ -1449,17 +834,6 @@ function create(var pArray : ARRAY_6L; pRefArray : ARRAY_6L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7L) ; overload;
 
@@ -1471,17 +845,6 @@ function create(var pArray : ARRAY_7L; pRefArray : ARRAY_7L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8L) ; overload;
 
@@ -1493,17 +856,6 @@ function create(var pArray : ARRAY_8L; pRefArray : ARRAY_8L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9L) ; overload;
 
@@ -1515,17 +867,6 @@ function create(var pArray : ARRAY_9L; pRefArray : ARRAY_9L) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10L) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10L) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10L ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10L ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10L) ; overload;
 
@@ -1537,17 +878,6 @@ function create(var pArray : ARRAY_10L; pRefArray : ARRAY_10L) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10L) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1UL) ; overload;
 
@@ -1559,17 +889,6 @@ function create(var pArray : ARRAY_1UL; pRefArray : ARRAY_1UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2UL) ; overload;
 
@@ -1581,17 +900,6 @@ function create(var pArray : ARRAY_2UL; pRefArray : ARRAY_2UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3UL) ; overload;
 
@@ -1603,17 +911,6 @@ function create(var pArray : ARRAY_3UL; pRefArray : ARRAY_3UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4UL) ; overload;
 
@@ -1625,17 +922,6 @@ function create(var pArray : ARRAY_4UL; pRefArray : ARRAY_4UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5UL) ; overload;
 
@@ -1647,17 +933,6 @@ function create(var pArray : ARRAY_5UL; pRefArray : ARRAY_5UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6UL) ; overload;
 
@@ -1669,17 +944,6 @@ function create(var pArray : ARRAY_6UL; pRefArray : ARRAY_6UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7UL) ; overload;
 
@@ -1691,17 +955,6 @@ function create(var pArray : ARRAY_7UL; pRefArray : ARRAY_7UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8UL) ; overload;
 
@@ -1713,17 +966,6 @@ function create(var pArray : ARRAY_8UL; pRefArray : ARRAY_8UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9UL) ; overload;
 
@@ -1735,17 +977,6 @@ function create(var pArray : ARRAY_9UL; pRefArray : ARRAY_9UL) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10UL) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10UL) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10UL ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10UL ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10UL) ; overload;
 
@@ -1757,17 +988,6 @@ function create(var pArray : ARRAY_10UL; pRefArray : ARRAY_10UL) : boolean ; ove
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10UL) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1F) ; overload;
 
@@ -1779,17 +999,6 @@ function create(var pArray : ARRAY_1F; pRefArray : ARRAY_1F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2F) ; overload;
 
@@ -1801,17 +1010,6 @@ function create(var pArray : ARRAY_2F; pRefArray : ARRAY_2F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3F) ; overload;
 
@@ -1823,17 +1021,6 @@ function create(var pArray : ARRAY_3F; pRefArray : ARRAY_3F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4F) ; overload;
 
@@ -1845,17 +1032,6 @@ function create(var pArray : ARRAY_4F; pRefArray : ARRAY_4F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5F) ; overload;
 
@@ -1867,17 +1043,6 @@ function create(var pArray : ARRAY_5F; pRefArray : ARRAY_5F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6F) ; overload;
 
@@ -1889,17 +1054,6 @@ function create(var pArray : ARRAY_6F; pRefArray : ARRAY_6F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7F) ; overload;
 
@@ -1911,17 +1065,6 @@ function create(var pArray : ARRAY_7F; pRefArray : ARRAY_7F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8F) ; overload;
 
@@ -1933,17 +1076,6 @@ function create(var pArray : ARRAY_8F; pRefArray : ARRAY_8F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9F) ; overload;
 
@@ -1955,17 +1087,6 @@ function create(var pArray : ARRAY_9F; pRefArray : ARRAY_9F) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10F) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10F) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10F ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10F ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10F) ; overload;
 
@@ -1977,17 +1098,6 @@ function create(var pArray : ARRAY_10F; pRefArray : ARRAY_10F) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10F) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_1D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_1D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_1D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_1D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_1D) ; overload;
 
@@ -1999,17 +1109,6 @@ function create(var pArray : ARRAY_1D; pRefArray : ARRAY_1D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_1D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_2D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_2D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_2D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_2D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_2D) ; overload;
 
@@ -2021,17 +1120,6 @@ function create(var pArray : ARRAY_2D; pRefArray : ARRAY_2D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_2D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_3D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_3D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_3D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_3D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_3D) ; overload;
 
@@ -2043,17 +1131,6 @@ function create(var pArray : ARRAY_3D; pRefArray : ARRAY_3D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_3D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_4D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_4D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_4D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_4D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_4D) ; overload;
 
@@ -2065,17 +1142,6 @@ function create(var pArray : ARRAY_4D; pRefArray : ARRAY_4D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_4D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_5D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_5D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_5D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_5D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_5D) ; overload;
 
@@ -2087,17 +1153,6 @@ function create(var pArray : ARRAY_5D; pRefArray : ARRAY_5D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_5D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_6D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_6D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_6D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_6D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_6D) ; overload;
 
@@ -2109,17 +1164,6 @@ function create(var pArray : ARRAY_6D; pRefArray : ARRAY_6D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_6D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_7D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_7D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_7D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_7D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_7D) ; overload;
 
@@ -2131,17 +1175,6 @@ function create(var pArray : ARRAY_7D; pRefArray : ARRAY_7D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_7D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_8D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_8D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_8D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_8D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_8D) ; overload;
 
@@ -2153,17 +1186,6 @@ function create(var pArray : ARRAY_8D; pRefArray : ARRAY_8D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_8D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_9D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_9D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_9D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_9D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_9D) ; overload;
 
@@ -2175,17 +1197,6 @@ function create(var pArray : ARRAY_9D; pRefArray : ARRAY_9D) : boolean ; overloa
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_9D) ; overload;
-
-// R_to_ADlib methods
-procedure R_to_ADlib(pArraySrc : plongint ; pArrayDest : ARRAY_10D) ; overload;
-
-procedure R_to_ADlib(pArraySrc : pdouble ; pArrayDest : ARRAY_10D) ; overload;
-
-// ADlib_to_R methods
-procedure ADlib_to_R(pArraySrc : ARRAY_10D ; pArrayDest : plongint) ; overload;
-
-procedure ADlib_to_R(pArraySrc : ARRAY_10D ; pArrayDest : pdouble) ; overload;
-
 // zero methods
 procedure zero(pArray : ARRAY_10D) ; overload;
 
@@ -2197,7 +1208,26 @@ function create(var pArray : ARRAY_10D; pRefArray : ARRAY_10D) : boolean ; overl
 
 // array destruction method
 procedure destroy(var pArray : ARRAY_10D) ; overload;
-
+procedure set_all(pArray : ARRAY_1B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_2B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_3B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_4B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_5B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_6B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_7B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_8B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_9B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_10B; value : boolean) ; overload;
+procedure set_all(pArray : ARRAY_1LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_2LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_3LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_4LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_5LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_6LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_7LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_8LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_9LB; value : longbool) ; overload;
+procedure set_all(pArray : ARRAY_10LB; value : longbool) ; overload;
 procedure set_all(pArray : ARRAY_1C; value : shortint) ; overload;
 
 procedure inc(pArray : ARRAY_1C) ; overload;
@@ -3441,6 +2471,381 @@ procedure check9(var pContext : AdtArrayPlanActor ;
 
 procedure check10(var pContext : AdtArrayPlanActor ;
                   pArray : ARRAY_10B ;
+                  sArrayName, sFileName, pFileLine : AnsiString ;
+                  bThrowException : boolean ;
+                  ix1 : integer ;
+                  n1 : AnsiString ;
+                  ix2 : integer ;
+                  n2 : AnsiString ;
+                  ix3 : integer ;
+                  n3 : AnsiString ;
+                  ix4 : integer ;
+                  n4 : AnsiString ;
+                  ix5 : integer ;
+                  n5 : AnsiString ;
+                  ix6 : integer ;
+                  n6 : AnsiString ;
+                  ix7 : integer ;
+                  n7 : AnsiString ;
+                  ix8 : integer ;
+                  n8 : AnsiString ;
+                  ix9 : integer ;
+                  n9 : AnsiString ;
+                  ix10 : integer ;
+                  n10 : AnsiString) ; inline;
+// flatten methods
+function createFlattened(pArray : ARRAY_2LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_3LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_4LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_5LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_6LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_7LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_8LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_9LB) : ARRAY_1LB ; overload;
+
+function createFlattened(pArray : ARRAY_10LB) : ARRAY_1LB ; overload;
+
+// createSlice methods
+function createSlice(pArray : ARRAY_2LB; i1 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_3LB; i1 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_3LB; i1, i2 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_4LB; i1 : longint) : ARRAY_3LB ; overload;
+
+function createSlice(pArray : ARRAY_4LB; i1, i2 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_4LB; i1, i2, i3 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_5LB; i1 : longint) : ARRAY_4LB ; overload;
+
+function createSlice(pArray : ARRAY_5LB; i1, i2 : longint) : ARRAY_3LB ; overload;
+
+function createSlice(pArray : ARRAY_5LB; i1, i2, i3 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_5LB; i1, i2, i3, i4 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_6LB; i1 : longint) : ARRAY_5LB ; overload;
+
+function createSlice(pArray : ARRAY_6LB; i1, i2 : longint) : ARRAY_4LB ; overload;
+
+function createSlice(pArray : ARRAY_6LB; i1, i2, i3 : longint) : ARRAY_3LB ; overload;
+
+function createSlice(pArray : ARRAY_6LB; i1, i2, i3, i4 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_6LB; i1, i2, i3, i4, i5 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_7LB; i1 : longint) : ARRAY_6LB ; overload;
+
+function createSlice(pArray : ARRAY_7LB; i1, i2 : longint) : ARRAY_5LB ; overload;
+
+function createSlice(pArray : ARRAY_7LB; i1, i2, i3 : longint) : ARRAY_4LB ; overload;
+
+function createSlice(pArray : ARRAY_7LB; i1, i2, i3, i4 : longint) : ARRAY_3LB ; overload;
+
+function createSlice(pArray : ARRAY_7LB; i1, i2, i3, i4, i5 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_7LB; i1, i2, i3, i4, i5, i6 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_8LB; i1 : longint) : ARRAY_7LB ; overload;
+
+function createSlice(pArray : ARRAY_8LB; i1, i2 : longint) : ARRAY_6LB ; overload;
+
+function createSlice(pArray : ARRAY_8LB; i1, i2, i3 : longint) : ARRAY_5LB ; overload;
+
+function createSlice(pArray : ARRAY_8LB; i1, i2, i3, i4 : longint) : ARRAY_4LB ; overload;
+
+function createSlice(pArray : ARRAY_8LB; i1, i2, i3, i4, i5 : longint) : ARRAY_3LB ; overload;
+
+function createSlice(pArray : ARRAY_8LB; i1, i2, i3, i4, i5, i6 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_8LB; i1, i2, i3, i4, i5, i6, i7 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1 : longint) : ARRAY_8LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1, i2 : longint) : ARRAY_7LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1, i2, i3 : longint) : ARRAY_6LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1, i2, i3, i4 : longint) : ARRAY_5LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1, i2, i3, i4, i5 : longint) : ARRAY_4LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1, i2, i3, i4, i5, i6 : longint) : ARRAY_3LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1, i2, i3, i4, i5, i6, i7 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_9LB; i1, i2, i3, i4, i5, i6, i7, i8 : longint) : ARRAY_1LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1 : longint) : ARRAY_9LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2 : longint) : ARRAY_8LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2, i3 : longint) : ARRAY_7LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2, i3, i4 : longint) : ARRAY_6LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2, i3, i4, i5 : longint) : ARRAY_5LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2, i3, i4, i5, i6 : longint) : ARRAY_4LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2, i3, i4, i5, i6, i7 : longint) : ARRAY_3LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2, i3, i4, i5, i6, i7, i8 : longint) : ARRAY_2LB ; overload;
+
+function createSlice(pArray : ARRAY_10LB; i1, i2, i3, i4, i5, i6, i7, i8, i9 : longint) : ARRAY_1LB ; overload;
+
+// Stack size method
+function stackSize(pArray : ARRAY_1LB) : longint ; overload;
+
+// Stack creation method
+function createStack(var pArray : ARRAY_1LB; nInitialSize : longint = DEFAULT_STACK_SIZE) : boolean ; overload;
+
+// Stack growing method
+procedure growStack(var pArray : ARRAY_1LB; nIndexNeeded : longint); overload;
+
+// Simplified array creation methods
+// 1D
+function create(var pArray : ARRAY_1LB;
+                nBaseIndex, nSize : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 2D
+function create(var pArray : ARRAY_2LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 3D
+function create(var pArray : ARRAY_3LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 4D
+function create(var pArray : ARRAY_4LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                nBaseIndex4, nSize4 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 5D
+function create(var pArray : ARRAY_5LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                nBaseIndex4, nSize4 : longint;
+                nBaseIndex5, nSize5 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 6D
+function create(var pArray : ARRAY_6LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                nBaseIndex4, nSize4 : longint;
+                nBaseIndex5, nSize5 : longint;
+                nBaseIndex6, nSize6 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 7D
+function create(var pArray : ARRAY_7LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                nBaseIndex4, nSize4 : longint;
+                nBaseIndex5, nSize5 : longint;
+                nBaseIndex6, nSize6 : longint;
+                nBaseIndex7, nSize7 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 8D
+function create(var pArray : ARRAY_8LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                nBaseIndex4, nSize4 : longint;
+                nBaseIndex5, nSize5 : longint;
+                nBaseIndex6, nSize6 : longint;
+                nBaseIndex7, nSize7 : longint;
+                nBaseIndex8, nSize8 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 9D
+function create(var pArray : ARRAY_9LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                nBaseIndex4, nSize4 : longint;
+                nBaseIndex5, nSize5 : longint;
+                nBaseIndex6, nSize6 : longint;
+                nBaseIndex7, nSize7 : longint;
+                nBaseIndex8, nSize8 : longint;
+                nBaseIndex9, nSize9 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// 10D
+function create(var pArray : ARRAY_10LB;
+                nBaseIndex1, nSize1 : longint;
+                nBaseIndex2, nSize2 : longint;
+                nBaseIndex3, nSize3 : longint;
+                nBaseIndex4, nSize4 : longint;
+                nBaseIndex5, nSize5 : longint;
+                nBaseIndex6, nSize6 : longint;
+                nBaseIndex7, nSize7 : longint;
+                nBaseIndex8, nSize8 : longint;
+                nBaseIndex9, nSize9 : longint;
+                nBaseIndex10, nSize10 : longint;
+                pExisting : pchar = nil) : boolean ; overload;
+
+// Bounds checking inline wrappers
+procedure check1(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_1LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString) ; inline;
+
+procedure check2(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_2LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString) ; inline;
+
+procedure check3(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_3LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString ;
+                 ix3 : integer ;
+                 n3 : AnsiString) ; inline;
+
+procedure check4(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_4LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString ;
+                 ix3 : integer ;
+                 n3 : AnsiString ;
+                 ix4 : integer ;
+                 n4 : AnsiString) ; inline;
+
+procedure check5(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_5LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString ;
+                 ix3 : integer ;
+                 n3 : AnsiString ;
+                 ix4 : integer ;
+                 n4 : AnsiString ;
+                 ix5 : integer ;
+                 n5 : AnsiString) ; inline;
+
+procedure check6(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_6LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString ;
+                 ix3 : integer ;
+                 n3 : AnsiString ;
+                 ix4 : integer ;
+                 n4 : AnsiString ;
+                 ix5 : integer ;
+                 n5 : AnsiString ;
+                 ix6 : integer ;
+                 n6 : AnsiString) ; inline;
+
+procedure check7(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_7LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString ;
+                 ix3 : integer ;
+                 n3 : AnsiString ;
+                 ix4 : integer ;
+                 n4 : AnsiString ;
+                 ix5 : integer ;
+                 n5 : AnsiString ;
+                 ix6 : integer ;
+                 n6 : AnsiString ;
+                 ix7 : integer ;
+                 n7 : AnsiString) ; inline;
+
+procedure check8(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_8LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString ;
+                 ix3 : integer ;
+                 n3 : AnsiString ;
+                 ix4 : integer ;
+                 n4 : AnsiString ;
+                 ix5 : integer ;
+                 n5 : AnsiString ;
+                 ix6 : integer ;
+                 n6 : AnsiString ;
+                 ix7 : integer ;
+                 n7 : AnsiString ;
+                 ix8 : integer ;
+                 n8 : AnsiString) ; inline;
+
+procedure check9(var pContext : AdtArrayPlanActor ;
+                 pArray : ARRAY_9LB ;
+                 sArrayName, sFileName, pFileLine : AnsiString ;
+                 bThrowException : boolean ;
+                 ix1 : integer ;
+                 n1 : AnsiString ;
+                 ix2 : integer ;
+                 n2 : AnsiString ;
+                 ix3 : integer ;
+                 n3 : AnsiString ;
+                 ix4 : integer ;
+                 n4 : AnsiString ;
+                 ix5 : integer ;
+                 n5 : AnsiString ;
+                 ix6 : integer ;
+                 n6 : AnsiString ;
+                 ix7 : integer ;
+                 n7 : AnsiString ;
+                 ix8 : integer ;
+                 n8 : AnsiString ;
+                 ix9 : integer ;
+                 n9 : AnsiString) ; inline;
+
+procedure check10(var pContext : AdtArrayPlanActor ;
+                  pArray : ARRAY_10LB ;
                   sArrayName, sFileName, pFileLine : AnsiString ;
                   bThrowException : boolean ;
                   ix1 : integer ;

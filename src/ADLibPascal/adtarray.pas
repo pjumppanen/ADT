@@ -525,7 +525,9 @@ implementation
   procedure zero(var ArrayInfo : AdtArrayInfo); inline ; overload;
 
   begin
-    FillChar(ArrayInfo.BlockPtr[ArrayInfo.LookupSize], SizeOf(char), 0);
+    with ArrayInfo do begin
+      FillChar((BlockPtr + LookupSize)^, BlockSize - LookupSize, 0);
+    end;
   end;
 
   //  ----------------------------------------------------------------------------

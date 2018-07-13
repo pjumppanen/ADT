@@ -40,6 +40,7 @@ class AdtFile;
 class AdtParser;
 class AdtFortranExecutableProgram;
 class AdtBlackBoxDefinition;
+class AdtCommon;
 
 
 //  ----------------------------------------------------------------------------
@@ -362,9 +363,11 @@ public:
 //  ----------------------------------------------------------------------------
 //  List of AdtParser objects
 //  ----------------------------------------------------------------------------
-typedef std::list<AdtParserContext>                  AdtParserPtrList;
-typedef std::list<AdtParserContext>::iterator        AdtParserPtrListIter;
-typedef std::list<AdtParserContext>::const_iterator  AdtParserPtrListConstIter;
+typedef std::list<AdtParserContext>                         AdtParserPtrList;
+typedef std::list<AdtParserContext>::iterator               AdtParserPtrListIter;
+typedef std::list<AdtParserContext>::const_iterator         AdtParserPtrListConstIter;
+typedef std::list<AdtParserContext>::reverse_iterator       AdtParserPtrListRIter;
+typedef std::list<AdtParserContext>::const_reverse_iterator AdtParserPtrListConstRIter;
 
 
 //  ----------------------------------------------------------------------------
@@ -423,6 +426,7 @@ protected:
   int                                 Depth;
   int                                 LineNumber;
   const char*                         FileName;
+  bool                                CanBindComments;
 
 protected:
   bool                                findObject(const AdtParserPtrByStringMap& rMap,
@@ -456,10 +460,13 @@ protected:
   void                                enumerateSpecial(AdtParserPtrByStringMap& rMap);
   void                                enumerateSpecial(AdtParserPtrByStringMultiMap& rMap);
 
-  static AdtFile&                     writeExpanded(AdtFile& pOutFile, const char* pString);
+  static AdtFile&                     writeExpanded(AdtFile& pOutFile, const char* pString, bool bExcludeLast = false);
   static AdtFile&                     write(AdtFile& pOutFile, const string& rString);
   static AdtFile&                     write(AdtFile& pOutFile, const char* pString);
   static AdtFile&                     write(AdtFile& pOutFile, char nChar);
+
+  virtual void                        bindComments(AdtCommon* pCompilerBase);
+  virtual void                        bindComment(const string* pComment);
 
 public:
   AdtParser();
@@ -691,15 +698,6 @@ inline int AdtParser::depth() const
 
 //  ----------------------------------------------------------------------------
 
-inline void AdtParser::lineNumberAndFileName(int nLineNumber,
-                                             const char* pFileName)
-{
-  LineNumber  = nLineNumber;
-  FileName    = pFileName;
-}
-
-//  ----------------------------------------------------------------------------
-
 inline int AdtParser::lineNumber() const
 {
   return (LineNumber);
@@ -923,6 +921,9 @@ public:
   void                          regardAsClassFunctions(const AdtStringByStringMap& rRegardAsClassFunctionMap) const;
   void                          regardAsClassSubroutines(const AdtStringByStringMap& rRegardAsClassSubroutineMap) const;
 
+  void                          appendIsBlackBoxMap(AdtIntByStringMap& rIsBlackBoxMap) const;
+  void                          isBlackBoxMap(const AdtIntByStringMap& rIsBlackBoxMap);
+
   virtual void                  enumerateMethodNames(AdtStringList& rMethodList) const = 0;
 
   virtual bool                  hasClass(const char* pClassName,
@@ -930,7 +931,8 @@ public:
 
   virtual bool                  buildBlackBoxFile(const char* pBlackBoxFileName,
                                                   AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap) = 0;
+                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                                  double dVersionNumber) = 0;
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rRootList,
@@ -944,6 +946,7 @@ public:
   virtual bool                  extractClassConstructors(AdtStringList& rConstructorList,
                                                          const char* pClassName,
                                                          const char* pParentClassName,
+                                                         const char* pPathPrefix,
                                                          AdtSourceFileType nAsFileType) const = 0;
 
   virtual AdtFile&              writeClassMethodsAsFortran(AdtFile& rOutFile,
@@ -1047,6 +1050,13 @@ inline void AdtSourceRoot::regardAsClassFunctions(const AdtStringByStringMap& rR
 inline void AdtSourceRoot::regardAsClassSubroutines(const AdtStringByStringMap& rRegardAsClassSubroutineMap) const
 {
   RegardAsClassSubroutineMap = rRegardAsClassSubroutineMap;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtSourceRoot::isBlackBoxMap(const AdtIntByStringMap& rIsBlackBoxMap)
+{
+  IsBlackBoxMap = rIsBlackBoxMap;
 }
 
 

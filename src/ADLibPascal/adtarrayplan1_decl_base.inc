@@ -4,4 +4,4 @@
 function existing(var pArray : <T>; pExisting : pchar) : boolean ; overload;
 
 // New array creation method
-function create(rAllocator : AdtMemAllocator; var pArray : <T>; pExisting : pchar = nil) : boolean ; overload;
+function create(var rAllocator : AdtMemAllocator; var pArray : <T>; pExisting : pchar = nil) : boolean ; overload;

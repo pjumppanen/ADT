@@ -238,8 +238,8 @@ void AdtExpressionCompiler::reconstructWithIndexing(const char* pExpressionText,
 void AdtExpressionCompiler::reconstructWithPossibleSEXPArgs(const char* pExpressionText,
                                                             string& rReconstructedText,
                                                             const AdtIntByStringMap& rWithSEXP_map,
-                                                            bool bForceAll,
-                                                            bool bWithUnderscore)
+                                                            bool bWithUnderscore,
+                                                            bool bR_Prefix)
 {
   AdtExpressionAdditive*  pRoot = compile(pExpressionText);
 
@@ -258,7 +258,7 @@ void AdtExpressionCompiler::reconstructWithPossibleSEXPArgs(const char* pExpress
 
       if (pObj != 0)
       {
-        pObj->convertFromSEXP(rWithSEXP_map, bForceAll, bWithUnderscore);
+        pObj->convertFromSEXP(rWithSEXP_map, bWithUnderscore, bR_Prefix);
       }
     }
 
@@ -589,24 +589,61 @@ void AdtExpressionPostfix::fixIndexing(const char* pIndexBase, int nCurrentIndex
 //  ----------------------------------------------------------------------------
 
 void AdtExpressionPostfix::convertFromSEXP(const AdtIntByStringMap& rWithSEXP_map,
-                                           bool bForceAll,
-                                           bool bWithUnderscore)
+                                           bool bWithUnderscore,
+                                           bool bR_Prefix)
 {
   if (isString())
   {
     AdtIntByStringMapConstIter  Iter      = rWithSEXP_map.find(name());
-    bool                        bConvert  = bForceAll || (Iter != rWithSEXP_map.end());
+    int                         nType     = -1;
+    bool                        bConvert  = false;
+
+    // The key value in the rWithSEXP_map map indicates whether the named
+    // argument is a global constant or not. If 0 then it is a argument list
+    // local and if 1 it is a global. When 1 we do not want to assume it is
+    // an SEXP so don't wnat to convert it.
+    if (Iter != rWithSEXP_map.end())
+    {
+      nType = Iter->second;
+    }
+
+    if (bWithUnderscore)
+    {
+      bConvert = (nType != 1);
+    }
+    else
+    {
+      bConvert = (nType == 0);
+    }
 
     if (bConvert)
     {
-      if (bWithUnderscore)
+      string sCast;
+
+      if (bR_Prefix)
       {
-        name("INTEGER(arg_" + name() + ")[0]");
+        if (bWithUnderscore)
+        {
+          sCast = "R_INTEGER(arg_";
+        }
+        else
+        {
+          sCast = "R_INTEGER(";
+        }
       }
       else
       {
-        name("INTEGER(" + name() + ")[0]");
+        if (bWithUnderscore)
+        {
+          sCast = "INTEGER(arg_";
+        }
+        else
+        {
+          sCast = "INTEGER(";
+        }
       }
+
+      name(sCast + name() + ")[0]");
     }
   }
 }

@@ -334,8 +334,8 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
   {
     p_yylval->pContext    = pContext;
     p_yylval->dValue      = 0.0;
+    p_yylval->nValue      = 0;
     p_yylval->sValue      = 0;
-    p_yylval->sComment    = 0;
     p_yylval->nBlockDepth = adtCpp_nBlockDepth;
 
     switch (nType)
@@ -351,21 +351,21 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
             /* fall through */
           }
 
+          case PREPROCESSOR:
           case SINGLELINE_COMMENT:
           case MULTILINE_COMMENT:
           {
-            adtCpp_AppendComment(pContext, pTokenText);
+            if (adtCpp_nIfDefCodeActive != 0)
+            {
+              adtCpp_AppendComment(pContext, pTokenText, adtCpp_pFileName, adtCpp_nLineNumber);
+            }
             break;
           }
 
           default:
           {
             p_yylval->sValue = adtCpp_AllocString(pContext, pTokenText, 1);
-
-            if (nType == TOKEN_KEYWORD)
-            {
-              p_yylval->sComment = adtCpp_ExtractComment(pContext);
-            }
+            break;
           }
         }
         break;
@@ -591,6 +591,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                   if (pComment != 0)
                                   {
                                     dispatchToken(adtCpp_pCppContext, &yylval, pComment, TOKEN_TEXT, EMBEDDED_COMMANDS);
+
                                     free(pComment);
                                   }
                                 }
@@ -616,20 +617,22 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                   if (pComment != 0)
                                   {
                                     dispatchToken(adtCpp_pCppContext, &yylval, pComment, TOKEN_TEXT, MULTILINE_COMMENT);
+
                                     free(pComment);
                                   }
                                 }
 
 <INITIAL,NOT_AD_CODE>{LCOMMENT} {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, SINGLELINE_COMMENT);
+
                                   yyCpp_resetLastLine();
                                   adtCpp_nLineNumber++;
                                 }
 
 <INITIAL,NOT_AD_CODE>{PREP}     {
-                                  int         nPreserveInclude = 0;
-                                  int         cn               = 0;
-                                  const char* pChar            = adtCpp_AllocString(adtCpp_pCppContext, yytext, 0);
+                                  int         nPreserveInclude  = 0;
+                                  int         cn                = 0;
+                                  const char* pChar             = adtCpp_AllocString(adtCpp_pCppContext, yytext, 0);
 
                                   for (cn = 0 ; pChar[cn] != '\0' ; cn++)
                                   {
@@ -651,13 +654,13 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
 
                                   while (*pChar != '\0')
                                   {
-                                    pChar = adtParse_nextWord(pChar, 0);
+                                    pChar = adtParse_nextWord(pChar, 0, 1);
 
                                     if (adtParse_matchWord(&pChar, "#include", 0))
                                     {
                                       char* pIncludePath = 0;
 
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_matchWord(&pChar, "\"", 0))
                                       {
@@ -669,7 +672,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
 
                                             if (nPreserveInclude != 0)
                                             {
-                                              dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, SINGLELINE_COMMENT);
+                                              dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, PREPROCESSOR);
                                             }
                                           }
 
@@ -708,13 +711,13 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                     {
                                       char* pSymbolName = 0;
 
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_extractWord(&pSymbolName, " (\n", &pChar))
                                       {
                                         char* pValueName = 0;
 
-                                        pChar = adtParse_nextWord(pChar, 0);
+                                        pChar = adtParse_nextWord(pChar, 0, 1);
 
                                         if (adtParse_extractWord(&pValueName, " )\n", &pChar))
                                         {
@@ -739,7 +742,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                     {
                                       char* pSymbolName = 0;
 
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_extractWord(&pSymbolName, " \n", &pChar))
                                       {
@@ -756,7 +759,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                     {
                                       char* pSymbolName = 0;
 
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_extractWord(&pSymbolName, " \n", &pChar))
                                       {
@@ -782,7 +785,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                     {
                                       char* pSymbolName = 0;
 
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_extractWord(&pSymbolName, " \n", &pChar))
                                       {
@@ -808,19 +811,19 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                     {
                                       int nNegate = 0;
 
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_matchWord(&pChar, "!", 0))
                                       {
                                         nNegate = 1;
-                                        pChar   = adtParse_nextWord(pChar, 0);
+                                        pChar   = adtParse_nextWord(pChar, 0, 1);
                                       }
 
                                       if (adtParse_matchWord(&pChar, "defined(", 0))
                                       {
                                         char* pSymbolName = 0;
 
-                                        pChar = adtParse_nextWord(pChar, 0);
+                                        pChar = adtParse_nextWord(pChar, 0, 1);
 
                                         if (adtParse_extractWord(&pSymbolName, " )\n", &pChar))
                                         {
@@ -842,13 +845,13 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                       {
                                         char* pSymbolName = 0;
 
-                                        pChar = adtParse_nextWord(pChar, 0);
+                                        pChar = adtParse_nextWord(pChar, 0, 1);
 
                                         if (adtParse_extractWord(&pSymbolName, " \n", &pChar))
                                         {
                                           int nType = 0;
 
-                                          pChar = adtParse_nextWord(pChar, 0);
+                                          pChar = adtParse_nextWord(pChar, 0, 1);
 
                                           if (adtParse_matchWord(&pChar, "==", 0))
                                           {
@@ -883,7 +886,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                           {
                                             char* pCheckValue = 0;
 
-                                            pChar = adtParse_nextWord(pChar, 0);
+                                            pChar = adtParse_nextWord(pChar, 0, 1);
 
                                             if (adtParse_extractWord(&pCheckValue, " \n", &pChar))
                                             {
@@ -961,19 +964,19 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                     {
                                       int nNegate = 0;
 
-                                      pChar = adtParse_nextWord(pChar, 0);
+                                      pChar = adtParse_nextWord(pChar, 0, 1);
 
                                       if (adtParse_matchWord(&pChar, "!", 0))
                                       {
                                         nNegate = 1;
-                                        pChar   = adtParse_nextWord(pChar, 0);
+                                        pChar   = adtParse_nextWord(pChar, 0, 1);
                                       }
 
                                       if (adtParse_matchWord(&pChar, "defined(", 0))
                                       {
                                         char* pSymbolName = 0;
 
-                                        pChar = adtParse_nextWord(pChar, 0);
+                                        pChar = adtParse_nextWord(pChar, 0, 1);
 
                                         if (adtParse_extractWord(&pSymbolName, " )\n", &pChar))
                                         {
@@ -995,13 +998,13 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                       {
                                         char* pSymbolName = 0;
 
-                                        pChar = adtParse_nextWord(pChar, 0);
+                                        pChar = adtParse_nextWord(pChar, 0, 1);
 
                                         if (adtParse_extractWord(&pSymbolName, " \n", &pChar))
                                         {
                                           int nType = 0;
 
-                                          pChar = adtParse_nextWord(pChar, 0);
+                                          pChar = adtParse_nextWord(pChar, 0, 1);
 
                                           if (adtParse_matchWord(&pChar, "==", 0))
                                           {
@@ -1036,7 +1039,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                           {
                                             char* pCheckValue = 0;
 
-                                            pChar = adtParse_nextWord(pChar, 0);
+                                            pChar = adtParse_nextWord(pChar, 0, 1);
 
                                             if (adtParse_extractWord(&pCheckValue, " \n", &pChar))
                                             {
@@ -1138,6 +1141,7 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
 "asm"                           return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, ASM));
 "auto"                          return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, AUTO));
 "bool"                          return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, BOOL));
+"longbool"                      return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LONGBOOL));
 "break"                         return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, BREAK));
 "case"                          return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, CASE));
 "char"                          return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, CHAR));
@@ -1271,8 +1275,11 @@ STRING_LITERAL          (L?\"(\\.|\\[0-9]{1,3}|0?\\x[a-fA-F0-9]+|[^\\\"\n])+\"){
                                   yyCpp_resetLastLine();
                                   adtCpp_nLineNumber++;
                                 }
-[ \v\t\f\r]                     {
+[ \v\f\r]                       {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, -1);
+                                }
+[ \t]                           {
+                                  dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, WHITESPACE);
                                 }
 .                               {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, -1);

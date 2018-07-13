@@ -34,7 +34,7 @@
 %}
 
 /* Object pascal keyword tokens */
-%token ABSOLUTE AND ANSISTRING ARRAY AS B_BEGIN BOOLEAN BYTE CASE CDECL CHAR CLASS
+%token ABSOLUTE AND ANSISTRING ARRAY AS B_BEGIN BOOLEAN LONGBOOL BYTE CASE CDECL CHAR CLASS
 %token COMP CONST CONSTRUCTOR CONTAINS CURRENCY DEFAULT DESTRUCTOR DIV DO DOUBLE
 %token DOWNTO DYNAMIC ELSE B_END EXPORT EXTENDED EXTERNAL FAR P_FILE FINALIZATION
 %token FOR FORWARD FUNCTION GOTO IF IMPLEMENTATION IMPLEMENTS IN INDEX INHERITED
@@ -146,53 +146,102 @@ Macro : Ident LPARENTHESIS ExprList RPARENTHESIS Expression
 }
 ;
 
-Program : PROGRAM Ident LPARENTHESIS IdentList RPARENTHESIS SEMICOLON UsesClause Block DOT
+/* ModuleEnd is an artificial construct inserted to allow comment binding to. Without
+   splitting it up in this manner, the trailing module include commands will have nothing
+   to bind to. */
+ModuleEnd : B_END DOT
 {
-  $$.pContext = adtDelphiProgram_create($2.pContext, $4.pContext, $7.pContext, $8.pContext, $1.sComment);
-}
-        | PROGRAM Ident SEMICOLON UsesClause Block DOT
-{
-  $$.pContext = adtDelphiProgram_create($2.pContext, 0, $4.pContext, $5.pContext, $1.sComment);
-}
-        | UsesClause Block DOT
-{
-  $$.pContext = adtDelphiProgram_create(0, 0, $1.pContext, $2.pContext, $1.sComment);
+  $$.pContext = adtDelphiModuleEnd_create(1);
 }
 ;
 
-Unit : UNIT Ident SEMICOLON InterfaceSection ImplementationSection InitSection DOT
+NoEndBlock : DeclSection B_BEGIN StmtList
 {
-  $$.pContext = adtDelphiUnit_create($2.pContext, $4.pContext, $5.pContext, $6.pContext, $1.sComment);
+  $$.pContext = adtDelphiBlock_create($1.pContext, adtDelphiCompoundStmt_create($3.pContext, 1));
+}
+           | DeclSection B_BEGIN
+{
+  $$.pContext = adtDelphiBlock_create($1.pContext, adtDelphiCompoundStmt_create(0, 1));
 }
 ;
 
-Package : PACKAGE Ident SEMICOLON B_END DOT
+NoEndInitSection : INITIALIZATION StmtList
 {
-  $$.pContext = adtDelphiPackage_create($2.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiInitSection_create($2.pContext, 0, 1);
 }
-        | PACKAGE Ident SEMICOLON CONTAINS IdentList SEMICOLON B_END DOT
+            | INITIALIZATION StmtList FINALIZATION StmtList
 {
-  $$.pContext = adtDelphiPackage_create($2.pContext, 0, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiInitSection_create($2.pContext, $4.pContext, 1);
 }
-        | PACKAGE Ident SEMICOLON REQUIRES IdentList SEMICOLON B_END DOT
+            | B_BEGIN StmtList
 {
-  $$.pContext = adtDelphiPackage_create($2.pContext, $5.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiInitSection_create($2.pContext, 0, 0);
 }
-        | PACKAGE Ident SEMICOLON REQUIRES IdentList SEMICOLON CONTAINS IdentList SEMICOLON B_END DOT
+            |
 {
-  $$.pContext = adtDelphiPackage_create($2.pContext, $5.pContext, $8.pContext, $1.sComment);
-}
-;
-
-Library : LIBRARY Ident SEMICOLON UsesClause Block DOT
-{
-  $$.pContext = adtDelphiLibrary_create($2.pContext, $4.pContext, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiInitSection_create(0, 0, 0);
 }
 ;
 
-UsesClause : USES IdentList SEMICOLON
+Program : PROGRAM Ident LPARENTHESIS IdentList RPARENTHESIS SEMICOLON UsesClause NoEndBlock ModuleEnd
 {
-  $$.pContext = adtDelphiUsesClause_create($2.pContext, $1.sComment);
+  $$.pContext = adtDelphiProgram_create($2.pContext, $4.pContext, $7.pContext, $8.pContext, $9.pContext);
+}
+        | PROGRAM Ident SEMICOLON UsesClause NoEndBlock ModuleEnd
+{
+  $$.pContext = adtDelphiProgram_create($2.pContext, 0, $4.pContext, $5.pContext, $6.pContext);
+}
+        | UsesClause NoEndBlock ModuleEnd
+{
+  $$.pContext = adtDelphiProgram_create(0, 0, $1.pContext, $2.pContext, $3.pContext);
+}
+;
+
+UnitStart : UNIT
+{
+  $$.nValue = yyDelphi_lineNumber();
+}
+;
+
+Unit : UnitStart Ident SEMICOLON InterfaceSection ImplementationSection NoEndInitSection ModuleEnd
+{
+  $$.pContext = adtDelphiUnit_create($2.pContext, $4.pContext, $5.pContext, $6.pContext, $1.nValue, $7.pContext);
+}
+;
+
+Package : PACKAGE Ident SEMICOLON ModuleEnd
+{
+  $$.pContext = adtDelphiPackage_create($2.pContext, 0, 0, $4.pContext);
+}
+        | PACKAGE Ident SEMICOLON CONTAINS IdentList SEMICOLON ModuleEnd
+{
+  $$.pContext = adtDelphiPackage_create($2.pContext, 0, $5.pContext, $7.pContext);
+}
+        | PACKAGE Ident SEMICOLON REQUIRES IdentList SEMICOLON ModuleEnd
+{
+  $$.pContext = adtDelphiPackage_create($2.pContext, $5.pContext, 0, $7.pContext);
+}
+        | PACKAGE Ident SEMICOLON REQUIRES IdentList SEMICOLON CONTAINS IdentList SEMICOLON ModuleEnd
+{
+  $$.pContext = adtDelphiPackage_create($2.pContext, $5.pContext, $8.pContext, $10.pContext);
+}
+;
+
+Library : LIBRARY Ident SEMICOLON UsesClause NoEndBlock ModuleEnd
+{
+  $$.pContext = adtDelphiLibrary_create($2.pContext, $4.pContext, $5.pContext, $6.pContext);
+}
+;
+
+UsesClauseStart : USES
+{
+  $$.nValue = yyDelphi_lineNumber();
+}
+;
+
+UsesClause : UsesClauseStart IdentList SEMICOLON
+{
+  $$.pContext = adtDelphiUsesClause_create($2.pContext, $1.nValue);
 }
            |
 {
@@ -200,13 +249,19 @@ UsesClause : USES IdentList SEMICOLON
 }
 ;
 
-InterfaceSection : INTERFACE UsesClause ConstSection TypeSection VarSection ExportedHeadingList
+InterfaceSectionStart : INTERFACE
 {
-  $$.pContext = adtDelphiInterfaceSection_create($2.pContext, $3.pContext, $4.pContext, $5.pContext, $6.pContext, $1.sComment);
+  $$.nValue = yyDelphi_lineNumber();
 }
-                 | INTERFACE UsesClause ConstSection TypeSection VarSection
+;
+
+InterfaceSection : InterfaceSectionStart UsesClause ConstSection TypeSection VarSection ExportedHeadingList
 {
-  $$.pContext = adtDelphiInterfaceSection_create($2.pContext, $3.pContext, $4.pContext, $5.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiInterfaceSection_create($2.pContext, $3.pContext, $4.pContext, $5.pContext, $6.pContext, $1.nValue);
+}
+                 | InterfaceSectionStart UsesClause ConstSection TypeSection VarSection
+{
+  $$.pContext = adtDelphiInterfaceSection_create($2.pContext, $3.pContext, $4.pContext, $5.pContext, 0, $1.nValue);
 }
                  |
 {
@@ -226,25 +281,30 @@ ExportedHeadingList : ExportedHeadingList ExportedHeading
 
 ExportedHeading : ProcedureHeading SEMICOLON DirectiveList SEMICOLON
 {
-  $$.pContext = adtDelphiExportedHeading_create($1.pContext, 0, $3.pContext, $1.sComment);
+  $$.pContext = adtDelphiExportedHeading_create($1.pContext, 0, $3.pContext);
 }
                 | FunctionHeading SEMICOLON DirectiveList SEMICOLON
 {
-  $$.pContext = adtDelphiExportedHeading_create(0, $1.pContext, $3.pContext, $1.sComment);
+  $$.pContext = adtDelphiExportedHeading_create(0, $1.pContext, $3.pContext);
 }
                 | ProcedureHeading SEMICOLON
 {
-  $$.pContext = adtDelphiExportedHeading_create($1.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiExportedHeading_create($1.pContext, 0, 0);
 }
                 | FunctionHeading SEMICOLON
 {
-  $$.pContext = adtDelphiExportedHeading_create(0, $1.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiExportedHeading_create(0, $1.pContext, 0);
 }
 ;
 
-ImplementationSection : IMPLEMENTATION UsesClause DeclSection
+ImplementationSectionStart : IMPLEMENTATION
 {
-  $$.pContext = adtDelphiImplementationSection_create($2.pContext, $3.pContext, $1.sComment);
+  $$.nValue = yyDelphi_lineNumber();
+};
+
+ImplementationSection : ImplementationSectionStart UsesClause DeclSection
+{
+  $$.pContext = adtDelphiImplementationSection_create($2.pContext, $3.pContext, $1.nValue);
 }
                       |
 {
@@ -254,13 +314,13 @@ ImplementationSection : IMPLEMENTATION UsesClause DeclSection
 
 Block : DeclSection CompoundStmt
 {
-  $$.pContext = adtDelphiBlock_create($1.pContext, $2.pContext, $1.sComment);
+  $$.pContext = adtDelphiBlock_create($1.pContext, $2.pContext);
 }
 ;
 
 DeclSection : LabelDeclSection ConstSection TypeSection VarSection ProcedureDeclSection
 {
-  $$.pContext = adtDelphiDeclSection_create($1.pContext, $2.pContext, $3.pContext, $4.pContext, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiDeclSection_create($1.pContext, $2.pContext, $3.pContext, $4.pContext, $5.pContext);
 }
 ;
 
@@ -286,13 +346,13 @@ LabelDeclList : LabelDeclList LabelDecl
 
 LabelDecl : LABEL LabelId SEMICOLON
 {
-  $$.pContext = adtDelphiLabelDecl_create($2.pContext, $1.sComment);
+  $$.pContext = adtDelphiLabelDecl_create($2.pContext);
 }
 ;
 
 ConstSection : CONST ConstantDeclList
 {
-  $$.pContext = adtDelphiConstSection_create($2.pContext, $1.sComment);
+  $$.pContext = adtDelphiConstSection_create($2.pContext);
 }
              |
 {
@@ -324,9 +384,15 @@ ConstantDecl : Ident EQUALS ConstExpr SEMICOLON
 }
 ;
 
-TypeSection : TYPE TypeDeclList
+TypeSectionStart : TYPE
 {
-  $$.pContext = adtDelphiTypeSection_create($2.pContext, $1.sComment);
+  $$.nValue = yyDelphi_lineNumber();
+}
+;
+
+TypeSection : TypeSectionStart TypeDeclList
+{
+  $$.pContext = adtDelphiTypeSection_create($2.pContext, $1.nValue);
 }
             |
 {
@@ -585,6 +651,10 @@ OrdIdent : SHORTINT
          | POINTER
 {
   $$.pContext = adtDelphiOrdIdent_create(12);
+}
+         | LONGBOOL
+{
+  $$.pContext = adtDelphiOrdIdent_create(13);
 }
 ;
 
@@ -846,7 +916,7 @@ ProcedureType : ProcedureHeading OF OBJECT
 
 VarSection : VAR VarDeclList
 {
-  $$.pContext = adtDelphiVarSection_create($2.pContext, $1.sComment);
+  $$.pContext = adtDelphiVarSection_create($2.pContext);
 }
            |
 {
@@ -1229,79 +1299,79 @@ ExprList : ExprList COMMA Expression
 
 Statement : ExitStatement
 {
-  $$.pContext = adtDelphiStatement_create(0, $1.pContext, 0, 0, 0, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, $1.pContext, 0, 0, 0, 0, 0, 0, 0, 0);
 }
           | SimpleStatement
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, $1.pContext, 0, 0, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, $1.pContext, 0, 0, 0, 0, 0, 0, 0);
 }
           | CompoundStmt
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, 0, $1.pContext, 0, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, 0, $1.pContext, 0, 0, 0, 0, 0, 0);
 }
           | IfStmt
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, $1.pContext, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, $1.pContext, 0, 0, 0, 0, 0);
 }
           | CaseStmt
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, $1.pContext, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, $1.pContext, 0, 0, 0, 0);
 }
           | RepeatStmt
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, $1.pContext, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, $1.pContext, 0, 0, 0);
 }
           | WhileStmt
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, $1.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, $1.pContext, 0, 0);
 }
           | ForStmt
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, 0, $1.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, 0, $1.pContext, 0);
 }
           | WithStmt
 {
-  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, 0, 0, $1.pContext, $1.sComment);
+  $$.pContext = adtDelphiStatement_create(0, 0, 0, 0, 0, 0, 0, 0, 0, $1.pContext);
 }
           | LabelId COLON
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 }
           | LabelId COLON ExitStatement
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, $3.pContext, 0, 0, 0, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, $3.pContext, 0, 0, 0, 0, 0, 0, 0, 0);
 }
           | LabelId COLON SimpleStatement
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, $3.pContext, 0, 0, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, $3.pContext, 0, 0, 0, 0, 0, 0, 0);
 }
           | LabelId COLON CompoundStmt
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, $3.pContext, 0, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, $3.pContext, 0, 0, 0, 0, 0, 0);
 }
           | LabelId COLON IfStmt
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, $3.pContext, 0, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, $3.pContext, 0, 0, 0, 0, 0);
 }
           | LabelId COLON CaseStmt
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, $3.pContext, 0, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, $3.pContext, 0, 0, 0, 0);
 }
           | LabelId COLON RepeatStmt
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, $3.pContext, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, $3.pContext, 0, 0, 0);
 }
           | LabelId COLON WhileStmt
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, $3.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, $3.pContext, 0, 0);
 }
           | LabelId COLON ForStmt
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, 0, $3.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, 0, $3.pContext, 0);
 }
           | LabelId COLON WithStmt
 {
-  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, 0, 0, $3.pContext, $1.sComment);
+  $$.pContext = adtDelphiStatement_create($1.pContext, 0, 0, 0, 0, 0, 0, 0, 0, $3.pContext);
 }
 ;
 
@@ -1410,11 +1480,11 @@ SizeofType : OrdIdent
 
 CompoundStmt : B_BEGIN StmtList B_END
 {
-  $$.pContext = adtDelphiCompoundStmt_create($2.pContext);
+  $$.pContext = adtDelphiCompoundStmt_create($2.pContext, 0);
 }
              | B_BEGIN B_END
 {
-  $$.pContext = adtDelphiCompoundStmt_create(0);
+  $$.pContext = adtDelphiCompoundStmt_create(0, 0);
 }
 ;
 
@@ -1574,69 +1644,69 @@ ProcedureDecl : ProcedureHeading SEMICOLON DirectiveList SEMICOLON Block SEMICOL
 
 FunctionHeading : FUNCTION Ident DOT Ident FormalParameters COLON SimpleType
 {
-  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, $5.pContext, $7.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, $5.pContext, $7.pContext, 0);
 }
                 | FUNCTION Ident FormalParameters COLON SimpleType
 {
-  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, $3.pContext, $5.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, $3.pContext, $5.pContext, 0);
 }
                 | FUNCTION Ident DOT Ident COLON SimpleType
 {
-  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, 0, $6.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, 0, $6.pContext, 0);
 }
                 | FUNCTION Ident COLON SimpleType
 {
-  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, 0, $4.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, 0, $4.pContext, 0);
 }
                 | FUNCTION Ident DOT Ident FormalParameters COLON TypeId
 {
-  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, $5.pContext, 0, $7.pContext, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, $5.pContext, 0, $7.pContext);
 }
                 | FUNCTION Ident FormalParameters COLON TypeId
 {
-  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, $3.pContext, 0, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, $3.pContext, 0, $5.pContext);
 }
                 | FUNCTION Ident DOT Ident COLON TypeId
 {
-  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, 0, 0, $6.pContext, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, 0, 0, $6.pContext);
 }
                 | FUNCTION Ident COLON TypeId
 {
-  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, 0, 0, $4.pContext, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, 0, 0, $4.pContext);
 }
                 | FUNCTION Ident DOT Ident FormalParameters COLON STRING
 {
-  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, $5.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, $5.pContext, 0, 0);
 }
                 | FUNCTION Ident FormalParameters COLON STRING
 {
-  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, $3.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, $3.pContext, 0, 0);
 }
                 | FUNCTION Ident DOT Ident COLON STRING
 {
-  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create($2.pContext, $4.pContext, 0, 0, 0);
 }
                 | FUNCTION Ident COLON STRING
 {
-  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, 0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiFunctionHeading_create(0, $2.pContext, 0, 0, 0);
 }
 ;
 
 ProcedureHeading : PROCEDURE Ident DOT Ident FormalParameters
 {
-  $$.pContext = adtDelphiProcedureHeading_create($2.pContext, $4.pContext, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiProcedureHeading_create($2.pContext, $4.pContext, $5.pContext);
 }
                  | PROCEDURE Ident FormalParameters
 {
-  $$.pContext = adtDelphiProcedureHeading_create(0, $2.pContext, $3.pContext, $1.sComment);
+  $$.pContext = adtDelphiProcedureHeading_create(0, $2.pContext, $3.pContext);
 }
                  | PROCEDURE Ident DOT Ident
 {
-  $$.pContext = adtDelphiProcedureHeading_create($2.pContext, $4.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiProcedureHeading_create($2.pContext, $4.pContext, 0);
 }
                  | PROCEDURE Ident
 {
-  $$.pContext = adtDelphiProcedureHeading_create(0, $2.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiProcedureHeading_create(0, $2.pContext, 0);
 }
 ;
 
@@ -1904,37 +1974,37 @@ Method : ProcedureHeading SEMICOLON DirectiveList SEMICOLON
 
 ConstructorHeading : CONSTRUCTOR Ident DOT Ident FormalParameters
 {
-  $$.pContext = adtDelphiConstructorHeading_create($2.pContext, $4.pContext, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiConstructorHeading_create($2.pContext, $4.pContext, $5.pContext);
 }
                    | CONSTRUCTOR Ident FormalParameters
 {
-  $$.pContext = adtDelphiConstructorHeading_create(0, $2.pContext, $3.pContext, $1.sComment);
+  $$.pContext = adtDelphiConstructorHeading_create(0, $2.pContext, $3.pContext);
 }
                    | CONSTRUCTOR Ident DOT Ident
 {
-  $$.pContext = adtDelphiConstructorHeading_create($2.pContext, $4.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiConstructorHeading_create($2.pContext, $4.pContext, 0);
 }
                    | CONSTRUCTOR Ident
 {
-  $$.pContext = adtDelphiConstructorHeading_create(0, $2.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiConstructorHeading_create(0, $2.pContext, 0);
 }
 ;
 
 DestructorHeading : DESTRUCTOR Ident DOT Ident FormalParameters
 {
-  $$.pContext = adtDelphiDestructorHeading_create($2.pContext, $4.pContext, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiDestructorHeading_create($2.pContext, $4.pContext, $5.pContext);
 }
                   | DESTRUCTOR Ident FormalParameters
 {
-  $$.pContext = adtDelphiDestructorHeading_create(0, $2.pContext, $3.pContext, $1.sComment);
+  $$.pContext = adtDelphiDestructorHeading_create(0, $2.pContext, $3.pContext);
 }
                   | DESTRUCTOR Ident DOT Ident
 {
-  $$.pContext = adtDelphiDestructorHeading_create($2.pContext, $4.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiDestructorHeading_create($2.pContext, $4.pContext, 0);
 }
                   | DESTRUCTOR Ident
 {
-  $$.pContext = adtDelphiDestructorHeading_create(0, $2.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiDestructorHeading_create(0, $2.pContext, 0);
 }
 ;
 
@@ -1951,24 +2021,6 @@ ObjFieldList : ObjFieldList SEMICOLON ObjField
 ObjField : IdentList COLON Type
 {
   $$.pContext = adtDelphiObjField_create($1.pContext, $3.pContext);
-}
-;
-
-InitSection : INITIALIZATION StmtList B_END
-{
-  $$.pContext = adtDelphiInitSection_create($2.pContext, 0, 1, $1.sComment);
-}
-            | INITIALIZATION StmtList FINALIZATION StmtList B_END
-{
-  $$.pContext = adtDelphiInitSection_create($2.pContext, $4.pContext, 1, $1.sComment);
-}
-            | B_BEGIN StmtList B_END
-{
-  $$.pContext = adtDelphiInitSection_create($2.pContext, 0, 0, $1.sComment);
-}
-            | B_END
-{
-  $$.pContext = adtDelphiInitSection_create(0, 0, 0, $1.sComment);
 }
 ;
 
@@ -2058,15 +2110,15 @@ ClassField : ObjField
 }
            | PROTECTED ObjField
 {
-  $$.pContext = adtDelphiClassField_create(1, $2.pContext);
+  $$.pContext = adtDelphiClassField_create(2, $2.pContext);
 }
            | PRIVATE ObjField
 {
-  $$.pContext = adtDelphiClassField_create(2, $2.pContext);
+  $$.pContext = adtDelphiClassField_create(3, $2.pContext);
 }
            | PUBLISHED ObjField
 {
-  $$.pContext = adtDelphiClassField_create(3, $2.pContext);
+  $$.pContext = adtDelphiClassField_create(4, $2.pContext);
 }
 ;
 
@@ -2212,35 +2264,35 @@ PropertySpecifiers : INDEX ConstExpr
 
 InterfaceType : INTERFACE B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create(0, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create(0, 0, 0);
 }
               | INTERFACE ClassMethodList B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create(0, $2.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create(0, $2.pContext, 0);
 }
               | INTERFACE ClassPropertyList SEMICOLON B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create(0, 0, $2.pContext, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create(0, 0, $2.pContext);
 }
               | INTERFACE ClassMethodList ClassPropertyList SEMICOLON B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create(0, $2.pContext, $3.pContext, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create(0, $2.pContext, $3.pContext);
 }
               | INTERFACE LPARENTHESIS IdentList RPARENTHESIS B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create($3.pContext, 0, 0, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create($3.pContext, 0, 0);
 }
               | INTERFACE LPARENTHESIS IdentList RPARENTHESIS ClassMethodList B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create($3.pContext, $5.pContext, 0, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create($3.pContext, $5.pContext, 0);
 }
               | INTERFACE LPARENTHESIS IdentList RPARENTHESIS ClassPropertyList SEMICOLON B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create($3.pContext, 0, $5.pContext, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create($3.pContext, 0, $5.pContext);
 }
               | INTERFACE LPARENTHESIS IdentList RPARENTHESIS ClassMethodList ClassPropertyList SEMICOLON B_END
 {
-  $$.pContext = adtDelphiInterfaceType_create($3.pContext, $5.pContext, $6.pContext, $1.sComment);
+  $$.pContext = adtDelphiInterfaceType_create($3.pContext, $5.pContext, $6.pContext);
 }
 ;
 

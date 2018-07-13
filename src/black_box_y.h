@@ -34,7 +34,7 @@
 # define YY_YY_SRC_BLACK_BOX_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -54,36 +54,39 @@ extern int yydebug;
     POWER = 264,
     PERIOD = 265,
     IDENTIFIER = 266,
-    NUMBER_FIXED = 267,
-    NUMBER_FLOAT = 268,
-    COMMA = 269,
-    COLON = 270,
-    SEMICOLON = 271,
-    DERIV_OP = 272,
-    BLACKBOX = 273,
-    READ_NOT_WRITTEN = 274,
-    NOT_READ_THEN_WRITTEN = 275,
-    NOT_READ_NOT_WRITTEN = 276,
-    READ_THEN_WRITTEN = 277,
-    DEPS = 278,
-    ID = 279,
-    REAL = 280,
-    INTEGER = 281,
-    COMPLEX = 282,
-    CHARACTER = 283,
-    BOOLEAN = 284,
-    REAL_ARRAY = 285,
-    INTEGER_ARRAY = 286,
-    COMPLEX_ARRAY = 287,
-    CHARACTER_ARRAY = 288,
-    BOOLEAN_ARRAY = 289,
-    IN = 290,
-    OUT = 291,
-    F_BEGIN = 292,
-    F_END = 293,
-    FUNCTION = 294,
-    PROCEDURE = 295,
-    RESULT = 296
+    QUALIFIED_IDENTIFIER = 267,
+    NUMBER_FIXED = 268,
+    NUMBER_FLOAT = 269,
+    COMMA = 270,
+    COLON = 271,
+    SEMICOLON = 272,
+    DERIV_OP = 273,
+    BLACKBOX = 274,
+    READ_NOT_WRITTEN = 275,
+    NOT_READ_THEN_WRITTEN = 276,
+    NOT_READ_NOT_WRITTEN = 277,
+    READ_THEN_WRITTEN = 278,
+    DEPS = 279,
+    ID = 280,
+    REAL = 281,
+    INTEGER = 282,
+    COMPLEX = 283,
+    CHARACTER = 284,
+    BOOLEAN = 285,
+    REAL_ARRAY = 286,
+    INTEGER_ARRAY = 287,
+    COMPLEX_ARRAY = 288,
+    CHARACTER_ARRAY = 289,
+    BOOLEAN_ARRAY = 290,
+    IN = 291,
+    OUT = 292,
+    F_BEGIN = 293,
+    F_END = 294,
+    FUNCTION = 295,
+    PROCEDURE = 296,
+    RESULT = 297,
+    BB_BEGIN = 298,
+    BB_END = 299
   };
 #endif
 

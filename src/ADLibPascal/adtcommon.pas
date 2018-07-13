@@ -44,6 +44,7 @@ type
   ppppppppppchar    = ^pppppppppchar;
   plongint          = ^longint;
   pdouble           = ^double;
+  plongbool         = ^longbool;
 
 
   //  -------------------------------------------------------------------------
@@ -69,6 +70,30 @@ type
   ARRAY_9B          = ^boolean_array_9;
   boolean_array_10  = array[0..99] of ARRAY_9B;
   ARRAY_10B         = ^boolean_array_10;
+
+  //  -------------------------------------------------------------------------
+  //  ARRAY_LB?
+  //  -------------------------------------------------------------------------
+  longbool_array_1   = array[0..99] of longbool;
+  ARRAY_1LB          = ^longbool_array_1;
+  longbool_array_2   = array[0..99] of ARRAY_1LB;
+  ARRAY_2LB          = ^longbool_array_2;
+  longbool_array_3   = array[0..99] of ARRAY_2LB;
+  ARRAY_3LB          = ^longbool_array_3;
+  longbool_array_4   = array[0..99] of ARRAY_3LB;
+  ARRAY_4LB          = ^longbool_array_4;
+  longbool_array_5   = array[0..99] of ARRAY_4LB;
+  ARRAY_5LB          = ^longbool_array_5;
+  longbool_array_6   = array[0..99] of ARRAY_5LB;
+  ARRAY_6LB          = ^longbool_array_6;
+  longbool_array_7   = array[0..99] of ARRAY_6LB;
+  ARRAY_7LB          = ^longbool_array_7;
+  longbool_array_8   = array[0..99] of ARRAY_7LB;
+  ARRAY_8LB          = ^longbool_array_8;
+  longbool_array_9   = array[0..99] of ARRAY_8LB;
+  ARRAY_9LB          = ^longbool_array_9;
+  longbool_array_10  = array[0..99] of ARRAY_9LB;
+  ARRAY_10LB         = ^longbool_array_10;
 
   //  -------------------------------------------------------------------------
   //  ARRAY_C?
@@ -304,6 +329,7 @@ type
   //  -------------------------------------------------------------------------
   AdtVarType = (AdtVarType_UNDEFINED,
                 AdtVarType_BOOL,
+                AdtVarType_LONGBOOL,
                 AdtVarType_CHAR,
                 AdtVarType_UCHAR,
                 AdtVarType_INT,
@@ -330,6 +356,7 @@ const
   procedure log_warning(sMsg : AnsiString) ; external name 'log_warning';
 
   function elementSizeFromVarType(nVarType : AdtVarType) : longint;
+  function varTypeName(nVarType : AdtVarType) : pchar;
 
   function varType(rArray : ARRAY_1B) : AdtVarType;overload;
   function varType(rArray : ARRAY_2B) : AdtVarType;overload;
@@ -341,6 +368,17 @@ const
   function varType(rArray : ARRAY_8B) : AdtVarType;overload;
   function varType(rArray : ARRAY_9B) : AdtVarType;overload;
   function varType(rArray : ARRAY_10B) : AdtVarType;overload;
+
+  function varType(rArray : ARRAY_1LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_2LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_3LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_4LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_5LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_6LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_7LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_8LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_9LB) : AdtVarType;overload;
+  function varType(rArray : ARRAY_10LB) : AdtVarType;overload;
 
   function varType(rArray : ARRAY_1C) : AdtVarType;overload;
   function varType(rArray : ARRAY_2C) : AdtVarType;overload;
@@ -484,16 +522,17 @@ implementation
     nSizeOf := 0;
 
     case (nVarType) of
-      AdtVarType_BOOL:    nSizeOf := sizeof(boolean);
-      AdtVarType_CHAR:    nSizeOf := sizeof(shortint);
-      AdtVarType_UCHAR:   nSizeOf := sizeof(byte);
-      AdtVarType_INT:     nSizeOf := sizeof(integer);
-      AdtVarType_LONG:    nSizeOf := sizeof(longint);
-      AdtVarType_ULONG:   nSizeOf := sizeof(longword);
-      AdtVarType_SHORT:   nSizeOf := sizeof(smallint);
-      AdtVarType_USHORT:  nSizeOf := sizeof(word);
-      AdtVarType_FLOAT:   nSizeOf := sizeof(single);
-      AdtVarType_DOUBLE:  nSizeOf := sizeof(double);
+      AdtVarType_BOOL:      nSizeOf := sizeof(boolean);
+      AdtVarType_LONGBOOL:  nSizeOf := sizeof(longbool);
+      AdtVarType_CHAR:      nSizeOf := sizeof(shortint);
+      AdtVarType_UCHAR:     nSizeOf := sizeof(byte);
+      AdtVarType_INT:       nSizeOf := sizeof(integer);
+      AdtVarType_LONG:      nSizeOf := sizeof(longint);
+      AdtVarType_ULONG:     nSizeOf := sizeof(longword);
+      AdtVarType_SHORT:     nSizeOf := sizeof(smallint);
+      AdtVarType_USHORT:    nSizeOf := sizeof(word);
+      AdtVarType_FLOAT:     nSizeOf := sizeof(single);
+      AdtVarType_DOUBLE:    nSizeOf := sizeof(double);
       else
       begin
         raise Exception.Create('Uninitialised var type');
@@ -501,6 +540,31 @@ implementation
     end;
 
     elementSizeFromVarType := nSizeOf;
+  end;
+
+  function varTypeName(nVarType : AdtVarType): pchar;
+
+  var
+    sTypeName : pchar;
+
+  begin
+    case nVarType of
+      AdtVarType_UNDEFINED:  sTypeName := 'AdtVarType_UNDEFINED';
+      AdtVarType_BOOL:       sTypeName := 'AdtVarType_BOOL';
+      AdtVarType_LONGBOOL:   sTypeName := 'AdtVarType_LONGBOOL';
+      AdtVarType_CHAR:       sTypeName := 'AdtVarType_CHAR';
+      AdtVarType_UCHAR:      sTypeName := 'AdtVarType_UCHAR';
+      AdtVarType_INT:        sTypeName := 'AdtVarType_INT';
+      AdtVarType_LONG:       sTypeName := 'AdtVarType_LONG';
+      AdtVarType_ULONG:      sTypeName := 'AdtVarType_ULONG';
+      AdtVarType_SHORT:      sTypeName := 'AdtVarType_SHORT';
+      AdtVarType_USHORT:     sTypeName := 'AdtVarType_USHORT';
+      AdtVarType_FLOAT:      sTypeName := 'AdtVarType_FLOAT';
+      AdtVarType_DOUBLE:     sTypeName := 'AdtVarType_DOUBLE';
+      else                   sTypeName := 'AdtVarType_UNDEFINED';
+    end;
+
+    result := sTypeName;
   end;
 
   function varType(rArray : ARRAY_1B) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_BOOL; end;
@@ -513,6 +577,17 @@ implementation
   function varType(rArray : ARRAY_8B) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_BOOL; end;
   function varType(rArray : ARRAY_9B) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_BOOL; end;
   function varType(rArray : ARRAY_10B) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_BOOL; end;
+
+  function varType(rArray : ARRAY_1LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_2LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_3LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_4LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_5LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_6LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_7LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_8LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_9LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
+  function varType(rArray : ARRAY_10LB) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_LONGBOOL; end;
 
   function varType(rArray : ARRAY_1C) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_CHAR; end;
   function varType(rArray : ARRAY_2C) : AdtVarType;overload; begin rArray := rArray; varType := AdtVarType_CHAR; end;

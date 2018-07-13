@@ -6,6 +6,9 @@ Bison Flex macro replacements for make lexical scanner
 
 
 #define yyparse               yyBlackBoxparse
+#define yy_push_state         yyBlackBox_push_state
+#define yy_pop_state          yyBlackBox_pop_state
+#define yy_top_state          yyBlackBox_top_state
 #define yypop_buffer_state    yyBlackBoxpop_buffer_state
 #define yyget_lineno          yyBlackBoxget_lineno
 #define yyget_in              yyBlackBoxget_in

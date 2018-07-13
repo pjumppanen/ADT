@@ -876,9 +876,12 @@ AdtJavaBase::~AdtJavaBase()
 
 //  ----------------------------------------------------------------------------
 
-void AdtJavaBase::initialise()
+void AdtJavaBase::rootBindComments(AdtCommon* pCompilerBase)
 {
-  //Do whatever is required. Possibly not needed anymore
+  if (JavaRootObject != 0)
+  {
+    JavaRootObject->bindComments(pCompilerBase);
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -1045,7 +1048,8 @@ bool AdtJavaGoal::hasClass(const char* pClassName,
 
 bool AdtJavaGoal::buildBlackBoxFile(const char* pBlackBoxFileName,
                                     AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                    AdtStringByStringMap& rRegardAsClassSubroutineMap)
+                                    AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                    double dVersionNumber)
 {
   bool bBuilt = false;
 
@@ -1081,6 +1085,7 @@ bool AdtJavaGoal::expandMacros()
 bool AdtJavaGoal::extractClassConstructors(AdtStringList& rConstructorList,
                                            const char* pClassName,
                                            const char* pParentClassName,
+                                           const char* pPathPrefix,
                                            AdtSourceFileType nAsFileType) const
 {
   return (false);

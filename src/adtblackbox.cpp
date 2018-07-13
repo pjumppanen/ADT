@@ -310,49 +310,93 @@ void AdtBlackBoxDefinition::AdtBlackBoxInfo::writeShape(AdtFile& rOutFile, bool 
 
 //  ----------------------------------------------------------------------------
 
-void AdtBlackBoxDefinition::AdtBlackBoxInfo::writeType(AdtFile& rOutFile, bool bWithSeperator) const
+void AdtBlackBoxDefinition::AdtBlackBoxInfo::writeType(AdtFile& rOutFile, bool bWithSeperator, double dTapenadeVersion) const
 {
   if (bWithSeperator)
   {
     writeSeperator(rOutFile);
   }
 
-  switch (Type)
+  if (dTapenadeVersion > 3.12)
   {
-    case AdtBlackBox_real:
+    switch (Type)
     {
-      rOutFile.write(IsArray ? "arrayType(metavar real, dimColons())" : "metavar real");
-      break;
-    }
+      case AdtBlackBox_real:
+      {
+        rOutFile.write(IsArray ? "arrayType(float(), dimColons())" : "float()");
+        break;
+      }
 
-    case AdtBlackBox_integer:
-    {
-      rOutFile.write(IsArray ? "arrayType(metavar integer, dimColons())" : "metavar integer");
-      break;
-    }
+      case AdtBlackBox_integer:
+      {
+        rOutFile.write(IsArray ? "arrayType(integer(), dimColons())" : "integer()");
+        break;
+      }
 
-    case AdtBlackBox_complex:
-    {
-      rOutFile.write(IsArray ? "arrayType(metavar complex, dimColons())" : "metavar complex");
-      break;
-    }
+      case AdtBlackBox_complex:
+      {
+        rOutFile.write(IsArray ? "arrayType(complex(), dimColons())" : "complex()");
+        break;
+      }
 
-    case AdtBlackBox_character:
-    {
-      rOutFile.write(IsArray ? "arrayType(metavar character, dimColons())" : "metavar character");
-      break;
-    }
+      case AdtBlackBox_character:
+      {
+        rOutFile.write(IsArray ? "arrayType(character(), dimColons())" : "character()");
+        break;
+      }
 
-    case AdtBlackBox_boolean:
-    {
-      rOutFile.write(IsArray ? "arrayType(metavar boolean, dimColons())" : "metavar boolean");
-      break;
-    }
+      case AdtBlackBox_boolean:
+      {
+        rOutFile.write(IsArray ? "arrayType(boolean(), dimColons())" : "boolean()");
+        break;
+      }
 
-    default:
+      default:
+      {
+        FAIL();
+        break;
+      }
+    }
+  }
+  else
+  {
+    switch (Type)
     {
-      FAIL();
-      break;
+      case AdtBlackBox_real:
+      {
+        rOutFile.write(IsArray ? "arrayType(metavar real, dimColons())" : "ident real");
+        break;
+      }
+
+      case AdtBlackBox_integer:
+      {
+        rOutFile.write(IsArray ? "arrayType(metavar integer, dimColons())" : "ident integer");
+        break;
+      }
+
+      case AdtBlackBox_complex:
+      {
+        rOutFile.write(IsArray ? "arrayType(metavar complex, dimColons())" : "ident complex");
+        break;
+      }
+
+      case AdtBlackBox_character:
+      {
+        rOutFile.write(IsArray ? "arrayType(metavar character, dimColons())" : "ident character");
+        break;
+      }
+
+      case AdtBlackBox_boolean:
+      {
+        rOutFile.write(IsArray ? "arrayType(metavar boolean, dimColons())" : "ident boolean");
+        break;
+      }
+
+      default:
+      {
+        FAIL();
+        break;
+      }
     }
   }
 }
@@ -548,7 +592,7 @@ void AdtBlackBoxDefinition::addReturn(AdtBlackBoxArgType nType,
 
 //  ----------------------------------------------------------------------------
 
-void AdtBlackBoxDefinition::writeDefinition(AdtFile& rOutFile) const
+void AdtBlackBoxDefinition::writeDefinition(AdtFile& rOutFile, double dTapenadeVersion) const
 {
   bool                        bWithSeperator;
   AdtBlackBoxInfoConstIter    Iter;
@@ -586,7 +630,7 @@ void AdtBlackBoxDefinition::writeDefinition(AdtFile& rOutFile) const
 
   for (Iter = TypeList.begin() ; Iter != TypeList.end() ; ++Iter)
   {
-    Iter->writeType(rOutFile, bWithSeperator);
+    Iter->writeType(rOutFile, bWithSeperator, dTapenadeVersion);
     bWithSeperator = true;
   }
 
@@ -703,7 +747,7 @@ void AdtBlackBoxDefinition::writeDefinition(AdtFile& rOutFile) const
 
 //  ----------------------------------------------------------------------------
 
-void AdtBlackBoxDefinition::appendCallPart(string& rDerivativeSpec) const
+void AdtBlackBoxDefinition::appendCallPart(string& rDerivativeSpec, double dTapenadeVersion) const
 {
   bool                        bWithSeperator;
   AdtBlackBoxInfoConstIter    Iter;
@@ -712,7 +756,14 @@ void AdtBlackBoxDefinition::appendCallPart(string& rDerivativeSpec) const
   // Need to do this because of a bug in Tapenade that assumes all lowercase names
   lcName.toLower();
 
-  rDerivativeSpec += "call(ident " + lcName + ", expressions(";
+  if (dTapenadeVersion > 3.12)
+  {
+    rDerivativeSpec += "call(none(), ident " + lcName + ", expressions(";
+  }
+  else
+  {
+    rDerivativeSpec += "call(ident " + lcName + ", expressions(";
+  }
 
   bWithSeperator = false;
 
@@ -827,6 +878,8 @@ AdtBlackBoxDerivativeList* AdtBlackBoxCompiler::compileFile(const char* pBlackBo
 
     if (yyBlackBoxin != 0)
     {
+      int nBLACKBOXDEF = 1;
+
       adtBlackBox_pContext  = (void*)this;
 //      yyBlackBoxdebug       = 1;
       yyBlackBoxdebug       = 0;
@@ -834,7 +887,9 @@ AdtBlackBoxDerivativeList* AdtBlackBoxCompiler::compileFile(const char* pBlackBo
 
       yyBlackBox_resetLineNumber(pBlackBoxFile);
       yyBlackBoxrestart(yyBlackBoxin);
+      yyBlackBox_pushState(nBLACKBOXDEF);
       yyBlackBoxparse();
+      yyBlackBox_popState();
       yyBlackBox_endParse();
 
       adtBlackBox_pContext  = 0;
@@ -928,7 +983,8 @@ bool AdtBlackBoxCompiler::isBlackBox(const char* pComments)
 void AdtBlackBoxCompiler::parseComments(AdtBlackBoxDefinition& rDefaultDef,
                                         const char* pComments,
                                         const char* pFile,
-                                        int nLine)
+                                        int nLine,
+                                        double dTapenadeVersion)
 {
   if (AdtBlackBoxCompiler::isBlackBox(pComments))
   {
@@ -962,7 +1018,8 @@ void AdtBlackBoxCompiler::parseComments(AdtBlackBoxDefinition& rDefaultDef,
                                nBlackBoxCount,
                                nDerivativeCount,
                                pFile,
-                               nLine);
+                               nLine,
+                               dTapenadeVersion);
 
       rDefaultDef.derivativeSpecification(sDerivativeText);
     }
@@ -982,7 +1039,9 @@ void AdtBlackBoxCompiler::parseComments(AdtBlackBoxDefinition& rDefaultDef,
 
 bool AdtBlackBoxCompiler::makeBlackBoxFile(const char* pSrcDefinitionsFile,
                                            const char* pDestBlackBoxFile,
-                                           bool bAppend)
+                                           AdtIntByStringMap& rIsBlackBoxMap,
+                                           bool bAppend,
+                                           double dTapenadeVersion)
 {
   bool bMade = false;
 
@@ -1011,7 +1070,7 @@ bool AdtBlackBoxCompiler::makeBlackBoxFile(const char* pSrcDefinitionsFile,
           {
             AdtBlackBoxStandAloneDef* pStandAloneDef = pObj->blackBoxDef();
 
-            pStandAloneDef->writeBlackBoxDefinition(BlackBoxFile);
+            pStandAloneDef->writeBlackBoxDefinition(BlackBoxFile, rIsBlackBoxMap, dTapenadeVersion);
 
             bMade = true;
           }
@@ -1064,7 +1123,8 @@ AdtBlackBoxBase::~AdtBlackBoxBase()
 void AdtBlackBoxBase::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                       string& rDerivativeText,
                                       const char* pFile,
-                                      int nLine) const
+                                      int nLine,
+                                      double dTapenadeVersion) const
 {
   bool                      bWithSeperator = false;
   AdtParserPtrListConstIter Iter;
@@ -1080,7 +1140,7 @@ void AdtBlackBoxBase::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
         rDerivativeText += ", ";
       }
 
-      pObj->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+      pObj->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
       bWithSeperator = true;
     }
@@ -1094,7 +1154,8 @@ void AdtBlackBoxBase::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef,
                                         int& nBlackBoxCount,
                                         int& nDerivativeCount,
                                         const char* pFile,
-                                        int nLine) const
+                                        int nLine,
+                                        double dTapenadeVersion) const
 {
   AdtParserPtrListConstIter Iter;
 
@@ -1109,7 +1170,8 @@ void AdtBlackBoxBase::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef,
                               nBlackBoxCount,
                               nDerivativeCount,
                               pFile,
-                              nLine);
+                              nLine,
+                              dTapenadeVersion);
     }
   }
 }
@@ -1205,13 +1267,14 @@ AdtBlackBoxDerivative::~AdtBlackBoxDerivative()
 void AdtBlackBoxDerivative::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                             string& rDerivativeText,
                                             const char* pFile,
-                                            int nLine) const
+                                            int nLine,
+                                            double dTapenadeVersion) const
 {
   if (!IsExtended)
   {
     rDerivativeText += "binary(";
 
-    rDefaultDef.appendCallPart(rDerivativeText);
+    rDefaultDef.appendCallPart(rDerivativeText, dTapenadeVersion);
   }
 
   if (isDerivativeNull())
@@ -1229,7 +1292,7 @@ void AdtBlackBoxDerivative::buildDerivative(const AdtBlackBoxDefinition& rDefaul
     {
       rDerivativeText += "binary(metavar " + lcIdentifier + ", none(), ";
 
-      ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+      ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
       rDerivativeText += ")";
     }
@@ -1237,7 +1300,7 @@ void AdtBlackBoxDerivative::buildDerivative(const AdtBlackBoxDefinition& rDefaul
     {
       rDerivativeText += ", none(), expressions(binary(metavar " + lcIdentifier + ", none(), ";
 
-      ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+      ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
       rDerivativeText += "))";
     }
@@ -1246,11 +1309,11 @@ void AdtBlackBoxDerivative::buildDerivative(const AdtBlackBoxDefinition& rDefaul
   {
     rDerivativeText += ", ";
 
-    ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ", expressions(";
 
-    DerivativeExtendedList->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    DerivativeExtendedList->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ")";
   }
@@ -1272,7 +1335,8 @@ void AdtBlackBoxDerivative::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef
                                               int& nBlackBoxCount,
                                               int& nDerivativeCount,
                                               const char* pFile,
-                                              int nLine) const
+                                              int nLine,
+                                              double dTapenadeVersion) const
 {
   if (isDerivativeMultipart())
   {
@@ -1285,7 +1349,7 @@ void AdtBlackBoxDerivative::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef
       AdtExit(-1);
     }
 
-    buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
   }
   else if (isDerivativeNull())
   {
@@ -1300,7 +1364,7 @@ void AdtBlackBoxDerivative::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef
       AdtExit(-1);
     }
 
-    buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
   }
   else if (isDerivativeComplete())
   {
@@ -1328,7 +1392,7 @@ void AdtBlackBoxDerivative::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef
         AdtExit(-1);
       }
 
-      buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+      buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
     }
 
     if (!rDefaultDef.hasArgument(Identifier))
@@ -1362,7 +1426,8 @@ void AdtBlackBoxDerivative::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef
                                   nBlackBoxCount,
                                   nDerivativeCount,
                                   pFile,
-                                  nLine);
+                                  nLine,
+                                  dTapenadeVersion);
     }
   }
 }
@@ -1402,7 +1467,8 @@ AdtBlackBoxDerivativeList::~AdtBlackBoxDerivativeList()
 void AdtBlackBoxDerivativeList::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                                 string& rDerivativeText,
                                                 const char* pFile,
-                                                int nLine) const
+                                                int nLine,
+                                                double dTapenadeVersion) const
 {
   AdtParserPtrListConstIter Iter;
   bool                      bAddSeperator = false;
@@ -1420,7 +1486,7 @@ void AdtBlackBoxDerivativeList::buildDerivative(const AdtBlackBoxDefinition& rDe
 
       bAddSeperator = true;
 
-      pObj->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+      pObj->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
     }
   }
 }
@@ -1468,23 +1534,24 @@ AdtBlackBoxExprAdditive::~AdtBlackBoxExprAdditive()
 void AdtBlackBoxExprAdditive::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                               string& rDerivativeText,
                                               const char* pFile,
-                                              int nLine) const
+                                              int nLine,
+                                              double dTapenadeVersion) const
 {
   if ((ExprAdditive != 0) && (ExprMultiplicative != 0))
   {
     rDerivativeText += (IsPlus ? "add(" : "sub(");
 
-    ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ", ";
 
-    ExprMultiplicative->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprMultiplicative->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ")";
   }
   else if (ExprMultiplicative != 0)
   {
-    ExprMultiplicative->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprMultiplicative->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
   }
 }
 
@@ -1531,23 +1598,24 @@ AdtBlackBoxExprMultiplicative::~AdtBlackBoxExprMultiplicative()
 void AdtBlackBoxExprMultiplicative::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                                     string& rDerivativeText,
                                                     const char* pFile,
-                                                    int nLine) const
+                                                    int nLine,
+                                                    double dTapenadeVersion) const
 {
   if ((ExprMultiplicative != 0) && (ExprPower != 0))
   {
     rDerivativeText += (IsMultiply ? "mul(" : "div(");
 
-    ExprMultiplicative->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprMultiplicative->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ", ";
 
-    ExprPower->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprPower->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ")";
   }
   else if (ExprPower != 0)
   {
-    ExprPower->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprPower->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
   }
 }
 
@@ -1589,23 +1657,24 @@ AdtBlackBoxExprPower::~AdtBlackBoxExprPower()
 void AdtBlackBoxExprPower::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                            string& rDerivativeText,
                                            const char* pFile,
-                                           int nLine) const
+                                           int nLine,
+                                           double dTapenadeVersion) const
 {
   if ((ExprPower != 0) && (ExprUnary != 0))
   {
     rDerivativeText += "power(";
 
-    ExprPower->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprPower->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ", ";
 
-    ExprUnary->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprUnary->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     rDerivativeText += ")";
   }
   else if (ExprUnary != 0)
   {
-    ExprUnary->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprUnary->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
   }
 }
 
@@ -1651,7 +1720,8 @@ AdtBlackBoxExprUnary::~AdtBlackBoxExprUnary()
 void AdtBlackBoxExprUnary::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                            string& rDerivativeText,
                                            const char* pFile,
-                                           int nLine) const
+                                           int nLine,
+                                           double dTapenadeVersion) const
 {
   if (ExprPostfix != 0)
   {
@@ -1660,7 +1730,7 @@ void AdtBlackBoxExprUnary::buildDerivative(const AdtBlackBoxDefinition& rDefault
       rDerivativeText += "sub(realCst 0.0, ";
     }
 
-    ExprPostfix->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+    ExprPostfix->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
     if (HasOp && !IsPlus)
     {
@@ -1724,7 +1794,8 @@ AdtBlackBoxExprPostfix::~AdtBlackBoxExprPostfix()
 void AdtBlackBoxExprPostfix::buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                              string& rDerivativeText,
                                              const char* pFile,
-                                             int nLine) const
+                                             int nLine,
+                                             double dTapenadeVersion) const
 {
   char  sBuffer[32] = {0};
 
@@ -1774,9 +1845,16 @@ void AdtBlackBoxExprPostfix::buildDerivative(const AdtBlackBoxDefinition& rDefau
       // Need to do this because of a bug in Tapenade that assumes all lowercase names
       lcName.toLower();
 
-      rDerivativeText += "call(ident " + lcName + ", expressions(";
+      if (dTapenadeVersion > 3.12)
+      {
+        rDerivativeText += "call(none(), ident " + lcName + ", expressions(";
+      }
+      else
+      {
+        rDerivativeText += "call(ident " + lcName + ", expressions(";
+      }
 
-      ArgList->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+      ArgList->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
 
       rDerivativeText += "))";
       break;
@@ -1784,7 +1862,7 @@ void AdtBlackBoxExprPostfix::buildDerivative(const AdtBlackBoxDefinition& rDefau
 
     case AdtBlackBoxPostfixBrackets:
     {
-      ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine);
+      ExprAdditive->buildDerivative(rDefaultDef, rDerivativeText, pFile, nLine, dTapenadeVersion);
       break;
     }
 
@@ -1836,7 +1914,8 @@ void AdtBlackBoxSpec::updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef,
                                         int& nBlackBoxCount,
                                         int& nDerivativeCount,
                                         const char* pFile,
-                                        int nLine) const
+                                        int nLine,
+                                        double dTapenadeVersion) const
 {
   if (IdentList != 0)
   {
@@ -2157,7 +2236,9 @@ AdtBlackBoxStandAloneDef::~AdtBlackBoxStandAloneDef()
 
 //  ----------------------------------------------------------------------------
 
-void AdtBlackBoxStandAloneDef::writeBlackBoxDefinition(AdtFile& rOutFile)
+void AdtBlackBoxStandAloneDef::writeBlackBoxDefinition(AdtFile& rOutFile,
+                                                       AdtIntByStringMap& rIsBlackBoxMap,
+                                                       double dTapenadeVersion)
 {
   if (DerivativeList != 0)
   {
@@ -2198,10 +2279,13 @@ void AdtBlackBoxStandAloneDef::writeBlackBoxDefinition(AdtFile& rOutFile)
                                       nBlackBoxCount,
                                       nDerivativeCount,
                                       fileName(),
-                                      lineNumber());
+                                      lineNumber(),
+                                      dTapenadeVersion);
 
     BlackBox.derivativeSpecification(sDerivativeText);
-    BlackBox.writeDefinition(rOutFile);
+    BlackBox.writeDefinition(rOutFile, dTapenadeVersion);
+
+    rIsBlackBoxMap[BlackBox.nativeName()] = 1;
   }
 }
 

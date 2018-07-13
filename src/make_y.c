@@ -85,6 +85,7 @@
  *     PATHS: Path1,Path2,…,PathN;
  *     SOURCE FILES: File1,File2,…,FileN;
  *     WORKING DIRECTORY: Path;
+ *     [INCLUDE DIRECTORY: Path;] //Optional
  *     CPP OPTIONS FILE: FileBlah2;
  *     PASCAL OPTIONS FILE: FileBlah2;
  *     FORTRAN INCLUDE FILES: File1,File2,…,FileN;
@@ -134,7 +135,7 @@
 #define YYSTYPE   makeType
 
 
-#line 138 "..\\src\\make_y.c" /* yacc.c:339  */
+#line 139 "..\\src\\make_y.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -158,7 +159,7 @@
 # define YY_YY_SRC_MAKE_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -227,7 +228,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 231 "..\\src\\make_y.c" /* yacc.c:358  */
+#line 232 "..\\src\\make_y.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -469,16 +470,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   175
+#define YYLAST   185
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  42
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  42
+#define YYNNTS  43
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  68
+#define YYNRULES  70
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  158
+#define YYNSTATES  164
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -528,13 +529,14 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    90,    90,    91,    94,    97,    98,   101,   102,   103,
-     104,   105,   106,   107,   108,   111,   117,   123,   129,   135,
-     141,   147,   153,   159,   163,   169,   175,   181,   187,   193,
-     199,   205,   211,   212,   215,   216,   219,   223,   227,   231,
-     237,   243,   244,   247,   253,   257,   263,   264,   265,   266,
-     267,   268,   269,   270,   271,   273,   279,   282,   288,   291,
-     297,   303,   309,   315,   321,   327,   333,   339,   343
+       0,    91,    91,    92,    95,    98,    99,   102,   103,   104,
+     105,   106,   107,   108,   109,   110,   113,   119,   125,   131,
+     137,   143,   149,   155,   161,   165,   171,   177,   183,   189,
+     195,   201,   207,   213,   219,   220,   223,   224,   227,   231,
+     235,   239,   245,   251,   252,   255,   261,   265,   271,   272,
+     273,   274,   275,   276,   277,   278,   279,   281,   287,   290,
+     296,   299,   305,   311,   317,   323,   329,   335,   341,   347,
+     351
 };
 #endif
 
@@ -554,11 +556,11 @@ static const char *const yytname[] =
   "MakeOptionsList", "MakeOption", "MakeCommandBegin", "MakeCommandEnd",
   "Paths", "BeginPaths", "BlackBox", "BeginBlackBox", "SourceFiles",
   "BeginSourceFiles", "FileNameList", "WorkingDirectory",
-  "DelphiOptionsFile", "CppOptionsFile", "Switches", "BeginSwitches",
-  "FortranIncludeFiles", "BeginFortranIncludeFiles", "ClassList",
-  "ClassBlock", "ClassBlockBegin", "ClassBlockEnd", "AutoDiffCommandList",
-  "AutoDiffCommand", "AutoDiffCommandOpList", "AutoDiffCommandOp",
-  "AutoDiffCommandFunctionOp", "AutoDiffCommandVarOp",
+  "IncludeDirectory", "DelphiOptionsFile", "CppOptionsFile", "Switches",
+  "BeginSwitches", "FortranIncludeFiles", "BeginFortranIncludeFiles",
+  "ClassList", "ClassBlock", "ClassBlockBegin", "ClassBlockEnd",
+  "AutoDiffCommandList", "AutoDiffCommand", "AutoDiffCommandOpList",
+  "AutoDiffCommandOp", "AutoDiffCommandFunctionOp", "AutoDiffCommandVarOp",
   "BeginAutoDiffCommandVarOp", "AutoDiffCommandOutVarOp",
   "BeginAutoDiffCommandOutVarOp", "AutoDiffCommandModeOp",
   "AutoDiffCommandUserOp", "AutoDiffCommandPreOp", "AutoDiffCommandPostOp",
@@ -580,10 +582,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -50
+#define YYPACT_NINF -29
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-50)))
+  (!!((Yystate) == (-29)))
 
 #define YYTABLE_NINF -1
 
@@ -594,22 +596,23 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -2,    19,     2,   -50,    20,   -50,   -50,   -50,    22,    33,
-      17,    35,    37,    44,    38,    39,    14,   -50,   -50,    36,
-     -50,    36,   -50,    36,   -50,   -50,   -50,   -50,    36,   -50,
-      36,    40,    42,   -50,    66,    67,    68,   -50,   -50,    41,
-     -50,     0,   -50,     1,   -50,   -28,    21,    23,    29,    31,
-     -50,    43,    45,    49,    50,    51,   -50,   -50,   -50,    78,
-     -50,    53,    55,    57,    59,    60,    61,    62,    63,   -50,
-       1,   -50,    -5,   -50,   -50,   -50,    46,   -50,    46,   -50,
-     -50,   -50,   -50,   -50,   -50,    46,    52,   -50,   -50,   -50,
-     -50,   -50,    69,    64,    65,   -50,    70,   -50,    71,   -50,
-     -50,    72,    75,    76,    77,    79,   -50,   -50,   -50,   -50,
-     -50,    73,    73,    73,   -50,   -50,    74,    83,    81,   -50,
-     -50,   -50,   -50,   -50,   -50,    80,   -50,   -50,    84,   -50,
-      54,    85,    87,    86,    88,    89,    90,    56,    91,    92,
-      94,    58,    93,    95,    96,    97,   101,    98,    99,   100,
-     -50,   103,   104,   102,   -50,   -50,   117,   -50
+      -2,    19,     2,   -29,    24,   -29,   -29,   -29,    22,    30,
+      21,    38,    40,    47,    43,    41,    42,    14,   -29,   -29,
+      39,   -29,    39,   -29,    39,   -29,   -29,   -29,   -29,   -29,
+      39,   -29,    39,    45,    46,   -29,    66,    70,    71,    48,
+     -29,   -29,    44,   -29,     0,   -29,     1,   -29,   -28,    -3,
+      27,    34,    36,   -29,    49,    51,    52,    53,    50,    54,
+     -29,   -29,   -29,    84,   -29,    57,    58,    60,    62,    63,
+      64,    65,    67,   -29,     1,   -29,    -5,   -29,   -29,   -29,
+      56,   -29,    56,   -29,   -29,   -29,   -29,   -29,   -29,    56,
+      55,   -29,   -29,   -29,   -29,   -29,    68,    69,    72,   -29,
+      73,    74,   -29,    75,   -29,   -29,    76,    79,    80,    81,
+      82,   -29,   -29,   -29,   -29,   -29,    77,    77,    77,   -29,
+     -29,    88,    89,   -29,    86,   -29,   -29,   -29,   -29,   -29,
+     -29,    85,   -29,   -29,    94,   -29,    35,    78,    90,    87,
+      91,    95,    92,    59,    97,    93,    98,    61,    96,    99,
+     100,   102,   105,   101,   103,   104,   -29,   108,   123,   106,
+     -29,   -29,   124,   -29
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -617,42 +620,43 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     2,     0,    15,     1,     3,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     5,     7,     0,
-      14,     0,     8,     0,     9,    11,    10,    13,     0,    12,
-       0,     0,     0,    18,     0,     0,     0,    29,    20,     0,
-       6,     0,    32,     0,    23,     0,     0,     0,     0,     0,
-      22,     0,     0,     0,     0,     0,    16,     4,    33,     0,
-      40,     0,     0,     0,     0,     0,     0,     0,     0,    35,
-       0,    41,     0,    44,    46,    47,     0,    48,     0,    49,
-      50,    51,    52,    53,    54,     0,     0,    17,    19,    21,
-      28,    30,     0,     0,     0,    31,     0,    66,     0,    57,
-      59,     0,     0,     0,     0,     0,    34,    42,    43,    45,
-      67,    56,    58,    65,    24,    25,     0,     0,     0,    55,
-      60,    61,    64,    62,    63,     0,    26,    27,     0,    68,
+       0,     0,     0,     2,     0,    16,     1,     3,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     5,     7,
+       0,    15,     0,     8,     0,     9,    10,    12,    11,    14,
+       0,    13,     0,     0,     0,    19,     0,     0,     0,     0,
+      31,    21,     0,     6,     0,    34,     0,    24,     0,     0,
+       0,     0,     0,    23,     0,     0,     0,     0,     0,     0,
+      17,     4,    35,     0,    42,     0,     0,     0,     0,     0,
+       0,     0,     0,    37,     0,    43,     0,    46,    48,    49,
+       0,    50,     0,    51,    52,    53,    54,    55,    56,     0,
+       0,    18,    20,    22,    30,    32,     0,     0,     0,    33,
+       0,     0,    68,     0,    59,    61,     0,     0,     0,     0,
+       0,    36,    44,    45,    47,    69,    58,    60,    67,    25,
+      26,     0,     0,    27,     0,    57,    62,    63,    66,    64,
+      65,     0,    28,    29,     0,    70,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-      36,     0,     0,     0,    37,    38,     0,    39
+       0,     0,     0,     0,     0,     0,    38,     0,     0,     0,
+      39,    40,     0,    41
 };
 
   /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int8 yypgoto[] =
+static const yytype_int16 yypgoto[] =
 {
-     -50,   -50,   120,   -50,   107,   -50,   -50,   -50,   -50,   -50,
-     -50,   -50,   -50,    28,   -50,   -50,   -50,   -50,   -50,   -50,
-     -50,   -50,    47,   -50,    82,   -50,   105,   -50,    27,   -50,
-     -50,   -50,   -50,   -50,   -50,   -50,   -50,   -50,   -50,   -50,
-     -50,   -49
+     -29,   -29,   130,   -29,   119,   -29,   -29,   -29,   -29,   -29,
+     -29,   -29,   -29,    31,   -29,   -29,   -29,   -29,   -29,   -29,
+     -29,   -29,   -29,   107,   -29,    29,   -29,    83,   -29,   109,
+     -29,   -29,   -29,   -29,   -29,   -29,   -29,   -29,   -29,   -29,
+     -29,   -29,   -25
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,    16,    17,     4,    57,    18,    19,    20,
-      21,    22,    23,    45,    24,    25,    26,    27,    28,    29,
-      30,    41,    42,    43,    69,    70,    71,    72,    73,    74,
-      75,    76,    77,    78,    79,    80,    81,    82,    83,    84,
-      85,   111
+      -1,     2,     3,    17,    18,     4,    61,    19,    20,    21,
+      22,    23,    24,    48,    25,    26,    27,    28,    29,    30,
+      31,    32,    44,    45,    46,    73,    74,    75,    76,    77,
+      78,    79,    80,    81,    82,    83,    84,    85,    86,    87,
+      88,    89,   116
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -660,46 +664,48 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      59,     1,     6,    86,    87,     1,    59,    56,    60,    61,
-      62,    63,    64,    65,    66,    61,    62,    63,    64,    65,
-      66,    39,     8,     5,    67,    68,     9,   108,     8,   112,
-      67,    68,     9,    31,    10,    39,   113,    11,    12,    13,
-      10,    14,    15,    11,    12,    13,    32,    14,    15,    46,
-      33,    47,    86,    88,    86,    89,    48,    34,    49,    35,
-      86,    90,    86,    91,   131,   132,   139,   140,   144,   145,
-      36,    37,    38,    50,    44,    51,    52,    53,    93,    54,
-      55,    92,    94,    95,    97,   110,    96,    98,    58,    99,
-     114,   100,   130,   101,   102,   103,   104,   105,   137,   109,
-     141,   115,   116,   117,   125,   150,   126,   154,   155,   118,
-     119,   120,   121,   122,   123,   127,   124,   128,   133,   129,
-     134,   157,     7,    40,   135,   142,   136,   143,   138,   148,
-     149,   146,     0,   147,     0,     0,   151,   152,   153,     0,
-     156,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,   106,     0,     0,     0,     0,     0,     0,     0,
+      63,     1,     6,    90,    91,     1,    63,    60,    64,    65,
+      66,    67,    68,    69,    70,    65,    66,    67,    68,    69,
+      70,    42,     8,     5,    71,    72,     9,   113,    90,    92,
+      71,    72,     8,    33,    10,    42,     9,    11,    12,    13,
+      14,    15,    16,    34,    10,   137,   138,    11,    12,    13,
+      14,    15,    16,    49,    35,    50,    39,   117,    90,    93,
+      36,    51,    37,    52,   118,    90,    94,    90,    95,   145,
+     146,   150,   151,    38,    40,    41,    55,    47,    53,    54,
+      56,    58,    57,    59,    97,    98,    99,    96,   100,   101,
+     102,   103,   104,   119,   105,   115,   106,   107,   108,   109,
+     120,   110,   136,   111,   143,   123,   147,   121,   131,   156,
+     122,   139,   160,   124,   125,   126,   127,   128,   129,   130,
+     132,   133,   134,   140,   135,   141,   148,   161,   163,   142,
+     144,   149,     7,   154,   152,   155,    43,   153,     0,   157,
+       0,   158,   159,     0,   162,     0,     0,     0,     0,     0,
+       0,    62,     0,     0,     0,     0,     0,   112,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,   107
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,   114
 };
 
 static const yytype_int8 yycheck[] =
 {
        5,     3,     0,    31,    32,     3,     5,     7,     7,    14,
       15,    16,    17,    18,    19,    14,    15,    16,    17,    18,
-      19,    21,     8,     4,    29,    30,    12,    32,     8,    78,
-      29,    30,    12,    11,    20,    21,    85,    23,    24,    25,
-      20,    27,    28,    23,    24,    25,    13,    27,    28,    21,
-      33,    23,    31,    32,    31,    32,    28,    22,    30,    22,
-      31,    32,    31,    32,    10,    11,    10,    11,    10,    11,
-      26,    33,    33,    33,    38,    33,    10,    10,    33,    11,
-      39,    38,    33,    33,     6,    39,    35,    34,    41,    34,
-      38,    34,     8,    34,    34,    34,    34,    34,     9,    72,
-       9,    32,    38,    38,    31,     4,    32,     4,     4,    39,
-      39,    39,    37,    37,    37,    32,    37,    36,    33,    39,
-      33,     4,     2,    16,    38,    33,    38,    33,    38,    33,
-      33,    38,    -1,    38,    -1,    -1,    38,    38,    38,    -1,
-      38,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      19,    21,     8,     4,    29,    30,    12,    32,    31,    32,
+      29,    30,     8,    11,    20,    21,    12,    23,    24,    25,
+      26,    27,    28,    13,    20,    10,    11,    23,    24,    25,
+      26,    27,    28,    22,    33,    24,    13,    82,    31,    32,
+      22,    30,    22,    32,    89,    31,    32,    31,    32,    10,
+      11,    10,    11,    26,    33,    33,    10,    38,    33,    33,
+      10,    33,    11,    39,    33,    33,    33,    38,    38,    35,
+       6,    34,    34,    38,    34,    39,    34,    34,    34,    34,
+      32,    34,     8,    74,     9,    32,     9,    38,    31,     4,
+      38,    33,     4,    39,    39,    39,    37,    37,    37,    37,
+      32,    32,    36,    33,    39,    38,    33,     4,     4,    38,
+      38,    33,     2,    33,    38,    33,    17,    38,    -1,    38,
+      -1,    38,    38,    -1,    38,    -1,    -1,    -1,    -1,    -1,
+      -1,    44,    -1,    -1,    -1,    -1,    -1,    74,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    70
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    76
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -707,45 +713,48 @@ static const yytype_int8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,     3,    43,    44,    47,     4,     0,    44,     8,    12,
-      20,    23,    24,    25,    27,    28,    45,    46,    49,    50,
-      51,    52,    53,    54,    56,    57,    58,    59,    60,    61,
-      62,    11,    13,    33,    22,    22,    26,    33,    33,    21,
-      46,    63,    64,    65,    38,    55,    55,    55,    55,    55,
-      33,    33,    10,    10,    11,    39,     7,    48,    64,     5,
-       7,    14,    15,    16,    17,    18,    19,    29,    30,    66,
-      67,    68,    69,    70,    71,    72,    73,    74,    75,    76,
-      77,    78,    79,    80,    81,    82,    31,    32,    32,    32,
-      32,    32,    38,    33,    33,    33,    35,     6,    34,    34,
-      34,    34,    34,    34,    34,    34,    66,    68,    32,    70,
-      39,    83,    83,    83,    38,    32,    38,    38,    39,    39,
-      39,    37,    37,    37,    37,    31,    32,    32,    36,    39,
-       8,    10,    11,    33,    33,    38,    38,     9,    38,    10,
-      11,     9,    33,    33,    10,    11,    38,    38,    33,    33,
-       4,    38,    38,    38,     4,     4,    38,     4
+      20,    23,    24,    25,    26,    27,    28,    45,    46,    49,
+      50,    51,    52,    53,    54,    56,    57,    58,    59,    60,
+      61,    62,    63,    11,    13,    33,    22,    22,    26,    13,
+      33,    33,    21,    46,    64,    65,    66,    38,    55,    55,
+      55,    55,    55,    33,    33,    10,    10,    11,    33,    39,
+       7,    48,    65,     5,     7,    14,    15,    16,    17,    18,
+      19,    29,    30,    67,    68,    69,    70,    71,    72,    73,
+      74,    75,    76,    77,    78,    79,    80,    81,    82,    83,
+      31,    32,    32,    32,    32,    32,    38,    33,    33,    33,
+      38,    35,     6,    34,    34,    34,    34,    34,    34,    34,
+      34,    67,    69,    32,    71,    39,    84,    84,    84,    38,
+      32,    38,    38,    32,    39,    39,    39,    37,    37,    37,
+      37,    31,    32,    32,    36,    39,     8,    10,    11,    33,
+      33,    38,    38,     9,    38,    10,    11,     9,    33,    33,
+      10,    11,    38,    38,    33,    33,     4,    38,    38,    38,
+       4,     4,    38,     4
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    42,    43,    43,    44,    45,    45,    46,    46,    46,
-      46,    46,    46,    46,    46,    47,    48,    49,    50,    51,
-      52,    53,    54,    55,    55,    56,    57,    58,    59,    60,
-      61,    62,    63,    63,    64,    64,    65,    65,    65,    65,
-      66,    67,    67,    68,    69,    69,    70,    70,    70,    70,
-      70,    70,    70,    70,    70,    71,    72,    73,    74,    75,
-      76,    77,    78,    79,    80,    81,    82,    83,    83
+      46,    46,    46,    46,    46,    46,    47,    48,    49,    50,
+      51,    52,    53,    54,    55,    55,    56,    57,    58,    59,
+      60,    61,    62,    63,    64,    64,    65,    65,    66,    66,
+      66,    66,    67,    68,    68,    69,    70,    70,    71,    71,
+      71,    71,    71,    71,    71,    71,    71,    72,    73,    74,
+      75,    76,    77,    78,    79,    80,    81,    82,    83,    84,
+      84
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     2,     4,     1,     2,     1,     1,     1,
-       1,     1,     1,     1,     1,     2,     1,     3,     2,     3,
-       2,     3,     3,     1,     3,     5,     6,     6,     3,     2,
-       3,     4,     1,     2,     3,     2,    14,    15,    15,    16,
-       1,     1,     2,     2,     1,     2,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     3,     2,     2,     2,     2,
-       3,     3,     3,     3,     3,     2,     2,     1,     3
+       1,     1,     1,     1,     1,     1,     2,     1,     3,     2,
+       3,     2,     3,     3,     1,     3,     5,     5,     6,     6,
+       3,     2,     3,     4,     1,     2,     3,     2,    14,    15,
+      15,    16,     1,     1,     2,     2,     1,     2,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     3,     2,     2,
+       2,     2,     3,     3,     3,     3,     3,     2,     2,     1,
+       3
 };
 
 
@@ -1421,304 +1430,312 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 15:
-#line 112 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+        case 16:
+#line 114 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_MakeCommandOpen();
 }
-#line 1430 "..\\src\\make_y.c" /* yacc.c:1646  */
-    break;
-
-  case 16:
-#line 118 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
-    {
-  make_MakeCommandClose();
-}
-#line 1438 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1439 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 124 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 120 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_PathsClose();
+  make_MakeCommandClose();
 }
-#line 1446 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1447 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 130 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 126 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_PathsOpen();
+  make_PathsClose();
 }
-#line 1454 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1455 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 136 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 132 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_BlackBoxClose();
+  make_PathsOpen();
 }
-#line 1462 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1463 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 142 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 138 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_BlackBoxOpen();
+  make_BlackBoxClose();
 }
-#line 1470 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1471 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 148 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 144 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_SourceFilesClose();
+  make_BlackBoxOpen();
 }
-#line 1478 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1479 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 154 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 150 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_SourceFilesOpen();
+  make_SourceFilesClose();
 }
-#line 1486 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1487 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 160 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 156 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_PushString((yyvsp[0]).sValue);
+  make_SourceFilesOpen();
 }
-#line 1494 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1495 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 164 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 162 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PushString((yyvsp[0]).sValue);
 }
-#line 1502 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1503 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 170 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 166 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_WorkingDirectory((yyvsp[-1]).sValue);
+  make_PushString((yyvsp[0]).sValue);
 }
-#line 1510 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1511 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 176 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 172 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_SourceOptionsFile((yyvsp[-1]).sValue, 0);
+  make_WorkingDirectory((yyvsp[-1]).sValue);
 }
-#line 1518 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1519 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 182 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 178 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_SourceOptionsFile((yyvsp[-1]).sValue, 1);
+  make_IncludeDirectory((yyvsp[-1]).sValue);
 }
-#line 1526 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1527 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 188 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 184 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_SwitchesClose();
+  make_SourceOptionsFile((yyvsp[-1]).sValue, 0);
 }
-#line 1534 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1535 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 194 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 190 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_SwitchesOpen();
+  make_SourceOptionsFile((yyvsp[-1]).sValue, 1);
 }
-#line 1542 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1543 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 200 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 196 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_FortranIncludeFilesClose();
+  make_SwitchesClose();
 }
-#line 1550 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1551 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 206 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 202 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+    {
+  make_SwitchesOpen();
+}
+#line 1559 "..\\src\\make_y.c" /* yacc.c:1646  */
+    break;
+
+  case 32:
+#line 208 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+    {
+  make_FortranIncludeFilesClose();
+}
+#line 1567 "..\\src\\make_y.c" /* yacc.c:1646  */
+    break;
+
+  case 33:
+#line 214 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_FortranIncludeFilesOpen();
 }
-#line 1558 "..\\src\\make_y.c" /* yacc.c:1646  */
-    break;
-
-  case 36:
-#line 220 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
-    {
-  make_ClassOpen((yyvsp[-12]).sValue, (yyvsp[-10]).sValue, (yyvsp[-5]).sValue, 0, (yyvsp[-1]).sValue, 0);
-}
-#line 1566 "..\\src\\make_y.c" /* yacc.c:1646  */
-    break;
-
-  case 37:
-#line 224 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
-    {
-  make_ClassOpen((yyvsp[-13]).sValue, (yyvsp[-11]).sValue, (yyvsp[-6]).sValue, 0, (yyvsp[-2]).sValue, (yyvsp[-1]).sValue);
-}
-#line 1574 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1575 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 38:
 #line 228 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_ClassOpen((yyvsp[-13]).sValue, (yyvsp[-11]).sValue, (yyvsp[-6]).sValue, (yyvsp[-5]).sValue, (yyvsp[-1]).sValue, 0);
+  make_ClassOpen((yyvsp[-12]).sValue, (yyvsp[-10]).sValue, (yyvsp[-5]).sValue, 0, (yyvsp[-1]).sValue, 0);
 }
-#line 1582 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1583 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 39:
 #line 232 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_ClassOpen((yyvsp[-14]).sValue, (yyvsp[-12]).sValue, (yyvsp[-7]).sValue, (yyvsp[-6]).sValue, (yyvsp[-2]).sValue, (yyvsp[-1]).sValue);
+  make_ClassOpen((yyvsp[-13]).sValue, (yyvsp[-11]).sValue, (yyvsp[-6]).sValue, 0, (yyvsp[-2]).sValue, (yyvsp[-1]).sValue);
 }
-#line 1590 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1591 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 238 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 236 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+    {
+  make_ClassOpen((yyvsp[-13]).sValue, (yyvsp[-11]).sValue, (yyvsp[-6]).sValue, (yyvsp[-5]).sValue, (yyvsp[-1]).sValue, 0);
+}
+#line 1599 "..\\src\\make_y.c" /* yacc.c:1646  */
+    break;
+
+  case 41:
+#line 240 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+    {
+  make_ClassOpen((yyvsp[-14]).sValue, (yyvsp[-12]).sValue, (yyvsp[-7]).sValue, (yyvsp[-6]).sValue, (yyvsp[-2]).sValue, (yyvsp[-1]).sValue);
+}
+#line 1607 "..\\src\\make_y.c" /* yacc.c:1646  */
+    break;
+
+  case 42:
+#line 246 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_ClassClose();
 }
-#line 1598 "..\\src\\make_y.c" /* yacc.c:1646  */
-    break;
-
-  case 43:
-#line 248 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
-    {
-  make_CommandClose();
-}
-#line 1606 "..\\src\\make_y.c" /* yacc.c:1646  */
-    break;
-
-  case 44:
-#line 254 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
-    {
-  make_CommandOpClose();
-}
-#line 1614 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1615 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 258 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 256 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+    {
+  make_CommandClose();
+}
+#line 1623 "..\\src\\make_y.c" /* yacc.c:1646  */
+    break;
+
+  case 46:
+#line 262 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_CommandOpClose();
 }
-#line 1622 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1631 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
-  case 55:
-#line 274 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+  case 47:
+#line 266 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_CommandFunction((yyvsp[0]).sValue);
+  make_CommandOpClose();
 }
-#line 1630 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1639 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 283 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 282 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_CommandVarOpen();
+  make_CommandFunction((yyvsp[0]).sValue);
 }
-#line 1638 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1647 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 292 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 291 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_CommandOutVarOpen();
+  make_CommandVarOpen();
 }
-#line 1646 "..\\src\\make_y.c" /* yacc.c:1646  */
-    break;
-
-  case 60:
-#line 298 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
-    {
-  make_CommandMode((yyvsp[0]).sValue);
-}
-#line 1654 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1655 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 304 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 300 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_CommandUser((yyvsp[0]).sValue);
+  make_CommandOutVarOpen();
 }
-#line 1662 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1663 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 310 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 306 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_CommandPre((yyvsp[0]).sValue);
+  make_CommandMode((yyvsp[0]).sValue);
 }
-#line 1670 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1671 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 316 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 312 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_CommandPost((yyvsp[0]).sValue);
+  make_CommandUser((yyvsp[0]).sValue);
 }
-#line 1678 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1679 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 322 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 318 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_CommandPragmas((yyvsp[0]).sValue);
+  make_CommandPre((yyvsp[0]).sValue);
 }
-#line 1686 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1687 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 328 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 324 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_ClassBoundsCheckClose();
+  make_CommandPost((yyvsp[0]).sValue);
 }
-#line 1694 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1695 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 334 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 330 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_ClassBoundsCheckOpen();
+  make_CommandPragmas((yyvsp[0]).sValue);
 }
-#line 1702 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1703 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 340 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 336 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
-  make_PushString((yyvsp[0]).sValue);
+  make_ClassBoundsCheckClose();
 }
-#line 1710 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1711 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 344 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+#line 342 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+    {
+  make_ClassBoundsCheckOpen();
+}
+#line 1719 "..\\src\\make_y.c" /* yacc.c:1646  */
+    break;
+
+  case 69:
+#line 348 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
     {
   make_PushString((yyvsp[0]).sValue);
 }
-#line 1718 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1727 "..\\src\\make_y.c" /* yacc.c:1646  */
+    break;
+
+  case 70:
+#line 352 "C:\\cygwin\\usr\\src\\adt\\src\\make_y.y" /* yacc.c:1646  */
+    {
+  make_PushString((yyvsp[0]).sValue);
+}
+#line 1735 "..\\src\\make_y.c" /* yacc.c:1646  */
     break;
 
 
-#line 1722 "..\\src\\make_y.c" /* yacc.c:1646  */
+#line 1739 "..\\src\\make_y.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

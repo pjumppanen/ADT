@@ -1,4 +1,4 @@
-static const R_CallMethodDef callMethods[] = 
+static const R_CallMethodDef extMethods[] = 
 {
   {"_Rb.destroy", (DL_FUNC)&Rb_destroy, 1},
   {"_Rb.create", (DL_FUNC)&Rb_create, 1},
@@ -17,14 +17,14 @@ static const R_CallMethodDef callMethods[] =
 EXPORT void R_init_Rosenbrock(DllInfo* pInfo)
 {
   R_SetArrayClass(ArrayClass_Oarray);
-  R_registerRoutines(pInfo, 0, callMethods, 0, 0);
+  R_registerRoutines(pInfo, 0, 0, 0, extMethods);
 }
 
 
 EXPORT void R_init_libRosenbrock(DllInfo* pInfo)
 {
   R_SetArrayClass(ArrayClass_Oarray);
-  R_registerRoutines(pInfo, 0, callMethods, 0, 0);
+  R_registerRoutines(pInfo, 0, 0, 0, extMethods);
 }
 
 

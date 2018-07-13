@@ -13,7 +13,7 @@ begin
 end;
 
 // New array creation method
-function AdtArrayPlan.create(rAllocator : AdtMemAllocator; var pArray : <T>; pExisting : pchar = nil) : boolean ; overload;
+function AdtArrayPlan.create(var rAllocator : AdtMemAllocator; var pArray : <T>; pExisting : pchar = nil) : boolean ; overload;
 
 begin
   if (Actor <> nil) then
@@ -23,4 +23,3 @@ begin
 
   create := (pArray <> nil);
 end;
-

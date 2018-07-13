@@ -1,5 +1,5 @@
 AD BEGIN
-  PATHS: "../common", "../include", "../../src/ADLib";
+  PATHS: "../include", "../../src/ADLib";
   WORKING DIRECTORY: "./work/";
   BLACKBOX: Mseom.bbdef;
   SWITCHES: "rebuild","Oarray";

@@ -1,14 +1,14 @@
 library ArrayTestPas;
 
 uses
-  Classes, ArrayTest_Unit, R_ArrayTest_Unit, adtarray, Raccess;
+  Classes, ArrayTest_Unit, R_ArrayTest_Unit, adtarray, adtR, Raccess;
 
 // ----------------------------------------------------------------------------
 
-{$I AT_impl_lib_registration.pas}
+{$I include/AT_impl_lib_registration.pas}
 
 exports
-  {$I AT_lib_exports.pas};
+  {$I include/AT_lib_exports.pas};
 
 begin
 

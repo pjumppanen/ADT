@@ -147,7 +147,7 @@ C_FUNCTION void* adtFortranEndFunctionStmt_create(void* pLblDefObj, void* pFunct
 C_FUNCTION void* adtFortranSubroutineStmt_create(void* pLblDefObj, void* pSubroutineNameObj, void* pParameterListObj, int nEmptyParameterList, int nRecursive);
 C_FUNCTION void* adtFortranEndSubroutineStmt_create(void* pLblDefObj, void* pSubroutineNameObj);
 C_FUNCTION void* adtFortranReturnStmt_create(void* pLblDefObj, void* pExprObj);
-C_FUNCTION void* adtFortranLblDef_create(void* pIconObj, const char* pComment);
+C_FUNCTION void* adtFortranLblDef_create(void* pIconObj);
 C_FUNCTION void* adtFortranImplicitStmt_create(void* pLblDefObj, void* pImplicitSpecListObj);
 C_FUNCTION void* adtFortranIcon_create(const char* pIcon);
 C_FUNCTION void* adtFortranRcon_create(const char* pRcon);
@@ -505,6 +505,7 @@ public:
 
   void                                  dump(AdtFile* pFile) const;
 
+  bool                                  hasVarDeclarations() const;
   bool                                  isLocal(const char* pVarName) const;
   bool                                  remove(const char* pVarName);
 
@@ -611,6 +612,8 @@ public:
   // push and pop ops are dropped. With it false they are translated into array ops
   static bool                           PushPopDisable;
   static bool                           WithStackSubstitution;
+
+  static void                           rootBindComments(AdtCommon* pCompilerBase);
 
   static void                           setChangePrefix(const char* pRemovePrefixString, const char* pAddPrefixString);
   static AdtFile&                       writeWithChangedPrefix(AdtFile& pOutFile, const char* pString, bool bSupressNew);
@@ -735,7 +738,7 @@ private:
     const char*     VarTypeName;
   };
 
-  static const PushPopCall      PushPopCalls[55];
+  static const PushPopCall      PushPopCalls[62];
 
 protected:
   void                          createStackVarNames(string& rStackName,
@@ -789,6 +792,22 @@ protected:
                                                   const AdtFortranVariableInfo& rVariableInfo,
                                                   bool bThrowException);
 
+  void                          writeCPP_MethodDeclarations(AdtFile& pOutFile,
+                                                            bool bPublic,
+                                                            const AdtParserPtrByStringMap& rFunctionObjectMap,
+                                                            const AdtParserPtrByStringMap& rSubroutineObjectMap,
+                                                            const AdtStringByStringMap& rPublicMethodsMap,
+                                                            const AdtStringList& rMethodList,
+                                                            const char* pParentClassName) const;
+
+  void                          writeDelphi_MethodDeclarations(AdtFile& pOutFile,
+                                                               bool bPublic,
+                                                               const AdtParserPtrByStringMap& rFunctionObjectMap,
+                                                               const AdtParserPtrByStringMap& rSubroutineObjectMap,
+                                                               const AdtStringByStringMap& rPublicMethodsMap,
+                                                               const AdtStringList& rMethodList,
+                                                               const char* pParentClassName) const;
+
 public:
   AdtFortranExecutableProgram(AdtParser* pProgramUnitObj);
   AdtFortranExecutableProgram(const AdtFortranExecutableProgram& rCopy);
@@ -840,10 +859,12 @@ public:
 
   void                          writeCPP_ClassHeader(AdtFile& pOutFile,
                                                      const char* pParentIncludeName,
+                                                     const AdtStringByStringMap& rPublicMethodsMap,
                                                      const AdtStringList& rMethodList,
                                                      const AdtStringList& rAttributeList,
                                                      const char* pClassName,
                                                      const char* pParentClassName,
+                                                     const char* pPathPrefix,
                                                      AdtStringList& rCPP_ConstructorList,
                                                      string& sPreText,
                                                      string& sPostText) const;
@@ -854,16 +875,19 @@ public:
                                                              const AdtStringList& rAttributeList,
                                                              const char* pClassName,
                                                              const char* pParentClassName,
+                                                             const char* pPathPrefix,
                                                              AdtStringList& rCPP_ConstructorList,
                                                              AdtStringList* pVarSuffixList,
                                                              string& sPreText,
                                                              string& sPostText) const;
 
   void                          writeDelphiClass(AdtFile& pOutFile,
+                                                 const AdtStringByStringMap& rPublicMethodsMap,
                                                  const AdtStringList& rMethodList,
                                                  const AdtStringList& rAttributeList,
                                                  const char* pClassName,
                                                  const char* pParentClassName,
+                                                 const char* pPathPrefix,
                                                  AdtStringList& rDelphiConstructorList,
                                                  const char* pUsesList,
                                                  AdtStringList* pVarSuffixList) const;
@@ -879,7 +903,8 @@ public:
 
   virtual bool                  buildBlackBoxFile(const char* pBlackBoxFileName,
                                                   AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap);
+                                                  AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                                  double dVersionNumber);
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rRootList,
@@ -893,6 +918,7 @@ public:
   virtual bool                  extractClassConstructors(AdtStringList& rConstructorList,
                                                          const char* pClassName,
                                                          const char* pParentClassName,
+                                                         const char* pPathPrefix,
                                                          AdtSourceFileType nAsFileType) const;
 
   virtual AdtFile&              writeClassMethodsAsFortran(AdtFile& rOutFile,
@@ -1339,6 +1365,10 @@ private:
   size_t                          Dimensions;
   bool                            IsConst;
   bool                            IsOutOnly;
+  bool                            HasIntent;
+
+protected:
+  void                            initIntent();
 
 public:
   AdtFortranTypeDeclarationStmt(AdtParser* pLblDefObj,
@@ -1352,6 +1382,7 @@ public:
   void                            isConst(bool bIsConst, bool bIsOutOnly);
   bool                            isConst() const;
   bool                            isOutOnly() const;
+  bool                            hasIntent() const;
 
   void                            removeExternals(const AdtParserPtrByStringMap& rExternalsMap);
 
@@ -1389,6 +1420,13 @@ inline bool AdtFortranTypeDeclarationStmt::isConst() const
 inline bool AdtFortranTypeDeclarationStmt::isOutOnly() const
 {
   return (IsOutOnly);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtFortranTypeDeclarationStmt::hasIntent() const
+{
+  return (HasIntent);
 }
 
 
@@ -3576,6 +3614,8 @@ public:
 
   AdtFortranDeclarations*         declarations();
 
+  bool                            hasVarDeclarations() const;
+
   void                            isVirtual(bool bIsVirtual);
 
   void                            initialise(AdtParserPtrByStringMap* pFunctionMap = 0);
@@ -3603,6 +3643,13 @@ public:
 inline AdtFortranDeclarations* AdtFortranFunctionStmt::declarations()
 {
   return (Declarations);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtFortranFunctionStmt::hasVarDeclarations() const
+{
+  return (Declarations != 0 ? Declarations->hasVarDeclarations() : false);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3729,6 +3776,8 @@ public:
 
   AdtFortranDeclarations*         declarations();
 
+  bool                            hasVarDeclarations() const;
+
   void                            isVirtual(bool bIsVirtual);
 
   void                            initialise(AdtParserPtrByStringMap* pFunctionMap = 0);
@@ -3756,6 +3805,13 @@ public:
 inline AdtFortranDeclarations* AdtFortranSubroutineStmt::declarations()
 {
   return (Declarations);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtFortranSubroutineStmt::hasVarDeclarations() const
+{
+  return (Declarations != 0 ? Declarations->hasVarDeclarations() : false);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3823,9 +3879,7 @@ private:
   AdtFortranIcon*               Icon;
 
 public:
-  AdtFortranLblDef(AdtParser* pIconObj,
-                   const char* pComment);
-
+  AdtFortranLblDef(AdtParser* pIconObj);
   AdtFortranLblDef(const AdtFortranLblDef& rCopy);
   virtual ~AdtFortranLblDef();
 

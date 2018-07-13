@@ -43,6 +43,28 @@
 
 
 //  ----------------------------------------------------------------------------
+//  Cast of R LOGICAL to LONGBOOL. Dodgy but LOGICAL's are of type int and
+//  longbool is a union of int. Therefore the memory layout of longbool and int
+//  should, in theory at least, be exactly the same. Hence we should be able to
+//  cast an int* to a longbool*. Put it in a function so we can debug it if
+//  something goes wrong.
+//  ----------------------------------------------------------------------------
+longbool* LONGBOOL(SEXP x);
+
+
+//  ----------------------------------------------------------------------------
+//  Cast of R RAW to bool
+//  ----------------------------------------------------------------------------
+bool* RAWBOOL(SEXP x);
+
+
+//  ----------------------------------------------------------------------------
+//  Cast of R RAW to char
+//  ----------------------------------------------------------------------------
+char* RAWCHAR(SEXP x);
+
+
+//  ----------------------------------------------------------------------------
 //  Template functions to determine R type from array type
 //  ----------------------------------------------------------------------------
 template<class T> inline SEXPTYPE RType(T Array){ return (NILSXP); };
@@ -149,6 +171,10 @@ SEXP R_Scalar(const int& nResult);
 
 SEXP R_Scalar(const double& dResult);
 
+SEXP R_Scalar(const longbool& lbResult);
+
+SEXP R_Scalar(const char& cResult);
+
 SEXP R_Empty();
 
 
@@ -160,6 +186,11 @@ enum R_UseArrayClass
 
 
 void R_SetArrayClass(R_UseArrayClass nClass);
+
+inline Rboolean Rf_isIntegerOrFactor(SEXP sIntExp)
+{
+  return ((Rboolean)(Rf_isInteger(sIntExp) | Rf_isFactor(sIntExp)));
+}
 
 
 #include <R_ext/Applic.h>

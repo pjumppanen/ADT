@@ -1,6 +1,7 @@
 AD BEGIN
   PATHS: "../include", "../../src/ADLib";
   WORKING DIRECTORY: "./work/";
+  INCLUDE DIRECTORY: "./include/";
   SWITCHES: "rebuild","Oarray"; //,"ThrowException";
   BLACKBOX: ArrayTest.bbdef;
   CPP OPTIONS FILE: cpp_macros.txt;
@@ -10,6 +11,7 @@ AD BEGIN
   CLASS R_ArrayTest(ArrayTest) SOURCE FILE: ArrayTest_Unit.pas OUTPUT FILE: R_ArrayTest_Unit.pas
   BEGIN
     BOUNDS CHECK boundsCheckTest;
+    FUNCTION=polySum3D OUTVAR=polySum3D VAR=X MODE=r;
     FUNCTION=sum OUTVAR=sum VAR=X MODE=r;
     FUNCTION=polySumA OUTVAR=polySumA VAR=X MODE=r;
     FUNCTION=polySumB OUTVAR=polySumB VAR=X MODE=r;

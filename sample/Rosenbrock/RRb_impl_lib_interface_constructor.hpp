@@ -13,18 +13,29 @@ EXPORT void RRb_destroy_handler(SEXP rInstance)
   R_ClearExternalPtr(rInstance);
 }
 
-EXPORT SEXP RRb_destroy(SEXP rInstance)
+EXPORT SEXP RRb_destroy(SEXP args)
 {
+  SEXP rInstance;
+  args = CDR(args); rInstance = CAR(args);
   RRb_destroy_handler(rInstance);
   
-  return (rInstance);
+  SEXP Result = allocVector(INTSXP, 1);
+  
+  PROTECT(Result);
+  INTEGER(Result)[0] = 0;
+  UNPROTECT(1);
+  
+  return(Result);
 }
 
-EXPORT SEXP RRb_create(
-    SEXP arg_N)
+EXPORT SEXP RRb_create(SEXP args)
 {
   SEXP Result = {0};
   DR_MinRosenbrock* pContext = 0;
+  
+  SEXP arg_N;
+  
+  args = CDR(args); arg_N = CAR(args);
   
   R_CheckArgument("arg_N", "INTSXP", INTSXP, arg_N, __FILE__, __LINE__);
   

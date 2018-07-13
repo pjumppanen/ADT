@@ -93,8 +93,8 @@ public:
   void                            reconstructWithPossibleSEXPArgs(const char* pExpressionText,
                                                                   string& rReconstructedText,
                                                                   const AdtIntByStringMap& rWithSEXP_map,
-                                                                  bool bForceAll,
-                                                                  bool bWithUnderscore);
+                                                                  bool bWithUnderscore,
+                                                                  bool bR_Prefix);
 };
 
 
@@ -189,8 +189,8 @@ public:
   void                            fixIndexing(const char* pIndexBase, int nCurrentIndex);
 
   void                            convertFromSEXP(const AdtIntByStringMap& rWithSEXP_map,
-                                                  bool bForceAll,
-                                                  bool bWithUnderscore);
+                                                  bool bWithUnderscore,
+                                                  bool bR_Prefix);
 
   virtual void                    buildExpression(string& rResult,
                                                   bool bStripRaggedIndexing);

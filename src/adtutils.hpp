@@ -29,19 +29,29 @@
 
 
 #include <stdio.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <errno.h>
 #include "lexer.h"
 
 
 #ifdef _MSC_VER
 
-  #define ftello  _ftelli64
-  #define fseeko  _fseeki64
+  #include <direct.h>
+
+  #define popen           _popen
+  #define pclose          _pclose
+  #define adt_mkdir(Dir)  mkdir(Dir)
+  #define ftello         _ftelli64
+  #define fseeko         _fseeki64
 
   typedef __int64 f_ptr;
 
 #else
 
   #include <unistd.h>
+
+  #define adt_mkdir(Dir)  mkdir(Dir, S_IRWXO | S_IRWXG | S_IRWXU)
 
   typedef off_t f_ptr;
 
@@ -94,6 +104,8 @@ C_FUNCTION void         symTable_Remove(void* pSymTable, const char* pSymbol);
 C_FUNCTION int          symTable_Defined(void* pSymTable, const char* pSymbol, int* pnValue);
 
 C_FUNCTION size_t       adtParse_wordLength(const char* pText, const char* pWordDelimiters, const char** ppEndWord);
+C_FUNCTION int          adtParse_stepOverWord(char** pWord, const char* pWordDelimiters, const char** rpText);
+C_FUNCTION int          adtParse_stepOverWord2(char** pWord, const char** ppWordDelimiters, const char** rpText);
 C_FUNCTION int          adtParse_extractWord(char** pWord, const char* pWordDelimiters, const char** rpText);
 C_FUNCTION int          adtParse_extractWord2(char** pWord, const char** ppWordDelimiters, const char** rpText);
 C_FUNCTION int          adtParse_bracketedExtractWord(char** pWord, const char* pWordDelimiters, const char* pOpenBrackets, const char* pCloseBrackets, const char** rpText);
@@ -101,31 +113,27 @@ C_FUNCTION int          adtParse_bracketedExtractWord2(char** pWord, const char*
 C_FUNCTION int          adtParse_previousMatchWord(const char** ppChar, const char* pFirstChar, const char* pWord, int nCaseSensitive);
 C_FUNCTION int          adtParse_matchWord(const char** ppChar, const char* pWord, int nCaseSensitive);
 C_FUNCTION const char*  adtParse_previousWord(const char* pChar, const char* pFirstChar, size_t* pnCount);
-C_FUNCTION const char*  adtParse_nextWord(const char* pChar, size_t* pnCount);
+C_FUNCTION const char*  adtParse_nextWord(const char* pChar, size_t* pnCount, int bIncludeNewline);
 C_FUNCTION const char*  adtParse_nextLine(const char* pChar, size_t* pnCount);
 
-C_FUNCTION const char*  adtDelphi_ExtractComment(void* pContext);
-C_FUNCTION void         adtDelphi_AppendComment(void* pContext, const char* pTokenText);
+C_FUNCTION void         adtDelphi_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber);
 C_FUNCTION const char*  adtDelphi_AllocString(void* pContext, const char* pTokenText, int nTranslate);
 C_FUNCTION void         adtDelphi_ParseCommandBlock(void* pContext, const char* pCommandBlock);
 C_FUNCTION void         adtDelphi_LogText(void* pContext, const char* pTokenText, int nLineNumber);
 C_FUNCTION void         adtDelphi_LogFlush(void* pContext);
 
-C_FUNCTION const char*  adtFortran_ExtractComment(void* pContext);
-C_FUNCTION void         adtFortran_AppendComment(void* pContext, const char* pTokenText);
+C_FUNCTION void         adtFortran_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber);
 C_FUNCTION const char*  adtFortran_AllocString(void* pContext, const char* pTokenText, int nTranslate);
 C_FUNCTION void         adtFortran_LogText(void* pContext, const char* pTokenText, int nLineNumber);
 C_FUNCTION void         adtFortran_LogFlush(void* pContext);
 
-C_FUNCTION const char*  adtCpp_ExtractComment(void* pContext);
-C_FUNCTION void         adtCpp_AppendComment(void* pContext, const char* pTokenText);
+C_FUNCTION void         adtCpp_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber);
 C_FUNCTION const char*  adtCpp_AllocString(void* pContext, const char* pTokenText, int nTranslate);
 C_FUNCTION void         adtCpp_ParseCommandBlock(void* pContext, const char* pCommandBlock);
 C_FUNCTION void         adtCpp_LogText(void* pContext, const char* pTokenText, int nLineNumber);
 C_FUNCTION void         adtCpp_LogFlush(void* pContext);
 
-C_FUNCTION const char*  adtJava_ExtractComment(void* pContext);
-C_FUNCTION void         adtJava_AppendComment(void* pContext, const char* pTokenText);
+C_FUNCTION void         adtJava_AppendComment(void* pContext, const char* pTokenText, const char* pFileName, int nLineNumber);
 C_FUNCTION const char*  adtJava_AllocString(void* pContext, const char* pTokenText, int nTranslate);
 C_FUNCTION void         adtJava_ParseCommandBlock(void* pContext, const char* pCommandBlock);
 C_FUNCTION void         adtJava_LogText(void* pContext, const char* pTokenText, int nLineNumber);
@@ -192,6 +200,28 @@ class AdtCppTranslationUnit;
 class AdtCppScope;
 class AdtJava;
 class AdtJavaGoal;
+
+
+//  ----------------------------------------------------------------------------
+//  AdtTapenadeVersion class
+//  ----------------------------------------------------------------------------
+class AdtTapenadeVersion
+{
+private:
+  static double TapenadeVersion;
+
+public:
+  AdtTapenadeVersion(bool bInit = false);
+
+  operator double() const;
+};
+
+//  ----------------------------------------------------------------------------
+
+inline AdtTapenadeVersion::operator double() const
+{
+  return (TapenadeVersion);
+}
 
 
 //  ----------------------------------------------------------------------------
@@ -479,6 +509,7 @@ public:
   void          write(const string& rString) const;
   void          write(const char* pString) const;
   void          write(char nChar) const;
+  void          readLines(AdtStringList& rStringList);
 
   void          tabSize(int nTabSize);
   void          incrementIndent();
@@ -631,6 +662,14 @@ namespace AdtParse
                                     const char** ppEndWord,
                                     bool bMustBeDelimited = false);
 
+  bool          stepOverWord(const char* pWordDelimiters,
+                             const char*& rpText,
+                             bool bMustBeDelimited = false);
+
+  bool          stepOverWord(const char** ppWordDelimiters,
+                             const char*& rpText,
+                             bool bMustBeDelimited = false);
+
   bool          extractWord(string& sWord,
                             const char* pWordDelimiters,
                             const char*& rpText,
@@ -677,7 +716,7 @@ namespace AdtParse
                              const char* pFirstChar,
                              size_t* pnCount = 0);
 
-  const char*   nextWord(const char* pChar, size_t* pnCount = 0);
+  const char*   nextWord(const char* pChar, size_t* pnCount = 0, bool bIncludeNewline = true);
   const char*   nextLine(const char* pChar, size_t* pnCount = 0);
 }
 
@@ -894,17 +933,61 @@ inline void AdtGenericCommandBlock::isForwardMode(bool bForward)
 //  ----------------------------------------------------------------------------
 //  AdtCommon class
 //  ----------------------------------------------------------------------------
+class AdtCommentCollection
+{
+private:
+  string              FileName;
+  AdtStringByIntMap   CommentMap;
+
+public:
+  AdtCommentCollection(const char* pFileName);
+  virtual ~AdtCommentCollection();
+
+  void                addComment(const char* pComment, int nLineNumber);
+  bool                extractComment(string& rComment, int nUpToLineNumber);
+  void                flush();
+
+  const string&       fileName() const;
+};
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtCommentCollection::flush()
+{
+  CommentMap.clear();
+}
+
+//  ----------------------------------------------------------------------------
+
+inline const string& AdtCommentCollection::fileName() const
+{
+  return (FileName);
+}
+
+//  ----------------------------------------------------------------------------
+
+typedef std::pair<const string, AdtCommentCollection*>                        AdtCommentCollectionPtrStringPair;
+typedef std::map<string, AdtCommentCollection*, string_less>                  AdtCommentCollectionPtrByStringMap;
+typedef std::map<string, AdtCommentCollection*, string_less>::iterator        AdtCommentCollectionPtrByStringMapIter;
+typedef std::map<string, AdtCommentCollection*, string_less>::const_iterator  AdtCommentCollectionPtrByStringMapConstIter;
+
+
+//  ----------------------------------------------------------------------------
+//  AdtCommon class
+//  ----------------------------------------------------------------------------
 class AdtCommon
 {
 private:
-  FILE*                         Log;
-  const char*                   Comment;
-  static AdtStringCache         StringCache;
-  static AdtStringByStringMap   TranslationMap;
+  FILE*                               Log;
+  const char*                         Comment;
+  static AdtStringCache               StringCache;
+  static AdtStringByStringMap         TranslationMap;
+  AdtCommentCollectionPtrByStringMap  CommentCollectionMap;
 
 protected:
   bool                    beginParseString(FILE*& rFile, string& sFileName, const char* pString);
   bool                    endParseString(FILE*& rFile, string& sFileName);
+  void                    flush();
 
 public:
   AdtCommon();
@@ -912,10 +995,11 @@ public:
 
   bool                    openLog(const char* pFileAndPath, const char* pMode);
   bool                    closeLog();
-  const char*             extractComment();
-  void                    appendComment(const char* pTokenText);
   void                    logText(const char* pTokenText, int nLineNumber);
   void                    logFlush();
+  void                    appendComment(const char* pCommentText, const char* pFileName, int nLineNumber);
+  bool                    extractComment(const string** ppComment, const char* pFileName, int nUpToLineNumber);
+
   static void             addTranslation(const char* pOriginalText, const char* pTranslatedText);
   static void             addTranslation(const AdtStringList& rOriginalTextList, const AdtStringList& rTranslatedTextList);
   static void             removeTranslation(const char* pOriginalText);

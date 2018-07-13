@@ -2,9 +2,9 @@
 [Setup]
 ArchitecturesInstallIn64BitMode=x64
 ArchitecturesAllowed=x64
-OutputBaseFilename=ADT-1.08.5_x64_setup
+OutputBaseFilename=ADT-1.09.4_x64_setup
 AppName=ADT
-AppVersion=1.08.5
+AppVersion=1.09.4
 DefaultDirName={pf}\ADT
 DefaultGroupName=ADT
 Compression=lzma2
@@ -22,6 +22,8 @@ Source: ".\templates\make\autoconf\*"; DestDir: "{app}\templates\make\autoconf"
 Source: ".\templates\make\VisualStudio\*"; DestDir: "{app}\templates\make\VisualStudio"
 Source: ".\templates\source\cpp\*"; DestDir: "{app}\templates\source\cpp"
 Source: ".\templates\source\pascal\*"; DestDir: "{app}\templates\source\pascal"
+Source: ".\src\ADLib\*"; DestDir: "{app}\src\cpp"
+Source: ".\src\ADLibPascal\*"; DestDir: "{app}\src\pascal"
 Source: ".\src\ADLib\*.hpp"; DestDir: "{app}\include"
 Source: ".\src\RMath\include\*.h"; DestDir: "{app}\include\RMath"
 Source: ".\src\RMath\include\R_ext\*.h"; DestDir: "{app}\include\RMath\R_ext"
@@ -43,6 +45,8 @@ Source: ".\objs\x64\Debug\ADLibErr.lib"; DestDir: "{app}\lib\x64\debug"
 Source: ".\objs\x64\Debug\ADLibR.lib"; DestDir: "{app}\lib\x64\debug"
 Source: ".\objs\x64\Debug\fdlibm-5.2.lib"; DestDir: "{app}\lib\x64\debug"
 Source: ".\src\RMath\lib\x64\*.lib"; DestDir: "{app}\lib\x64\R"
+Source: ".\objs\ADLibPascal\Windows\win32\lib\*"; DestDir: "{app}\lib\Pascal\win32"
+Source: ".\objs\ADLibPascal\Windows\x64\lib\*"; DestDir: "{app}\lib\Pascal\x64"
 
 [Icons]
 Name: "{group}\ADT manual"; Filename: "{app}\users-manual.pdf";

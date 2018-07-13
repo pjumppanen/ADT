@@ -1,9 +1,2 @@
-EXPORT SEXP Om_destroy(SEXP rInstance);
-EXPORT SEXP Om_create(
-    SEXP arg_nsim, 
-    SEXP arg_npop, 
-    SEXP arg_nages, 
-    SEXP arg_nsubyears, 
-    SEXP arg_nareas, 
-    SEXP arg_nfleets, 
-    SEXP arg_Recsubyr);
+EXPORT SEXP Om_destroy(SEXP args);
+EXPORT SEXP Om_create(SEXP args);

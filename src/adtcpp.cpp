@@ -35,8 +35,7 @@
 //  ----------------------------------------------------------------------------
 #define FORTRAN_MODE_CLASS_EXTEND_NAME  10
 #define FORTRAN_MODE_ARRAY_SLICE        11
-#define WRITE_MODE_INTENTS              12
-#define WRITE_MODE_TYPEDECLS            13
+#define WRITE_MODE_TYPEDECLS            12
 
 
 //  ----------------------------------------------------------------------------
@@ -51,6 +50,7 @@ AdtCppToFortranTypeConversionByStringMap    AdtCppBase::CppTypeMap;
 
 AdtIntByStringMapCS                         AdtCppTranslationUnit::ProcedureMap;
 AdtIntByStringMapCS                         AdtCppTranslationUnit::FunctionMap;
+AdtParserPtrList                            AdtCppTranslationUnit::BlackBoxCommentsList;
 
 
 //  ----------------------------------------------------------------------------
@@ -142,9 +142,9 @@ void* adtCppDirectedExpression_create(void* pDeclaratorExpressionObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppDeclaratorExpression_create(const char* pIdentifier, void* pExpressionListObj, void* pDeclaratorExpressionDimsObj, int nQualified, int nHasBrackets, const char* pComment)
+void* adtCppDeclaratorExpression_create(const char* pIdentifier, void* pExpressionListObj, void* pDeclaratorExpressionDimsObj, int nQualified, int nHasBrackets)
 {
-  return (Hnd(new AdtCppDeclaratorExpression(pIdentifier, ObjAndRelease(pExpressionListObj), ObjAndRelease(pDeclaratorExpressionDimsObj), nQualified != 0, nHasBrackets != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppDeclaratorExpression(pIdentifier, ObjAndRelease(pExpressionListObj), ObjAndRelease(pDeclaratorExpressionDimsObj), nQualified != 0, nHasBrackets != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -282,23 +282,23 @@ void* adtCppStatement_create(void* pLabeledStatementObj, void* pExpressionStatem
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppLabeledStatement_create(void* pConstantExpressionObj, void* pStatementObj, const char* pIdentifier, int nIsDefault, const char* pComment)
+void* adtCppLabeledStatement_create(void* pConstantExpressionObj, void* pStatementObj, const char* pIdentifier, int nIsDefault)
 {
-  return (Hnd(new AdtCppLabeledStatement(ObjAndRelease(pConstantExpressionObj), ObjAndRelease(pStatementObj), pIdentifier, nIsDefault != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppLabeledStatement(ObjAndRelease(pConstantExpressionObj), ObjAndRelease(pStatementObj), pIdentifier, nIsDefault != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppExpressionStatement_create(void* pExpressionObj, const char* pComment)
+void* adtCppExpressionStatement_create(void* pExpressionObj)
 {
-  return (Hnd(new AdtCppExpressionStatement(ObjAndRelease(pExpressionObj), pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppExpressionStatement(ObjAndRelease(pExpressionObj)), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppCompoundStatement_create(void* pStatementSeqObj, const char* pComment)
+void* adtCppCompoundStatement_create(void* pStatementSeqObj)
 {
-  return (Hnd(new AdtCppCompoundStatement(ObjAndRelease(pStatementSeqObj), pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppCompoundStatement(ObjAndRelease(pStatementSeqObj)), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -310,16 +310,16 @@ void* adtCppStatementSeq_create(void* pStatementObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppSelectionStatement_create(void* pExpressionObj, void* pStatementObj, void* pStatement2Obj, int nIsIf, const char* pComment)
+void* adtCppSelectionStatement_create(void* pExpressionObj, void* pStatementObj, void* pStatement2Obj, int nIsIf)
 {
-  return (Hnd(new AdtCppSelectionStatement(ObjAndRelease(pExpressionObj), ObjAndRelease(pStatementObj), ObjAndRelease(pStatement2Obj), nIsIf != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppSelectionStatement(ObjAndRelease(pExpressionObj), ObjAndRelease(pStatementObj), ObjAndRelease(pStatement2Obj), nIsIf != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppIterationStatement_create(void* pForInitStatementObj, void* pExpressionObj, void* pExpression2Obj, void* pStatementObj, int nIsDo, const char* pComment)
+void* adtCppIterationStatement_create(void* pForInitStatementObj, void* pExpressionObj, void* pExpression2Obj, void* pStatementObj, int nIsDo)
 {
-  return (Hnd(new AdtCppIterationStatement(ObjAndRelease(pForInitStatementObj), ObjAndRelease(pExpressionObj), ObjAndRelease(pExpression2Obj), ObjAndRelease(pStatementObj), nIsDo != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppIterationStatement(ObjAndRelease(pForInitStatementObj), ObjAndRelease(pExpressionObj), ObjAndRelease(pExpression2Obj), ObjAndRelease(pStatementObj), nIsDo != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -331,9 +331,9 @@ void* adtCppForInitStatement_create(void* pExpressionStatementObj, void* pSimple
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppJumpStatement_create(void* pExpressionObj, const char* pIndentifier, int nType, const char* pComment)
+void* adtCppJumpStatement_create(void* pExpressionObj, const char* pIndentifier, int nType)
 {
-  return (Hnd(new AdtCppJumpStatement(ObjAndRelease(pExpressionObj), pIndentifier, (AdtCppJumpType)nType, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppJumpStatement(ObjAndRelease(pExpressionObj), pIndentifier, (AdtCppJumpType)nType), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -352,9 +352,9 @@ void* adtCppDeclarationSeq_create(void* pDeclarationObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppDeclaration_create(void* pBlockDeclarationObj, void* pFunctionDefinitionObj, void* pLinkageSpecificationObj, void* pNamespaceDefinitionObj, const char* pComment)
+void* adtCppDeclaration_create(void* pBlockDeclarationObj, void* pFunctionDefinitionObj, void* pLinkageSpecificationObj, void* pNamespaceDefinitionObj)
 {
-  return (Hnd(new AdtCppDeclaration(ObjAndRelease(pBlockDeclarationObj), ObjAndRelease(pFunctionDefinitionObj), ObjAndRelease(pLinkageSpecificationObj), ObjAndRelease(pNamespaceDefinitionObj), pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppDeclaration(ObjAndRelease(pBlockDeclarationObj), ObjAndRelease(pFunctionDefinitionObj), ObjAndRelease(pLinkageSpecificationObj), ObjAndRelease(pNamespaceDefinitionObj)), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -366,9 +366,9 @@ void* adtCppBlockDeclaration_create(void* pSimpleDeclarationObj, void* pAsmDefin
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppSimpleDeclaration_create(void* pClassSpecifierObj, void* pEnumSpecifierObj, void* pSimpleTypeSpecifierObj, void* pInitDeclaratorListObj, void* pDeclModifierListObj, int nHasTypeDef, const char* pComment)
+void* adtCppSimpleDeclaration_create(void* pClassSpecifierObj, void* pEnumSpecifierObj, void* pSimpleTypeSpecifierObj, void* pInitDeclaratorListObj, void* pDeclModifierListObj, int nHasTypeDef)
 {
-  return (Hnd(new AdtCppSimpleDeclaration(ObjAndRelease(pClassSpecifierObj), ObjAndRelease(pEnumSpecifierObj), ObjAndRelease(pSimpleTypeSpecifierObj), ObjAndRelease(pInitDeclaratorListObj), ObjAndRelease(pDeclModifierListObj), nHasTypeDef != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppSimpleDeclaration(ObjAndRelease(pClassSpecifierObj), ObjAndRelease(pEnumSpecifierObj), ObjAndRelease(pSimpleTypeSpecifierObj), ObjAndRelease(pInitDeclaratorListObj), ObjAndRelease(pDeclModifierListObj), nHasTypeDef != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -388,9 +388,9 @@ int adtCppSimpleDeclaration_isTypeDef(void* pCppSimpleDeclarationObj, const char
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppDeclModifier_create(int nType, const char* pComment)
+void* adtCppDeclModifier_create(int nType)
 {
-  return (Hnd(new AdtCppDeclModifier((AdtCppDeclModifierType)nType, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppDeclModifier((AdtCppDeclModifierType)nType), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -409,9 +409,9 @@ void* adtCppClassSpecifier_create(void* pClassKeyObj, void* pBaseSpecifierListOb
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppEnumSpecifierName_create(const char* pIdentifier, int nQualified, const char* pComment)
+void* adtCppEnumSpecifierName_create(const char* pIdentifier, int nQualified)
 {
-  return (Hnd(new AdtCppEnumSpecifierName(pIdentifier, nQualified != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppEnumSpecifierName(pIdentifier, nQualified != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -423,9 +423,9 @@ void* adtCppEnumSpecifier_create(void* pEnumeratorListObj, void* pEnumSpecifierN
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppSimpleTypeSpecifier_create(const char* pIdentifier, int nType, int nByRef, const char* pComment)
+void* adtCppSimpleTypeSpecifier_create(const char* pIdentifier, int nType, int nByRef)
 {
-  return (Hnd(new AdtCppSimpleTypeSpecifier(pIdentifier, (AdtCppSimpleType)nType, nByRef != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppSimpleTypeSpecifier(pIdentifier, (AdtCppSimpleType)nType, nByRef != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -437,51 +437,51 @@ void* adtCppEnumeratorList_create(void* pEnumeratorDefinitionObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppEnumeratorDefinition_create(void* pConstantExpressionObj, const char* pIdentifier, const char* pComment)
+void* adtCppEnumeratorDefinition_create(void* pConstantExpressionObj, const char* pIdentifier)
 {
-  return (Hnd(new AdtCppEnumeratorDefinition(ObjAndRelease(pConstantExpressionObj), pIdentifier, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppEnumeratorDefinition(ObjAndRelease(pConstantExpressionObj), pIdentifier), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppNamespaceDefinition_create(void* pDeclarationSeqObj, const char* pIdentifier, const char* pComment)
+void* adtCppNamespaceDefinition_create(void* pDeclarationSeqObj, const char* pIdentifier)
 {
-  return (Hnd(new AdtCppNamespaceDefinition(ObjAndRelease(pDeclarationSeqObj), pIdentifier, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppNamespaceDefinition(ObjAndRelease(pDeclarationSeqObj), pIdentifier), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppNamespaceAliasDefinition_create(const char* pIdentifier, const char* pQualifiedIdentifier, const char* pComment)
+void* adtCppNamespaceAliasDefinition_create(const char* pIdentifier, const char* pQualifiedIdentifier)
 {
-  return (Hnd(new AdtCppNamespaceAliasDefinition(pIdentifier, pQualifiedIdentifier, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppNamespaceAliasDefinition(pIdentifier, pQualifiedIdentifier), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppUsingDeclaration_create(const char* pQualifiedIdentifier, int nWithTypename, const char* pComment)
+void* adtCppUsingDeclaration_create(const char* pQualifiedIdentifier, int nWithTypename)
 {
-  return (Hnd(new AdtCppUsingDeclaration(pQualifiedIdentifier, nWithTypename != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppUsingDeclaration(pQualifiedIdentifier, nWithTypename != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppUsingDirective_create(const char* pIdentifier, int nQualified, const char* pComment)
+void* adtCppUsingDirective_create(const char* pIdentifier, int nQualified)
 {
-  return (Hnd(new AdtCppUsingDirective(pIdentifier, nQualified != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppUsingDirective(pIdentifier, nQualified != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppAsmDefinition_create(const char* pStringLiteral, const char* pComment)
+void* adtCppAsmDefinition_create(const char* pStringLiteral)
 {
-  return (Hnd(new AdtCppAsmDefinition(pStringLiteral, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppAsmDefinition(pStringLiteral), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppLinkageSpecification_create(void* pDeclarationSeqObj, void* pDeclarationObj, const char* pStringLiteral, const char* pComment)
+void* adtCppLinkageSpecification_create(void* pDeclarationSeqObj, void* pDeclarationObj, const char* pStringLiteral)
 {
-  return (Hnd(new AdtCppLinkageSpecification(ObjAndRelease(pDeclarationSeqObj), ObjAndRelease(pDeclarationObj), pStringLiteral, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppLinkageSpecification(ObjAndRelease(pDeclarationSeqObj), ObjAndRelease(pDeclarationObj), pStringLiteral), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -500,9 +500,9 @@ void* adtCppInitDeclarator_create(void* pDeclaratorObj, void* pInitializerObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppDeclarator_create(void* pParameterDeclarationClauseObj, void* pExpressionListObj, void* pDeclaratorDimsObj, const char* pIdentifier, int nWithBrackets, int nQualified, int nIsObj, int nIsVirtual, int nType, const char* pComment, int nInitQualifiedName)
+void* adtCppDeclarator_create(void* pParameterDeclarationClauseObj, void* pExpressionListObj, void* pDeclaratorDimsObj, const char* pIdentifier, int nWithBrackets, int nQualified, int nIsObj, int nIsVirtual, int nType, int nInitQualifiedName)
 {
-  return (Hnd(new AdtCppDeclarator(ObjAndRelease(pParameterDeclarationClauseObj), ObjAndRelease(pExpressionListObj), ObjAndRelease(pDeclaratorDimsObj), pIdentifier, nWithBrackets != 0, nQualified != 0, nIsObj != 0, nIsVirtual != 0, (AdtCppDeclaratorCV_Type)nType, pComment, nInitQualifiedName != 0), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppDeclarator(ObjAndRelease(pParameterDeclarationClauseObj), ObjAndRelease(pExpressionListObj), ObjAndRelease(pDeclaratorDimsObj), pIdentifier, nWithBrackets != 0, nQualified != 0, nIsObj != 0, nIsVirtual != 0, (AdtCppDeclaratorCV_Type)nType, nInitQualifiedName != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -570,9 +570,9 @@ void* adtCppInitializerList_create(void* pInitializerClauseObj)
 
 //  ----------------------------------------------------------------------------
 
-void* adtCppClassKey_create(int nType, const char* pIdentifier, int nQualified, const char* pComment)
+void* adtCppClassKey_create(int nType, const char* pIdentifier, int nQualified)
 {
-  return (Hnd(new AdtCppClassKey((AdtCppClassKeyType)nType, pIdentifier, nQualified != 0, pComment), yyCpp_lineNumber(), yyCpp_fileName()));
+  return (Hnd(new AdtCppClassKey((AdtCppClassKeyType)nType, pIdentifier, nQualified != 0), yyCpp_lineNumber(), yyCpp_fileName()));
 }
 
 //  ----------------------------------------------------------------------------
@@ -788,6 +788,141 @@ AdtFile& AdtCppBase::forAllWriteCPP(AdtFile& pOutFile, int nMode, const char* pD
 
 //  ----------------------------------------------------------------------------
 
+AdtFile& AdtCppBase::writePragmas(AdtFile& pOutFile) const
+{
+  if (pOutFile.isOpen()        &&
+      pOutFile.isFortranFile() &&
+      (comment().length() > 0))
+  {
+    string  sCopy(comment());
+    int         nCount      = 0;
+    const char* pWord       = 0;
+    const char* pStart      = sCopy.c_str();
+    const char* pEnd        = pStart;
+    bool        bHasPragmas = false;
+
+    while (*pEnd != 0)
+    {
+      pEnd = AdtParse::nextWord(pEnd);
+
+      int  nCommentType  = 0;
+      bool bStartComment = false;
+
+      if (AdtParse::matchWord(pEnd, "/*", false))
+      {
+        bStartComment = true;
+        nCommentType  = 1;
+      }
+      else if (AdtParse::matchWord(pEnd, "//", false))
+      {
+        bStartComment = true;
+        nCommentType  = 0;
+      }
+
+      pEnd  = AdtParse::nextWord(pEnd);
+      pWord = pEnd;
+
+      if (bStartComment)
+      {
+        if (AdtParse::matchWord(pWord, "$AD", false))
+        {
+          bool bContinue = true;
+
+          pStart = pEnd;
+          pEnd   = pWord;
+
+          while ((*pEnd != 0) && bContinue)
+          {
+            bool bMatched = false;
+
+            pWord = pEnd;
+
+            switch (nCommentType)
+            {
+              default:
+              case 0:
+              {
+                bMatched = AdtParse::matchWord(pEnd, "\n", false);
+                break;
+              }
+
+              case 1:
+              {
+                bMatched = AdtParse::matchWord(pEnd, "*/", false);
+                break;
+              }
+            }
+
+            if (bMatched)
+            {
+              pEnd      = pWord;
+              bContinue = false;
+            }
+            else
+            {
+              pEnd++;
+              pEnd = AdtParse::nextWord(pEnd, 0, false);
+            }
+
+            if (!bContinue)
+            {
+              char* pTerminate = (char*)pEnd;
+
+              pTerminate[0] = 0;
+
+              pOutFile.newline();
+              pOutFile.write("!");
+              pOutFile.write(pStart);
+
+              bHasPragmas = true;
+            }
+          }
+        }
+
+        switch (nCommentType)
+        {
+          default:
+          case 0:
+          {
+            AdtParse::stepOverWord("\n", pEnd, false);
+            break;
+          }
+
+          case 1:
+          {
+            AdtParse::stepOverWord("*/", pEnd, false);
+            break;
+          }
+        }
+      }
+
+      if (pEnd[0] != 0)
+      {
+        pEnd++;
+        pEnd = AdtParse::nextWord(pEnd, 0, false);
+      }
+
+      pStart = pEnd;
+    }
+
+    if (bHasPragmas)
+    {
+      pOutFile.newline();
+    }
+    else
+    {
+      string sComment;
+
+      translateComment(sComment, AdtParserCodeFortran, false);
+      writeExpanded(pOutFile, sComment);
+    }
+  }
+
+  return (pOutFile);
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtCppBase::AdtCppBase()
  : AdtParser()
 {
@@ -803,9 +938,12 @@ AdtCppBase::~AdtCppBase()
 
 //  ----------------------------------------------------------------------------
 
-void AdtCppBase::initialise()
+void AdtCppBase::rootBindComments(AdtCommon* pCompilerBase)
 {
-  //Do whatever is required. Possibly not needed anymore
+  if (CppRootObject != 0)
+  {
+    CppRootObject->bindComments(pCompilerBase);
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -838,6 +976,21 @@ void AdtCppBase::prefixFromQualifiedName(const char* pName, string& rPrefix)
 
     rPrefix = sPrefix;
   }
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtCppBase::qualifiedName(string& rName, const char* pPrefix)
+{
+  bool bQualified = false;
+
+  if ((rName.find(':') == string::npos) && (pPrefix != 0))
+  {
+    rName      = string(pPrefix) + "::" + rName;
+    bQualified = true;
+  }
+
+  return (bQualified);
 }
 
 //  ----------------------------------------------------------------------------
@@ -1157,7 +1310,8 @@ void AdtCppCheckDeclaration::initialiseQualifiedName()
 AdtCppCheckDeclaration::AdtCppCheckDeclaration()
  : AdtCppBase()
 {
-  QualifiedName = 0;
+  QualifiedName         = 0;
+  IsForwardDeclaration  = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -1165,7 +1319,8 @@ AdtCppCheckDeclaration::AdtCppCheckDeclaration()
 AdtCppCheckDeclaration::AdtCppCheckDeclaration(const AdtCppCheckDeclaration& rCopy)
  : AdtCppBase(rCopy)
 {
-  QualifiedName = rCopy.QualifiedName;
+  QualifiedName         = rCopy.QualifiedName;
+  IsForwardDeclaration  = rCopy.IsForwardDeclaration;
 }
 
 //  ----------------------------------------------------------------------------
@@ -1272,7 +1427,6 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
         pChar = AdtParse::nextWord(pChar);
 
         AdtParse::extractWord(sName, ppDelimeters, pChar);
-//        AdtParse::extractWord(sName, ":*,", pChar);
 
         if (AdtParse::matchWord(pChar, ":"))
         {
@@ -1294,7 +1448,6 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
           pChar = AdtParse::nextWord(pChar);
 
           AdtParse::extractWord(sName, ppDelimeters, pChar);
-//          AdtParse::extractWord(sName, ":*,", pChar);
         }
 
         pChar = AdtParse::nextWord(pChar);
@@ -1303,12 +1456,16 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
         {
           //Take out end of comment
         }
-//        else if (AdtParse::matchWord(pChar, "*"))
-//        {
-//          //Is variable size array definition
-//        }
 
-        pOutFile.write(sName);
+        if (::strchr(sName.c_str(), '<') != 0)
+        {
+          // Ragged array so leave the dimensions open
+          pOutFile.write(":");
+        }
+        else
+        {
+          pOutFile.write(sName);
+        }
 
         if (AdtParse::matchWord(pChar, ","))
         {
@@ -1566,25 +1723,18 @@ void AdtCppTranslationUnit::addDimensionVars(const char* pClassName,
 
   if (pClass != 0)
   {
-    AdtParserPtrList      rList;
-    AdtParserPtrListIter  Iter;
+    AdtParserPtrByStringMap     rDimsMap;
+    AdtParserPtrByStringMapIter Iter;
 
-    pClass->findDimensionVars(this, rVarsMap, rList);
+    pClass->findDimensionVars(this, rVarsMap, rDimsMap);
 
-    for (Iter = rList.begin() ; Iter != rList.end() ; ++Iter)
+    for (Iter = rDimsMap.begin() ; Iter != rDimsMap.end() ; ++Iter)
     {
-      const AdtParser*  pExternal = *Iter;
+      const AdtParser*  pDimObj = Iter->second;
 
-      if (pExternal != 0)
+      if (pDimObj != 0)
       {
-        char  sKeyName[32]  = {0};
-
-        //Quick and dirty hack to build a unique key name to stop the same
-        //object being inserted more than once.
-        ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
-        //Is a class variable
-        rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+        rVarsMap.insert(AdtParserPtrByStringMap::value_type(Iter->first, AdtParserContext((AdtParser*)pDimObj)));
       }
     }
   }
@@ -1654,12 +1804,8 @@ bool AdtCppTranslationUnit::compile(const AdtCppFunctionDefinition* pFunction,
 
           if (findVar(rName, pExternal))
           {
-            //Quick and dirty hack to build a unique key name to stop the same
-            //object being inserted more than once.
-            ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
             //Is a variable
-            rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+            rVarsMap.insert(AdtParserPtrByStringMap::value_type(rName, AdtParserContext((AdtParser*)pExternal)));
           }
           else if (findFunction(rName, ClassName, pExternal, sMatchName))
           {
@@ -1683,21 +1829,13 @@ bool AdtCppTranslationUnit::compile(const AdtCppFunctionDefinition* pFunction,
           }
           else if (findField(rName, ClassName, pExternal))
           {
-            //Quick and dirty hack to build a unique key name to stop the same
-            //object being inserted more than once.
-            ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
             //Is a class variable
-            rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+            rVarsMap.insert(AdtParserPtrByStringMap::value_type(rName, AdtParserContext((AdtParser*)pExternal)));
           }
           else if (findEnum(rName, pExternal))
           {
-            //Quick and dirty hack to build a unique key name to stop the same
-            //object being inserted more than once.
-            ::sprintf(sKeyName, "%zx", (size_t)pExternal);
-
             //Is a variable
-            rVarsMap.insert(AdtParserPtrByStringMap::value_type(sKeyName, AdtParserContext((AdtParser*)pExternal)));
+            rVarsMap.insert(AdtParserPtrByStringMap::value_type(rName, AdtParserContext((AdtParser*)pExternal)));
           }
           else
           {
@@ -1774,7 +1912,19 @@ AdtCppTranslationUnit::AdtCppTranslationUnit(const AdtCppTranslationUnit& rCopy)
 
 AdtCppTranslationUnit::~AdtCppTranslationUnit()
 {
+  BlackBoxCommentsList.clear();
+
   UtlReleaseReference(DeclarationSeq);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtCppTranslationUnit::addBlackBoxCommentsObject(AdtParser* pObj)
+{
+  if (pObj != 0)
+  {
+    BlackBoxCommentsList.push_back(pObj);
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -1968,7 +2118,7 @@ void AdtCppTranslationUnit::addFunction(AdtCppFunctionDefinition* pFunctionDefin
 {
   if ((pFunctionDefinition != 0) && (DeclarationSeq != 0))
   {
-    AdtCppDeclaration*  pDeclaration = new AdtCppDeclaration(0, pFunctionDefinition, 0, 0, 0);
+    AdtCppDeclaration*  pDeclaration = new AdtCppDeclaration(0, pFunctionDefinition, 0, 0);
 
     if (pDeclaration != 0)
     {
@@ -2003,56 +2153,66 @@ bool AdtCppTranslationUnit::hasClass(const char* pClassName,
 
 bool AdtCppTranslationUnit::buildBlackBoxFile(const char* pBlackBoxFileName,
                                               AdtStringByStringMap& rRegardAsClassFunctionMap,
-                                              AdtStringByStringMap& rRegardAsClassSubroutineMap)
+                                              AdtStringByStringMap& rRegardAsClassSubroutineMap,
+                                              double dVersionNumber)
 {
   bool    bBuilt = false;
   string  sBlackBoxDefs;
 
-  //Find all black box containing objects
-  AdtBlackBoxDefinitionPtrByStringMap BlackBoxMap;
-  AdtParserPtrList                    rBlackBoxList;
-  AdtParserPtrListConstIter           Iter;
-
-  findObjects(rBlackBoxList, "AdtCppFunctionDefinition");
-
-  for (Iter = rBlackBoxList.begin() ; Iter != rBlackBoxList.end() ; ++Iter)
+  if (BlackBoxCommentsList.size() > 0)
   {
-    const AdtCppFunctionDefinition* pFunctionDefinition = (const AdtCppFunctionDefinition*)Iter->object();
+    //Find all black box containing objects
+    AdtBlackBoxDefinitionPtrByStringMap BlackBoxMap;
+    AdtParserPtrListIter                Iter;
 
-    if ((pFunctionDefinition != 0) && (pFunctionDefinition->blackBox() != 0))
+    for (Iter = BlackBoxCommentsList.begin() ; Iter != BlackBoxCommentsList.end() ; ++Iter)
     {
-      AdtBlackBoxDefinition*  pBlackBox = pFunctionDefinition->blackBox();
-      AdtFile                 DefFile;
-      string                  sDef;
+      AdtParser* pObj = *Iter;
 
-      if (DefFile.open(sDef))
+      if ((pObj != 0) && pObj->isType("AdtCppFunctionDefinition"))
       {
-        AdtBlackBoxDefinitionPtrByStringMapIter BlackBoxIter;
+        AdtCppFunctionDefinition* pFunctionDefinition = (AdtCppFunctionDefinition*)pObj;
 
-        pBlackBox->writeDefinition(DefFile);
-        DefFile.close();
-
-        BlackBoxIter = BlackBoxMap.find(pBlackBox->name());
-
-        if (BlackBoxIter == BlackBoxMap.end())
+        if (pFunctionDefinition != 0)
         {
-          BlackBoxMap[pBlackBox->name()] = pBlackBox;
-          addBlackBox(pBlackBox,
-                      rRegardAsClassFunctionMap,
-                      rRegardAsClassSubroutineMap);
-        }
-        else
-        {
-          ::printf("ERROR: The black box definition in file %s on line %d is already defined in file %s on line %d.\n",
-                   pBlackBox->fileName(),
-                   pBlackBox->lineNumber(),
-                   BlackBoxIter->second->fileName(),
-                   BlackBoxIter->second->lineNumber());
+          AdtBlackBoxDefinition* pBlackBox = pFunctionDefinition->compileBlackBoxDefinition();
 
-          AdtExit(-1);
-        }
+          if (pBlackBox != 0)
+          {
+            AdtFile DefFile;
+            string  sDef;
 
-        sBlackBoxDefs += sDef;
+            if (DefFile.open(sDef))
+            {
+              AdtBlackBoxDefinitionPtrByStringMapIter BlackBoxIter;
+
+              pBlackBox->writeDefinition(DefFile, dVersionNumber);
+              DefFile.close();
+
+              BlackBoxIter = BlackBoxMap.find(pBlackBox->name());
+
+              if (BlackBoxIter == BlackBoxMap.end())
+              {
+                BlackBoxMap[pBlackBox->name()] = pBlackBox;
+                addBlackBox(pBlackBox,
+                            rRegardAsClassFunctionMap,
+                            rRegardAsClassSubroutineMap);
+              }
+              else
+              {
+                ::printf("ERROR: The black box definition in file %s on line %d is already defined in file %s on line %d.\n",
+                         pBlackBox->fileName(),
+                         pBlackBox->lineNumber(),
+                         BlackBoxIter->second->fileName(),
+                         BlackBoxIter->second->lineNumber());
+
+                AdtExit(-1);
+              }
+
+              sBlackBoxDefs += sDef;
+            }
+          }
+        }
       }
     }
   }
@@ -2215,11 +2375,13 @@ void AdtCppTranslationUnit::extractClassConstructorName(const char* pConstructor
 bool AdtCppTranslationUnit::extractClassConstructors(AdtStringList& rConstructorList,
                                                      const char* pClassName,
                                                      const char* pParentClassName,
+                                                     const char* pPathPrefix,
                                                      AdtSourceFileType nAsFileType) const
 {
   bool bExtracted = AdtAutoClass::buildClassConstructor(rConstructorList,
                                                         pClassName,
                                                         pParentClassName,
+                                                        pPathPrefix,
                                                         nAsFileType);
 
   if (!bExtracted)
@@ -3249,7 +3411,7 @@ void AdtCppDeclarationSeq::initialise()
 
 AdtFile& AdtCppDeclarationSeq::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  forAllWriteCPP(rOutFile, nMode, "", true, true);
+  forAllWriteCPP(rOutFile, nMode, "", false, true);
 
   return (rOutFile);
 }
@@ -3621,8 +3783,7 @@ AdtCppDeclaratorExpression::AdtCppDeclaratorExpression(const char* pIdentifier,
                                                        AdtParser* pExpressionListObj,
                                                        AdtParser* pDeclaratorExpressionDimsObj,
                                                        bool bQualified,
-                                                       bool bHasBrackets,
-                                                       const char* pComment)
+                                                       bool bHasBrackets)
  : AdtCppBase()
 {
   if (pIdentifier != 0)
@@ -3635,8 +3796,6 @@ AdtCppDeclaratorExpression::AdtCppDeclaratorExpression(const char* pIdentifier,
 
   Qualified   = bQualified;
   HasBrackets = bHasBrackets;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3730,8 +3889,6 @@ bool AdtCppDeclaratorExpression::isCallDeclaration(size_t* pnArgs) const
 
 AdtFile& AdtCppDeclaratorExpression::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, name());
 
   if (HasBrackets)
@@ -3839,15 +3996,15 @@ AdtFile& AdtCppDeclaratorExpression::writeFortran(AdtFile& rOutFile, int nMode) 
 
       AdtCppBase*               pObjB = (AdtCppBase*)(AdtParser*)*Iter;
 
-      write(rOutFile, "(");
+      write(rOutFile, "((");
 
       pObjA->writeFortran(rOutFile, nMode);
 
-      write(rOutFile, " ** ");
+      write(rOutFile, ") ** (");
 
       pObjB->writeFortran(rOutFile, nMode);
 
-      write(rOutFile, ")");
+      write(rOutFile, "))");
 
       return (rOutFile);
     }
@@ -5944,7 +6101,8 @@ AdtCppStatement::AdtCppStatement(AdtParser* pLabeledStatementObj,
   initObject(IterationStatement,    pIterationStatementObj,   AdtCppIterationStatement,   false);
   initObject(JumpStatement,         pJumpStatementObj,        AdtCppJumpStatement,        false);
   initObject(DeclarationStatement,  pDeclarationStatementObj, AdtCppDeclarationStatement, false);
-;
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -5959,6 +6117,8 @@ AdtCppStatement::AdtCppStatement(const AdtCppStatement& rCopy)
   copyObject(IterationStatement,    rCopy, AdtCppIterationStatement);
   copyObject(JumpStatement,         rCopy, AdtCppJumpStatement);
   copyObject(DeclarationStatement,  rCopy, AdtCppDeclarationStatement);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -6065,6 +6225,8 @@ AdtFile& AdtCppStatement::writeCPP(AdtFile& rOutFile, int nMode) const
 
 AdtFile& AdtCppStatement::writeFortran(AdtFile& rOutFile, int nMode) const
 {
+  writePragmas(rOutFile);
+
   if (LabeledStatement != 0)
   {
     LabeledStatement->writeFortran(rOutFile, nMode);
@@ -6114,8 +6276,7 @@ implType(AdtCppStatement, AdtCppBase);
 AdtCppLabeledStatement::AdtCppLabeledStatement(AdtParser* pConstantExpressionObj,
                                                AdtParser* pStatementObj,
                                                const char* pIdentifier,
-                                               bool bIsDefault,
-                                               const char* pComment)
+                                               bool bIsDefault)
  : AdtCppBase()
 {
   nameWithComment(pIdentifier);
@@ -6124,8 +6285,6 @@ AdtCppLabeledStatement::AdtCppLabeledStatement(AdtParser* pConstantExpressionObj
   initObject(Statement,           pStatementObj,          AdtCppStatement,          false);
 
   IsDefault = bIsDefault;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -6151,8 +6310,6 @@ AdtCppLabeledStatement::~AdtCppLabeledStatement()
 
 AdtFile& AdtCppLabeledStatement::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   if (ConstantExpression != 0)
   {
     write(rOutFile, "case ");
@@ -6224,13 +6381,10 @@ implType(AdtCppLabeledStatement, AdtCppBase);
 //  ----------------------------------------------------------------------------
 //  AdtCppExpressionStatement method implementations
 //  ----------------------------------------------------------------------------
-AdtCppExpressionStatement::AdtCppExpressionStatement(AdtParser* pExpressionObj,
-                                                     const char* pComment)
+AdtCppExpressionStatement::AdtCppExpressionStatement(AdtParser* pExpressionObj)
  : AdtCppBase()
 {
   initObject(Expression, pExpressionObj, AdtCppExpression, false);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -6252,8 +6406,6 @@ AdtCppExpressionStatement::~AdtCppExpressionStatement()
 
 AdtFile& AdtCppExpressionStatement::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   if (Expression != 0)
   {
     Expression->writeCPP(rOutFile, nMode);
@@ -6284,13 +6436,10 @@ implType(AdtCppExpressionStatement, AdtCppBase);
 //  ----------------------------------------------------------------------------
 //  AdtCppCompoundStatement meethod implementations
 //  ----------------------------------------------------------------------------
-AdtCppCompoundStatement::AdtCppCompoundStatement(AdtParser* pStatementSeqObj,
-                                                 const char* pComment)
+AdtCppCompoundStatement::AdtCppCompoundStatement(AdtParser* pStatementSeqObj)
  : AdtCppBase()
 {
   initObject(StatementSeq, pStatementSeqObj, AdtCppStatementSeq, false);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -6312,8 +6461,6 @@ AdtCppCompoundStatement::~AdtCppCompoundStatement()
 
 AdtFile& AdtCppCompoundStatement::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, "{");
 
   rOutFile.incrementIndent();
@@ -6408,8 +6555,7 @@ implType(AdtCppStatementSeq, AdtCppBase);
 AdtCppSelectionStatement::AdtCppSelectionStatement(AdtParser* pExpressionObj,
                                                    AdtParser* pStatementObj,
                                                    AdtParser* pStatement2Obj,
-                                                   bool bIsIf,
-                                                   const char* pComment)
+                                                   bool bIsIf)
  : AdtCppBase()
 {
   initObject(Expression,  pExpressionObj, AdtCppExpression, false);
@@ -6417,8 +6563,6 @@ AdtCppSelectionStatement::AdtCppSelectionStatement(AdtParser* pExpressionObj,
   initObject(Statement2,  pStatement2Obj, AdtCppStatement,  false);
 
   IsIf = bIsIf;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -6461,8 +6605,6 @@ void AdtCppSelectionStatement::linespace(AdtFile& pOutFile,
 
 AdtFile& AdtCppSelectionStatement::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   if (IsIf)
   {
     write(rOutFile, "if (");
@@ -6610,8 +6752,7 @@ AdtCppIterationStatement::AdtCppIterationStatement(AdtParser* pForInitStatementO
                                                    AdtParser* pExpressionObj,
                                                    AdtParser* pExpression2Obj,
                                                    AdtParser* pStatementObj,
-                                                   bool bIsDo,
-                                                   const char* pComment)
+                                                   bool bIsDo)
  : AdtCppBase()
 {
   initObject(ForInitStatement,  pForInitStatementObj, AdtCppForInitStatement, false);
@@ -6620,8 +6761,6 @@ AdtCppIterationStatement::AdtCppIterationStatement(AdtParser* pForInitStatementO
   initObject(Statement,         pStatementObj,        AdtCppStatement,        false);
 
   IsDo = bIsDo;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -6666,8 +6805,6 @@ void AdtCppIterationStatement::linespace(AdtFile& pOutFile,
 
 AdtFile& AdtCppIterationStatement::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   if ((Statement        != 0) &&
       (Expression       != 0) &&
       (Expression2      == 0) &&
@@ -6932,16 +7069,13 @@ implType(AdtCppForInitStatement, AdtCppBase);
 //  ----------------------------------------------------------------------------
 AdtCppJumpStatement::AdtCppJumpStatement(AdtParser* pExpressionObj,
                                          const char* pIndentifier,
-                                         AdtCppJumpType nType,
-                                         const char* pComment)
+                                         AdtCppJumpType nType)
  : AdtCppBase()
 {
   nameWithComment(pIndentifier);
   initObject(Expression, pExpressionObj, AdtCppExpression, false);
 
   Type = nType;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -6965,8 +7099,6 @@ AdtCppJumpStatement::~AdtCppJumpStatement()
 
 AdtFile& AdtCppJumpStatement::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   switch (Type)
   {
     case AdtCppJumpType_BREAK:
@@ -7150,16 +7282,13 @@ string  AdtCppDeclaration::LastFileName;
 AdtCppDeclaration::AdtCppDeclaration(AdtParser* pBlockDeclarationObj,
                                      AdtParser* pFunctionDefinitionObj,
                                      AdtParser* pLinkageSpecificationObj,
-                                     AdtParser* pNamespaceDefinitionObj,
-                                     const char* pComment)
+                                     AdtParser* pNamespaceDefinitionObj)
  : AdtCppBase()
 {
   initObject(BlockDeclaration,      pBlockDeclarationObj,     AdtCppBlockDeclaration,     false);
   initObject(FunctionDefinition,    pFunctionDefinitionObj,   AdtCppFunctionDefinition,   false);
   initObject(LinkageSpecification,  pLinkageSpecificationObj, AdtCppLinkageSpecification, false);
   initObject(NamespaceDefinition,   pNamespaceDefinitionObj,  AdtCppNamespaceDefinition,  false);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -7171,7 +7300,6 @@ AdtCppDeclaration::AdtCppDeclaration(const AdtCppDeclaration& rCopy)
   copyObject(FunctionDefinition,    rCopy, AdtCppFunctionDefinition);
   copyObject(LinkageSpecification,  rCopy, AdtCppLinkageSpecification);
   copyObject(NamespaceDefinition,   rCopy, AdtCppNamespaceDefinition);
-;
 }
 
 //  ----------------------------------------------------------------------------
@@ -7210,8 +7338,6 @@ AdtFile& AdtCppDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
 
   if (Print)
   {
-    writeExpanded(rOutFile, comment());
-
     if (BlockDeclaration != 0)
     {
       BlockDeclaration->writeCPP(rOutFile, nMode);
@@ -7239,6 +7365,8 @@ AdtFile& AdtCppDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
     {
       write(rOutFile, ";");
     }
+
+    rOutFile.newline();
   }
 
   return (rOutFile);
@@ -7291,6 +7419,8 @@ AdtCppBlockDeclaration::AdtCppBlockDeclaration(AdtParser* pSimpleDeclarationObj,
   initObject(NamespaceAliasDefinition,  pNamespaceAliasDefinitionObj, AdtCppNamespaceAliasDefinition, false);
   initObject(UsingDeclaration,          pUsingDeclarationObj,         AdtCppUsingDeclaration,         false);
   initObject(UsingDirective,            pUsingDirectiveObj,           AdtCppUsingDirective,           false);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -7303,6 +7433,8 @@ AdtCppBlockDeclaration::AdtCppBlockDeclaration(const AdtCppBlockDeclaration& rCo
   copyObject(NamespaceAliasDefinition,  rCopy, AdtCppNamespaceAliasDefinition);
   copyObject(UsingDeclaration,          rCopy, AdtCppUsingDeclaration);
   copyObject(UsingDirective,            rCopy, AdtCppUsingDirective);
+
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -7320,6 +7452,8 @@ AdtCppBlockDeclaration::~AdtCppBlockDeclaration()
 
 AdtFile& AdtCppBlockDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
 {
+  writeExpanded(rOutFile, comment());
+
   if (SimpleDeclaration != 0)
   {
     SimpleDeclaration->writeCPP(rOutFile, nMode);
@@ -7352,6 +7486,8 @@ AdtFile& AdtCppBlockDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
 
 AdtFile& AdtCppBlockDeclaration::writeFortran(AdtFile& rOutFile, int nMode) const
 {
+  writePragmas(rOutFile);
+
   if (SimpleDeclaration != 0)
   {
     SimpleDeclaration->writeFortran(rOutFile, nMode);
@@ -7393,8 +7529,7 @@ AdtCppSimpleDeclaration::AdtCppSimpleDeclaration(AdtParser* pClassSpecifierObj,
                                                  AdtParser* pSimpleTypeSpecifierObj,
                                                  AdtParser* pInitDeclaratorListObj,
                                                  AdtParser* pDeclModifierListObj,
-                                                 bool bHasTypeDef,
-                                                 const char* pComment)
+                                                 bool bHasTypeDef)
  : AdtCppBase()
 {
   initObject(ClassSpecifier,      pClassSpecifierObj,       AdtCppClassSpecifier,       false);
@@ -7405,7 +7540,34 @@ AdtCppSimpleDeclaration::AdtCppSimpleDeclaration(AdtParser* pClassSpecifierObj,
 
   HasTypeDef = bHasTypeDef;
 
-  comment(pComment);
+  if (SimpleTypeSpecifier != 0)
+  {
+    int         nDimensions = 0;
+    AdtAutoType nType       = SimpleTypeSpecifier->autoType(nDimensions);
+
+    if ((InitDeclaratorList != 0) &&
+        (DeclModifierList   != 0) &&
+        (nDimensions        == 0) &&
+        DeclModifierList->hasModifier(AdtCppDeclModifierType_EXTERN))
+    {
+      AdtParserPtrListIter  Iter;
+      AdtParserPtrList      List;
+
+      InitDeclaratorList->findObjects(List, "AdtCppDeclarator");
+
+      for (Iter = List.begin() ; Iter != List.end() ; ++Iter)
+      {
+        AdtCppDeclarator* pObject = (AdtCppDeclarator*)(AdtParser*)*Iter;
+
+        pObject->setForwardDeclaration(true);
+
+        AdtAutoClass::addGlobalScalar(pObject->name(),
+                                      nType,
+                                      yyCpp_fileName(),
+                                      yyCpp_lineNumber());
+      }
+    }
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -7472,8 +7634,6 @@ void AdtCppSimpleDeclaration::writeFortranDeclaration(AdtFile& rOutFile, const A
 
 AdtFile& AdtCppSimpleDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   if (ClassSpecifier != 0)
   {
     ClassSpecifier->writeCPP(rOutFile, nMode);
@@ -7557,12 +7717,10 @@ implType(AdtCppSimpleDeclaration, AdtCppBase);
 //  ----------------------------------------------------------------------------
 //  AdtCppDeclModifier method implementations
 //  ----------------------------------------------------------------------------
-AdtCppDeclModifier::AdtCppDeclModifier(AdtCppDeclModifierType nType, const char* pComment)
+AdtCppDeclModifier::AdtCppDeclModifier(AdtCppDeclModifierType nType)
  : AdtCppBase()
 {
   Type = nType;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -7584,8 +7742,6 @@ AdtCppDeclModifier::~AdtCppDeclModifier()
 
 AdtFile& AdtCppDeclModifier::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   switch (Type)
   {
     case AdtCppDeclModifierType_AUTO:
@@ -8114,7 +8270,7 @@ bool AdtCppClassSpecifier::flattenClass(AdtCppTranslationUnit* pRoot,
 
 void AdtCppClassSpecifier::findDimensionVars(const AdtCppTranslationUnit* pRoot,
                                              const AdtParserPtrByStringMap& rVarsMap,
-                                             AdtParserPtrList& rList) const
+                                             AdtParserPtrByStringMap& rDimsMap) const
 {
   AdtStringByStringMap              DefinedMap;
   AdtParserPtrByStringMapConstIter  Iter;
@@ -8122,15 +8278,7 @@ void AdtCppClassSpecifier::findDimensionVars(const AdtCppTranslationUnit* pRoot,
   // Make map of object names as a check for whether they are already mapped
   for (Iter = rVarsMap.begin() ; Iter != rVarsMap.end() ; ++Iter)
   {
-    const AdtParser* pObj = Iter->second;
-
-    if ((pObj != 0) && pObj->isType("AdtCppDeclarator"))
-    {
-      AdtCppDeclarator* pDeclarator;
-
-      pDeclarator                     = (AdtCppDeclarator*)pObj;
-      DefinedMap[pDeclarator->name()] = pDeclarator->name();
-    }
+    DefinedMap[Iter->first] = Iter->first;
   }
 
   // For all the mapped variables check for dimension specs and add dim vars
@@ -8162,8 +8310,9 @@ void AdtCppClassSpecifier::findDimensionVars(const AdtCppTranslationUnit* pRoot,
 
           if ((DefinedMap.find(rDepName) == DefinedMap.end()) && findField(pRoot, rDepName, pDepObj))
           {
-            DefinedMap[pDepObj->name()] = pDepObj->name();
-            rList.push_back((AdtParser*)pDepObj);
+            DefinedMap[rDepName] = rDepName;
+
+            rDimsMap.insert(AdtParserPtrByStringMap::value_type(rDepName, AdtParserContext((AdtParser*)pDepObj)));
           }
         }
       }
@@ -8349,14 +8498,12 @@ implType(AdtCppClassSpecifier, AdtCppCheckDeclaration);
 //  ----------------------------------------------------------------------------
 //  AdtCppEnumSpecifierName class
 //  ----------------------------------------------------------------------------
-AdtCppEnumSpecifierName::AdtCppEnumSpecifierName(const char* pIdentifier, bool bQualified, const char* pComment)
+AdtCppEnumSpecifierName::AdtCppEnumSpecifierName(const char* pIdentifier, bool bQualified)
  : AdtCppBase()
 {
   Qualified = bQualified;
 
   nameWithComment(pIdentifier);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -8378,8 +8525,6 @@ AdtCppEnumSpecifierName::~AdtCppEnumSpecifierName()
 
 AdtFile& AdtCppEnumSpecifierName::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, "enum ");
   write(rOutFile, name());
   write(rOutFile, " ");
@@ -8508,16 +8653,13 @@ implType(AdtCppEnumSpecifier, AdtCppCheckDeclaration);
 //  ----------------------------------------------------------------------------
 AdtCppSimpleTypeSpecifier::AdtCppSimpleTypeSpecifier(const char* pIdentifier,
                                                      AdtCppSimpleType nType,
-                                                     bool bByRef,
-                                                     const char* pComment)
+                                                     bool bByRef)
  : AdtCppBase()
 {
   nameWithComment(pIdentifier);
 
   Type  = nType;
   ByRef = bByRef;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -8586,6 +8728,7 @@ void AdtCppSimpleTypeSpecifier::writeArrayBounds(AdtFile& rOutFile,
       case AdtCppSimpleType_SIGNED_LONG_LONG:
       case AdtCppSimpleType_UNSIGNED_LONG_LONG:
       case AdtCppSimpleType_VOID:
+      case AdtCppSimpleType_LONGBOOL:
       {
         break;
       }
@@ -8647,6 +8790,12 @@ AdtAutoType AdtCppSimpleTypeSpecifier::autoType(int& nDimensions) const
     case AdtCppSimpleType_BOOL:
     {
       nType = AdtAutoType_BOOL;
+      break;
+    }
+
+    case AdtCppSimpleType_LONGBOOL:
+    {
+      nType = AdtAutoType_LONGBOOL;
       break;
     }
 
@@ -8775,6 +8924,7 @@ void AdtCppSimpleTypeSpecifier::addToBlackBox(AdtBlackBoxDefinition& rBlackBox,
     }
 
     case AdtCppSimpleType_BOOL:
+    case AdtCppSimpleType_LONGBOOL:
     {
       nMappedType = AdtBlackBox_boolean;
       break;
@@ -8875,8 +9025,6 @@ void AdtCppSimpleTypeSpecifier::addToBlackBox(AdtBlackBoxDefinition& rBlackBox,
 
 AdtFile& AdtCppSimpleTypeSpecifier::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   const char* pType = 0;
 
   switch(Type)
@@ -8903,6 +9051,12 @@ AdtFile& AdtCppSimpleTypeSpecifier::writeCPP(AdtFile& rOutFile, int nMode) const
     case AdtCppSimpleType_BOOL:
     {
       pType = "bool";
+      break;
+    }
+
+    case AdtCppSimpleType_LONGBOOL:
+    {
+      pType = "longbool";
       break;
     }
 
@@ -9119,6 +9273,12 @@ AdtFile& AdtCppSimpleTypeSpecifier::writeFortran(AdtFile& rOutFile, int nMode) c
       break;
     }
 
+    case AdtCppSimpleType_LONGBOOL:
+    {
+      pType = "LOGICAL(4)";
+      break;
+    }
+
     case AdtCppSimpleType_INT:
     case AdtCppSimpleType_SIGNED:
     case AdtCppSimpleType_SIGNED_INT:
@@ -9292,14 +9452,11 @@ implType(AdtCppEnumeratorList, AdtCppBase);
 //  AdtCppEnumeratorDefinition method implementations
 //  ----------------------------------------------------------------------------
 AdtCppEnumeratorDefinition::AdtCppEnumeratorDefinition(AdtParser* pConstantExpressionObj,
-                                                       const char* pIdentifier,
-                                                       const char* pComment)
+                                                       const char* pIdentifier)
  : AdtCppBase()
 {
   nameWithComment(pIdentifier);
   initObject(ConstantExpression, pConstantExpressionObj, AdtCppConstantExpression, false);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -9321,8 +9478,6 @@ AdtCppEnumeratorDefinition::~AdtCppEnumeratorDefinition()
 
 AdtFile& AdtCppEnumeratorDefinition::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, name());
 
   if (ConstantExpression != 0)
@@ -9360,8 +9515,7 @@ implType(AdtCppEnumeratorDefinition, AdtCppBase);
 //  AdtCppNamespaceDefinition method implementations
 //  ----------------------------------------------------------------------------
 AdtCppNamespaceDefinition::AdtCppNamespaceDefinition(AdtParser* pDeclarationSeqObj,
-                                                     const char* pIdentifier,
-                                                     const char* pComment)
+                                                     const char* pIdentifier)
  : AdtCppBase()
 {
   nameWithComment(pIdentifier);
@@ -9371,8 +9525,6 @@ AdtCppNamespaceDefinition::AdtCppNamespaceDefinition(AdtParser* pDeclarationSeqO
   {
     DeclarationSeq->initialise();
   }
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -9408,8 +9560,6 @@ AdtCppDeclarationSeq* AdtCppNamespaceDefinition::declarationSeq() const
 
 AdtFile& AdtCppNamespaceDefinition::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, "namespace ");
   write(rOutFile, name());
   write(rOutFile, "{");
@@ -9445,8 +9595,7 @@ implType(AdtCppNamespaceDefinition, AdtCppBase);
 //  AdtCppNamespaceAliasDefinition method implementations
 //  ----------------------------------------------------------------------------
 AdtCppNamespaceAliasDefinition::AdtCppNamespaceAliasDefinition(const char* pIdentifier,
-                                                               const char* pQualifiedIdentifier,
-                                                               const char* pComment)
+                                                               const char* pQualifiedIdentifier)
  : AdtCppBase(),
    QualifiedIdentifier()
 {
@@ -9456,8 +9605,6 @@ AdtCppNamespaceAliasDefinition::AdtCppNamespaceAliasDefinition(const char* pIden
   {
     QualifiedIdentifier = pQualifiedIdentifier;
   }
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -9480,8 +9627,6 @@ AdtCppNamespaceAliasDefinition::~AdtCppNamespaceAliasDefinition()
 
 AdtFile& AdtCppNamespaceAliasDefinition::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, "namespace ");
   write(rOutFile, name());
   write(rOutFile, " = ");
@@ -9512,15 +9657,12 @@ implType(AdtCppNamespaceAliasDefinition, AdtCppBase);
 //  AdtCppUsingDeclaration method implementations
 //  ----------------------------------------------------------------------------
 AdtCppUsingDeclaration::AdtCppUsingDeclaration(const char* pQualifiedIdentifier,
-                                               bool bWithTypename,
-                                               const char* pComment)
+                                               bool bWithTypename)
  : AdtCppBase()
 {
   nameWithComment(pQualifiedIdentifier);
 
   WithTypename = bWithTypename;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -9542,8 +9684,6 @@ AdtCppUsingDeclaration::~AdtCppUsingDeclaration()
 
 AdtFile& AdtCppUsingDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   if (WithTypename)
   {
     write(rOutFile, "using typename ");
@@ -9580,15 +9720,12 @@ implType(AdtCppUsingDeclaration, AdtCppBase);
 //  AdtCppUsingDirective method implementations
 //  ----------------------------------------------------------------------------
 AdtCppUsingDirective::AdtCppUsingDirective(const char* pIdentifier,
-                                           bool bQualified,
-                                           const char* pComment)
+                                           bool bQualified)
  : AdtCppBase()
 {
   nameWithComment(pIdentifier);
 
   Qualified = bQualified;
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -9610,8 +9747,6 @@ AdtCppUsingDirective::~AdtCppUsingDirective()
 
 AdtFile& AdtCppUsingDirective::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, "using namespace ");
   write(rOutFile, name());
   write(rOutFile, ";");
@@ -9639,12 +9774,10 @@ implType(AdtCppUsingDirective, AdtCppBase);
 //  ----------------------------------------------------------------------------
 //  AdtCppAsmDefinition method implementations
 //  ----------------------------------------------------------------------------
-AdtCppAsmDefinition::AdtCppAsmDefinition(const char* pStringLiteral, const char* pComment)
+AdtCppAsmDefinition::AdtCppAsmDefinition(const char* pStringLiteral)
  : AdtCppBase()
 {
   nameWithComment(pStringLiteral);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -9666,8 +9799,6 @@ AdtCppAsmDefinition::~AdtCppAsmDefinition()
 
 AdtFile& AdtCppAsmDefinition::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, "asm {");
   write(rOutFile, name());
   write(rOutFile, "};");
@@ -9697,16 +9828,13 @@ implType(AdtCppAsmDefinition, AdtCppBase);
 //  ----------------------------------------------------------------------------
 AdtCppLinkageSpecification::AdtCppLinkageSpecification(AdtParser* pDeclarationSeqObj,
                                                        AdtParser* pDeclarationObj,
-                                                       const char* pStringLiteral,
-                                                       const char* pComment)
+                                                       const char* pStringLiteral)
  : AdtCppBase()
 {
   nameWithComment(pStringLiteral);
 
   initObject(DeclarationSeq,  pDeclarationSeqObj, AdtCppDeclarationSeq, false);
   initObject(Declaration,     pDeclarationObj,    AdtCppDeclaration,    false);
-
-  comment(pComment);
 }
 
 //  ----------------------------------------------------------------------------
@@ -9730,8 +9858,6 @@ AdtCppLinkageSpecification::~AdtCppLinkageSpecification()
 
 AdtFile& AdtCppLinkageSpecification::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   write(rOutFile, "extern ");
   write(rOutFile, name());
   write(rOutFile, " ");
@@ -9951,7 +10077,6 @@ AdtCppDeclarator::AdtCppDeclarator(AdtParser* pParameterDeclarationClauseObj,
                                    bool bIsObj,
                                    bool bIsVirtual,
                                    AdtCppDeclaratorCV_Type nType,
-                                   const char* pComment,
                                    bool bInitQualifiedName)
  : AdtCppEmbeddedComment()
 {
@@ -9966,8 +10091,6 @@ AdtCppDeclarator::AdtCppDeclarator(AdtParser* pParameterDeclarationClauseObj,
   Type          = nType;
   IsObj         = bIsObj;
   IsVirtual     = bIsVirtual;
-
-  comment(pComment);
 
   if (bInitQualifiedName)
   {
@@ -10064,8 +10187,6 @@ bool AdtCppDeclarator::isFunctionDeclaration() const
 
 AdtFile& AdtCppDeclarator::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  writeExpanded(rOutFile, comment());
-
   if (IsVirtual)
   {
     write(rOutFile, "virtual ");
@@ -10133,7 +10254,6 @@ AdtFile& AdtCppDeclarator::writeFortran(AdtFile& rOutFile, int nMode) const
 {
   switch (nMode)
   {
-    case WRITE_MODE_INTENTS:
     case WRITE_MODE_TYPEDECLS:
     {
       if (ParameterDeclarationClause != 0)
@@ -10367,7 +10487,6 @@ AdtFile& AdtCppParameterDeclarationList::writeFortran(AdtFile& rOutFile, int nMo
 {
   switch (nMode)
   {
-    case WRITE_MODE_INTENTS:
     case WRITE_MODE_TYPEDECLS:
     {
       forAllWriteFortran(rOutFile, nMode, " ", true, false);
@@ -10464,9 +10583,19 @@ AdtFile& AdtCppParameterDeclaration::writeFortran(AdtFile& rOutFile, int nMode) 
 {
   switch (nMode)
   {
-    case WRITE_MODE_INTENTS:
+    case WRITE_MODE_TYPEDECLS:
     {
-      write(rOutFile, "INTENT (");
+      if (DeclModifierList != 0)
+      {
+        DeclModifierList->writeFortran(rOutFile, nMode);
+      }
+
+      if (SimpleTypeSpecifier != 0)
+      {
+        SimpleTypeSpecifier->writeFortran(rOutFile, nMode);
+      }
+
+      write(rOutFile, ", INTENT (");
 
       // Any const vars or vars passed by value need to be declared IN
       // Any non const pass by reference or ARRAY types need to be of INOUT
@@ -10504,26 +10633,7 @@ AdtFile& AdtCppParameterDeclaration::writeFortran(AdtFile& rOutFile, int nMode) 
         write(rOutFile, "IN");
       }
 
-      write(rOutFile, ") ");
-
-      if (Declarator != 0)
-      {
-        Declarator->writeFortran(rOutFile, 0);
-      }
-      break;
-    }
-
-    case WRITE_MODE_TYPEDECLS:
-    {
-      if (DeclModifierList != 0)
-      {
-        DeclModifierList->writeFortran(rOutFile, nMode);
-      }
-
-      if (SimpleTypeSpecifier != 0)
-      {
-        SimpleTypeSpecifier->writeFortran(rOutFile, nMode);
-      }
+      write(rOutFile, ") :: ");
 
       if (Declarator != 0)
       {
@@ -10564,6 +10674,18 @@ implType(AdtCppParameterDeclaration, AdtCppBase);
 //  ----------------------------------------------------------------------------
 //  AdtCppFunctionDefinition method implementations
 //  ----------------------------------------------------------------------------
+void AdtCppFunctionDefinition::bindComment(const string* pComment)
+{
+  AdtParser::bindComment(pComment);
+
+  if (AdtBlackBoxCompiler::isBlackBox(comment()))
+  {
+    AdtCppTranslationUnit::addBlackBoxCommentsObject(this);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 AdtCppFunctionDefinition::AdtCppFunctionDefinition(AdtParser* pDeclModifierListObj,
                                                    AdtParser* pSimpleTypeSpecifierObj,
                                                    AdtParser* pDeclaratorObj,
@@ -10578,54 +10700,14 @@ AdtCppFunctionDefinition::AdtCppFunctionDefinition(AdtParser* pDeclModifierListO
   initObject(CtorInitializer,     pCtorInitializerObj,      AdtCppCtorInitializer,      false);
   initObject(FunctionBody,        pFunctionBodyObj,         AdtCppFunctionBody,         false);
 
-  BlackBox     = 0;
-  HasSemiColon = bHasSemiColon;
+  BlackBox        = 0;
+  HasSemiColon    = bHasSemiColon;
+  CanBindComments = true;
 
   if (Declarator != 0)
   {
     name(Declarator->name());
     initialiseQualifiedName();
-  }
-
-  if ((SimpleTypeSpecifier != 0) && (Declarator != 0) && AdtBlackBoxCompiler::isBlackBox(SimpleTypeSpecifier->comment()))
-  {
-    string  sQualifiedName(name());
-    bool    bIsFunction = !SimpleTypeSpecifier->isVoid();
-
-    AdtCppScopeManager::globalScopeManager()->qualifyName(sQualifiedName);
-
-    BlackBox = new AdtBlackBoxDefinition(sQualifiedName, bIsFunction, yyCpp_fileName(), yyCpp_lineNumber());
-
-    if (BlackBox != 0)
-    {
-      AdtParserPtrList        ObjList;
-      AdtParserPtrListIter    Iter;
-
-      // Need to initialise black box definition based on argument list and return type
-      Declarator->enumerateDescendantList(ObjList, "ParameterDeclarationClause,ParameterDeclarationList");
-
-      for (Iter = ObjList.begin() ; Iter != ObjList.end() ; ++Iter)
-      {
-        AdtCppParameterDeclaration* pParameterDeclaration = (AdtCppParameterDeclaration*)Iter->object();
-
-        if (pParameterDeclaration != 0)
-        {
-          AdtCppSimpleTypeSpecifier* pSimpleTypeSpecifier = (AdtCppSimpleTypeSpecifier*)pParameterDeclaration->findDescendant("SimpleTypeSpecifier");
-
-          if (pSimpleTypeSpecifier != 0)
-          {
-            pSimpleTypeSpecifier->addToBlackBox(*BlackBox, pParameterDeclaration->name(), false, yyCpp_fileName(), yyCpp_lineNumber());
-          }
-        }
-      }
-
-      if (bIsFunction)
-      {
-        SimpleTypeSpecifier->addToBlackBox(*BlackBox, 0, true, yyCpp_fileName(), yyCpp_lineNumber());
-      }
-
-      AdtBlackBoxCompiler::parseComments(*BlackBox, SimpleTypeSpecifier->comment(), yyCpp_fileName(), yyCpp_lineNumber());
-    }
   }
 }
 
@@ -10658,6 +10740,61 @@ AdtCppFunctionDefinition::~AdtCppFunctionDefinition()
   UtlReleaseReference(Declarator);
   UtlReleaseReference(CtorInitializer);
   UtlReleaseReference(FunctionBody);
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtBlackBoxDefinition* AdtCppFunctionDefinition::compileBlackBoxDefinition()
+{
+  if (BlackBox != 0)
+  {
+    delete BlackBox;
+
+    BlackBox = 0;
+  }
+
+  const char* pComment = comment();
+
+  if ((SimpleTypeSpecifier != 0) && (Declarator != 0) && AdtBlackBoxCompiler::isBlackBox(pComment))
+  {
+    bool    bIsFunction = !SimpleTypeSpecifier->isVoid();
+
+    BlackBox = new AdtBlackBoxDefinition(qualifiedName(), bIsFunction, yyCpp_fileName(), yyCpp_lineNumber());
+
+    if (BlackBox != 0)
+    {
+      AdtTapenadeVersion      TapenadeVersion;
+      AdtParserPtrList        ObjList;
+      AdtParserPtrListIter    Iter;
+
+      // Need to initialise black box definition based on argument list and return type
+      Declarator->enumerateDescendantList(ObjList, "ParameterDeclarationClause,ParameterDeclarationList");
+
+      for (Iter = ObjList.begin() ; Iter != ObjList.end() ; ++Iter)
+      {
+        AdtCppParameterDeclaration* pParameterDeclaration = (AdtCppParameterDeclaration*)Iter->object();
+
+        if (pParameterDeclaration != 0)
+        {
+          AdtCppSimpleTypeSpecifier* pSimpleTypeSpecifier = (AdtCppSimpleTypeSpecifier*)pParameterDeclaration->findDescendant("SimpleTypeSpecifier");
+
+          if (pSimpleTypeSpecifier != 0)
+          {
+            pSimpleTypeSpecifier->addToBlackBox(*BlackBox, pParameterDeclaration->name(), false, yyCpp_fileName(), yyCpp_lineNumber());
+          }
+        }
+      }
+
+      if (bIsFunction)
+      {
+        SimpleTypeSpecifier->addToBlackBox(*BlackBox, 0, true, yyCpp_fileName(), yyCpp_lineNumber());
+      }
+
+      AdtBlackBoxCompiler::parseComments(*BlackBox, pComment, yyCpp_fileName(), yyCpp_lineNumber(), TapenadeVersion);
+    }
+  }
+
+  return (BlackBox);
 }
 
 //  ----------------------------------------------------------------------------
@@ -10912,50 +11049,47 @@ bool AdtCppFunctionDefinition::isCtor() const
 
 AdtFile& AdtCppFunctionDefinition::writeCPP(AdtFile& rOutFile, int nMode) const
 {
-  AdtCppTranslationUnit* pRoot        = cppRootObject();
-  bool                   bIsBlackBox  = ((pRoot != 0) && pRoot->isBlackBox(qualifiedName()));
+  writeExpanded(rOutFile, comment());
 
-  // Only write if it isn't a black box routine. Black boxes aren't meant to be
-  // seen by tapenade and should be ignored.
-  if (!bIsBlackBox)
+  if (FunctionBody != 0)
   {
-    if (FunctionBody != 0)
-    {
-      rOutFile.newline();
-      write(rOutFile, "// ----------------------------------------------------------------------------");
-      rOutFile.newline();
-      rOutFile.newline();
-    }
+    rOutFile.newline();
+  }
 
-    if (DeclModifierList != 0)
-    {
-      DeclModifierList->writeCPP(rOutFile, nMode);
-    }
+  if (DeclModifierList != 0)
+  {
+    DeclModifierList->writeCPP(rOutFile, nMode);
+  }
 
-    if (SimpleTypeSpecifier != 0)
-    {
-      SimpleTypeSpecifier->writeCPP(rOutFile, nMode);
-    }
+  if (SimpleTypeSpecifier != 0)
+  {
+    SimpleTypeSpecifier->writeCPP(rOutFile, nMode);
+  }
 
-    if (Declarator != 0)
-    {
-      Declarator->writeCPP(rOutFile, nMode);
-    }
+  if (Declarator != 0)
+  {
+    Declarator->writeCPP(rOutFile, nMode);
+  }
 
-    if (CtorInitializer != 0)
-    {
-      CtorInitializer->writeCPP(rOutFile, nMode);
-    }
+  if (CtorInitializer != 0)
+  {
+    CtorInitializer->writeCPP(rOutFile, nMode);
+  }
 
-    if (FunctionBody != 0)
-    {
-      FunctionBody->writeCPP(rOutFile, nMode);
-    }
+  if (FunctionBody != 0)
+  {
+    FunctionBody->writeCPP(rOutFile, nMode);
+  }
 
-    if (HasSemiColon)
-    {
-      write(rOutFile, ";");
-    }
+  if (HasSemiColon)
+  {
+    write(rOutFile, ";");
+  }
+
+  if (FunctionBody != 0)
+  {
+    rOutFile.newline();
+    rOutFile.newline();
   }
 
   return (rOutFile);
@@ -10965,75 +11099,83 @@ AdtFile& AdtCppFunctionDefinition::writeCPP(AdtFile& rOutFile, int nMode) const
 
 AdtFile& AdtCppFunctionDefinition::writeFortran(AdtFile& rOutFile, int nMode) const
 {
-  bool bFunction  = false;
-  bool bIsCall    = (Declarator != 0) ? Declarator->isFunctionDeclaration() : false;
+  AdtCppTranslationUnit* pRoot       = cppRootObject();
+  bool                   bIsBlackBox = ((pRoot != 0) && pRoot->isBlackBox(name()));
 
-  if (FunctionBody != 0)
+  // Only write if it isn't a black box routine. Black boxes aren't meant to be
+  // seen by tapenade and should be ignored.
+  if (!bIsBlackBox)
   {
-    rOutFile.newline();
-    rOutFile.newline();
-    rOutFile.newline();
-  }
+    bool bFunction  = false;
+    bool bIsCall    = (Declarator != 0) ? Declarator->isFunctionDeclaration() : false;
 
-  if (DeclModifierList != 0)
-  {
-    DeclModifierList->writeFortran(rOutFile, nMode);
-  }
-
-  if ((SimpleTypeSpecifier != 0) && !SimpleTypeSpecifier->isVoid())
-  {
-    SimpleTypeSpecifier->writeFortran(rOutFile, nMode);
-
-    if (bIsCall)
+    if (FunctionBody != 0)
     {
-      write(rOutFile, "FUNCTION ");
+      rOutFile.newline();
+      rOutFile.newline();
 
-      bFunction = true;
+      writePragmas(rOutFile);
+
+      rOutFile.newline();
     }
-  }
-  else
-  {
-    if (bIsCall)
+
+    if (DeclModifierList != 0)
     {
-      write(rOutFile, "SUBROUTINE ");
+      DeclModifierList->writeFortran(rOutFile, nMode);
     }
-  }
 
-  if (Declarator != 0)
-  {
-    Declarator->writeFortran(rOutFile, nMode);
-  }
+    if ((SimpleTypeSpecifier != 0) && !SimpleTypeSpecifier->isVoid())
+    {
+      SimpleTypeSpecifier->writeFortran(rOutFile, nMode);
 
-  if (CtorInitializer != 0)
-  {
-    CtorInitializer->writeFortran(rOutFile, nMode);
-  }
+      if (bIsCall)
+      {
+        write(rOutFile, "FUNCTION ");
 
-  if (bIsCall)
-  {
-    rOutFile.newline();
+        bFunction = true;
+      }
+    }
+    else
+    {
+      if (bIsCall)
+      {
+        write(rOutFile, "SUBROUTINE ");
+      }
+    }
 
     if (Declarator != 0)
     {
-      //Write INTENTs
-      Declarator->writeFortran(rOutFile, WRITE_MODE_INTENTS);
-
-      //Write argument types
-      Declarator->writeFortran(rOutFile, WRITE_MODE_TYPEDECLS);
+      Declarator->writeFortran(rOutFile, nMode);
     }
 
-    rOutFile.newline();
-    write(rOutFile, "USE COMMON");
-  }
+    if (CtorInitializer != 0)
+    {
+      CtorInitializer->writeFortran(rOutFile, nMode);
+    }
 
-  if (FunctionBody != 0)
-  {
-    FunctionBody->writeFortran(rOutFile, nMode);
-  }
+    if (bIsCall)
+    {
+      rOutFile.newline();
 
-  if (bIsCall)
-  {
-    write(rOutFile, "END ");
+      if (Declarator != 0)
+      {
+        //Write argument types with intents
+        Declarator->writeFortran(rOutFile, WRITE_MODE_TYPEDECLS);
+      }
+
+      rOutFile.newline();
+      write(rOutFile, "USE COMMON");
+    }
+
+    if (FunctionBody != 0)
+    {
+      FunctionBody->writeFortran(rOutFile, nMode);
+    }
+
+    if (bIsCall)
+    {
+      write(rOutFile, "END ");
+    }
   }
 
   return (rOutFile);
@@ -11089,11 +11231,13 @@ void AdtCppFunctionBody::checkDeclarations(const AdtCppTranslationUnit* pTransla
       // the variables don't have initialisers.
       for (Iter = pStatementSeq->objList().begin() ; Iter != pStatementSeq->objList().end() ; ++Iter)
       {
-        const AdtParser*  pObj = *Iter;
+        const AdtCppStatement* pObj = (const AdtCppStatement*)(const AdtParser*)*Iter;
 
         if (pObj != 0)
         {
-          if (pObj->findDescendant("DeclarationStatement"))
+          const AdtCppDeclarationStatement* pDeclarationStatement = (const AdtCppDeclarationStatement*)pObj->findDescendant("DeclarationStatement");
+
+          if (pDeclarationStatement != 0)
           {
             if (bOtherStatements)
             {
@@ -11188,7 +11332,7 @@ void AdtCppFunctionBody::checkDeclarations(const AdtCppTranslationUnit* pTransla
               }
             }
           }
-          else
+          else if (!pObj->isEmpty())
           {
             const AdtParser*  pDeclObj;
 
@@ -11430,14 +11574,13 @@ implType(AdtCppInitializerList, AdtCppBase);
 //  ----------------------------------------------------------------------------
 //  AdtCppClassKey method implementations
 //  ----------------------------------------------------------------------------
-AdtCppClassKey::AdtCppClassKey(AdtCppClassKeyType nType, const char* pIdentifier, bool bQualified, const char* pComment)
+AdtCppClassKey::AdtCppClassKey(AdtCppClassKeyType nType, const char* pIdentifier, bool bQualified)
  : AdtCppBase()
 {
   Type      = nType;
   Qualified = bQualified;
 
   nameWithComment(pIdentifier);
-  comment(pComment);
 
   switch (Type)
   {
@@ -11635,8 +11778,9 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
   initObject(FunctionDefinition,    pFunctionDefinitionObj,     AdtCppFunctionDefinition,     false);
   initObject(UsingDeclaration,      pUsingDeclarationObj,       AdtCppUsingDeclaration,       false);
 
-  Type          = nType;
-  HasSemicolon  = bHasSemicolon;
+  Type            = nType;
+  HasSemicolon    = bHasSemicolon;
+  CanBindComments = true;
 
   if (Type != AdtCppMemberScopeType_NONE)
   {
@@ -11838,8 +11982,9 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(const AdtCppMemberDeclaration& 
   copyObject(FunctionDefinition,    rCopy, AdtCppFunctionDefinition);
   copyObject(UsingDeclaration,      rCopy, AdtCppUsingDeclaration);
 
-  Type          = rCopy.Type;
-  HasSemicolon  = rCopy.HasSemicolon;
+  Type            = rCopy.Type;
+  HasSemicolon    = rCopy.HasSemicolon;
+  CanBindComments = true;
 }
 
 //  ----------------------------------------------------------------------------
@@ -11946,6 +12091,8 @@ void AdtCppMemberDeclaration::writeFortranDeclaration(AdtFile& rOutFile, const A
 
 AdtFile& AdtCppMemberDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
 {
+  writeExpanded(rOutFile, comment());
+
   const char* pScopeModifier = 0;
 
   switch (Type)
@@ -12033,7 +12180,7 @@ AdtFile& AdtCppMemberDeclaration::writeCPP(AdtFile& rOutFile, int nMode) const
 
 AdtFile& AdtCppMemberDeclaration::writeFortran(AdtFile& rOutFile, int nMode) const
 {
-  FAIL();
+  writePragmas(rOutFile);
 
   return (rOutFile);
 }
