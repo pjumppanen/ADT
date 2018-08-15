@@ -10,7 +10,7 @@ How to build the example R libraries on Linux without Tapenade
 In a command prompt change directory to the adt project root (adt) and execute
 the following commands:
 
-chmod 755 ./*
+chmod -R 755 ./*
 ./init_config.sh
 ./configure --disable-tapenade --with-r-lib-path={path to the R shared library import lib} --with-r-include-path={path to the R include files}
 
@@ -77,7 +77,7 @@ Run the configure script to generated the necessary makefiles. That is, in
 the root folder for adt (the folder where the source package is installed -
 for example: /usr/src/adt-1.03), run the following in a command shell:
 
-  chmod 755 ./*
+  chmod -R 755 ./*
   ./init_config.sh
   ./configure
 
