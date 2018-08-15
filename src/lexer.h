@@ -68,8 +68,8 @@ typedef struct delphiType
   void*         pContext;
   const char*   sValue;
   double        dValue;
+  int           nValue;
   int           nBlockDepth;
-  const char*   sComment;
 } delphiType;
 
 
@@ -78,8 +78,8 @@ typedef struct fortranType
   void*         pContext;
   const char*   sValue;
   double        dValue;
+  int           nValue;
   int           nBlockDepth;
-  const char*   sComment;
 } fortranType;
 
 
@@ -88,8 +88,8 @@ typedef struct cppType
   void*         pContext;
   const char*   sValue;
   double        dValue;
+  int           nValue;
   int           nBlockDepth;
-  const char*   sComment;
 } cppType;
 
 
@@ -98,8 +98,8 @@ typedef struct javaType
   void*         pContext;
   const char*   sValue;
   double        dValue;
+  int           nValue;
   int           nBlockDepth;
-  const char*   sComment;
 } javaType;
 
 
@@ -180,10 +180,12 @@ C_FUNCTION int          yyDelphi_lineNumber(void);
 C_FUNCTION const char*  yyDelphi_fileName(void);
 C_FUNCTION void         yyDelphi_resetLineNumber(const char* pFileName);
 C_FUNCTION int          yyDelphi_error(void);
+
 C_FUNCTION int          yyDelphiparse(void);
 C_FUNCTION void         yyDelphirestart(FILE* pFile);
 C_FUNCTION void         yyDelphierror(char const*);
 C_FUNCTION int          yyDelphilex(void);
+C_FUNCTION int          yyDelphi_canIncludeComment(int yychar);
 C_FUNCTION void         adtDelphi_releaseRoot(void);
 
 C_FUNCTION const char*  yyFortran_LastComment(void);
@@ -209,6 +211,7 @@ C_FUNCTION int          yyCppparse(void);
 C_FUNCTION void         yyCpprestart(FILE* pFile);
 C_FUNCTION void         yyCpperror(char const*);
 C_FUNCTION int          yyCpplex(void);
+C_FUNCTION int          yyCpp_canIncludeComment(int yychar);
 C_FUNCTION void         adtCpp_releaseRoot(void);
 
 C_FUNCTION void         yyJava_endParse(void);
@@ -255,6 +258,9 @@ C_FUNCTION int          yyBlackBoxparse(void);
 C_FUNCTION void         yyBlackBoxrestart(FILE* pFile);
 C_FUNCTION void         yyBlackBoxerror(char const*);
 C_FUNCTION int          yyBlackBoxlex(void);
+C_FUNCTION void         yyBlackBox_pushState(int nState);
+C_FUNCTION void         yyBlackBox_popState(void);
+C_FUNCTION int          yyBlackBox_topState(void);
 
 
 #endif  //__LEXER_H
