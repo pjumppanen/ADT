@@ -126,7 +126,7 @@ class AdtBlackBoxDefinition
     void                writeSeperator(AdtFile& rOutFile) const;
     void                appendArg(string& rString, bool& bWithSeperator) const;
     void                writeShape(AdtFile& rOutFile, bool bWithSeperator) const;
-    void                writeType(AdtFile& rOutFile, bool bWithSeperator) const;
+    void                writeType(AdtFile& rOutFile, bool bWithSeperator, double dTapenadeVersion) const;
     void                writeReadNotWritten(AdtFile& rOutFile, bool bWithSeperator) const;
     void                writeNotReadThenWritten(AdtFile& rOutFile, bool bWithSeperator) const;
     void                writeNotReadNotWritten(AdtFile& rOutFile, bool bWithSeperator) const;
@@ -181,7 +181,7 @@ public:
   void                  addReturn(AdtBlackBoxArgType nType,
                                   bool bIsArray);
 
-  void                  writeDefinition(AdtFile& rOutFile) const;
+  void                  writeDefinition(AdtFile& rOutFile, double dTapenadeVersion) const;
 
   void                  readNotWrittenValues(const char* pValues);
   void                  notReadThenWrittenValues(const char* pValues);
@@ -190,7 +190,7 @@ public:
   void                  depsValues(const char* pValues);
   void                  derivativeSpecification(const char* pDerivativeSpec);
 
-  void                  appendCallPart(string& rDerivativeSpec) const;
+  void                  appendCallPart(string& rDerivativeSpec, double dTapenadeVersion) const;
 
   bool                  hasArgument(const char* pName) const;
 
@@ -331,11 +331,14 @@ public:
   static void                     parseComments(AdtBlackBoxDefinition& rDefaultDef,
                                                 const char* pComments,
                                                 const char* pFile,
-                                                int nLine);
+                                                int nLine,
+                                                double dTapenadeVersion);
 
   static bool                     makeBlackBoxFile(const char* pSrcDefinitionsFile,
                                                    const char* pDestBlackBoxFile,
-                                                   bool bAppend);
+                                                   AdtIntByStringMap& rIsBlackBoxMap,
+                                                   bool bAppend,
+                                                   double dTapenadeVersion);
 };
 
 
@@ -355,14 +358,16 @@ public:
   virtual void                        buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                                       string& rDerivativeText,
                                                       const char* pFile,
-                                                      int nLine) const;
+                                                      int nLine,
+                                                      double dTapenadeVersion) const;
 
   virtual void                        updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef,
                                                         string& rDerivativeText,
                                                         int& nBlackBoxCount,
                                                         int& nDerivativeCount,
                                                         const char* pFile,
-                                                        int nLine) const;
+                                                        int nLine,
+                                                        double dTapenadeVersion) const;
 
   static void                         blackBoxRootObject(AdtParser* pRoot);
   static AdtBlackBoxDerivativeList*   blackBoxRootObject();
@@ -400,14 +405,16 @@ public:
   virtual void                buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                               string& rDerivativeText,
                                               const char* pFile,
-                                              int nLine) const;
+                                              int nLine,
+                                              double dTapenadeVersion) const;
 
   virtual void                updateBlackBoxDef(AdtBlackBoxDefinition& rDefaultDef,
                                                 string& rDerivativeText,
                                                 int& nBlackBoxCount,
                                                 int& nDerivativeCount,
                                                 const char* pFile,
-                                                int nLine) const;
+                                                int nLine,
+                                                double dTapenadeVersion) const;
 
   AdtBlackBoxStandAloneDef*   blackBoxDef();
 
@@ -503,7 +510,8 @@ public:
   virtual void                        buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                                       string& rDerivativeText,
                                                       const char* pFile,
-                                                      int nLine) const;
+                                                      int nLine,
+                                                      double dTapenadeVersion) const;
 
   declListType(AdtBlackBoxDerivative);
   declType;
@@ -531,7 +539,8 @@ public:
   virtual void                    buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                                   string& rDerivativeText,
                                                   const char* pFile,
-                                                  int nLine) const;
+                                                  int nLine,
+                                                  double dTapenadeVersion) const;
 
   declType;
 };
@@ -558,7 +567,8 @@ public:
   virtual void                    buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                                   string& rDerivativeText,
                                                   const char* pFile,
-                                                  int nLine) const;
+                                                  int nLine,
+                                                  double dTapenadeVersion) const;
 
   declType;
 };
@@ -584,7 +594,8 @@ public:
   virtual void                    buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                                   string& rDerivativeText,
                                                   const char* pFile,
-                                                  int nLine) const;
+                                                  int nLine,
+                                                  double dTapenadeVersion) const;
 
   declType;
 };
@@ -611,7 +622,8 @@ public:
   virtual void            buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                           string& rDerivativeText,
                                           const char* pFile,
-                                          int nLine) const;
+                                          int nLine,
+                                          double dTapenadeVersion) const;
 
   declType;
 };
@@ -649,7 +661,8 @@ public:
   virtual void              buildDerivative(const AdtBlackBoxDefinition& rDefaultDef,
                                             string& rDerivativeText,
                                             const char* pFile,
-                                            int nLine) const;
+                                            int nLine,
+                                            double dTapenadeVersion) const;
 
   declType;
 };
@@ -702,7 +715,8 @@ public:
                                                 int& nBlackBoxCount,
                                                 int& nDerivativeCount,
                                                 const char* pFile,
-                                                int nLine) const;
+                                                int nLine,
+                                                double dTapenadeVersion) const;
 
   declType;
 };
@@ -799,7 +813,9 @@ public:
 
   virtual ~AdtBlackBoxStandAloneDef();
 
-  void                        writeBlackBoxDefinition(AdtFile& rOutFile);
+  void                        writeBlackBoxDefinition(AdtFile& rOutFile,
+                                                      AdtIntByStringMap& rIsBlackBoxMap,
+                                                      double dTapenadeVersion);
 
   declType;
 };
