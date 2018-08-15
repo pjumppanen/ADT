@@ -75,6 +75,16 @@
 #type_map   ARRAY_8B   : LOGICAL, 8
 #type_map   ARRAY_9B   : LOGICAL, 9
 #type_map   ARRAY_10B  : LOGICAL, 10
+#type_map   ARRAY_1LB  : LOGICAL(4), 1
+#type_map   ARRAY_2LB  : LOGICAL(4), 2
+#type_map   ARRAY_3LB  : LOGICAL(4), 3
+#type_map   ARRAY_4LB  : LOGICAL(4), 4
+#type_map   ARRAY_5LB  : LOGICAL(4), 5
+#type_map   ARRAY_6LB  : LOGICAL(4), 6
+#type_map   ARRAY_7LB  : LOGICAL(4), 7
+#type_map   ARRAY_8LB  : LOGICAL(4), 8
+#type_map   ARRAY_9LB  : LOGICAL(4), 9
+#type_map   ARRAY_10LB : LOGICAL(4), 10
 #type_map   ARRAY_1C   : INTEGER(1), 1
 #type_map   ARRAY_2C   : INTEGER(1), 2
 #type_map   ARRAY_3C   : INTEGER(1), 3
