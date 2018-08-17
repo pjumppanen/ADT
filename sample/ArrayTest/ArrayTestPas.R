@@ -204,7 +204,7 @@ AT.A1_DDB <- as.double(rep(0, length(AT.A1_D)))
 AT.A1_DDC <- as.double(rep(0, length(AT.A1_D)))
 
 # do reverse mode differentiation
-#AT.POLYSUMA_BX(Context, AT.A1_D, AT.A1_DDA, 1.0)
+AT.POLYSUMA_BX(Context, AT.A1_D, AT.A1_DDA, 1.0)
 AT.POLYSUMB_BX(Context, AT.A1_D, AT.A1_DDB, 1.0)
 AT.POLYSUMC_BX(Context, AT.A1_D, AT.A1_DDC, 1.0)
 
