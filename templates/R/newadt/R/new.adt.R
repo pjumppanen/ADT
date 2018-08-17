@@ -58,16 +58,12 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
   if (IsWindows)
   {
     # find path to ADT as we need it to obtain the project file templates
-    path.env  <- gsub("\\\\","/", Sys.getenv('PATH'))
-    matches   <- regexec(";*([A-Z]:)*[^<>:\"|?*]*ADT/bin", path.env, ignore.case=TRUE)
-    match     <- unlist(regmatches(path.env, matches))
+    adt.path <- dirname(dirname(Sys.which('adt.exe'))) # drop the /bin/adt.exe
 
-    if (length(match) < 1)
+    if (!nzchar( adt.path))
     {
       stop("cannot find ADT. Looks like it is not installed")
     }
-
-    adt.path  <- gsub("/bin", "", gsub(";", "", match[1]))
   }
   else
   {
