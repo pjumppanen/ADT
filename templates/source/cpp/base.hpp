@@ -20,11 +20,11 @@ protected:
   /* AUTOINIT */
   /* AUTODEC */
 
-#include "$(short-classname)_array_plans.hpp"
+#include "include/$(short-classname)_array_plans.hpp"
 
 public:
   $(classname)(
-#include "$(short-classname)_constructor_args.hpp"
+#include "include/$(short-classname)_constructor_args.hpp"
   );
 
   virtual ~$(classname)();

@@ -1,5 +1,7 @@
-AD BEGIN
+AD
+BEGIN
   WORKING DIRECTORY: "./work/";
+  INCLUDE DIRECTORY: "./include/";
   SWITCHES: "rebuild";
   CPP OPTIONS FILE: cpp_macros.txt;
   FORTRAN INCLUDE FILES: stdlib.f;

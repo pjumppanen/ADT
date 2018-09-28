@@ -18,7 +18,7 @@ new.adt(path, name, short.name, target=NA, language="cpp", src.templates=NA, ove
   \item{path}{path to the folder in which to create the project}
   \item{name}{name to give to the project. Only use characters that are allowable for naming objects, typical all the letters and numbers plus the underscore character.}
   \item{short.name}{a contraction or nick name for the project used for file an function prefixes. This should be short with the same character restrictions as above.}
-  \item{target}{string specifying the target build enviroment. Can be \code{vs} (visual studio) or \code{autoconf}} (gnu autoconf / automake)
+  \item{target}{string specifying the target build enviroment. Can be \code{vs} (Visual Studio IDE), \code{xcode} (Xcode IDE), \code{autoconf} (gnu autoconf / automake) or \code{lazarus} (Lazarus Pascal IDE)}
   \item{language}{string specifying the language to target. Can be \code{cpp} or \code{pascal}}
   \item{src.templates}{string specifying the path to folder container alternative source code templates. See details for more information.}
   \item{overwrite}{boolean specifying whether to overwrite existing files and folders.}
@@ -26,9 +26,8 @@ new.adt(path, name, short.name, target=NA, language="cpp", src.templates=NA, ove
 
 \details{
 \code{new.adt} creates a skeleton project. \code{name} is used for the project name, folder names, file names and class names
-so should be unique and reasonably discriptive of the project, though not very long. At this point in time only C++ language
-support is implemented for both \code{vs} and \code{autoconf} targets. Pascal language support should be added at some point
-in the future.
+so should be unique and reasonably discriptive of the project, though not very long. C++ language support is implemented
+for \code{vs}, \code{xcode} and \code{autoconf} targets. Pascal language support is currently only implement for the \code{lazarus}.
 
 \code{new.adt} creates a bare bones skeleton that does nothing but provides the backbone to make something useful. It can be useful
 to have a generic skeleton project that has a base level of functionality that is to be extended in a customized implementation. The

@@ -19,11 +19,11 @@ protected:
   /* AUTOINIT */
   /* AUTODEC */
 
-#include "R$(short-classname)_array_plans.hpp"
+#include "include/R$(short-classname)_array_plans.hpp"
 
 public:
   R$(classname)(
-#include "R$(short-classname)_constructor_args.hpp"
+#include "include/R$(short-classname)_constructor_args.hpp"
   );
 
   virtual ~R$(classname)();

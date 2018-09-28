@@ -2649,10 +2649,10 @@ void AdtMakeCommand::addDefaultPaths()
 
   #else
 
-  sADT_include      = "usr/local/share/adt/include/";
-  sADTSrc_include   = "usr/local/include/";
-  sADLib_include    = "usr/local/share/adt/templates/source/cpp/";
-  sADLibPas_include = "usr/local/share/adt/templates/source/pascal/";
+  sADT_include      = "/usr/local/share/adt/include/";
+  sADTSrc_include   = "/usr/local/include/";
+  sADLib_include    = "/usr/local/share/adt/templates/source/cpp/";
+  sADLibPas_include = "/usr/local/share/adt/templates/source/pascal/";
 
   #endif
 

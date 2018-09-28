@@ -18,13 +18,17 @@ src/RI$(filename).cpp : src/$(filename).mk
 
 clean-local:
 	-rm -f src/D$(filename).cpp src/RI$(filename).cpp src/$(filename)_reg_*.hpp src/$(filename).dch && \
-	rm -f $(short-classname)_array_plans.hpp $(short-classname)_array_plans_copy.hpp $(short-classname)_array_plans_init.hpp $(short-classname)_constructor_args.hpp && \
-	rm -f $(short-classname)_constructor_arrays_phase_*.hpp $(short-classname)_constructor_call_args.hpp $(short-classname)_constructor_locals.hpp && \
-	rm -f $(short-classname)_constructor_scalars_phase_*.hpp $(short-classname)_decl_lib_interface_constructor.hpp $(short-classname)_decl_lib_interface_globals.hpp && \
-	rm -f $(short-classname)_decl_lib_interface_methods.hpp $(short-classname)_impl_lib_interface_constructor.hpp $(short-classname)_impl_lib_interface_globals.hpp && \
-	rm -f $(short-classname)_impl_lib_interface_methods.hpp $(short-classname)_impl_lib_registration.hpp R$(short-classname)_array_plans.hpp && \
-	rm -f R$(short-classname)_array_plans_copy.hpp R$(short-classname)_array_plans_init.hpp R$(short-classname)_constructor_args.hpp && \
-	rm -f R$(short-classname)_constructor_arrays_phase_*.hpp R$(short-classname)_constructor_call_args.hpp R$(short-classname)_constructor_locals.hpp && \
-	rm -f R$(short-classname)_constructor_scalars_phase_*.hpp R$(short-classname)_decl_lib_interface_constructor.hpp R$(short-classname)_decl_lib_interface_globals.hpp && \
-	rm -f R$(short-classname)_decl_lib_interface_methods.hpp R$(short-classname)_impl_lib_interface_constructor.hpp R$(short-classname)_impl_lib_interface_globals.hpp && \
-	rm -f R$(short-classname)_impl_lib_interface_methods.hpp R$(short-classname)_impl_lib_registration.hpp
+	rm -f src/include/$(short-classname)_array_plans.hpp src/include/$(short-classname)_array_plans_copy.hpp src/include/$(short-classname)_array_plans_init.hpp && \
+	rm -f src/include/$(short-classname)_constructor_args.hpp src/include/$(short-classname)_constructor_arrays_phase_*.hpp && \
+	rm -f src/include/$(short-classname)_constructor_call_args.hpp src/include/$(short-classname)_constructor_locals.hpp && \
+	rm -f src/include/$(short-classname)_constructor_scalars_phase_*.hpp src/include/$(short-classname)_decl_lib_interface_constructor.hpp && \
+	rm -f src/include/$(short-classname)_decl_lib_interface_globals.hpp src/include/$(short-classname)_decl_lib_interface_methods.hpp && \
+	rm -f src/include/$(short-classname)_impl_lib_interface_constructor.hpp src/include/$(short-classname)_impl_lib_interface_globals.hpp && \
+	rm -f src/include/$(short-classname)_impl_lib_interface_methods.hpp src/include/$(short-classname)_impl_lib_registration.hpp && \
+	rm -f src/include/R$(short-classname)_array_plans.hpp src/include/R$(short-classname)_array_plans_copy.hpp src/include/R$(short-classname)_array_plans_init.hpp && \
+	rm -f src/include/R$(short-classname)_constructor_args.hpp src/include/R$(short-classname)_constructor_arrays_phase_*.hpp && \
+	rm -f src/include/R$(short-classname)_constructor_call_args.hpp src/include/R$(short-classname)_constructor_locals.hpp && \
+	rm -f src/include/R$(short-classname)_constructor_scalars_phase_*.hpp src/include/R$(short-classname)_decl_lib_interface_constructor.hpp && \
+	rm -f src/include/R$(short-classname)_decl_lib_interface_globals.hpp src/include/R$(short-classname)_decl_lib_interface_methods.hpp && \
+	rm -f src/include/R$(short-classname)_impl_lib_interface_constructor.hpp src/include/R$(short-classname)_impl_lib_interface_globals.hpp && \
+	rm -f src/include/R$(short-classname)_impl_lib_interface_methods.hpp src/include/R$(short-classname)_impl_lib_registration.hpp

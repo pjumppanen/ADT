@@ -190,14 +190,14 @@ AT.set.nt.A2_UC <- function(Context, Arg, ...)
   return (.External('_AT.set.nt.A2_UC', Context, as.raw(Arg), list(...)))
 }
 
-AT.boundsCheckTest <- function(Context, X)
+AT.boundsCheckTest <- function(Context, x)
 {
-  return (.External('_AT.boundsCheckTest', Context, X))
+  return (.External('_AT.boundsCheckTest', Context, x))
 }
 
-AT.nt.boundsCheckTest <- function(Context, X)
+AT.nt.boundsCheckTest <- function(Context, x)
 {
-  return (.External('_AT.nt.boundsCheckTest', Context, X))
+  return (.External('_AT.nt.boundsCheckTest', Context, x))
 }
 
 AT.IFTEST_BX <- function(Context, x, xb6_x, iftestb6_x)

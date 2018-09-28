@@ -4,4 +4,4 @@ $(title-comment)
 
 
 #include "RI$(filename).hpp"
-#include "R$(short-classname)_impl_lib_registration.hpp"
+#include "include/R$(short-classname)_impl_lib_registration.hpp"

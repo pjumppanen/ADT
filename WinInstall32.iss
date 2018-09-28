@@ -1,8 +1,8 @@
 ; ADT inno setup installer script
 [Setup]
-OutputBaseFilename=ADT-1.09.4_win32_setup
+OutputBaseFilename=ADT-1.09.5_win32_setup
 AppName=ADT
-AppVersion=1.09.4
+AppVersion=1.09.5
 DefaultDirName={pf}\ADT
 DefaultGroupName=ADT
 Compression=lzma2
@@ -18,8 +18,10 @@ Source: ".\doc\Presentation\*"; DestDir: "{app}\Presentation"
 Source: ".\doc\Presentation\slidy\*"; DestDir: "{app}\Presentation\slidy"
 Source: ".\templates\make\autoconf\*"; DestDir: "{app}\templates\make\autoconf"
 Source: ".\templates\make\VisualStudio\*"; DestDir: "{app}\templates\make\VisualStudio"
+Source: ".\templates\make\Lazarus\*"; DestDir: "{app}\templates\make\Lazarus"
 Source: ".\templates\source\cpp\*"; DestDir: "{app}\templates\source\cpp"
 Source: ".\templates\source\pascal\*"; DestDir: "{app}\templates\source\pascal"
+Source: ".\templates\R\newadt_1.04.zip"; DestDir: "{app}\templates\R"
 Source: ".\src\ADLib\*"; DestDir: "{app}\src\cpp"
 Source: ".\src\ADLibPascal\*"; DestDir: "{app}\src\pascal"
 Source: ".\src\ADLib\*.hpp"; DestDir: "{app}\include"

@@ -31,7 +31,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
 
   if (is.na(not.dir) || not.dir)
   {
-    stop("path ", path, " does not exist")
+    stop(paste("path", path, "does not exist"))
   }
 
   OS        <- .Platform$OS.type
@@ -42,15 +42,29 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     # Guess target based on platform running
     if (IsWindows)
     {
-      target <- "vs"
+      if (language == "cpp")
+      {
+        target <- "vs"
+      }
+      else
+      {
+        target <- "lazarus"
+      }
     }
     else
     {
-      target <- "autoconf"
+      if (language == "cpp")
+      {
+        target <- "autoconf"
+      }
+      else
+      {
+        target <- "lazarus"
+      }
     }
   }
 
-  if (language != "cpp")
+  if ((language != "cpp") && (language != "pascal"))
   {
     stop(paste("language", language, "not supported"))
   }
@@ -87,6 +101,11 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
 
   if (target == "vs")
   {
+    if (language != "cpp")
+    {
+      stop(paste("language", language, "not supported for vs target"))
+    }
+
     # Visual Studio Project
     solution.path <- paste(gsub("\\\\","/", path), "/", name, sep="")
     project.path  <- paste(solution.path, "/", name, sep="")
@@ -118,6 +137,15 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     }
 
     Sys.chmod(project.path, mode="0777")
+
+    # create include folder
+    include.path <- paste(project.path, "/include", sep="")
+
+    if (!dir.exists(include.path))
+    {
+      dir.create(include.path)
+      Sys.chmod(include.path, mode="0777")
+    }
 
     # create project file
     project.template <- paste(adt.path, "/templates/make/VisualStudio/base.vcxproj", sep="")
@@ -186,6 +214,11 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
   }
   else if (target == "autoconf")
   {
+    if (language != "cpp")
+    {
+      stop(paste("language", language, "not supported for autoconf target"))
+    }
+
     # autoconf project
     project.path  <- paste(path, "/", name, sep="")
     src.path      <- paste(project.path, "/src", sep="")
@@ -207,6 +240,15 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     # create src folder
     dir.create(src.path)
     Sys.chmod(src.path, mode="0777")
+
+    # create include folder
+    include.path <- paste(src.path, "/include", sep="")
+
+    if (!dir.exists(include.path))
+    {
+      dir.create(include.path)
+      Sys.chmod(include.path, mode="0777")
+    }
 
     # create source files
     source.templates <- c("base.hpp", "base.cpp", "Rbase.hpp", "Rbase.cpp", "base_registration.cpp", "base.mk", "run_mk")
@@ -258,6 +300,95 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       close(con)
 
       Sys.chmod(ac.name, mode="0755")
+    }
+  }
+  else if (target == "xcode")
+  {
+    if (language != "cpp")
+    {
+      stop(paste("language", language, "not supported for xcode target"))
+    }
+
+    stop("xcode not yet supported")
+  }
+  else if (target == "lazarus")
+  {
+    if (language != "pascal")
+    {
+      stop(paste("language", language, "not supported for lazarus target"))
+    }
+
+    # Lazarus Project
+    project.path <- paste(gsub("\\\\","/", path), "/", name, sep="")
+    adt.path.win <- gsub("/","\\\\", adt.path)
+    adt.lib.path <- if (IsWindows) paste(adt.path.win, "\\lib\\Pascal\\win32", sep="") else paste(adt.path, "/ADLibPascal", sep="")
+
+    if (dir.exists(project.path))
+    {
+      if (!overwrite)
+      {
+        stop("Project folder already exists! Use overwrite argument to force the result.")
+      }
+    }
+    else
+    {
+      # create project folder
+      dir.create(project.path)
+    }
+
+    Sys.chmod(project.path, mode="0777")
+
+    # create include folder
+    include.path <- paste(project.path, "/include", sep="")
+
+    if (!dir.exists(include.path))
+    {
+      dir.create(include.path)
+      Sys.chmod(include.path, mode="0777")
+    }
+
+    # create project .lpi file
+    project.lpi.template <- paste(adt.path, "/templates/make/Lazarus/base.lpi", sep="")
+    project.lpi.name     <- paste(project.path, "/", name, ".lpi", sep="")
+
+    con           <- file(project.lpi.template, "rt")
+    template.text <- readLines(con)
+    close(con)
+
+    template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
+    template.text <- gsub("$(adt-lib-path)", adt.lib.path, template.text, fixed=TRUE)
+
+    con <- file(project.lpi.name, "wb")
+    writeLines(template.text, con)
+    close(con)
+
+    Sys.chmod(project.lpi.name, mode="0755")
+
+    # create source files
+    source.templates <- c("base_Unit.pas", "Rbase_Unit.pas", "base.mk", "base.lpr")
+
+    for (cn in 1:length(source.templates))
+    {
+      source.template <- paste(src.templates.path, "/pascal/", source.templates[cn], sep="")
+      source.filename <- gsub("base", name, source.templates[cn], fixed=TRUE)
+
+      con           <- file(source.template, "rt")
+      template.text <- readLines(con)
+      close(con)
+
+      template.text <- gsub("$(classname)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(short-classname)", short.name, template.text, fixed=TRUE)
+      template.text <- gsub("$(libname)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(title-comment)", paste("//", source.filename), template.text, fixed=TRUE)
+
+      source.name <- paste(project.path, "/", source.filename, sep="")
+
+      con <- file(source.name, "wb")
+      writeLines(template.text, con)
+      close(con)
+
+      Sys.chmod(source.name, mode="0755")
     }
   }
   else
