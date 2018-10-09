@@ -3,7 +3,7 @@ library $(filename);
 {$mode objfpc}{$H+}
 
 uses
-  Classes, $(filename)_unit, D$(filename)_unit, R$(filename)_unit, RI$(filename)_unit, adtarray, adtR, Raccess;
+  Classes, $(filename)_Unit, D$(filename)_Unit, R$(filename)_Unit, RI$(filename)_Unit, adtarray, adtR, Raccess;
 
 // ----------------------------------------------------------------------------
 

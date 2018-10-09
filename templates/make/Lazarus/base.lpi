@@ -32,19 +32,19 @@
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="$(filename)_unit.pas"/>
+        <Filename Value="$(filename)_Unit.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit1>
       <Unit2>
-        <Filename Value="D$(filename)_unit.pas"/>
+        <Filename Value="D$(filename)_Unit.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="R$(filename)_unit.pas"/>
+        <Filename Value="R$(filename)_Unit.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit3>
       <Unit4>
-        <Filename Value="RI$(filename)_unit.pas"/>
+        <Filename Value="RI$(filename)_Unit.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit4>
     </Units>
@@ -60,15 +60,13 @@
       <OtherUnitFiles Value="$(adt-lib-path)"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
-    <CodeGeneration>
-      <RelocatableUnit Value="True"/>
-    </CodeGeneration>
     <Linking>
       <Options>
         <ExecutableType Value="Library"/>
       </Options>
     </Linking>
     <Other>
+      <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <Command Value="ADT $(filename).mk"/>
       </ExecuteBefore>
