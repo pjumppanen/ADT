@@ -68,7 +68,7 @@
     <Other>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
-        <Command Value="ADT $(filename).mk"/>
+        <Command Value="adt $(filename).mk"/>
       </ExecuteBefore>
     </Other>
   </CompilerOptions>

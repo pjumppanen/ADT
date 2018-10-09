@@ -321,7 +321,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     # Lazarus Project
     project.path <- paste(gsub("\\\\","/", path), "/", name, sep="")
     adt.path.win <- gsub("/","\\\\", adt.path)
-    adt.lib.path <- if (IsWindows) paste(adt.path.win, "\\lib\\Pascal\\win32", sep="") else paste(adt.path, "/ADLibPascal;",adt.path, "/fcl-stl", sep="")
+    adt.lib.path <- if (IsWindows) paste(adt.path.win, "\\lib\\Pascal\\win32", sep="") else paste(adt.path, "/ADLibPascal;",adt.path, "/ADLibPascal/fcl-stl", sep="")
 
     if (dir.exists(project.path))
     {
