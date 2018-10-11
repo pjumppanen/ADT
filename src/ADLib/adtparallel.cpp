@@ -594,7 +594,8 @@ void parallelFor(void* pContext, AdtParallelForCallback pCallback, int nStartIdx
     throw(std::runtime_error(std::string("start index must be less than or equal to end index")));
   }
 
-  if (bSerialise)
+  // if nStartIdx equals nEndIdx then don't bother with thread processing
+  if (bSerialise || (nStartIdx == nEndIdx))
   {
     for (int nIdx = nStartIdx ; nIdx <= nEndIdx ; nIdx++)
     {
@@ -619,7 +620,7 @@ void parallelFor(void* pContext, AdtParallelForCallback pCallback, int nStartIdx
     AdtThreadPool ThreadPool;
 
     // Create thread pool on first use. This ensures that if we don't use the
-    // parallelFor() function then a thread pool isn't created.
+    // parallelFor() function when a thread pool isn't created.
     ThreadPool.initialise();
     ThreadPool.beginRun(nEndIdx - nStartIdx + 1);
 
@@ -629,6 +630,113 @@ void parallelFor(void* pContext, AdtParallelForCallback pCallback, int nStartIdx
     }
 
     ThreadPool.waitForCompletion();
+  }
+}
+
+
+//  ----------------------------------------------------------------------------
+//  Mappings of int by int
+//  ----------------------------------------------------------------------------
+typedef std::pair<const int, int>                          IntIntPair;
+typedef std::multimap<int, int>                            IntByIntMultimap;
+typedef std::multimap<int, int>::iterator                  IntByIntMultimapIter;
+typedef std::multimap<int, int>::const_iterator            IntByIntMultimapConstIter;
+
+//  ----------------------------------------------------------------------------
+//  The basic idea behind priorityParallelFor() is that the order of calling
+//  pCallback is prioritised in groups and must be done in that group order.
+//  This is to account of parallelisation of operations that have an order
+//  dendency. The priority grouping is denoted by the entries in the array
+//  pPriorities. For example, a call like,
+//
+//  priorityParallelFor(MyContext, MyCallBack, MyPriority, 1, 10, false)
+//
+//  with MyPriority containing,
+//
+//  MyPriority[1] == 1
+//  MyPriority[2] == 2
+//  MyPriority[3] == 2
+//  MyPriority[4] == 2
+//  MyPriority[5] == 3
+//  MyPriority[6] == 3
+//  MyPriority[7] == 4
+//  MyPriority[8] == 5
+//  MyPriority[9] == 6
+//  MyPriority[10] == 6
+//
+//  Will call MyCallback with index == 1 first, then index 2,3 & 4 second in any
+//  order depending on which thread operates first, then 5 & 6 third, then 7,
+//  then 8, and finally 9 & 10 in any order. This mechanism therefore gives
+//  some scope for parellelisation of a heirarchical process. The lowest level
+//  priority always evaluates first but the values themselves are unimportant.
+//  ----------------------------------------------------------------------------
+
+void priorityParallelFor(void* pContext, AdtParallelForCallback pCallback, int* pPriorities, int nStartIdx, int nEndIdx, bool bSerialise)
+{
+  if (pPriorities != 0)
+  {
+    int                   nIdx;
+    IntByIntMultimap      PriorityMap;
+    IntByIntMultimapIter  Iter;
+
+    for (nIdx = nStartIdx ; nIdx <= nEndIdx ; nIdx++)
+    {
+      PriorityMap.insert(IntIntPair(pPriorities[nIdx], nIdx));
+    }
+
+    Iter = PriorityMap.begin();
+
+    while (Iter != PriorityMap.end())
+    {
+      int cn;
+      int nKey    = Iter->first;
+      int nCount  = PriorityMap.count(nKey);
+
+      if (bSerialise || (nCount == 1))
+      {
+        for (cn = 0 ; cn < nCount ; cn++)
+        {
+          nIdx = Iter->second;
+
+          SerialisedStdOutString.clear();
+          SerialisedStdErrString.clear();
+
+          pCallback(pContext, nIdx, 0, SerialisedStdOutString);
+
+          if ((SerialisedStdOutString.length() > 0) && (StdOutCallback != 0))
+          {
+            StdOutCallback(SerialisedStdOutString);
+          }
+
+          if ((SerialisedStdErrString.length() > 0) && (StdErrCallback != 0))
+          {
+            StdOutCallback(SerialisedStdErrString);
+          }
+
+          Iter++;
+        }
+      }
+      else
+      {
+        AdtThreadPool ThreadPool;
+
+        // Create thread pool on first use. This ensures that if we don't use the
+        // parallelFor() function when a thread pool isn't created.
+        ThreadPool.initialise();
+        ThreadPool.beginRun(nCount);
+
+        for (cn = 0 ; cn < nCount ; cn++)
+        {
+          nIdx = Iter->second;
+
+          ThreadPool.addRun(pContext, pCallback, nIdx);
+
+          Iter++;
+        }
+
+        ThreadPool.waitForCompletion();
+      }
+    }
   }
 }
 

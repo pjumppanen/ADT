@@ -55,6 +55,7 @@ typedef void (*AdtParallelForCallback)(void* pContext, int nIdx, int nThreadIdx,
 //  ----------------------------------------------------------------------------
 
 void                      parallelFor(void* pContext, AdtParallelForCallback pCallback, int nStartIdx, int nEndIdx, bool bSerialise = false);
+void                      priorityParallelFor(void* pContext, AdtParallelForCallback pCallback, int* pPriorities, int nStartIdx, int nEndIdx, bool bSerialise = false);
 
 AdtParallelStdOutCallback setStdOutCallback(AdtParallelStdOutCallback pCallback);
 AdtParallelStdOutCallback getStdOutCallback();
