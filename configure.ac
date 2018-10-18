@@ -29,17 +29,51 @@ else
   AH_BOTTOM([#define NDEBUG])
 fi
 
+# check for R include file locations
+AC_CHECK_FILE([/usr/share/R/include/R.h],
+              [R_INCLUDE="/usr/share/R/include"],
+              [R_INCLUDE=$R_INCLUDE])
+
+if test "x$R_INCLUDE" = "x/usr/share/R/include"; then
+
+  R_LIB="/usr/lib/R/lib"
+
+else
+
+  AC_CHECK_FILE([/usr/lib/R/include/R.h],
+                [R_INCLUDE="/usr/lib/R/include"],
+                [R_INCLUDE=$R_INCLUDE])
+
+  if test "x$R_INCLUDE" = "x/usr/lib/R/include"; then
+
+    R_LIB="/usr/lib/R/lib"
+
+  else
+
+    AC_CHECK_FILE([/Library/Frameworks/R.framework/Headers/R.h],
+                  [R_INCLUDE="/Library/Frameworks/R.framework/Headers"],
+                  [R_INCLUDE=$R_INCLUDE])
+
+    if test "x$R_INCLUDE" = "x/Library/Frameworks/R.framework/Headers"; then
+
+      R_LIB="/Library/Frameworks/R.framework/Libraries"
+
+    fi
+
+  fi
+
+fi
 
 AC_ARG_WITH([r-include-path],
             [AS_HELP_STRING([--with-r-include-path],[location of R includes (defaults to /usr/share/R/include)])],
             [R_INCLUDE="$withval"],
-            [R_INCLUDE="/usr/share/R/include"])
+            [R_INCLUDE=$R_INCLUDE])
 
 
 AC_ARG_WITH([r-lib-path],
             [AS_HELP_STRING([--with-r-lib-path],[location of R libs (defaults to /usr/lib/R/lib)])],
             [R_LIB="$withval"],
-            [R_LIB="/usr/lib/R/lib"])
+            [R_LIB=$R_LIB])
 
 
 AC_ARG_ENABLE([standalone],

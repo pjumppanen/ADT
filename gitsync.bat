@@ -294,6 +294,7 @@ copy /Y src\RMath\lib\x32\*                                              \users\
 copy /Y templates\make\autoconf\*                                        \users\jum002\Documents\GitHub\ADT\templates\make\autoconf
 copy /Y templates\make\VisualStudio\*                                    \users\jum002\Documents\GitHub\ADT\templates\make\VisualStudio
 copy /Y templates\make\Lazarus\*                                         \users\jum002\Documents\GitHub\ADT\templates\make\Lazarus
+copy /Y templates\make\Xcode\*                                           \users\jum002\Documents\GitHub\ADT\templates\make\Xcode
 copy /Y templates\R\newadt\man\*                                         \users\jum002\Documents\GitHub\ADT\templates\R\newadt\man
 copy /Y templates\R\newadt\R\*                                           \users\jum002\Documents\GitHub\ADT\templates\R\newadt\R
 copy /Y templates\R\newadt\*                                             \users\jum002\Documents\GitHub\ADT\templates\R\newadt

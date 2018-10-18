@@ -1,26 +1,49 @@
-createUUID <- function()
+createUUID <- function(Xcode=FALSE)
 {
-  # example "41919986-9594-11e6-bcd9-8fb587d839a2"
-  # not strictly universally unique but it is good enough for what it gets
-  # used for.
-  rnums <- as.integer(256 * runif(16))
-  UUID  <- sprintf("%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-                   rnums[1],
-                   rnums[2],
-                   rnums[3],
-                   rnums[4],
-                   rnums[5],
-                   rnums[6],
-                   rnums[7],
-                   rnums[8],
-                   rnums[9],
-                   rnums[10],
-                   rnums[11],
-                   rnums[12],
-                   rnums[13],
-                   rnums[14],
-                   rnums[15],
-                   rnums[16])
+  if (Xcode)
+  {
+    # example "2049552B21761416006A5D2E" of UUID in Xcode project
+    # not strictly universally unique but it is good enough for what it gets
+    # used for.
+    rnums <- as.integer(256 * runif(12))
+    UUID  <- sprintf("%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+                     rnums[1],
+                     rnums[2],
+                     rnums[3],
+                     rnums[4],
+                     rnums[5],
+                     rnums[6],
+                     rnums[7],
+                     rnums[8],
+                     rnums[9],
+                     rnums[10],
+                     rnums[11],
+                     rnums[12])
+  }
+  else
+  {
+    # example "41919986-9594-11e6-bcd9-8fb587d839a2" of UUID in VC project
+    # not strictly universally unique but it is good enough for what it gets
+    # used for.
+    rnums <- as.integer(256 * runif(16))
+    UUID  <- sprintf("%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+                     rnums[1],
+                     rnums[2],
+                     rnums[3],
+                     rnums[4],
+                     rnums[5],
+                     rnums[6],
+                     rnums[7],
+                     rnums[8],
+                     rnums[9],
+                     rnums[10],
+                     rnums[11],
+                     rnums[12],
+                     rnums[13],
+                     rnums[14],
+                     rnums[15],
+                     rnums[16])
+  }
 
   return (UUID)
 }
@@ -309,7 +332,120 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       stop(paste("language", language, "not supported for xcode target"))
     }
 
-    stop("xcode not yet supported")
+    # Xcode project
+    project.path  <- paste(path, "/", name, sep="")
+
+    if (dir.exists(project.path))
+    {
+      if (!overwrite)
+      {
+        stop("Project folder already exists! Use overwrite argument to force the result.")
+      }
+    }
+    else
+    {
+      # create project folder
+      dir.create(project.path)
+      Sys.chmod(project.path, mode="0777")
+    }
+
+    project.folder <- paste(project.path, "/", name, ".xcodeproj", sep="")
+
+    if (!dir.exists(project.folder))
+    {
+      # create project folder
+      dir.create(project.folder)
+      Sys.chmod(project.folder, mode="0777")
+    }
+
+    # create include folder
+    include.path <- paste(project.path, "/include", sep="")
+
+    if (!dir.exists(include.path))
+    {
+      dir.create(include.path)
+      Sys.chmod(include.path, mode="0777")
+    }
+
+    # create source files
+    source.templates <- c("base.hpp", "base.cpp", "Rbase.hpp", "Rbase.cpp", "base_registration.cpp", "base.mk", "run_mk")
+
+    for (cn in 1:length(source.templates))
+    {
+      source.template <- paste(src.templates.path, "/cpp/", source.templates[cn], sep="")
+      source.filename <- gsub("base", name, source.templates[cn], fixed=TRUE)
+
+      con           <- file(source.template, "rt")
+      template.text <- readLines(con)
+      close(con)
+
+      template.text <- gsub("$(classname)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(short-classname)", short.name, template.text, fixed=TRUE)
+      template.text <- gsub("$(libname)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(title-comment)", paste("//", source.filename), template.text, fixed=TRUE)
+
+      source.name <- paste(project.path, "/", source.filename, sep="")
+
+      con <- file(source.name, "wb")
+      writeLines(template.text, con)
+      close(con)
+
+      Sys.chmod(source.name, mode="0755")
+    }
+
+    uuids <- list("$(uuid_build_mk)",
+                  "$(uuid_mk)",
+                  "$(uuid_build_filename)",
+                  "$(uuid_filename)",
+                  "$(uuid_build_Dfilename)",
+                  "$(uuid_Dfilename)",
+                  "$(uuid_build_Rfilename)",
+                  "$(uuid_Rfilename)",
+                  "$(uuid_build_RIfilename)",
+                  "$(uuid_RIfilename)",
+                  "$(uuid_build_regfilename)",
+                  "$(uuid_regfilename)",
+                  "$(uuid_build_rule)",
+                  "$(uuid_lib)",
+                  "$(uuid_frameworks)",
+                  "$(uuid_group)",
+                  "$(uuid_products)",
+                  "$(uuid_headers)",
+                  "$(uuid_native_target)",
+                  "$(uuid_native_configlist)",
+                  "$(uuid_sources)",
+                  "$(uuid_frameworks)",
+                  "$(uuid_root)",
+                  "$(uuid_project_configlist)",
+                  "$(uuid_project_debug_config)",
+                  "$(uuid_project_release_config)",
+                  "$(uuid_native_debug_config)",
+                  "$(uuid_native_release_config)",
+                  "$(uuid_native_configlist)",
+                  "$(uuid_native_debug_config)",
+                  "$(uuid_native_release_config")
+
+    # create project.pbxproj file
+    project.template <- paste(adt.path, "/templates/make/Xcode/project.pbxproj", sep="")
+    project.name     <- paste(project.folder, "/project.pbxproj", sep="")
+
+    con           <- file(project.template, "rt")
+    template.text <- readLines(con)
+    close(con)
+
+    for (uuid in uuids)
+    {
+      template.text <- gsub(uuid, createUUID(Xcode=TRUE), template.text, fixed=TRUE)
+    }
+
+    template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
+
+    con <- file(project.name, "wb")
+    writeLines(template.text, con)
+    close(con)
+
+    Sys.chmod(project.name, mode="0755")
   }
   else if (target == "lazarus")
   {

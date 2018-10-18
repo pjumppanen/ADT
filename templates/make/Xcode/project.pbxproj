@@ -1,0 +1,299 @@
+// !$*UTF8*$!
+{
+  archiveVersion = 1;
+  classes = {
+  };
+  objectVersion = 46;
+  objects = {
+
+/* Begin PBXBuildFile section */
+    $(uuid_build_mk) /* $(filename).mk in Sources */ = {isa = PBXBuildFile; fileRef = $(uuid_mk) /* $(filename).mk */; };
+    $(uuid_build_filename) /* $(filename).cpp in Sources */ = {isa = PBXBuildFile; fileRef = $(uuid_filename) /* $(filename).cpp */; };
+    $(uuid_build_Dfilename) /* D$(filename).cpp in Sources */ = {isa = PBXBuildFile; fileRef = $(uuid_Dfilename) /* D$(filename).cpp */; };
+    $(uuid_build_Rfilename) /* R$(filename).cpp in Sources */ = {isa = PBXBuildFile; fileRef = $(uuid_Rfilename) /* R$(filename).cpp */; };
+    $(uuid_build_RIfilename) /* RI$(filename).cpp in Sources */ = {isa = PBXBuildFile; fileRef = $(uuid_RIfilename) /* RI$(filename).cpp */; };
+    $(uuid_build_regfilename) /* $(filename)_registration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = $(uuid_regfilename) /* $(filename)_registration.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+    $(uuid_build_rule) /* PBXBuildRule */ = {
+      isa = PBXBuildRule;
+      compilerSpec = com.apple.compilers.proxy.script;
+      filePatterns = $(filename).mk;
+      fileType = pattern.proxy;
+      isEditable = 1;
+      outputFiles = (
+        "D$(filename).hpp",
+        "D$(filename).cpp",
+        "RI$(filename).hpp",
+        "RI$(filename).cpp",
+      );
+      script = "cd \"$INPUT_FILE_DIR\" && adt \"$INPUT_FILE_NAME\"";
+    };
+/* End PBXBuildRule section */
+
+/* Begin PBXFileReference section */
+    $(uuid_lib) /* lib$(filename).dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "lib$(filename).dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
+    $(uuid_mk) /* $(filename).mk */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.mk; fileEncoding = 4; path = "$(filename).mk"; sourceTree = "<group>"; };
+    $(uuid_filename) /* $(filename).cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = "$(filename).cpp"; sourceTree = "<group>"; };
+    $(uuid_Dfilename) /* D$(filename).cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = "D$(filename).cpp"; sourceTree = "<group>"; };
+    $(uuid_Rfilename) /* R$(filename).cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = "R$(filename).cpp"; sourceTree = "<group>"; };
+    $(uuid_RIfilename) /* RI$(filename).cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = "RI$(filename).cpp"; sourceTree = "<group>"; };
+    $(uuid_regfilename) /* $(filename)_registration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = "$(filename)_registration.cpp"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+    $(uuid_frameworks) /* Frameworks */ = {
+      isa = PBXFrameworksBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+    $(uuid_group) = {
+      isa = PBXGroup;
+      children = (
+        $(uuid_mk) /* $(filename).mk */,
+        $(uuid_filename) /* $(filename).cpp */,
+        $(uuid_Dfilename) /* D$(filename).cpp */,
+        $(uuid_Rfilename) /* R$(filename).cpp */,
+        $(uuid_RIfilename) /* RI$(filename).cpp */,
+        $(uuid_regfilename) /* $(filename)_registration.cpp */,
+        $(uuid_products) /* Products */,
+      );
+      indentWidth = 2;
+      sourceTree = "<group>";
+      tabWidth = 2;
+      wrapsLines = 0;
+    };
+    $(uuid_products) /* Products */ = {
+      isa = PBXGroup;
+      children = (
+        $(uuid_lib) /* lib$(filename).dylib */,
+      );
+      name = Products;
+      sourceTree = "<group>";
+    };
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+    $(uuid_headers) /* Headers */ = {
+      isa = PBXHeadersBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+    $(uuid_native_target) /* $(filename) */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = $(uuid_native_configlist) /* Build configuration list for PBXNativeTarget "$(filename)" */;
+      buildPhases = (
+        $(uuid_sources) /* Sources */,
+        $(uuid_frameworks) /* Frameworks */,
+        $(uuid_headers) /* Headers */,
+      );
+      buildRules = (
+      $(uuid_build_rule) /* PBXBuildRule */,
+      );
+      dependencies = (
+      );
+      name = $(filename);
+      productName = $(filename);
+      productReference = $(uuid_lib) /* lib$(filename).dylib */;
+      productType = "com.apple.product-type.library.dynamic";
+    };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+    $(uuid_root) /* Project object */ = {
+      isa = PBXProject;
+      attributes = {
+        LastUpgradeCheck = 0730;
+        ORGANIZATIONNAME = "new.adt";
+        TargetAttributes = {
+          $(uuid_native_target) = {
+            CreatedOnToolsVersion = 7.3;
+          };
+        };
+      };
+      buildConfigurationList = $(uuid_project_configlist) /* Build configuration list for PBXProject "$(filename)" */;
+      compatibilityVersion = "Xcode 3.2";
+      developmentRegion = English;
+      hasScannedForEncodings = 0;
+      knownRegions = (
+        en,
+      );
+      mainGroup = $(uuid_group);
+      productRefGroup = $(uuid_products) /* Products */;
+      projectDirPath = "";
+      projectRoot = "";
+      targets = (
+        $(uuid_native_target) /* $(filename) */,
+      );
+    };
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+    $(uuid_sources) /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        $(uuid_build_mk) /* $(filename).mk in Sources */,
+        $(uuid_build_filename) /* $(filename).cpp in Sources */,
+        $(uuid_build_Dfilename) /* D$(filename).cpp in Sources */,
+        $(uuid_build_Rfilename) /* R$(filename).cpp in Sources */,
+        $(uuid_build_RIfilename) /* RI$(filename).cpp in Sources */,
+        $(uuid_build_regfilename) /* $(filename)_registration.cpp in Sources */,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+    $(uuid_project_debug_config) /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ALWAYS_SEARCH_USER_PATHS = NO;
+        CLANG_ANALYZER_NONNULL = YES;
+        CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+        CLANG_CXX_LIBRARY = "libc++";
+        CLANG_ENABLE_MODULES = YES;
+        CLANG_ENABLE_OBJC_ARC = YES;
+        CLANG_WARN_BOOL_CONVERSION = YES;
+        CLANG_WARN_CONSTANT_CONVERSION = YES;
+        CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+        CLANG_WARN_EMPTY_BODY = YES;
+        CLANG_WARN_ENUM_CONVERSION = YES;
+        CLANG_WARN_INT_CONVERSION = YES;
+        CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+        CLANG_WARN_UNREACHABLE_CODE = YES;
+        CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+        CODE_SIGN_IDENTITY = "-";
+        COPY_PHASE_STRIP = NO;
+        DEBUG_INFORMATION_FORMAT = dwarf;
+        ENABLE_STRICT_OBJC_MSGSEND = YES;
+        ENABLE_TESTABILITY = YES;
+        GCC_C_LANGUAGE_STANDARD = gnu99;
+        GCC_DYNAMIC_NO_PIC = NO;
+        GCC_NO_COMMON_BLOCKS = YES;
+        GCC_OPTIMIZATION_LEVEL = 0;
+        GCC_PREPROCESSOR_DEFINITIONS = (
+          "DEBUG=1",
+          "$(inherited)",
+        );
+        GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+        GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+        GCC_WARN_UNDECLARED_SELECTOR = YES;
+        GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+        GCC_WARN_UNUSED_FUNCTION = YES;
+        GCC_WARN_UNUSED_VARIABLE = YES;
+        MACOSX_DEPLOYMENT_TARGET = 10.6;
+        MTL_ENABLE_DEBUG_INFO = YES;
+        ONLY_ACTIVE_ARCH = YES;
+        OTHER_CFLAGS = (
+          "-I/usr/local/include",
+          "-I/Library/Frameworks/R.framework/Headers",
+        );
+        OTHER_LDFLAGS = (
+          "-L/usr/local/lib -lADlib -lADLibR",
+          "-L/Library/Frameworks/R.framework/Libraries -lR.dylib -lRblas -lRlapack",
+        );
+        SDKROOT = macosx;
+      };
+      name = Debug;
+    };
+    $(uuid_project_release_config) /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ALWAYS_SEARCH_USER_PATHS = NO;
+        CLANG_ANALYZER_NONNULL = YES;
+        CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+        CLANG_CXX_LIBRARY = "libc++";
+        CLANG_ENABLE_MODULES = YES;
+        CLANG_ENABLE_OBJC_ARC = YES;
+        CLANG_WARN_BOOL_CONVERSION = YES;
+        CLANG_WARN_CONSTANT_CONVERSION = YES;
+        CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+        CLANG_WARN_EMPTY_BODY = YES;
+        CLANG_WARN_ENUM_CONVERSION = YES;
+        CLANG_WARN_INT_CONVERSION = YES;
+        CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+        CLANG_WARN_UNREACHABLE_CODE = YES;
+        CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+        CODE_SIGN_IDENTITY = "-";
+        COPY_PHASE_STRIP = NO;
+        DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+        ENABLE_NS_ASSERTIONS = NO;
+        ENABLE_STRICT_OBJC_MSGSEND = YES;
+        GCC_C_LANGUAGE_STANDARD = gnu99;
+        GCC_NO_COMMON_BLOCKS = YES;
+        GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+        GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+        GCC_WARN_UNDECLARED_SELECTOR = YES;
+        GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+        GCC_WARN_UNUSED_FUNCTION = YES;
+        GCC_WARN_UNUSED_VARIABLE = YES;
+        MACOSX_DEPLOYMENT_TARGET = 10.6;
+        MTL_ENABLE_DEBUG_INFO = NO;
+        OTHER_CFLAGS = (
+          "-I/usr/local/include",
+          "-I/Library/Frameworks/R.framework/Headers",
+        );
+        OTHER_LDFLAGS = (
+          "-L/usr/local/lib -lADlib -lADLibR",
+          "-L/Library/Frameworks/R.framework/Libraries -lR.dylib -lRblas -lRlapack",
+        );
+        SDKROOT = macosx;
+      };
+      name = Release;
+    };
+    $(uuid_native_debug_config) /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        DYLIB_COMPATIBILITY_VERSION = 1;
+        DYLIB_CURRENT_VERSION = 1;
+        EXECUTABLE_PREFIX = lib;
+        PRODUCT_NAME = "$(TARGET_NAME)";
+      };
+      name = Debug;
+    };
+    $(uuid_native_release_config) /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        DYLIB_COMPATIBILITY_VERSION = 1;
+        DYLIB_CURRENT_VERSION = 1;
+        EXECUTABLE_PREFIX = lib;
+        PRODUCT_NAME = "$(TARGET_NAME)";
+      };
+      name = Release;
+    };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+    $(uuid_project_configlist) /* Build configuration list for PBXProject "$(filename)" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        $(uuid_project_debug_config) /* Debug */,
+        $(uuid_project_release_config) /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Debug;
+    };
+    $(uuid_native_configlist) /* Build configuration list for PBXNativeTarget "$(filename)" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        $(uuid_native_debug_config) /* Debug */,
+        $(uuid_native_release_config) /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+    };
+/* End XCConfigurationList section */
+  };
+  rootObject = $(uuid_root) /* Project object */;
+}
