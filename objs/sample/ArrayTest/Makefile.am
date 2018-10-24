@@ -14,5 +14,5 @@ BUILT_SOURCES = ../../../sample/ArrayTest/R_ArrayTest.cpp
 	../../../sample/ArrayTest/run_mk ArrayTest.mk
 
 clean-local:
-	-rm -f ../../../sample/ArrayTest/R_ArrayTest.cpp ../../../sample/ArrayTest/AT_*.hpp ../../../sample/ArrayTest/ArrayTest.dch
+	-rm -f ../../../sample/ArrayTest/R_ArrayTest.cpp ../../../sample/ArrayTest/include/AT_*.hpp ../../../sample/ArrayTest/ArrayTest.dch
 endif

@@ -19,16 +19,16 @@
     $(uuid_build_rule) /* PBXBuildRule */ = {
       isa = PBXBuildRule;
       compilerSpec = com.apple.compilers.proxy.script;
-      filePatterns = $(filename).mk;
+      filePatterns = *.mk;
       fileType = pattern.proxy;
       isEditable = 1;
       outputFiles = (
-        "D$(filename).hpp",
-        "D$(filename).cpp",
-        "RI$(filename).hpp",
-        "RI$(filename).cpp",
+        "D${INPUT_FILE_BASE}.hpp",
+        "D${INPUT_FILE_BASE}.cpp",
+        "RI${INPUT_FILE_BASE}.hpp",
+        "RI${INPUT_FILE_BASE}.cpp",
       );
-      script = "cd \"$INPUT_FILE_DIR\" && adt \"$INPUT_FILE_NAME\"";
+      script = "cd ${INPUT_FILE_DIR} && adt ${INPUT_FILE_NAME}";
     };
 /* End PBXBuildRule section */
 
@@ -193,16 +193,16 @@
         GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
         GCC_WARN_UNUSED_FUNCTION = YES;
         GCC_WARN_UNUSED_VARIABLE = YES;
-        MACOSX_DEPLOYMENT_TARGET = 10.6;
+        MACOSX_DEPLOYMENT_TARGET = 10.7;
         MTL_ENABLE_DEBUG_INFO = YES;
         ONLY_ACTIVE_ARCH = YES;
         OTHER_CFLAGS = (
           "-I/usr/local/include",
-          "-I/Library/Frameworks/R.framework/Headers",
+          "-I/Library/Frameworks/R.framework/Versions/Current/Resources/include",
         );
         OTHER_LDFLAGS = (
           "-L/usr/local/lib -lADlib -lADLibR",
-          "-L/Library/Frameworks/R.framework/Libraries -lR.dylib -lRblas -lRlapack",
+          "-L/Library/Frameworks/R.framework/Versions/Current/Resources/lib -lR.dylib -lRblas -lRlapack",
         );
         SDKROOT = macosx;
       };
@@ -239,15 +239,15 @@
         GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
         GCC_WARN_UNUSED_FUNCTION = YES;
         GCC_WARN_UNUSED_VARIABLE = YES;
-        MACOSX_DEPLOYMENT_TARGET = 10.6;
+        MACOSX_DEPLOYMENT_TARGET = 10.7;
         MTL_ENABLE_DEBUG_INFO = NO;
         OTHER_CFLAGS = (
           "-I/usr/local/include",
-          "-I/Library/Frameworks/R.framework/Headers",
+          "-I/Library/Frameworks/R.framework/Versions/Current/Resources/include",
         );
         OTHER_LDFLAGS = (
           "-L/usr/local/lib -lADlib -lADLibR",
-          "-L/Library/Frameworks/R.framework/Libraries -lR.dylib -lRblas -lRlapack",
+          "-L/Library/Frameworks/R.framework/Versions/Current/Resources/lib -lR.dylib -lRblas -lRlapack",
         );
         SDKROOT = macosx;
       };
