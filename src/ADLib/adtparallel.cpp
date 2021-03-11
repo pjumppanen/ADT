@@ -34,6 +34,10 @@
 
 #include <sys/sysctl.h>
 
+#elif __MINGW32__
+
+#include <sysinfoapi.h>
+
 #else
 
 #include <sys/sysinfo.h>
@@ -486,7 +490,7 @@ int AdtThreadPool::numberOfCores()
 {
   int nCores = 1;
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 
   SYSTEM_INFO sysinfo;
 
