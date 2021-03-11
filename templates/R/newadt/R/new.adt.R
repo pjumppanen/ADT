@@ -404,7 +404,9 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       ADLIBPATH <- paste0(adt.path, "/usr/local/lib")
     }
 
-    RINCLUDE <- R.home("include")
+    gcc.path     <- normalizePath(Sys.which("gcc"), "/", mustWork=FALSE)
+    toolset.path <- sub("/$", "", sub("gcc$", "", sub(".exe$", "", gcc.path)))
+    RINCLUDE     <- R.home("include")
 
     for (cn in 1:length(make.templates))
     {
@@ -419,6 +421,8 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       template.text <- gsub("$(libname)", name, template.text, fixed=TRUE)
       template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
       
+      template.text <- gsub("$(toolset-path)", toolset.path, template.text, fixed=TRUE)
+      template.text <- gsub("$(adt-path)", adt.path, template.text, fixed=TRUE)
       template.text <- gsub("$(AD_LIB)", ADLIBPATH, template.text, fixed=TRUE)
       template.text <- gsub("$(R_LIB)", RLIBPATH, template.text, fixed=TRUE)
 
