@@ -67,7 +67,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     {
       if (language == "cpp")
       {
-        target <- "vs"
+        target <- "libtools"
       }
       else
       {
@@ -323,6 +323,112 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       close(con)
 
       Sys.chmod(ac.name, mode="0755")
+    }
+  }
+  else if (target == "libtools")
+  {
+    if (language != "cpp")
+    {
+      stop(paste("language", language, "not supported for libtools target"))
+    }
+
+    # libtools project
+    project.path  <- paste(path, "/", name, sep="")
+    src.path      <- paste(project.path, "/src", sep="")
+
+    if (dir.exists(project.path))
+    {
+      if (!overwrite)
+      {
+        stop("Project folder already exists! Use overwrite argument to force the result.")
+      }
+    }
+    else
+    {
+      # create project folder
+      dir.create(project.path)
+      Sys.chmod(project.path, mode="0777")
+    }
+
+    # create src folder
+    dir.create(src.path)
+    Sys.chmod(src.path, mode="0777")
+
+    # create include folder
+    include.path <- paste(src.path, "/include", sep="")
+
+    if (!dir.exists(include.path))
+    {
+      dir.create(include.path)
+      Sys.chmod(include.path, mode="0777")
+    }
+
+    # create source files
+    source.templates <- c("base.hpp", "base.cpp", "Rbase.hpp", "Rbase.cpp", "base_registration.cpp", "base.mk", "run_mk")
+
+    for (cn in 1:length(source.templates))
+    {
+      source.template <- paste(src.templates.path, "/cpp/", source.templates[cn], sep="")
+      source.filename <- gsub("base", name, source.templates[cn], fixed=TRUE)
+
+      con           <- file(source.template, "rt")
+      template.text <- readLines(con)
+      close(con)
+
+      template.text <- gsub("$(classname)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(short-classname)", short.name, template.text, fixed=TRUE)
+      template.text <- gsub("$(libname)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(title-comment)", paste("//", source.filename), template.text, fixed=TRUE)
+
+      source.name <- paste(src.path, "/", source.filename, sep="")
+
+      con <- file(source.name, "wb")
+      writeLines(template.text, con)
+      close(con)
+
+      Sys.chmod(source.name, mode="0755")
+    }
+
+    # create makefile files
+    make.templates <- c("makefile")
+
+    if (IsWindows)
+    {
+      RLIBPATH  <- R.home("bin")
+      ADLIBPATH <- paste0(adt.path, "/lib/Rtools/Win32")
+    }
+    else
+    {
+      RLIBPATH  <- paste(R.home(), "/lib", Sys.getenv("R_ARCH"), sep="")
+      ADLIBPATH <- paste0(adt.path, "/usr/local/lib")
+    }
+
+    RINCLUDE <- R.home("include")
+
+    for (cn in 1:length(make.templates))
+    {
+      make.template <- paste(adt.path, "/templates/make/libtools/", make.templates[cn], sep="")
+      make.filename <- make.templates[cn]
+
+      con           <- file(make.template, "rt")
+      template.text <- readLines(con)
+      close(con)
+
+      template.text <- gsub("$(short-classname)", short.name, template.text, fixed=TRUE)
+      template.text <- gsub("$(libname)", name, template.text, fixed=TRUE)
+      template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
+      
+      template.text <- gsub("$(AD_LIB)", ADLIBPATH, template.text, fixed=TRUE)
+      template.text <- gsub("$(R_LIB)", RLIBPATH, template.text, fixed=TRUE)
+
+      make.name <- paste(project.path, "/", make.filename, sep="")
+
+      con <- file(make.name, "wb")
+      writeLines(template.text, con)
+      close(con)
+
+      Sys.chmod(make.name, mode="0755")
     }
   }
   else if (target == "xcode")
