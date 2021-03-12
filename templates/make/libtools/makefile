@@ -17,12 +17,12 @@ CFLAGS=$(COMMONFLAGS)
 CXXFLAGS=$(COMMONFLAGS)
 FFLAGS=$(COMMONFLAGS)
 LDFLAGS=-shared
-LDLIBS=-L$(AD_LIB) -lADLib -lADLibR -L$(R_LIB) -lR -lblas -lpthread
-objects=$(filename).o D$(filename).o R$(filename).o RI$(filename).o $(filename)_registration.o
+LDLIBS=-L$(AD_LIB) -lADLib.a -lADLibR.a -L$(R_LIB) -lR -lblas -lpthread
+objects=D$(filename).o R$(filename).o RI$(filename).o $(filename).o $(filename)_registration.o
 
 # Note - the whitespace on lines 25,28,31,34,37,40,43,46, and 49 must be a tab character
 $(libname).$(lib-extension) : $(objects)
-	$(CXX) -o $(libname).dll $(LDFLAGS) $(objects) $(LDLIBS)
+	$(CXX) -o $(libname).$(lib-extension) $(LDFLAGS) $(objects) $(LDLIBS)
 
 $(filename).o : src/$(filename).cpp
 	$(CXX) -c $(CXXFLAGS) src/$(filename).cpp
@@ -46,8 +46,8 @@ src/RI$(filename).cpp : src/$(filename).mk
 	./src/run_mk $(filename).mk
 
 clean : 
-	rm $(libname).$(lib-extension) $(objects)\
-src/D$(filename).?pp src/RI$(filename).?pp src/$(filename)_reg_*.hpp sr/$(filename).dch \
+	rm $(libname).$(lib-extension) $(objects) \
+src/D$(filename).?pp src/RI$(filename).?pp src/$(filename)_reg_*.hpp src/$(filename).dch \
 src/include/$(short-classname)_array_plans.hpp src/include/$(short-classname)_array_plans_copy.hpp src/include/$(short-classname)_array_plans_init.hpp \
 src/include/$(short-classname)_constructor_args.hpp src/include/$(short-classname)_constructor_arrays_phase_*.hpp \
 src/include/$(short-classname)_constructor_call_args.hpp src/include/$(short-classname)_constructor_locals.hpp \
@@ -61,4 +61,5 @@ src/include/R$(short-classname)_constructor_call_args.hpp src/include/R$(short-c
 src/include/R$(short-classname)_constructor_scalars_phase_*.hpp src/include/R$(short-classname)_decl_lib_interface_constructor.hpp \
 src/include/R$(short-classname)_decl_lib_interface_globals.hpp src/include/R$(short-classname)_decl_lib_interface_methods.hpp \
 src/include/R$(short-classname)_impl_lib_interface_constructor.hpp src/include/R$(short-classname)_impl_lib_interface_globals.hpp \
-src/include/R$(short-classname)_impl_lib_interface_methods.hpp src/include/R$(short-classname)_impl_lib_registration.hpp
+src/include/R$(short-classname)_impl_lib_interface_methods.hpp src/include/R$(short-classname)_impl_lib_registration.hpp \
+src/R$(short-classname)_R_interface.r src/$(short-classname)_R_interface.r

@@ -15,16 +15,16 @@ ADLib_objects=adtarrays.o adtdiff.o adtmaths.o adtparallel.o adtstack.o adtthrea
 ADLibErr_objects=adterror.o
 ADLibR_objects=adtR.o ts_optim.o
 
-Libs : ADLib.a ADLibErr.a ADLibR.a 
+Libs : libADLib.a libADLibErr.a libADLibR.a 
 
-ADLib.a : $(ADLib_objects)
-	ar rcs ADLib.a $(ADLib_objects)
+libADLib.a : $(ADLib_objects)
+	ar rcs libADLib.a $(ADLib_objects)
 
-ADLibErr.a : $(ADLibErr_objects)
-	ar rcs ADLibErr.a $(ADLibErr_objects)
+libADLibErr.a : $(ADLibErr_objects)
+	ar rcs libADLibErr.a $(ADLibErr_objects)
 
-ADLibR.a : $(ADLibR_objects)
-	ar rcs ADLibR.a $(ADLibR_objects)
+libADLibR.a : $(ADLibR_objects)
+	ar rcs libADLibR.a $(ADLibR_objects)
 
 adtarrays.o : $(SRC_PATH)/adtarrays.cpp
 	$(CXX) -c $(CXXFLAGS) $(SRC_PATH)/adtarrays.cpp
@@ -55,4 +55,4 @@ ts_optim.o : $(SRC_PATH)/ts_optim.cpp
 
 
 clean : 
-	rm ADLib.a ADLibErr.a ADLibR $(ADLib_objects) $(ADLibErr_objects) $(ADLibR_objects)
+	rm libADLib.a libADLibErr.a libADLibR.a $(ADLib_objects) $(ADLibErr_objects) $(ADLibR_objects)

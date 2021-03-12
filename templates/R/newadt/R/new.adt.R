@@ -395,13 +395,23 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
 
     if (IsWindows)
     {
-      RLIBPATH  <- R.home("bin")
-      ADLIBPATH <- paste0(adt.path, "/lib/Rtools/Win32")
+      RLIBPATH      <- R.home("bin")
+      ADLIBPATH     <- paste0(adt.path, "/lib/Rtools/Win32")
+      lib.extension <- "dll"
     }
     else
     {
       RLIBPATH  <- paste(R.home(), "/lib", Sys.getenv("R_ARCH"), sep="")
       ADLIBPATH <- paste0(adt.path, "/usr/local/lib")
+
+      if (OS == "Darwin")
+      {
+        lib.extension <- "dylib"
+      }
+      else
+      {
+        lib.extension <- "so"
+      }
     }
 
     gcc.path     <- normalizePath(Sys.which("gcc"), "/", mustWork=FALSE)
@@ -421,6 +431,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       template.text <- gsub("$(libname)", name, template.text, fixed=TRUE)
       template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
       
+      template.text <- gsub("$(lib-extension)", lib.extension, template.text, fixed=TRUE)
       template.text <- gsub("$(toolset-path)", toolset.path, template.text, fixed=TRUE)
       template.text <- gsub("$(adt-path)", adt.path, template.text, fixed=TRUE)
       template.text <- gsub("$(AD_LIB)", ADLIBPATH, template.text, fixed=TRUE)
