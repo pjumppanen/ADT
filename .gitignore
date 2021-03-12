@@ -9,7 +9,6 @@
 *.zip
 *.ppu
 *.user
-*.sdf
 *.lib
 *.pdb
 *.dch
