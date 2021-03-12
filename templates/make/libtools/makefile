@@ -17,7 +17,7 @@ CFLAGS=$(COMMONFLAGS)
 CXXFLAGS=$(COMMONFLAGS)
 FFLAGS=$(COMMONFLAGS)
 LDFLAGS=-shared
-LDLIBS=-L$(AD_LIB) -lADLib.a -lADLibR.a -L$(R_LIB) -lR -lblas -lpthread
+LDLIBS=-L$(AD_LIB) -lADLib -lADLibR -L$(R_LIB) -lR -l$(blas) -lpthread
 objects=D$(filename).o R$(filename).o RI$(filename).o $(filename).o $(filename)_registration.o
 
 # Note - the whitespace on lines 25,28,31,34,37,40,43,46, and 49 must be a tab character

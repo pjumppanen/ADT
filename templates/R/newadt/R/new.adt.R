@@ -393,16 +393,22 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     # create makefile files
     make.templates <- c("makefile")
 
+    gcc.path       <- normalizePath(Sys.which("gcc"), "/", mustWork=FALSE)
+    toolset.path   <- sub("/$", "", sub("gcc$", "", sub(".exe$", "", gcc.path)))
+    RINCLUDE       <- R.home("include")
+
     if (IsWindows)
     {
       RLIBPATH      <- R.home("bin")
-      ADLIBPATH     <- paste0(adt.path, "/lib/Rtools/Win32")
+      ADLIBPATH     <- paste0(adt.path, "/lib/Rtools", Sys.getenv("R_ARCH"))
       lib.extension <- "dll"
+      blas          <- "Rblas"
     }
     else
     {
-      RLIBPATH  <- paste(R.home(), "/lib", Sys.getenv("R_ARCH"), sep="")
-      ADLIBPATH <- paste0(adt.path, "/usr/local/lib")
+      RLIBPATH      <- paste(R.home(), "/lib", Sys.getenv("R_ARCH"), sep="")
+      ADLIBPATH     <- paste0(adt.path, "/usr/local/lib")
+      blas          <- "blas"
 
       if (OS == "Darwin")
       {
@@ -413,10 +419,6 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
         lib.extension <- "so"
       }
     }
-
-    gcc.path     <- normalizePath(Sys.which("gcc"), "/", mustWork=FALSE)
-    toolset.path <- sub("/$", "", sub("gcc$", "", sub(".exe$", "", gcc.path)))
-    RINCLUDE     <- R.home("include")
 
     for (cn in 1:length(make.templates))
     {
@@ -431,6 +433,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       template.text <- gsub("$(libname)", name, template.text, fixed=TRUE)
       template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
       
+      template.text <- gsub("$(blas)", blas, template.text, fixed=TRUE)
       template.text <- gsub("$(lib-extension)", lib.extension, template.text, fixed=TRUE)
       template.text <- gsub("$(toolset-path)", toolset.path, template.text, fixed=TRUE)
       template.text <- gsub("$(adt-path)", adt.path, template.text, fixed=TRUE)
