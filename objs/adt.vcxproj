@@ -22,30 +22,30 @@
     <ProjectGuid>{D6B8227D-6B4B-4A0B-B602-A4AE6FF41DB8}</ProjectGuid>
     <RootNamespace>adt</RootNamespace>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -339,15 +339,15 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\src\black_box_l.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe --nounistd -o..\src\black_box_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -o..\src\black_box_l.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -o..\src\black_box_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\black_box_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\black_box_l.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe --nounistd -o..\src\black_box_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe -o..\src\black_box_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe --nounistd -o..\src\black_box_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe -o..\src\black_box_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\black_box_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\black_box_l.c;%(Outputs)</Outputs>
@@ -367,15 +367,15 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\black_box_y.c;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\src\cpp_l.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe --nounistd -o..\src\cpp_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -o..\src\cpp_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -o..\src\cpp_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe -o..\src\cpp_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\cpp_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\cpp_l.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe --nounistd -o..\src\cpp_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe -o..\src\cpp_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe --nounistd -o..\src\cpp_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe -o..\src\cpp_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\cpp_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\cpp_l.c;%(Outputs)</Outputs>
@@ -395,15 +395,15 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\cpp_y.c;..\src\cpp_y.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\src\delphi_l.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe --nounistd -i -o..\src\delphi_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -i -o..\src\delphi_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -i -o..\src\delphi_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe -i -o..\src\delphi_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\delphi_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\delphi_l.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe --nounistd -i -o..\src\delphi_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe -i -o..\src\delphi_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe --nounistd -i -o..\src\delphi_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe -i -o..\src\delphi_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\delphi_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\delphi_l.c;%(Outputs)</Outputs>
@@ -423,15 +423,15 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\delphi_y.c;..\src\delphi_y.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\src\expression_l.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe --nounistd -o..\src\expression_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -o..\src\expression_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -o..\src\expression_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe -o..\src\expression_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\expression_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\expression_l.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe --nounistd -o..\src\expression_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe -o..\src\expression_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe --nounistd -o..\src\expression_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe -o..\src\expression_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\expression_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\expression_l.c;%(Outputs)</Outputs>
@@ -451,15 +451,15 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\expression_y.c;..\src\expression_y.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\src\fortran_l.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe --nounistd -i -o..\src\fortran_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -i -o..\src\fortran_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -i -o..\src\fortran_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe -i -o..\src\fortran_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\fortran_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\fortran_l.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe --nounistd -i -o..\src\fortran_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe -i -o..\src\fortran_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe --nounistd -i -o..\src\fortran_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe -i -o..\src\fortran_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\fortran_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\fortran_l.c;%(Outputs)</Outputs>
@@ -479,15 +479,15 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\fortran_y.c;..\src\fortran_y.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\src\java_l.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe --nounistd -o..\src\java_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -o..\src\java_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -o..\src\java_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe -o..\src\java_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\java_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\java_l.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe --nounistd -o..\src\java_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe -o..\src\java_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe --nounistd -o..\src\java_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe -o..\src\java_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\java_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\java_l.c;%(Outputs)</Outputs>
@@ -507,15 +507,15 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\java_y.c;..\src\java_y.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\src\make_l.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe --nounistd -i -o..\src\make_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -i -o..\src\make_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -i -o..\src\make_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe -i -o..\src\make_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\make_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\make_l.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe --nounistd -i -o..\src\make_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex.exe -i -o..\src\make_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe --nounistd -i -o..\src\make_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex.exe -i -o..\src\make_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\make_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\make_l.c;%(Outputs)</Outputs>
