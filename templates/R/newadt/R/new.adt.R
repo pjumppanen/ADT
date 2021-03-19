@@ -57,8 +57,139 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     stop(paste("path", path, "does not exist"))
   }
 
-  OS        <- .Platform$OS.type
-  IsWindows <- OS == "windows"
+  OS            <- Sys.info()[["sysname"]]
+  Architecture  <- Sys.info()[["machine"]]
+  IsWindows     <- OS == "Windows"
+  Extra         <- ""
+  normPath      <- function(arg) {return (arg)}
+  gcc.path      <- normalizePath(Sys.which("gcc"), "/", mustWork=FALSE)
+  toolset.path  <- sub("/$", "", sub("gcc$", "", sub(".exe$", "", gcc.path)))
+  RINCLUDE      <- R.home("include")
+
+  if (OS == "Windows")
+  {
+    adt.path      <- dirname(dirname(Sys.which('adt.exe'))) # drop the /bin/adt.exe
+    TargetName    <- "Win32"
+    Mode          <- "gcc"    
+    normPath      <- function(arg) {gsub("\\\\", "/", shortPathName(arg))}
+    RLIBPATH      <- R.home("bin")
+    ADLIBPATH     <- paste0(adt.path, "/lib/Rtools", Sys.getenv("R_ARCH"))
+    lib.extension <- "dll"
+    blas          <- "Rblas"
+    debug.app     <- "gdb"
+    gdb.path      <- normalizePath(Sys.which(debug.app), "/", mustWork=FALSE)
+    R.path        <- normalizePath(Sys.which("Rgui"), "/", mustWork=FALSE)
+  }
+  else if (OS == "Linux")
+  {
+    adt.path      <- "/usr/local/share/adt"
+    TargetName    <- "Linux"
+    Mode          <- "gcc"    
+    RLIBPATH      <- paste(R.home(), "/lib", Sys.getenv("R_ARCH"), sep="")
+    ADLIBPATH     <- paste0(adt.path, "/usr/local/lib")
+    lib.extension <- "so"
+    blas          <- "blas"
+    debug.app     <- "gdb"
+    gdb.path      <- normalizePath(Sys.which(debug.app), "/", mustWork=FALSE)
+    R.path        <- normalizePath(Sys.which("Rgui"), "/", mustWork=FALSE)
+
+    if (nchar(R.path) == 0)
+    {
+      R.path <- paste(R.home(), "/bin/exec/R", sep="")
+    }
+  }
+  else if (OS == "Darwin")
+  {
+    adt.path      <- "/usr/local/share/adt"
+    TargetName    <- "Mac"
+    Mode          <- "clang"
+    RLIBPATH      <- paste(R.home(), "/lib", Sys.getenv("R_ARCH"), sep="")
+    ADLIBPATH     <- paste0(adt.path, "/usr/local/lib")
+    lib.extension <- "dylib"
+    blas          <- "blas"
+    Extra         <- "    \"macFrameworkPath\": [\"/System/Library/Frameworks\"],"
+    gdb.path      <- "/Applications/Xcode.app/Contents/Developer/usr/bin/lldb-mi"
+    debug.app     <- "lldb"
+    R.path        <- "/Applications/R.app/Contents/MacOS/R"        
+
+    if (!file.exists(R.path))
+    {
+      warning("Cannot find R.\n")
+    }
+  }
+
+  if (nchar(gdb.path) == 0)
+  {
+    warning(paste("Cannot find path to gdb. Check that", debug.app, "is accessible via the PATH environment variable.\n"))
+  }
+
+  if (Architecture =="x86-64")
+  {
+    Architecture <- "x86_64"
+    Mode         <- paste(Mode, "-x64", sep="")
+  }
+  else if (Architecture =="x86_64")
+  {
+    Mode         <- paste(Mode, "-x64", sep="")
+  }
+  else if (Architecture == "x86")
+  {
+    Mode         <- paste(Mode, "-x86", sep="")
+  }
+
+  R.include             <- R.home("include")
+  intellisense.includes <- ""
+
+  if (grepl("mingw", gcc.path))
+  {
+    # windows
+    # Need the correct compiler for the architecture. Sys.which() just picks up whichever one is in the PATH
+    if (Sys.info()["machine"]=="x86-64")
+    {
+      # mingw64
+      gcc.path <- sub("/mingw\\d\\d", "/mingw64", gcc.path)
+    }
+    else
+    {
+      # mingw32
+      gcc.path <- sub("/mingw\\d\\d", "/mingw32", gcc.path)
+    }
+
+    rtools.path           <- sub("/mingw.*", "/", gcc.path)
+    gcc.include           <- sub("/bin/gcc.*", "/include", gcc.path)
+    intellisense.includes <- paste(intellisense.includes, ",\"", gcc.include, "/**\"", sep="")
+
+    root.include      <- paste(rtools.path, "usr/include", sep="")
+    root.user.include <- paste(rtools.path, "usr/local/include", sep="")
+
+    if (file.exists(root.include))
+    {
+      intellisense.includes <- paste(intellisense.includes, ",\"", normPath(root.include), "/**\"", sep="")
+    }
+
+    if (file.exists(root.user.include))
+    {
+      intellisense.includes <- paste(intellisense.includes, ",\"", normPath(root.user.include), "/**\"", sep="")
+    }
+  }
+  else
+  {
+    # linux
+    gcc.include       <- "/usr/include"
+    gcc.local.include <- "/usr/local/include"
+
+    if (file.exists(gcc.include))
+    {
+      intellisense.includes <- paste(intellisense.includes, ",\"", normPath(gcc.include), "/**\"", sep="")
+    }
+
+    if (file.exists(gcc.local.include))
+    {
+      intellisense.includes <- paste(intellisense.includes, ",\"", normPath(gcc.local.include), "/**\"", sep="")
+    }
+  }
+
+  intellisense.includes <- paste(intellisense.includes, ",\"", normPath(R.include), "/**\"", sep="")
 
   if (is.na(target))
   {
@@ -92,25 +223,10 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     stop(paste("language", language, "not supported"))
   }
 
-  if (IsWindows)
+  # check for presence of adt
+  if (!file.exists(adt.path))
   {
-    # find path to ADT as we need it to obtain the project file templates
-    adt.path <- dirname(dirname(Sys.which('adt.exe'))) # drop the /bin/adt.exe
-
-    if (!nzchar( adt.path))
-    {
-      stop("cannot find ADT. Looks like it is not installed")
-    }
-  }
-  else
-  {
-    adt.path  <- "/usr/local/share/adt"
-
-    # check for presence of adt
-    if (!file.exists(adt.path))
-    {
-      stop("cannot find adt template files. make and install adt")
-    }
+    stop("cannot find ADT. Looks like it is not installed")
   }
 
   if (is.na(src.templates))
@@ -335,6 +451,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     # libtools project
     project.path  <- paste(path, "/", name, sep="")
     src.path      <- paste(project.path, "/src", sep="")
+    vscode.path   <- paste(src.path, "/.vscode", sep="")
 
     if (dir.exists(project.path))
     {
@@ -353,6 +470,10 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     # create src folder
     dir.create(src.path)
     Sys.chmod(src.path, mode="0777")
+
+    # create .vscode folder
+    dir.create(vscode.path)
+    Sys.chmod(vscode.path, mode="0777")
 
     # create include folder
     include.path <- paste(src.path, "/include", sep="")
@@ -391,42 +512,17 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     }
 
     # create makefile files
-    make.templates <- c("makefile")
-
-    gcc.path       <- normalizePath(Sys.which("gcc"), "/", mustWork=FALSE)
-    toolset.path   <- sub("/$", "", sub("gcc$", "", sub(".exe$", "", gcc.path)))
-    RINCLUDE       <- R.home("include")
-
-    if (IsWindows)
-    {
-      RLIBPATH      <- R.home("bin")
-      ADLIBPATH     <- paste0(adt.path, "/lib/Rtools", Sys.getenv("R_ARCH"))
-      lib.extension <- "dll"
-      blas          <- "Rblas"
-    }
-    else
-    {
-      RLIBPATH      <- paste(R.home(), "/lib", Sys.getenv("R_ARCH"), sep="")
-      ADLIBPATH     <- paste0(adt.path, "/usr/local/lib")
-      blas          <- "blas"
-
-      if (OS == "Darwin")
-      {
-        lib.extension <- "dylib"
-      }
-      else
-      {
-        lib.extension <- "so"
-      }
-    }
+    make.debug     <- if (IsWindows) "make-debug.bat" else "make-debug"
+    make.templates <- c("makefile", make.debug, "c_cpp_properties.json", "launch.json", "tasks.json")
+    make.paths     <- c("", "", "src/.vscode/", "src/.vscode/", "src/.vscode/")
 
     for (cn in 1:length(make.templates))
     {
       make.template <- paste(adt.path, "/templates/make/libtools/", make.templates[cn], sep="")
-      make.filename <- make.templates[cn]
+      make.filename <- paste(make.paths[cn], make.templates[cn], sep="")
 
       con           <- file(make.template, "rt")
-      template.text <- readLines(con)
+      template.text <- readLines(con, warn = FALSE)
       close(con)
 
       template.text <- gsub("$(short-classname)", short.name, template.text, fixed=TRUE)
@@ -439,6 +535,17 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       template.text <- gsub("$(adt-path)", adt.path, template.text, fixed=TRUE)
       template.text <- gsub("$(AD_LIB)", ADLIBPATH, template.text, fixed=TRUE)
       template.text <- gsub("$(R_LIB)", RLIBPATH, template.text, fixed=TRUE)
+
+      template.text <- gsub("$(target-name)", TargetName, template.text, fixed=TRUE)
+      template.text <- gsub("$(mode)", Mode, template.text, fixed=TRUE)
+      template.text <- gsub("$(intellisense-includes)", intellisense.includes, template.text, fixed=TRUE)
+      template.text <- gsub("$(gcc-path)", gcc.path, template.text, fixed=TRUE)
+      template.text <- gsub("$(debug-app)", debug.app, template.text, fixed=TRUE)
+      template.text <- gsub("$(architecture)", Architecture, template.text, fixed=TRUE)
+      template.text <- gsub("$(R-prog-path)", R.path, template.text, fixed=TRUE)
+      template.text <- gsub("$(R-home-path)", R.home(), template.text, fixed=TRUE)
+      template.text <- gsub("$(gdb-path)", gdb.path, template.text, fixed=TRUE)
+      template.text <- gsub("$(Extra)", Extra, template.text, fixed=TRUE)
 
       make.name <- paste(project.path, "/", make.filename, sep="")
 
@@ -500,7 +607,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       source.filename <- gsub("base", name, source.templates[cn], fixed=TRUE)
 
       con           <- file(source.template, "rt")
-      template.text <- readLines(con)
+      template.text <- readLines(con, warn = FALSE)
       close(con)
 
       template.text <- gsub("$(classname)", name, template.text, fixed=TRUE)
@@ -555,7 +662,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     project.name     <- paste(project.folder, "/project.pbxproj", sep="")
 
     con           <- file(project.template, "rt")
-    template.text <- readLines(con)
+    template.text <- readLines(con, warn = FALSE)
     close(con)
 
     for (uuid in uuids)
@@ -612,7 +719,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
     project.lpi.name     <- paste(project.path, "/", name, ".lpi", sep="")
 
     con           <- file(project.lpi.template, "rt")
-    template.text <- readLines(con)
+    template.text <- readLines(con, warn = FALSE)
     close(con)
 
     template.text <- gsub("$(filename)", name, template.text, fixed=TRUE)
@@ -633,7 +740,7 @@ new.adt <- function(path, name, short.name, target=NA, language="cpp", src.templ
       source.filename <- gsub("base", name, source.templates[cn], fixed=TRUE)
 
       con           <- file(source.template, "rt")
-      template.text <- readLines(con)
+      template.text <- readLines(con, warn = FALSE)
       close(con)
 
       template.text <- gsub("$(classname)", name, template.text, fixed=TRUE)

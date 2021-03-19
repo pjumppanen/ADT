@@ -1,0 +1,19 @@
+{
+  "configurations": [
+  {
+    "name": "$(target-name)",
+    "intelliSenseMode": "$(mode)",
+    "includePath": ["${workspaceFolder}/**","$(intellisence-includes)", "$(adt-path)/include/**"],
+$(Extra)    
+    "defines": [],
+    "compilerPath": "$(gcc-path)",
+    "cStandard": "c89",
+    "cppStandard": "c++14",
+    "browse": {
+       "limitSymbolsToIncludedHeaders": true,
+       "databaseFilename": ""
+      }
+    }
+  ],
+  "version": 4
+}

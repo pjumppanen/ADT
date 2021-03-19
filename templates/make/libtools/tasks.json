@@ -1,0 +1,38 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "make release",
+			"command": "make",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceFolder}/../",
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+		},
+		{
+			"type": "cppbuild",
+			"label": "make debug",
+			"command": "make-debug",
+			"args": [],
+			"options": {
+				"cwd": "${workspaceFolder}/../",
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+		},
+		{
+			"type": "cppbuild",
+			"label": "make clean",
+			"command": "make",
+			"args": ["clean"],
+			"options": {
+				"cwd": "${workspaceFolder}/../",
+			}
+		}
+	]
+}
