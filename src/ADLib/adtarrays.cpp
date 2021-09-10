@@ -26,6 +26,7 @@
 
 
 #include "adtarrays.hpp"
+#include "adtstack.hpp"
 #include "adtthreads.hpp"
 #include <string.h>
 #include <stdarg.h>
@@ -3153,12 +3154,13 @@ size_t AdtArrayPlan::lookupSize() const
 //  ----------------------------------------------------------------------------
 //  AdtArrays method implementations
 //  ----------------------------------------------------------------------------
-const size_t AdtArrays::DefaultStackSize = 1024;
+const size_t AdtArrays::DefaultStackSize = 131072;
 
 //  ----------------------------------------------------------------------------
 
 AdtArrays::AdtArrays()
- : MemAllocator(*(new AdtMemAllocator))
+ : MemAllocator(*(new AdtMemAllocator)),
+   Stack(*(new AdtADStack(DefaultStackSize)))
 {
   IsShallowCopy = false;
 }
@@ -3166,7 +3168,8 @@ AdtArrays::AdtArrays()
 //  ----------------------------------------------------------------------------
 
 AdtArrays::AdtArrays(const AdtArrays& rCopy, bool bShallow)
- : MemAllocator(bShallow ? rCopy.MemAllocator : *(new AdtMemAllocator))
+ : MemAllocator(bShallow ? rCopy.MemAllocator : *(new AdtMemAllocator)),
+   Stack(*(new AdtADStack(rCopy.Stack.bufferSize())))
 {
   IsShallowCopy = bShallow;
 }
@@ -3186,70 +3189,4 @@ AdtArrays::~AdtArrays()
 AdtArrays* AdtArrays::createShallowCopy() const
 {
   return (new AdtArrays(*this, true));
-}
-
-//  ----------------------------------------------------------------------------
-
-bool AdtArrays::createStack(char** ppArray,
-                            size_t nInitialSize,
-                            AdtVarType nVarType) const
-{
-  bool        bCreated  = false;
-  size_t      nSizeOf   = elementSizeFromVarType(nVarType);
-
-  // Tricky issue. We want to alloc stacks in such a manner that createSameShape
-  // will work but we also want to allocated it such that the block has header
-  // Info that stores the current stack size so we can check that value quickly
-  // (ie. without the need of using the infoMap). Maybe not supporting
-  // createSameShape for stacks makes more sense!!! I'm not at all sure about
-  // this, other than I believe allocSameShape isn't supported for stacks in
-  // Mark's code
-  int           nBlockOffset  = sizeof(AdtStackInfo);
-  size_t        nBlockSize    = (nSizeOf * (nInitialSize + 1)) + nBlockOffset; // Add 1 to account for possible 1 based array usage
-  char*         pOffsetBlock  = MemAllocator.alloc(nBlockSize, AdtAllocType_STACK, nBlockOffset);
-
-  if (pOffsetBlock != 0)
-  {
-    AdtStackInfo* pStackInfo  = stackInfo(pOffsetBlock);
-
-    pStackInfo->StackSize = nInitialSize;
-    pStackInfo->SizeOf    = nSizeOf;
-    pStackInfo->VarType   = nVarType;
-    bCreated              = true;
-  }
-
-  *ppArray = pOffsetBlock;
-
-  return (bCreated);
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtArrays::copyAndGrowStack(char** ppArray,
-                                 AdtStackInfo* pCurrentStackInfo,
-                                 size_t nMinSizeNeeded) const
-{
-  // Note that we double the minimum required stack size so that we don't
-  // get a re-size immediately after the current one. It should take some
-  // time for the new to be exhausted.
-  AdtVarType    nVarType          = pCurrentStackInfo->VarType;
-  size_t        nSizeOf           = pCurrentStackInfo->SizeOf;
-  size_t        nOldStackSize     = pCurrentStackInfo->StackSize;
-  size_t        nNewStackSize     = nOldStackSize;
-  size_t        nNewMinStackSize  = 2 * nMinSizeNeeded;
-  char*         pNewStack         = 0;
-
-  while (nNewStackSize < nNewMinStackSize)
-  {
-    nNewStackSize *= 2;
-  }
-
-  if (createStack(&pNewStack, nNewStackSize, nVarType))
-  {
-    ::memcpy(pNewStack, *ppArray, (nOldStackSize + 1) * nSizeOf); // Add 1 to account for possible 1 based array usage
-
-    MemAllocator.free(*ppArray);
-
-    *ppArray = pNewStack;
-  }
 }

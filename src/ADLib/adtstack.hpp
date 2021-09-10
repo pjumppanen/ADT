@@ -69,138 +69,172 @@
 
 
 //  ----------------------------------------------------------------------------
+//  Forward declarations
+//  ----------------------------------------------------------------------------
+class AdtADStack;
+class AdtADStackGroup;
+
+
+//  ----------------------------------------------------------------------------
 //  Wrapper macros to incorporate Allocator into Tapenade Array push/pop calls
 //  ----------------------------------------------------------------------------
-#define PUSHREAL4ARRAY(A,B)     PUSHREAL4ARRAY_allocator(Allocator, (A), (B))
-#define POPREAL4ARRAY(A,B)      POPREAL4ARRAY_allocator(Allocator, (A), (B))
-#define PUSHREAL8ARRAY(A,B)     PUSHREAL8ARRAY_allocator(Allocator, (A), (B))
-#define POPREAL8ARRAY(A,B)      POPREAL8ARRAY_allocator(Allocator, (A), (B))
-// #define PUSHREAL16ARRAY(A,B)    PUSHREAL16ARRAY_allocator(Allocator, (A), (B))
-// #define POPREAL16ARRAY(A,B)     POPREAL16ARRAY_allocator(Allocator, (A), (B))
-#define PUSHINTEGER1ARRAY(A,B)  PUSHINTEGER1ARRAY_allocator(Allocator, (A), (B))
-#define POPINTEGER1ARRAY(A,B)   POPINTEGER1ARRAY_allocator(Allocator, (A), (B))
-#define PUSHINTEGER2ARRAY(A,B)  PUSHINTEGER2ARRAY_allocator(Allocator, (A), (B))
-#define POPINTEGER2ARRAY(A,B)   POPINTEGER2ARRAY_allocator(Allocator, (A), (B))
-#define PUSHINTEGER4ARRAY(A,B)  PUSHINTEGER4ARRAY_allocator(Allocator, (A), (B))
-#define POPINTEGER4ARRAY(A,B)   POPINTEGER4ARRAY_allocator(Allocator, (A), (B))
-// #define PUSHINTEGER8ARRAY(A,B)  PUSHINTEGER8ARRAY_allocator(Allocator, (A), (B))
-// #define POPINTEGER8ARRAY(A,B)   POPINTEGER8ARRAY_allocator(Allocator, (A), (B))
-#define PUSHCONTROL1BARRAY(A,B) PUSHCONTROL1BARRAY_allocator(Allocator, (A), (B))
-#define POPCONTROL1BARRAY(A,B)  POPCONTROL1BARRAY_allocator(Allocator, (A), (B))
-#define PUSHCONTROL2BARRAY(A,B) PUSHCONTROL2BARRAY_allocator(Allocator, (A), (B))
-#define POPCONTROL2BARRAY(A,B)  POPCONTROL2BARRAY_allocator(Allocator, (A), (B))
-#define PUSHCONTROL3BARRAY(A,B) PUSHCONTROL3BARRAY_allocator(Allocator, (A), (B))
-#define POPCONTROL3BARRAY(A,B)  POPCONTROL3BARRAY_allocator(Allocator, (A), (B))
-#define PUSHCONTROL4BARRAY(A,B) PUSHCONTROL4BARRAY_allocator(Allocator, (A), (B))
-#define POPCONTROL4BARRAY(A,B)  POPCONTROL4BARRAY_allocator(Allocator, (A), (B))
+#define PUSHREAL4(A)            PUSHREAL4SCALAR(Stack, (A))
+#define POPREAL4(A)             POPREAL4SCALAR(Stack, (A))
+#define LOOKREAL4(A)            LOOKREAL4SCALAR(Stack, (A))
+#define PUSHREAL4ARRAY(A,B)     PUSHREAL4ARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPREAL4ARRAY(A,B)      POPREAL4ARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHREAL8(A)            PUSHREAL8SCALAR(Stack, (A))
+#define POPREAL8(A)             POPREAL8SCALAR(Stack, (A))
+#define LOOKREAL8(A)            LOOKREAL8SCALAR(Stack, (A))
+#define PUSHREAL8ARRAY(A,B)     PUSHREAL8ARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPREAL8ARRAY(A,B)      POPREAL8ARRAY_allocator(Stack, Allocator, (A), (B))
+//#define PUSHREAL16(A)            PUSHREAL16SCALAR(Stack, (A))
+//#define POPREAL16(A)             POPREAL16SCALAR(Stack, (A))
+//#define LOOKREAL16(A)            LOOKREAL16SCALAR(Stack, (A))
+// #define PUSHREAL16ARRAY(A,B)    PUSHREAL16ARRAY_allocator(Stack, Allocator, (A), (B))
+// #define POPREAL16ARRAY(A,B)     POPREAL16ARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHINTEGER1(A)         PUSHINTEGER1SCALAR(Stack, (A))
+#define POPINTEGER1(A)          POPINTEGER1SCALAR(Stack, (A))
+#define LOOKINTEGER1(A)         LOOKINTEGER1SCALAR(Stack, (A))
+#define PUSHINTEGER1ARRAY(A,B)  PUSHINTEGER1ARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPINTEGER1ARRAY(A,B)   POPINTEGER1ARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHINTEGER2(A)         PUSHINTEGER2SCALAR(Stack, (A))
+#define POPINTEGER2(A)          POPINTEGER2SCALAR(Stack, (A))
+#define LOOKINTEGER2(A)         LOOKINTEGER2SCALAR(Stack, (A))
+#define PUSHINTEGER2ARRAY(A,B)  PUSHINTEGER2ARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPINTEGER2ARRAY(A,B)   POPINTEGER2ARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHINTEGER4(A)         PUSHINTEGER4SCALAR(Stack, (A))
+#define POPINTEGER4(A)          POPINTEGER4SCALAR(Stack, (A))
+#define LOOKINTEGER4(A)         LOOKINTEGER4SCALAR(Stack, (A))
+#define PUSHINTEGER4ARRAY(A,B)  PUSHINTEGER4ARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPINTEGER4ARRAY(A,B)   POPINTEGER4ARRAY_allocator(Stack, Allocator, (A), (B))
+// #define PUSHINTEGER8(A)         PUSHINTEGER8SCALAR(Stack, (A))
+// #define POPINTEGER8(A)          POPINTEGER8SCALAR(Stack, (A))
+// #define LOOKINTEGER8(A)         LOOKINTEGER8SCALAR(Stack, (A))
+// #define PUSHINTEGER8ARRAY(A,B)  PUSHINTEGER8ARRAY_allocator(Stack, Allocator, (A), (B))
+// #define POPINTEGER8ARRAY(A,B)   POPINTEGER8ARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHCONTROL1B(A)        PUSHCONTROL1BSCALAR(Stack, (A))
+#define POPCONTROL1B(A)         POPCONTROL1BSCALAR(Stack, (A))
+#define LOOKCONTROL1B(A)        LOOKCONTROL1BSCALAR(Stack, (A))
+#define PUSHCONTROL1BARRAY(A,B) PUSHCONTROL1BARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPCONTROL1BARRAY(A,B)  POPCONTROL1BARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHCONTROL2B(A)        PUSHCONTROL2BSCALAR(Stack, (A))
+#define POPCONTROL2B(A)         POPCONTROL2BSCALAR(Stack, (A))
+#define LOOKCONTROL2B(A)        LOOKCONTROL2BSCALAR(Stack, (A))
+#define PUSHCONTROL2BARRAY(A,B) PUSHCONTROL2BARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPCONTROL2BARRAY(A,B)  POPCONTROL2BARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHCONTROL3B(A)        PUSHCONTROL3BSCALAR(Stack, (A))
+#define POPCONTROL3B(A)         POPCONTROL3BSCALAR(Stack, (A))
+#define LOOKCONTROL3B(A)        LOOKCONTROL3BSCALAR(Stack, (A))
+#define PUSHCONTROL3BARRAY(A,B) PUSHCONTROL3BARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPCONTROL3BARRAY(A,B)  POPCONTROL3BARRAY_allocator(Stack, Allocator, (A), (B))
+#define PUSHCONTROL4B(A)        PUSHCONTROL4BSCALAR(Stack, (A))
+#define POPCONTROL4B(A)         POPCONTROL4BSCALAR(Stack, (A))
+#define LOOKCONTROL4B(A)        LOOKCONTROL4BSCALAR(Stack, (A))
+#define PUSHCONTROL4BARRAY(A,B) PUSHCONTROL4BARRAY_allocator(Stack, Allocator, (A), (B))
+#define POPCONTROL4BARRAY(A,B)  POPCONTROL4BARRAY_allocator(Stack, Allocator, (A), (B))
 
 
 //  ----------------------------------------------------------------------------
 //  Tapenade stack function wrappers
 //  ----------------------------------------------------------------------------
-void PUSHREAL4(float fNum);
-void POPREAL4(float& rNum);
-void LOOKREAL4(float& rNum);
-void PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1F pNum, int nSize);
-void POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1F pNum, int nSize);
+void PUSHREAL4SCALAR(AdtADStack& rStack, float fNum);
+void POPREAL4SCALAR(AdtADStack& rStack, float& rNum);
+void LOOKREAL4SCALAR(AdtADStack& rStack, float& rNum);
+void PUSHREAL4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1F pNum, int nSize);
+void POPREAL4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1F pNum, int nSize);
 
-void PUSHREAL8(double dNum);
-void POPREAL8(double& rNum);
-void LOOKREAL8(double& rNum);
-void PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1D pNum, int nSize);
-void POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1D pNum, int nSize);
+void PUSHREAL8SCALAR(AdtADStack& rStack, double dNum);
+void POPREAL8SCALAR(AdtADStack& rStack, double& rNum);
+void LOOKREAL8SCALAR(AdtADStack& rStack, double& rNum);
+void PUSHREAL8ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1D pNum, int nSize);
+void POPREAL8ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1D pNum, int nSize);
 
 // Not supported at this stage. Most C++ compilers have sizeof(double) == sizeof(long double)
-// void PUSHREAL16(long double dNum);
-// void POPREAL16(long double& rNum);
-// void LOOKREAL16(long double& rNum);
-// void PUSHREAL16ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1LD pNum, int nSize);
-// void POPREAL16ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1LD pNum, int nSize);
+// void PUSHREAL16SCALAR(AdtADStack& rStack, long double dNum);
+// void POPREAL16SCALAR(AdtADStack& rStack, long double& rNum);
+// void LOOKREAL16SCALAR(AdtADStack& rStack, long double& rNum);
+// void PUSHREAL16ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1LD pNum, int nSize);
+// void POPREAL16ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1LD pNum, int nSize);
 
-void PUSHINTEGER1(char cNum);
-void POPINTEGER1(char& rNum);
-void LOOKINTEGER1(char& rNum);
-void PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1C pNum, int nSize);
-void POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1C pNum, int nSize);
+void PUSHINTEGER1SCALAR(AdtADStack& rStack, char cNum);
+void POPINTEGER1SCALAR(AdtADStack& rStack, char& rNum);
+void LOOKINTEGER1SCALAR(AdtADStack& rStack, char& rNum);
+void PUSHINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1C pNum, int nSize);
+void POPINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1C pNum, int nSize);
 
-void PUSHINTEGER1(unsigned char cNum);
-void POPINTEGER1(unsigned char& rNum);
-void LOOKINTEGER1(unsigned char& rNum);
-void PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UC pNum, int nSize);
-void POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1UC pNum, int nSize);
+void PUSHINTEGER1SCALAR(AdtADStack& rStack, unsigned char cNum);
+void POPINTEGER1SCALAR(AdtADStack& rStack, unsigned char& rNum);
+void LOOKINTEGER1SCALAR(AdtADStack& rStack, unsigned char& rNum);
+void PUSHINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1UC pNum, int nSize);
+void POPINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1UC pNum, int nSize);
 
-void PUSHINTEGER2(short nNum);
-void POPINTEGER2(short& rNum);
-void LOOKINTEGER2(short& rNum);
-void PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1S pNum, int nSize);
-void POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1S pNum, int nSize);
+void PUSHINTEGER2SCALAR(AdtADStack& rStack, short nNum);
+void POPINTEGER2SCALAR(AdtADStack& rStack, short& rNum);
+void LOOKINTEGER2SCALAR(AdtADStack& rStack, short& rNum);
+void PUSHINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1S pNum, int nSize);
+void POPINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1S pNum, int nSize);
 
-void PUSHINTEGER2(unsigned short nNum);
-void POPINTEGER2(unsigned short& rNum);
-void LOOKINTEGER2(unsigned short& rNum);
-void PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1US pNum, int nSize);
-void POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1US pNum, int nSize);
+void PUSHINTEGER2SCALAR(AdtADStack& rStack, unsigned short nNum);
+void POPINTEGER2SCALAR(AdtADStack& rStack, unsigned short& rNum);
+void LOOKINTEGER2SCALAR(AdtADStack& rStack, unsigned short& rNum);
+void PUSHINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1US pNum, int nSize);
+void POPINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1US pNum, int nSize);
 
-void PUSHINTEGER4(long nNum);
-void POPINTEGER4(long& rNum);
-void LOOKINTEGER4(long& rNum);
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1L pNum, int nSize);
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1L pNum, int nSize);
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, long nNum);
+void POPINTEGER4SCALAR(AdtADStack& rStack, long& rNum);
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, long& rNum);
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1L pNum, int nSize);
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1L pNum, int nSize);
 
-void PUSHINTEGER4(int nNum);
-void POPINTEGER4(int& rNum);
-void LOOKINTEGER4(int& rNum);
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, int nNum);
+void POPINTEGER4SCALAR(AdtADStack& rStack, int& rNum);
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, int& rNum);
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
 
-void PUSHINTEGER4(unsigned long nNum);
-void POPINTEGER4(unsigned long& rNum);
-void LOOKINTEGER4(unsigned long& rNum);
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UL pNum, int nSize);
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1UL pNum, int nSize);
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, unsigned long nNum);
+void POPINTEGER4SCALAR(AdtADStack& rStack, unsigned long& rNum);
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, unsigned long& rNum);
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1UL pNum, int nSize);
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1UL pNum, int nSize);
 
-void PUSHINTEGER4(unsigned int nNum);
-void POPINTEGER4(unsigned int& rNum);
-void LOOKINTEGER4(unsigned int& rNum);
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UI pNum, int nSize);
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1UI pNum, int nSize);
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, unsigned int nNum);
+void POPINTEGER4SCALAR(AdtADStack& rStack, unsigned int& rNum);
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, unsigned int& rNum);
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1UI pNum, int nSize);
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1UI pNum, int nSize);
 
 // Not supported at this stage and probably not needed.
-// void PUSHINTEGER8(long long nNum);
-// void POPINTEGER8(long long& nNum);
-// void LOOKINTEGER8(long long& nNum);
-// void PUSHINTEGER8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1LL pNum, int nSize);
-// void POPINTEGER8ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1LL pNum, int nSize);
+// void PUSHINTEGER8SCALAR(AdtADStack& rStack, long long nNum);
+// void POPINTEGER8SCALAR(AdtADStack& rStack, long long& nNum);
+// void LOOKINTEGER8SCALAR(AdtADStack& rStack, long long& nNum);
+// void PUSHINTEGER8ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1LL pNum, int nSize);
+// void POPINTEGER8ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1LL pNum, int nSize);
 
-void PUSHCONTROL1B(int nNum);
-void POPCONTROL1B(int& nNum);
-void LOOKCONTROL1B(int& nNum);
-void PUSHCONTROL1BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
-void POPCONTROL1BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
+void PUSHCONTROL1BSCALAR(AdtADStack& rStack, int nNum);
+void POPCONTROL1BSCALAR(AdtADStack& rStack, int& nNum);
+void LOOKCONTROL1BSCALAR(AdtADStack& rStack, int& nNum);
+void PUSHCONTROL1BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
+void POPCONTROL1BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
 
-void PUSHCONTROL2B(int nNum);
-void POPCONTROL2B(int& nNum);
-void LOOKCONTROL2B(int& nNum);
-void PUSHCONTROL2BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
-void POPCONTROL2BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
+void PUSHCONTROL2BSCALAR(AdtADStack& rStack, int nNum);
+void POPCONTROL2BSCALAR(AdtADStack& rStack, int& nNum);
+void LOOKCONTROL2BSCALAR(AdtADStack& rStack, int& nNum);
+void PUSHCONTROL2BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
+void POPCONTROL2BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
 
-void PUSHCONTROL3B(int nNum);
-void POPCONTROL3B(int& nNum);
-void LOOKCONTROL3B(int& nNum);
-void PUSHCONTROL3BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
-void POPCONTROL3BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
+void PUSHCONTROL3BSCALAR(AdtADStack& rStack, int nNum);
+void POPCONTROL3BSCALAR(AdtADStack& rStack, int& nNum);
+void LOOKCONTROL3BSCALAR(AdtADStack& rStack, int& nNum);
+void PUSHCONTROL3BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
+void POPCONTROL3BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
 
-void PUSHCONTROL4B(int nNum);
-void POPCONTROL4B(int& nNum);
-void LOOKCONTROL4B(int& nNum);
-void PUSHCONTROL4BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
-void POPCONTROL4BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
-
-
-//  ----------------------------------------------------------------------------
-//  Forward declarations
-//  ----------------------------------------------------------------------------
-class AdtADStackGroup;
+void PUSHCONTROL4BSCALAR(AdtADStack& rStack, int nNum);
+void POPCONTROL4BSCALAR(AdtADStack& rStack, int& nNum);
+void LOOKCONTROL4BSCALAR(AdtADStack& rStack, int& nNum);
+void PUSHCONTROL4BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
+void POPCONTROL4BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
 
 
 //  ----------------------------------------------------------------------------
@@ -295,6 +329,8 @@ public:
   void        pop(const AdtMemAllocator& rAllocator, ARRAY_1UL pNum, int nSize);
   void        pop(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
   void        pop(const AdtMemAllocator& rAllocator, ARRAY_1UI pNum, int nSize);
+
+  size_t      bufferSize() const;
 };
 
 //  ----------------------------------------------------------------------------
@@ -505,6 +541,13 @@ inline void AdtADStack::look(int& rNum)
 inline void AdtADStack::look(unsigned int& rNum)
 {
   look((char*)&rNum, sizeof(rNum));
+}
+
+//  ----------------------------------------------------------------------------
+
+inline size_t AdtADStack::bufferSize() const
+{
+  return (BufferSize);
 }
 
 

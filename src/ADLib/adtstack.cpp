@@ -40,631 +40,491 @@
 
 //  ----------------------------------------------------------------------------
 
-void PUSHREAL4(float fNum)
+void PUSHREAL4SCALAR(AdtADStack& rStack, float fNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R4();
-
   rStack.push(fNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPREAL4(float& rNum)
+void POPREAL4SCALAR(AdtADStack& rStack, float& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R4();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKREAL4(float& rNum)
+void LOOKREAL4SCALAR(AdtADStack& rStack, float& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R4();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1F pNum, int nSize)
+void PUSHREAL4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1F pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R4();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1F pNum, int nSize)
+void POPREAL4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1F pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R4();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHREAL8(double dNum)
+void PUSHREAL8SCALAR(AdtADStack& rStack, double dNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R8();
-
   rStack.push(dNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPREAL8(double& rNum)
+void POPREAL8SCALAR(AdtADStack& rStack, double& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R8();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKREAL8(double& rNum)
+void LOOKREAL8SCALAR(AdtADStack& rStack, double& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R8();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1D pNum, int nSize)
+void PUSHREAL8ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1D pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R8();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1D pNum, int nSize)
+void POPREAL8ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1D pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_R8();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER1(char cNum)
+void PUSHINTEGER1SCALAR(AdtADStack& rStack, char cNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.push(cNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER1(char& rNum)
+void POPINTEGER1SCALAR(AdtADStack& rStack, char& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER1(char& rNum)
+void LOOKINTEGER1SCALAR(AdtADStack& rStack, char& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1C pNum, int nSize)
+void PUSHINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1C pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1C pNum, int nSize)
+void POPINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1C pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER1(unsigned char cNum)
+void PUSHINTEGER1SCALAR(AdtADStack& rStack, unsigned char cNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.push(cNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER1(unsigned char& rNum)
+void POPINTEGER1SCALAR(AdtADStack& rStack, unsigned char& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER1(unsigned char& rNum)
+void LOOKINTEGER1SCALAR(AdtADStack& rStack, unsigned char& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UC pNum, int nSize)
+void PUSHINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1UC pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1UC pNum, int nSize)
+void POPINTEGER1ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1UC pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I1();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER2(short nNum)
+void PUSHINTEGER2SCALAR(AdtADStack& rStack, short nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER2(short& rNum)
+void POPINTEGER2SCALAR(AdtADStack& rStack, short& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER2(short& rNum)
+void LOOKINTEGER2SCALAR(AdtADStack& rStack, short& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1S pNum, int nSize)
+void PUSHINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1S pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1S pNum, int nSize)
+void POPINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1S pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER2(unsigned short nNum)
+void PUSHINTEGER2SCALAR(AdtADStack& rStack, unsigned short nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER2(unsigned short& rNum)
+void POPINTEGER2SCALAR(AdtADStack& rStack, unsigned short& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER2(unsigned short& rNum)
+void LOOKINTEGER2SCALAR(AdtADStack& rStack, unsigned short& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1US pNum, int nSize)
+void PUSHINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1US pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1US pNum, int nSize)
+void POPINTEGER2ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1US pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I2();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4(long nNum)
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, long nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4(long& rNum)
+void POPINTEGER4SCALAR(AdtADStack& rStack, long& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER4(long& rNum)
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, long& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1L pNum, int nSize)
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1L pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1L pNum, int nSize)
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1L pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4(int nNum)
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, int nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4(int& rNum)
+void POPINTEGER4SCALAR(AdtADStack& rStack, int& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER4(int& rNum)
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, int& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4(unsigned long nNum)
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, unsigned long nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4(unsigned long& rNum)
+void POPINTEGER4SCALAR(AdtADStack& rStack, unsigned long& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER4(unsigned long& rNum)
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, unsigned long& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UL pNum, int nSize)
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1UL pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1UL pNum, int nSize)
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1UL pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4(unsigned int nNum)
+void PUSHINTEGER4SCALAR(AdtADStack& rStack, unsigned int nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4(unsigned int& rNum)
+void POPINTEGER4SCALAR(AdtADStack& rStack, unsigned int& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKINTEGER4(unsigned int& rNum)
+void LOOKINTEGER4SCALAR(AdtADStack& rStack, unsigned int& rNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.look(rNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UI pNum, int nSize)
+void PUSHINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1UI pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1UI pNum, int nSize)
+void POPINTEGER4ARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1UI pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_I4();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL1B(int nNum)
+void PUSHCONTROL1BSCALAR(AdtADStack& rStack, int nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL1B(int& nNum)
+void POPCONTROL1BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKCONTROL1B(int& nNum)
+void LOOKCONTROL1BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.look(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL1BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
+void PUSHCONTROL1BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL1BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
+void POPCONTROL1BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL2B(int nNum)
+void PUSHCONTROL2BSCALAR(AdtADStack& rStack, int nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL2B(int& nNum)
+void POPCONTROL2BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKCONTROL2B(int& nNum)
+void LOOKCONTROL2BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.look(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL2BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
+void PUSHCONTROL2BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL2BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
+void POPCONTROL2BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL3B(int nNum)
+void PUSHCONTROL3BSCALAR(AdtADStack& rStack, int nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL3B(int& nNum)
+void POPCONTROL3BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKCONTROL3B(int& nNum)
+void LOOKCONTROL3BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.look(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL3BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
+void PUSHCONTROL3BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL3BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
+void POPCONTROL3BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL4B(int nNum)
+void PUSHCONTROL4BSCALAR(AdtADStack& rStack, int nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL4B(int& nNum)
+void POPCONTROL4BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void LOOKCONTROL4B(int& nNum)
+void LOOKCONTROL4BSCALAR(AdtADStack& rStack, int& nNum)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.look(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-void PUSHCONTROL4BARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
+void PUSHCONTROL4BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.push(rAllocator, pNum, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void POPCONTROL4BARRAY_allocator(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
+void POPCONTROL4BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
 {
-  AdtADStack& rStack = AdtADStackGroupSingleton::stack_B();
-
   rStack.pop(rAllocator, pNum, nSize);
 }
 
