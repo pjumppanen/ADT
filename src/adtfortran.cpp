@@ -4319,6 +4319,8 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
       pCallExpandRoot->findObjects(CallExpandList, "AdtFortranCallExpand");
     }
 
+    // Need to add processing to do call expansions for the fortran code...
+
     for (Iter = SrcFunctionList.begin() ; Iter != SrcFunctionList.end() ; ++Iter)
     {
       AdtParser*  pObj = *Iter;

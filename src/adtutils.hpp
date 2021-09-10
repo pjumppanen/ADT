@@ -1159,7 +1159,6 @@ class AdtFortran : public AdtCompilerBase
 {
 protected:
   static const char*      PushPopFunctions[55];
-  static const char*      CallExpandMacrosWithStackSubstitution;
   static const char*      CallExpandMacrosWithoutStackSubstitution;
 
 protected:
