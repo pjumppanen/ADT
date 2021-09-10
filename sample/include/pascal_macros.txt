@@ -125,22 +125,6 @@
 #type_map   ARRAY_8UC  : UNSIGNED(1), 8
 #type_map   ARRAY_9UC  : UNSIGNED(1), 9
 #type_map   ARRAY_10UC : UNSIGNED(1), 10
-#defineb CHECKSIZE(_stack,_i)            if _i > stackSize(_stack) then
-                                         begin
-                                           growStack(_stack,_i);
-                                         end
-#defineb CHECKSIZE2(_stack,_i1,_i2)      if i1 > _i2 then
-                                         begin
-                                           if _i1 > stackSize(_stack) then
-                                           begin
-                                             growStack(_stack,_i1);
-                                           end;
-                                         end
-                                         else if _i2 > stackSize(_stack) then
-                                         begin
-                                           growStack(_stack,_i2);
-                                         end
-#defineb GETSIZE(_stack)                 stackSize(_stack)
 #defineb LOG(_a)                         ln(_a)
 #definef ln(_a)                          LOG(_a)
 #definef logit(_a)                       LOG((_a)/(1-(_a)))

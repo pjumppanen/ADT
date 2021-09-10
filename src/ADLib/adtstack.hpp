@@ -72,7 +72,6 @@
 //  Forward declarations
 //  ----------------------------------------------------------------------------
 class AdtADStack;
-class AdtADStackGroup;
 
 
 //  ----------------------------------------------------------------------------
@@ -235,15 +234,6 @@ void POPCONTROL4BSCALAR(AdtADStack& rStack, int& nNum);
 void LOOKCONTROL4BSCALAR(AdtADStack& rStack, int& nNum);
 void PUSHCONTROL4BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize);
 void POPCONTROL4BARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize);
-
-
-//  ----------------------------------------------------------------------------
-//  Mappings of AdtADStackGroup* by ThreadIdType
-//  ----------------------------------------------------------------------------
-typedef std::pair<ThreadIdType, AdtADStackGroup*>                 ThreadIdTypeAdtADStackGroupPtrPair;
-typedef std::map<ThreadIdType, AdtADStackGroup*>                  AdtADStackGroupPtrByThreadIdTypeMap;
-typedef std::map<ThreadIdType, AdtADStackGroup*>::iterator        AdtADStackGroupPtrByThreadIdTypeMapIter;
-typedef std::map<ThreadIdType, AdtADStackGroup*>::const_iterator  AdtADStackGroupPtrByThreadIdTypeMapConstIter;
 
 
 //  ----------------------------------------------------------------------------
@@ -550,185 +540,6 @@ inline size_t AdtADStack::bufferSize() const
   return (BufferSize);
 }
 
-
-//  ----------------------------------------------------------------------------
-//  class AdtADStackGroup
-//  ----------------------------------------------------------------------------
-//  Container for all stacks required by tapenade algorithmic differentiation.
-//  Tapenade assumes that each data size type has it's own stack. We need to
-//  honour this here or else the AD code may not work correctly. Also note that
-//  we dynamically allocate each stack on demand to reduce possible memory
-//  foot print.
-//  ----------------------------------------------------------------------------
-class AdtADStackGroup
-{
-private:
-  size_t        BufferSize;
-  AdtADStack*   Stack_R4;
-  AdtADStack*   Stack_R8;
-  AdtADStack*   Stack_I1;
-  AdtADStack*   Stack_I2;
-  AdtADStack*   Stack_I4;
-  AdtADStack*   Stack_B;
-
-public:
-  AdtADStackGroup(size_t nBufferSize);
-  virtual ~AdtADStackGroup();
-
-  AdtADStack&   stack_R4();
-  AdtADStack&   stack_R8();
-  AdtADStack&   stack_I1();
-  AdtADStack&   stack_I2();
-  AdtADStack&   stack_I4();
-  AdtADStack&   stack_B();
-};
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroup::stack_R4()
-{
-  if (Stack_R4 == 0)
-  {
-    Stack_R4 = new AdtADStack(BufferSize);
-  }
-
-  return (*Stack_R4);
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroup::stack_R8()
-{
-  if (Stack_R8 == 0)
-  {
-    Stack_R8 = new AdtADStack(BufferSize);
-  }
-
-  return (*Stack_R8);
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroup::stack_I1()
-{
-  if (Stack_I1 == 0)
-  {
-    Stack_I1 = new AdtADStack(BufferSize);
-  }
-
-  return (*Stack_I1);
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroup::stack_I2()
-{
-  if (Stack_I2 == 0)
-  {
-    Stack_I2 = new AdtADStack(BufferSize);
-  }
-
-  return (*Stack_I2);
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroup::stack_I4()
-{
-  if (Stack_I4 == 0)
-  {
-    Stack_I4 = new AdtADStack(BufferSize);
-  }
-
-  return (*Stack_I4);
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroup::stack_B()
-{
-  if (Stack_B == 0)
-  {
-    Stack_B = new AdtADStack(BufferSize);
-  }
-
-  return (*Stack_B);
-}
-
-
-//  ----------------------------------------------------------------------------
-//  class AdtADStackGroupSingleton
-//  ----------------------------------------------------------------------------
-//  This class is used to create and destroy all AdtADStackGroup instances.
-//  The class constructor is to be called only in one place in the startup
-//  code. Users of this lbrary should never call it.
-//  ----------------------------------------------------------------------------
-class AdtADStackGroupSingleton
-{
-private:
-  static AdtADStackGroupPtrByThreadIdTypeMap  Map;
-  static long                                 Lock;
-
-private:
-  static void                                 onExit();
-  static void                                 beginMutex();
-  static void                                 endMutex();
-
-public:
-  AdtADStackGroupSingleton();
-  virtual ~AdtADStackGroupSingleton();
-
-  static AdtADStackGroup&                     stackGroup();
-  static AdtADStack&                          stack_R4();
-  static AdtADStack&                          stack_R8();
-  static AdtADStack&                          stack_I1();
-  static AdtADStack&                          stack_I2();
-  static AdtADStack&                          stack_I4();
-  static AdtADStack&                          stack_B();
-  static size_t                               BufferSize;
-};
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroupSingleton::stack_R4()
-{
-  return (stackGroup().stack_R4());
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroupSingleton::stack_R8()
-{
-  return (stackGroup().stack_R8());
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroupSingleton::stack_I1()
-{
-  return (stackGroup().stack_I1());
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroupSingleton::stack_I2()
-{
-  return (stackGroup().stack_I2());
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroupSingleton::stack_I4()
-{
-  return (stackGroup().stack_I4());
-}
-
-//  ----------------------------------------------------------------------------
-
-inline AdtADStack& AdtADStackGroupSingleton::stack_B()
-{
-  return (stackGroup().stack_B());
-}
 
 #endif //AD
 

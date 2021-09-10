@@ -722,7 +722,6 @@ public:
   virtual ~AdtMakeCommand();
 
   bool                      switchDefined(const char* pSwitch) const;
-  bool                      withStackSubstitution(const AdtMakeCommandOperation* pOperation = 0) const;
   bool                      isFile(const char* pFileName) const;
   bool                      findFile(const string& rSourceFileName, string& rFileAndPath) const;
 

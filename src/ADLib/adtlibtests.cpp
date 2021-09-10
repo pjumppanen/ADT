@@ -163,39 +163,6 @@ protected:
       {
         printf("PASSED\n");
       }
-
-      AdtArrays Arrays;
-      T*        pStack;
-
-      printf("Testing %s stacks : ", pTypeName);
-
-      if (Arrays.createStack(pStack))
-      {
-        size_t  nSize     = Arrays.stackSize(pStack);
-        size_t  nNewSize  = 3 * nSize / 2;
-
-        Arrays.growStack(pStack, nNewSize);
-
-        nSize = Arrays.stackSize(pStack);
-
-        if (nSize < nNewSize)
-        {
-          printf("FAILED, grown stack size too small\n");
-          Passed = false;
-        }
-
-        Arrays.destroy(pStack);
-      }
-      else
-      {
-        printf("FAILED, Can't create stack\n");
-        Passed = false;
-      }
-
-      if (Passed)
-      {
-        printf("PASSED\n");
-      }
     }
     else
     {
