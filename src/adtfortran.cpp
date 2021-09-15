@@ -4508,6 +4508,31 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
                 UtlReleaseReference(pCodeObj);
               }
             }
+
+            AdtParserPtrListIter CallExpandIter;
+
+            // Carry out all call expansions
+            for (CallExpandIter = CallExpandList.begin() ; CallExpandIter != CallExpandList.end() ; ++CallExpandIter)
+            {
+              AdtFortranCallExpand* pCallExpandObj = (AdtFortranCallExpand*)(AdtParser*)*CallExpandIter;
+
+              if (pCallExpandObj != 0)
+              {
+                AdtParserPtrByStringMultiMapIter CallIter;
+
+                for (CallIter = CallMap.lower_bound(pCallExpandObj->name()) ; CallIter != CallMap.upper_bound(pCallExpandObj->name()) ; ++CallIter)
+                {
+                  //Call expansion match found. Carry out call expansion.
+                  AdtFortranCallStmt* pCallObj = (AdtFortranCallStmt*)(AdtParser*)(*CallIter).second;
+
+                  pCallExpandObj->expand(pCallObj,
+                                         pModuleBody,
+                                         nIteration,
+                                         nFnNumber,
+                                         rNewAttributeList);
+                }
+              }
+            }
           }
           else
           {
