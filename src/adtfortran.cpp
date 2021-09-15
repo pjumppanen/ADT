@@ -4509,7 +4509,12 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
               }
             }
 
-            AdtParserPtrListIter CallExpandIter;
+            AdtParserPtrListIter          CallExpandIter;
+            AdtParserPtrList              CallList;
+            AdtParserPtrByStringMultiMap  CallMap;
+
+            pObjCopy->findObjects(CallList, "AdtFortranCallStmt");
+            listToMap(CallMap, CallList);
 
             // Carry out all call expansions
             for (CallExpandIter = CallExpandList.begin() ; CallExpandIter != CallExpandList.end() ; ++CallExpandIter)

@@ -47,11 +47,11 @@ if (version$os == "mingw32")
   {
     if (version$arch == "i386")
     {
-      dyn.load("../../objs/Win32/Release/Rosenbrock.dll")
+      dyn.load("../../objs/Win32/Debug/Rosenbrock.dll")
 
     } else
     {
-      dyn.load("../../objs/x64/Release/Rosenbrock.dll")
+      dyn.load("../../objs/x64/Debug/Rosenbrock.dll")
     }
   }
 
