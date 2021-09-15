@@ -465,7 +465,7 @@ public:
 class AdtFileCopy
 {
 public:
-  AdtFileCopy(const char* pSrcFile, const char* pDestFile);
+  AdtFileCopy(const char* pSrcFile, const char* pDestFile, bool bAppend = false);
   virtual ~AdtFileCopy();
 };
 

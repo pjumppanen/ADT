@@ -1996,12 +1996,12 @@ const char* AdtStringCache::add(const char* pString, const string** ppCachedStri
 //  ----------------------------------------------------------------------------
 //  AdtFileCopy method implementations
 //  ----------------------------------------------------------------------------
-AdtFileCopy::AdtFileCopy(const char* pSrcFile, const char* pDestFile)
+AdtFileCopy::AdtFileCopy(const char* pSrcFile, const char* pDestFile, bool bAppend)
 {
   if ((pSrcFile != 0) && (pDestFile != 0))
   {
     FILE* SrcFile   = ::fopen(pSrcFile, "rb");
-    FILE* DestFile  = ::fopen(pDestFile, "wb");
+    FILE* DestFile  = ::fopen(pDestFile, bAppend ? "ab+" : "wb");
 
     if ((SrcFile != 0) && (DestFile != 0))
     {
