@@ -2921,6 +2921,33 @@ bool AdtMakeCommand::switchDefined(const char* pSwitch) const
 
 //  ----------------------------------------------------------------------------
 
+bool AdtMakeCommand::withStackSubstitution(const AdtMakeCommandOperation* pOperation) const
+{
+  bool bWithStackSubstitution = false;
+
+  if (switchDefined("WithoutStackSubstitution"))
+  {
+    bWithStackSubstitution = false;
+  }
+
+  if (pOperation != 0)
+  {
+    // Pragma takes precedence over switches
+    if (bWithStackSubstitution && pOperation->pragma("WithoutStackSubstitution"))
+    {
+      bWithStackSubstitution = false;
+    }
+    else if (!bWithStackSubstitution && pOperation->pragma("WithStackSubstitution"))
+    {
+      bWithStackSubstitution = true;
+    }
+  }
+
+  return (bWithStackSubstitution);
+}
+
+//  ----------------------------------------------------------------------------
+
 bool AdtMakeCommand::isFile(const char* pFileName) const
 {
   bool        bIsFile = false;
@@ -3256,6 +3283,9 @@ int AdtMakeCommand::make(AdtMakeIncremental& rBuildCheck)
     }
 
     FortranOut.close();
+
+    // Need a switch / option to control this, maybe in the makefile
+    AdtFortranBase::WithStackSubstitution = withStackSubstitution();
 
     //Parse the CallExpansion macros.
     if (!FortranContext.parseCallExpandMacros(pCallExpandRoot))

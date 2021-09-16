@@ -611,7 +611,8 @@ public:
   // This parameter is used to control push and pop processing. With PushPopDisable true
   // push and pop ops are dropped. With it false they are translated into array ops
   static bool                           PushPopDisable;
-  
+  static bool                           WithStackSubstitution;
+
   static void                           rootBindComments(AdtCommon* pCompilerBase);
 
   static void                           setChangePrefix(const char* pRemovePrefixString, const char* pAddPrefixString);
@@ -712,6 +713,33 @@ inline AdtFile& AdtFortranBase::writeFortran(AdtFile& pOutFile, int nMode) const
 //  ----------------------------------------------------------------------------
 class AdtFortranExecutableProgram : public AdtFortranBase, public AdtSourceRoot
 {
+private:
+  enum PushPopCallType {PushArrayCall = 0,
+                        PopArrayCall  = 1,
+                        PushCall      = 2,
+                        LookCall      = 3,
+                        PopCall       = 4};
+
+  enum PushPopVarType {CharacterVarType  = 0,
+                       BooleanVarType    = 1,
+                       Integer4VarType   = 2,
+                       Integer8VarType   = 3,
+                       Real4VarType      = 4,
+                       Real8VarType      = 5,
+                       Real16VarType     = 6};
+
+  struct PushPopCall
+  {
+    const char*     CallName;
+    PushPopCallType CallType;
+    PushPopVarType  VarType;
+    int             ArgsExpected;
+    const char*     BaseStackName;
+    const char*     VarTypeName;
+  };
+
+  static const PushPopCall      PushPopCalls[62];
+
 protected:
   void                          createStackVarNames(string& rStackName,
                                                     string& rIndexName,
@@ -727,6 +755,24 @@ protected:
 
   void                          baseStackName(string& rBaseStackName,
                                               const char* pArrayName);
+
+  bool                          translatePushPopArrayCall(AdtFortranCallStmt* pCallObj,
+                                                          const PushPopCall& rPushPopCallInfo,
+                                                          AdtFortranModuleBody* pModuleBody,
+                                                          int nIteration,
+                                                          int nFnNumber,
+                                                          AdtStringByStringMap& rNewLocalsMap,
+                                                          const AdtFortranVariableInfo& rVariableInfo);
+
+  bool                          removePushPopCall(AdtFortranCallStmt* pCallObj,
+                                                  const PushPopCall& rPushPopCallInfo,
+                                                  AdtFortranModuleBody* pModuleBody,
+                                                  int nIteration,
+                                                  int nFnNumber,
+                                                  AdtStringList& rNewAttributeList,
+                                                  AdtStringByStringMap& rNewAttributeMap,
+                                                  AdtStringByStringMap& rNewLocalsMap,
+                                                  const AdtFortranVariableInfo& rVariableInfo);
 
   void                          enumerateLinkages(const char* pFunctionName,
                                                   const AdtParserPtrByStringMap& rFunctionMap,

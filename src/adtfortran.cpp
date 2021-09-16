@@ -42,6 +42,7 @@ AdtFortranExecutableProgram*  AdtFortranBase::FortranRootObject           = 0;
 const char*                   AdtFortranBase::RemovePrefixString          = 0;
 const char*                   AdtFortranBase::AddPrefixString             = 0;
 bool                          AdtFortranBase::PushPopDisable              = false;
+bool                          AdtFortranBase::WithStackSubstitution       = false;
 //  ----------------------------------------------------------------------------
 const char*                   AdtFortranName::PrefixString                = 0;
 const char*                   AdtFortranName::FindString                  = 0;
@@ -3772,6 +3773,71 @@ void AdtFortranExecutableProgram::enumerateSubroutineNames(AdtStringByStringMap&
 
 //  ----------------------------------------------------------------------------
 
+const AdtFortranExecutableProgram::PushPopCall  AdtFortranExecutableProgram::PushPopCalls[] = {{"PUSHINTEGER1ARRAY",  PushArrayCall, BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPINTEGER1ARRAY",   PopArrayCall , BooleanVarType  , 2, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHINTEGER1",       PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKINTEGER1",       LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPINTEGER1",        PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHINTEGER2ARRAY",  PushArrayCall, Integer4VarType , 2, "i2stack",  "INTEGER(2)"},
+                                                                                               {"POPINTEGER2ARRAY",   PopArrayCall , Integer4VarType , 2, "i2stack",  "INTEGER(2)"},
+                                                                                               {"PUSHINTEGER2",       PushCall     , Integer4VarType , 1, "i2stack",  "INTEGER(2)"},
+                                                                                               {"LOOKINTEGER2",       LookCall     , Integer4VarType , 1, "i2stack",  "INTEGER(2)"},
+                                                                                               {"POPINTEGER4",        PopCall      , Integer4VarType , 1, "i4stack",  "INTEGER"},
+                                                                                               {"PUSHINTEGER4ARRAY",  PushArrayCall, Integer4VarType , 2, "i4stack",  "INTEGER"},
+                                                                                               {"POPINTEGER4ARRAY",   PopArrayCall , Integer4VarType , 2, "i4stack",  "INTEGER"},
+                                                                                               {"PUSHINTEGER4",       PushCall     , Integer4VarType , 1, "i4stack",  "INTEGER"},
+                                                                                               {"LOOKINTEGER4",       LookCall     , Integer4VarType , 1, "i4stack",  "INTEGER"},
+                                                                                               {"POPINTEGER4",        PopCall      , Integer4VarType , 1, "i4stack",  "INTEGER"},
+                                                                                               {"PUSHINTEGER8ARRAY",  PushArrayCall, Integer8VarType , 2, "i8stack",  "INTEGER"},
+                                                                                               {"POPINTEGER8ARRAY",   PopArrayCall , Integer8VarType , 2, "i8stack",  "INTEGER"},
+                                                                                               {"PUSHINTEGER8",       PushCall     , Integer8VarType , 1, "i8stack",  "INTEGER"},
+                                                                                               {"LOOKINTEGER8",       LookCall     , Integer8VarType , 1, "i8stack",  "INTEGER"},
+                                                                                               {"POPINTEGER8",        PopCall      , Integer8VarType , 1, "i8stack",  "INTEGER"},
+                                                                                               {"PUSHREAL4ARRAY",     PushArrayCall, Real4VarType    , 2, "r4stack",  "REAL(4)"},
+                                                                                               {"POPREAL4ARRAY",      PopArrayCall , Real4VarType    , 2, "r4stack",  "REAL(4)"},
+                                                                                               {"PUSHREAL4",          PushCall     , Real4VarType    , 1, "r4stack",  "REAL(4)"},
+                                                                                               {"LOOKREAL4",          LookCall     , Real4VarType    , 1, "r4stack",  "REAL(4)"},
+                                                                                               {"POPREAL4",           PopCall      , Real4VarType    , 1, "r4stack",  "REAL(4)"},
+                                                                                               {"PUSHREAL8ARRAY",     PushArrayCall, Real8VarType    , 2, "r8stack",  "REAL(8)"},
+                                                                                               {"POPREAL8ARRAY",      PopArrayCall , Real8VarType    , 2, "r8stack",  "REAL(8)"},
+                                                                                               {"PUSHREAL8",          PushCall     , Real8VarType    , 1, "r8stack",  "REAL(8)"},
+                                                                                               {"LOOKREAL8",          LookCall     , Real8VarType    , 1, "r8stack",  "REAL(8)"},
+                                                                                               {"POPREAL8",           PopCall      , Real8VarType    , 1, "r8stack",  "REAL(8)"},
+                                                                                               {"PUSHREAL16ARRAY",    PushArrayCall, Real16VarType   , 2, "r16stack",  "REAL(16)"},
+                                                                                               {"POPREAL16ARRAY",     PopArrayCall , Real16VarType   , 2, "r16stack",  "REAL(16)"},
+                                                                                               {"PUSHREAL16",         PushCall     , Real16VarType   , 1, "r16stack",  "REAL(16)"},
+                                                                                               {"LOOKREAL16",         LookCall     , Real16VarType   , 1, "r16stack",  "REAL(16)"},
+                                                                                               {"POPREAL16",          PopCall      , Real16VarType   , 1, "r16stack",  "REAL(16)"},
+                                                                                               {"PUSHCONTROL1B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL1B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL1B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL2B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL2B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL2B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL3B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL3B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL3B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL4B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL4B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL4B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL5B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL5B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL5B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL6B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL6B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL6B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL7B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL7B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL7B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL8B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL8B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL8B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"PUSHCONTROL9B",      PushCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"LOOKCONTROL9B",      LookCall     , BooleanVarType  , 1, "bstack",   "INTEGER(1)"},
+                                                                                               {"POPCONTROL9B",       PopCall      , BooleanVarType  , 1, "bstack",   "INTEGER(1)"}};
+
+//  ----------------------------------------------------------------------------
+
 void AdtFortranExecutableProgram::createStackVarNames(string& rStackName,
                                                       string& rIndexName,
                                                       const string& rBaseStackName,
@@ -4095,6 +4161,532 @@ void AdtFortranExecutableProgram::baseStackName(string& rBaseStackName,
 
 //  ----------------------------------------------------------------------------
 
+bool AdtFortranExecutableProgram::translatePushPopArrayCall(AdtFortranCallStmt* pCallObj,
+                                                            const PushPopCall& rPushPopCallInfo,
+                                                            AdtFortranModuleBody* pModuleBody,
+                                                            int nIteration,
+                                                            int nFnNumber,
+                                                            AdtStringByStringMap& rNewLocalsMap,
+                                                            const AdtFortranVariableInfo& rVariableInfo)
+{
+  bool  bRemoved = false;
+
+  if ((pCallObj != 0) && (rPushPopCallInfo.ArgsExpected == 2))
+  {
+    AdtFortranSectionSubscriptList* pSectionSubscriptList = (AdtFortranSectionSubscriptList*)pCallObj->findDescendant("SectionSubscriptList");
+
+    if (pSectionSubscriptList != 0)
+    {
+      size_t nArgs = pSectionSubscriptList->listSize();
+
+      if (rPushPopCallInfo.ArgsExpected == nArgs)
+      {
+        int nTriplets = 0;
+
+        if (!pSectionSubscriptList->hasSlice(nTriplets))
+        {
+          const AdtParserPtrList&           rObjList        = pSectionSubscriptList->objList();
+          AdtParserPtrListConstIter         Iter            = rObjList.begin();
+          const AdtFortranSectionSubscript* pArg1_Subscript = (const AdtFortranSectionSubscript*)(const AdtParser*)*Iter;
+
+          Iter++;
+
+          const AdtFortranSectionSubscript* pArg2_Subscript = (const AdtFortranSectionSubscript*)(const AdtParser*)*Iter;
+
+          if ((pArg1_Subscript != 0) && (pArg2_Subscript != 0))
+          {
+            string                        sArg1;
+            string                        sArg2;
+            AdtFile                       FortranOut;
+
+            FortranOut.open(sArg1);
+            pArg1_Subscript->writeFortran(FortranOut);
+            FortranOut.close();
+
+            FortranOut.open(sArg2);
+            pArg2_Subscript->writeFortran(FortranOut);
+            FortranOut.close();
+
+            if ((::strstr(sArg1, "stack")    != 0) &&
+                pArg1_Subscript->isSimple()        &&
+                (sArg2.icompare("dim_stack") == 0))
+            {
+              string            rCodeString;
+              string            sBaseStackName;
+              AdtFortranLblDef* pLblDef = (AdtFortranLblDef*)pCallObj->findDescendant("LblDef");
+
+              if (pLblDef != 0)
+              {
+                FortranOut.open(rCodeString);
+                pLblDef->writeFortran(FortranOut);
+                FortranOut.close();
+
+                rCodeString += " ";
+              }
+
+              baseStackName(sBaseStackName,
+                            sArg1);
+
+              switch(rPushPopCallInfo.CallType)
+              {
+                case PushArrayCall:
+                {
+                  // need to translate,
+                  //
+                  //  CALL PUSHARRAY(stack, dim_stack)
+                  //
+                  // into,
+                  //
+                  //  CALL PUSHARRAY(stack, stacki)
+                  //  CALL PUSHINTEGER4(stacki)
+                  //
+                  rCodeString += "CALL " + string(rPushPopCallInfo.CallName) + "(" + sArg1 + "," + sBaseStackName + "i)\n";
+                  rCodeString += "CALL PUSHINTEGER4(" + sBaseStackName + "i)\n";
+                  break;
+                }
+
+                case PopArrayCall:
+                {
+                  // need to translate,
+                  //
+                  //  CALL POPARRAY(stack, dim_stack)
+                  //
+                  // is translated to,
+                  //
+                  //  CALL POPINTEGER4(saved_stacki)
+                  //  CALL POPARRAY(stack, saved_stacki)
+                  //
+                  // where saved_stacki is a local scope variable.
+                  string  sLocalIndexName("saved_" + sBaseStackName + "i");
+
+                  createLocalVar(sLocalIndexName,
+                                 ForType_INTEGER,
+                                 pCallObj,
+                                 rNewLocalsMap,
+                                 rVariableInfo);
+
+                  rCodeString += "CALL POPINTEGER4(" + sLocalIndexName + ")\n";
+                  rCodeString += "CALL " + string(rPushPopCallInfo.CallName) + "(" + sArg1 + "," + sLocalIndexName + ")\n";
+                  break;
+                }
+
+                case PushCall:
+                case LookCall:
+                case PopCall:
+                default:
+                {
+                  ::printf("FATAL ERROR: AdtFortranExecutableProgram::translatePushPopArrayCall "
+                           "failure on line %d in file %s\nContext line %d, file %s\n",
+                           pCallObj->lineNumber(),
+                           pCallObj->fileName(),
+                           __LINE__,
+                           __FILE__);
+
+                  FAIL();
+                  AdtExit(-1);
+                  break;
+                }
+              }
+
+              expressionBuildAndReplace(rCodeString, pCallObj);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return (bRemoved);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtFortranExecutableProgram::removePushPopCall(AdtFortranCallStmt* pCallObj,
+                                                    const PushPopCall& rPushPopCallInfo,
+                                                    AdtFortranModuleBody* pModuleBody,
+                                                    int nIteration,
+                                                    int nFnNumber,
+                                                    AdtStringList& rNewAttributeList,
+                                                    AdtStringByStringMap& rNewAttributeMap,
+                                                    AdtStringByStringMap& rNewLocalsMap,
+                                                    const AdtFortranVariableInfo& rVariableInfo)
+{
+  bool  bRemoved = false;
+
+  if (pCallObj != 0)
+  {
+    string                          sCallExpression;
+    AdtFile                         StringFile;
+    AdtFortranSectionSubscriptList* pSectionSubscriptList = (AdtFortranSectionSubscriptList*)pCallObj->findDescendant("SectionSubscriptList");
+
+    StringFile.open(sCallExpression);
+    pCallObj->writeFortran(StringFile);
+    StringFile.close();
+
+    if (pSectionSubscriptList != 0)
+    {
+      size_t nArgs = pSectionSubscriptList->listSize();
+
+      if (rPushPopCallInfo.ArgsExpected == nArgs)
+      {
+        int nTriplets = 0;
+
+        if (!pSectionSubscriptList->hasSlice(nTriplets))
+        {
+          // Remove PUSH / POP calls by replacing them with array equivalents
+          const AdtParserPtrList&           rObjList        = pSectionSubscriptList->objList();
+          AdtParserPtrListConstIter         Iter            = rObjList.begin();
+          const AdtFortranSectionSubscript* pArg1_Subscript = (const AdtFortranSectionSubscript*)(const AdtParser*)*Iter;
+
+          Iter++;
+
+          const AdtFortranSectionSubscript* pArg2_Subscript = nArgs > 1 ? (const AdtFortranSectionSubscript*)(const AdtParser*)*Iter : 0;
+
+          if (pArg1_Subscript != 0)
+          {
+            string                        rCodeString;
+            string                        sLabel;
+            string                        sIndexName;
+            string                        sStackName;
+            string                        sArg1;
+            string                        sArg2;
+            AdtFile                       FortranOut;
+            AdtStringByStringMapIter      Iter;
+            AdtFortran                    FortranContext;
+            AdtFortranLblDef*             pLblDef = (AdtFortranLblDef*)pCallObj->findDescendant("LblDef");
+
+            if (pLblDef != 0)
+            {
+              FortranOut.open(sLabel);
+              pLblDef->writeFortran(FortranOut);
+              FortranOut.close();
+
+              rCodeString += sLabel;
+              rCodeString += " ";
+            }
+
+            FortranOut.open(sArg1);
+            pArg1_Subscript->writeFortran(FortranOut);
+            FortranOut.close();
+
+            if (pArg2_Subscript != 0)
+            {
+              FortranOut.open(sArg2);
+              pArg2_Subscript->writeFortran(FortranOut);
+              FortranOut.close();
+            }
+
+            createStackVarNames(sStackName,
+                                sIndexName,
+                                rPushPopCallInfo.BaseStackName,
+                                nIteration,
+                                nFnNumber);
+
+            Iter = rNewAttributeMap.find(sStackName);
+
+            if (Iter == rNewAttributeMap.end())
+            {
+              rNewAttributeList.push_back(sStackName);
+              rNewAttributeList.push_back(sIndexName);
+              rNewAttributeMap.insert(AdtStringByStringMap::value_type(sStackName, sStackName));
+              rNewAttributeMap.insert(AdtStringByStringMap::value_type(sIndexName, sIndexName));
+
+              if (pModuleBody != 0)
+              {
+                AdtParser*            pRoot = 0;
+                AdtFortranModuleBody* pReplacementBody;
+                string                rDeclString("MODULE Fragment\n");
+
+                rDeclString += "INTEGER " + sIndexName + "\n";
+                rDeclString += string(rPushPopCallInfo.VarTypeName) + " " + sStackName + "(dim_stack)\nENDMODULE\n";
+
+                FortranContext.parseString(pRoot,
+                                           rDeclString);
+
+                pReplacementBody = (AdtFortranModuleBody*)pRoot->findObject("AdtFortranModuleBody");
+                pModuleBody->addListCopy(pReplacementBody);
+
+                UtlReleaseReference(pRoot);
+              }
+            }
+
+            bool bIsArrayOp = false;
+            bool bIsPush    = false;
+
+            switch(rPushPopCallInfo.CallType)
+            {
+              case PushArrayCall:
+              {
+                bIsPush = true;
+                // fall thru
+              }
+              case PopArrayCall:
+              {
+                bIsArrayOp = true;
+
+                if (AdtFortranBase::PushPopDisable)
+                {
+                  // No need to process as we kill Array pushes and pops in this case.
+                  break;
+                }
+
+                // FIX ME. Need to fix this code as it assumes only whole arrays
+                // will be pushed. It is possible that Array slices can be pushed
+                // and in this current code it will fail.
+                bool bIsStackVar = (::strstr(sArg1, "stack") != 0);
+
+                // Change. If the var is a stack it has no size comment. It is a
+                // vector and the size can be determined
+                if ((rVariableInfo.hasVariable(sArg1) || bIsStackVar) &&
+                    pArg1_Subscript->isSimple()                       &&
+                    (pArg2_Subscript != 0))
+                {
+                  int         cn;
+                  int         nRepeat = 0;
+                  int         nDims   = bIsStackVar ? 1 : rVariableInfo.numberOfDimensions(sArg1);
+                  const char* pChar   = AdtParse::nextWord(sArg2);
+                  string      sIndexedArg(sArg1);
+                  string      sCount;
+
+                  sIndexedArg += "(";
+
+                  for (cn = 0 ; cn < nDims ; cn++)
+                  {
+                    string sLowerDim;
+                    string sUpperDim;
+                    bool   bAddCode = false;
+
+                    if (bIsStackVar)
+                    {
+                      // We initialise to [1:sArg2] because in the case of stack
+                      // the base index is always 1 and the size will be in the
+                      // push/pop array call because we put it there through
+                      // pre-processing
+                      sLowerDim = "1";
+                      sUpperDim = sArg2;
+                    }
+
+                    pChar = AdtParse::nextWord(pChar);
+
+                    if ((nRepeat == 0) && AdtParse::matchWord(pChar, "*"))
+                    {
+                      string  sPower;
+
+                      AdtParse::extractWord(sPower, "*", pChar, false);
+                      nRepeat = ::atoi(sPower) - 1;
+                    }
+
+                    if ((nRepeat > 0) || AdtParse::extractWord(sCount, "*", pChar))
+                    {
+                      char  sLoopVarName[16]  = {0};
+
+                      if (nRepeat == 0)
+                      {
+                        AdtParse::matchWord(pChar, "*");
+                      }
+                      else
+                      {
+                        nRepeat--;
+                      }
+
+                      rVariableInfo.lowerDimension(sArg1, cn, sLowerDim);
+                      rVariableInfo.upperDimension(sArg1, cn, sUpperDim);
+
+                      // Create a loop variable
+                      ::sprintf(sLoopVarName, "ix_%d___", cn);
+
+                      createLocalVar(sLoopVarName,
+                                     ForType_INTEGER,
+                                     pCallObj,
+                                     rNewLocalsMap,
+                                     rVariableInfo);
+
+                      string sLoopVar(sLoopVarName);
+
+                      sIndexedArg += sLoopVarName;
+
+                      if (cn < nDims - 1)
+                      {
+                        sIndexedArg += ",";
+                      }
+
+                      if (bIsPush)
+                      {
+                        rCodeString += "DO " + sLoopVar + "=" + sLowerDim + ",(" + sLowerDim + "+" + sCount + "-1)\n";
+                      }
+                      else
+                      {
+                        // Need to reverse the order of looping so we don't end up swapping the order
+                        // of the numbers in the saved and restored arrays.
+                        rCodeString += "DO " + sLoopVar + "=(" + sLowerDim + "+" + sCount + "-1)," + sLowerDim + ",-1\n";
+                      }
+                    }
+                    else
+                    {
+                      ::printf("FATAL ERROR: AdtFortranExecutableProgram::removePushPopCall "
+                               "failure on line %d in file %s converting expression:\n %s\n"
+                               "Cannot determine loop indices.\nContext line %d, file %s\n",
+                                pCallObj->lineNumber(),
+                                pCallObj->fileName(),
+                                sCallExpression.c_str(),
+                                __LINE__,
+                                __FILE__);
+
+                      FAIL();
+                      AdtExit(-1);
+                    }
+                  }
+
+                  sIndexedArg += ")";
+
+
+                  if (rPushPopCallInfo.CallType == PushArrayCall)
+                  {
+                    // Increment Stack
+                    rCodeString += sIndexName + "=" + sIndexName + "+1\n";
+
+                    // Push operation
+                    rCodeString += sStackName + "(" + sIndexName + ")=" + sIndexedArg + "\n";
+                  }
+                  else
+                  {
+                    // Pop operation
+                    rCodeString += sIndexedArg + "=" + sStackName + "(" + sIndexName + ")\n";
+
+                    // Decrement Stack
+                    rCodeString += sIndexName + "=" + sIndexName + "-1\n";
+                  }
+
+                  for (cn = 0 ; cn < nDims ; cn++)
+                  {
+                    rCodeString += "END DO\n";
+                  }
+                }
+                else
+                {
+                  ::printf("FATAL ERROR: AdtFortranExecutableProgram::removePushPopCall "
+                           "failure on line %d in file %s converting expression:\n %s\n"
+                           "%s has no size information.\nContext line %d, file %s\n",
+                           pCallObj->lineNumber(),
+                           pCallObj->fileName(),
+                           sCallExpression.c_str(),
+                           sArg1.c_str(),
+                           __LINE__,
+                           __FILE__);
+
+                  FAIL();
+                  AdtExit(-1);
+                }
+                break;
+              }
+
+              case PushCall:
+              {
+                // Increment Stack
+                rCodeString += sIndexName + "=" + sIndexName + "+1\n";
+
+                // Push operation
+                rCodeString += sStackName + "(" + sIndexName + ")=" + sArg1 + "\n";
+                break;
+              }
+
+              case LookCall:
+              {
+                // Look operation
+                rCodeString += sArg1 + "=" + sStackName + "(" + sIndexName + ")\n";
+                break;
+              }
+
+              case PopCall:
+              {
+                // Pop operation
+                rCodeString += sArg1 + "=" + sStackName + "(" + sIndexName + ")\n";
+
+                // Decrement Stack
+                rCodeString += sIndexName + "=" + sIndexName + "-1\n";
+                break;
+              }
+
+              default:
+              {
+                ::printf("FATAL ERROR: AdtFortranExecutableProgram::removePushPopCall "
+                         "failure on line %d in file %s converting expression:\n %s\n "
+                         "Context line %d, file %s\n",
+                         pCallObj->lineNumber(),
+                         pCallObj->fileName(),
+                         sCallExpression.c_str(),
+                         __LINE__,
+                         __FILE__);
+
+                FAIL();
+                AdtExit(-1);
+                break;
+              }
+            }
+
+            if (AdtFortranBase::PushPopDisable && bIsArrayOp)
+            {
+              if (sLabel.length() != 0)
+              {
+                // The line we are removing has a label so we need to replace
+                // the line with a NOP label
+                rCodeString = sLabel + " CONTINUE\n";
+
+                expressionBuildAndReplace(rCodeString, pCallObj);
+              }
+              else
+              {
+                AdtParser*  pObjectToRemove   = pCallObj->findAscendantWithClass("AdtFortranExecutableConstruct");
+                AdtParser*  pObjectContainer  = pObjectToRemove->parent();
+
+                if (pObjectContainer->isType("AdtFortranBodyConstruct"))
+                {
+                  pObjectToRemove   = pObjectContainer;
+                  pObjectContainer  = pObjectToRemove->parent();
+                }
+
+                pObjectContainer->remove(pObjectToRemove);
+              }
+            }
+            else
+            {
+              expressionBuildAndReplace(rCodeString, pCallObj);
+            }
+
+            bRemoved = true;
+          }
+        }
+        else
+        {
+          ::printf("MERGE ERROR : slice expression not allowed in %s call on "
+                   "line %d in file %s converting expression:\n %s\n",
+                   rPushPopCallInfo.CallName,
+                   lineNumber(),
+                   fileName(),
+                   sCallExpression.c_str());
+          FAIL();
+          AdtExit(-1);
+        }
+      }
+      else
+      {
+        ::printf("MERGE ERROR : wrong number of arguments in %s call on "
+                 "line %d in file %s converting expression:\n %s\n",
+                 rPushPopCallInfo.CallName,
+                 lineNumber(),
+                 fileName(),
+                 sCallExpression.c_str());
+        FAIL();
+        AdtExit(-1);
+      }
+    }
+  }
+
+  return (bRemoved);
+}
+
+//  ----------------------------------------------------------------------------
+
 void AdtFortranExecutableProgram::enumerateLinkages(const char* pFunctionName,
                                                     const AdtParserPtrByStringMap& rFunctionMap,
                                                     AdtStringByStringMap& rFunctionLinkagesMap) const
@@ -4319,8 +4911,6 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
       pCallExpandRoot->findObjects(CallExpandList, "AdtFortranCallExpand");
     }
 
-    // Need to add processing to do call expansions for the fortran code...
-
     for (Iter = SrcFunctionList.begin() ; Iter != SrcFunctionList.end() ; ++Iter)
     {
       AdtParser*  pObj = *Iter;
@@ -4509,12 +5099,156 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
               }
             }
 
+            // modify PUSH/POP ARRAY stack pushes to include the saving
+            // of size in the operation. That is,
+            //
+            //  CALL PUSHARRAY(stack, dim_stack)
+            //
+            // is translated to,
+            //
+            //  CALL PUSHARRAY(stack, stacki)
+            //  CALL PUSHINTEGER4(stacki)
+            //
+            // and
+            //
+            //  CALL POPARRAY(stack, dim_stack)
+            //
+            // is translated to,
+            //
+            //  CALL POPINTEGER4(stack_sz)
+            //  CALL POPARRAY(stack, stack_sz)
+            //
+            // where stack_sz is a local scope variable.
             AdtParserPtrListIter          CallExpandIter;
             AdtParserPtrList              CallList;
             AdtParserPtrByStringMultiMap  CallMap;
+            AdtFortranVariableInfo        VariableInfo(pObjCopy);
 
             pObjCopy->findObjects(CallList, "AdtFortranCallStmt");
             listToMap(CallMap, CallList);
+
+            if (WithStackSubstitution)
+            {
+              //Need to translate these calls
+              // PUSHINTEGER1ARRAY
+              // POPINTEGER1ARRAY
+              // PUSHINTEGER4ARRAY
+              // POPINTEGER4ARRAY
+              // PUSHINTEGER8ARRAY
+              // POPINTEGER8ARRAY
+              // PUSHREAL4ARRAY
+              // POPREAL4ARRAY
+              // PUSHREAL8ARRAY
+              // POPREAL8ARRAY
+              // PUSHREAL16ARRAY
+              // POPREAL16ARRAY
+
+              AdtStringByStringMap    rNewLocalsMap;
+              int                     cn;
+
+              for (cn = 0 ; cn < sizeof(PushPopCalls) / sizeof(PushPopCalls[0]) ; cn++)
+              {
+                switch(PushPopCalls[cn].CallType)
+                {
+                  case PushArrayCall:
+                  case PopArrayCall:
+                  {
+                    AdtParserPtrByStringMultiMapIter CallIter;
+
+                    for (CallIter = CallMap.lower_bound(PushPopCalls[cn].CallName) ; CallIter != CallMap.upper_bound(PushPopCalls[cn].CallName) ; ++CallIter)
+                    {
+                      //push/pop array call translation.
+                      AdtFortranCallStmt*     pCallObj = (AdtFortranCallStmt*)(AdtParser*)(*CallIter).second;
+
+                      translatePushPopArrayCall(pCallObj,
+                                                PushPopCalls[cn],
+                                                pModuleBody,
+                                                nIteration,
+                                                nFnNumber,
+                                                rNewLocalsMap,
+                                                VariableInfo);
+                    }
+                    break;
+                  }
+
+                  default:
+                  {
+                    break;
+                  }
+                }
+              }
+
+              //Translate PUSH/POP stack calls to equivalent arrays to allow for
+              //further differentiation
+              CallList.clear();
+              CallMap.clear();
+
+              pObjCopy->findObjects(CallList, "AdtFortranCallStmt");
+              listToMap(CallMap, CallList);
+
+              //Need to translate these calls
+              // PUSHCHARACTERARRAY
+              // POPCHARACTERARRAY
+              // PUSHCHARACTER
+              // LOOKCHARACTER
+              // POPCHARACTER
+              // PUSHBOOLEANARRAY
+              // POPBOOLEANARRAY
+              // PUSHBOOLEAN
+              // LOOKBOOLEAN
+              // POPBOOLEAN
+              // PUSHINTEGER4ARRAY
+              // POPINTEGER4ARRAY
+              // PUSHINTEGER4
+              // LOOKINTEGER4
+              // POPINTEGER4
+              // PUSHINTEGER8ARRAY
+              // POPINTEGER8ARRAY
+              // PUSHINTEGER8
+              // LOOKINTEGER8
+              // POPINTEGER8
+              // PUSHREAL4ARRAY
+              // POPREAL4ARRAY
+              // PUSHREAL4
+              // LOOKREAL4
+              // POPREAL4
+              // PUSHREAL8ARRAY
+              // POPREAL8ARRAY
+              // PUSHREAL8
+              // LOOKREAL8
+              // POPREAL8
+              // PUSHREAL16ARRAY
+              // POPREAL16ARRAY
+              // PUSHREAL16
+              // LOOKREAL16
+              // POPREAL16
+
+              //Do push/pop/look call elimination
+              for (cn = 0 ; cn < sizeof(PushPopCalls) / sizeof(PushPopCalls[0]) ; cn++)
+              {
+                AdtParserPtrByStringMultiMapIter CallIter;
+
+                for (CallIter = CallMap.lower_bound(PushPopCalls[cn].CallName) ; CallIter != CallMap.upper_bound(PushPopCalls[cn].CallName) ; ++CallIter)
+                {
+                  //push/pop/look call match found. Carry out call elimination.
+                  AdtFortranCallStmt*     pCallObj = (AdtFortranCallStmt*)(AdtParser*)(*CallIter).second;
+
+                  removePushPopCall(pCallObj,
+                                    PushPopCalls[cn],
+                                    pModuleBody,
+                                    nIteration,
+                                    nFnNumber,
+                                    rNewAttributeList,
+                                    rNewAttributeMap,
+                                    rNewLocalsMap,
+                                    VariableInfo);
+                }
+
+                //Remove the calls from the map as they have been translated and we
+                //don't want them being processed by call expansions
+                CallMap.erase(PushPopCalls[cn].CallName);
+              }
+            }
 
             // Carry out all call expansions
             for (CallExpandIter = CallExpandList.begin() ; CallExpandIter != CallExpandList.end() ; ++CallExpandIter)

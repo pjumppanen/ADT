@@ -42,6 +42,12 @@
 
 
 //  ----------------------------------------------------------------------------
+//  Kludge to work around unsigned/unsigned mismatch warnings in AD code
+//  ----------------------------------------------------------------------------
+#define stackSizeInt  (int)stackSize
+
+
+//  ----------------------------------------------------------------------------
 //  Forward declarations
 //  ----------------------------------------------------------------------------
 class AdtADStack;
@@ -663,6 +669,7 @@ typedef void (*AdtUserDestroyCallback)(char* pData);
 enum AdtAllocType
 {
   AdtAllocType_ARRAY,
+  AdtAllocType_STACK,
   AdtAllocType_UNSPECIFIED
 };
 
@@ -1413,6 +1420,17 @@ public:
 
 
 //  ----------------------------------------------------------------------------
+//  struct AdtStackInfo
+//  ----------------------------------------------------------------------------
+struct AdtStackInfo
+{
+  size_t        StackSize;
+  size_t        SizeOf;
+  AdtVarType    VarType;
+};
+
+
+//  ----------------------------------------------------------------------------
 //  class AdtArrays
 //  ----------------------------------------------------------------------------
 //  This class is a base class for auto-differentiation classes. It has an
@@ -1428,13 +1446,26 @@ protected:
   AdtMemAllocator&        MemAllocator;
   AdtADStack&             Stack;
 
+protected:
+  bool                    createStack(char** ppArray,
+                                      size_t nInitialSize,
+                                      AdtVarType nVarType) const;
+
+  void                    copyAndGrowStack(char** ppArray,
+                                           AdtStackInfo* pCurrentStackInfo,
+                                           size_t nMinSizeNeeded) const;
+
+  void                    growStack(char** ppArray, size_t nIndexNeeded) const;
+
 public:
   static const size_t     DefaultStackSize;
+  static const size_t     DefaultADStackSize;
 
   AdtArrays();
   AdtArrays(const AdtArrays& rCopy, bool bShallow = true);
   virtual ~AdtArrays();
 
+  AdtStackInfo*           stackInfo(char* pStack) const;
   const AdtMemAllocator&  memAllocator() const;
   AdtADStack&             stack() const;
 
@@ -3129,6 +3160,29 @@ public:
     return (pSliceArray);
   };
 
+  // Stack size method
+  template<class T>
+  size_t                  stackSize(T pArray) const
+  {
+    AdtStackInfo* pStackInfo = stackInfo((char*)pArray);
+
+    return (pStackInfo->StackSize);
+  }
+
+  // Stack creation method
+  template<class T>
+  bool                    createStack(T& pArray, size_t nInitialSize = AdtArrays::DefaultStackSize) const
+  {
+    return (createStack((char**)&pArray, nInitialSize, varType(pArray)));
+  }
+
+  // Stack growing method
+  template<class T>
+  void                    growStack(T& pArray, size_t nIndexNeeded) const
+  {
+    growStack((char**)&pArray, nIndexNeeded);
+  }
+
   // Simplified array creation methods
   // 1D
   template<class T>
@@ -3347,6 +3401,18 @@ public:
 
 //  ----------------------------------------------------------------------------
 
+inline void AdtArrays::growStack(char** ppArray, size_t nIndexNeeded) const
+{
+  AdtStackInfo* pStackInfo = stackInfo(*ppArray);
+
+  if (pStackInfo->StackSize <= nIndexNeeded)
+  {
+    copyAndGrowStack(ppArray, pStackInfo, nIndexNeeded);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 inline const AdtMemAllocator& AdtArrays::memAllocator() const
 {
   return (MemAllocator);
@@ -3357,6 +3423,15 @@ inline const AdtMemAllocator& AdtArrays::memAllocator() const
 inline AdtADStack& AdtArrays::stack() const
 {
   return (Stack);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline AdtStackInfo* AdtArrays::stackInfo(char* pStack) const
+{
+  AdtStackInfo* pStackInfo = (AdtStackInfo*)(pStack - sizeof(AdtStackInfo));
+
+  return (pStackInfo);
 }
 
 
