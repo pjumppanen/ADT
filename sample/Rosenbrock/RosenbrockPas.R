@@ -9,7 +9,7 @@
 # to initialise X, Grad and Hessian to the correct size / shape as required
 # by the problem. This initialisation needs to be done in the same scope as
 # the call to nlminb().
-RRb.N <- as.integer(150)
+RRb.N <- as.integer(500)
 StartX <- rep(0,RRb.N)
 Grad <- rep(0,RRb.N)
 Hessian <- array(0,dim=c(RRb.N,RRb.N))
@@ -145,7 +145,7 @@ for (cn in 1:7)
                                                             gradient = gradientFns[[cn]],
                                                             hessian = hessianFns[[cn]],
                                                             scale=1,
-                                                            control=list(eval.max=100000,iter.max=10000)))[3])
+                                                            control=list(eval.max=100000,iter.max=10000,abs.tol=1e-18)))[3])
 
   Results$RMS.error[cn]<-(sum((Correct - res$par)^2))^0.5
   Results$convergence[cn]<-res$convergence
