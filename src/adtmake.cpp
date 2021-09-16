@@ -2543,6 +2543,14 @@ void AdtMakeClass::newMakeClass(const AdtMakeCommand& rMakeCommand,
     // to the output file.
     AdtBlackBoxCompiler::makeBlackBoxFile(rFileAndPath, BlackBoxFile, IsBlackBoxMap, true, TapenadeVersion);
   }
+
+  string sExtFileAndPath;
+
+  // Append black box include file
+  if (rMakeCommand.findFile("my_extlib.txt", sExtFileAndPath))
+  {
+    AdtFileCopy Append(sExtFileAndPath, BlackBoxFile, true);
+  }
 }
 
 //  ----------------------------------------------------------------------------
