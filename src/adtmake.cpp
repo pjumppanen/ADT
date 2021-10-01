@@ -866,6 +866,7 @@ bool AdtMakeCommandOperation::shouldBuild(AdtMakeIncremental& rBuildCheck) const
 bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
                                       AdtFortranExecutableProgram* pWorkingRoot,
                                       AdtStringList& rNewFunctionsList,
+                                      AdtStringByStringMap& rPublicMethodsMap,
                                       AdtStringList& rTranslateFunctionsFromList,
                                       AdtStringList& rTranslateFunctionsToList,
                                       string& rOutputFileName,
@@ -1134,6 +1135,12 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
     sOutputFileName   += SubSuffix;
 
     rNewFunctionsList.push_back(sNewFunctionName);
+
+    // Should only add to rPublicMethodsMap if parent is public.
+    if (rPublicMethodsMap.find(sFunctionName) != rPublicMethodsMap.end())
+    {
+      rPublicMethodsMap[sNewFunctionName] = sNewFunctionName;
+    }
 
     string  sMessageFile(sOutputFileName);
     bool    bWriteMessageFile = true;
@@ -1764,7 +1771,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
               AdtExit(-1);
             }
 
-            pGoal->flattenClass(ParentClassName, rEmptyCodeList, UsesList);
+            pGoal->flattenClass(ParentClassName, rEmptyCodeList, UsesList, rPublicMethodsMap);
 
             // Must do this after flatten class as the above imports code from
             // rCodeList which may contain black box definitions
@@ -1780,7 +1787,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
           }
           else
           {
-            pGoal->flattenClass(ParentClassName, rCodeList, UsesList);
+            pGoal->flattenClass(ParentClassName, rCodeList, UsesList, rPublicMethodsMap);
 
             // Must do this after flatten class as the above imports code from
             // rCodeList which may contain black box definitions
@@ -2052,6 +2059,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                     if (rOperation.execute(rParent,
                                            pWorkingRoot,
                                            rNewFunctionsList,
+                                           rPublicMethodsMap,
                                            rTranslateFunctionsFromList,
                                            rTranslateFunctionsToList,
                                            sOutputFile,
@@ -2142,7 +2150,6 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
 
                     sClassPrefix += "__";
 
-                    AdtParser::nameListToNameMap(rPublicMethodsMap, rNewFunctionsList);
                     AdtParser::nameListToNameMap(rPublicMethodsMap, BoundsCheckList, sClassPrefix);
                   }
                   else

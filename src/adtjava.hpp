@@ -416,7 +416,8 @@ public:
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rRootList,
-                                             string& rUsesList);
+                                             string& rUsesList,
+                                             AdtStringByStringMap& rPublicMethodsMap);
 
   virtual bool                  optimise(const AdtStringList& rNewMethodList,
                                          const AdtStringByStringMap& rNewMethodMap);

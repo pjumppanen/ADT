@@ -567,7 +567,8 @@ public:
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rGoalList,
-                                             string& rUsesList);
+                                             string& rUsesList,
+                                             AdtStringByStringMap& rPublicMethodsMap);
 
   virtual bool                  optimise(const AdtStringList& rNewMethodList,
                                          const AdtStringByStringMap& rNewMethodMap);
@@ -3841,12 +3842,14 @@ protected:
   bool                            importClass(const string& rDestClassName,
                                               const string& rSrcClassName,
                                               AdtDelphiGoal* pGoal,
-                                              const AdtParserPtrList& rGoalList);
+                                              const AdtParserPtrList& rGoalList,
+                                              AdtStringByStringMap& rPublicMethodsMap);
 
   bool                            flattenClass(const string& rClassName,
                                                const AdtParserPtrList& rParentList,
                                                AdtDelphiGoal* pGoal,
-                                               const AdtParserPtrList& rGoalList);
+                                               const AdtParserPtrList& rGoalList,
+                                               AdtStringByStringMap& rPublicMethodsMap);
 
 public:
   AdtDelphiClassType(AdtParser* pIdentListObj,
@@ -3857,7 +3860,10 @@ public:
   AdtDelphiClassType(const AdtDelphiClassType& rCopy);
   virtual ~AdtDelphiClassType();
 
-  bool                            flattenClass(AdtDelphiGoal* pGoal, const AdtParserPtrList& rGoalList);
+  bool                            flattenClass(AdtDelphiGoal* pGoal, 
+                                               const AdtParserPtrList& rGoalList,
+                                               AdtStringByStringMap& rPublicMethodsMap);
+                                               
   const char*                     parentClassName() const;
 
   AdtDelphiClassType::SymbolType  defined(const char* pName) const;
@@ -3915,6 +3921,7 @@ class AdtDelphiClassField : public AdtDelphiBase
 {
 protected:
   AdtVisibility       Visibility;
+  AdtVisibility       ContextualVisibility;
   AdtDelphiObjField*  ObjField;
 
 public:
@@ -3976,6 +3983,7 @@ class AdtDelphiClassMethod : public AdtDelphiBase
 public:
 protected:
   AdtVisibility     Visibility;
+  AdtVisibility     ContextualVisibility;
   AdtDelphiMethod*  Method;
 
 public:
@@ -3992,9 +4000,17 @@ public:
   virtual AdtFile&  writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
 
   bool              isVirtual() const;
+  AdtVisibility     visibility() const;
 
   declType;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline AdtVisibility AdtDelphiClassMethod::visibility() const
+{
+  return (ContextualVisibility);
+}
 
 
 //  ----------------------------------------------------------------------------
@@ -4036,6 +4052,7 @@ class AdtDelphiClassProperty : public AdtDelphiBase
 {
 protected:
   AdtVisibility       Visibility;
+  AdtVisibility       ContextualVisibility;
   AdtDelphiProperty*  Property;
 
 public:

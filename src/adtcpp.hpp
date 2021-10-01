@@ -555,7 +555,8 @@ public:
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rRootList,
-                                             string& rUsesList);
+                                             string& rUsesList,
+                                             AdtStringByStringMap& rPublicMethodsMap);
 
   virtual bool                  optimise(const AdtStringList& rNewMethodList,
                                          const AdtStringByStringMap& rNewMethodMap);
@@ -2065,7 +2066,8 @@ protected:
                                                     const AdtParserPtrList& rRootList,
                                                     string& rUsesList);
 
-  void                          expandOutInlineImplementations(AdtCppTranslationUnit* pRoot);
+  void                          expandOutInlineImplementations(AdtCppTranslationUnit* pRoot,
+                                                               AdtStringByStringMap& rPublicMethodsMap);
 
 public:
   AdtCppClassSpecifier(AdtParser* pClassKeyObj,
@@ -2081,7 +2083,8 @@ public:
 
   bool                          flattenClass(AdtCppTranslationUnit* pRoot,
                                              const AdtParserPtrList& rRootList,
-                                             string& rUsesList);
+                                             string& rUsesList,
+                                             AdtStringByStringMap& rPublicMethodsMap);
 
   void                          findDimensionVars(const AdtCppTranslationUnit* pRoot,
                                                   const AdtParserPtrByStringMap& rVarsMap,
@@ -2929,7 +2932,11 @@ public:
   bool                          isCtor() const;
   bool                          isInlineFunction() const;
   bool                          isVirtual() const;
+  AdtCppMemberScopeType         scopeType() const;
   void                          checkLookForDefinition(AdtStringList& rImportDefinitionList) const;
+  void                          addPublicMethods(AdtStringByStringMap& rPublicMethodsMap, 
+                                                 const string& rClassName, 
+                                                 AdtCppMemberScopeType& nType) const;
 
   void                          exportFunctionImplementation(AdtCppTranslationUnit* pTarget);
   void                          updateScope(const AdtCppBaseSpecifier* pBaseSpecifier);
@@ -2949,6 +2956,13 @@ inline bool AdtCppMemberDeclaration::isVirtual() const
   bool bIsVirtual = (DeclModifierList != 0) ? DeclModifierList->hasModifier(AdtCppDeclModifierType_VIRTUAL) : false;
 
   return (bIsVirtual);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline AdtCppMemberScopeType AdtCppMemberDeclaration::scopeType() const
+{
+  return (Type);
 }
 
 

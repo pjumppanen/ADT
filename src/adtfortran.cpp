@@ -7051,7 +7051,8 @@ bool AdtFortranExecutableProgram::buildBlackBoxFile(const char* pBlackBoxFileNam
 
 bool AdtFortranExecutableProgram::flattenClass(const char* pClassName,
                                                const AdtParserPtrList& rRootList,
-                                               string& rUsesList)
+                                               string& rUsesList,
+                                               AdtStringByStringMap& rPublicMethodsMap)
 {
   return (false);
 }

@@ -2135,7 +2135,8 @@ bool AdtDelphiGoal::buildBlackBoxFile(const char* pBlackBoxFileName,
 
 bool AdtDelphiGoal::flattenClass(const char* pClassName,
                                  const AdtParserPtrList& rGoalList,
-                                 string& rUsesList)
+                                 string& rUsesList,
+                                 AdtStringByStringMap& rPublicMethodsMap)
 {
   bool bFlattened = false;
 
@@ -2236,7 +2237,7 @@ bool AdtDelphiGoal::flattenClass(const char* pClassName,
     if (isClassType(ExportedTypeMap, pClassName, &pClassObject) |
         isClassType(LocalTypeMap, pClassName, &pClassObject))
     {
-      bFlattened = pClassObject->flattenClass(this, rGoalList);
+      bFlattened = pClassObject->flattenClass(this, rGoalList, rPublicMethodsMap);
 
       LocalVariableMap.clear();
       LocalTypeMap.clear();
@@ -14486,7 +14487,8 @@ void AdtDelphiClassType::addProperties(AdtDelphiGoal* pGoal,
 bool AdtDelphiClassType::importClass(const string& rDestClassName,
                                      const string& rSrcClassName,
                                      AdtDelphiGoal* pGoal,
-                                     const AdtParserPtrList& rGoalList)
+                                     const AdtParserPtrList& rGoalList,
+                                     AdtStringByStringMap& rPublicMethodsMap)
 {
   bool bImported = false;
 
@@ -14525,7 +14527,7 @@ bool AdtDelphiClassType::importClass(const string& rDestClassName,
         if (pClass->IdentList != 0)
         {
           //import parent class of import class
-          flattenClass(rDestClassName, pClass->IdentList->objList(), pGoal, rGoalList);
+          flattenClass(rDestClassName, pClass->IdentList->objList(), pGoal, rGoalList, rPublicMethodsMap);
         }
 
         bImported = true;
@@ -14557,7 +14559,8 @@ bool AdtDelphiClassType::importClass(const string& rDestClassName,
 bool AdtDelphiClassType::flattenClass(const string& rClassName,
                                       const AdtParserPtrList& rParentList,
                                       AdtDelphiGoal* pGoal,
-                                      const AdtParserPtrList& rGoalList)
+                                      const AdtParserPtrList& rGoalList,
+                                      AdtStringByStringMap& rPublicMethodsMap)
 {
   bool bFlattened = false;
 
@@ -14573,7 +14576,31 @@ bool AdtDelphiClassType::flattenClass(const string& rClassName,
       {
         const string& rParentClassName = pIdent->name();
 
-        importClass(rClassName, rParentClassName, pGoal, rGoalList);
+        importClass(rClassName, rParentClassName, pGoal, rGoalList, rPublicMethodsMap);
+      }
+    }
+
+    //Enumerate scope of methods
+    if (ClassMethodList != 0)
+    {
+      const AdtParserPtrList&   MethodList  = ClassMethodList->objList();
+      AdtParserPtrListConstIter MethodIter;
+     
+      for (MethodIter = MethodList.begin() ; MethodIter != MethodList.end() ; ++MethodIter)
+      {
+        const AdtDelphiClassMethod*  pClassMethodObj = (const AdtDelphiClassMethod*)(const AdtParser*)*MethodIter;
+
+        if ((pClassMethodObj != 0) && (pClassMethodObj->visibility() == AdtVisibility_PUBLIC))
+        {
+          AdtDelphiMethod*  pMethodObj = (AdtDelphiMethod*)pClassMethodObj->findDescendant("Method");
+
+          if (pMethodObj != 0)
+          {
+            string sFortranQualifiedName = rClassName + "__" + pMethodObj->name();
+
+            rPublicMethodsMap[sFortranQualifiedName] = sFortranQualifiedName;
+          }
+        }
       }
     }
   }
@@ -14638,14 +14665,16 @@ AdtDelphiClassType::~AdtDelphiClassType()
 
 //  ----------------------------------------------------------------------------
 
-bool AdtDelphiClassType::flattenClass(AdtDelphiGoal* pGoal, const AdtParserPtrList& rGoalList)
+bool AdtDelphiClassType::flattenClass(AdtDelphiGoal* pGoal, 
+                                      const AdtParserPtrList& rGoalList,
+                                      AdtStringByStringMap& rPublicMethodsMap)
 {
   bool                bFlattened  = false;
   AdtDelphiTypeDecl*  pTypeDecl   = (AdtDelphiTypeDecl*)findAscendantWithClassLineage("AdtDelphiRestrictedType,AdtDelphiTypeDecl");
 
   if (pTypeDecl != 0)
   {
-    bFlattened  = flattenClass(pTypeDecl->name(), IdentList->objList(), pGoal, rGoalList);
+    bFlattened  = flattenClass(pTypeDecl->name(), IdentList->objList(), pGoal, rGoalList, rPublicMethodsMap);
   }
 
   return (bFlattened);
@@ -14894,6 +14923,8 @@ AdtDelphiClassField::AdtDelphiClassField(AdtVisibility nVisibility,
     AdtDelphiClassType::GlobalVisibility = Visibility;
   }
 
+  ContextualVisibility = AdtDelphiClassType::GlobalVisibility;
+
   initObject(ObjField, pObjFieldObj, AdtDelphiObjField, true);
 }
 
@@ -15059,6 +15090,8 @@ AdtDelphiClassMethod::AdtDelphiClassMethod(AdtVisibility nVisibility,
   {
     AdtDelphiClassType::GlobalVisibility = Visibility;
   }
+
+  ContextualVisibility = AdtDelphiClassType::GlobalVisibility;
 
   if (AdtAutoClass::automationEnabled() &&
       (Method != 0)                     &&
@@ -15357,6 +15390,8 @@ AdtDelphiClassProperty::AdtDelphiClassProperty(AdtVisibility nVisibility,
   {
     AdtDelphiClassType::GlobalVisibility = Visibility;
   }
+
+  ContextualVisibility = AdtDelphiClassType::GlobalVisibility;
 
   initObject(Property, pPropertyObj, AdtDelphiProperty, true);
 }

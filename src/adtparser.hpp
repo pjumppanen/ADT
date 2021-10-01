@@ -936,7 +936,8 @@ public:
 
   virtual bool                  flattenClass(const char* pClassName,
                                              const AdtParserPtrList& rRootList,
-                                             string& rUsesList) = 0;
+                                             string& rUsesList,
+                                             AdtStringByStringMap& rPublicMethodsMap) = 0;
 
   virtual bool                  optimise(const AdtStringList& rNewMethodList,
                                          const AdtStringByStringMap& rNewMethodMap) = 0;

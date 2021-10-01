@@ -2250,7 +2250,8 @@ bool AdtCppTranslationUnit::buildBlackBoxFile(const char* pBlackBoxFileName,
 
 bool AdtCppTranslationUnit::flattenClass(const char* pClassName,
                                          const AdtParserPtrList& rRootList,
-                                         string& rUsesList)
+                                         string& rUsesList,
+                                         AdtStringByStringMap& rPublicMethodsMap)
 {
   string                rParentClassName;
   bool                  bFlattened = false;
@@ -2260,7 +2261,8 @@ bool AdtCppTranslationUnit::flattenClass(const char* pClassName,
   {
     bFlattened = pClass->flattenClass(this,
                                       rRootList,
-                                      rUsesList);
+                                      rUsesList,
+                                      rPublicMethodsMap);
   }
 
   return (bFlattened);
@@ -8148,7 +8150,8 @@ bool AdtCppClassSpecifier::importParentClasses(AdtCppClassSpecifier* pDestClass,
 
 //  ----------------------------------------------------------------------------
 
-void AdtCppClassSpecifier::expandOutInlineImplementations(AdtCppTranslationUnit* pRoot)
+void AdtCppClassSpecifier::expandOutInlineImplementations(AdtCppTranslationUnit* pRoot,
+                                                          AdtStringByStringMap& rPublicMethodsMap)
 {
   if (MemberSpecification != 0)
   {
@@ -8158,6 +8161,7 @@ void AdtCppClassSpecifier::expandOutInlineImplementations(AdtCppTranslationUnit*
     if (pRoot != 0)
     {
       AdtParserPtrListConstIter DeclIter;
+      AdtCppMemberScopeType     nType = AdtCppMemberScopeType_PRIVATE;
 
       // Convert inline function to out of line implementation in pRoot
       for (DeclIter = MemberSpecification->objList().begin() ; DeclIter != MemberSpecification->objList().end() ; ++DeclIter)
@@ -8168,6 +8172,7 @@ void AdtCppClassSpecifier::expandOutInlineImplementations(AdtCppTranslationUnit*
         {
           AdtCppMemberDeclaration*  pMemberDeclaration = (AdtCppMemberDeclaration*)pDeclObj;
 
+          pMemberDeclaration->addPublicMethods(rPublicMethodsMap, name(), nType);
           pMemberDeclaration->exportFunctionImplementation(pRoot);
         }
       }
@@ -8249,7 +8254,8 @@ bool AdtCppClassSpecifier::isEmpty() const
 
 bool AdtCppClassSpecifier::flattenClass(AdtCppTranslationUnit* pRoot,
                                         const AdtParserPtrList& rRootList,
-                                        string& rUsesList)
+                                        string& rUsesList,
+                                        AdtStringByStringMap& rPublicMethodsMap)
 {
   AdtIntByStringMap ImportMap;
 
@@ -8257,7 +8263,7 @@ bool AdtCppClassSpecifier::flattenClass(AdtCppTranslationUnit* pRoot,
   bool bFlattened = importParentClasses(this, pRoot, ImportMap, rRootList, rUsesList);
 
   // Take embedded class method implementations and expand them out of class (get rid of inline implementations).
-  expandOutInlineImplementations(pRoot);
+  expandOutInlineImplementations(pRoot, rPublicMethodsMap);
 
   UtlReleaseReference(BaseSpecifierList);
 
@@ -12042,6 +12048,25 @@ void AdtCppMemberDeclaration::checkLookForDefinition(AdtStringList& rImportDefin
   if ((FunctionDefinition != 0) && !FunctionDefinition->hasBody())
   {
     rImportDefinitionList.push_back(FunctionDefinition->name());
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtCppMemberDeclaration::addPublicMethods(AdtStringByStringMap& rPublicMethodsMap, 
+                                               const string& rClassName, 
+                                               AdtCppMemberScopeType& nType) const
+{
+  if (Type != AdtCppMemberScopeType_NONE)
+  {
+    nType = Type;
+  }
+
+  if ((nType == AdtCppMemberScopeType_PUBLIC) && (FunctionDefinition != 0))
+  {
+    string sFortranQualifiedName = rClassName + "__" + FunctionDefinition->name();
+
+    rPublicMethodsMap[sFortranQualifiedName] = sFortranQualifiedName;
   }
 }
 

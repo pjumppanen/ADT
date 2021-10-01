@@ -255,6 +255,7 @@ public:
   bool            execute(const AdtMakeCommand& rParent,
                           AdtFortranExecutableProgram* pWorkingRoot,
                           AdtStringList& rNewFunctionsList,
+                          AdtStringByStringMap& rPublicMethodsMap,
                           AdtStringList& rTranslateFunctionsFromList,
                           AdtStringList& rTranslateFunctionsToList,
                           string& rOutputFileName,
