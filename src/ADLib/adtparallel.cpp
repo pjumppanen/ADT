@@ -77,6 +77,7 @@ private:
   static int                ActiveThreads;
   static int                NumberOfThreads;
   static AdtThreadPoolInfo  ThreadsInfo[256];
+  static AdtAtomicLock      Lock;
   static AdtMutex*          Mutex;
   static AdtSemaphore*      FreeSemaphore;
   static AdtSemaphore*      CompleteSemaphore;
@@ -90,7 +91,7 @@ private:
 protected:
   static unsigned           threadCallback(void* pInstance, unsigned nThreadId);
   void                      run(AdtThreadPoolInfo* pInfo, unsigned nThreadId);
-  bool                      initialise(int nNumberOfThreads);
+  bool                      createPool(int nNumberOfThreads);
   void                      flushStringList(bool& bHasContent, adtstringList& rStringList, AdtParallelStdOutCallback pCallback);
   void                      flushStdOutAndStdErr();
   static bool               writeToStdString(const char* pString, bool bStdOut);
@@ -99,7 +100,7 @@ public:
   AdtThreadPool();
   virtual ~AdtThreadPool();
 
-  bool                      initialise();
+  bool                      initialise(int nNumberOfThreads = 0);
 
   void                      beginRun(int nCount);
   void                      addRun(void* pContext,
@@ -128,6 +129,7 @@ int                               AdtThreadPool::RunCount           = 0;
 int                               AdtThreadPool::ActiveThreads      = 0;
 int                               AdtThreadPool::NumberOfThreads    = 0;
 AdtThreadPool::AdtThreadPoolInfo  AdtThreadPool::ThreadsInfo[256]   = {0};
+AdtAtomicLock                     AdtThreadPool::Lock;
 AdtMutex*                         AdtThreadPool::Mutex              = 0;
 AdtSemaphore*                     AdtThreadPool::FreeSemaphore      = 0;
 AdtSemaphore*                     AdtThreadPool::CompleteSemaphore  = 0;
@@ -192,11 +194,6 @@ void AdtThreadPool::run(AdtThreadPoolInfo* pInfo, unsigned nThreadId)
         AdtThreadPool::ActiveThreads--;
         AdtThreadPool::RunCount--;
 
-        if (AdtThreadPool::RunCount == 0)
-        {
-          AdtThreadPool::CompleteSemaphore->signal();
-        }
-
         if (pInfo->StdOutString->length() > 0)
         {
           HasStdOut = true;
@@ -214,6 +211,12 @@ void AdtThreadPool::run(AdtThreadPoolInfo* pInfo, unsigned nThreadId)
         }
 
         AdtThreadPool::FreeSemaphore->signal();
+
+        if (AdtThreadPool::RunCount == 0)
+        {
+          AdtThreadPool::CompleteSemaphore->signal();
+        }
+
       }
     }
   }
@@ -223,9 +226,11 @@ void AdtThreadPool::run(AdtThreadPoolInfo* pInfo, unsigned nThreadId)
 
 //  ----------------------------------------------------------------------------
 
-bool AdtThreadPool::initialise(int nNumberOfThreads)
+bool AdtThreadPool::createPool(int nNumberOfThreads)
 {
   bool bInitialised = false;
+
+  atomicLock(&Lock, true);
 
   if ((NumberOfThreads == 0) && (nNumberOfThreads > 0) && (nNumberOfThreads < 128))
   {
@@ -233,6 +238,7 @@ bool AdtThreadPool::initialise(int nNumberOfThreads)
     Mutex             = new AdtMutex;
     FreeSemaphore     = new AdtSemaphore(0, NumberOfThreads, NumberOfThreads);
     CompleteSemaphore = new AdtSemaphore(0, 0, 1);
+    Close             = false; // Must do this before creating threads or they may exit on creation
 
     AdtWaitOnMutex  Wait(Mutex);
 
@@ -257,6 +263,8 @@ bool AdtThreadPool::initialise(int nNumberOfThreads)
     bInitialised = true;
     Initialised  = true;
   }
+
+  atomicUnlock(&Lock);
 
   return (bInitialised);
 }
@@ -330,26 +338,26 @@ bool AdtThreadPool::writeToStdString(const char* pString, bool bStdOut)
     }
     else
     {
-      // Technically we should lock this resource before looking through it
-      // but as the info that we are looking for is static over the lifetime
-      // of the threads and the thread pool should never be closed whilst
-      // a thread is running (implied by someone calling this) then we don't
-      // need to lock it.
-      for (int cn = 0 ; cn < NumberOfThreads ; cn++)
-      {
-        if (ThreadsInfo[cn].ThreadId == nId)
-        {
-          if (bStdOut)
-          {
-            ThreadsInfo[cn].StdOutString->append(pString);
-          }
-          else
-          {
-            ThreadsInfo[cn].StdErrString->append(pString);
-          }
+      AdtWaitOnMutex  Wait(Mutex);
 
-          bWritten = true;
-          break;
+      if (Wait)
+      {
+        for (int cn = 0 ; cn < NumberOfThreads ; cn++)
+        {
+          if (ThreadsInfo[cn].ThreadId == nId)
+          {
+            if (bStdOut)
+            {
+              ThreadsInfo[cn].StdOutString->append(pString);
+            }
+            else
+            {
+              ThreadsInfo[cn].StdErrString->append(pString);
+            }
+
+            bWritten = true;
+            break;
+          }
         }
       }
     }
@@ -379,13 +387,20 @@ AdtThreadPool::~AdtThreadPool()
 
 //  ----------------------------------------------------------------------------
 
-bool AdtThreadPool::initialise()
+bool AdtThreadPool::initialise(int nNumberOfThreads)
 {
   bool bDone = false;
 
   if (!Initialised)
   {
-    bDone = initialise(numberOfCores());
+    int nNumberOfCores = numberOfCores();
+    
+    if ((nNumberOfThreads > nNumberOfCores) || (nNumberOfThreads == 0))
+    {
+      nNumberOfThreads = nNumberOfCores;
+    }
+
+    bDone = createPool(nNumberOfThreads);
   }
 
   return (bDone);
@@ -471,17 +486,41 @@ void AdtThreadPool::close()
 
     AdtWaitForThreadClosure();
 
-    for (int cn = 0 ; cn < NumberOfThreads ; cn++)
+    AdtWaitOnMutex  Wait(Mutex);
+
+    if (Wait)
     {
-      delete ThreadsInfo[cn].StdOutString;
+      for (int cn = 0 ; cn < NumberOfThreads ; cn++)
+      {
+        delete ThreadsInfo[cn].StdOutString;
+
+        ThreadsInfo[cn].Parent        = 0;
+        ThreadsInfo[cn].Semaphore     = 0;
+        ThreadsInfo[cn].StdOutString  = 0;
+        ThreadsInfo[cn].StdErrString  = 0;
+        ThreadsInfo[cn].Context       = 0;
+        ThreadsInfo[cn].Callback      = 0;
+        ThreadsInfo[cn].ThreadIdx     = 0;
+        ThreadsInfo[cn].Idx           = 0;
+        ThreadsInfo[cn].Thread        = 0;
+      }
     }
 
-    NumberOfThreads = 0;
+    atomicLock(&Lock, true);
 
     AdtReleaseReference(Mutex);
     AdtReleaseReference(FreeSemaphore);
     AdtReleaseReference(CompleteSemaphore);
+
+    NumberOfThreads   = 0;
+    Mutex             = 0;
+    FreeSemaphore     = 0;
+    CompleteSemaphore = 0;
+
+    atomicUnlock(&Lock);
   }
+
+  Initialised = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -625,7 +664,7 @@ void parallelFor(void* pContext, AdtParallelForCallback pCallback, int nStartIdx
 
     // Create thread pool on first use. This ensures that if we don't use the
     // parallelFor() function when a thread pool isn't created.
-    ThreadPool.initialise();
+    ThreadPool.initialise(nEndIdx - nStartIdx + 1);
     ThreadPool.beginRun(nEndIdx - nStartIdx + 1);
 
     for (int nIdx = nStartIdx ; nIdx <= nEndIdx ; nIdx++)
@@ -726,7 +765,7 @@ void priorityParallelFor(void* pContext, AdtParallelForCallback pCallback, int* 
 
         // Create thread pool on first use. This ensures that if we don't use the
         // parallelFor() function when a thread pool isn't created.
-        ThreadPool.initialise();
+        ThreadPool.initialise(nCount);
         ThreadPool.beginRun(nCount);
 
         for (cn = 0 ; cn < nCount ; cn++)
@@ -780,6 +819,15 @@ AdtParallelStdOutCallback setStdErrCallback(AdtParallelStdOutCallback pCallback)
 AdtParallelStdOutCallback getStdErrCallback()
 {
   return (StdErrCallback);
+}
+
+//  ----------------------------------------------------------------------------
+
+void createThreadPool(int nNumberOfThreads)
+{
+  AdtThreadPool ThreadPool;
+
+  ThreadPool.initialise(nNumberOfThreads);
 }
 
 //  ----------------------------------------------------------------------------

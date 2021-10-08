@@ -28,6 +28,15 @@
 
 
 //  ----------------------------------------------------------------------------
+//  static members
+//
+//  Note that AdtThread::ThreadCount and AdtThread::HandleMap are instantiated 
+//  in adtparallel.cpp for scoping reasons.
+//  ----------------------------------------------------------------------------
+AdtAtomicLock      AdtThread::Lock;
+
+
+//  ----------------------------------------------------------------------------
 //  AdtWaitForThreadClosure function
 //  ----------------------------------------------------------------------------
 //  This function goes into a wait state until all threads have closed. You
@@ -58,6 +67,131 @@ void AdtWaitForThreadClosure()
 
 #ifdef _MSC_VER
 
+
+//  ----------------------------------------------------------------------------
+//  Atomic locking operations without mutexs
+//  ----------------------------------------------------------------------------
+bool atomicLock(AdtAtomicLock* pLockVar, bool bWait)
+{
+  bool bLocked = false;
+
+  while (!bLocked)
+  {
+    long nLockVar = ::InterlockedIncrement(&pLockVar->LockVar);
+
+    if (nLockVar == 1)
+    {
+      // We own the lock but now need to set pid. Need to use a access
+      // lock to both read and modify pid to ensure proper synchronisation.
+      while (true)
+      {
+        long nLockVar_pid = ::InterlockedIncrement(&pLockVar->LockVar_pid);
+
+        if (nLockVar_pid == 1)
+        {
+          pLockVar->pid       = ::GetCurrentThreadId();
+          pLockVar->NestCount = 1;
+          bLocked             = true;
+
+          ::InterlockedDecrement(&pLockVar->LockVar_pid);
+          break;
+        }
+        else
+        {
+          ::InterlockedDecrement(&pLockVar->LockVar_pid);
+        }
+      }
+      break;
+    }
+    else
+    {
+      // We don't own the lock but now need to check pid. Need to use a access
+      // lock to both read and modify pid to ensure proper synchronisation.
+      // If we have the same pid as the lock owner then this is a nested call
+      // and can be ignored and assume as locked.
+      while (true)
+      {
+        long nLockVar_pid = ::InterlockedIncrement(&pLockVar->LockVar_pid);
+
+        if (nLockVar_pid == 1)
+        {
+          if (pLockVar->pid == ::GetCurrentThreadId())
+          {
+            pLockVar->NestCount++;
+            bLocked = true;
+          }
+
+          ::InterlockedDecrement(&pLockVar->LockVar_pid);
+          break;
+        }
+        else
+        {
+          ::InterlockedDecrement(&pLockVar->LockVar_pid);
+        }
+      }
+
+      if (bLocked)
+      {
+        break;
+      }
+
+      // We don't own the lock so decrement the LockVar
+      ::InterlockedDecrement(&pLockVar->LockVar);
+
+      if (!bWait)
+      {
+        break;
+      }
+
+      msSleep(0);
+    }
+  }
+
+  return (bLocked);
+}
+
+//  ----------------------------------------------------------------------------
+
+void atomicUnlock(AdtAtomicLock* pLockVar)
+{
+  DWORD thread_pid = ::GetCurrentThreadId();
+
+  while (true)
+  {
+    long nLockVar_pid = ::InterlockedIncrement(&pLockVar->LockVar_pid);
+
+    if (nLockVar_pid == 1)
+    {
+      // Only the owner thread can unlock it
+      if (thread_pid == pLockVar->pid)
+      {
+        ::InterlockedDecrement(&pLockVar->LockVar);
+
+        pLockVar->NestCount--;
+
+        if (pLockVar->NestCount <= 0)
+        {
+          pLockVar->pid       = 0;
+          pLockVar->NestCount = 0;
+        }
+      }
+
+      ::InterlockedDecrement(&pLockVar->LockVar_pid);
+      break;
+    }
+    else
+    {
+      ::InterlockedDecrement(&pLockVar->LockVar_pid);
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+long atomicAdd(volatile long* pLong, long nAdd)
+{
+  return (InterlockedExchangeAdd(pLong, nAdd) + nAdd);
+}
 
 //  ----------------------------------------------------------------------------
 
@@ -254,7 +388,10 @@ unsigned AdtThread::threadMain(AdtThread* pThis)
   //Register for COM use
   ::CoInitialize(0);
 
+  atomicLock(&Lock, true);
   HandleMap[pThis->HandleThread]  = pThis->HandleThread;
+  atomicUnlock(&Lock);
+
   nExitCode                       = pThis->Callback(pThis->Instance, pThis->Id);
   pThis->ExitCode                 = nExitCode;
 
@@ -267,8 +404,6 @@ unsigned AdtThread::threadMain(AdtThread* pThis)
   ::CoUninitialize();
 
   ::_endthreadex(nExitCode);
-
-  pThis->closeThreadHandle();
 
   return (nExitCode);
 }
@@ -294,11 +429,14 @@ void AdtThread::closeThreadHandle()
   {
     ::CloseHandle(HandleThread);
 
+    atomicLock(&Lock, true);
     HandleMap.erase(HandleThread);
+    atomicUnlock(&Lock);
+    
     HandleThread = 0;
   }
 
-  IsOpen = true;
+  IsOpen = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -321,7 +459,9 @@ AdtThread::AdtThread()
   Id           = 0;
   HandleThread = 0;
 
+  atomicLock(&Lock, true);
   ThreadCount++;
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------
@@ -338,7 +478,9 @@ AdtThread::AdtThread(AdtThreadCallback pCallback, void* pInstance, unsigned nSta
 
   open(pCallback, pInstance, nStackSize);
 
+  atomicLock(&Lock, true);
   ThreadCount++;
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------
@@ -347,7 +489,9 @@ AdtThread::~AdtThread()
 {
   closeThreadHandle();
 
+  atomicLock(&Lock, true);
   ThreadCount--;
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------
@@ -355,6 +499,8 @@ AdtThread::~AdtThread()
 void AdtThread::updateThreadCount()
 {
   HandleByHandleMapIter Iter;
+
+  atomicLock(&Lock, true);
 
   // The purpose of this function is to check for threads closed by the OS
   // which aren't known to be closed by the AdtThread code. This typically
@@ -383,6 +529,8 @@ void AdtThread::updateThreadCount()
       ++Iter;
     }
   }
+
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------
@@ -498,7 +646,272 @@ int clock_gettime(int, struct timespec* tp)
   tp->tv_nsec = tod.tv_usec * 1000;
 }
 
+//  ----------------------------------------------------------------------------
+//  Atomic locking operations without mutexs
+//  ----------------------------------------------------------------------------
+bool atomicLock(AdtAtomicLock* pLockVar, bool bWait)
+{
+  bool bLocked = false;
+
+  while (!bLocked)
+  {
+    long nLockVar = OSAtomicIncrement32Barrier(&pLockVar->LockVar);
+
+    if (nLockVar == 1)
+    {
+      // We own the lock but now need to set pid. Need to use a access
+      // lock to both read and modify pid to ensure proper synchronisation.
+      while (true)
+      {
+        long nLockVar_pid = OSAtomicIncrement32Barrier(&pLockVar->LockVar_pid);
+
+        if (nLockVar_pid == 1)
+        {
+          pLockVar->pid       = ::pthread_self();
+          pLockVar->NestCount = 1;
+          bLocked             = true;
+
+          OSAtomicDecrement32Barrier(&pLockVar->LockVar_pid);
+          break;
+        }
+        else
+        {
+          OSAtomicDecrement32Barrier(&pLockVar->LockVar_pid);
+        }
+      }
+      break;
+    }
+    else
+    {
+      // We don't own the lock but now need to check pid. Need to use a access
+      // lock to both read and modify pid to ensure proper synchronisation.
+      // If we have the same pid as the lock owner then this is a nested call
+      // and can be ignored and assume as locked.
+      while (true)
+      {
+        long nLockVar_pid = OSAtomicIncrement32Barrier(&pLockVar->LockVar_pid);
+
+        if (nLockVar_pid == 1)
+        {
+          if (pLockVar->pid == ::pthread_self())
+          {
+            pLockVar->NestCount++;
+            bLocked = true;
+          }
+
+          OSAtomicDecrement32Barrier(&pLockVar->LockVar_pid);
+          break;
+        }
+        else
+        {
+          OSAtomicDecrement32Barrier(&pLockVar->LockVar_pid);
+        }
+      }
+
+      if (bLocked)
+      {
+        break;
+      }
+
+      // We don't own the lock so decrement the LockVar
+      OSAtomicDecrement32Barrier(&pLockVar->LockVar);
+
+      if (!bWait)
+      {
+        break;
+      }
+
+      msSleep(0);
+    }
+  }
+
+  return (bLocked);
+}
+
+//  ----------------------------------------------------------------------------
+
+void atomicUnlock(AdtAtomicLock* pLockVar)
+{
+  pthread_t thread_pid = ::pthread_self();
+
+  while (true)
+  {
+    long nLockVar_pid = OSAtomicIncrement32Barrier(&pLockVar->LockVar_pid);
+
+    if (nLockVar_pid == 1)
+    {
+      // Only the owner thread can unlock it
+      if (thread_pid == pLockVar->pid)
+      {
+        OSAtomicDecrement32Barrier(&pLockVar->LockVar);
+
+        pLockVar->NestCount--;
+
+        if (pLockVar->NestCount <= 0)
+        {
+          pLockVar->pid       = 0;
+          pLockVar->NestCount = 0;
+        }
+      }
+
+      OSAtomicDecrement32Barrier(&pLockVar->LockVar_pid);
+      break;
+    }
+    else
+    {
+      OSAtomicDecrement32Barrier(&pLockVar->LockVar_pid);
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+long atomicAdd(volatile long* pLong, long nAdd)
+{
+  int32_t nVar;
+  long    nReturn;
+
+  nVar     = (int32_t)pLong[0];
+  nReturn  = (long)OSAtomicAdd32Barrier((int32_t)nAdd, &nVar);
+  pLong[0] = nVar;
+
+  return (nReturn);
+}
+
+#else
+
+//  ----------------------------------------------------------------------------
+//  Atomic locking operations without mutexs
+//  ----------------------------------------------------------------------------
+bool atomicLock(AdtAtomicLock* pLockVar, bool bWait)
+{
+  bool bLocked = false;
+
+  while (!bLocked)
+  {
+    long nLockVar = __atomic_add_fetch(&pLockVar->LockVar, 1, __ATOMIC_SEQ_CST);
+
+    if (nLockVar == 1)
+    {
+      // We own the lock but now need to set pid. Need to use a access
+      // lock to both read and modify pid to ensure proper synchronisation.
+      while (true)
+      {
+        long nLockVar_pid = __atomic_add_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+
+        if (nLockVar_pid == 1)
+        {
+          pLockVar->pid       = ::pthread_self();
+          pLockVar->NestCount = 1;
+          bLocked             = true;
+
+          __atomic_sub_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+          break;
+        }
+        else
+        {
+          __atomic_sub_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+        }
+      }
+      break;
+    }
+    else
+    {
+      // We don't own the lock but now need to check pid. Need to use a access
+      // lock to both read and modify pid to ensure proper synchronisation.
+      // If we have the same pid as the lock owner then this is a nested call
+      // and can be ignored and assume as locked.
+      while (true)
+      {
+        long nLockVar_pid = __atomic_add_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+
+        if (nLockVar_pid == 1)
+        {
+          if (pLockVar->pid == ::pthread_self())
+          {
+            pLockVar->NestCount++;
+            bLocked = true;
+          }
+
+          __atomic_sub_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+          break;
+        }
+        else
+        {
+          __atomic_sub_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+        }
+      }
+
+      if (bLocked)
+      {
+        break;
+      }
+
+      // We don't own the lock so decrement the LockVar
+      __atomic_sub_fetch(&pLockVar->LockVar, 1, __ATOMIC_SEQ_CST);
+
+      if (!bWait)
+      {
+        break;
+      }
+
+      msSleep(0);
+    }
+  }
+
+  return (bLocked);
+}
+
+//  ----------------------------------------------------------------------------
+
+void atomicUnlock(AdtAtomicLock* pLockVar)
+{
+  pthread_t thread_pid = ::pthread_self();
+
+  while (true)
+  {
+    long nLockVar_pid = __atomic_add_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+    
+    if (nLockVar_pid == 1)
+    {
+      // Only the owner thread can unlock it
+      if (thread_pid == pLockVar->pid)
+      {
+        __atomic_sub_fetch(&pLockVar->LockVar, 1, __ATOMIC_SEQ_CST);
+
+        pLockVar->NestCount--;
+
+        if (pLockVar->NestCount <= 0)
+        {
+          pLockVar->pid       = 0;
+          pLockVar->NestCount = 0;
+        }
+      }
+
+      __atomic_sub_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+      break;
+    }
+    else
+    {
+      __atomic_sub_fetch(&pLockVar->LockVar_pid, 1, __ATOMIC_SEQ_CST);
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+long atomicAdd(volatile long* pLong, long nAdd)
+{
+  long    nReturn;
+
+  nVar     = (int32_t)pLong[0];
+  nReturn  = __atomic_add_fetch(pLong, 1, __ATOMIC_SEQ_CST);
+
+  return (nReturn);
+}
+
 #endif //__APPLE__
+
 
 //  ----------------------------------------------------------------------------
 //  AdtSemaphore method implementations
@@ -998,7 +1411,9 @@ AdtThread::AdtThread()
   pthread_attr_init(&Attr);
   pthread_attr_setdetachstate(&Attr, PTHREAD_CREATE_JOINABLE);
 
+  atomicLock(&Lock, true);
   ThreadCount++;
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------
@@ -1018,7 +1433,9 @@ AdtThread::AdtThread(AdtThreadCallback pCallback, void* pInstance, unsigned nSta
 
   open(pCallback, pInstance, nStackSize);
 
+  atomicLock(&Lock, true);
   ThreadCount++;
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------
@@ -1028,7 +1445,9 @@ AdtThread::~AdtThread()
   closeThreadHandle();
   pthread_attr_destroy(&Attr);
 
+  atomicLock(&Lock, true);
   ThreadCount--;
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------
@@ -1036,6 +1455,8 @@ AdtThread::~AdtThread()
 void AdtThread::updateThreadCount()
 {
   PthreadByUnsignedMapIter Iter;
+
+  atomicLock(&Lock, true);
 
   // The purpose of this function is to check for threads closed by the OS
   // which aren't known to be closed by the AdtThread code. This typically
@@ -1065,6 +1486,8 @@ void AdtThread::updateThreadCount()
       ++Iter;
     }
   }
+
+  atomicUnlock(&Lock);
 }
 
 //  ----------------------------------------------------------------------------

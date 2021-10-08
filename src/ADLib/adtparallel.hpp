@@ -63,6 +63,7 @@ AdtParallelStdOutCallback getStdOutCallback();
 AdtParallelStdOutCallback setStdErrCallback(AdtParallelStdOutCallback pCallback);
 AdtParallelStdOutCallback getStdErrCallback();
 
+void                      createThreadPool(int nNumberOfThreads);
 void                      closeThreadPool();
 int                       numberOfThreads();
 bool                      writeToStdOutString(const char* pString);

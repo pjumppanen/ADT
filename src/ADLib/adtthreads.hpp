@@ -149,6 +149,31 @@ typedef unsigned (*AdtThreadCallback)(void* pInstance, unsigned nThreadId);
 #include <objbase.h>
 #include <process.h>
 
+//  ----------------------------------------------------------------------------
+//  Atomic locking operations without mutexs
+//  ----------------------------------------------------------------------------
+struct AdtAtomicLock
+{
+  AdtAtomicLock()
+  {
+    LockVar     = 0;
+    LockVar_pid = 0;
+    NestCount   = 0;
+    pid         = 0;
+  }
+
+  volatile LONG  LockVar;
+  volatile LONG  LockVar_pid;
+  volatile LONG  NestCount;
+  volatile DWORD pid;
+};
+
+//  ----------------------------------------------------------------------------
+
+bool atomicLock(AdtAtomicLock* pLockVar, bool bWait);
+void atomicUnlock(AdtAtomicLock* pLockVar);
+long atomicAdd(volatile long* pLong, long nAdd);
+
 
 //  ----------------------------------------------------------------------------
 //  Enumerated types
@@ -409,6 +434,7 @@ typedef std::map<HANDLE, HANDLE>::const_iterator                 HandleByHandleM
 class AdtThread : public AdtReferenceCount
 {
 protected:
+  static AdtAtomicLock      Lock;
   static long               ThreadCount;
   static HandleByHandleMap  HandleMap;
   HANDLE                    HandleThread;
@@ -495,6 +521,7 @@ inline AdtThreadCallback AdtThread::callback() const
   #include <sys/param.h>
   #include <sys/sysctl.h>
   #include <sys/time.h>
+  #include <libkern/OSAtomic.h>
 
   // We define this shit because Apple doesn't bloody implement it!!! Stupid!!!
   #define CLOCK_REALTIME  0
@@ -506,6 +533,36 @@ inline AdtThreadCallback AdtThread::callback() const
   #include <time.h>
 
 #endif //__APPLE__
+
+
+#include <pthread.h>
+#include <errno.h>
+#include <sys/time.h>
+
+//  ----------------------------------------------------------------------------
+//  Atomic locking operations without mutexs
+//  ----------------------------------------------------------------------------
+struct AdtAtomicLock
+{
+  AdtAtomicLock()
+  {
+    LockVar     = 0;
+    LockVar_pid = 0;
+    NestCount   = 0;
+    pid         = 0;
+  }
+
+  volatile int32_t   LockVar;
+  volatile int32_t   LockVar_pid;
+  volatile int32_t   NestCount;
+  volatile pthread_t pid;
+};
+
+//  ----------------------------------------------------------------------------
+
+bool atomicLock(AdtAtomicLock* pLockVar, bool bWait);
+void atomicUnlock(AdtAtomicLock* pLockVar);
+long atomicAdd(volatile long* pLong, long nAdd);
 
 
 #define INFINITE        0xFFFFFFFF
