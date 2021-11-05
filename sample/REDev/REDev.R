@@ -86,6 +86,8 @@ hessianFn <- function(X)
   return (Hessian)
 }
 
+# Multithreaded hessian calculation
+RRd.beginMultithreadedHessian(RRd.Context)
 
 system.time(res<-nlminb(start = StartX,
                         objective = objFn,
@@ -93,3 +95,5 @@ system.time(res<-nlminb(start = StartX,
                         hessian = hessianFn,
                         scale=1,
                         control=list(eval.max=100000,iter.max=10000,abs.tol=1e-18)))
+
+RRd.endMultithreadedHessian(RRd.Context)

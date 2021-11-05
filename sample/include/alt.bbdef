@@ -1,0 +1,339 @@
+# Black box definition for pow
+function pow(x : real in, y : real in) : real
+begin
+  D/D(.) 1,
+  D/D(x) .* y * pow(x, y - 1),
+  D/D(y) .* log(x) * pow(x, y);
+end
+
+# Black box definition for stack operations
+procedure pushreal4(x : real in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popreal4(x : real out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookreal4(x : real out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushreal4array(x : real in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popreal4array(x : real out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushreal8(x : real in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popreal8(x : real out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookreal8(x : real out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushreal8array(x : real in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popreal8array(x : real out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushreal16(x : real in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popreal16(x : real out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookreal16(x : real out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushreal16array(x : real in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popreal16array(x : real out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushinteger1(x : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popinteger1(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookinteger1(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushinteger1array(x : integer in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popinteger1array(x : integer out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushinteger2(x : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popinteger2(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookinteger2(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushinteger2array(x : integer in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popinteger2array(x : integer out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushinteger4(x : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popinteger4(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookinteger4(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushinteger4array(x : integer in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popinteger4array(x : integer out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushinteger8(x : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popinteger8(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookinteger8(x : integer out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushinteger8array(x : integer in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popinteger8array(x : integer out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushcontrol1b(x : boolean in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popcontrol1b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookcontrol1b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushcontrol1barray(x : boolean in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popcontrol1barray(x : boolean out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushcontrol2b(x : boolean in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popcontrol2b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookcontrol2b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushcontrol2barray(x : boolean in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popcontrol2barray(x : boolean out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushcontrol3b(x : boolean in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popcontrol3b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookcontrol3b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushcontrol3barray(x : boolean in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popcontrol3barray(x : boolean out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
+procedure pushcontrol4b(x : boolean in)
+begin
+  BLACKBOX ReadNotWritten:(1)
+  NotReadThenWritten:(0);
+end
+
+procedure popcontrol4b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure lookcontrol4b(x : boolean out)
+begin
+  BLACKBOX ReadNotWritten:(0)
+  NotReadThenWritten:(1);
+end
+
+procedure pushcontrol4barray(x : boolean in, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(1, 1)
+  NotReadThenWritten:(0, 0);
+end
+
+procedure popcontrol4barray(x : boolean out, size : integer in)
+begin
+  BLACKBOX ReadNotWritten:(0, 1)
+  NotReadThenWritten:(1, 0);
+end
+
