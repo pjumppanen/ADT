@@ -1694,7 +1694,7 @@ void AdtCppTranslationUnit::writeArraySizes(AdtFile& rOutFile,
     }
   }
 
-  rOutFile.write("INTEGER, PARAMETER :: ");
+  rOutFile.write("INTEGER(4), PARAMETER :: ");
 
   //Print out the PARAMETER definitions
   for (StrIter = ArraySizeMap.begin() ; StrIter != ArraySizeMap.end() ; ++StrIter)
@@ -2617,7 +2617,7 @@ AdtFile& AdtCppTranslationUnit::writeFortran(AdtFile& rOutFile,
           {
             const AdtCppEnumSpecifier* pEnumSpecifier = (const AdtCppEnumSpecifier*)pObj;
 
-            rOutFile.write("INTEGER, ");
+            rOutFile.write("INTEGER(4), ");
             pEnumSpecifier->writeFortran(rOutFile, 0);
           }
         }
@@ -9289,7 +9289,7 @@ AdtFile& AdtCppSimpleTypeSpecifier::writeFortran(AdtFile& rOutFile, int nMode) c
     case AdtCppSimpleType_SIGNED:
     case AdtCppSimpleType_SIGNED_INT:
     {
-      pType = "INTEGER";
+      pType = "INTEGER(4)";
       break;
     }
 

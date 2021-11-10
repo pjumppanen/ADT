@@ -3782,17 +3782,17 @@ const AdtFortranExecutableProgram::PushPopCall  AdtFortranExecutableProgram::Pus
                                                                                                {"POPINTEGER2ARRAY",   PopArrayCall , Integer4VarType , 2, "i2stack",  "INTEGER(2)"},
                                                                                                {"PUSHINTEGER2",       PushCall     , Integer4VarType , 1, "i2stack",  "INTEGER(2)"},
                                                                                                {"LOOKINTEGER2",       LookCall     , Integer4VarType , 1, "i2stack",  "INTEGER(2)"},
-                                                                                               {"POPINTEGER4",        PopCall      , Integer4VarType , 1, "i4stack",  "INTEGER"},
-                                                                                               {"PUSHINTEGER4ARRAY",  PushArrayCall, Integer4VarType , 2, "i4stack",  "INTEGER"},
-                                                                                               {"POPINTEGER4ARRAY",   PopArrayCall , Integer4VarType , 2, "i4stack",  "INTEGER"},
-                                                                                               {"PUSHINTEGER4",       PushCall     , Integer4VarType , 1, "i4stack",  "INTEGER"},
-                                                                                               {"LOOKINTEGER4",       LookCall     , Integer4VarType , 1, "i4stack",  "INTEGER"},
-                                                                                               {"POPINTEGER4",        PopCall      , Integer4VarType , 1, "i4stack",  "INTEGER"},
-                                                                                               {"PUSHINTEGER8ARRAY",  PushArrayCall, Integer8VarType , 2, "i8stack",  "INTEGER"},
-                                                                                               {"POPINTEGER8ARRAY",   PopArrayCall , Integer8VarType , 2, "i8stack",  "INTEGER"},
-                                                                                               {"PUSHINTEGER8",       PushCall     , Integer8VarType , 1, "i8stack",  "INTEGER"},
-                                                                                               {"LOOKINTEGER8",       LookCall     , Integer8VarType , 1, "i8stack",  "INTEGER"},
-                                                                                               {"POPINTEGER8",        PopCall      , Integer8VarType , 1, "i8stack",  "INTEGER"},
+                                                                                               {"POPINTEGER4",        PopCall      , Integer4VarType , 1, "i4stack",  "INTEGER(4)"},
+                                                                                               {"PUSHINTEGER4ARRAY",  PushArrayCall, Integer4VarType , 2, "i4stack",  "INTEGER(4)"},
+                                                                                               {"POPINTEGER4ARRAY",   PopArrayCall , Integer4VarType , 2, "i4stack",  "INTEGER(4)"},
+                                                                                               {"PUSHINTEGER4",       PushCall     , Integer4VarType , 1, "i4stack",  "INTEGER(4)"},
+                                                                                               {"LOOKINTEGER4",       LookCall     , Integer4VarType , 1, "i4stack",  "INTEGER(4)"},
+                                                                                               {"POPINTEGER4",        PopCall      , Integer4VarType , 1, "i4stack",  "INTEGER(4)"},
+                                                                                               {"PUSHINTEGER8ARRAY",  PushArrayCall, Integer8VarType , 2, "i8stack",  "INTEGER(8)"},
+                                                                                               {"POPINTEGER8ARRAY",   PopArrayCall , Integer8VarType , 2, "i8stack",  "INTEGER(8)"},
+                                                                                               {"PUSHINTEGER8",       PushCall     , Integer8VarType , 1, "i8stack",  "INTEGER(8)"},
+                                                                                               {"LOOKINTEGER8",       LookCall     , Integer8VarType , 1, "i8stack",  "INTEGER(8)"},
+                                                                                               {"POPINTEGER8",        PopCall      , Integer8VarType , 1, "i8stack",  "INTEGER(8)"},
                                                                                                {"PUSHREAL4ARRAY",     PushArrayCall, Real4VarType    , 2, "r4stack",  "REAL(4)"},
                                                                                                {"POPREAL4ARRAY",      PopArrayCall , Real4VarType    , 2, "r4stack",  "REAL(4)"},
                                                                                                {"PUSHREAL4",          PushCall     , Real4VarType    , 1, "r4stack",  "REAL(4)"},
@@ -10244,13 +10244,13 @@ void AdtFortranTypeSpec::initialise()
   {
     case ForType_INTEGER:
     {
-      pTypeName = "INTEGER";
+      pTypeName = "INTEGER(4)";
       break;
     }
 
     case ForType_REAL:
     {
-      pTypeName = "REAL";
+      pTypeName = "REAL(8)";
       break;
     }
 
@@ -10659,7 +10659,7 @@ AdtFile& AdtFortranTypeSpec::writeFortran(AdtFile& pOutFile, int nMode) const
         case 0:
         default:
         {
-          pTypeName = "INTEGER ";
+          pTypeName = "INTEGER(4) ";
           break;
         }
 
@@ -10694,7 +10694,7 @@ AdtFile& AdtFortranTypeSpec::writeFortran(AdtFile& pOutFile, int nMode) const
 
     case ForType_REAL:
     {
-      write(pOutFile, "REAL ");
+      write(pOutFile, "REAL(8) ");
       break;
     }
 
@@ -10755,7 +10755,7 @@ AdtFile& AdtFortranTypeSpec::writeFortran(AdtFile& pOutFile, int nMode) const
         case 0:
         default:
         {
-          pTypeName = "UNSIGNED ";
+          pTypeName = "UNSIGNED(4) ";
           break;
         }
 

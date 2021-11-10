@@ -5,16 +5,6 @@
 #def_type SEXP
 #def_type AdtArrays
 #def_type AdtArrayPlan
-#type_map   ARRAY_1D   : REAL, 1
-#type_map   ARRAY_2D   : REAL, 2
-#type_map   ARRAY_3D   : REAL, 3
-#type_map   ARRAY_4D   : REAL, 4
-#type_map   ARRAY_5D   : REAL, 5
-#type_map   ARRAY_6D   : REAL, 6
-#type_map   ARRAY_7D   : REAL, 7
-#type_map   ARRAY_8D   : REAL, 8
-#type_map   ARRAY_9D   : REAL, 9
-#type_map   ARRAY_10D  : REAL, 10
 #type_map   ARRAY_1D   : REAL(8), 1
 #type_map   ARRAY_2D   : REAL(8), 2
 #type_map   ARRAY_3D   : REAL(8), 3
@@ -35,16 +25,16 @@
 #type_map   ARRAY_8F   : REAL(4), 8
 #type_map   ARRAY_9F   : REAL(4), 9
 #type_map   ARRAY_10F  : REAL(4), 10
-#type_map   ARRAY_1I   : INTEGER, 1
-#type_map   ARRAY_2I   : INTEGER, 2
-#type_map   ARRAY_3I   : INTEGER, 3
-#type_map   ARRAY_4I   : INTEGER, 4
-#type_map   ARRAY_5I   : INTEGER, 5
-#type_map   ARRAY_6I   : INTEGER, 6
-#type_map   ARRAY_7I   : INTEGER, 7
-#type_map   ARRAY_8I   : INTEGER, 8
-#type_map   ARRAY_9I   : INTEGER, 9
-#type_map   ARRAY_10I  : INTEGER, 10
+#type_map   ARRAY_1I   : INTEGER(4), 1
+#type_map   ARRAY_2I   : INTEGER(4), 2
+#type_map   ARRAY_3I   : INTEGER(4), 3
+#type_map   ARRAY_4I   : INTEGER(4), 4
+#type_map   ARRAY_5I   : INTEGER(4), 5
+#type_map   ARRAY_6I   : INTEGER(4), 6
+#type_map   ARRAY_7I   : INTEGER(4), 7
+#type_map   ARRAY_8I   : INTEGER(4), 8
+#type_map   ARRAY_9I   : INTEGER(4), 9
+#type_map   ARRAY_10I  : INTEGER(4), 10
 #type_map   ARRAY_1S   : INTEGER(2), 1
 #type_map   ARRAY_2S   : INTEGER(2), 2
 #type_map   ARRAY_3S   : INTEGER(2), 3

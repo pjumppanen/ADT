@@ -3246,7 +3246,7 @@ int AdtMakeCommand::make(AdtMakeIncremental& rBuildCheck)
               FortranOut.write("MODULE DIFFSIZES");
               FortranOut.incrementIndent();
               FortranOut.newline();
-              FortranOut.write("INTEGER , parameter :: nbdirsmax = 25");
+              FortranOut.write("INTEGER(4) , parameter :: nbdirsmax = 25");
               FortranOut.decrementIndent();
               FortranOut.newline();
               FortranOut.write("ENDMODULE");

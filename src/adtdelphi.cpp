@@ -1979,7 +1979,7 @@ void AdtDelphiGoal::writeArraySizes(AdtFile& pOutFile,
     }
   }
 
-  pOutFile.write("INTEGER, PARAMETER :: ");
+  pOutFile.write("INTEGER(4), PARAMETER :: ");
 
   //Print out the PARAMETER definitions
   for (StrIter = ArraySizeMap.begin() ; StrIter != ArraySizeMap.end() ; ++StrIter)
@@ -6208,7 +6208,7 @@ AdtFile& AdtDelphiOrdIdent::writeFortran(AdtFile& pOutFile, int nMode) const
 
     case AdtType_INTEGER:
     {
-      pType = "INTEGER";
+      pType = "INTEGER(4)";
       break;
     }
 
