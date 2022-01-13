@@ -1,20 +1,6 @@
 ###############################################################################
 # Test minimisation code for ADT. 
 ###############################################################################
-# Parameter declarations. Note that we need to explicitely make N integer
-# because the C++ code takes an integer parameter, not a double. We also need
-# to initialise X, Grad and Hessian to the correct size / shape as required
-# by the problem. This initialisation needs to be done in the same scope as
-# the call to nlminb().
-N       <- as.integer(500)
-StartX  <- rep(0,N)
-Grad    <- rep(0,N)
-Hessian <- array(0,dim=c(N,N))
-
-
-# The true minimum
-Correct <- rep(1,N)
-
 
 # Load the library
 if (version$os == "mingw32")
@@ -56,8 +42,51 @@ source('Rd_R_interface.r', print.eval=TRUE)
 source('RRd_R_interface.r', print.eval=TRUE)
 
 
+Y <- scan("TMBex/thetalog/thetalog.dat", skip=3, quiet=TRUE)
+X <- Y * 0
+N <- length(Y)
+NR <- N
+NP <- 5
+
+# Parameter initial guess
+logr0     <- 0
+logtheta  <- 0
+logK      <- 6
+logQ      <- 0
+logR      <- 0
+
+parameters <- list(logr0, logtheta, logK, logQ, logR)
+
 # create the object instance
-RRd.Context <- RRd.create(N)
+RRd.Context <- RRd.create(Y, N, NR, NP)
+
+# determinant check
+A <- matrix(c(4, 2, 2,
+              2, 3, 1,
+              2, 1, 3), nrow=3, byrow=TRUE)
+
+det(A)
+
+L <- A * 0
+
+Rd.choleskyDecomposition(RRd.Context, A, L, as.integer(3))
+
+# should be null matrix
+t(L) - chol(A)
+
+# should be null
+det(A) - exp(Rd.logDeterminantFromChol(RRd.Context, L, as.integer(3)))
+
+# Inverse check
+RInv <- solve(A)
+RInv[upper.tri(RInv)] <- 0.0
+
+Inv <- A * 0
+
+Rd.matrixInverseFromChol(RRd.Context, L, Inv, as.integer(3))
+
+# should be null
+RInv - Inv
 
 
 # Objective function.

@@ -9,9 +9,9 @@ AD BEGIN
 
   CLASS D_REDev(REDev) SOURCE FILE: REDev.cpp OUTPUT FILES: d_REDev.cpp d_REDev.hpp
   BEGIN
-    FUNCTION=logLikelihood OUTVAR=logLikelihood VAR=re MODE=r;
-    FUNCTION=LOGLIKELIHOOD_BRE OUTVAR=reb1_re VAR=re MODE=f;
-    FUNCTION=logLikelihood OUTVAR=logLikelihood VAR=par MODE=r;
+    FUNCTION=logLikelihood OUTVAR=logLikelihood VAR=re MODE=r; // f'u(u,theta)
+    FUNCTION=LOGLIKELIHOOD_BRE OUTVAR=reb1_re VAR=re MODE=f;   // f''uu(u,theta)
+    FUNCTION=LOGLIKELIHOOD_BRE OUTVAR=reb1_re VAR=par MODE=f;  // f''utheta(u,theta)
   END
 
   CLASS DR_REDev(R_REDev) SOURCE FILE: R_REDev.cpp OUTPUT FILES: dR_REDev.cpp dR_REDev.hpp

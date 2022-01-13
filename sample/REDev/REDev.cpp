@@ -33,50 +33,7 @@ double REDev::dlognorm(const double x,
 
 // ----------------------------------------------------------------------------
 
-double REDev::simpleLogLikelihood(const ARRAY_1D x/*N1*/, 
-                                  const ARRAY_1D u/*N3*/,
-                                  const ARRAY_1D beta/*N2*/,
-                                  const double logsdu,
-                                  const double logsd0)
-{
-  int    cn;
-  int    cr;
-  int    cc;
-  double likelihood;
-  double v;
-
-  likelihood = 0.0;
-
-  // Distribution of random effect (u):
-  for (cn = 1 ; cn <= N3 ; cn++)
-  {
-    likelihood = likelihood - dlognorm(u[cn], 0.0, exp(logsdu));
-  }
-
-  // Distribution of obs given random effects (x|u):
-  for (cr = 1 ; cr <= N1 ; cr++)
-  {
-    v = 0.0;
-
-    for (cc = 1 ; cc <= N2 ; cc++)
-    {
-      v = v + A[cc][cr] * beta[cc]; 
-    }
-
-    for (cc = 1 ; cc <= N3 ; cc++)
-    {
-      v = v + B[cc][cr] * u[cc]; 
-    }
-
-    likelihood = likelihood - dlognorm(x[cr], v, exp(logsd0));
-  }
-
-  return likelihood;
-}
-
-// ----------------------------------------------------------------------------
-
-double REDev::thetalogLikelihood(const ARRAY_1D u/*NP*/,
+double REDev::thetalogLikelihood(const ARRAY_1D u/*N*/,
                                  const double logr0,
                                  const double logtheta,
                                  const double logK,
@@ -99,14 +56,14 @@ double REDev::thetalogLikelihood(const ARRAY_1D u/*NP*/,
   R     = exp(logR);
   ll    = 0.0;
 
-  for (cn = 2 ; cn <= NP ; cn++)
+  for (cn = 2 ; cn <= N ; cn++)
   {
     mean = u[cn - 1] + r0 * (1.0 - pow(exp(u[cn - 1]) / K, theta));
 
     ll -= dlognorm(u[cn], mean, sqrt(Q));
   }
 
-  for(cn = 1 ; cn <= NP ; cn++)
+  for(cn = 1 ; cn <= N ; cn++)
   {
     ll -= dlognorm(y[cn], u[cn], sqrt(R));
   }
@@ -164,7 +121,7 @@ double REDev::logLikelihood(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP *
 
 // ----------------------------------------------------------------------------
 
-void REDev::choleskyDecomposition(const ARRAY_2D pA/* NR,NR */, ARRAY_2D pL/* NR,NR */)
+void REDev::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize)
 {
   //--------------------------------------------------------------------------
   // A is symetric positive definite matrix in lower triangular form
@@ -173,14 +130,14 @@ void REDev::choleskyDecomposition(const ARRAY_2D pA/* NR,NR */, ARRAY_2D pL/* NR
   double sum;
   int    ci, cj, ck;
 
-  for (ci = 1 ; ci <= NR ; ci++)
+  for (ci = 1 ; ci <= nSize ; ci++)
   {
     sum = pA[ci][ci];
     cj  = 1;
 
     while (cj <= ci - 1)
     {
-      sum = sum - pA[ci][cj] * pA[ci][cj];
+      sum = sum - pL[ci][cj] * pL[ci][cj];
 
       cj++;
     }
@@ -189,17 +146,19 @@ void REDev::choleskyDecomposition(const ARRAY_2D pA/* NR,NR */, ARRAY_2D pL/* NR
 
     cj = ci + 1;
 
-    while (cj <= NR)
+    while (cj <= nSize)
     {
       sum = pA[cj][ci];
       ck  = 1;
 
       while (ck <= ci - 1)
       {
-        sum = sum - pA[ci][ck] * pA[cj][ck];
+        sum = sum - pL[ci][ck] * pL[cj][ck];
+
+        ck++;
       }
 
-      pL[cj][ci] = sum / pA[ci][ci];
+      pL[cj][ci] = sum / pL[ci][ci];
 
       cj++;
     }
@@ -208,22 +167,59 @@ void REDev::choleskyDecomposition(const ARRAY_2D pA/* NR,NR */, ARRAY_2D pL/* NR
 
 // ----------------------------------------------------------------------------
 
-double REDev::logDeterminant(const ARRAY_2D pA/* NR,NR */, ARRAY_2D pL/* NR,NR */)
+double REDev::logDeterminantFromChol(const ARRAY_2D pL/* nSize, nSize */, const int nSize)
 {
   //--------------------------------------------------------------------------
-  // A is symetric positive definite matrix in lower triangular form
+  // pL is the cholesky decomposition of A in lower triangular form
   //--------------------------------------------------------------------------
   double dLogDet;
   int    ci;
 
-  choleskyDecomposition(pA, pL);
-
   dLogDet = 0.0;
 
-  for (ci = 1 ; ci <= NR ; ci++)
+  for (ci = 1 ; ci <= nSize ; ci++)
   {
     dLogDet += log(pL[ci][ci]);
   }
 
+  dLogDet *= 2.0;
+
   return (dLogDet);
+}
+
+// ----------------------------------------------------------------------------
+
+void REDev::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize)
+{
+  //--------------------------------------------------------------------------
+  // pL is the cholesky decomposition of A in lower triangular form
+  // pInv is the resulting lower triangular inverse matrix
+  //--------------------------------------------------------------------------
+  int     cc;
+  int     cr;
+  int     cq;
+  double  b;
+
+  for (cc = nSize ; cc >= 1 ; cc--)
+  {
+    for (cr = cc ; cr >= 1 ; cr--)
+    {
+      b = 0.0;
+
+      if (cr == cc)
+      {
+        b = (1.0 / pL[cr][cr]);
+      }
+
+      if (cr < nSize)
+      {
+        for (cq = 1 + cr ; cq <= nSize ; cq++)
+        {
+          b = b - pInv[cq][cc] * pL[cq][cr];
+        }
+      }
+
+      pInv[cc][cr] = b * (1.0 / pL[cr][cr]);
+    }
+  }
 }
