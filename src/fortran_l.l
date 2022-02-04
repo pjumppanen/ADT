@@ -46,8 +46,9 @@
 #include "fortran_y.h"
 
 
+#if defined(_MSC_VER)
 int           yyFortrandebug             = 0;
-
+#endif
 int           adtFortran_nError          = 0;
 int           adtFortran_nLineNumber     = 1;
 const char*   adtFortran_pFileName       = "";

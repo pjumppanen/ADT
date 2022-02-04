@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +31,11 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_SRC_DELPHI_Y_H_INCLUDED
-# define YY_YY_SRC_DELPHI_Y_H_INCLUDED
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
+
+#ifndef YY_YY_______SRC_DELPHI_Y_H_INCLUDED
+# define YY_YY_______SRC_DELPHI_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -195,6 +199,155 @@ extern int yydebug;
     ADDVARIABLES = 405
   };
 #endif
+/* Tokens.  */
+#define ABSOLUTE 258
+#define AND 259
+#define ANSISTRING 260
+#define ARRAY 261
+#define AS 262
+#define B_BEGIN 263
+#define BOOLEAN 264
+#define LONGBOOL 265
+#define BYTE 266
+#define CASE 267
+#define CDECL 268
+#define CHAR 269
+#define CLASS 270
+#define COMP 271
+#define CONST 272
+#define CONSTRUCTOR 273
+#define CONTAINS 274
+#define CURRENCY 275
+#define DEFAULT 276
+#define DESTRUCTOR 277
+#define DIV 278
+#define DO 279
+#define DOUBLE 280
+#define DOWNTO 281
+#define DYNAMIC 282
+#define ELSE 283
+#define B_END 284
+#define EXPORT 285
+#define EXTENDED 286
+#define EXTERNAL 287
+#define FAR 288
+#define P_FILE 289
+#define FINALIZATION 290
+#define FOR 291
+#define FORWARD 292
+#define FUNCTION 293
+#define GOTO 294
+#define IF 295
+#define IMPLEMENTATION 296
+#define IMPLEMENTS 297
+#define IN 298
+#define INDEX 299
+#define INHERITED 300
+#define INITIALIZATION 301
+#define INT64 302
+#define INTEGER 303
+#define INTERFACE 304
+#define IS 305
+#define LABEL 306
+#define LIBRARY 307
+#define LONGINT 308
+#define LONGWORD 309
+#define MESSAGE 310
+#define MOD 311
+#define NIL 312
+#define NODEFAULT 313
+#define NOT 314
+#define OBJECT 315
+#define OF 316
+#define OLEVARIANT 317
+#define OR 318
+#define OUT 319
+#define OUTO 320
+#define OVERLOAD 321
+#define OVERRIDE 322
+#define PACKAGE 323
+#define PACKED 324
+#define PASCAL 325
+#define PCHAR 326
+#define PRIVATE 327
+#define PROCEDURE 328
+#define PROGRAM 329
+#define PROPERTY 330
+#define PROTECTED 331
+#define PUBLIC 332
+#define PUBLISHED 333
+#define READ 334
+#define REAL 335
+#define REAL48 336
+#define RECORD 337
+#define REGISTER 338
+#define REINTRODUCE 339
+#define REPEAT 340
+#define REQUIRES 341
+#define SAFECALL 342
+#define SET 343
+#define SHL 344
+#define SHORTINT 345
+#define SHR 346
+#define SINGLE 347
+#define SIZEOF 348
+#define SMALLINT 349
+#define STDCALL 350
+#define STORED 351
+#define STRING 352
+#define THEN 353
+#define TO 354
+#define TYPE 355
+#define UNIT 356
+#define UNTIL 357
+#define USES 358
+#define VAR 359
+#define VARIANT 360
+#define VIRTUAL 361
+#define WHILE 362
+#define WIDECHAR 363
+#define WIDESTRING 364
+#define WITH 365
+#define WORD 366
+#define WRITE 367
+#define XOR 368
+#define EXIT 369
+#define POINTER 370
+#define COMMA 371
+#define SEMICOLON 372
+#define COLON 373
+#define ASSIGNMENT 374
+#define PLUS_EQUALS 375
+#define MINUS_EQUALS 376
+#define TIMES_EQUALS 377
+#define DIV_EQUALS 378
+#define EQUALS 379
+#define DOT 380
+#define RANGE 381
+#define LPARENTHESIS 382
+#define RPARENTHESIS 383
+#define LBRACKET 384
+#define RBRACKET 385
+#define AT 386
+#define HAT 387
+#define PLUS 388
+#define MINUS 389
+#define GT 390
+#define LT 391
+#define GE 392
+#define LE 393
+#define NE 394
+#define MULTIPLY 395
+#define DIVIDE 396
+#define IDENTIFIER 397
+#define BOOL_NUMBER 398
+#define INT_NUMBER 399
+#define REAL_NUMBER 400
+#define TEXT 401
+#define SINGLELINE_COMMENT 402
+#define MULTILINE_COMMENT 403
+#define EMBEDDED_COMMANDS 404
+#define ADDVARIABLES 405
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -208,4 +361,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_SRC_DELPHI_Y_H_INCLUDED  */
+#endif /* !YY_YY_______SRC_DELPHI_Y_H_INCLUDED  */

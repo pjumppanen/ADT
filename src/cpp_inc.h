@@ -43,6 +43,9 @@ Bison Flex macro replacements for cpp lexical scanner
 #define yyrestart             yyCpprestart
 #define yytext                yyCpptext
 #define yywrap                yyCppwrap
+#define yynerrs               yyCppnerrs
+#define yychar                yyCppchar
+#define yylval                yyCpplval
 
 #define dispatchToken         yyCpp_dispatchToken
 #define commenteof            yyCpp_commenteof

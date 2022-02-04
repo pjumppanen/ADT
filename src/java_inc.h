@@ -43,6 +43,9 @@ Bison Flex macro replacements for fortran lexical scanner
 #define yyrestart             yyJavarestart
 #define yytext                yyJavatext
 #define yywrap                yyJavawrap
+#define yynerrs               yyJavanerrs
+#define yychar                yyJavachar
+#define yylval                yyJavalval
 
 #define dispatchToken         yyJava_dispatchToken
 #define commenteof            yyJava_commenteof

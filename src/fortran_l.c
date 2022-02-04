@@ -1,6 +1,5 @@
-#line 1 "..\\src\\fortran_l.c"
 
-#line 3 "..\\src\\fortran_l.c"
+#line 2 "../../src/fortran_l.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -862,8 +861,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
-#line 2 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 1 "fortran_l.l"
+#line 2 "fortran_l.l"
 /*
  * fortran.l
  *
@@ -911,8 +910,9 @@ char *yytext;
 #include "fortran_y.h"
 
 
+#if defined(_MSC_VER)
 int           yyFortrandebug             = 0;
-
+#endif
 int           adtFortran_nError          = 0;
 int           adtFortran_nLineNumber     = 1;
 const char*   adtFortran_pFileName       = "";
@@ -1184,12 +1184,20 @@ char* mallocScanComment(const char* pClosingBrace)
 }
 
 
-#line 1187 "..\\src\\fortran_l.c"
+#line 1187 "../../src/fortran_l.c"
 
-#line 1189 "..\\src\\fortran_l.c"
+#line 1189 "../../src/fortran_l.c"
 
 #define INITIAL 0
 #define Implicit 1
+
+#ifndef YY_NO_UNISTD_H
+/* Special case for "unistd.h", since it is non-ANSI. We include it way
+ * down here because we want the user's section 1 to have been scanned first.
+ * The user has a chance to override it with an option.
+ */
+#include <unistd.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -1399,11 +1407,11 @@ YY_DECL
 		}
 
 	{
-#line 328 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 329 "fortran_l.l"
 
-#line 330 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 331 "fortran_l.l"
  /* Undo continuation lines */
-#line 1406 "..\\src\\fortran_l.c"
+#line 1414 "../../src/fortran_l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1464,7 +1472,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 331 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 332 "fortran_l.l"
 {
                                                       const char* pAmpersand = 0;
 
@@ -1486,237 +1494,237 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 350 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 351 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, CALL_EXPAND));
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 351 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 352 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ADD_VARIABLES));
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 352 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 353 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, INTENT));
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 353 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 354 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, IN));
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 354 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 355 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, OUT));
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 355 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 356 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, INOUT));
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 356 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 357 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LBRACKET));
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 357 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 358 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, RBRACKET));
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 358 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 359 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 359 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 360 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, COLON));
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 360 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 361 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ASSIGN));
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 361 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 362 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 362 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 363 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 363 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 364 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, POWER));
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 364 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 365 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 365 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 366 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, DIVIDE));
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 366 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 367 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_EQ));
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 367 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 368 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_NE));
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 368 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 369 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_LT));
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 369 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 370 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_LE));
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 370 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 371 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_GT));
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 371 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 372 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_GE));
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 372 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 373 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_NOT));
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 373 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 374 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_AND));
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 374 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 375 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_OR));
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 375 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 376 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_EQUIV));
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 376 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 377 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_NEQUIV));
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 377 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 378 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, EQUAL));
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 378 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 379 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, NEQUAL));
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 379 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 380 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LT));
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 380 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 381 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LE));
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 381 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 382 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, GT));
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 382 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 383 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, GE));
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 383 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 384 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_TRUE));
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 384 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 385 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL_FALSE));
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 385 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 386 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER));
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 386 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 387 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, UNSIGNED));
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 387 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 388 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, REAL));
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 388 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 389 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, DOUBLE));
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 389 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 390 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, PRECISION));
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 390 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 391 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, DOUBLEPRECISION));
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 391 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 392 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, COMPLEX));
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 392 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 393 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, LOGICAL));
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 393 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 394 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, CHARACTER));
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 394 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 395 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, UNKNOWNTYPE));
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 395 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 396 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, DIMENSION));
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 396 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 397 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, END);
 
@@ -1726,27 +1734,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 402 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 403 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, PARAMETER));
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 403 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 404 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, PRIVATE));
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 404 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 405 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, PROTECTED));
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 405 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 406 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, PUBLIC));
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 406 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 407 "fortran_l.l"
 {
                                                       BEGIN(Implicit);
                                                       return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, IMPLICIT));
@@ -1754,12 +1762,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 410 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 411 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, NONE));
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 411 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 412 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, WHERE);
 
@@ -1769,12 +1777,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 417 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 418 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ELSEWHERE));
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 418 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 419 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ENDWHERE);
 
@@ -1784,17 +1792,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 424 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 425 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, GOTO));
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 425 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 426 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, IF));
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 426 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 427 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, THEN);
 
@@ -1804,17 +1812,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 432 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 433 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ELSEIF));
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 433 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 434 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ELSE));
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 434 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 435 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ENDIF);
 
@@ -1824,7 +1832,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 440 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 441 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, SELECTCASE);
 
@@ -1834,7 +1842,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 446 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 447 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, SELECT);
 
@@ -1844,7 +1852,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 452 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 453 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ENDSELECT);
 
@@ -1854,22 +1862,22 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 458 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 459 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, CASE));
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 459 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 460 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, DEFAULT));
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 460 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 461 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, DO));
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 461 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 462 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ENDDO);
 
@@ -1879,7 +1887,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 467 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 468 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, WHILE);
 
@@ -1889,27 +1897,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 473 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 474 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, CYCLE));
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 474 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 475 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, EXIT));
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 475 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 476 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, CONTINUE));
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 476 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 477 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, INTRINSIC));
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 477 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 478 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, MODULE);
 
@@ -1919,7 +1927,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 483 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 484 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ENDMODULE);
 
@@ -1929,27 +1937,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 489 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 490 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, USE));
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 490 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 491 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, CALL));
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 491 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 492 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, PROGRAM));
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 492 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 493 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, RESULT));
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 493 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 494 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, FUNCTION);
 
@@ -1959,12 +1967,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 499 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 500 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, RECURSIVE));
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 500 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 501 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ENDFUNCTION);
 
@@ -1974,7 +1982,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 506 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 507 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, SUBROUTINE);
 
@@ -1984,7 +1992,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 512 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 513 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, ENDSUBROUTINE);
 
@@ -1994,82 +2002,82 @@ YY_RULE_SETUP
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 518 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 519 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, RETURN));
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 519 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 520 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, EXTERNAL));
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 520 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 521 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, "nbdirs", TOKEN_KEYWORD, XNAME)); /* Translate nbdirsmax into nbdirs to simply resulting code */
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 521 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 522 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, XNAME));
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 522 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 523 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_TEXT, XSCON));
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 524 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 525 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON_S));
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 525 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 526 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON_S));
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 526 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 527 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON_S));
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 527 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 528 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON_S));
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 528 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 529 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON_S));
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 529 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 530 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON_S));
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 530 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 531 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON_S));
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 532 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 533 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON));
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 533 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 534 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON));
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 534 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 535 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON));
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 535 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 536 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON));
 	YY_BREAK
 case 103:
@@ -2079,38 +2087,38 @@ YY_LINENO_REWIND_TO(yy_cp - 1);
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 536 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 537 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON));
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 537 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 538 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON));
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 538 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 539 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XRCON));
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 540 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 541 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XICON_S));
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 541 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 542 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XICON));
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 543 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 544 "fortran_l.l"
 return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_NUMBER, XIMPL));
 	YY_BREAK
 case 109:
 /* rule 109 can match eol */
 YY_RULE_SETUP
-#line 544 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 545 "fortran_l.l"
 {
                                                       dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_TEXT, COMMENT);
                                                       adjustLineNumber(yytext);
@@ -2118,7 +2126,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 548 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 549 "fortran_l.l"
 {
                                                       dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_TEXT, -1);
                                                     };
@@ -2126,7 +2134,7 @@ YY_RULE_SETUP
 case 111:
 /* rule 111 can match eol */
 YY_RULE_SETUP
-#line 551 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 552 "fortran_l.l"
 {
                                                       dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_TEXT, -1);
                                                       BEGIN(0);
@@ -2136,7 +2144,7 @@ YY_RULE_SETUP
 case 112:
 /* rule 112 can match eol */
 YY_RULE_SETUP
-#line 556 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 557 "fortran_l.l"
 {
                                                       int nReturn = dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, xEOS);
 
@@ -2147,7 +2155,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 563 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 564 "fortran_l.l"
 {
                                                       dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_TEXT, -1);
                                                       printf("'%c' (0x%x): illegal charcter at line %d\n", yytext[0], yytext[0], adtFortran_nLineNumber);
@@ -2155,10 +2163,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 568 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 569 "fortran_l.l"
 ECHO;
 	YY_BREAK
-#line 2161 "..\\src\\fortran_l.c"
+#line 2169 "../../src/fortran_l.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(Implicit):
 	yyterminate();
@@ -3167,7 +3175,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 568 "C:\\cygwin\\usr\\src\\adt\\src\\fortran_l.l"
+#line 569 "fortran_l.l"
 
 
 

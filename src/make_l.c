@@ -1,6 +1,5 @@
-#line 1 "..\\src\\make_l.c"
 
-#line 3 "..\\src\\make_l.c"
+#line 2 "../../src/make_l.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -935,8 +934,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
-#line 2 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 1 "make_l.l"
+#line 2 "make_l.l"
 /*
  * make.l
  *
@@ -979,8 +978,9 @@ char *yytext;
 #include "make_y.h"
 
 
+#if defined(_MSC_VER)
 int         yyMakedebug             = 0;
-
+#endif
 int         adtMake_nError          = 0;
 int         adtMake_nLineNumber     = 1;
 const char* adtMake_pFileName       = "";
@@ -1182,12 +1182,20 @@ char* mallocScanComment(const char* pClosingBrace)
 }
 
 
-#line 1185 "..\\src\\make_l.c"
+#line 1185 "../../src/make_l.c"
 
-#line 1187 "..\\src\\make_l.c"
+#line 1187 "../../src/make_l.c"
 
 #define INITIAL 0
 #define FILENAMES 1
+
+#ifndef YY_NO_UNISTD_H
+/* Special case for "unistd.h", since it is non-ANSI. We include it way
+ * down here because we want the user's section 1 to have been scanned first.
+ * The user has a chance to override it with an option.
+ */
+#include <unistd.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -1394,9 +1402,9 @@ YY_DECL
 		}
 
 	{
-#line 258 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 259 "make_l.l"
 
-#line 1399 "..\\src\\make_l.c"
+#line 1407 "../../src/make_l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1455,17 +1463,17 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 259 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 260 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_AD));
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 260 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 261 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_CLASS));
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 261 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 262 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_BEGIN));
@@ -1473,22 +1481,22 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 265 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 266 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_BOUNDS));
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 266 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 267 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_CHECK));
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 267 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 268 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_END));
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 268 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 269 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_PATHS));
@@ -1496,22 +1504,22 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 272 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 273 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_SOURCE));
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 273 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 274 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_INCLUDE));
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 274 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 275 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_OUTPUT));
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 275 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 276 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_FILE));
@@ -1519,7 +1527,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 279 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 280 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_SWITCHES));
@@ -1527,7 +1535,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 283 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 284 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_BLACKBOX));
@@ -1535,7 +1543,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 287 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 288 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_FILES));
@@ -1543,12 +1551,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 291 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 292 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_WORKING));
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 292 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 293 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_DIRECTORY));
@@ -1556,72 +1564,72 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 296 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 297 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_OPTIONS));
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 297 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 298 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_CPP));
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 298 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 299 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_PASCAL));
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 299 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 300 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_FORTRAN));
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 300 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 301 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_FUNCTION));
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 301 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 302 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_VAR));
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 302 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 303 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_OUTVAR));
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 303 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 304 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_MODE));
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 304 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 305 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_USER));
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 305 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 306 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_PRE));
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 306 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 307 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_POST));
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 307 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 308 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_PRAGMAS));
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 308 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 309 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_COMMA));
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 309 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 310 "make_l.l"
 {
                                                     BEGIN(0);
                                                     return (dispatchToken(&yylval, yytext, M_SEMICOLON));
@@ -1629,7 +1637,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 313 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 314 "make_l.l"
 {
                                                     BEGIN(FILENAMES);
                                                     return (dispatchToken(&yylval, yytext, M_COLON));
@@ -1637,22 +1645,22 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 317 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 318 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_EQUALS));
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 318 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 319 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_LBRACKET));
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 319 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 320 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_RBRACKET));
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 320 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 321 "make_l.l"
 {
                                                     int   nToken   = M_MULTILINE_COMMENT;
                                                     char* pComment = mallocScanComment("}");
@@ -1666,7 +1674,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 330 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 331 "make_l.l"
 {
                                                     int   nToken   = M_SINGLELINE_COMMENT;
                                                     char* pComment = mallocScanComment("*)");
@@ -1681,39 +1689,39 @@ YY_RULE_SETUP
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 340 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 341 "make_l.l"
 {
                                                     int   nToken   = M_SINGLELINE_COMMENT;
                                                   }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 343 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 344 "make_l.l"
 {
                                                     return (dispatchToken(&yylval, yytext, M_FILENAME));
                                                   }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 346 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 347 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_IDENT));
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 347 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 348 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_TEXT));
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 348 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 349 "make_l.l"
 return (dispatchToken(&yylval, yytext, M_TEXT));
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 349 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 350 "make_l.l"
 {
                                                     dispatchToken(&yylval, yytext, -1);
                                                     yyMake_resetLastLine();
@@ -1722,24 +1730,24 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 354 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 355 "make_l.l"
 {
                                                     dispatchToken(&yylval, yytext, -1);
                                                   }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 357 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 358 "make_l.l"
 {
                                                     printf("'%c' (0x%x): illegal character at line %d\n", yytext[0], yytext[0], adtMake_nLineNumber);
                                                   }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 361 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 362 "make_l.l"
 ECHO;
 	YY_BREAK
-#line 1742 "..\\src\\make_l.c"
+#line 1750 "../../src/make_l.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(FILENAMES):
 	yyterminate();
@@ -2745,7 +2753,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 361 "C:\\cygwin\\usr\\src\\adt\\src\\make_l.l"
+#line 362 "make_l.l"
 
 
 int yywrap()

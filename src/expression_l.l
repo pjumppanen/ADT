@@ -49,7 +49,9 @@
 #include "expression_y.h"
 
 
+#if defined(_MSC_VER)
 int         yyExpressiondebug       = 0;
+#endif
 int         adtExpression_nError    = 0;
 const char* adtExpression_pErrorMsg = 0;
 void*       adtExpression_pContext  = 0;

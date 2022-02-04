@@ -43,6 +43,9 @@ Bison Flex macro replacements for fortran lexical scanner
 #define yyrestart             yyFortranrestart
 #define yytext                yyFortrantext
 #define yywrap                yyFortranwrap
+#define yynerrs               yyFortrannerrs
+#define yychar                yyFortranchar
+#define yylval                yyFortranlval
 
 #define dispatchToken         yyFortran_dispatchToken
 #define commenteof            yyFortran_commenteof

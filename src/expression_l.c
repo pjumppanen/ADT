@@ -1,6 +1,5 @@
-#line 1 "..\\src\\expression_l.c"
 
-#line 3 "..\\src\\expression_l.c"
+#line 2 "../../src/expression_l.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -450,8 +449,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
-#line 2 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 1 "expression_l.l"
+#line 2 "expression_l.l"
 /*
  * expression_l.l
  *
@@ -502,7 +501,9 @@ char *yytext;
 #include "expression_y.h"
 
 
+#if defined(_MSC_VER)
 int         yyExpressiondebug       = 0;
+#endif
 int         adtExpression_nError    = 0;
 const char* adtExpression_pErrorMsg = 0;
 void*       adtExpression_pContext  = 0;
@@ -581,10 +582,18 @@ int dispatchToken(void* pContext, YYSTYPE* p_yylval, const char* pTokenText, int
 }
 
 
-#line 584 "..\\src\\expression_l.c"
-#line 585 "..\\src\\expression_l.c"
+#line 585 "../../src/expression_l.c"
+#line 586 "../../src/expression_l.c"
 
 #define INITIAL 0
+
+#ifndef YY_NO_UNISTD_H
+/* Special case for "unistd.h", since it is non-ANSI. We include it way
+ * down here because we want the user's section 1 to have been scanned first.
+ * The user has a chance to override it with an option.
+ */
+#include <unistd.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -791,10 +800,10 @@ YY_DECL
 		}
 
 	{
-#line 134 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 136 "expression_l.l"
 
 
-#line 797 "..\\src\\expression_l.c"
+#line 806 "../../src/expression_l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -853,80 +862,80 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 136 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 138 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, LT));
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 137 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 139 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, GT));
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 138 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 140 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, SLBRACKET));
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 139 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 141 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, SRBRACKET));
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 140 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 142 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 141 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 143 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, LPARENTHESIS));
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 142 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 144 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, RPARENTHESIS));
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 143 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 145 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 144 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 146 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 145 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 147 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 146 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 148 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, DIVIDE));
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 147 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 149 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_KEYWORD, IDENTIFIER));
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 148 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 150 "expression_l.l"
 return (dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_NUMBER, NUMBER));
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 149 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 151 "expression_l.l"
 {
                               dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_TEXT, -1);
                             }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 153 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 155 "expression_l.l"
 {
                               dispatchToken(adtExpression_pContext, &yylval, yytext, TOKEN_TEXT, -1);
 
@@ -938,10 +947,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 161 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 163 "expression_l.l"
 ECHO;
 	YY_BREAK
-#line 944 "..\\src\\expression_l.c"
+#line 953 "../../src/expression_l.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1946,7 +1955,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 161 "C:\\cygwin\\usr\\src\\adt\\src\\expression_l.l"
+#line 163 "expression_l.l"
 
 
 int yywrap()

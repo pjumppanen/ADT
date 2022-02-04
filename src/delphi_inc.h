@@ -43,6 +43,9 @@ Bison Flex macro replacements for delphi lexical scanner
 #define yyrestart             yyDelphirestart
 #define yytext                yyDelphitext
 #define yywrap                yyDelphiwrap
+#define yynerrs               yyDelphinerrs
+#define yychar                yyDelphichar
+#define yylval                yyDelphilval
 
 #define dispatchToken         yyDelphi_dispatchToken
 #define commenteof            yyDelphi_commenteof

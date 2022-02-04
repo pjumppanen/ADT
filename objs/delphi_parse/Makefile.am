@@ -9,4 +9,4 @@ libdelphi_y_a_SOURCES = ../../src/delphi_y.y
 libdelphi_l_a_SOURCES = ../../src/delphi_l.l
 
 clean-local:
-	-rm -f delphi_l.c delphi_y.c delphi_y.h
+	-rm -f ../../src/delphi_l.c ../../src/delphi_y.c ../../src/delphi_y.h

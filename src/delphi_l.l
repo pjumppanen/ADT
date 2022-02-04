@@ -61,8 +61,9 @@ struct IncludeContext adtDelphi_IncludeStack[64] = {0};
 int                   adtDelphi_IncludeSP        = 0;
 
 
+#if defined(_MSC_VER)
 int         yyDelphidebug               = 0;
-
+#endif
 int         adtDelphi_nSection          = AdtDelphiSection_IMPLEMENTATION;
 int         adtDelphi_nCodeType         = AdtDelphiCodeType_PROGRAM;
 int         adtDelphi_nError            = 0;

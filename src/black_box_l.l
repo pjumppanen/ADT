@@ -66,7 +66,9 @@
 #include "black_box_y.h"
 
 
+#if defined(_MSC_VER)
 int         yyBlackBoxdebug           = 0;
+#endif
 int         yyBlackBoxIsFile          = 0;
 int         yyBlackBoxReentrancyCount = 0;
 int         adtBlackBox_nError        = 0;

@@ -1,6 +1,5 @@
-#line 1 "..\\src\\delphi_l.c"
 
-#line 3 "..\\src\\delphi_l.c"
+#line 2 "../../src/delphi_l.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -1273,8 +1272,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
-#line 2 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 1 "delphi_l.l"
+#line 2 "delphi_l.l"
 /*
  * delphi.l
  *
@@ -1337,8 +1336,9 @@ struct IncludeContext adtDelphi_IncludeStack[64] = {0};
 int                   adtDelphi_IncludeSP        = 0;
 
 
+#if defined(_MSC_VER)
 int         yyDelphidebug               = 0;
-
+#endif
 int         adtDelphi_nSection          = AdtDelphiSection_IMPLEMENTATION;
 int         adtDelphi_nCodeType         = AdtDelphiCodeType_PROGRAM;
 int         adtDelphi_nError            = 0;
@@ -1750,12 +1750,20 @@ char* mallocScanComment(const char* pClosingBrace, int nToUpper)
 }
 
 
-#line 1753 "..\\src\\delphi_l.c"
+#line 1753 "../../src/delphi_l.c"
 
-#line 1755 "..\\src\\delphi_l.c"
+#line 1755 "../../src/delphi_l.c"
 
 #define INITIAL 0
 #define NOT_AD_CODE 1
+
+#ifndef YY_NO_UNISTD_H
+/* Special case for "unistd.h", since it is non-ANSI. We include it way
+ * down here because we want the user's section 1 to have been scanned first.
+ * The user has a chance to override it with an option.
+ */
+#include <unistd.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -1962,9 +1970,9 @@ YY_DECL
 		}
 
 	{
-#line 487 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 488 "delphi_l.l"
 
-#line 1967 "..\\src\\delphi_l.c"
+#line 1975 "../../src/delphi_l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -2023,37 +2031,37 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 488 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 489 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, ADDVARIABLES));
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 489 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 490 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, ABSOLUTE));
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 490 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 491 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, AND));
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 491 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 492 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, ANSISTRING));
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 492 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 493 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, ARRAY));
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 493 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 494 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, AS));
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 494 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 495 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, B_BEGIN);
 
@@ -2063,22 +2071,22 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 500 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 501 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, BOOLEAN));
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 501 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 502 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LONGBOOL));
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 502 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 503 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, BYTE));
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 503 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 504 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CASE);
 
@@ -2088,17 +2096,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 509 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 510 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CDECL));
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 510 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 511 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CHAR));
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 511 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 512 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CLASS);
 
@@ -2108,72 +2116,72 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 517 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 518 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, COMP));
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 518 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 519 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CONST));
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 519 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 520 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CONSTRUCTOR));
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 520 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 521 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CONTAINS));
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 521 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 522 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, CURRENCY));
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 522 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 523 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DEFAULT));
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 523 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 524 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DESTRUCTOR));
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 524 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 525 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DIV));
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 525 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 526 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DO));
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 526 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 527 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DOUBLE));
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 527 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 528 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DOWNTO));
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 528 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 529 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DYNAMIC));
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 529 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 530 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, ELSE));
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 530 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 531 "delphi_l.l"
 {
                                                     adtDelphi_nBlockDepth--;
                                                     return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, B_END));
@@ -2181,62 +2189,62 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 534 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 535 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, EXPORT));
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 535 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 536 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, EXTENDED));
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 536 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 537 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, EXTERNAL));
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 537 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 538 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, FAR));
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 538 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 539 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, P_FILE));
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 539 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 540 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, FINALIZATION));
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 540 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 541 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, FOR));
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 541 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 542 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, FORWARD));
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 542 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 543 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, FUNCTION));
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 543 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 544 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, GOTO));
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 544 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 545 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, IF));
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 545 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 546 "delphi_l.l"
 {
                                                     adtDelphi_nSection = AdtDelphiSection_IMPLEMENTATION;
                                                     return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, IMPLEMENTATION));
@@ -2244,27 +2252,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 549 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 550 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, IMPLEMENTS));
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 550 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 551 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, IN));
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 551 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 552 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, INDEX));
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 552 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 553 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, INHERITED));
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 553 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 554 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, INITIALIZATION);
 
@@ -2274,17 +2282,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 559 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 560 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, INT64));
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 560 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 561 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, INTEGER));
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 561 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 562 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, INTERFACE);
 
@@ -2296,17 +2304,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 569 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 570 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, IS));
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 570 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 571 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LABEL));
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 571 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 572 "delphi_l.l"
 {
                                                     adtDelphi_nCodeType = AdtDelphiCodeType_LIBRARY;
                                                     return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LIBRARY));
@@ -2314,42 +2322,42 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 575 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 576 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LONGINT));
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 576 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 577 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LONGWORD));
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 577 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 578 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, MESSAGE));
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 578 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 579 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, MOD));
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 579 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 580 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, NIL));
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 580 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 581 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, NODEFAULT));
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 581 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 582 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, NOT));
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 582 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 583 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OBJECT);
 
@@ -2359,42 +2367,42 @@ YY_RULE_SETUP
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 588 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 589 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OF));
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 589 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 590 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OLEVARIANT));
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 590 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 591 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OR));
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 591 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 592 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OUT));
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 592 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 593 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OUTO));
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 593 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 594 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OVERLOAD));
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 594 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 595 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, OVERRIDE));
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 595 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 596 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PACKAGE);
 
@@ -2405,37 +2413,37 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 602 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 603 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PACKED));
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 603 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 604 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PASCAL));
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 604 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 605 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PCHAR));
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 605 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 606 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, POINTER));
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 606 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 607 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PRIVATE));
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 607 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 608 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PROCEDURE));
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 608 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 609 "delphi_l.l"
 {
                                                     adtDelphi_nCodeType = AdtDelphiCodeType_PROGRAM;
                                                     return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PROGRAM));
@@ -2443,42 +2451,42 @@ YY_RULE_SETUP
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 613 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 614 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PROPERTY));
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 614 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 615 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PROTECTED));
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 615 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 616 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PUBLIC));
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 616 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 617 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PUBLISHED));
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 617 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 618 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, READ));
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 618 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 619 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, REAL));
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 619 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 620 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, REAL48));
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 620 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 621 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, RECORD);
 
@@ -2488,97 +2496,97 @@ YY_RULE_SETUP
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 626 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 627 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, REGISTER));
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 627 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 628 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, REINTRODUCE));
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 628 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 629 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, REPEAT));
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 629 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 630 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, REQUIRES));
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 630 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 631 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SAFECALL));
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 631 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 632 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SET));
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 632 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 633 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SHL));
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 633 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 634 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SHORTINT));
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 634 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 635 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SHR));
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 635 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 636 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SINGLE));
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 636 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 637 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SIZEOF));
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 637 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 638 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SMALLINT));
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 638 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 639 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, STDCALL));
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 639 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 640 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, STORED));
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 640 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 641 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, STRING));
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 641 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 642 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, THEN));
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 642 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 643 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, TO));
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 643 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 644 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, TYPE));
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 644 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 645 "delphi_l.l"
 {
                                                     int nReturn = dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, UNIT);
 
@@ -2589,142 +2597,142 @@ YY_RULE_SETUP
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 651 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 652 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, UNTIL));
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 652 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 653 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, USES));
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 653 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 654 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, VAR));
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 654 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 655 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, VARIANT));
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 655 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 656 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, VIRTUAL));
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 656 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 657 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, WHILE));
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 657 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 658 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, WIDECHAR));
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 658 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 659 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, WIDESTRING));
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 659 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 660 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, WITH));
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 660 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 661 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, WORD));
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 661 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 662 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, WRITE));
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 662 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 663 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, XOR));
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 663 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 664 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, BOOL_NUMBER));
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 664 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 665 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, BOOL_NUMBER));
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 665 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 666 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, EXIT));
 	YY_BREAK
 case 117:
 YY_RULE_SETUP
-#line 666 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 667 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 667 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 668 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, SEMICOLON));
 	YY_BREAK
 case 119:
 YY_RULE_SETUP
-#line 668 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 669 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, COLON));
 	YY_BREAK
 case 120:
 YY_RULE_SETUP
-#line 669 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 670 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, ASSIGNMENT));
 	YY_BREAK
 case 121:
 YY_RULE_SETUP
-#line 670 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 671 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PLUS_EQUALS));
 	YY_BREAK
 case 122:
 YY_RULE_SETUP
-#line 671 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 672 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, MINUS_EQUALS));
 	YY_BREAK
 case 123:
 YY_RULE_SETUP
-#line 672 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 673 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, TIMES_EQUALS));
 	YY_BREAK
 case 124:
 YY_RULE_SETUP
-#line 673 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 674 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DIV_EQUALS));
 	YY_BREAK
 case 125:
 YY_RULE_SETUP
-#line 674 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 675 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, EQUALS));
 	YY_BREAK
 case 126:
 YY_RULE_SETUP
-#line 675 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 676 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DOT));
 	YY_BREAK
 case 127:
 YY_RULE_SETUP
-#line 676 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 677 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, RANGE));
 	YY_BREAK
 case 128:
 YY_RULE_SETUP
-#line 678 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 679 "delphi_l.l"
 dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_TEXT, -1);
 	YY_BREAK
 case 129:
 YY_RULE_SETUP
-#line 679 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 680 "delphi_l.l"
 {
                                                     char* pComment = mallocScanComment("}", 0);
 
@@ -2878,7 +2886,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 130:
 YY_RULE_SETUP
-#line 830 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 831 "delphi_l.l"
 {
                                                     char* pComment = mallocScanComment("}", 0);
 
@@ -2892,7 +2900,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 131:
 YY_RULE_SETUP
-#line 841 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 842 "delphi_l.l"
 {
                                                     char* pComment = mallocScanComment("*)", 0);
 
@@ -2910,58 +2918,58 @@ YY_RULE_SETUP
 case 132:
 /* rule 132 can match eol */
 YY_RULE_SETUP
-#line 855 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 856 "delphi_l.l"
 automate_AD_Alias(yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 133:
 /* rule 133 can match eol */
 YY_RULE_SETUP
-#line 856 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 857 "delphi_l.l"
 automate_AD_LibName(yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 134:
 YY_RULE_SETUP
-#line 857 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 858 "delphi_l.l"
 automate_VarModeAndPhase(2, yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 135:
 YY_RULE_SETUP
-#line 858 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 859 "delphi_l.l"
 automate_VarModeAndPhase(2, yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 136:
 YY_RULE_SETUP
-#line 859 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 860 "delphi_l.l"
 automate_VarModeAndPhase(1, yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 137:
 YY_RULE_SETUP
-#line 860 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 861 "delphi_l.l"
 automate_VarModeAndPhase(1, yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 138:
 YY_RULE_SETUP
-#line 861 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 862 "delphi_l.l"
 automate_VarModeAndPhase(1, yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 139:
 YY_RULE_SETUP
-#line 862 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 863 "delphi_l.l"
 automate_VarModeAndPhase(1, yytext, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 140:
 YY_RULE_SETUP
-#line 863 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 864 "delphi_l.l"
 automate_VarModeAndPhase(0, 0, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 141:
 YY_RULE_SETUP
-#line 864 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 865 "delphi_l.l"
 automate_VarModeAndPhase(0, 0, adtDelphi_pFileName, adtDelphi_nLineNumber);
 	YY_BREAK
 case 142:
 YY_RULE_SETUP
-#line 866 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 867 "delphi_l.l"
 {
                                                     char* pComment = mallocScanComment("}", 0);
 
@@ -2978,7 +2986,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 143:
 YY_RULE_SETUP
-#line 880 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 881 "delphi_l.l"
 {
                                                     char* pComment = mallocScanComment("*)", 0);
 
@@ -2995,78 +3003,78 @@ YY_RULE_SETUP
 	YY_BREAK
 case 144:
 YY_RULE_SETUP
-#line 894 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 895 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LPARENTHESIS));
 	YY_BREAK
 case 145:
 YY_RULE_SETUP
-#line 895 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 896 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, RPARENTHESIS));
 	YY_BREAK
 case 146:
 YY_RULE_SETUP
-#line 896 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 897 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LBRACKET));
 	YY_BREAK
 case 147:
 YY_RULE_SETUP
-#line 897 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 898 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, RBRACKET));
 	YY_BREAK
 case 148:
 YY_RULE_SETUP
-#line 898 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 899 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, AT));
 	YY_BREAK
 case 149:
 YY_RULE_SETUP
-#line 899 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 900 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, HAT));
 	YY_BREAK
 case 150:
 YY_RULE_SETUP
-#line 900 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 901 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
 	YY_BREAK
 case 151:
 YY_RULE_SETUP
-#line 901 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 902 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
 	YY_BREAK
 case 152:
 YY_RULE_SETUP
-#line 902 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 903 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, GT));
 	YY_BREAK
 case 153:
 YY_RULE_SETUP
-#line 903 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 904 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LT));
 	YY_BREAK
 case 154:
 YY_RULE_SETUP
-#line 904 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 905 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, GE));
 	YY_BREAK
 case 155:
 YY_RULE_SETUP
-#line 905 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 906 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, LE));
 	YY_BREAK
 case 156:
 YY_RULE_SETUP
-#line 906 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 907 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, NE));
 	YY_BREAK
 case 157:
 YY_RULE_SETUP
-#line 907 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 908 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, MULTIPLY));
 	YY_BREAK
 case 158:
 /* rule 158 can match eol */
 YY_RULE_SETUP
-#line 908 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 909 "delphi_l.l"
 {
                                                     dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_TEXT, SINGLELINE_COMMENT);
 
@@ -3076,17 +3084,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 159:
 YY_RULE_SETUP
-#line 915 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 916 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, DIVIDE));
 	YY_BREAK
 case 160:
 YY_RULE_SETUP
-#line 916 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 917 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_KEYWORD, IDENTIFIER));
 	YY_BREAK
 case 161:
 YY_RULE_SETUP
-#line 917 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 918 "delphi_l.l"
 {
                                                     char  sBuffer[256]  = {0};
                                                     int   nLen          = strlen(yytext);
@@ -3112,7 +3120,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 162:
 YY_RULE_SETUP
-#line 940 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 941 "delphi_l.l"
 {
                                                     char  sBuffer[256]  = {0};
                                                     int   nLen          = strlen(yytext);
@@ -3139,13 +3147,13 @@ YY_RULE_SETUP
 case 163:
 /* rule 163 can match eol */
 YY_RULE_SETUP
-#line 963 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 964 "delphi_l.l"
 return (dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_TEXT, TEXT));
 	YY_BREAK
 case 164:
 /* rule 164 can match eol */
 YY_RULE_SETUP
-#line 964 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 965 "delphi_l.l"
 {
                                                     dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_TEXT, -1);
                                                     yyDelphi_resetLastLine();
@@ -3154,14 +3162,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 165:
 YY_RULE_SETUP
-#line 969 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 970 "delphi_l.l"
 {
                                                     dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_TEXT, -1);
                                                   }
 	YY_BREAK
 case 166:
 YY_RULE_SETUP
-#line 973 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 974 "delphi_l.l"
 {
                                                     dispatchToken(adtDelphi_pDelphiContext, &yylval, yytext, TOKEN_TEXT, -1);
                                                     printf("'%c' (0x%x): illegal character at line %d\n", yytext[0], yytext[0], adtDelphi_nLineNumber);
@@ -3169,7 +3177,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(NOT_AD_CODE):
-#line 978 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 979 "delphi_l.l"
 {
                                                     if (yyDelphi_endInclude() == 0)
                                                     {
@@ -3179,10 +3187,10 @@ case YY_STATE_EOF(NOT_AD_CODE):
 	YY_BREAK
 case 167:
 YY_RULE_SETUP
-#line 984 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 985 "delphi_l.l"
 ECHO;
 	YY_BREAK
-#line 3185 "..\\src\\delphi_l.c"
+#line 3193 "../../src/delphi_l.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -4185,7 +4193,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 984 "C:\\cygwin\\usr\\src\\adt\\src\\delphi_l.l"
+#line 985 "delphi_l.l"
 
 
 int yywrap()

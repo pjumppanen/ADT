@@ -43,6 +43,9 @@ Bison Flex macro replacements for make lexical scanner
 #define yyrestart             yyMakerestart
 #define yytext                yyMaketext
 #define yywrap                yyMakewrap
+#define yynerrs               yyMakenerrs
+#define yychar                yyMakechar
+#define yylval                yyMakelval
 
 #define dispatchToken         yyMake_dispatchToken
 #define commenteof            yyMake_commenteof

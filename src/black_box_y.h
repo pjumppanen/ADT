@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +31,11 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_SRC_BLACK_BOX_Y_H_INCLUDED
-# define YY_YY_SRC_BLACK_BOX_Y_H_INCLUDED
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
+
+#ifndef YY_YY_______SRC_BLACK_BOX_Y_H_INCLUDED
+# define YY_YY_______SRC_BLACK_BOX_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -89,6 +93,49 @@ extern int yydebug;
     BB_END = 299
   };
 #endif
+/* Tokens.  */
+#define LBRACKET 258
+#define RBRACKET 259
+#define PLUS 260
+#define MINUS 261
+#define MULTIPLY 262
+#define DIVIDE 263
+#define POWER 264
+#define PERIOD 265
+#define IDENTIFIER 266
+#define QUALIFIED_IDENTIFIER 267
+#define NUMBER_FIXED 268
+#define NUMBER_FLOAT 269
+#define COMMA 270
+#define COLON 271
+#define SEMICOLON 272
+#define DERIV_OP 273
+#define BLACKBOX 274
+#define READ_NOT_WRITTEN 275
+#define NOT_READ_THEN_WRITTEN 276
+#define NOT_READ_NOT_WRITTEN 277
+#define READ_THEN_WRITTEN 278
+#define DEPS 279
+#define ID 280
+#define REAL 281
+#define INTEGER 282
+#define COMPLEX 283
+#define CHARACTER 284
+#define BOOLEAN 285
+#define REAL_ARRAY 286
+#define INTEGER_ARRAY 287
+#define COMPLEX_ARRAY 288
+#define CHARACTER_ARRAY 289
+#define BOOLEAN_ARRAY 290
+#define IN 291
+#define OUT 292
+#define F_BEGIN 293
+#define F_END 294
+#define FUNCTION 295
+#define PROCEDURE 296
+#define RESULT 297
+#define BB_BEGIN 298
+#define BB_END 299
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -102,4 +149,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_SRC_BLACK_BOX_Y_H_INCLUDED  */
+#endif /* !YY_YY_______SRC_BLACK_BOX_Y_H_INCLUDED  */

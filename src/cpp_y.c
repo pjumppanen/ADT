@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,11 +41,14 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
+
 /* Identify Bison output.  */
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.4"
+#define YYBISON_VERSION "3.5"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -61,8 +65,8 @@
 
 
 
-/* Copy the first part of user declarations.  */
-#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:339  */
+/* First part of user prologue.  */
+#line 1 "cpp_y.y"
 
 /*
 /*
@@ -108,13 +112,26 @@ int*        adtCpp_yyState                  = 0;
 
 
 
-#line 112 "..\\src\\cpp_y.c" /* yacc.c:339  */
+#line 116 "../../src/cpp_y.c"
 
-# ifndef YY_NULLPTR
-#  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULLPTR nullptr
+# ifndef YY_CAST
+#  ifdef __cplusplus
+#   define YY_CAST(Type, Val) static_cast<Type> (Val)
+#   define YY_REINTERPRET_CAST(Type, Val) reinterpret_cast<Type> (Val)
 #  else
-#   define YY_NULLPTR 0
+#   define YY_CAST(Type, Val) ((Type) (Val))
+#   define YY_REINTERPRET_CAST(Type, Val) ((Type) (Val))
+#  endif
+# endif
+# ifndef YY_NULLPTR
+#  if defined __cplusplus
+#   if 201103L <= __cplusplus
+#    define YY_NULLPTR nullptr
+#   else
+#    define YY_NULLPTR 0
+#   endif
+#  else
+#   define YY_NULLPTR ((void*)0)
 #  endif
 # endif
 
@@ -126,10 +143,10 @@ int*        adtCpp_yyState                  = 0;
 # define YYERROR_VERBOSE 0
 #endif
 
-/* In a future release of Bison, this section will be replaced
-   by #include "cpp_y.h".  */
-#ifndef YY_YY_SRC_CPP_Y_H_INCLUDED
-# define YY_YY_SRC_CPP_Y_H_INCLUDED
+/* Use api.header.include to #include this header
+   instead of duplicating it here.  */
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -252,6 +269,114 @@ extern int yydebug;
     ADDVARIABLES = 364
   };
 #endif
+/* Tokens.  */
+#define OR_EQ 258
+#define MOD 259
+#define PROD 260
+#define XOR 261
+#define DOT 262
+#define XOR_EQ 263
+#define LT_EQ 264
+#define NEQ 265
+#define ELLIPSIS 266
+#define LBRACKET 267
+#define RBRACKET 268
+#define LSBRACKET 269
+#define RSBRACKET 270
+#define LSQBRACKET 271
+#define RSQBRACKET 272
+#define AND_EQ 273
+#define LT 274
+#define GT 275
+#define DECR 276
+#define INCR 277
+#define PLUS 278
+#define MINUS 279
+#define SHR_EQ 280
+#define SHL_EQ 281
+#define GT_EQ 282
+#define COLON 283
+#define COMMA 284
+#define LAND 285
+#define LOR 286
+#define LNOT 287
+#define NOT 288
+#define SEMICOLON 289
+#define LITERAL 290
+#define AND 291
+#define EQEQ 292
+#define SHR 293
+#define M_EQ 294
+#define P_EQ 295
+#define SHL 296
+#define QUESTION 297
+#define MOD_EQ 298
+#define DIV_EQ 299
+#define DIV 300
+#define PROD_EQ 301
+#define EQ 302
+#define OR 303
+#define STRING_LITERAL 304
+#define TYPENAME 305
+#define DOUBLE 306
+#define FLOAT 307
+#define MUTABLE 308
+#define PUBLIC 309
+#define PRIVATE 310
+#define PROTECTED 311
+#define EXTERN 312
+#define DEFAULT 313
+#define WHILE 314
+#define SWITCH 315
+#define ENUM 316
+#define RETURN 317
+#define UNSIGNED 318
+#define ASM 319
+#define DO 320
+#define AUTO 321
+#define CONTINUE 322
+#define BOOL 323
+#define LONGBOOL 324
+#define WCHAR_T 325
+#define EXPLICIT 326
+#define IF 327
+#define SIZEOF 328
+#define UNION 329
+#define CHAR 330
+#define CLASS 331
+#define USING 332
+#define VOLATILE 333
+#define SIGNED 334
+#define CONST 335
+#define LONG 336
+#define STATIC 337
+#define INT 338
+#define ELSE 339
+#define SHORT 340
+#define NAMESPACE 341
+#define REGISTER 342
+#define TYPEDEF 343
+#define FRIEND 344
+#define FOR 345
+#define GOTO 346
+#define VIRTUAL 347
+#define INLINE 348
+#define CASE 349
+#define VOID 350
+#define STRUCT 351
+#define BREAK 352
+#define IDENTIFIER 353
+#define QUALIFIED_IDENTIFIER 354
+#define DTOR 355
+#define QUALIFIED_DTOR 356
+#define OBJ_IDENTIFIER 357
+#define QUALIFIED_OBJ_IDENTIFIER 358
+#define SINGLELINE_COMMENT 359
+#define MULTILINE_COMMENT 360
+#define EMBEDDED_COMMANDS 361
+#define PREPROCESSOR 362
+#define WHITESPACE 363
+#define ADDVARIABLES 364
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -265,38 +390,83 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_SRC_CPP_Y_H_INCLUDED  */
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
 
-/* Copy the second part of user declarations.  */
 
-#line 273 "..\\src\\cpp_y.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
 #endif
 
-#ifdef YYTYPE_UINT8
-typedef YYTYPE_UINT8 yytype_uint8;
-#else
-typedef unsigned char yytype_uint8;
+/* On compilers that do not define __PTRDIFF_MAX__ etc., make sure
+   <limits.h> and (if available) <stdint.h> are included
+   so that the code can choose integer types of a good width.  */
+
+#ifndef __PTRDIFF_MAX__
+# include <limits.h> /* INFRINGES ON USER NAME SPACE */
+# if defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
+#  include <stdint.h> /* INFRINGES ON USER NAME SPACE */
+#  define YY_STDINT_H
+# endif
 #endif
 
-#ifdef YYTYPE_INT8
-typedef YYTYPE_INT8 yytype_int8;
+/* Narrow types that promote to a signed type and that can represent a
+   signed or unsigned integer of at least N bits.  In tables they can
+   save space and decrease cache pressure.  Promoting to a signed type
+   helps avoid bugs in integer arithmetic.  */
+
+#ifdef __INT_LEAST8_MAX__
+typedef __INT_LEAST8_TYPE__ yytype_int8;
+#elif defined YY_STDINT_H
+typedef int_least8_t yytype_int8;
 #else
 typedef signed char yytype_int8;
 #endif
 
-#ifdef YYTYPE_UINT16
-typedef YYTYPE_UINT16 yytype_uint16;
+#ifdef __INT_LEAST16_MAX__
+typedef __INT_LEAST16_TYPE__ yytype_int16;
+#elif defined YY_STDINT_H
+typedef int_least16_t yytype_int16;
 #else
-typedef unsigned short int yytype_uint16;
+typedef short yytype_int16;
 #endif
 
-#ifdef YYTYPE_INT16
-typedef YYTYPE_INT16 yytype_int16;
+#if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
+typedef __UINT_LEAST8_TYPE__ yytype_uint8;
+#elif (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
+       && UINT_LEAST8_MAX <= INT_MAX)
+typedef uint_least8_t yytype_uint8;
+#elif !defined __UINT_LEAST8_MAX__ && UCHAR_MAX <= INT_MAX
+typedef unsigned char yytype_uint8;
 #else
-typedef short int yytype_int16;
+typedef short yytype_uint8;
+#endif
+
+#if defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
+typedef __UINT_LEAST16_TYPE__ yytype_uint16;
+#elif (!defined __UINT_LEAST16_MAX__ && defined YY_STDINT_H \
+       && UINT_LEAST16_MAX <= INT_MAX)
+typedef uint_least16_t yytype_uint16;
+#elif !defined __UINT_LEAST16_MAX__ && USHRT_MAX <= INT_MAX
+typedef unsigned short yytype_uint16;
+#else
+typedef int yytype_uint16;
+#endif
+
+#ifndef YYPTRDIFF_T
+# if defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
+#  define YYPTRDIFF_T __PTRDIFF_TYPE__
+#  define YYPTRDIFF_MAXIMUM __PTRDIFF_MAX__
+# elif defined PTRDIFF_MAX
+#  ifndef ptrdiff_t
+#   include <stddef.h> /* INFRINGES ON USER NAME SPACE */
+#  endif
+#  define YYPTRDIFF_T ptrdiff_t
+#  define YYPTRDIFF_MAXIMUM PTRDIFF_MAX
+# else
+#  define YYPTRDIFF_T long
+#  define YYPTRDIFF_MAXIMUM LONG_MAX
+# endif
 #endif
 
 #ifndef YYSIZE_T
@@ -304,15 +474,27 @@ typedef short int yytype_int16;
 #  define YYSIZE_T __SIZE_TYPE__
 # elif defined size_t
 #  define YYSIZE_T size_t
-# elif ! defined YYSIZE_T
+# elif defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
-#  define YYSIZE_T unsigned int
+#  define YYSIZE_T unsigned
 # endif
 #endif
 
-#define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
+#define YYSIZE_MAXIMUM                                  \
+  YY_CAST (YYPTRDIFF_T,                                 \
+           (YYPTRDIFF_MAXIMUM < YY_CAST (YYSIZE_T, -1)  \
+            ? YYPTRDIFF_MAXIMUM                         \
+            : YY_CAST (YYSIZE_T, -1)))
+
+#define YYSIZEOF(X) YY_CAST (YYPTRDIFF_T, sizeof (X))
+
+/* Stored state numbers (used for stacks). */
+typedef yytype_int16 yy_state_t;
+
+/* State numbers in computations.  */
+typedef int yy_state_fast_t;
 
 #ifndef YY_
 # if defined YYENABLE_NLS && YYENABLE_NLS
@@ -326,30 +508,19 @@ typedef short int yytype_int16;
 # endif
 #endif
 
-#ifndef YY_ATTRIBUTE
-# if (defined __GNUC__                                               \
-      && (2 < __GNUC__ || (__GNUC__ == 2 && 96 <= __GNUC_MINOR__)))  \
-     || defined __SUNPRO_C && 0x5110 <= __SUNPRO_C
-#  define YY_ATTRIBUTE(Spec) __attribute__(Spec)
+#ifndef YY_ATTRIBUTE_PURE
+# if defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
+#  define YY_ATTRIBUTE_PURE __attribute__ ((__pure__))
 # else
-#  define YY_ATTRIBUTE(Spec) /* empty */
+#  define YY_ATTRIBUTE_PURE
 # endif
 #endif
 
-#ifndef YY_ATTRIBUTE_PURE
-# define YY_ATTRIBUTE_PURE   YY_ATTRIBUTE ((__pure__))
-#endif
-
 #ifndef YY_ATTRIBUTE_UNUSED
-# define YY_ATTRIBUTE_UNUSED YY_ATTRIBUTE ((__unused__))
-#endif
-
-#if !defined _Noreturn \
-     && (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112)
-# if defined _MSC_VER && 1200 <= _MSC_VER
-#  define _Noreturn __declspec (noreturn)
+# if defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
+#  define YY_ATTRIBUTE_UNUSED __attribute__ ((__unused__))
 # else
-#  define _Noreturn YY_ATTRIBUTE ((__noreturn__))
+#  define YY_ATTRIBUTE_UNUSED
 # endif
 #endif
 
@@ -360,13 +531,13 @@ typedef short int yytype_int16;
 # define YYUSE(E) /* empty */
 #endif
 
-#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+#if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
 /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
-# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
-    _Pragma ("GCC diagnostic push") \
-    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")\
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                            \
+    _Pragma ("GCC diagnostic push")                                     \
+    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")              \
     _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
-# define YY_IGNORE_MAYBE_UNINITIALIZED_END \
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END      \
     _Pragma ("GCC diagnostic pop")
 #else
 # define YY_INITIAL_VALUE(Value) Value
@@ -379,6 +550,20 @@ typedef short int yytype_int16;
 # define YY_INITIAL_VALUE(Value) /* Nothing. */
 #endif
 
+#if defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
+# define YY_IGNORE_USELESS_CAST_BEGIN                          \
+    _Pragma ("GCC diagnostic push")                            \
+    _Pragma ("GCC diagnostic ignored \"-Wuseless-cast\"")
+# define YY_IGNORE_USELESS_CAST_END            \
+    _Pragma ("GCC diagnostic pop")
+#endif
+#ifndef YY_IGNORE_USELESS_CAST_BEGIN
+# define YY_IGNORE_USELESS_CAST_BEGIN
+# define YY_IGNORE_USELESS_CAST_END
+#endif
+
+
+#define YY_ASSERT(E) ((void) (0 && (E)))
 
 #if ! defined yyoverflow || YYERROR_VERBOSE
 
@@ -455,17 +640,17 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
-  yytype_int16 yyss_alloc;
+  yy_state_t yyss_alloc;
   YYSTYPE yyvs_alloc;
 };
 
 /* The size of the maximum gap between one aligned stack and the next.  */
-# define YYSTACK_GAP_MAXIMUM (sizeof (union yyalloc) - 1)
+# define YYSTACK_GAP_MAXIMUM (YYSIZEOF (union yyalloc) - 1)
 
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
 # define YYSTACK_BYTES(N) \
-     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE)) \
+     ((N) * (YYSIZEOF (yy_state_t) + YYSIZEOF (YYSTYPE)) \
       + YYSTACK_GAP_MAXIMUM)
 
 # define YYCOPY_NEEDED 1
@@ -478,11 +663,11 @@ union yyalloc
 # define YYSTACK_RELOCATE(Stack_alloc, Stack)                           \
     do                                                                  \
       {                                                                 \
-        YYSIZE_T yynewbytes;                                            \
+        YYPTRDIFF_T yynewbytes;                                         \
         YYCOPY (&yyptr->Stack_alloc, Stack, yysize);                    \
         Stack = &yyptr->Stack_alloc;                                    \
-        yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-        yyptr += yynewbytes / sizeof (*yyptr);                          \
+        yynewbytes = yystacksize * YYSIZEOF (*Stack) + YYSTACK_GAP_MAXIMUM; \
+        yyptr += yynewbytes / YYSIZEOF (*yyptr);                        \
       }                                                                 \
     while (0)
 
@@ -494,12 +679,12 @@ union yyalloc
 # ifndef YYCOPY
 #  if defined __GNUC__ && 1 < __GNUC__
 #   define YYCOPY(Dst, Src, Count) \
-      __builtin_memcpy (Dst, Src, (Count) * sizeof (*(Src)))
+      __builtin_memcpy (Dst, Src, YY_CAST (YYSIZE_T, (Count)) * sizeof (*(Src)))
 #  else
 #   define YYCOPY(Dst, Src, Count)              \
       do                                        \
         {                                       \
-          YYSIZE_T yyi;                         \
+          YYPTRDIFF_T yyi;                      \
           for (yyi = 0; yyi < (Count); yyi++)   \
             (Dst)[yyi] = (Src)[yyi];            \
         }                                       \
@@ -522,17 +707,18 @@ union yyalloc
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  594
 
-/* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
-   by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   364
 
+
+/* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
+   as returned by yylex, with out-of-bounds checking.  */
 #define YYTRANSLATE(YYX)                                                \
-  ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
+  (0 <= (YYX) && (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
 /* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
-   as returned by yylex, without out-of-bounds checking.  */
-static const yytype_uint8 yytranslate[] =
+   as returned by yylex.  */
+static const yytype_int8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -575,7 +761,7 @@ static const yytype_uint8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint16 yyrline[] =
+static const yytype_int16 yyrline[] =
 {
        0,    73,    73,    82,    90,    94,   100,   104,   111,   115,
      119,   123,   127,   131,   138,   142,   149,   153,   164,   168,
@@ -676,7 +862,7 @@ static const char *const yytname[] =
 # ifdef YYPRINT
 /* YYTOKNUM[NUM] -- (External) token number corresponding to the
    (internal) symbol number NUM (which must be that of a token).  */
-static const yytype_uint16 yytoknum[] =
+static const yytype_int16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
@@ -692,14 +878,14 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -384
+#define YYPACT_NINF (-384)
 
-#define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-384)))
+#define yypact_value_is_default(Yyn) \
+  ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF -1
+#define YYTABLE_NINF (-1)
 
-#define yytable_value_is_error(Yytable_value) \
+#define yytable_value_is_error(Yyn) \
   0
 
   /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -771,7 +957,7 @@ static const yytype_int16 yypact[] =
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
      Performed when YYTABLE does not specify something else to do.  Zero
      means the default is an error.  */
-static const yytype_uint16 yydefact[] =
+static const yytype_int16 yydefact[] =
 {
        0,   126,   188,   187,   142,   141,     0,   180,     0,   138,
      167,   194,   165,   145,     0,   166,     0,     0,   147,   173,
@@ -866,7 +1052,7 @@ static const yytype_int16 yydefgoto[] =
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule whose
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_uint16 yytable[] =
+static const yytype_int16 yytable[] =
 {
       50,    46,   334,   140,   294,   221,   326,   295,   297,   127,
      283,   432,    43,   190,   404,   491,   384,   102,   183,   505,
@@ -1426,7 +1612,7 @@ static const yytype_uint8 yyr1[] =
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
-static const yytype_uint8 yyr2[] =
+static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     1,     5,     7,     1,     2,     1,     1,
        3,     2,     2,     1,     1,     3,     1,     3,     1,     1,
@@ -1481,22 +1667,22 @@ static const yytype_uint8 yyr2[] =
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)                                  \
-do                                                              \
-  if (yychar == YYEMPTY)                                        \
-    {                                                           \
-      yychar = (Token);                                         \
-      yylval = (Value);                                         \
-      YYPOPSTACK (yylen);                                       \
-      yystate = *yyssp;                                         \
-      goto yybackup;                                            \
-    }                                                           \
-  else                                                          \
-    {                                                           \
-      yyerror (YY_("syntax error: cannot back up")); \
-      YYERROR;                                                  \
-    }                                                           \
-while (0)
+#define YYBACKUP(Token, Value)                                    \
+  do                                                              \
+    if (yychar == YYEMPTY)                                        \
+      {                                                           \
+        yychar = (Token);                                         \
+        yylval = (Value);                                         \
+        YYPOPSTACK (yylen);                                       \
+        yystate = *yyssp;                                         \
+        goto yybackup;                                            \
+      }                                                           \
+    else                                                          \
+      {                                                           \
+        yyerror (YY_("syntax error: cannot back up")); \
+        YYERROR;                                                  \
+      }                                                           \
+  while (0)
 
 /* Error token number */
 #define YYTERROR        1
@@ -1536,37 +1722,39 @@ do {                                                                      \
 } while (0)
 
 
-/*----------------------------------------.
-| Print this symbol's value on YYOUTPUT.  |
-`----------------------------------------*/
+/*-----------------------------------.
+| Print this symbol's value on YYO.  |
+`-----------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep)
 {
-  FILE *yyo = yyoutput;
-  YYUSE (yyo);
+  FILE *yyoutput = yyo;
+  YYUSE (yyoutput);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
-    YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
+    YYPRINT (yyo, yytoknum[yytype], *yyvaluep);
 # endif
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   YYUSE (yytype);
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
 
-/*--------------------------------.
-| Print this symbol on YYOUTPUT.  |
-`--------------------------------*/
+/*---------------------------.
+| Print this symbol on YYO.  |
+`---------------------------*/
 
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep)
 {
-  YYFPRINTF (yyoutput, "%s %s (",
+  YYFPRINTF (yyo, "%s %s (",
              yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
-  YYFPRINTF (yyoutput, ")");
+  yy_symbol_value_print (yyo, yytype, yyvaluep);
+  YYFPRINTF (yyo, ")");
 }
 
 /*------------------------------------------------------------------.
@@ -1575,7 +1763,7 @@ yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
 `------------------------------------------------------------------*/
 
 static void
-yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
+yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
 {
   YYFPRINTF (stderr, "Stack now");
   for (; yybottom <= yytop; yybottom++)
@@ -1598,12 +1786,12 @@ do {                                                            \
 `------------------------------------------------*/
 
 static void
-yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, int yyrule)
+yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, int yyrule)
 {
-  unsigned long int yylno = yyrline[yyrule];
+  int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
-  YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
+  YYFPRINTF (stderr, "Reducing stack by rule %d (line %d):\n",
              yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
@@ -1611,7 +1799,7 @@ yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, int yyrule)
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        yystos[yyssp[yyi + 1 - yynrhs]],
-                       &(yyvsp[(yyi + 1) - (yynrhs)])
+                       &yyvsp[(yyi + 1) - (yynrhs)]
                                               );
       YYFPRINTF (stderr, "\n");
     }
@@ -1655,13 +1843,13 @@ int yydebug;
 
 # ifndef yystrlen
 #  if defined __GLIBC__ && defined _STRING_H
-#   define yystrlen strlen
+#   define yystrlen(S) (YY_CAST (YYPTRDIFF_T, strlen (S)))
 #  else
 /* Return the length of YYSTR.  */
-static YYSIZE_T
+static YYPTRDIFF_T
 yystrlen (const char *yystr)
 {
-  YYSIZE_T yylen;
+  YYPTRDIFF_T yylen;
   for (yylen = 0; yystr[yylen]; yylen++)
     continue;
   return yylen;
@@ -1697,12 +1885,12 @@ yystpcpy (char *yydest, const char *yysrc)
    backslash-backslash).  YYSTR is taken from yytname.  If YYRES is
    null, do not copy; instead, return the length of what the result
    would have been.  */
-static YYSIZE_T
+static YYPTRDIFF_T
 yytnamerr (char *yyres, const char *yystr)
 {
   if (*yystr == '"')
     {
-      YYSIZE_T yyn = 0;
+      YYPTRDIFF_T yyn = 0;
       char const *yyp = yystr;
 
       for (;;)
@@ -1715,7 +1903,10 @@ yytnamerr (char *yyres, const char *yystr)
           case '\\':
             if (*++yyp != '\\')
               goto do_not_strip_quotes;
-            /* Fall through.  */
+            else
+              goto append;
+
+          append:
           default:
             if (yyres)
               yyres[yyn] = *yyp;
@@ -1730,10 +1921,10 @@ yytnamerr (char *yyres, const char *yystr)
     do_not_strip_quotes: ;
     }
 
-  if (! yyres)
+  if (yyres)
+    return yystpcpy (yyres, yystr) - yyres;
+  else
     return yystrlen (yystr);
-
-  return yystpcpy (yyres, yystr) - yyres;
 }
 # endif
 
@@ -1746,19 +1937,19 @@ yytnamerr (char *yyres, const char *yystr)
    *YYMSG_ALLOC to the required number of bytes.  Return 2 if the
    required number of bytes is too large to store.  */
 static int
-yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
-                yytype_int16 *yyssp, int yytoken)
+yysyntax_error (YYPTRDIFF_T *yymsg_alloc, char **yymsg,
+                yy_state_t *yyssp, int yytoken)
 {
-  YYSIZE_T yysize0 = yytnamerr (YY_NULLPTR, yytname[yytoken]);
-  YYSIZE_T yysize = yysize0;
   enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
   /* Internationalized format string. */
   const char *yyformat = YY_NULLPTR;
-  /* Arguments of yyformat. */
+  /* Arguments of yyformat: reported tokens (one for the "unexpected",
+     one per "expected"). */
   char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
-  /* Number of reported tokens (one for the "unexpected", one per
-     "expected"). */
+  /* Actual size of YYARG. */
   int yycount = 0;
+  /* Cumulated lengths of YYARG.  */
+  YYPTRDIFF_T yysize = 0;
 
   /* There are many possibilities here to consider:
      - If this state is a consistent state with a default action, then
@@ -1786,6 +1977,8 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
   if (yytoken != YYEMPTY)
     {
       int yyn = yypact[*yyssp];
+      YYPTRDIFF_T yysize0 = yytnamerr (YY_NULLPTR, yytname[yytoken]);
+      yysize = yysize0;
       yyarg[yycount++] = yytname[yytoken];
       if (!yypact_value_is_default (yyn))
         {
@@ -1810,11 +2003,12 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                   }
                 yyarg[yycount++] = yytname[yyx];
                 {
-                  YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
-                  if (! (yysize <= yysize1
-                         && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+                  YYPTRDIFF_T yysize1
+                    = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
+                  if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
+                    yysize = yysize1;
+                  else
                     return 2;
-                  yysize = yysize1;
                 }
               }
         }
@@ -1826,6 +2020,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
       case N:                               \
         yyformat = S;                       \
       break
+    default: /* Avoid compiler warnings. */
       YYCASE_(0, YY_("syntax error"));
       YYCASE_(1, YY_("syntax error, unexpected %s"));
       YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
@@ -1836,10 +2031,13 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
     }
 
   {
-    YYSIZE_T yysize1 = yysize + yystrlen (yyformat);
-    if (! (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+    /* Don't count the "%s"s in the final size, but reserve room for
+       the terminator.  */
+    YYPTRDIFF_T yysize1 = yysize + (yystrlen (yyformat) - 2 * yycount) + 1;
+    if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
+      yysize = yysize1;
+    else
       return 2;
-    yysize = yysize1;
   }
 
   if (*yymsg_alloc < yysize)
@@ -1865,8 +2063,8 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
         }
       else
         {
-          yyp++;
-          yyformat++;
+          ++yyp;
+          ++yyformat;
         }
   }
   return 0;
@@ -1909,7 +2107,7 @@ int yynerrs;
 int
 yyparse (void)
 {
-    int yystate;
+    yy_state_fast_t yystate;
     /* Number of tokens to shift before error messages enabled.  */
     int yyerrstatus;
 
@@ -1921,16 +2119,16 @@ yyparse (void)
        to reallocate them elsewhere.  */
 
     /* The state stack.  */
-    yytype_int16 yyssa[YYINITDEPTH];
-    yytype_int16 *yyss;
-    yytype_int16 *yyssp;
+    yy_state_t yyssa[YYINITDEPTH];
+    yy_state_t *yyss;
+    yy_state_t *yyssp;
 
     /* The semantic value stack.  */
     YYSTYPE yyvsa[YYINITDEPTH];
     YYSTYPE *yyvs;
     YYSTYPE *yyvsp;
 
-    YYSIZE_T yystacksize;
+    YYPTRDIFF_T yystacksize;
 
   int yyn;
   int yyresult;
@@ -1944,7 +2142,7 @@ yyparse (void)
   /* Buffer for error messages, and its allocated size.  */
   char yymsgbuf[128];
   char *yymsg = yymsgbuf;
-  YYSIZE_T yymsg_alloc = sizeof yymsgbuf;
+  YYPTRDIFF_T yymsg_alloc = sizeof yymsgbuf;
 #endif
 
 #define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N))
@@ -1965,46 +2163,54 @@ yyparse (void)
   yychar = YYEMPTY; /* Cause a token to be read.  */
   goto yysetstate;
 
+
 /*------------------------------------------------------------.
-| yynewstate -- Push a new state, which is found in yystate.  |
+| yynewstate -- push a new state, which is found in yystate.  |
 `------------------------------------------------------------*/
- yynewstate:
+yynewstate:
   /* In all cases, when you get here, the value and location stacks
      have just been pushed.  So pushing a state here evens the stacks.  */
   yyssp++;
 
- yysetstate:
-  *yyssp = yystate;
+
+/*--------------------------------------------------------------------.
+| yysetstate -- set current state (the top of the stack) to yystate.  |
+`--------------------------------------------------------------------*/
+yysetstate:
+  YYDPRINTF ((stderr, "Entering state %d\n", yystate));
+  YY_ASSERT (0 <= yystate && yystate < YYNSTATES);
+  YY_IGNORE_USELESS_CAST_BEGIN
+  *yyssp = YY_CAST (yy_state_t, yystate);
+  YY_IGNORE_USELESS_CAST_END
 
   if (yyss + yystacksize - 1 <= yyssp)
+#if !defined yyoverflow && !defined YYSTACK_RELOCATE
+    goto yyexhaustedlab;
+#else
     {
       /* Get the current used size of the three stacks, in elements.  */
-      YYSIZE_T yysize = yyssp - yyss + 1;
+      YYPTRDIFF_T yysize = yyssp - yyss + 1;
 
-#ifdef yyoverflow
+# if defined yyoverflow
       {
         /* Give user a chance to reallocate the stack.  Use copies of
            these so that the &'s don't force the real ones into
            memory.  */
+        yy_state_t *yyss1 = yyss;
         YYSTYPE *yyvs1 = yyvs;
-        yytype_int16 *yyss1 = yyss;
 
         /* Each stack pointer address is followed by the size of the
            data in use in that stack, in bytes.  This used to be a
            conditional around just the two extra args, but that might
            be undefined if yyoverflow is a macro.  */
         yyoverflow (YY_("memory exhausted"),
-                    &yyss1, yysize * sizeof (*yyssp),
-                    &yyvs1, yysize * sizeof (*yyvsp),
+                    &yyss1, yysize * YYSIZEOF (*yyssp),
+                    &yyvs1, yysize * YYSIZEOF (*yyvsp),
                     &yystacksize);
-
         yyss = yyss1;
         yyvs = yyvs1;
       }
-#else /* no yyoverflow */
-# ifndef YYSTACK_RELOCATE
-      goto yyexhaustedlab;
-# else
+# else /* defined YYSTACK_RELOCATE */
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
         goto yyexhaustedlab;
@@ -2013,42 +2219,43 @@ yyparse (void)
         yystacksize = YYMAXDEPTH;
 
       {
-        yytype_int16 *yyss1 = yyss;
+        yy_state_t *yyss1 = yyss;
         union yyalloc *yyptr =
-          (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+          YY_CAST (union yyalloc *,
+                   YYSTACK_ALLOC (YY_CAST (YYSIZE_T, YYSTACK_BYTES (yystacksize))));
         if (! yyptr)
           goto yyexhaustedlab;
         YYSTACK_RELOCATE (yyss_alloc, yyss);
         YYSTACK_RELOCATE (yyvs_alloc, yyvs);
-#  undef YYSTACK_RELOCATE
+# undef YYSTACK_RELOCATE
         if (yyss1 != yyssa)
           YYSTACK_FREE (yyss1);
       }
 # endif
-#endif /* no yyoverflow */
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
 
-      YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-                  (unsigned long int) yystacksize));
+      YY_IGNORE_USELESS_CAST_BEGIN
+      YYDPRINTF ((stderr, "Stack size increased to %ld\n",
+                  YY_CAST (long, yystacksize)));
+      YY_IGNORE_USELESS_CAST_END
 
       if (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
-
-  YYDPRINTF ((stderr, "Entering state %d\n", yystate));
+#endif /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
 
   if (yystate == YYFINAL)
     YYACCEPT;
 
   goto yybackup;
 
+
 /*-----------.
 | yybackup.  |
 `-----------*/
 yybackup:
-
   /* Do appropriate processing given the current state.  Read a
      lookahead token if we need one and don't already have one.  */
 
@@ -2098,15 +2305,13 @@ yybackup:
 
   /* Shift the lookahead token.  */
   YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
-
-  /* Discard the shifted token.  */
-  yychar = YYEMPTY;
-
   yystate = yyn;
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 
+  /* Discard the shifted token.  */
+  yychar = YYEMPTY;
   goto yynewstate;
 
 
@@ -2121,7 +2326,7 @@ yydefault:
 
 
 /*-----------------------------.
-| yyreduce -- Do a reduction.  |
+| yyreduce -- do a reduction.  |
 `-----------------------------*/
 yyreduce:
   /* yyn is the number of a rule to reduce with.  */
@@ -2141,3138 +2346,3139 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 2:
-#line 74 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+  case 2:
+#line 74 "cpp_y.y"
+{
   void* pObj;
 
-  pObj        = adtCppTranslationUnit_create((yyvsp[0]).pContext);
-  (yyval).pContext = adtCpp_setRoot(pObj);
+  pObj        = adtCppTranslationUnit_create(yyvsp[0].pContext);
+  yyval.pContext = adtCpp_setRoot(pObj);
 
   adtCpp_releaseObject(pObj);
 }
-#line 2155 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2360 "../../src/cpp_y.c"
     break;
 
   case 3:
-#line 83 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add(adtCpp_getRoot(), (yyvsp[0]).pContext);
+#line 83 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(adtCpp_getRoot(), yyvsp[0].pContext);
 }
-#line 2163 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2368 "../../src/cpp_y.c"
     break;
 
   case 4:
-#line 91 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMacro_create((yyvsp[-4]).sValue, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
+#line 91 "cpp_y.y"
+{
+  yyval.pContext = adtCppMacro_create(yyvsp[-4].sValue, yyvsp[-2].pContext, yyvsp[0].pContext, 0);
 }
-#line 2171 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2376 "../../src/cpp_y.c"
     break;
 
   case 5:
-#line 95 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMacro_create((yyvsp[-6]).sValue, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 95 "cpp_y.y"
+{
+  yyval.pContext = adtCppMacro_create(yyvsp[-6].sValue, yyvsp[-4].pContext, yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 2179 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2384 "../../src/cpp_y.c"
     break;
 
   case 6:
-#line 101 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleDeclarationList_create((yyvsp[0]).pContext);
+#line 101 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleDeclarationList_create(yyvsp[0].pContext);
 }
-#line 2187 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2392 "../../src/cpp_y.c"
     break;
 
   case 7:
-#line 105 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+#line 105 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-1].pContext, yyvsp[0].pContext);
 }
-#line 2195 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2400 "../../src/cpp_y.c"
     break;
 
   case 8:
-#line 112 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppPostfixExpression_create(0, 0, 0, 0, (yyvsp[0]).sValue);
+#line 112 "cpp_y.y"
+{
+  yyval.pContext = adtCppPostfixExpression_create(0, 0, 0, 0, yyvsp[0].sValue);
 }
-#line 2203 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2408 "../../src/cpp_y.c"
     break;
 
   case 9:
-#line 116 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppPostfixExpression_create(0, 0, 0, 0, (yyvsp[0]).sValue);
+#line 116 "cpp_y.y"
+{
+  yyval.pContext = adtCppPostfixExpression_create(0, 0, 0, 0, yyvsp[0].sValue);
 }
-#line 2211 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2416 "../../src/cpp_y.c"
     break;
 
   case 10:
-#line 120 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppPostfixExpression_create((yyvsp[-1]).pContext, 0, 0, 0, 0);
+#line 120 "cpp_y.y"
+{
+  yyval.pContext = adtCppPostfixExpression_create(yyvsp[-1].pContext, 0, 0, 0, 0);
 }
-#line 2219 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2424 "../../src/cpp_y.c"
     break;
 
   case 11:
-#line 124 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppPostfixExpression_create(0, (yyvsp[-1]).pContext, 0, 1, 0);
+#line 124 "cpp_y.y"
+{
+  yyval.pContext = adtCppPostfixExpression_create(0, yyvsp[-1].pContext, 0, 1, 0);
 }
-#line 2227 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2432 "../../src/cpp_y.c"
     break;
 
   case 12:
-#line 128 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppPostfixExpression_create(0, (yyvsp[-1]).pContext, 0, 0, 0);
+#line 128 "cpp_y.y"
+{
+  yyval.pContext = adtCppPostfixExpression_create(0, yyvsp[-1].pContext, 0, 0, 0);
 }
-#line 2235 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2440 "../../src/cpp_y.c"
     break;
 
   case 13:
-#line 132 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppPostfixExpression_create(0, 0, (yyvsp[0]).pContext, 0, 0);
+#line 132 "cpp_y.y"
+{
+  yyval.pContext = adtCppPostfixExpression_create(0, 0, yyvsp[0].pContext, 0, 0);
 }
-#line 2243 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2448 "../../src/cpp_y.c"
     break;
 
   case 14:
-#line 139 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppExpressionList_create((yyvsp[0]).pContext);
+#line 139 "cpp_y.y"
+{
+  yyval.pContext = adtCppExpressionList_create(yyvsp[0].pContext);
 }
-#line 2251 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2456 "../../src/cpp_y.c"
     break;
 
   case 15:
-#line 143 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 143 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 2259 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2464 "../../src/cpp_y.c"
     break;
 
   case 16:
-#line 150 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDirectedExpression_create((yyvsp[0]).pContext);
+#line 150 "cpp_y.y"
+{
+  yyval.pContext = adtCppDirectedExpression_create(yyvsp[0].pContext);
 }
-#line 2267 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2472 "../../src/cpp_y.c"
     break;
 
   case 17:
-#line 154 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 154 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 2275 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2480 "../../src/cpp_y.c"
     break;
 
   case 18:
-#line 165 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[0]).sValue, 0, 0, 0, 0);
+#line 165 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[0].sValue, 0, 0, 0, 0);
 }
-#line 2283 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2488 "../../src/cpp_y.c"
     break;
 
   case 19:
-#line 169 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[0]).sValue, 0, 0, 1, 0);
+#line 169 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[0].sValue, 0, 0, 1, 0);
 }
-#line 2291 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2496 "../../src/cpp_y.c"
     break;
 
   case 20:
-#line 173 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-2]).sValue, 0, 0, 0, 1);
+#line 173 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-2].sValue, 0, 0, 0, 1);
 }
-#line 2299 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2504 "../../src/cpp_y.c"
     break;
 
   case 21:
-#line 177 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-2]).sValue, 0, 0, 1, 1);
+#line 177 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-2].sValue, 0, 0, 1, 1);
 }
-#line 2307 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2512 "../../src/cpp_y.c"
     break;
 
   case 22:
-#line 181 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-3]).sValue, (yyvsp[-1]).pContext, 0, 0, 1);
+#line 181 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-3].sValue, yyvsp[-1].pContext, 0, 0, 1);
 }
-#line 2315 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2520 "../../src/cpp_y.c"
     break;
 
   case 23:
-#line 185 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-3]).sValue, (yyvsp[-1]).pContext, 0, 1, 1);
+#line 185 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-3].sValue, yyvsp[-1].pContext, 0, 1, 1);
 }
-#line 2323 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2528 "../../src/cpp_y.c"
     break;
 
   case 24:
-#line 189 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-1]).sValue, 0, (yyvsp[0]).pContext, 0, 0);
+#line 189 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-1].sValue, 0, yyvsp[0].pContext, 0, 0);
 }
-#line 2331 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2536 "../../src/cpp_y.c"
     break;
 
   case 25:
-#line 193 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-1]).sValue, 0, (yyvsp[0]).pContext, 1, 0);
+#line 193 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-1].sValue, 0, yyvsp[0].pContext, 1, 0);
 }
-#line 2339 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2544 "../../src/cpp_y.c"
     break;
 
   case 26:
-#line 197 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-3]).sValue, 0, (yyvsp[0]).pContext, 0, 1);
+#line 197 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-3].sValue, 0, yyvsp[0].pContext, 0, 1);
 }
-#line 2347 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2552 "../../src/cpp_y.c"
     break;
 
   case 27:
-#line 201 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-3]).sValue, 0, (yyvsp[0]).pContext, 1, 1);
+#line 201 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-3].sValue, 0, yyvsp[0].pContext, 1, 1);
 }
-#line 2355 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2560 "../../src/cpp_y.c"
     break;
 
   case 28:
-#line 205 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-4]).sValue, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 1);
+#line 205 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-4].sValue, yyvsp[-2].pContext, yyvsp[0].pContext, 0, 1);
 }
-#line 2363 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2568 "../../src/cpp_y.c"
     break;
 
   case 29:
-#line 209 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpression_create((yyvsp[-4]).sValue, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1, 1);
+#line 209 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpression_create(yyvsp[-4].sValue, yyvsp[-2].pContext, yyvsp[0].pContext, 1, 1);
 }
-#line 2371 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2576 "../../src/cpp_y.c"
     break;
 
   case 30:
-#line 216 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorExpressionDims_create((yyvsp[-1]).pContext);
+#line 216 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorExpressionDims_create(yyvsp[-1].pContext);
 }
-#line 2379 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2584 "../../src/cpp_y.c"
     break;
 
   case 31:
-#line 220 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
+#line 220 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-3].pContext, yyvsp[-1].pContext);
 }
-#line 2387 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2592 "../../src/cpp_y.c"
     break;
 
   case 32:
-#line 227 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryExpression_create((yyvsp[0]).pContext, 0, 0, 0, 0);
+#line 227 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryExpression_create(yyvsp[0].pContext, 0, 0, 0, 0);
 }
-#line 2395 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2600 "../../src/cpp_y.c"
     break;
 
   case 33:
-#line 231 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryExpression_create(0, (yyvsp[0]).pContext, 0, 0, 1);
+#line 231 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryExpression_create(0, yyvsp[0].pContext, 0, 0, 1);
 }
-#line 2403 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2608 "../../src/cpp_y.c"
     break;
 
   case 34:
-#line 235 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryExpression_create(0, (yyvsp[0]).pContext, 0, 0, 0);
+#line 235 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryExpression_create(0, yyvsp[0].pContext, 0, 0, 0);
 }
-#line 2411 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2616 "../../src/cpp_y.c"
     break;
 
   case 35:
-#line 239 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryExpression_create(0, (yyvsp[0]).pContext, (yyvsp[-1]).pContext, 0, 0);
+#line 239 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryExpression_create(0, yyvsp[0].pContext, yyvsp[-1].pContext, 0, 0);
 }
-#line 2419 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2624 "../../src/cpp_y.c"
     break;
 
   case 36:
-#line 243 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryExpression_create(0, 0, 0, (yyvsp[-1]).pContext, 0);
+#line 243 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryExpression_create(0, 0, 0, yyvsp[-1].pContext, 0);
 }
-#line 2427 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2632 "../../src/cpp_y.c"
     break;
 
   case 37:
-#line 250 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryOperator_create(0);
+#line 250 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryOperator_create(0);
 }
-#line 2435 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2640 "../../src/cpp_y.c"
     break;
 
   case 38:
-#line 254 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryOperator_create(1);
+#line 254 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryOperator_create(1);
 }
-#line 2443 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2648 "../../src/cpp_y.c"
     break;
 
   case 39:
-#line 258 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryOperator_create(2);
+#line 258 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryOperator_create(2);
 }
-#line 2451 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2656 "../../src/cpp_y.c"
     break;
 
   case 40:
-#line 262 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUnaryOperator_create(3);
+#line 262 "cpp_y.y"
+{
+  yyval.pContext = adtCppUnaryOperator_create(3);
 }
-#line 2459 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2664 "../../src/cpp_y.c"
     break;
 
   case 41:
-#line 269 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMultiplicativeExpression_create(0, (yyvsp[0]).pContext, 0);
+#line 269 "cpp_y.y"
+{
+  yyval.pContext = adtCppMultiplicativeExpression_create(0, yyvsp[0].pContext, 0);
 }
-#line 2467 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2672 "../../src/cpp_y.c"
     break;
 
   case 42:
-#line 273 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMultiplicativeExpression_create(0, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 273 "cpp_y.y"
+{
+  yyval.pContext = adtCppMultiplicativeExpression_create(0, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2475 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2680 "../../src/cpp_y.c"
     break;
 
   case 43:
-#line 277 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMultiplicativeExpression_create(1, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 277 "cpp_y.y"
+{
+  yyval.pContext = adtCppMultiplicativeExpression_create(1, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2483 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2688 "../../src/cpp_y.c"
     break;
 
   case 44:
-#line 281 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMultiplicativeExpression_create(2, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 281 "cpp_y.y"
+{
+  yyval.pContext = adtCppMultiplicativeExpression_create(2, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2491 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2696 "../../src/cpp_y.c"
     break;
 
   case 45:
-#line 288 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAdditiveExpression_create(0, (yyvsp[0]).pContext, 0);
+#line 288 "cpp_y.y"
+{
+  yyval.pContext = adtCppAdditiveExpression_create(0, yyvsp[0].pContext, 0);
 }
-#line 2499 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2704 "../../src/cpp_y.c"
     break;
 
   case 46:
-#line 292 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAdditiveExpression_create(0, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 292 "cpp_y.y"
+{
+  yyval.pContext = adtCppAdditiveExpression_create(0, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2507 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2712 "../../src/cpp_y.c"
     break;
 
   case 47:
-#line 296 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAdditiveExpression_create(1, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 296 "cpp_y.y"
+{
+  yyval.pContext = adtCppAdditiveExpression_create(1, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2515 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2720 "../../src/cpp_y.c"
     break;
 
   case 48:
-#line 303 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppShiftExpression_create(0, (yyvsp[0]).pContext, 0);
+#line 303 "cpp_y.y"
+{
+  yyval.pContext = adtCppShiftExpression_create(0, yyvsp[0].pContext, 0);
 }
-#line 2523 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2728 "../../src/cpp_y.c"
     break;
 
   case 49:
-#line 307 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppShiftExpression_create(0, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 307 "cpp_y.y"
+{
+  yyval.pContext = adtCppShiftExpression_create(0, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2531 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2736 "../../src/cpp_y.c"
     break;
 
   case 50:
-#line 311 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppShiftExpression_create(1, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 311 "cpp_y.y"
+{
+  yyval.pContext = adtCppShiftExpression_create(1, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2539 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2744 "../../src/cpp_y.c"
     break;
 
   case 51:
-#line 318 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppRelationalExpression_create(0, (yyvsp[0]).pContext, 0);
+#line 318 "cpp_y.y"
+{
+  yyval.pContext = adtCppRelationalExpression_create(0, yyvsp[0].pContext, 0);
 }
-#line 2547 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2752 "../../src/cpp_y.c"
     break;
 
   case 52:
-#line 322 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppRelationalExpression_create(0, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 322 "cpp_y.y"
+{
+  yyval.pContext = adtCppRelationalExpression_create(0, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2555 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2760 "../../src/cpp_y.c"
     break;
 
   case 53:
-#line 326 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppRelationalExpression_create(1, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 326 "cpp_y.y"
+{
+  yyval.pContext = adtCppRelationalExpression_create(1, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2563 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2768 "../../src/cpp_y.c"
     break;
 
   case 54:
-#line 330 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppRelationalExpression_create(2, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 330 "cpp_y.y"
+{
+  yyval.pContext = adtCppRelationalExpression_create(2, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2571 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2776 "../../src/cpp_y.c"
     break;
 
   case 55:
-#line 334 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppRelationalExpression_create(3, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 334 "cpp_y.y"
+{
+  yyval.pContext = adtCppRelationalExpression_create(3, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2579 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2784 "../../src/cpp_y.c"
     break;
 
   case 56:
-#line 341 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEqualityExpression_create(0, (yyvsp[0]).pContext, 0);
+#line 341 "cpp_y.y"
+{
+  yyval.pContext = adtCppEqualityExpression_create(0, yyvsp[0].pContext, 0);
 }
-#line 2587 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2792 "../../src/cpp_y.c"
     break;
 
   case 57:
-#line 345 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEqualityExpression_create(0, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 345 "cpp_y.y"
+{
+  yyval.pContext = adtCppEqualityExpression_create(0, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2595 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2800 "../../src/cpp_y.c"
     break;
 
   case 58:
-#line 349 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEqualityExpression_create(1, (yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 349 "cpp_y.y"
+{
+  yyval.pContext = adtCppEqualityExpression_create(1, yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2603 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2808 "../../src/cpp_y.c"
     break;
 
   case 59:
-#line 356 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAndExpression_create((yyvsp[0]).pContext, 0);
+#line 356 "cpp_y.y"
+{
+  yyval.pContext = adtCppAndExpression_create(yyvsp[0].pContext, 0);
 }
-#line 2611 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2816 "../../src/cpp_y.c"
     break;
 
   case 60:
-#line 360 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAndExpression_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 360 "cpp_y.y"
+{
+  yyval.pContext = adtCppAndExpression_create(yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2619 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2824 "../../src/cpp_y.c"
     break;
 
   case 61:
-#line 367 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppExclusiveOrExpression_create((yyvsp[0]).pContext, 0);
+#line 367 "cpp_y.y"
+{
+  yyval.pContext = adtCppExclusiveOrExpression_create(yyvsp[0].pContext, 0);
 }
-#line 2627 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2832 "../../src/cpp_y.c"
     break;
 
   case 62:
-#line 371 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppExclusiveOrExpression_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 371 "cpp_y.y"
+{
+  yyval.pContext = adtCppExclusiveOrExpression_create(yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2635 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2840 "../../src/cpp_y.c"
     break;
 
   case 63:
-#line 378 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInclusiveOrExpression_create((yyvsp[0]).pContext, 0);
+#line 378 "cpp_y.y"
+{
+  yyval.pContext = adtCppInclusiveOrExpression_create(yyvsp[0].pContext, 0);
 }
-#line 2643 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2848 "../../src/cpp_y.c"
     break;
 
   case 64:
-#line 382 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInclusiveOrExpression_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 382 "cpp_y.y"
+{
+  yyval.pContext = adtCppInclusiveOrExpression_create(yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2651 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2856 "../../src/cpp_y.c"
     break;
 
   case 65:
-#line 389 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLogicalAndExpression_create((yyvsp[0]).pContext, 0);
+#line 389 "cpp_y.y"
+{
+  yyval.pContext = adtCppLogicalAndExpression_create(yyvsp[0].pContext, 0);
 }
-#line 2659 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2864 "../../src/cpp_y.c"
     break;
 
   case 66:
-#line 393 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLogicalAndExpression_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 393 "cpp_y.y"
+{
+  yyval.pContext = adtCppLogicalAndExpression_create(yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2667 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2872 "../../src/cpp_y.c"
     break;
 
   case 67:
-#line 400 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLogicalOrExpression_create((yyvsp[0]).pContext, 0);
+#line 400 "cpp_y.y"
+{
+  yyval.pContext = adtCppLogicalOrExpression_create(yyvsp[0].pContext, 0);
 }
-#line 2675 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2880 "../../src/cpp_y.c"
     break;
 
   case 68:
-#line 404 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLogicalOrExpression_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 404 "cpp_y.y"
+{
+  yyval.pContext = adtCppLogicalOrExpression_create(yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2683 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2888 "../../src/cpp_y.c"
     break;
 
   case 69:
-#line 411 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppConditionalExpression_create((yyvsp[0]).pContext, 0, 0);
+#line 411 "cpp_y.y"
+{
+  yyval.pContext = adtCppConditionalExpression_create(yyvsp[0].pContext, 0, 0);
 }
-#line 2691 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2896 "../../src/cpp_y.c"
     break;
 
   case 70:
-#line 415 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppConditionalExpression_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 415 "cpp_y.y"
+{
+  yyval.pContext = adtCppConditionalExpression_create(yyvsp[-4].pContext, yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 2699 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2904 "../../src/cpp_y.c"
     break;
 
   case 71:
-#line 422 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentExpression_create((yyvsp[0]).pContext, 0, 0, 0);
+#line 422 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentExpression_create(yyvsp[0].pContext, 0, 0, 0);
 }
-#line 2707 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2912 "../../src/cpp_y.c"
     break;
 
   case 72:
-#line 426 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentExpression_create(0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+#line 426 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentExpression_create(0, yyvsp[-2].pContext, yyvsp[-1].pContext, yyvsp[0].pContext);
 }
-#line 2715 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2920 "../../src/cpp_y.c"
     break;
 
   case 73:
-#line 433 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(0);
+#line 433 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(0);
 }
-#line 2723 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2928 "../../src/cpp_y.c"
     break;
 
   case 74:
-#line 437 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(1);
+#line 437 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(1);
 }
-#line 2731 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2936 "../../src/cpp_y.c"
     break;
 
   case 75:
-#line 441 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(2);
+#line 441 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(2);
 }
-#line 2739 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2944 "../../src/cpp_y.c"
     break;
 
   case 76:
-#line 445 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(3);
+#line 445 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(3);
 }
-#line 2747 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2952 "../../src/cpp_y.c"
     break;
 
   case 77:
-#line 449 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(4);
+#line 449 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(4);
 }
-#line 2755 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2960 "../../src/cpp_y.c"
     break;
 
   case 78:
-#line 453 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(5);
+#line 453 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(5);
 }
-#line 2763 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2968 "../../src/cpp_y.c"
     break;
 
   case 79:
-#line 457 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(6);
+#line 457 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(6);
 }
-#line 2771 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2976 "../../src/cpp_y.c"
     break;
 
   case 80:
-#line 461 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(7);
+#line 461 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(7);
 }
-#line 2779 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2984 "../../src/cpp_y.c"
     break;
 
   case 81:
-#line 465 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(8);
+#line 465 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(8);
 }
-#line 2787 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 2992 "../../src/cpp_y.c"
     break;
 
   case 82:
-#line 469 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(9);
+#line 469 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(9);
 }
-#line 2795 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3000 "../../src/cpp_y.c"
     break;
 
   case 83:
-#line 473 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAssignmentOperator_create(10);
+#line 473 "cpp_y.y"
+{
+  yyval.pContext = adtCppAssignmentOperator_create(10);
 }
-#line 2803 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3008 "../../src/cpp_y.c"
     break;
 
   case 84:
-#line 480 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppExpression_create((yyvsp[0]).pContext, 0);
+#line 480 "cpp_y.y"
+{
+  yyval.pContext = adtCppExpression_create(yyvsp[0].pContext, 0);
 }
-#line 2811 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3016 "../../src/cpp_y.c"
     break;
 
   case 85:
-#line 484 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppExpression_create((yyvsp[0]).pContext, (yyvsp[-2]).pContext);
+#line 484 "cpp_y.y"
+{
+  yyval.pContext = adtCppExpression_create(yyvsp[0].pContext, yyvsp[-2].pContext);
 }
-#line 2819 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3024 "../../src/cpp_y.c"
     break;
 
   case 86:
-#line 491 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppConstantExpression_create((yyvsp[0]).pContext);
+#line 491 "cpp_y.y"
+{
+  yyval.pContext = adtCppConstantExpression_create(yyvsp[0].pContext);
 }
-#line 2827 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3032 "../../src/cpp_y.c"
     break;
 
   case 87:
-#line 498 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatement_create((yyvsp[0]).pContext, 0, 0, 0, 0, 0, 0);
+#line 498 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatement_create(yyvsp[0].pContext, 0, 0, 0, 0, 0, 0);
 }
-#line 2835 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3040 "../../src/cpp_y.c"
     break;
 
   case 88:
-#line 502 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatement_create(0, (yyvsp[0]).pContext, 0, 0, 0, 0, 0);
+#line 502 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatement_create(0, yyvsp[0].pContext, 0, 0, 0, 0, 0);
 }
-#line 2843 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3048 "../../src/cpp_y.c"
     break;
 
   case 89:
-#line 506 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatement_create(0, 0, (yyvsp[0]).pContext, 0, 0, 0, 0);
+#line 506 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatement_create(0, 0, yyvsp[0].pContext, 0, 0, 0, 0);
 }
-#line 2851 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3056 "../../src/cpp_y.c"
     break;
 
   case 90:
-#line 510 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatement_create(0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0);
+#line 510 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatement_create(0, 0, 0, yyvsp[0].pContext, 0, 0, 0);
 }
-#line 2859 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3064 "../../src/cpp_y.c"
     break;
 
   case 91:
-#line 514 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatement_create(0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0);
+#line 514 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatement_create(0, 0, 0, 0, yyvsp[0].pContext, 0, 0);
 }
-#line 2867 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3072 "../../src/cpp_y.c"
     break;
 
   case 92:
-#line 518 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatement_create(0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0);
+#line 518 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatement_create(0, 0, 0, 0, 0, yyvsp[0].pContext, 0);
 }
-#line 2875 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3080 "../../src/cpp_y.c"
     break;
 
   case 93:
-#line 522 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatement_create(0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext);
+#line 522 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatement_create(0, 0, 0, 0, 0, 0, yyvsp[0].pContext);
 }
-#line 2883 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3088 "../../src/cpp_y.c"
     break;
 
   case 94:
-#line 529 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLabeledStatement_create(0, (yyvsp[0]).pContext, (yyvsp[-2]).sValue, 0);
+#line 529 "cpp_y.y"
+{
+  yyval.pContext = adtCppLabeledStatement_create(0, yyvsp[0].pContext, yyvsp[-2].sValue, 0);
 }
-#line 2891 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3096 "../../src/cpp_y.c"
     break;
 
   case 95:
-#line 533 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLabeledStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0);
+#line 533 "cpp_y.y"
+{
+  yyval.pContext = adtCppLabeledStatement_create(yyvsp[-2].pContext, yyvsp[0].pContext, 0, 0);
 }
-#line 2899 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3104 "../../src/cpp_y.c"
     break;
 
   case 96:
-#line 537 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLabeledStatement_create(0, (yyvsp[0]).pContext, 0, 1);
+#line 537 "cpp_y.y"
+{
+  yyval.pContext = adtCppLabeledStatement_create(0, yyvsp[0].pContext, 0, 1);
 }
-#line 2907 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3112 "../../src/cpp_y.c"
     break;
 
   case 97:
-#line 544 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppExpressionStatement_create(0);
+#line 544 "cpp_y.y"
+{
+  yyval.pContext = adtCppExpressionStatement_create(0);
 }
-#line 2915 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3120 "../../src/cpp_y.c"
     break;
 
   case 98:
-#line 548 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppExpressionStatement_create((yyvsp[-1]).pContext);
+#line 548 "cpp_y.y"
+{
+  yyval.pContext = adtCppExpressionStatement_create(yyvsp[-1].pContext);
 }
-#line 2923 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3128 "../../src/cpp_y.c"
     break;
 
   case 99:
-#line 555 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppCompoundStatement_create(0);
+#line 555 "cpp_y.y"
+{
+  yyval.pContext = adtCppCompoundStatement_create(0);
 }
-#line 2931 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3136 "../../src/cpp_y.c"
     break;
 
   case 100:
-#line 559 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppCompoundStatement_create((yyvsp[-1]).pContext);
+#line 559 "cpp_y.y"
+{
+  yyval.pContext = adtCppCompoundStatement_create(yyvsp[-1].pContext);
 }
-#line 2939 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3144 "../../src/cpp_y.c"
     break;
 
   case 101:
-#line 566 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppStatementSeq_create((yyvsp[0]).pContext);
+#line 566 "cpp_y.y"
+{
+  yyval.pContext = adtCppStatementSeq_create(yyvsp[0].pContext);
 }
-#line 2947 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3152 "../../src/cpp_y.c"
     break;
 
   case 102:
-#line 570 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+#line 570 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-1].pContext, yyvsp[0].pContext);
 }
-#line 2955 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3160 "../../src/cpp_y.c"
     break;
 
   case 103:
-#line 581 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSelectionStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 1);
+#line 581 "cpp_y.y"
+{
+  yyval.pContext = adtCppSelectionStatement_create(yyvsp[-2].pContext, yyvsp[0].pContext, 0, 1);
 }
-#line 2963 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3168 "../../src/cpp_y.c"
     break;
 
   case 104:
-#line 585 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSelectionStatement_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 1);
+#line 585 "cpp_y.y"
+{
+  yyval.pContext = adtCppSelectionStatement_create(yyvsp[-4].pContext, yyvsp[-2].pContext, yyvsp[0].pContext, 1);
 }
-#line 2971 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3176 "../../src/cpp_y.c"
     break;
 
   case 105:
-#line 589 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSelectionStatement_create((yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0, 0);
+#line 589 "cpp_y.y"
+{
+  yyval.pContext = adtCppSelectionStatement_create(yyvsp[-2].pContext, yyvsp[0].pContext, 0, 0);
 }
-#line 2979 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3184 "../../src/cpp_y.c"
     break;
 
   case 106:
-#line 596 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppIterationStatement_create(0, (yyvsp[-2]).pContext, 0, (yyvsp[0]).pContext, 0);
+#line 596 "cpp_y.y"
+{
+  yyval.pContext = adtCppIterationStatement_create(0, yyvsp[-2].pContext, 0, yyvsp[0].pContext, 0);
 }
-#line 2987 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3192 "../../src/cpp_y.c"
     break;
 
   case 107:
-#line 600 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppIterationStatement_create(0, (yyvsp[-2]).pContext, 0, (yyvsp[-5]).pContext, 1);
+#line 600 "cpp_y.y"
+{
+  yyval.pContext = adtCppIterationStatement_create(0, yyvsp[-2].pContext, 0, yyvsp[-5].pContext, 1);
 }
-#line 2995 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3200 "../../src/cpp_y.c"
     break;
 
   case 108:
-#line 604 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppIterationStatement_create((yyvsp[-3]).pContext, 0, 0, (yyvsp[0]).pContext, 0);
+#line 604 "cpp_y.y"
+{
+  yyval.pContext = adtCppIterationStatement_create(yyvsp[-3].pContext, 0, 0, yyvsp[0].pContext, 0);
 }
-#line 3003 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3208 "../../src/cpp_y.c"
     break;
 
   case 109:
-#line 608 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppIterationStatement_create((yyvsp[-4]).pContext, 0, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
+#line 608 "cpp_y.y"
+{
+  yyval.pContext = adtCppIterationStatement_create(yyvsp[-4].pContext, 0, yyvsp[-2].pContext, yyvsp[0].pContext, 0);
 }
-#line 3011 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3216 "../../src/cpp_y.c"
     break;
 
   case 110:
-#line 612 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppIterationStatement_create((yyvsp[-4]).pContext, (yyvsp[-3]).pContext, 0, (yyvsp[0]).pContext, 0);
+#line 612 "cpp_y.y"
+{
+  yyval.pContext = adtCppIterationStatement_create(yyvsp[-4].pContext, yyvsp[-3].pContext, 0, yyvsp[0].pContext, 0);
 }
-#line 3019 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3224 "../../src/cpp_y.c"
     break;
 
   case 111:
-#line 616 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppIterationStatement_create((yyvsp[-5]).pContext, (yyvsp[-4]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext, 0);
+#line 616 "cpp_y.y"
+{
+  yyval.pContext = adtCppIterationStatement_create(yyvsp[-5].pContext, yyvsp[-4].pContext, yyvsp[-2].pContext, yyvsp[0].pContext, 0);
 }
-#line 3027 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3232 "../../src/cpp_y.c"
     break;
 
   case 112:
-#line 623 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppForInitStatement_create((yyvsp[0]).pContext, 0);
+#line 623 "cpp_y.y"
+{
+  yyval.pContext = adtCppForInitStatement_create(yyvsp[0].pContext, 0);
 }
-#line 3035 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3240 "../../src/cpp_y.c"
     break;
 
   case 113:
-#line 627 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppForInitStatement_create(0, (yyvsp[0]).pContext);
+#line 627 "cpp_y.y"
+{
+  yyval.pContext = adtCppForInitStatement_create(0, yyvsp[0].pContext);
 }
-#line 3043 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3248 "../../src/cpp_y.c"
     break;
 
   case 114:
-#line 634 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppJumpStatement_create(0, 0, 0);
+#line 634 "cpp_y.y"
+{
+  yyval.pContext = adtCppJumpStatement_create(0, 0, 0);
 }
-#line 3051 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3256 "../../src/cpp_y.c"
     break;
 
   case 115:
-#line 638 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppJumpStatement_create(0, 0, 1);
+#line 638 "cpp_y.y"
+{
+  yyval.pContext = adtCppJumpStatement_create(0, 0, 1);
 }
-#line 3059 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3264 "../../src/cpp_y.c"
     break;
 
   case 116:
-#line 642 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppJumpStatement_create(0, 0, 2);
+#line 642 "cpp_y.y"
+{
+  yyval.pContext = adtCppJumpStatement_create(0, 0, 2);
 }
-#line 3067 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3272 "../../src/cpp_y.c"
     break;
 
   case 117:
-#line 646 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppJumpStatement_create((yyvsp[-1]).pContext, 0, 2);
+#line 646 "cpp_y.y"
+{
+  yyval.pContext = adtCppJumpStatement_create(yyvsp[-1].pContext, 0, 2);
 }
-#line 3075 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3280 "../../src/cpp_y.c"
     break;
 
   case 118:
-#line 650 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppJumpStatement_create(0, (yyvsp[-1]).sValue, 3);
+#line 650 "cpp_y.y"
+{
+  yyval.pContext = adtCppJumpStatement_create(0, yyvsp[-1].sValue, 3);
 }
-#line 3083 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3288 "../../src/cpp_y.c"
     break;
 
   case 119:
-#line 657 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarationStatement_create((yyvsp[0]).pContext);
+#line 657 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarationStatement_create(yyvsp[0].pContext);
 }
-#line 3091 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3296 "../../src/cpp_y.c"
     break;
 
   case 120:
-#line 664 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarationSeq_create((yyvsp[0]).pContext);
+#line 664 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarationSeq_create(yyvsp[0].pContext);
 }
-#line 3099 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3304 "../../src/cpp_y.c"
     break;
 
   case 121:
-#line 668 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+#line 668 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-1].pContext, yyvsp[0].pContext);
 }
-#line 3107 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3312 "../../src/cpp_y.c"
     break;
 
   case 122:
-#line 675 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaration_create((yyvsp[0]).pContext, 0, 0, 0);
+#line 675 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaration_create(yyvsp[0].pContext, 0, 0, 0);
 }
-#line 3115 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3320 "../../src/cpp_y.c"
     break;
 
   case 123:
-#line 679 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaration_create(0, (yyvsp[0]).pContext, 0, 0);
+#line 679 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaration_create(0, yyvsp[0].pContext, 0, 0);
 }
-#line 3123 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3328 "../../src/cpp_y.c"
     break;
 
   case 124:
-#line 683 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaration_create(0, 0, (yyvsp[0]).pContext, 0);
+#line 683 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaration_create(0, 0, yyvsp[0].pContext, 0);
 }
-#line 3131 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3336 "../../src/cpp_y.c"
     break;
 
   case 125:
-#line 687 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaration_create(0, 0, 0, (yyvsp[0]).pContext);
+#line 687 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaration_create(0, 0, 0, yyvsp[0].pContext);
 }
-#line 3139 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3344 "../../src/cpp_y.c"
     break;
 
   case 126:
-#line 691 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaration_create(0, 0, 0, 0);
+#line 691 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaration_create(0, 0, 0, 0);
 }
-#line 3147 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3352 "../../src/cpp_y.c"
     break;
 
   case 127:
-#line 698 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppBlockDeclaration_create((yyvsp[0]).pContext, 0, 0, 0, 0);
+#line 698 "cpp_y.y"
+{
+  yyval.pContext = adtCppBlockDeclaration_create(yyvsp[0].pContext, 0, 0, 0, 0);
 }
-#line 3155 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3360 "../../src/cpp_y.c"
     break;
 
   case 128:
-#line 702 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppBlockDeclaration_create(0, (yyvsp[0]).pContext, 0, 0, 0);
+#line 702 "cpp_y.y"
+{
+  yyval.pContext = adtCppBlockDeclaration_create(0, yyvsp[0].pContext, 0, 0, 0);
 }
-#line 3163 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3368 "../../src/cpp_y.c"
     break;
 
   case 129:
-#line 706 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppBlockDeclaration_create(0, 0, (yyvsp[0]).pContext, 0, 0);
+#line 706 "cpp_y.y"
+{
+  yyval.pContext = adtCppBlockDeclaration_create(0, 0, yyvsp[0].pContext, 0, 0);
 }
-#line 3171 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3376 "../../src/cpp_y.c"
     break;
 
   case 130:
-#line 710 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppBlockDeclaration_create(0, 0, 0, (yyvsp[0]).pContext, 0);
+#line 710 "cpp_y.y"
+{
+  yyval.pContext = adtCppBlockDeclaration_create(0, 0, 0, yyvsp[0].pContext, 0);
 }
-#line 3179 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3384 "../../src/cpp_y.c"
     break;
 
   case 131:
-#line 714 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppBlockDeclaration_create(0, 0, 0, 0, (yyvsp[0]).pContext);
+#line 714 "cpp_y.y"
+{
+  yyval.pContext = adtCppBlockDeclaration_create(0, 0, 0, 0, yyvsp[0].pContext);
 }
-#line 3187 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3392 "../../src/cpp_y.c"
     break;
 
   case 132:
-#line 721 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleDeclaration_create((yyvsp[-1]).pContext, 0, 0, 0, 0, 0);
+#line 721 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleDeclaration_create(yyvsp[-1].pContext, 0, 0, 0, 0, 0);
 }
-#line 3195 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3400 "../../src/cpp_y.c"
     break;
 
   case 133:
-#line 725 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleDeclaration_create(0, (yyvsp[-1]).pContext, 0, 0, 0, 0);
+#line 725 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleDeclaration_create(0, yyvsp[-1].pContext, 0, 0, 0, 0);
 }
-#line 3203 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3408 "../../src/cpp_y.c"
     break;
 
   case 134:
-#line 729 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleDeclaration_create(0, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 0);
+#line 729 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleDeclaration_create(0, 0, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 0);
 }
-#line 3211 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3416 "../../src/cpp_y.c"
     break;
 
   case 135:
-#line 733 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 733 "cpp_y.y"
+{
   const char* pAliasName                = 0;
-  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 1);
+  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 1);
 
-  (yyval).pContext = pCppSimpleDeclarationObj;
+  yyval.pContext = pCppSimpleDeclarationObj;
 
   if (adtCppSimpleDeclaration_isTypeDef(pCppSimpleDeclarationObj, &pAliasName) != 0)
   {
     scopeManager_addType(adtCpp_ScopeManager, pAliasName);
   }
 }
-#line 3227 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3432 "../../src/cpp_y.c"
     break;
 
   case 136:
-#line 745 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleDeclaration_create(0, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[-3]).pContext, 0);
+#line 745 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleDeclaration_create(0, 0, yyvsp[-2].pContext, yyvsp[-1].pContext, yyvsp[-3].pContext, 0);
 }
-#line 3235 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3440 "../../src/cpp_y.c"
     break;
 
   case 137:
-#line 749 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 749 "cpp_y.y"
+{
   const char* pAliasName                = 0;
-  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[-3]).pContext, 1);
+  void*       pCppSimpleDeclarationObj  = adtCppSimpleDeclaration_create(0, 0, yyvsp[-2].pContext, yyvsp[-1].pContext, yyvsp[-3].pContext, 1);
 
-  (yyval).pContext = pCppSimpleDeclarationObj;
+  yyval.pContext = pCppSimpleDeclarationObj;
 
   if (adtCppSimpleDeclaration_isTypeDef(pCppSimpleDeclarationObj, &pAliasName) != 0)
   {
     scopeManager_addType(adtCpp_ScopeManager, pAliasName);
   }
 }
-#line 3251 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3456 "../../src/cpp_y.c"
     break;
 
   case 138:
-#line 764 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(0);
+#line 764 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(0);
 }
-#line 3259 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3464 "../../src/cpp_y.c"
     break;
 
   case 139:
-#line 768 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(1);
+#line 768 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(1);
 }
-#line 3267 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3472 "../../src/cpp_y.c"
     break;
 
   case 140:
-#line 772 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(2);
+#line 772 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(2);
 }
-#line 3275 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3480 "../../src/cpp_y.c"
     break;
 
   case 141:
-#line 776 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(3);
+#line 776 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(3);
 }
-#line 3283 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3488 "../../src/cpp_y.c"
     break;
 
   case 142:
-#line 780 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(4);
+#line 780 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(4);
 }
-#line 3291 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3496 "../../src/cpp_y.c"
     break;
 
   case 143:
-#line 784 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(5);
+#line 784 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(5);
 }
-#line 3299 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3504 "../../src/cpp_y.c"
     break;
 
   case 144:
-#line 788 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(6);
+#line 788 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(6);
 }
-#line 3307 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3512 "../../src/cpp_y.c"
     break;
 
   case 145:
-#line 792 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(7);
+#line 792 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(7);
 }
-#line 3315 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3520 "../../src/cpp_y.c"
     break;
 
   case 146:
-#line 796 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(8);
+#line 796 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(8);
 }
-#line 3323 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3528 "../../src/cpp_y.c"
     break;
 
   case 147:
-#line 800 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(9);
+#line 800 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(9);
 }
-#line 3331 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3536 "../../src/cpp_y.c"
     break;
 
   case 148:
-#line 804 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifier_create(10);
+#line 804 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifier_create(10);
 }
-#line 3339 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3544 "../../src/cpp_y.c"
     break;
 
   case 149:
-#line 811 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclModifierList_create((yyvsp[0]).pContext);
+#line 811 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclModifierList_create(yyvsp[0].pContext);
 }
-#line 3347 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3552 "../../src/cpp_y.c"
     break;
 
   case 150:
-#line 815 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+#line 815 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-1].pContext, yyvsp[0].pContext);
 }
-#line 3355 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3560 "../../src/cpp_y.c"
     break;
 
   case 151:
-#line 822 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 822 "cpp_y.y"
+{
   scopeManager_popScope(adtCpp_ScopeManager);
 
-  (yyval).pContext = adtCppClassSpecifier_create((yyvsp[0]).pContext, 0, 0, 0);
+  yyval.pContext = adtCppClassSpecifier_create(yyvsp[0].pContext, 0, 0, 0);
 }
-#line 3365 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3570 "../../src/cpp_y.c"
     break;
 
   case 152:
-#line 828 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 828 "cpp_y.y"
+{
   scopeManager_popScope(adtCpp_ScopeManager);
 
-  (yyval).pContext = adtCppClassSpecifier_create((yyvsp[-2]).pContext, 0, 0, 1);
+  yyval.pContext = adtCppClassSpecifier_create(yyvsp[-2].pContext, 0, 0, 1);
 }
-#line 3375 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3580 "../../src/cpp_y.c"
     break;
 
   case 153:
-#line 834 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 834 "cpp_y.y"
+{
   scopeManager_popScope(adtCpp_ScopeManager);
 
-  (yyval).pContext = adtCppClassSpecifier_create((yyvsp[-3]).pContext, 0, (yyvsp[-1]).pContext, 1);
+  yyval.pContext = adtCppClassSpecifier_create(yyvsp[-3].pContext, 0, yyvsp[-1].pContext, 1);
 }
-#line 3385 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3590 "../../src/cpp_y.c"
     break;
 
   case 154:
-#line 840 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 840 "cpp_y.y"
+{
   scopeManager_popScope(adtCpp_ScopeManager);
 
-  (yyval).pContext = adtCppClassSpecifier_create((yyvsp[-4]).pContext, (yyvsp[-2]).pContext, 0, 1);
+  yyval.pContext = adtCppClassSpecifier_create(yyvsp[-4].pContext, yyvsp[-2].pContext, 0, 1);
 }
-#line 3395 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3600 "../../src/cpp_y.c"
     break;
 
   case 155:
-#line 846 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 846 "cpp_y.y"
+{
   scopeManager_popScope(adtCpp_ScopeManager);
 
-  (yyval).pContext = adtCppClassSpecifier_create((yyvsp[-5]).pContext, (yyvsp[-3]).pContext, (yyvsp[-1]).pContext, 1);
+  yyval.pContext = adtCppClassSpecifier_create(yyvsp[-5].pContext, yyvsp[-3].pContext, yyvsp[-1].pContext, 1);
 }
-#line 3405 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3610 "../../src/cpp_y.c"
     break;
 
   case 156:
-#line 855 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 855 "cpp_y.y"
+{
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppEnumSpecifierName_create((yyvsp[0]).sValue, 0);
+  yyval.pContext = adtCppEnumSpecifierName_create(yyvsp[0].sValue, 0);
 }
-#line 3415 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3620 "../../src/cpp_y.c"
     break;
 
   case 157:
-#line 861 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 861 "cpp_y.y"
+{
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppEnumSpecifierName_create((yyvsp[0]).sValue, 1);
+  yyval.pContext = adtCppEnumSpecifierName_create(yyvsp[0].sValue, 1);
 }
-#line 3425 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3630 "../../src/cpp_y.c"
     break;
 
   case 158:
-#line 867 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumSpecifierName_create((yyvsp[0]).sValue, 0);
+#line 867 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumSpecifierName_create(yyvsp[0].sValue, 0);
 }
-#line 3433 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3638 "../../src/cpp_y.c"
     break;
 
   case 159:
-#line 871 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumSpecifierName_create((yyvsp[0]).sValue, 1);
+#line 871 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumSpecifierName_create(yyvsp[0].sValue, 1);
 }
-#line 3441 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3646 "../../src/cpp_y.c"
     break;
 
   case 160:
-#line 878 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumSpecifier_create(0, (yyvsp[0]).pContext, 0);
+#line 878 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumSpecifier_create(0, yyvsp[0].pContext, 0);
 }
-#line 3449 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3654 "../../src/cpp_y.c"
     break;
 
   case 161:
-#line 882 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumSpecifier_create(0, (yyvsp[-2]).pContext, 1);
+#line 882 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumSpecifier_create(0, yyvsp[-2].pContext, 1);
 }
-#line 3457 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3662 "../../src/cpp_y.c"
     break;
 
   case 162:
-#line 886 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumSpecifier_create((yyvsp[-1]).pContext, (yyvsp[-3]).pContext, 1);
+#line 886 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumSpecifier_create(yyvsp[-1].pContext, yyvsp[-3].pContext, 1);
 }
-#line 3465 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3670 "../../src/cpp_y.c"
     break;
 
   case 163:
-#line 900 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create((yyvsp[0]).sValue, 0, 0);
+#line 900 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(yyvsp[0].sValue, 0, 0);
 }
-#line 3473 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3678 "../../src/cpp_y.c"
     break;
 
   case 164:
-#line 904 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create((yyvsp[0]).sValue, 1, 0);
+#line 904 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(yyvsp[0].sValue, 1, 0);
 }
-#line 3481 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3686 "../../src/cpp_y.c"
     break;
 
   case 165:
-#line 908 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 2, 0);
+#line 908 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 2, 0);
 }
-#line 3489 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3694 "../../src/cpp_y.c"
     break;
 
   case 166:
-#line 912 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 3, 0);
+#line 912 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 3, 0);
 }
-#line 3497 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3702 "../../src/cpp_y.c"
     break;
 
   case 167:
-#line 916 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 4, 0);
+#line 916 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 4, 0);
 }
-#line 3505 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3710 "../../src/cpp_y.c"
     break;
 
   case 168:
-#line 920 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 5, 0);
+#line 920 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 5, 0);
 }
-#line 3513 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3718 "../../src/cpp_y.c"
     break;
 
   case 169:
-#line 924 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 6, 0);
+#line 924 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 6, 0);
 }
-#line 3521 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3726 "../../src/cpp_y.c"
     break;
 
   case 170:
-#line 928 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 7, 0);
+#line 928 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 7, 0);
 }
-#line 3529 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3734 "../../src/cpp_y.c"
     break;
 
   case 171:
-#line 932 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 8, 0);
+#line 932 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 8, 0);
 }
-#line 3537 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3742 "../../src/cpp_y.c"
     break;
 
   case 172:
-#line 936 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 9, 0);
+#line 936 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 9, 0);
 }
-#line 3545 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3750 "../../src/cpp_y.c"
     break;
 
   case 173:
-#line 940 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 10, 0);
+#line 940 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 10, 0);
 }
-#line 3553 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3758 "../../src/cpp_y.c"
     break;
 
   case 174:
-#line 944 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 11, 0);
+#line 944 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 11, 0);
 }
-#line 3561 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3766 "../../src/cpp_y.c"
     break;
 
   case 175:
-#line 948 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 12, 0);
+#line 948 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 12, 0);
 }
-#line 3569 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3774 "../../src/cpp_y.c"
     break;
 
   case 176:
-#line 952 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 13, 0);
+#line 952 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 13, 0);
 }
-#line 3577 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3782 "../../src/cpp_y.c"
     break;
 
   case 177:
-#line 956 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 14, 0);
+#line 956 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 14, 0);
 }
-#line 3585 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3790 "../../src/cpp_y.c"
     break;
 
   case 178:
-#line 960 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 15, 0);
+#line 960 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 15, 0);
 }
-#line 3593 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3798 "../../src/cpp_y.c"
     break;
 
   case 179:
-#line 964 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 16, 0);
+#line 964 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 16, 0);
 }
-#line 3601 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3806 "../../src/cpp_y.c"
     break;
 
   case 180:
-#line 968 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 17, 0);
+#line 968 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 17, 0);
 }
-#line 3609 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3814 "../../src/cpp_y.c"
     break;
 
   case 181:
-#line 972 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 18, 0);
+#line 972 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 18, 0);
 }
-#line 3617 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3822 "../../src/cpp_y.c"
     break;
 
   case 182:
-#line 976 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 19, 0);
+#line 976 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 19, 0);
 }
-#line 3625 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3830 "../../src/cpp_y.c"
     break;
 
   case 183:
-#line 980 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 20, 0);
+#line 980 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 20, 0);
 }
-#line 3633 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3838 "../../src/cpp_y.c"
     break;
 
   case 184:
-#line 984 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 21, 0);
+#line 984 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 21, 0);
 }
-#line 3641 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3846 "../../src/cpp_y.c"
     break;
 
   case 185:
-#line 988 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 22, 0);
+#line 988 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 22, 0);
 }
-#line 3649 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3854 "../../src/cpp_y.c"
     break;
 
   case 186:
-#line 992 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 23, 0);
+#line 992 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 23, 0);
 }
-#line 3657 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3862 "../../src/cpp_y.c"
     break;
 
   case 187:
-#line 996 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 24, 0);
+#line 996 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 24, 0);
 }
-#line 3665 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3870 "../../src/cpp_y.c"
     break;
 
   case 188:
-#line 1000 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 25, 0);
+#line 1000 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 25, 0);
 }
-#line 3673 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3878 "../../src/cpp_y.c"
     break;
 
   case 189:
-#line 1004 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 26, 0);
+#line 1004 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 26, 0);
 }
-#line 3681 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3886 "../../src/cpp_y.c"
     break;
 
   case 190:
-#line 1008 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 27, 0);
+#line 1008 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 27, 0);
 }
-#line 3689 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3894 "../../src/cpp_y.c"
     break;
 
   case 191:
-#line 1012 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 28, 0);
+#line 1012 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 28, 0);
 }
-#line 3697 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3902 "../../src/cpp_y.c"
     break;
 
   case 192:
-#line 1016 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 29, 0);
+#line 1016 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 29, 0);
 }
-#line 3705 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3910 "../../src/cpp_y.c"
     break;
 
   case 193:
-#line 1020 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 30, 0);
+#line 1020 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 30, 0);
 }
-#line 3713 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3918 "../../src/cpp_y.c"
     break;
 
   case 194:
-#line 1024 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 31, 0);
+#line 1024 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 31, 0);
 }
-#line 3721 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3926 "../../src/cpp_y.c"
     break;
 
   case 195:
-#line 1028 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create((yyvsp[-1]).sValue, 0, 1);
+#line 1028 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(yyvsp[-1].sValue, 0, 1);
 }
-#line 3729 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3934 "../../src/cpp_y.c"
     break;
 
   case 196:
-#line 1032 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create((yyvsp[-1]).sValue, 1, 1);
+#line 1032 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(yyvsp[-1].sValue, 1, 1);
 }
-#line 3737 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3942 "../../src/cpp_y.c"
     break;
 
   case 197:
-#line 1036 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 2, 1);
+#line 1036 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 2, 1);
 }
-#line 3745 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3950 "../../src/cpp_y.c"
     break;
 
   case 198:
-#line 1040 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 3, 1);
+#line 1040 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 3, 1);
 }
-#line 3753 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3958 "../../src/cpp_y.c"
     break;
 
   case 199:
-#line 1044 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 4, 1);
+#line 1044 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 4, 1);
 }
-#line 3761 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3966 "../../src/cpp_y.c"
     break;
 
   case 200:
-#line 1048 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 5, 1);
+#line 1048 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 5, 1);
 }
-#line 3769 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3974 "../../src/cpp_y.c"
     break;
 
   case 201:
-#line 1052 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 6, 1);
+#line 1052 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 6, 1);
 }
-#line 3777 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3982 "../../src/cpp_y.c"
     break;
 
   case 202:
-#line 1056 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 7, 1);
+#line 1056 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 7, 1);
 }
-#line 3785 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3990 "../../src/cpp_y.c"
     break;
 
   case 203:
-#line 1060 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 8, 1);
+#line 1060 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 8, 1);
 }
-#line 3793 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 3998 "../../src/cpp_y.c"
     break;
 
   case 204:
-#line 1064 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 9, 1);
+#line 1064 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 9, 1);
 }
-#line 3801 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4006 "../../src/cpp_y.c"
     break;
 
   case 205:
-#line 1068 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 10, 1);
+#line 1068 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 10, 1);
 }
-#line 3809 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4014 "../../src/cpp_y.c"
     break;
 
   case 206:
-#line 1072 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 11, 1);
+#line 1072 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 11, 1);
 }
-#line 3817 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4022 "../../src/cpp_y.c"
     break;
 
   case 207:
-#line 1076 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 12, 1);
+#line 1076 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 12, 1);
 }
-#line 3825 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4030 "../../src/cpp_y.c"
     break;
 
   case 208:
-#line 1080 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 13, 1);
+#line 1080 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 13, 1);
 }
-#line 3833 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4038 "../../src/cpp_y.c"
     break;
 
   case 209:
-#line 1084 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 14, 1);
+#line 1084 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 14, 1);
 }
-#line 3841 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4046 "../../src/cpp_y.c"
     break;
 
   case 210:
-#line 1088 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 15, 1);
+#line 1088 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 15, 1);
 }
-#line 3849 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4054 "../../src/cpp_y.c"
     break;
 
   case 211:
-#line 1092 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 16, 1);
+#line 1092 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 16, 1);
 }
-#line 3857 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4062 "../../src/cpp_y.c"
     break;
 
   case 212:
-#line 1096 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 17, 1);
+#line 1096 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 17, 1);
 }
-#line 3865 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4070 "../../src/cpp_y.c"
     break;
 
   case 213:
-#line 1100 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 18, 1);
+#line 1100 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 18, 1);
 }
-#line 3873 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4078 "../../src/cpp_y.c"
     break;
 
   case 214:
-#line 1104 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 19, 1);
+#line 1104 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 19, 1);
 }
-#line 3881 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4086 "../../src/cpp_y.c"
     break;
 
   case 215:
-#line 1108 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 20, 1);
+#line 1108 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 20, 1);
 }
-#line 3889 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4094 "../../src/cpp_y.c"
     break;
 
   case 216:
-#line 1112 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 21, 1);
+#line 1112 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 21, 1);
 }
-#line 3897 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4102 "../../src/cpp_y.c"
     break;
 
   case 217:
-#line 1116 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 22, 1);
+#line 1116 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 22, 1);
 }
-#line 3905 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4110 "../../src/cpp_y.c"
     break;
 
   case 218:
-#line 1120 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 23, 1);
+#line 1120 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 23, 1);
 }
-#line 3913 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4118 "../../src/cpp_y.c"
     break;
 
   case 219:
-#line 1124 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 24, 1);
+#line 1124 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 24, 1);
 }
-#line 3921 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4126 "../../src/cpp_y.c"
     break;
 
   case 220:
-#line 1128 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 25, 1);
+#line 1128 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 25, 1);
 }
-#line 3929 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4134 "../../src/cpp_y.c"
     break;
 
   case 221:
-#line 1132 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 26, 1);
+#line 1132 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 26, 1);
 }
-#line 3937 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4142 "../../src/cpp_y.c"
     break;
 
   case 222:
-#line 1136 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 27, 1);
+#line 1136 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 27, 1);
 }
-#line 3945 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4150 "../../src/cpp_y.c"
     break;
 
   case 223:
-#line 1140 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 28, 1);
+#line 1140 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 28, 1);
 }
-#line 3953 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4158 "../../src/cpp_y.c"
     break;
 
   case 224:
-#line 1144 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 29, 1);
+#line 1144 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 29, 1);
 }
-#line 3961 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4166 "../../src/cpp_y.c"
     break;
 
   case 225:
-#line 1148 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 30, 1);
+#line 1148 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 30, 1);
 }
-#line 3969 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4174 "../../src/cpp_y.c"
     break;
 
   case 226:
-#line 1152 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppSimpleTypeSpecifier_create(0, 31, 1);
+#line 1152 "cpp_y.y"
+{
+  yyval.pContext = adtCppSimpleTypeSpecifier_create(0, 31, 1);
 }
-#line 3977 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4182 "../../src/cpp_y.c"
     break;
 
   case 227:
-#line 1159 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumeratorList_create((yyvsp[0]).pContext);
+#line 1159 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumeratorList_create(yyvsp[0].pContext);
 }
-#line 3985 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4190 "../../src/cpp_y.c"
     break;
 
   case 228:
-#line 1163 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1163 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 3993 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4198 "../../src/cpp_y.c"
     break;
 
   case 229:
-#line 1170 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumeratorDefinition_create(0, (yyvsp[0]).sValue);
+#line 1170 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumeratorDefinition_create(0, yyvsp[0].sValue);
 }
-#line 4001 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4206 "../../src/cpp_y.c"
     break;
 
   case 230:
-#line 1174 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppEnumeratorDefinition_create((yyvsp[0]).pContext, (yyvsp[-2]).sValue);
+#line 1174 "cpp_y.y"
+{
+  yyval.pContext = adtCppEnumeratorDefinition_create(yyvsp[0].pContext, yyvsp[-2].sValue);
 }
-#line 4009 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4214 "../../src/cpp_y.c"
     break;
 
   case 231:
-#line 1181 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppNamespaceDefinition_create((yyvsp[-1]).pContext, (yyvsp[-3]).sValue);
+#line 1181 "cpp_y.y"
+{
+  yyval.pContext = adtCppNamespaceDefinition_create(yyvsp[-1].pContext, yyvsp[-3].sValue);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4019 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4224 "../../src/cpp_y.c"
     break;
 
   case 232:
-#line 1187 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppNamespaceDefinition_create((yyvsp[-1]).pContext, 0);
+#line 1187 "cpp_y.y"
+{
+  yyval.pContext = adtCppNamespaceDefinition_create(yyvsp[-1].pContext, 0);
 }
-#line 4027 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4232 "../../src/cpp_y.c"
     break;
 
   case 233:
-#line 1194 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+#line 1194 "cpp_y.y"
+{
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 
-  (yyval).sValue = (yyvsp[0]).sValue;
+  yyval.sValue = yyvsp[0].sValue;
 }
-#line 4037 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4242 "../../src/cpp_y.c"
     break;
 
   case 234:
-#line 1202 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppNamespaceAliasDefinition_create((yyvsp[-3]).sValue, (yyvsp[-1]).sValue);
+#line 1202 "cpp_y.y"
+{
+  yyval.pContext = adtCppNamespaceAliasDefinition_create(yyvsp[-3].sValue, yyvsp[-1].sValue);
 }
-#line 4045 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4250 "../../src/cpp_y.c"
     break;
 
   case 235:
-#line 1209 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUsingDeclaration_create((yyvsp[-1]).sValue, 0);
+#line 1209 "cpp_y.y"
+{
+  yyval.pContext = adtCppUsingDeclaration_create(yyvsp[-1].sValue, 0);
 
-  scopeManager_addUsingDeclaration(adtCpp_ScopeManager, (yyvsp[-1]).sValue);
+  scopeManager_addUsingDeclaration(adtCpp_ScopeManager, yyvsp[-1].sValue);
 }
-#line 4055 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4260 "../../src/cpp_y.c"
     break;
 
   case 236:
-#line 1215 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUsingDeclaration_create((yyvsp[-1]).sValue, 1);
+#line 1215 "cpp_y.y"
+{
+  yyval.pContext = adtCppUsingDeclaration_create(yyvsp[-1].sValue, 1);
 
-  scopeManager_addUsingDeclaration(adtCpp_ScopeManager, (yyvsp[-1]).sValue);
+  scopeManager_addUsingDeclaration(adtCpp_ScopeManager, yyvsp[-1].sValue);
 }
-#line 4065 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4270 "../../src/cpp_y.c"
     break;
 
   case 237:
-#line 1224 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUsingDirective_create((yyvsp[-1]).sValue, 0);
+#line 1224 "cpp_y.y"
+{
+  yyval.pContext = adtCppUsingDirective_create(yyvsp[-1].sValue, 0);
 
-  scopeManager_addUsing(adtCpp_ScopeManager, (yyvsp[-1]).sValue);
+  scopeManager_addUsing(adtCpp_ScopeManager, yyvsp[-1].sValue);
 }
-#line 4075 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4280 "../../src/cpp_y.c"
     break;
 
   case 238:
-#line 1230 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppUsingDirective_create((yyvsp[-1]).sValue, 1);
+#line 1230 "cpp_y.y"
+{
+  yyval.pContext = adtCppUsingDirective_create(yyvsp[-1].sValue, 1);
 
-  scopeManager_addUsing(adtCpp_ScopeManager, (yyvsp[-1]).sValue);
+  scopeManager_addUsing(adtCpp_ScopeManager, yyvsp[-1].sValue);
 }
-#line 4085 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4290 "../../src/cpp_y.c"
     break;
 
   case 239:
-#line 1239 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppAsmDefinition_create((yyvsp[-2]).sValue);
+#line 1239 "cpp_y.y"
+{
+  yyval.pContext = adtCppAsmDefinition_create(yyvsp[-2].sValue);
 }
-#line 4093 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4298 "../../src/cpp_y.c"
     break;
 
   case 240:
-#line 1246 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLinkageSpecification_create(0, 0, (yyvsp[-2]).sValue);
+#line 1246 "cpp_y.y"
+{
+  yyval.pContext = adtCppLinkageSpecification_create(0, 0, yyvsp[-2].sValue);
 }
-#line 4101 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4306 "../../src/cpp_y.c"
     break;
 
   case 241:
-#line 1250 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLinkageSpecification_create((yyvsp[-1]).pContext, 0, (yyvsp[-3]).sValue);
+#line 1250 "cpp_y.y"
+{
+  yyval.pContext = adtCppLinkageSpecification_create(yyvsp[-1].pContext, 0, yyvsp[-3].sValue);
 }
-#line 4109 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4314 "../../src/cpp_y.c"
     break;
 
   case 242:
-#line 1254 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppLinkageSpecification_create(0, (yyvsp[0]).pContext, (yyvsp[-1]).sValue);
+#line 1254 "cpp_y.y"
+{
+  yyval.pContext = adtCppLinkageSpecification_create(0, yyvsp[0].pContext, yyvsp[-1].sValue);
 }
-#line 4117 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4322 "../../src/cpp_y.c"
     break;
 
   case 243:
-#line 1261 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitDeclaratorList_create((yyvsp[0]).pContext);
+#line 1261 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitDeclaratorList_create(yyvsp[0].pContext);
 }
-#line 4125 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4330 "../../src/cpp_y.c"
     break;
 
   case 244:
-#line 1265 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1265 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 4133 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4338 "../../src/cpp_y.c"
     break;
 
   case 245:
-#line 1272 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitDeclarator_create((yyvsp[0]).pContext, 0);
+#line 1272 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitDeclarator_create(yyvsp[0].pContext, 0);
 }
-#line 4141 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4346 "../../src/cpp_y.c"
     break;
 
   case 246:
-#line 1276 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitDeclarator_create((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+#line 1276 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitDeclarator_create(yyvsp[-1].pContext, yyvsp[0].pContext);
 }
-#line 4149 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4354 "../../src/cpp_y.c"
     break;
 
   case 247:
-#line 1285 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = (yyvsp[0]).pContext;
+#line 1285 "cpp_y.y"
+{
+  yyval.pContext = yyvsp[0].pContext;
 }
-#line 4157 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4362 "../../src/cpp_y.c"
     break;
 
   case 248:
-#line 1289 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = (yyvsp[0]).pContext;
+#line 1289 "cpp_y.y"
+{
+  yyval.pContext = yyvsp[0].pContext;
 }
-#line 4165 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4370 "../../src/cpp_y.c"
     break;
 
   case 249:
-#line 1296 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, 0, (yyvsp[0]).sValue, 0, 0, 0, 0, 0, 1);
+#line 1296 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, 0, yyvsp[0].sValue, 0, 0, 0, 0, 0, 1);
 }
-#line 4173 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4378 "../../src/cpp_y.c"
     break;
 
   case 250:
-#line 1300 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, 0, (yyvsp[0]).sValue, 0, 0, 1, 0, 0, 0);
+#line 1300 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, 0, yyvsp[0].sValue, 0, 0, 1, 0, 0, 0);
 }
-#line 4181 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4386 "../../src/cpp_y.c"
     break;
 
   case 251:
-#line 1304 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, 0, (yyvsp[0]).sValue, 0, 1, 0, 0, 0, 1);
+#line 1304 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, 0, yyvsp[0].sValue, 0, 1, 0, 0, 0, 1);
 }
-#line 4189 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4394 "../../src/cpp_y.c"
     break;
 
   case 252:
-#line 1308 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, 0, (yyvsp[0]).sValue, 0, 1, 1, 0, 0, 0);
+#line 1308 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, 0, yyvsp[0].sValue, 0, 1, 1, 0, 0, 0);
 }
-#line 4197 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4402 "../../src/cpp_y.c"
     break;
 
   case 253:
-#line 1312 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, (yyvsp[0]).pContext, (yyvsp[-1]).sValue, 0, 0, 0, 0, 0, 1);
+#line 1312 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, yyvsp[0].pContext, yyvsp[-1].sValue, 0, 0, 0, 0, 0, 1);
 }
-#line 4205 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4410 "../../src/cpp_y.c"
     break;
 
   case 254:
-#line 1316 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, (yyvsp[0]).pContext, (yyvsp[-1]).sValue, 0, 1, 0, 0, 0, 1);
+#line 1316 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, yyvsp[0].pContext, yyvsp[-1].sValue, 0, 1, 0, 0, 0, 1);
 }
-#line 4213 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4418 "../../src/cpp_y.c"
     break;
 
   case 255:
-#line 1346 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
- (yyval).pContext = (yyvsp[0]).pContext;
+#line 1346 "cpp_y.y"
+{
+ yyval.pContext = yyvsp[0].pContext;
 }
-#line 4221 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4426 "../../src/cpp_y.c"
     break;
 
   case 256:
-#line 1353 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, (yyvsp[-1]).sValue, 0);
+#line 1353 "cpp_y.y"
+{
+  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, yyvsp[-1].sValue, 0);
   adtCpp_pLastFunctionIsObj       = 0;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 0;
 
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4234 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4439 "../../src/cpp_y.c"
     break;
 
   case 257:
-#line 1362 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, (yyvsp[-1]).sValue, 0);
+#line 1362 "cpp_y.y"
+{
+  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, yyvsp[-1].sValue, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 0;
 
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4247 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4452 "../../src/cpp_y.c"
     break;
 
   case 258:
-#line 1371 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, (yyvsp[-1]).sValue, 0);
+#line 1371 "cpp_y.y"
+{
+  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, yyvsp[-1].sValue, 0);
   adtCpp_pLastFunctionIsObj       = 0;
   adtCpp_pLastFunctionIsQualified = 1;
   adtCpp_pLastFunctionIsVirtual   = 0;
 
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4260 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4465 "../../src/cpp_y.c"
     break;
 
   case 259:
-#line 1380 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, (yyvsp[-1]).sValue, 0);
+#line 1380 "cpp_y.y"
+{
+  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, yyvsp[-1].sValue, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 1;
   adtCpp_pLastFunctionIsVirtual   = 0;
 
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4273 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4478 "../../src/cpp_y.c"
     break;
 
   case 260:
-#line 1389 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, (yyvsp[-1]).sValue, 0);
+#line 1389 "cpp_y.y"
+{
+  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, yyvsp[-1].sValue, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 0;
 
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4286 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4491 "../../src/cpp_y.c"
     break;
 
   case 261:
-#line 1398 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, (yyvsp[-1]).sValue, 0);
+#line 1398 "cpp_y.y"
+{
+  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, yyvsp[-1].sValue, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 1;
   adtCpp_pLastFunctionIsVirtual   = 0;
 
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4299 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4504 "../../src/cpp_y.c"
     break;
 
   case 262:
-#line 1407 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, (yyvsp[-1]).sValue, 0);
+#line 1407 "cpp_y.y"
+{
+  adtCpp_pLastFunctionName        = adtCpp_AllocString(adtCpp_pCppContext, yyvsp[-1].sValue, 0);
   adtCpp_pLastFunctionIsObj       = 1;
   adtCpp_pLastFunctionIsQualified = 0;
   adtCpp_pLastFunctionIsVirtual   = 1;
 
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4312 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4517 "../../src/cpp_y.c"
     break;
 
   case 263:
-#line 1419 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, 0);
+#line 1419 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4322 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4527 "../../src/cpp_y.c"
     break;
 
   case 264:
-#line 1425 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, 0);
+#line 1425 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4332 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4537 "../../src/cpp_y.c"
     break;
 
   case 265:
-#line 1431 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, 0);
+#line 1431 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(0, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4342 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4547 "../../src/cpp_y.c"
     break;
 
   case 266:
-#line 1437 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create((yyvsp[-1]).pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, 0);
+#line 1437 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(yyvsp[-1].pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 0, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4352 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4557 "../../src/cpp_y.c"
     break;
 
   case 267:
-#line 1443 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create((yyvsp[-2]).pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, 0);
+#line 1443 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(yyvsp[-2].pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 1, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4362 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4567 "../../src/cpp_y.c"
     break;
 
   case 268:
-#line 1449 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclarator_create((yyvsp[-2]).pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, 0);
+#line 1449 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclarator_create(yyvsp[-2].pContext, 0, 0, adtCpp_pLastFunctionName, 1, adtCpp_pLastFunctionIsQualified, adtCpp_pLastFunctionIsObj, adtCpp_pLastFunctionIsVirtual, 2, 0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4372 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4577 "../../src/cpp_y.c"
     break;
 
   case 269:
-#line 1458 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorDims_create(0, 0);
+#line 1458 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorDims_create(0, 0);
 }
-#line 4380 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4585 "../../src/cpp_y.c"
     break;
 
   case 270:
-#line 1462 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorDims_create((yyvsp[-1]).pContext, 0);
+#line 1462 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorDims_create(yyvsp[-1].pContext, 0);
 }
-#line 4388 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4593 "../../src/cpp_y.c"
     break;
 
   case 271:
-#line 1466 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorDims_create(0, (yyvsp[-2]).pContext);
+#line 1466 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorDims_create(0, yyvsp[-2].pContext);
 }
-#line 4396 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4601 "../../src/cpp_y.c"
     break;
 
   case 272:
-#line 1470 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppDeclaratorDims_create((yyvsp[-1]).pContext, (yyvsp[-3]).pContext);
+#line 1470 "cpp_y.y"
+{
+  yyval.pContext = adtCppDeclaratorDims_create(yyvsp[-1].pContext, yyvsp[-3].pContext);
 }
-#line 4404 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4609 "../../src/cpp_y.c"
     break;
 
   case 273:
-#line 1477 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclarationClause_create(0, 1, 0);
+#line 1477 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclarationClause_create(0, 1, 0);
 }
-#line 4412 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4617 "../../src/cpp_y.c"
     break;
 
   case 274:
-#line 1481 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclarationClause_create((yyvsp[0]).pContext, 0, 0);
+#line 1481 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclarationClause_create(yyvsp[0].pContext, 0, 0);
 }
-#line 4420 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4625 "../../src/cpp_y.c"
     break;
 
   case 275:
-#line 1485 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclarationClause_create((yyvsp[-1]).pContext, 1, 0);
+#line 1485 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclarationClause_create(yyvsp[-1].pContext, 1, 0);
 }
-#line 4428 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4633 "../../src/cpp_y.c"
     break;
 
   case 276:
-#line 1489 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclarationClause_create((yyvsp[-2]).pContext, 1, 1);
+#line 1489 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclarationClause_create(yyvsp[-2].pContext, 1, 1);
 }
-#line 4436 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4641 "../../src/cpp_y.c"
     break;
 
   case 277:
-#line 1496 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclarationList_create((yyvsp[0]).pContext);
+#line 1496 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclarationList_create(yyvsp[0].pContext);
 }
-#line 4444 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4649 "../../src/cpp_y.c"
     break;
 
   case 278:
-#line 1500 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1500 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 4452 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4657 "../../src/cpp_y.c"
     break;
 
   case 279:
-#line 1507 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclaration_create(0, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, 0);
+#line 1507 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclaration_create(0, yyvsp[-1].pContext, yyvsp[0].pContext, 0);
 }
-#line 4460 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4665 "../../src/cpp_y.c"
     break;
 
   case 280:
-#line 1511 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclaration_create((yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, 0);
+#line 1511 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclaration_create(yyvsp[-2].pContext, yyvsp[-1].pContext, yyvsp[0].pContext, 0);
 }
-#line 4468 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4673 "../../src/cpp_y.c"
     break;
 
   case 281:
-#line 1515 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclaration_create(0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1515 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclaration_create(0, yyvsp[-3].pContext, yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 4476 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4681 "../../src/cpp_y.c"
     break;
 
   case 282:
-#line 1519 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclaration_create((yyvsp[-4]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1519 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclaration_create(yyvsp[-4].pContext, yyvsp[-3].pContext, yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 4484 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4689 "../../src/cpp_y.c"
     break;
 
   case 283:
-#line 1523 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclaration_create(0, (yyvsp[0]).pContext, 0, 0);
+#line 1523 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclaration_create(0, yyvsp[0].pContext, 0, 0);
 }
-#line 4492 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4697 "../../src/cpp_y.c"
     break;
 
   case 284:
-#line 1527 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppParameterDeclaration_create((yyvsp[-1]).pContext, (yyvsp[0]).pContext, 0, 0);
+#line 1527 "cpp_y.y"
+{
+  yyval.pContext = adtCppParameterDeclaration_create(yyvsp[-1].pContext, yyvsp[0].pContext, 0, 0);
 }
-#line 4500 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4705 "../../src/cpp_y.c"
     break;
 
   case 285:
-#line 1534 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, 0, (yyvsp[-1]).pContext, 0, 0, 1);
+#line 1534 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, 0, yyvsp[-1].pContext, 0, 0, 1);
 }
-#line 4508 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4713 "../../src/cpp_y.c"
     break;
 
   case 286:
-#line 1538 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 0, 1);
+#line 1538 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 0, 1);
 }
-#line 4516 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4721 "../../src/cpp_y.c"
     break;
 
   case 287:
-#line 1542 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create((yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 0, 1);
+#line 1542 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(yyvsp[-3].pContext, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 0, 1);
 }
-#line 4524 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4729 "../../src/cpp_y.c"
     break;
 
   case 288:
-#line 1546 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, 0, (yyvsp[-1]).pContext, 0, (yyvsp[0]).pContext, 0);
+#line 1546 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, 0, yyvsp[-1].pContext, 0, yyvsp[0].pContext, 0);
 }
-#line 4532 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4737 "../../src/cpp_y.c"
     break;
 
   case 289:
-#line 1550 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, (yyvsp[0]).pContext, 0);
+#line 1550 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, 0, yyvsp[-2].pContext, yyvsp[-1].pContext, yyvsp[0].pContext, 0);
 }
-#line 4540 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4745 "../../src/cpp_y.c"
     break;
 
   case 290:
-#line 1554 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, (yyvsp[0]).pContext, 0);
+#line 1554 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, yyvsp[0].pContext, 0);
 }
-#line 4548 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4753 "../../src/cpp_y.c"
     break;
 
   case 291:
-#line 1558 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create((yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, (yyvsp[0]).pContext, 0);
+#line 1558 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(yyvsp[-3].pContext, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, yyvsp[0].pContext, 0);
 }
-#line 4556 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4761 "../../src/cpp_y.c"
     break;
 
   case 292:
-#line 1565 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, 0, (yyvsp[-1]).pContext, 0, 0, 1);
+#line 1565 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, 0, yyvsp[-1].pContext, 0, 0, 1);
 }
-#line 4564 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4769 "../../src/cpp_y.c"
     break;
 
   case 293:
-#line 1569 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 0, 1);
+#line 1569 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 0, 1);
 }
-#line 4572 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4777 "../../src/cpp_y.c"
     break;
 
   case 294:
-#line 1573 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create((yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 0, 1);
+#line 1573 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(yyvsp[-3].pContext, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 0, 1);
 }
-#line 4580 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4785 "../../src/cpp_y.c"
     break;
 
   case 295:
-#line 1577 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, 0, (yyvsp[-2]).pContext, 0, (yyvsp[-1]).pContext, 1);
+#line 1577 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, 0, yyvsp[-2].pContext, 0, yyvsp[-1].pContext, 1);
 }
-#line 4588 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4793 "../../src/cpp_y.c"
     break;
 
   case 296:
-#line 1581 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, 0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 1);
+#line 1581 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, 0, yyvsp[-3].pContext, yyvsp[-2].pContext, yyvsp[-1].pContext, 1);
 }
-#line 4596 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4801 "../../src/cpp_y.c"
     break;
 
   case 297:
-#line 1585 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create(0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[-1]).pContext, 1);
+#line 1585 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(0, yyvsp[-3].pContext, yyvsp[-2].pContext, 0, yyvsp[-1].pContext, 1);
 }
-#line 4604 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4809 "../../src/cpp_y.c"
     break;
 
   case 298:
-#line 1589 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionDefinition_create((yyvsp[-4]).pContext, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, 0, (yyvsp[-1]).pContext, 1);
+#line 1589 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionDefinition_create(yyvsp[-4].pContext, yyvsp[-3].pContext, yyvsp[-2].pContext, 0, yyvsp[-1].pContext, 1);
 }
-#line 4612 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4817 "../../src/cpp_y.c"
     break;
 
   case 299:
-#line 1599 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppFunctionBody_create((yyvsp[0]).pContext);
+#line 1599 "cpp_y.y"
+{
+  yyval.pContext = adtCppFunctionBody_create(yyvsp[0].pContext);
 }
-#line 4620 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4825 "../../src/cpp_y.c"
     break;
 
   case 300:
-#line 1606 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
+#line 1606 "cpp_y.y"
+{
   scopeManager_pushScope(adtCpp_ScopeManager, adtCpp_pLastFunctionName, 1);
 }
-#line 4628 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4833 "../../src/cpp_y.c"
     break;
 
   case 301:
-#line 1613 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppCompoundStatement_create(0);
+#line 1613 "cpp_y.y"
+{
+  yyval.pContext = adtCppCompoundStatement_create(0);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4638 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4843 "../../src/cpp_y.c"
     break;
 
   case 302:
-#line 1619 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppCompoundStatement_create((yyvsp[-1]).pContext);
+#line 1619 "cpp_y.y"
+{
+  yyval.pContext = adtCppCompoundStatement_create(yyvsp[-1].pContext);
 
   scopeManager_popScope(adtCpp_ScopeManager);
 }
-#line 4648 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4853 "../../src/cpp_y.c"
     break;
 
   case 303:
-#line 1628 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitializer_create((yyvsp[0]).pContext, 0);
+#line 1628 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitializer_create(yyvsp[0].pContext, 0);
 }
-#line 4656 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4861 "../../src/cpp_y.c"
     break;
 
   case 304:
-#line 1632 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitializer_create(0, (yyvsp[-1]).pContext);
+#line 1632 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitializer_create(0, yyvsp[-1].pContext);
 }
-#line 4664 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4869 "../../src/cpp_y.c"
     break;
 
   case 305:
-#line 1639 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitializerClause_create((yyvsp[0]).pContext, 0, 0);
+#line 1639 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitializerClause_create(yyvsp[0].pContext, 0, 0);
 }
-#line 4672 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4877 "../../src/cpp_y.c"
     break;
 
   case 306:
-#line 1643 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitializerClause_create(0, (yyvsp[-1]).pContext, 0);
+#line 1643 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitializerClause_create(0, yyvsp[-1].pContext, 0);
 }
-#line 4680 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4885 "../../src/cpp_y.c"
     break;
 
   case 307:
-#line 1647 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitializerClause_create(0, (yyvsp[-2]).pContext, 1);
+#line 1647 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitializerClause_create(0, yyvsp[-2].pContext, 1);
 }
-#line 4688 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4893 "../../src/cpp_y.c"
     break;
 
   case 308:
-#line 1651 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitializerClause_create(0, 0, 0);
+#line 1651 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitializerClause_create(0, 0, 0);
 }
-#line 4696 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4901 "../../src/cpp_y.c"
     break;
 
   case 309:
-#line 1658 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppInitializerList_create((yyvsp[0]).pContext);
+#line 1658 "cpp_y.y"
+{
+  yyval.pContext = adtCppInitializerList_create(yyvsp[0].pContext);
 }
-#line 4704 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4909 "../../src/cpp_y.c"
     break;
 
   case 310:
-#line 1662 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1662 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 4712 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4917 "../../src/cpp_y.c"
     break;
 
   case 311:
-#line 1669 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(0, (yyvsp[0]).sValue, 0);
+#line 1669 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(0, yyvsp[0].sValue, 0);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4723 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4928 "../../src/cpp_y.c"
     break;
 
   case 312:
-#line 1676 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(0, (yyvsp[0]).sValue, 0);
+#line 1676 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(0, yyvsp[0].sValue, 0);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4734 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4939 "../../src/cpp_y.c"
     break;
 
   case 313:
-#line 1683 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(0, (yyvsp[0]).sValue, 1);
+#line 1683 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(0, yyvsp[0].sValue, 1);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4745 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4950 "../../src/cpp_y.c"
     break;
 
   case 314:
-#line 1690 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(0, (yyvsp[0]).sValue, 1);
+#line 1690 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(0, yyvsp[0].sValue, 1);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4756 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4961 "../../src/cpp_y.c"
     break;
 
   case 315:
-#line 1697 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(1, (yyvsp[0]).sValue, 0);
+#line 1697 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(1, yyvsp[0].sValue, 0);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4767 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4972 "../../src/cpp_y.c"
     break;
 
   case 316:
-#line 1704 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(1, (yyvsp[0]).sValue, 0);
+#line 1704 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(1, yyvsp[0].sValue, 0);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4778 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4983 "../../src/cpp_y.c"
     break;
 
   case 317:
-#line 1711 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(1, (yyvsp[0]).sValue, 1);
+#line 1711 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(1, yyvsp[0].sValue, 1);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4789 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 4994 "../../src/cpp_y.c"
     break;
 
   case 318:
-#line 1718 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(1, (yyvsp[0]).sValue, 1);
+#line 1718 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(1, yyvsp[0].sValue, 1);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4800 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5005 "../../src/cpp_y.c"
     break;
 
   case 319:
-#line 1725 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(2, (yyvsp[0]).sValue, 0);
+#line 1725 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(2, yyvsp[0].sValue, 0);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4811 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5016 "../../src/cpp_y.c"
     break;
 
   case 320:
-#line 1732 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(2, (yyvsp[0]).sValue, 0);
+#line 1732 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(2, yyvsp[0].sValue, 0);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4822 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5027 "../../src/cpp_y.c"
     break;
 
   case 321:
-#line 1739 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(2, (yyvsp[0]).sValue, 1);
+#line 1739 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(2, yyvsp[0].sValue, 1);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4833 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5038 "../../src/cpp_y.c"
     break;
 
   case 322:
-#line 1746 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppClassKey_create(2, (yyvsp[0]).sValue, 1);
+#line 1746 "cpp_y.y"
+{
+  yyval.pContext = adtCppClassKey_create(2, yyvsp[0].sValue, 1);
 
-  scopeManager_addType(adtCpp_ScopeManager, (yyvsp[0]).sValue);
-  scopeManager_pushScope(adtCpp_ScopeManager, (yyvsp[0]).sValue, 0);
+  scopeManager_addType(adtCpp_ScopeManager, yyvsp[0].sValue);
+  scopeManager_pushScope(adtCpp_ScopeManager, yyvsp[0].sValue, 0);
 }
-#line 4844 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5049 "../../src/cpp_y.c"
     break;
 
   case 323:
-#line 1756 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberSpecification_create((yyvsp[0]).pContext);
+#line 1756 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberSpecification_create(yyvsp[0].pContext);
 }
-#line 4852 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5057 "../../src/cpp_y.c"
     break;
 
   case 324:
-#line 1760 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-1]).pContext, (yyvsp[0]).pContext);
+#line 1760 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-1].pContext, yyvsp[0].pContext);
 }
-#line 4860 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5065 "../../src/cpp_y.c"
     break;
 
   case 325:
-#line 1767 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, 0, 0, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 0, 0, 1);
+#line 1767 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, 0, 0, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 0, 0, 1);
 }
-#line 4868 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5073 "../../src/cpp_y.c"
     break;
 
   case 326:
-#line 1771 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, 0, (yyvsp[-3]).pContext, (yyvsp[-2]).pContext, (yyvsp[-1]).pContext, 0, 0, 0, 1);
+#line 1771 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, 0, yyvsp[-3].pContext, yyvsp[-2].pContext, yyvsp[-1].pContext, 0, 0, 0, 1);
 }
-#line 4876 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5081 "../../src/cpp_y.c"
     break;
 
   case 327:
-#line 1775 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0, 0);
+#line 1775 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, yyvsp[0].pContext, 0, 0, 0);
 }
-#line 4884 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5089 "../../src/cpp_y.c"
     break;
 
   case 328:
-#line 1779 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, (yyvsp[0]).pContext, 0, 0);
+#line 1779 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, yyvsp[0].pContext, 0, 0);
 }
-#line 4892 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5097 "../../src/cpp_y.c"
     break;
 
   case 329:
-#line 1783 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create((yyvsp[-1]).pContext, 0, 0, 0, 0, 0, 0, 0, 1);
+#line 1783 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(yyvsp[-1].pContext, 0, 0, 0, 0, 0, 0, 0, 1);
 }
-#line 4900 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5105 "../../src/cpp_y.c"
     break;
 
   case 330:
-#line 1787 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, (yyvsp[-1]).pContext, 0, 0, 0, 0, 0, 0, 1);
+#line 1787 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, yyvsp[-1].pContext, 0, 0, 0, 0, 0, 0, 1);
 }
-#line 4908 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5113 "../../src/cpp_y.c"
     break;
 
   case 331:
-#line 1791 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, 0, 1, 0);
+#line 1791 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, 0, 1, 0);
 }
-#line 4916 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5121 "../../src/cpp_y.c"
     break;
 
   case 332:
-#line 1795 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, 0, 2, 0);
+#line 1795 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, 0, 2, 0);
 }
-#line 4924 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5129 "../../src/cpp_y.c"
     break;
 
   case 333:
-#line 1799 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, 0, 3, 0);
+#line 1799 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclaration_create(0, 0, 0, 0, 0, 0, 0, 3, 0);
 }
-#line 4932 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5137 "../../src/cpp_y.c"
     break;
 
   case 334:
-#line 1806 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclarationList_create((yyvsp[0]).pContext);
+#line 1806 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclarationList_create(yyvsp[0].pContext);
 }
-#line 4940 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5145 "../../src/cpp_y.c"
     break;
 
   case 335:
-#line 1810 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1810 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 4948 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5153 "../../src/cpp_y.c"
     break;
 
   case 336:
-#line 1817 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclarator_create((yyvsp[0]).pContext, 0);
+#line 1817 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclarator_create(yyvsp[0].pContext, 0);
 }
-#line 4956 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5161 "../../src/cpp_y.c"
     break;
 
   case 337:
-#line 1821 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemberDeclarator_create((yyvsp[-2]).pContext, (yyvsp[0]).sValue);
+#line 1821 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemberDeclarator_create(yyvsp[-2].pContext, yyvsp[0].sValue);
 }
-#line 4964 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5169 "../../src/cpp_y.c"
     break;
 
   case 338:
-#line 1828 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppBaseSpecifierList_create((yyvsp[0]).pContext);
+#line 1828 "cpp_y.y"
+{
+  yyval.pContext = adtCppBaseSpecifierList_create(yyvsp[0].pContext);
 }
-#line 4972 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5177 "../../src/cpp_y.c"
     break;
 
   case 339:
-#line 1832 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1832 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 4980 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5185 "../../src/cpp_y.c"
     break;
 
   case 340:
-#line 1839 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1839 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(0, 0, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(0, 0, 0, yyvsp[0].sValue);
 }
-#line 4990 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5195 "../../src/cpp_y.c"
     break;
 
   case 341:
-#line 1845 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1845 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(1, 0, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(1, 0, 0, yyvsp[0].sValue);
 }
-#line 5000 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5205 "../../src/cpp_y.c"
     break;
 
   case 342:
-#line 1851 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1851 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(2, 0, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(2, 0, 0, yyvsp[0].sValue);
 }
-#line 5010 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5215 "../../src/cpp_y.c"
     break;
 
   case 343:
-#line 1857 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1857 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(3, 0, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(3, 0, 0, yyvsp[0].sValue);
 }
-#line 5020 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5225 "../../src/cpp_y.c"
     break;
 
   case 344:
-#line 1863 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1863 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(0, 0, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(0, 0, 1, yyvsp[0].sValue);
 }
-#line 5030 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5235 "../../src/cpp_y.c"
     break;
 
   case 345:
-#line 1869 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1869 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(1, 0, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(1, 0, 1, yyvsp[0].sValue);
 }
-#line 5040 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5245 "../../src/cpp_y.c"
     break;
 
   case 346:
-#line 1875 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1875 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(2, 0, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(2, 0, 1, yyvsp[0].sValue);
 }
-#line 5050 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5255 "../../src/cpp_y.c"
     break;
 
   case 347:
-#line 1881 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1881 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(3, 0, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(3, 0, 1, yyvsp[0].sValue);
 }
-#line 5060 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5265 "../../src/cpp_y.c"
     break;
 
   case 348:
-#line 1887 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1887 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(0, 1, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(0, 1, 0, yyvsp[0].sValue);
 }
-#line 5070 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5275 "../../src/cpp_y.c"
     break;
 
   case 349:
-#line 1893 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1893 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(1, 1, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(1, 1, 0, yyvsp[0].sValue);
 }
-#line 5080 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5285 "../../src/cpp_y.c"
     break;
 
   case 350:
-#line 1899 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1899 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(2, 1, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(2, 1, 0, yyvsp[0].sValue);
 }
-#line 5090 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5295 "../../src/cpp_y.c"
     break;
 
   case 351:
-#line 1905 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1905 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(3, 1, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(3, 1, 0, yyvsp[0].sValue);
 }
-#line 5100 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5305 "../../src/cpp_y.c"
     break;
 
   case 352:
-#line 1911 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1911 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(0, 1, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(0, 1, 1, yyvsp[0].sValue);
 }
-#line 5110 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5315 "../../src/cpp_y.c"
     break;
 
   case 353:
-#line 1917 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1917 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(1, 1, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(1, 1, 1, yyvsp[0].sValue);
 }
-#line 5120 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5325 "../../src/cpp_y.c"
     break;
 
   case 354:
-#line 1923 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1923 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(2, 1, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(2, 1, 1, yyvsp[0].sValue);
 }
-#line 5130 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5335 "../../src/cpp_y.c"
     break;
 
   case 355:
-#line 1929 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1929 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(3, 1, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(3, 1, 1, yyvsp[0].sValue);
 }
-#line 5140 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5345 "../../src/cpp_y.c"
     break;
 
   case 356:
-#line 1935 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1935 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(1, 1, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(1, 1, 0, yyvsp[0].sValue);
 }
-#line 5150 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5355 "../../src/cpp_y.c"
     break;
 
   case 357:
-#line 1941 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1941 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(2, 1, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(2, 1, 0, yyvsp[0].sValue);
 }
-#line 5160 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5365 "../../src/cpp_y.c"
     break;
 
   case 358:
-#line 1947 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1947 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(3, 1, 0, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(3, 1, 0, yyvsp[0].sValue);
 }
-#line 5170 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5375 "../../src/cpp_y.c"
     break;
 
   case 359:
-#line 1953 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1953 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(1, 1, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(1, 1, 1, yyvsp[0].sValue);
 }
-#line 5180 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5385 "../../src/cpp_y.c"
     break;
 
   case 360:
-#line 1959 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1959 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(2, 1, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(2, 1, 1, yyvsp[0].sValue);
 }
-#line 5190 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5395 "../../src/cpp_y.c"
     break;
 
   case 361:
-#line 1965 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  scopeManager_inheritsFrom(adtCpp_ScopeManager, (yyvsp[0]).sValue);
+#line 1965 "cpp_y.y"
+{
+  scopeManager_inheritsFrom(adtCpp_ScopeManager, yyvsp[0].sValue);
 
-  (yyval).pContext = adtCppBaseSpecifier_create(3, 1, 1, (yyvsp[0]).sValue);
+  yyval.pContext = adtCppBaseSpecifier_create(3, 1, 1, yyvsp[0].sValue);
 }
-#line 5200 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5405 "../../src/cpp_y.c"
     break;
 
   case 362:
-#line 1974 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppCtorInitializer_create((yyvsp[0]).pContext);
+#line 1974 "cpp_y.y"
+{
+  yyval.pContext = adtCppCtorInitializer_create(yyvsp[0].pContext);
 }
-#line 5208 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5413 "../../src/cpp_y.c"
     break;
 
   case 363:
-#line 1981 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemInitializerList_create((yyvsp[0]).pContext);
+#line 1981 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemInitializerList_create(yyvsp[0].pContext);
 }
-#line 5216 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5421 "../../src/cpp_y.c"
     break;
 
   case 364:
-#line 1985 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppList_add((yyvsp[-2]).pContext, (yyvsp[0]).pContext);
+#line 1985 "cpp_y.y"
+{
+  yyval.pContext = adtCppList_add(yyvsp[-2].pContext, yyvsp[0].pContext);
 }
-#line 5224 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5429 "../../src/cpp_y.c"
     break;
 
   case 365:
-#line 1992 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemInitializer_create((yyvsp[-2]).pContext, 0);
+#line 1992 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemInitializer_create(yyvsp[-2].pContext, 0);
 }
-#line 5232 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5437 "../../src/cpp_y.c"
     break;
 
   case 366:
-#line 1996 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemInitializer_create((yyvsp[-3]).pContext, (yyvsp[-1]).pContext);
+#line 1996 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemInitializer_create(yyvsp[-3].pContext, yyvsp[-1].pContext);
 }
-#line 5240 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5445 "../../src/cpp_y.c"
     break;
 
   case 367:
-#line 2003 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemInitializerId_create(0, (yyvsp[0]).sValue);
+#line 2003 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemInitializerId_create(0, yyvsp[0].sValue);
 }
-#line 5248 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5453 "../../src/cpp_y.c"
     break;
 
   case 368:
-#line 2007 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemInitializerId_create(1, (yyvsp[0]).sValue);
+#line 2007 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemInitializerId_create(1, yyvsp[0].sValue);
 }
-#line 5256 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5461 "../../src/cpp_y.c"
     break;
 
   case 369:
-#line 2011 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemInitializerId_create(0, (yyvsp[0]).sValue);
+#line 2011 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemInitializerId_create(0, yyvsp[0].sValue);
 }
-#line 5264 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5469 "../../src/cpp_y.c"
     break;
 
   case 370:
-#line 2015 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1646  */
-    {
-  (yyval).pContext = adtCppMemInitializerId_create(1, (yyvsp[0]).sValue);
+#line 2015 "cpp_y.y"
+{
+  yyval.pContext = adtCppMemInitializerId_create(1, yyvsp[0].sValue);
 }
-#line 5272 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5477 "../../src/cpp_y.c"
     break;
 
 
-#line 5276 "..\\src\\cpp_y.c" /* yacc.c:1646  */
+#line 5481 "../../src/cpp_y.c"
+
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -5297,14 +5503,13 @@ yyreduce:
   /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
-
-  yyn = yyr1[yyn];
-
-  yystate = yypgoto[yyn - YYNTOKENS] + *yyssp;
-  if (0 <= yystate && yystate <= YYLAST && yycheck[yystate] == *yyssp)
-    yystate = yytable[yystate];
-  else
-    yystate = yydefgoto[yyn - YYNTOKENS];
+  {
+    const int yylhs = yyr1[yyn] - YYNTOKENS;
+    const int yyi = yypgoto[yylhs] + *yyssp;
+    yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyssp
+               ? yytable[yyi]
+               : yydefgoto[yylhs]);
+  }
 
   goto yynewstate;
 
@@ -5336,7 +5541,7 @@ yyerrlab:
           {
             if (yymsg != yymsgbuf)
               YYSTACK_FREE (yymsg);
-            yymsg = (char *) YYSTACK_ALLOC (yymsg_alloc);
+            yymsg = YY_CAST (char *, YYSTACK_ALLOC (YY_CAST (YYSIZE_T, yymsg_alloc)));
             if (!yymsg)
               {
                 yymsg = yymsgbuf;
@@ -5387,12 +5592,10 @@ yyerrlab:
 | yyerrorlab -- error raised explicitly by YYERROR.  |
 `---------------------------------------------------*/
 yyerrorlab:
-
-  /* Pacify compilers like GCC when the user code never invokes
-     YYERROR and the label yyerrorlab therefore never appears in user
-     code.  */
-  if (/*CONSTCOND*/ 0)
-     goto yyerrorlab;
+  /* Pacify compilers when the user code never invokes YYERROR and the
+     label yyerrorlab therefore never appears in user code.  */
+  if (0)
+    YYERROR;
 
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYERROR.  */
@@ -5454,12 +5657,14 @@ yyacceptlab:
   yyresult = 0;
   goto yyreturn;
 
+
 /*-----------------------------------.
 | yyabortlab -- YYABORT comes here.  |
 `-----------------------------------*/
 yyabortlab:
   yyresult = 1;
   goto yyreturn;
+
 
 #if !defined yyoverflow || YYERROR_VERBOSE
 /*-------------------------------------------------.
@@ -5471,6 +5676,10 @@ yyexhaustedlab:
   /* Fall through.  */
 #endif
 
+
+/*-----------------------------------------------------.
+| yyreturn -- parsing is finished, return the result.  |
+`-----------------------------------------------------*/
 yyreturn:
   if (yychar != YYEMPTY)
     {
@@ -5500,5 +5709,5 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 2021 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_y.y" /* yacc.c:1906  */
+#line 2021 "cpp_y.y"
 

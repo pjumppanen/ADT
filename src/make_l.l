@@ -41,8 +41,9 @@
 #include "make_y.h"
 
 
+#if defined(_MSC_VER)
 int         yyMakedebug             = 0;
-
+#endif
 int         adtMake_nError          = 0;
 int         adtMake_nLineNumber     = 1;
 const char* adtMake_pFileName       = "";

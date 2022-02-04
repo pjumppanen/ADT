@@ -9,4 +9,4 @@ libfortran_y_a_SOURCES = ../../src/fortran_y.y
 libfortran_l_a_SOURCES = ../../src/fortran_l.l
 
 clean-local:
-	-rm -f fortran_l.c fortran_y.c fortran_y.h
+	-rm -f ../../src/fortran_l.c ../../src/fortran_y.c ../../src/fortran_y.h

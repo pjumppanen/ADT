@@ -8,4 +8,4 @@ libcpp_y_a_SOURCES = ../../src/cpp_y.y
 libcpp_l_a_SOURCES = ../../src/cpp_l.l
 
 clean-local:
-	-rm -f cpp_l.c cpp_y.c cpp_y.h
+	-rm -f ../../src/cpp_l.c ../../src/cpp_y.c ../../src/cpp_y.h

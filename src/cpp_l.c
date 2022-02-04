@@ -1,6 +1,5 @@
-#line 1 "..\\src\\cpp_l.c"
 
-#line 3 "..\\src\\cpp_l.c"
+#line 2 "../../src/cpp_l.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -1335,8 +1334,8 @@ goto find_rule; \
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
-#line 2 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1 "cpp_l.l"
+#line 2 "cpp_l.l"
 /*
  * cpp.l
  *
@@ -1399,8 +1398,9 @@ struct IncludeContext adtCpp_IncludeStack[64] = {0};
 int                   adtCpp_IncludeSP        = 0;
 
 
+#if defined(_MSC_VER)
 int         yyCppdebug                = 0;
-
+#endif
 int         adtCpp_nError             = 0;
 int         adtCpp_nLineNumber        = 1;
 const char* adtCpp_pFileName          = "";
@@ -1898,12 +1898,20 @@ int yyCpp_check_dtor()
 }
 
 
-#line 1901 "..\\src\\cpp_l.c"
+#line 1901 "../../src/cpp_l.c"
 
-#line 1903 "..\\src\\cpp_l.c"
+#line 1903 "../../src/cpp_l.c"
 
 #define INITIAL 0
 #define NOT_AD_CODE 1
+
+#ifndef YY_NO_UNISTD_H
+/* Special case for "unistd.h", since it is non-ANSI. We include it way
+ * down here because we want the user's section 1 to have been scanned first.
+ * The user has a chance to override it with an option.
+ */
+#include <unistd.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
@@ -2116,9 +2124,9 @@ YY_DECL
 		}
 
 	{
-#line 585 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 586 "cpp_l.l"
 
-#line 2121 "..\\src\\cpp_l.c"
+#line 2129 "../../src/cpp_l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -2182,12 +2190,12 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 586 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 587 "cpp_l.l"
 dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, -1);
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 588 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 589 "cpp_l.l"
 {
                                   char* pComment = mallocScanComment("*/", 0);
 
@@ -2204,57 +2212,57 @@ YY_RULE_SETUP
     be matched first and processed */
 case 3:
 YY_RULE_SETUP
-#line 603 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 604 "cpp_l.l"
 automate_AD_Alias(yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 604 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 605 "cpp_l.l"
 automate_AD_LibName(yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 605 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 606 "cpp_l.l"
 automate_VarModeAndPhase(2, yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 606 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 607 "cpp_l.l"
 automate_VarModeAndPhase(2, yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 607 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 608 "cpp_l.l"
 automate_VarModeAndPhase(1, yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 608 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 609 "cpp_l.l"
 automate_VarModeAndPhase(1, yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 609 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 610 "cpp_l.l"
 automate_VarModeAndPhase(1, yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 610 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 611 "cpp_l.l"
 automate_VarModeAndPhase(1, yytext, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 611 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 612 "cpp_l.l"
 automate_VarModeAndPhase(0, 0, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 612 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 613 "cpp_l.l"
 automate_VarModeAndPhase(0, 0, adtCpp_pFileName, adtCpp_nLineNumber);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 614 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 615 "cpp_l.l"
 {
                                   char* pComment = mallocScanComment("*/", 0);
 
@@ -2269,7 +2277,7 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 625 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 626 "cpp_l.l"
 {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, SINGLELINE_COMMENT);
 
@@ -2280,7 +2288,7 @@ YY_RULE_SETUP
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 632 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 633 "cpp_l.l"
 {
                                   int         nPreserveInclude  = 0;
                                   int         cn                = 0;
@@ -2791,262 +2799,262 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 1140 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1141 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, ADDVARIABLES));
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 1141 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1142 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, ASM));
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 1142 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1143 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, AUTO));
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 1143 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1144 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, BOOL));
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 1144 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1145 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LONGBOOL));
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 1145 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1146 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, BREAK));
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 1146 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1147 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, CASE));
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 1147 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1148 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, CHAR));
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 1148 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1149 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, CLASS));
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 1149 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1150 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, CONST));
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 1150 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1151 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, CONTINUE));
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 1151 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1152 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, DEFAULT));
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 1152 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1153 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, DO));
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 1153 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1154 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, DOUBLE));
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 1154 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1155 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, ELSE));
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 1155 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1156 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, ENUM));
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 1156 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1157 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, EXPLICIT));
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 1157 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1158 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, EXTERN));
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 1158 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1159 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, FLOAT));
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 1159 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1160 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, FRIEND));
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 1160 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1161 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, FOR));
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 1161 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1162 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, GOTO));
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 1162 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1163 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, IF));
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 1163 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1164 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, INLINE));
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 1164 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1165 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, INT));
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 1165 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1166 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LONG));
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 1166 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1167 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, MUTABLE));
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 1167 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1168 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, NAMESPACE));
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 1168 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1169 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, PUBLIC));
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 1169 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1170 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, PRIVATE));
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 1170 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1171 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, PROTECTED));
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 1171 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1172 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, REGISTER));
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 1172 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1173 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, RETURN));
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 1173 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1174 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SHORT));
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 1174 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1175 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SIGNED));
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 1175 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1176 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SIZEOF));
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 1176 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1177 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, STATIC));
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 1177 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1178 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, STRUCT));
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 1178 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1179 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SWITCH));
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 1179 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1180 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, TYPEDEF));
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 1180 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1181 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, TYPENAME));
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 1181 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1182 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, UNION));
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 1182 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1183 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, UNSIGNED));
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 1183 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1184 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, USING));
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 1184 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1185 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, VIRTUAL));
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 1185 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1186 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, VOID));
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 1186 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1187 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, VOLATILE));
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 1187 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1188 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, WCHAR_T));
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 1188 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1189 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, WHILE));
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 1189 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1190 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, yyCpp_check_type(1)));
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 1190 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1191 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, yyCpp_check_type(0)));
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 1192 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1193 "cpp_l.l"
 {
                                   if (yyCpp_check_dtor())
                                   {
@@ -3060,7 +3068,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 1203 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1204 "cpp_l.l"
 {
                                   if (yyCpp_check_dtor())
                                   {
@@ -3074,147 +3082,147 @@ YY_RULE_SETUP
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 1214 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1215 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_NUMBER, LITERAL));
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 1215 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1216 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_NUMBER, LITERAL));
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 1216 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1217 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_NUMBER, LITERAL));
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 1217 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1218 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_NUMBER, LITERAL));
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 1218 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1219 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, LITERAL));
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 1219 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1220 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, STRING_LITERAL));
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 1220 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1221 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, ELLIPSIS));
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 1221 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1222 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SHR_EQ));
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 1222 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1223 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SHL_EQ));
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 1223 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1224 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, P_EQ));
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 1224 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1225 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, M_EQ));
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 1225 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1226 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, PROD_EQ));
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 1226 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1227 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, DIV_EQ));
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 1227 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1228 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, MOD_EQ));
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 1228 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1229 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, AND_EQ));
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 1229 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1230 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, XOR_EQ));
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 1230 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1231 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, OR_EQ));
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 1231 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1232 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SHR));
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 1232 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1233 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SHL));
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 1233 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1234 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, INCR));
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 1234 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1235 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, DECR));
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 1235 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1236 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LAND));
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 1236 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1237 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LOR));
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 1237 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1238 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LT_EQ));
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 1238 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1239 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, GT_EQ));
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 1239 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1240 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, EQEQ));
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 1240 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1241 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, NEQ));
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 1241 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1242 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, SEMICOLON));
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 1242 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1243 "cpp_l.l"
 {
                                   int nReturn = dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LSBRACKET);
 
@@ -3224,7 +3232,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 1248 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1249 "cpp_l.l"
 {
                                   adtCpp_nBlockDepth--;
                                   return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, RSBRACKET));
@@ -3232,113 +3240,113 @@ YY_RULE_SETUP
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 1252 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1253 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, COMMA));
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 1253 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1254 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, COLON));
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 1254 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1255 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, EQ));
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 1255 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1256 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LBRACKET));
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 1256 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1257 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, RBRACKET));
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 1257 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1258 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LSQBRACKET));
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 1258 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1259 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, RSQBRACKET));
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 1259 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1260 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, DOT));
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 1260 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1261 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, AND));
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 1261 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1262 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LNOT));
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 1262 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1263 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, NOT));
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 1263 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1264 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, MINUS));
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 1264 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1265 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, PLUS));
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 1265 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1266 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, PROD));
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 1266 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1267 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, DIV));
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 1267 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1268 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, MOD));
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 1268 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1269 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, LT));
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 1269 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1270 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, GT));
 	YY_BREAK
 case 117:
 YY_RULE_SETUP
-#line 1270 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1271 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, XOR));
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 1271 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1272 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, OR));
 	YY_BREAK
 case 119:
 YY_RULE_SETUP
-#line 1272 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1273 "cpp_l.l"
 return (dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_KEYWORD, QUESTION));
 	YY_BREAK
 case 120:
 /* rule 120 can match eol */
 YY_RULE_SETUP
-#line 1273 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1274 "cpp_l.l"
 {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, -1);
                                   yyCpp_resetLastLine();
@@ -3347,21 +3355,21 @@ YY_RULE_SETUP
 	YY_BREAK
 case 121:
 YY_RULE_SETUP
-#line 1278 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1279 "cpp_l.l"
 {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, -1);
                                 }
 	YY_BREAK
 case 122:
 YY_RULE_SETUP
-#line 1281 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1282 "cpp_l.l"
 {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, WHITESPACE);
                                 }
 	YY_BREAK
 case 123:
 YY_RULE_SETUP
-#line 1284 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1285 "cpp_l.l"
 {
                                   dispatchToken(adtCpp_pCppContext, &yylval, yytext, TOKEN_TEXT, -1);
                                   printf("'%c' (0x%x): illegal character at line %d\n", yytext[0], yytext[0], adtCpp_nLineNumber);
@@ -3369,7 +3377,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(NOT_AD_CODE):
-#line 1288 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1289 "cpp_l.l"
 {
                                   if (yyCpp_endInclude() == 0)
                                   {
@@ -3379,10 +3387,10 @@ case YY_STATE_EOF(NOT_AD_CODE):
 	YY_BREAK
 case 124:
 YY_RULE_SETUP
-#line 1295 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1296 "cpp_l.l"
 ECHO;
 	YY_BREAK
-#line 3385 "..\\src\\cpp_l.c"
+#line 3393 "../../src/cpp_l.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -4358,7 +4366,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 1295 "C:\\cygwin\\usr\\src\\adt\\src\\cpp_l.l"
+#line 1296 "cpp_l.l"
 
 
 

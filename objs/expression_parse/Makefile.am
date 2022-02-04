@@ -9,4 +9,4 @@ libexpression_y_a_SOURCES = ../../src/expression_y.y
 libexpression_l_a_SOURCES = ../../src/expression_l.l
 
 clean-local:
-	-rm -f expression_l.c expression_y.c expression_y.h
+	-rm -f ../../src/expression_l.c ../../src/expression_y.c ../../src/expression_y.h

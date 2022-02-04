@@ -46,6 +46,9 @@ Bison Flex macro replacements for make lexical scanner
 #define yyrestart             yyBlackBoxrestart
 #define yytext                yyBlackBoxtext
 #define yywrap                yyBlackBoxwrap
+#define yynerrs               yyBlackBoxnerrs
+#define yychar                yyBlackBoxchar
+#define yylval                yyBlackBoxlval
 
 #define dispatchToken         yyBlackBox_dispatchToken
 #define commenteof            yyBlackBox_commenteof

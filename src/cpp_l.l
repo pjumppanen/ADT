@@ -61,8 +61,9 @@ struct IncludeContext adtCpp_IncludeStack[64] = {0};
 int                   adtCpp_IncludeSP        = 0;
 
 
+#if defined(_MSC_VER)
 int         yyCppdebug                = 0;
-
+#endif
 int         adtCpp_nError             = 0;
 int         adtCpp_nLineNumber        = 1;
 const char* adtCpp_pFileName          = "";

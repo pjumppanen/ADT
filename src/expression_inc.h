@@ -43,6 +43,10 @@ Bison Flex macro replacements for make lexical scanner
 #define yyrestart             yyExpressionrestart
 #define yytext                yyExpressiontext
 #define yywrap                yyExpressionwrap
+#define yynerrs               yyExpressionnerrs
+#define yychar                yyExpressionchar
+#define yylval                yyExpressionlval
+
 
 #define dispatchToken         yyExpression_dispatchToken
 #define commenteof            yyExpression_commenteof

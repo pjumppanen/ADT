@@ -54,8 +54,9 @@ FS			(f|F|d|D)
 #include "java_y.h"
 
 
+#if defined(_MSC_VER)
 int         yyJavadebug               = 0;
-
+#endif
 int         adtJava_nError            = 0;
 int         adtJava_nLineNumber       = 1;
 const char* adtJava_pFileName         = "";

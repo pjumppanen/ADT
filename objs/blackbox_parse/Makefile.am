@@ -9,4 +9,4 @@ libblackbox_y_a_SOURCES = ../../src/black_box_y.y
 libblackbox_l_a_SOURCES = ../../src/black_box_l.l
 
 clean-local:
-	-rm -f blackbox_l.c black_box_y.c black_box_y.h
+	-rm -f ../../src/blackbox_l.c ../../src/black_box_y.c ../../src/black_box_y.h
