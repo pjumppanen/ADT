@@ -1,0 +1,27 @@
+1 File: cygwin warning:
+2 File:   MS-DOS style path detected: .\work\d_REDev.4.f95
+3 File:   Preferred POSIX equivalent is: ./work/d_REDev.4.f95
+4 File:   CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+5 File:   Consult the user's guide for more details about POSIX paths:
+6 File:     http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+7 redev__dlognorm: (DF03) variable m_pi is used before initialized
+8 redev__thetaloglikelihood_bre: (TC19) Equality test on reals is not reliable
+9 redev__thetaloglikelihood_bre: (TC19) Equality test on reals is not reliable
+10 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+11 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+12 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+13 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+14 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+15 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+16 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+17 redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+18 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+19 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+20 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+21 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+22 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+23 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+24 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+25 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+26 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+27 redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable

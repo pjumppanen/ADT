@@ -616,7 +616,7 @@ public:
   static void                           rootBindComments(AdtCommon* pCompilerBase);
 
   static void                           setChangePrefix(const char* pRemovePrefixString, const char* pAddPrefixString);
-  static AdtFile&                       writeWithChangedPrefix(AdtFile& pOutFile, const char* pString, bool bSupressNew);
+  static AdtFile&                       writeWithChangedPrefix(AdtFile& pOutFile, const char* pString, bool bAddNew = true, bool bUnconditional = false);
 
   static void                           initialise();
   static void                           fortranRootObject(AdtParser* pRoot);

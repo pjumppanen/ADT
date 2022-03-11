@@ -1958,7 +1958,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                     //Write the merged file output
                     if (FortranOut.open(rWorkingFile, "wt"))
                     {
-                      AdtFortranName::setClearPrefix(pWorkingMake->parentClassName());
+                      AdtFortranName::setClearPrefix(0);
                       AdtFortranBase::setChangePrefix(pWorkingMake->parentClassName(), parentClassName());
 
                       pWorkingRoot->writeFortran(FortranOut);

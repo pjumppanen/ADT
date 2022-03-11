@@ -1,0 +1,337 @@
+! ----------------------------------------------------------------------------
+MODULE DIFFSIZES
+  INTEGER(4) , parameter :: nbdirsmax = 25
+ENDMODULE
+! ----------------------------------------------------------------------------
+! Including stdlib.f
+! ----------------------------------------------------------------------------
+! ----------------------------------------------------------------------------
+! Standard definitions of needed functions
+! ----------------------------------------------------------------------------
+SUBROUTINE CheckSizeInteger1(a,i)
+
+  INTEGER(1) :: i
+  INTEGER(1) :: a(:)
+  
+ENDSUBROUTINE 
+
+! ----------------------------------------------------------------------------
+SUBROUTINE CheckSizeInteger4(a,i)
+
+  INTEGER(4) :: i
+  INTEGER(4) :: a(:)
+  
+ENDSUBROUTINE 
+
+! ----------------------------------------------------------------------------
+SUBROUTINE CheckSizeInteger8(a,i)
+
+  INTEGER(8) :: i
+  INTEGER(8) :: a(:)
+  
+ENDSUBROUTINE 
+
+! ----------------------------------------------------------------------------
+SUBROUTINE CheckSizeReal4(a,i)
+
+  INTEGER(4) :: i
+  REAL(8) :: a(:)
+  
+ENDSUBROUTINE 
+
+! ----------------------------------------------------------------------------
+SUBROUTINE CheckSizeReal8(a,i)
+
+  INTEGER(4) :: i
+  REAL(8) :: a(:)
+  
+ENDSUBROUTINE 
+
+! ----------------------------------------------------------------------------
+SUBROUTINE CheckSizeReal16(a,i)
+
+  INTEGER(4) :: i
+  REAL(8) :: a(:)
+  
+ENDSUBROUTINE 
+
+! ----------------------------------------------------------------------------
+INTEGER(4) FUNCTION one_if(a)
+
+  LOGICAL :: a
+  
+  IF (A) THEN
+  
+    one_if = 1
+    
+  ELSE 
+  
+    one_if = 0
+    
+  ENDIF 
+  
+  
+ENDFUNCTION 
+
+
+! ----------------------------------------------------------------------------
+MODULE COMMON
+  
+  INTEGER(4), PARAMETER :: dim_stack
+  
+  INTEGER(4) N
+  INTEGER(4) NP
+  INTEGER(4) NR
+  REAL(8) par_logK
+  REAL(8) par_logQ
+  REAL(8) par_logR
+  REAL(8) par_logr0
+  REAL(8) par_logtheta
+  REAL(8) par_u(N )
+  REAL(8) y(N )
+  
+END
+
+! ----------------------------------------------------------------------------
+
+
+!  ----------------------------------------------------------------------------
+
+SUBROUTINE REDev__choleskyDecomposition(pA, pL, nSize)
+REAL(8) , INTENT (IN) :: pA(nSize,nSize ) 
+REAL(8) , INTENT (INOUT) :: pL(nSize,nSize ) 
+INTEGER(4) , INTENT (IN) :: nSize 
+
+USE COMMON
+
+  ! --------------------------------------------------------------------------
+  !  A is symetric positive definite matrix in lower triangular form
+  !  L is the cholesky decomposition in lower triangular form
+  ! --------------------------------------------------------------------------
+  REAL(8) sum
+  INTEGER(4) ci, cj, ck
+  ci = 1
+  DO WHILE(ci .LE. nSize)
+  
+    sum = pA(ci,ci)
+    cj = 1
+    DO WHILE (cj .LE. ci - 1)
+    
+      sum = sum - pL(ci,cj) * pL(ci,cj)
+      cj = cj + 1
+    
+    END DO 
+    
+    pL(ci,ci) = SQRT(sum)
+    cj = ci + 1
+    DO WHILE (cj .LE. nSize)
+    
+      sum = pA(cj,ci)
+      ck = 1
+      DO WHILE (ck .LE. ci - 1)
+      
+        sum = sum - pL(ci,ck) * pL(cj,ck)
+        ck = ck + 1
+      
+      END DO 
+      
+      pL(cj,ci) = sum / pL(ci,ci)
+      cj = cj + 1
+    
+    END DO 
+    
+  
+  ci = ci + 1
+  END DO 
+  
+END 
+
+
+!  ----------------------------------------------------------------------------
+
+REAL(8) FUNCTION REDev__dlognorm(x, mean, sigma)
+REAL(8) , INTENT (IN) :: x 
+REAL(8) , INTENT (IN) :: mean 
+REAL(8) , INTENT (IN) :: sigma 
+
+USE COMMON
+
+  REAL(8) dValue
+  dValue = -LOG(sigma) - 0.5 * LOG(2 * M_PI) - 0.5 * (((x - mean) / sig&
+  &ma) ** (2.0))
+  REDev__dlognorm = (dValue)
+  RETURN 
+END 
+
+
+!  ----------------------------------------------------------------------------
+
+REAL(8) FUNCTION REDev__logDeterminantFromChol(pL, nSize)
+REAL(8) , INTENT (IN) :: pL(nSize,nSize ) 
+INTEGER(4) , INTENT (IN) :: nSize 
+
+USE COMMON
+
+  ! --------------------------------------------------------------------------
+  !  pL is the cholesky decomposition of A in lower triangular form
+  ! --------------------------------------------------------------------------
+  REAL(8) dLogDet
+  INTEGER(4) ci
+  dLogDet = 0.0
+  ci = 1
+  DO WHILE(ci .LE. nSize)
+  
+    dLogDet = dLogDet + (LOG(pL(ci,ci)))
+  
+  ci = ci + 1
+  END DO 
+  
+  dLogDet = dLogDet * (2.0)
+  REDev__logDeterminantFromChol = (dLogDet)
+  RETURN 
+END 
+
+
+!  ----------------------------------------------------------------------------
+
+REAL(8) FUNCTION REDev__logLikelihood(re, par)
+REAL(8) , INTENT (IN) :: re(NR ) 
+REAL(8) , INTENT (IN) :: par(NP ) 
+
+USE COMMON
+
+  !  Decode parameters     
+  REAL(8) dLikelihood
+  INTEGER(4) cn
+  INTEGER(4) cm
+  !  Copy over random effects
+  cm = 1
+  cn = 0
+  DO WHILE(cn .LT. NR)
+  
+    par_u(cm) = re(cm)
+    cm = cm + 1
+  
+  cn = cn + 1
+  END DO 
+  
+  !  Copy over parameters
+  cm = 1
+  par_logr0 = par(cm)
+  cm = cm + 1
+  par_logtheta = par(cm)
+  cm = cm + 1
+  par_logK = par(cm)
+  cm = cm + 1
+  par_logQ = par(cm)
+  cm = cm + 1
+  par_logR = par(cm)
+  cm = cm + 1
+  !  Call likelihood function
+  dLikelihood = REDev__thetalogLikelihood(par_u,par_logr0,par_logtheta,&
+  &par_logK,par_logQ,par_logR)
+  REDev__logLikelihood = (dLikelihood)
+  RETURN 
+END 
+
+
+!  ----------------------------------------------------------------------------
+
+SUBROUTINE REDev__matrixInverseFromChol(pL, pInv, nSize)
+REAL(8) , INTENT (IN) :: pL(nSize,nSize ) 
+REAL(8) , INTENT (INOUT) :: pInv(nSize,nSize ) 
+INTEGER(4) , INTENT (IN) :: nSize 
+
+USE COMMON
+
+  ! --------------------------------------------------------------------------
+  !  pL is the cholesky decomposition of A in lower triangular form
+  !  pInv is the resulting lower triangular inverse matrix
+  ! --------------------------------------------------------------------------
+  INTEGER(4) cc
+  INTEGER(4) cr
+  INTEGER(4) cq
+  REAL(8) b
+  cc = nSize
+  DO WHILE(cc .GE. 1)
+  
+    cr = cc
+    DO WHILE(cr .GE. 1)
+    
+      b = 0.0
+      IF (cr .EQ. cc) THEN 
+      
+        b = (1.0 / pL(cr,cr))
+      END IF 
+      
+      IF (cr .LT. nSize) THEN 
+      
+        cq = 1 + cr
+        DO WHILE(cq .LE. nSize)
+        
+          b = b - pInv(cq,cc) * pL(cq,cr)
+        
+        cq = cq + 1
+        END DO 
+        
+      END IF 
+      
+      pInv(cc,cr) = b * (1.0 / pL(cr,cr))
+    
+    cr = cr - 1
+    END DO 
+    
+  
+  cc = cc - 1
+  END DO 
+  
+END 
+
+
+!  ----------------------------------------------------------------------------
+
+REAL(8) FUNCTION REDev__thetalogLikelihood(u, logr0, logtheta, logK, lo&
+&gQ, logR)
+REAL(8) , INTENT (IN) :: u(N) 
+REAL(8) , INTENT (IN) :: logr0 
+REAL(8) , INTENT (IN) :: logtheta 
+REAL(8) , INTENT (IN) :: logK 
+REAL(8) , INTENT (IN) :: logQ 
+REAL(8) , INTENT (IN) :: logR 
+
+USE COMMON
+
+  REAL(8) mean
+  REAL(8) r0
+  REAL(8) theta
+  REAL(8) K
+  REAL(8) Q
+  REAL(8) R
+  REAL(8) ll
+  INTEGER(4) cn
+  r0 = EXP(logr0)
+  theta = EXP(logtheta)
+  K = EXP(logK)
+  Q = EXP(logQ)
+  R = EXP(logR)
+  ll = 0.0
+  cn = 2
+  DO WHILE(cn .LE. N)
+  
+    mean = u(cn - 1) + r0 * (1.0 - ((EXP(u(cn - 1)) / K) ** (theta)))
+    ll = ll - (REDev__dlognorm(u(cn),mean,SQRT(Q)))
+  
+  cn = cn + 1
+  END DO 
+  
+  cn = 1
+  DO WHILE(cn .LE. N)
+  
+    ll = ll - (REDev__dlognorm(y(cn),u(cn),SQRT(R)))
+  
+  cn = cn + 1
+  END DO 
+  
+  REDev__thetalogLikelihood = (ll)
+  RETURN 
+END 

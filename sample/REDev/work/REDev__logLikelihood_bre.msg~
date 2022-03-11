@@ -1,0 +1,7 @@
+1 File: cygwin warning:
+2 File:   MS-DOS style path detected: .\work\d_REDev.1.f95
+3 File:   Preferred POSIX equivalent is: ./work/d_REDev.1.f95
+4 File:   CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+5 File:   Consult the user's guide for more details about POSIX paths:
+6 File:     http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+7 redev__dlognorm: (DF03) variable m_pi is used before initialized

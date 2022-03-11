@@ -1,0 +1,62 @@
+1 File: cygwin warning:
+2 File:   MS-DOS style path detected: .\work\dR_REDev.1.f95
+3 File:   Preferred POSIX equivalent is: ./work/dR_REDev.1.f95
+4 File:   CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+5 File:   Consult the user's guide for more details about POSIX paths:
+6 File:     http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+7 (AD06) Differentiation root procedures (r_redev__laplace) have no active input nor output
+8 r_redev__laplace: (DF03) variable m_pi is used before initialized
+9 r_redev__laplace: Command: Input variable(s) re have no differentiable influence in r_redev__laplace: removed from independents
+10 r_redev__laplace: Command: Output variable(s) R_REDev__laplace are not influenced differentiably in r_redev__laplace: removed from dependents
+11 r_redev__hessianre: (TC24) Wrong number of dimensions for array phessian: 2 expected, and 1 given
+12 r_redev__dlognorm: (TC20) Variable __dlognorm is not declared
+13 r_redev__logdeterminantfromchol: (TC20) Variable __logdeterminantfromchol is not declared
+14 r_redev__loglikelihood: (TC33) External procedure __thetaloglikelihood is not declared
+15 r_redev__loglikelihood: (TC20) Variable __loglikelihood is not declared
+16 r_redev__thetaloglikelihood: (TC33) External procedure __dlognorm is not declared
+17 r_redev__thetaloglikelihood: (TC20) Variable __thetaloglikelihood is not declared
+18 r_redev__loglikelihood_bre: (TC20) Variable __loglikelihoodb1_re is not declared
+19 r_redev__loglikelihood_bre: (TC33) External procedure __thetaloglikelihood_bre is not declared
+20 r_redev__thetaloglikelihood_bre: (TC20) Variable __thetaloglikelihoodb1_re is not declared
+21 r_redev__thetaloglikelihood_bre: (TC33) External procedure __dlognorm_bre is not declared
+22 r_redev__thetaloglikelihood_bre: (TC19) Equality test on reals is not reliable
+23 r_redev__thetaloglikelihood_bre: (TC19) Equality test on reals is not reliable
+24 r_redev__dlognorm_bre: (TC20) Variable __dlognormb1_re is not declared
+25 r_redev__loglikelihood_bre_dre: (TC20) Variable __loglikelihoodb1_re is not declared
+26 r_redev__loglikelihood_bre_dre: (TC33) External procedure __thetaloglikelihood_bre_dre is not declared
+27 r_redev__loglikelihood_bre_dre: (DF03) variable __loglikelihoodb1_re is used before initialized
+28 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+29 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+30 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+31 r_redev__thetaloglikelihood_bre_dre: (TC20) Variable __thetaloglikelihoodb1_re is not declared
+32 r_redev__thetaloglikelihood_bre_dre: (TC33) External procedure __dlognorm_bre_dre is not declared
+33 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+34 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+35 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+36 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+37 r_redev__thetaloglikelihood_bre_dre: (TC19) Equality test on reals is not reliable
+38 r_redev__dlognorm_bre_dre: (TC20) Variable __dlognormb1_re is not declared
+39 r_redev__loglikelihood_bre_dpar: (TC20) Variable __loglikelihoodb1_re is not declared
+40 r_redev__loglikelihood_bre_dpar: (TC33) External procedure __thetaloglikelihood_bre_dpar is not declared
+41 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+42 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+43 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+44 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+45 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+46 r_redev__thetaloglikelihood_bre_dpar: (TC20) Variable __thetaloglikelihoodb1_re is not declared
+47 r_redev__thetaloglikelihood_bre_dpar: (TC33) External procedure __dlognorm_bre_dpar is not declared
+48 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+49 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+50 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+51 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+52 r_redev__thetaloglikelihood_bre_dpar: (TC19) Equality test on reals is not reliable
+53 r_redev__dlognorm_bre_dpar: (TC20) Variable __dlognormb1_re is not declared
+54 r_redev__loglikelihood_bpar: (TC20) Variable __loglikelihoodb4_par is not declared
+55 r_redev__loglikelihood_bpar: (TC33) External procedure __thetaloglikelihood_bpar is not declared
+56 r_redev__thetaloglikelihood_bpar: (TC20) Variable __thetaloglikelihoodb4_par is not declared
+57 r_redev__thetaloglikelihood_bpar: (TC33) External procedure __dlognorm_bpar is not declared
+58 r_redev__thetaloglikelihood_bpar: (TC19) Equality test on reals is not reliable
+59 r_redev__thetaloglikelihood_bpar: (TC19) Equality test on reals is not reliable
+60 r_redev__thetaloglikelihood_bpar: (TC19) Equality test on reals is not reliable
+61 r_redev__thetaloglikelihood_bpar: (TC19) Equality test on reals is not reliable
+62 r_redev__dlognorm_bpar: (TC20) Variable __dlognormb4_par is not declared
