@@ -2677,11 +2677,13 @@ void AdtFortranBase::setChangePrefix(const char* pRemovePrefixString, const char
 
 //  ----------------------------------------------------------------------------
 
-AdtFile& AdtFortranBase::writeWithChangedPrefix(AdtFile& pOutFile, const char* pString, bool bSupressNew)
+AdtFile& AdtFortranBase::writeWithChangedPrefix(AdtFile& pOutFile, const char* pString, bool bAddNew, bool bUnconditional)
 {
-  int     nStart  = 0;
-  int     nLength = 0;
-  string  sName(pString);
+  int         nStart  = 0;
+  int         nLength = 0;
+  string      sName(pString);
+  const char* pName    = sName;
+  bool        bRemoved = false;
 
   if (RemovePrefixString != 0)
   {
@@ -2691,47 +2693,25 @@ AdtFile& AdtFortranBase::writeWithChangedPrefix(AdtFile& pOutFile, const char* p
                                 nLength,
                                 false) && (nStart == 0))
     {
-      const char* pName = sName;
-
-      // If it matches the prefix we should allows add the new one
-      if (AddPrefixString != 0)
-      {
-        write(pOutFile, AddPrefixString);
-      }
-
-      write(pOutFile, pName + nLength);
-    }
-    else
-    {
-      if (!bSupressNew && (AddPrefixString != 0))
-      {
-        write(pOutFile, AddPrefixString);
-      }
-
-      write(pOutFile, pString);
+      // If it matches the prefix we should remove it
+      pName   += nLength;
+      bRemoved = true;
     }
   }
-  else
+
+  if ((AddPrefixString != 0) && ((bAddNew && bRemoved) || (bUnconditional || bRemoved)))
   {
-    if (AddPrefixString != 0)
-    {
-      // If it matches the new prefix we shouldn't add the new one
-      if (AdtParser::hasSubString(sName,
+    if (!(AdtParser::hasSubString(pName,
                                   AddPrefixString,
                                   nStart,
                                   nLength,
-                                  false) && (nStart == 0))
-      {
-        // Do nothing
-      }
-      else if (!bSupressNew)
-      {
-        write(pOutFile, AddPrefixString);
-      }
+                                  false) && (nStart == 0)))
+    {                                  
+      write(pOutFile, AddPrefixString);
     }
-
-    write(pOutFile, pString);
   }
+
+  write(pOutFile, pName);
 
   return (pOutFile);
 }
@@ -4758,6 +4738,9 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
     //to the module definition in the working fortran source code.
     AdtFortranModuleBody* pModuleBody     = 0;
     AdtParser*            pDestModuleBody = 0;
+    string                ClassPrefix(pParentClassName);
+
+    ClassPrefix += "__";
 
     if (pNewLocalsList == 0)
     {
@@ -4948,7 +4931,8 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
               }
             }
 
-            const char*               pSuffix         = strrchr(pObjCopy->name(), '_');
+            const char*               pNext           = 0;
+            const char*               pSuffix         = pObjCopy->name().findMatch(ClassPrefix, pNext, true, false);
             AdtFortranFunctionStmt*   pOrigFuncObj    = (AdtFortranFunctionStmt*)pObj->findDescendant("FunctionStmt");
             AdtFortranSubroutineStmt* pOrigSubObj     = (AdtFortranSubroutineStmt*)pObj->findDescendant("SubroutineStmt");
             AdtFortranFunctionStmt*   pFunctionObj    = (AdtFortranFunctionStmt*)pObjCopy->findDescendant("FunctionStmt");
@@ -13489,7 +13473,7 @@ AdtFile& AdtFortranPrimary::writeFortran(AdtFile& pOutFile, int nMode) const
 
     if (Name != 0)
     {
-      AdtFortranBase::writeWithChangedPrefix(pOutFile, Name->name(), true);
+      AdtFortranBase::writeWithChangedPrefix(pOutFile, Name->name(), false);
     }
 
     if (IsBracket)
@@ -15526,7 +15510,7 @@ AdtFile& AdtFortranAssignmentStmt::writeFortran(AdtFile& pOutFile, int nMode) co
 
   if (Name != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, Name->name(), true);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, Name->name(), false);
   }
 
   if (SFExprList != 0)
@@ -20880,7 +20864,7 @@ AdtFile& AdtFortranCallStmt::writeFortran(AdtFile& pOutFile, int nMode) const
 
     write(pOutFile, "CALL ");
 
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, Name->name(), true);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, Name->name(), false);
 
     if (SectionSubscriptList != 0)
     {
@@ -21212,7 +21196,7 @@ AdtFile& AdtFortranFunctionStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
   if (FunctionName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), true, true);
   }
 
   if (EmptyParameterList)
@@ -21265,7 +21249,7 @@ AdtFile& AdtFortranFunctionStmt::writeDelphi(AdtFile& pOutFile, int nMode) const
 
   if (FunctionName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), true, true);
   }
 
   if (EmptyParameterList)
@@ -21346,7 +21330,7 @@ AdtFile& AdtFortranFunctionStmt::writeFortran(AdtFile& pOutFile, int nMode) cons
 
   if (FunctionName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), true);
   }
 
   if (EmptyParameterList)
@@ -21367,7 +21351,7 @@ AdtFile& AdtFortranFunctionStmt::writeFortran(AdtFile& pOutFile, int nMode) cons
   {
     // Should never happen as we replace RESULT with function name return type.
     write(pOutFile, "RESULT (");
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, ResultName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, ResultName->name(), true);
     write(pOutFile, ")");
   }
 
@@ -21667,7 +21651,7 @@ AdtFile& AdtFortranEndFunctionStmt::writeFortran(AdtFile& pOutFile, int nMode) c
 
   if (FunctionName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, FunctionName->name(), true);
   }
 
   pOutFile.newline();
@@ -21898,7 +21882,7 @@ AdtFile& AdtFortranSubroutineStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
   if (SubroutineName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), true);
   }
 
   if (EmptyParameterList)
@@ -21951,7 +21935,7 @@ AdtFile& AdtFortranSubroutineStmt::writeDelphi(AdtFile& pOutFile, int nMode) con
 
   if (SubroutineName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), true);
   }
 
   if (EmptyParameterList)
@@ -22005,7 +21989,7 @@ AdtFile& AdtFortranSubroutineStmt::writeFortran(AdtFile& pOutFile, int nMode) co
 
   if (SubroutineName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), true);
   }
 
   if (EmptyParameterList)
@@ -22104,7 +22088,7 @@ AdtFile& AdtFortranEndSubroutineStmt::writeFortran(AdtFile& pOutFile, int nMode)
 
   if (SubroutineName != 0)
   {
-    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), false);
+    AdtFortranBase::writeWithChangedPrefix(pOutFile, SubroutineName->name(), true);
   }
 
   pOutFile.newline();
