@@ -2937,6 +2937,11 @@ bool AdtMakeCommand::withStackSubstitution(const AdtMakeCommandOperation* pOpera
     bWithStackSubstitution = false;
   }
 
+  if (switchDefined("WithStackSubstitution"))
+  {
+    bWithStackSubstitution = true;
+  }
+
   if (pOperation != 0)
   {
     // Pragma takes precedence over switches

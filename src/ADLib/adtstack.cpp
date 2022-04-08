@@ -352,203 +352,42 @@ AdtADStack::~AdtADStack()
 
 //  ----------------------------------------------------------------------------
 
-int AdtADStack::baseIndex(const AdtMemAllocator& rAllocator, char* pArray, int nSize) const
+void AdtADStack::memoryAndLength(const AdtMemAllocator& rAllocator, char* pArray, int nSize, char*& pData, size_t& nDataSize) const
 {
-  int                   nIndex  = 0;
-  const AdtArrayInfo*   pInfo   = AdtArrayPlanActor::arrayInfo(rAllocator, pArray);
+  int           nIndex  = 0;
+  AdtArrayInfo* pInfo   = AdtArrayPlanActor::arrayInfo(rAllocator, pArray);
 
   if (pInfo == 0)
   {
     throw(std::runtime_error(std::string("push/pop operation on invalid array")));
   }
 
-  const AdtArrayCoord&  rCoord  = pInfo->Actor->coord(0);
-
-  if (rCoord.Size != nSize)
-  {
-    throw(std::runtime_error(std::string("push/pop array size parameter inconsistent with actual array size")));
-  }
-
-  return (rCoord.IndexBase);
+  pData     = pInfo->firstData();
+  nDataSize = pInfo->lengthOfData();
 }
 
 //  ----------------------------------------------------------------------------
 
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1F pNum, int nSize)
+void AdtADStack::pushArray(const AdtMemAllocator& rAllocator, const char* pArray, int nSize)
 {
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
+  char*   pData     = 0;
+  size_t  nDataSize = 0;
 
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
+  memoryAndLength(rAllocator, (char*)pArray, nSize, pData, nDataSize);
+
+  push(pData, nDataSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1D pNum, int nSize)
+void AdtADStack::popArray(const AdtMemAllocator& rAllocator, char* pArray, int nSize)
 {
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
+  char*   pData     = 0;
+  size_t  nDataSize = 0;
 
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
+  memoryAndLength(rAllocator, pArray, nSize, pData, nDataSize);
+
+  pop(pData, nDataSize);
 }
 
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1C pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1UC pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1S pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1US pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1L pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1UL pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1I pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::push(const AdtMemAllocator& rAllocator, const ARRAY_1UI pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  push((const char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1F pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1D pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1C pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1UC pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1S pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1US pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1L pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1UL pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1I pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-void AdtADStack::pop(const AdtMemAllocator& rAllocator, ARRAY_1UI pNum, int nSize)
-{
-  int nIndex = baseIndex(rAllocator, (char*)pNum, nSize);
-
-  pop((char*)&pNum[nIndex], nSize * sizeof(*pNum));
-}
 

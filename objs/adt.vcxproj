@@ -341,7 +341,7 @@
     <CustomBuild Include="..\src\black_box_l.l">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex.exe -o..\src\black_box_l.c %(FullPath)
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe --nounistd -o..\src\black_box_l.c %(FullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex.exe -o..\src\black_box_l.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\black_box_l.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\black_box_l.c;%(Outputs)</Outputs>

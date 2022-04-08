@@ -206,18 +206,22 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dR_REDev.cpp" />
+    <ClCompile Include="dR_REDevA.cpp" />
+    <ClCompile Include="dR_REDevB.cpp" />
+    <ClCompile Include="dR_REDevC.cpp" />
     <ClCompile Include="d_REDev.cpp" />
     <ClCompile Include="registration.cpp" />
     <ClCompile Include="REDev.cpp" />
-    <ClCompile Include="R_REDev.cpp" />
+    <ClCompile Include="R_REDevA.cpp" />
+    <ClCompile Include="R_REDevB.cpp" />
+    <ClCompile Include="R_REDevC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="REDev.mk">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Platform)\$(Configuration)\adt %(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\adt %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)d_REDev.hpp;%(RootDir)%(Directory)d_REDev.cpp;%(RootDir)%(Directory)dR_REDev.hpp;%(RootDir)%(Directory)dR_REDev.cpp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)d_REDev.hpp;%(RootDir)%(Directory)d_REDev.cpp;%(RootDir)%(Directory)dR_REDev.hpp;%(RootDir)%(Directory)dR_REDev.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)d_REDev.hpp;%(RootDir)%(Directory)d_REDev.cpp;%(RootDir)%(Directory)dR_REDevA.hpp;%(RootDir)%(Directory)dR_REDevA.cpp;%(RootDir)%(Directory)dR_REDevB.hpp;%(RootDir)%(Directory)dR_REDevB.cpp;%(RootDir)%(Directory)dR_REDevC.hpp;%(RootDir)%(Directory)dR_REDevC.cpp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Platform)\$(Configuration)\adt %(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\adt %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)d_REDev.hpp;%(RootDir)%(Directory)d_REDev.cpp;%(RootDir)%(Directory)dR_REDev.hpp;%(RootDir)%(Directory)dR_REDev.cpp;%(Outputs)</Outputs>
@@ -225,7 +229,8 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)REDev.hpp;%(RootDir)%(Directory)REDev.cpp;%(RootDir)%(Directory)R_REDev.hpp;%(RootDir)%(Directory)R_REDev.cpp;</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)REDev.hpp;%(RootDir)%(Directory)REDev.cpp;%(RootDir)%(Directory)R_REDev.hpp;%(RootDir)%(Directory)R_REDev.cpp;</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)REDev.hpp;%(RootDir)%(Directory)REDev.cpp;%(RootDir)%(Directory)R_REDev.hpp;%(RootDir)%(Directory)R_REDev.cpp;</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)REDev.hpp;%(RootDir)%(Directory)REDev.cpp;%(RootDir)%(Directory)R_REDev.hpp;%(RootDir)%(Directory)R_REDev.cpp;</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalInputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

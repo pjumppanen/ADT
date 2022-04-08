@@ -1,6 +1,14 @@
 // ----------------------------------------------------------------------------
 // Code to develop generalised RE modelling code.
 // ----------------------------------------------------------------------------
+// This layer implements generalisation of loglikelihood interface plus
+// support functions:
+//
+//  choleskyDecomposition()
+//  logDeterminantFromChol()
+//  matrixInverseFromChol()
+//
+// ----------------------------------------------------------------------------
 
 
 #include "REDev.hpp"
@@ -9,13 +17,13 @@
 // ----------------------------------------------------------------------------
 
 REDev::REDev(
-#include "Rd_constructor_args.hpp"
+#include "Da_constructor_args.hpp"
 )
 {
-  #include "Rd_constructor_locals.hpp"
-  #include "Rd_constructor_scalars_phase_1.hpp"
-  #include "Rd_constructor_arrays_phase_1.hpp"
-  #include "Rd_array_plans_init.hpp"
+  #include "Da_constructor_locals.hpp"
+  #include "Da_constructor_scalars_phase_1.hpp"
+  #include "Da_constructor_arrays_phase_1.hpp"
+  #include "Da_array_plans_init.hpp"
 }
 
 // ----------------------------------------------------------------------------
@@ -26,14 +34,14 @@ double REDev::dlognorm(const double x,
 {
   double dValue;
 
-  dValue = -log(sigma) - 0.5 * log(2 * M_PI) - 0.5 * pow((x - mean) / sigma, 2.0);
+  dValue = -log(sigma) - 0.5 * log(2 * 3.14159265358979323846) - 0.5 * pow((x - mean) / sigma, 2.0);
 
   return (dValue);
 }
 
 // ----------------------------------------------------------------------------
 
-double REDev::thetalogLikelihood(const ARRAY_1D u/*N*/,
+double REDev::thetalogLikelihood(const ARRAY_1D u/* NR */,
                                  const double logr0,
                                  const double logtheta,
                                  const double logK,
@@ -56,14 +64,14 @@ double REDev::thetalogLikelihood(const ARRAY_1D u/*N*/,
   R     = exp(logR);
   ll    = 0.0;
 
-  for (cn = 2 ; cn <= N ; cn++)
+  for (cn = 2 ; cn <= NR ; cn++)
   {
     mean = u[cn - 1] + r0 * (1.0 - pow(exp(u[cn - 1]) / K, theta));
 
     ll -= dlognorm(u[cn], mean, sqrt(Q));
   }
 
-  for(cn = 1 ; cn <= N ; cn++)
+  for(cn = 1 ; cn <= NR ; cn++)
   {
     ll -= dlognorm(y[cn], u[cn], sqrt(R));
   }
@@ -73,9 +81,10 @@ double REDev::thetalogLikelihood(const ARRAY_1D u/*N*/,
 
 // ----------------------------------------------------------------------------
 
-double REDev::logLikelihood(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */)
+double REDev::logLikelihood(const ARRAY_1D re/* NR */, 
+                            const ARRAY_1D par/* NP */)
 {
-  // Decode parameters                                  
+  // Decode parameters     
   double dLikelihood;
   int    cn;
   int    cm;
@@ -121,7 +130,81 @@ double REDev::logLikelihood(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP *
 
 // ----------------------------------------------------------------------------
 
-void REDev::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize)
+void REDev::sparseBandedLimitsByRows(const ARRAY_2D pA/* nRows, nColumns */, 
+                                     ARRAY_1L pLowerLimit/* nRows */, 
+                                     ARRAY_1L pUpperLimit/* nRows */, 
+                                     const int nRows,
+                                     const int nColumns)
+{
+  int    ci, cj, first, last;
+  double dVal;
+
+  for (ci = 1 ; ci <= nRows ; ci++)
+  {
+    first = -1;
+    last  = -1;
+
+    for (cj = 1 ; cj <= nColumns ; cj++)
+    {
+      dVal = pA[ci][cj];
+
+      if ((first < 0) && (dVal != 0))
+      {
+        first = cj;
+      }
+
+      if (dVal != 0)
+      {
+        last = cj;
+      }
+    }
+
+    pLowerLimit[ci] = first;
+    pUpperLimit[ci] = last;
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+void REDev::sparseBandedLimitsByColumns(const ARRAY_2D pA/* nRows, nColumns */, 
+                                        ARRAY_1L pLowerLimit/* nColumns */, 
+                                        ARRAY_1L pUpperLimit/* nColumns */, 
+                                        const int nRows,
+                                        const int nColumns)
+{
+  int    ci, cj, first, last;
+  double dVal;
+
+  for (ci = 1 ; ci <= nColumns ; ci++)
+  {
+    first = -1;
+    last  = -1;
+
+    for (cj = 1 ; cj <= nRows ; cj++)
+    {
+      dVal = pA[cj][ci];
+
+      if ((first < 0) && (dVal != 0))
+      {
+        first = cj;
+      }
+
+      if (dVal != 0)
+      {
+        last = cj;
+      }
+    }
+
+    pLowerLimit[ci] = first;
+    pUpperLimit[ci] = last;
+  }
+}                                      
+
+// ----------------------------------------------------------------------------
+
+void REDev::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, 
+                                  ARRAY_2D pL/* nSize, nSize */, 
+                                  const int nSize)
 {
   //--------------------------------------------------------------------------
   // A is symetric positive definite matrix in lower triangular form
@@ -133,41 +216,35 @@ void REDev::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D 
   for (ci = 1 ; ci <= nSize ; ci++)
   {
     sum = pA[ci][ci];
-    cj  = 1;
 
-    while (cj <= ci - 1)
+    for (cj = 1 ; cj <= ci - 1 ; cj++)
     {
       sum = sum - pL[ci][cj] * pL[ci][cj];
-
-      cj++;
     }
 
+#ifndef AD
+    assert(sum > 0.0);
+#endif    
     pL[ci][ci] = sqrt(sum);
 
-    cj = ci + 1;
-
-    while (cj <= nSize)
+    for (cj = ci + 1 ; cj <= nSize ; cj++)
     {
       sum = pA[cj][ci];
-      ck  = 1;
-
-      while (ck <= ci - 1)
+      
+      for (ck = 1 ; ck <= ci - 1 ; ck++)
       {
         sum = sum - pL[ci][ck] * pL[cj][ck];
-
-        ck++;
       }
 
       pL[cj][ci] = sum / pL[ci][ci];
-
-      cj++;
     }
   }
 }
 
 // ----------------------------------------------------------------------------
 
-double REDev::logDeterminantFromChol(const ARRAY_2D pL/* nSize, nSize */, const int nSize)
+double REDev::logDeterminantFromChol(const ARRAY_2D pL/* nSize, nSize */, 
+                                     const int nSize)
 {
   //--------------------------------------------------------------------------
   // pL is the cholesky decomposition of A in lower triangular form
@@ -189,7 +266,9 @@ double REDev::logDeterminantFromChol(const ARRAY_2D pL/* nSize, nSize */, const 
 
 // ----------------------------------------------------------------------------
 
-void REDev::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize)
+void REDev::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, 
+                                  ARRAY_2D pInv/* nSize, nSize */, 
+                                  const int nSize)
 {
   //--------------------------------------------------------------------------
   // pL is the cholesky decomposition of A in lower triangular form
@@ -215,11 +294,19 @@ void REDev::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D 
       {
         for (cq = 1 + cr ; cq <= nSize ; cq++)
         {
-          b = b - pInv[cq][cc] * pL[cq][cr];
+          if (cc <= cq)
+          {
+            b = b - pInv[cq][cc] * pL[cq][cr];
+          }
+          else
+          {
+            b = b - pInv[cc][cq] * pL[cq][cr];
+          }
         }
       }
 
       pInv[cc][cr] = b * (1.0 / pL[cr][cr]);
+      pInv[cr][cc] = pInv[cc][cr];
     }
   }
 }
