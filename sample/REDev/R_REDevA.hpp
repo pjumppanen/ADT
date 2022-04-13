@@ -4,9 +4,7 @@
 // This layer implements:
 //
 //  gradientRE()
-//  hessianRE()
-//  logDetHessianRE()
-//  laplace()
+//  diffRE()
 //
 // ----------------------------------------------------------------------------
 
@@ -36,11 +34,6 @@ public:
 
   R_REDevA(const R_REDevA& rCopy);
   virtual ~R_REDevA();
-
-  // Gradient of objective with respect to parameters
-  void      gradientPar(const ARRAY_1D re/* NR */, 
-                        const ARRAY_1D par/* NP */, 
-                        ARRAY_1D pGrad/* NP */);
 
   // Gradient of objective with respect to random effects
   void      gradientRE(const ARRAY_1D re/* NR */, 

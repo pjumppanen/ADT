@@ -84,25 +84,26 @@ void R_REDevB::hessianRow(void* pContext, int nIdx, int nThreadIdx, adtstring& S
 
 // ----------------------------------------------------------------------------
 
-void R_REDevB::covarRE_ParRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString)
+void R_REDevB::hessianAndCovarRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString)
 {
-  ParallelForContext* Context       = (ParallelForContext*)pContext;
-  R_REDevB*           pThis         = (R_REDevB*)shallowCopy(nThreadIdx);
-  double              diffreb2_par  = 1.0;
+  ParallelForContext* Context         = (ParallelForContext*)pContext;
+  R_REDevB*           pThis           = (R_REDevB*)shallowCopy(nThreadIdx);
+  double              diffreb2_repar  = 1.0;
 
-  Context->Dir[nIdx] = 1.0;
+  pThis->Dir[nIdx] = 1.0;
 
-  // Hessian matrix is symmetric and we construct the matrix row by row by
-  // taking the tangent derivative of the adjoint derivative in each basis
-  // direction. The hessian result goes into an ARRAY_2D but we pass the
-  // n'th column to be filled by indexing the array.
-  pThis->DIFFRE_BPAR(Context->Re, 
-                     Context->Par, 
-                     Context->Result[nIdx], 
-                     pThis->Dir, 
-                     diffreb2_par);
+      // Hessian matrix is symmetric and we construct the matrix row by row by
+      // taking the tangent derivative of the adjoint derivative in each basis
+      // direction. The hessian result goes into an ARRAY_2D but we pass the
+      // n'th column to be filled by indexing the array.
+  pThis->DIFFRE_BREPAR(Context->Re, 
+                       Context->Result[nIdx], 
+                       Context->Par, 
+                       Context->Result2[nIdx], 
+                       pThis->Dir, 
+                       diffreb2_repar);
 
-  Context->Dir[nIdx] = 0.0;
+  pThis->Dir[nIdx] = 0.0;
 
 }
 
@@ -182,7 +183,8 @@ void R_REDevB::hessianRE(const ARRAY_1D re/* NR */,
                                 par,
                                 re,
                                 Dir,
-                                pHessian);
+                                pHessian, 
+                                0);
 
     parallelFor((void*)&Context, R_REDevB::hessianRow, 1, NR);
   }
@@ -210,15 +212,16 @@ void R_REDevB::hessianRE(const ARRAY_1D re/* NR */,
 
 // ----------------------------------------------------------------------------
 
-void R_REDevB::covarRE_Par(const ARRAY_1D re/* NR */, 
-                           const ARRAY_1D par/* NP */, 
-                           ARRAY_2D pReParXCovar/* NR,NP */)
+void R_REDevB::hessianAndCovarRE(const ARRAY_1D re/* NR */, 
+                                 const ARRAY_1D par/* NP */, 
+                                 ARRAY_2D pHessian/* NR,NR */,
+                                 ARRAY_2D pReParXCovar/* NR,NP */)
 {
   int     cn;
   int     cm;
-  double  diffreb2_par;
+  double  diffreb2_repar;
   
-  diffreb2_par = 1.0;
+  diffreb2_repar = 1.0;
 
   for (cn = 1 ; cn <= NR ; cn++)
   {
@@ -234,15 +237,21 @@ void R_REDevB::covarRE_Par(const ARRAY_1D re/* NR */,
     // taking the tangent derivative of the adjoint derivative in each basis
     // direction. The hessian result goes into an ARRAY_2D but we pass the
     // n'th column to be filled by indexing the array.
-    DIFFRE_BPAR(re, 
-                par, 
-                TempRow, 
-                Dir, 
-                diffreb2_par);
+    DIFFRE_BREPAR(re, 
+                  TempRow, 
+                  par, 
+                  TempRow2, 
+                  Dir, 
+                  diffreb2_repar);
   
     for (cm = 1 ; cm <= NR ; cm++)
     {
-      pReParXCovar[cn][cm] = TempRow[cm];
+      pHessian[cn][cm] = TempRow[cm];
+    }
+
+    for (cm = 1 ; cm <= NP ; cm++)
+    {
+      pReParXCovar[cn][cm] = TempRow2[cm];
     }
 
     Dir[cn] = 0.0;
@@ -256,9 +265,10 @@ void R_REDevB::covarRE_Par(const ARRAY_1D re/* NR */,
                                 par,
                                 re,
                                 Dir,
+                                pHessian,
                                 pReParXCovar);
 
-    parallelFor((void*)&Context, R_REDevB::covarRE_ParRow, 1, NR);
+    parallelFor((void*)&Context, R_REDevB::hessianAndCovarRow, 1, NR);
   }
   else
   {
@@ -270,11 +280,12 @@ void R_REDevB::covarRE_Par(const ARRAY_1D re/* NR */,
       // taking the tangent derivative of the adjoint derivative in each basis
       // direction. The hessian result goes into an ARRAY_2D but we pass the
       // n'th column to be filled by indexing the array.
-      DIFFRE_BPAR(re, 
-                  par, 
-                  pReParXCovar[cn], 
-                  Dir, 
-                  diffreb2_par);
+      DIFFRE_BREPAR(re, 
+                    pHessian[cn], 
+                    par, 
+                    pReParXCovar[cn], 
+                    Dir, 
+                    diffreb2_repar);
     
       Dir[cn] = 0.0;
     }
@@ -301,12 +312,13 @@ double R_REDevB::logDetHessianRE(const ARRAY_1D re/* NR */,
 
 double R_REDevB::laplace(const ARRAY_1D re/* NR */, 
                          const ARRAY_1D par/* NP */, 
-                         ARRAY_2D pHessian/* NR,NR */, 
+                         ARRAY_2D pHessian/* NR,NR */,
+                         ARRAY_2D pReParXCovar/* NR,NP */, 
                          ARRAY_2D pCholesky/* NR,NR */)
 {
   double h;
 
-  hessianRE(re, par, pHessian);
+  hessianAndCovarRE(re, par, pHessian, pReParXCovar);
   h = ((-NR * log(2 * M_PI) + logDetHessianRE(re, par, pHessian, pCholesky)) * 0.5) + logLikelihood(re, par);
 
   return (h);

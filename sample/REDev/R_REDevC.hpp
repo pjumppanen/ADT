@@ -20,10 +20,9 @@ protected:
   /* AD_ALIAS Dd=DR_REDevC, DR_REDevB */
   /* AUTOINIT */
   /* AUTODEC 1 */
-  ARRAY_2D      Hessianb1_re/* NR,NR */;
-  ARRAY_2D      Choleskyb1_re/* NR,NR */;
-  ARRAY_1D      TempRow2/* NR */;
-  
+  ARRAY_2D  Hessianb1_repar/* NR,NR */;
+  ARRAY_2D  Choleskyb1_repar/* NR,NR */;
+
 #include "Dd_array_plans.hpp"
 
 public:

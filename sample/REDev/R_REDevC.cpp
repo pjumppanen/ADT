@@ -63,8 +63,7 @@ void R_REDevC::gradientLaplacePar(const ARRAY_1D re/* NR */,
 
   rev = 1.0;
 
-  LAPLACE_BREPAR(re, pLaplaceGradRE, par, pLaplaceGradPar, pHessian, Hessianb1_re, pCholesky, Choleskyb1_re, rev);
-  covarRE_Par(re, par, pObjReParXCovar);
+  LAPLACE_BREPAR(re, pLaplaceGradRE, par, pLaplaceGradPar, pHessian, Hessianb1_repar, pObjReParXCovar, pCholesky, Choleskyb1_repar, rev);
 
   // We assume here that Cholesky is calculated already from above.
   matrixInverseFromChol(pCholesky, pInvHessian, NR);
@@ -78,7 +77,7 @@ void R_REDevC::gradientLaplacePar(const ARRAY_1D re/* NR */,
       dSum += pLaplaceGradRE[cr] * pInvHessian[cc][cr];
     }
 
-    TempRow2[cc] = dSum;
+    TempRow[cc] = dSum;
   }
 
 
@@ -88,7 +87,7 @@ void R_REDevC::gradientLaplacePar(const ARRAY_1D re/* NR */,
 
     for (cr = 1 ; cr <= NR ; cr++)
     {
-      dSum += TempRow2[cr] * pObjReParXCovar[cr][cc];
+      dSum += TempRow[cr] * pObjReParXCovar[cr][cc];
     }
 
     pGrad[cc] = pLaplaceGradPar[cc] - dSum;

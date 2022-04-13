@@ -50,19 +50,6 @@ R_REDevA::~R_REDevA()
 
 // ----------------------------------------------------------------------------
 
-void R_REDevA::gradientPar(const ARRAY_1D re/* NR */, 
-                           const ARRAY_1D par/* NP */, 
-                           ARRAY_1D pGrad/* NP */)
-{
-  double  loglikelihoodb4_par;
-
-  loglikelihoodb4_par = 1.0;
-
-  LOGLIKELIHOOD_BPAR(re, par, pGrad, loglikelihoodb4_par);
-}
-
-// ----------------------------------------------------------------------------
-
 void R_REDevA::gradientRE(const ARRAY_1D re/* NR */, 
                           const ARRAY_1D par/* NP */, 
                           ARRAY_1D pGrad/* NR */)

@@ -22,6 +22,7 @@ protected:
   /* AUTODEC 1 */
   ARRAY_1D      Dir /* NR */;
   ARRAY_1D      TempRow/* NR */;
+  ARRAY_1D      TempRow2/* NP */;
 #include "Dc_array_plans.hpp"
 
 #ifndef AD
@@ -35,23 +36,26 @@ private:
     ARRAY_1D  Re;
     ARRAY_1D  Dir;
     ARRAY_2D  Result;
+    ARRAY_2D  Result2;
 
     ParallelForContext(R_REDevA* pThis,
                        ARRAY_1D  par/* NP */,
                        ARRAY_1D  re/* NR */,
                        ARRAY_1D  dir/* NR */,
-                       ARRAY_2D  pResult)
+                       ARRAY_2D  pResult,
+                       ARRAY_2D  pResult2)
     {
       This        = pThis;
       Par         = par;
       Re          = re;
       Dir         = dir;
       Result      = pResult;
+      Result2     = pResult2;
     };
   };
 
   static void hessianRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
-  static void covarRE_ParRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
+  static void hessianAndCovarRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
 #endif
 
 public:
@@ -76,9 +80,10 @@ public:
                       ARRAY_2D pHessian/* NR,NR */);
 
   // Covariance matrix of objective with respect to random effects against parameters (ie. dRE dPar)
-  void      covarRE_Par(const ARRAY_1D re/* NR */, 
-                        const ARRAY_1D par/* NP */, 
-                        ARRAY_2D pReParXCovar/* NR,NP */);
+  void      hessianAndCovarRE(const ARRAY_1D re/* NR */, 
+                              const ARRAY_1D par/* NP */,
+                              ARRAY_2D pHessian/* NR,NR */, 
+                              ARRAY_2D pReParXCovar/* NR,NP */);
 
   // Log determinant of Hessian with respect to random effects
   double    logDetHessianRE(const ARRAY_1D re/* NR */, 
@@ -90,6 +95,7 @@ public:
   double    laplace(const ARRAY_1D re/* NR */, 
                     const ARRAY_1D par/* NP */,
                     ARRAY_2D pHessian/* NR,NR */,
+                    ARRAY_2D pReParXCovar/* NR,NP */, 
                     ARRAY_2D pCholesky/* NR,NR */);
 };
 
