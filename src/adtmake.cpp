@@ -1012,7 +1012,7 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
         ModuleSuffix  = "_d";
         BaseSubSuffix = "_d";
       }
-      else if (Mode == "m")
+      else if (Mode == "mf")
       {
         ::sprintf(sVarSuffix, "d%d_", nIteration);
 
@@ -1030,6 +1030,19 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
         SubSuffix     = "_b";
         ModuleSuffix  = "_b";
         BaseSubSuffix = "_b";
+
+        DiffVarNameOption  = "-adjvarname";
+        DiffFuncNameOption = "-adjfuncname";
+      }
+      else if (Mode == "mr")
+      {
+        ::sprintf(sVarSuffix, "b%d_", nIteration);
+
+        Arguments    += "-b  -multi ";
+        SubSuffix     = "_b";
+        ModuleSuffix  = "_b";
+        BaseSubSuffix = "_b";
+        bAddV         = true;
 
         DiffVarNameOption  = "-adjvarname";
         DiffFuncNameOption = "-adjfuncname";
