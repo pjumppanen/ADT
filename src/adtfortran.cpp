@@ -1753,7 +1753,7 @@ bool AdtFortranDeclarations::extractDeclarations(AdtParser* pParentObj,
           pParameterTypeDeclObj = (AdtFortranTypeDeclarationStmt*)((AdtParser*)((*Iter).second));
         }
 
-        if (!pParameterTypeDeclObj->hasIntent())
+        if ((pParameterTypeDeclObj != 0) && !pParameterTypeDeclObj->hasIntent())
         {
           if ((ConstVarMap.find(pObj->name()) != ConstVarMap.end()) && (pParameterTypeDeclObj != 0))
           {
@@ -21768,10 +21768,11 @@ void AdtFortranSubroutineStmt::initialise(AdtParserPtrByStringMap* pFunctionMap)
               pTypeDeclarationStmt->removeExternals(rExternalsMap);
             }
 
-            if (bHasFunctionMap)
-            {
-              pTypeDeclarationStmt->removeExternals(*pFunctionMap);
-            }
+//            if (bHasFunctionMap)
+//            {
+// Why is this here? Presumably this has something do do withreturn types.
+//              pTypeDeclarationStmt->removeExternals(*pFunctionMap);
+//            }
           }
         }
 
