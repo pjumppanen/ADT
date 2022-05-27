@@ -2912,11 +2912,11 @@ AdtAutoType AdtAutoAttribute::fortranTypeToAutoType(const char* pType)
   }
   else if (caseless_string_comparison("INTEGER(4)", pType) == 0)
   {
-    nType = AdtAutoType_LONG;
+    nType = AdtAutoType_INT;
   }
   else if (caseless_string_comparison("UNSIGNED(4)", pType) == 0)
   {
-    nType = AdtAutoType_UNSIGNED_LONG;
+    nType = AdtAutoType_UNSIGNED_INT;
   }
   else if (caseless_string_comparison("INTEGER(8)", pType) == 0)
   {
