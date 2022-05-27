@@ -516,7 +516,7 @@ char* mallocScanComment(const char* pClosingBrace)
                                                     };
 "RETURN"                                            return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, RETURN));
 "EXTERNAL"                                          return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, EXTERNAL));
-"nbdirsmax"                                         return (dispatchToken(adtFortran_pFortranContext, &yylval, "nbdirs", TOKEN_KEYWORD, XNAME)); /* Translate nbdirsmax into nbdirs to simply resulting code */
+"nbdirsmax0"                                        return (dispatchToken(adtFortran_pFortranContext, &yylval, "nbdirsmax", TOKEN_KEYWORD, XNAME)); /* Translate nbdirsmax0 into nbdirsmax */
 [a-zA-Z_]([a-zA-Z0-9_])*                            return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_KEYWORD, XNAME));
 \'[^\'\n]*[\']                                      return (dispatchToken(adtFortran_pFortranContext, &yylval, yytext, TOKEN_TEXT, XSCON));
 

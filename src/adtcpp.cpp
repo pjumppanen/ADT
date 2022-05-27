@@ -1789,6 +1789,18 @@ bool AdtCppTranslationUnit::compile(const AdtCppFunctionDefinition* pFunction,
       //Add it to the list of functions
       rFunctionsMap.insert(AdtParserPtrByStringMap::value_type(pCopyFunction->name(), AdtParserContext(pCopyFunction)));
 
+      const char*       pDirsMaxVar = "nbdirsmax";
+      const AdtParser*  pDirsMax    = 0;
+
+      // Add nbdimsmax variable definition if not there. We do this because it needs to be 
+      // there for multidirection differentiation but won't normally be included as it 
+      // isn't referenced except after the fact after differentiation is carried out.
+      if ((rVarsMap.find(pDirsMaxVar) == rVarsMap.end()) && findField(pDirsMaxVar, ClassName, pDirsMax))
+      {
+        //Is a variable
+        rVarsMap.insert(AdtParserPtrByStringMap::value_type(pDirsMaxVar, AdtParserContext((AdtParser*)pDirsMax)));
+      }
+
       //Find unresolved externals
       AdtStringListConstIter  Iter;
       AdtStringList           ExternalsList;
@@ -11803,9 +11815,9 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
       if ((SimpleTypeSpecifier != 0) && (MemberDeclarationList != 0))
       {
         int         nDimensions = 0;
-        AdtAutoType nType       = SimpleTypeSpecifier->autoType(nDimensions);
+        AdtAutoType nVarType    = SimpleTypeSpecifier->autoType(nDimensions);
 
-        if (nType != AdtAutoType_UNDEFINED)
+        if (nVarType != AdtAutoType_UNDEFINED)
         {
           AdtParserPtrListConstIter Iter;
           const AdtParserPtrList&   rIdentList = MemberDeclarationList->objList();
@@ -11833,7 +11845,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
                       (rArrayUpperBoundList.size() == nDimensions))
                   {
                     AdtAutoArray* pArray = pClass->addArray(pDeclaratorObj->name(),
-                                                            nType,
+                                                            nVarType,
                                                             AdtAutoDir_UNDEFINED,
                                                             nDimensions,
                                                             pDeclaratorObj->fileName(),
@@ -11862,7 +11874,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
                 else
                 {
                   pClass->addScalar(pDeclaratorObj->name(),
-                                    nType,
+                                    nVarType,
                                     AdtAutoDir_UNDEFINED,
                                     pDeclaratorObj->fileName(),
                                     pDeclaratorObj->lineNumber());
@@ -11909,7 +11921,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
                 if ((pSimpleTypeSpecifier != 0) && (pDeclarator != 0))
                 {
                   int         nDimensions = 0;
-                  AdtAutoType nType       = pSimpleTypeSpecifier->autoType(nDimensions);
+                  AdtAutoType nVarType    = pSimpleTypeSpecifier->autoType(nDimensions);
                   AdtAutoDir  nDir        = pSimpleTypeSpecifier->autoDir();
 
                   if (pModifierList != 0)
@@ -11917,7 +11929,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
                     nDir = pModifierList->autoDir(nDir);
                   }
 
-                  if (nType != AdtAutoType_UNDEFINED)
+                  if (nVarType != AdtAutoType_UNDEFINED)
                   {
                     if (nDimensions > 0)
                     {
@@ -11930,7 +11942,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
                           (rArrayUpperBoundList.size() == nDimensions))
                       {
                         AdtAutoArray* pArray = pFunction->addArray(pDeclarator->name(),
-                                                                   nType,
+                                                                   nVarType,
                                                                    nDir,
                                                                    nDimensions,
                                                                    pDeclarator->fileName(),
@@ -11959,7 +11971,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
                     else
                     {
                       pFunction->addScalar(pDeclarator->name(),
-                                           nType,
+                                           nVarType,
                                            nDir,
                                            pDeclarator->fileName(),
                                            pDeclarator->lineNumber());
