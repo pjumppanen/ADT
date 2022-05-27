@@ -4918,16 +4918,41 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
             rNewMethodMap[pObjCopy->name()] = pObjCopy->name();
             rNewMethodList.push_back(pObjCopy->name());
 
-            //Change the USE statement to point to COMMON
-            AdtParser*  pUseStmt = pObjCopy->findObject("AdtFortranUseStmt");
+            //Change the USE statement to point to COMMON and remove other USE statements
+            AdtParserPtrList      UseList;
+            AdtParserPtrListIter  UseIter;
+            bool                  bFirstUse = true;
 
-            if (pUseStmt != 0)
+            pObjCopy->findObjects(UseList, "AdtFortranUseStmt");
+
+            for (UseIter = UseList.begin() ; UseIter != UseList.end() ; ++UseIter)
             {
-              AdtParser*  pName = pUseStmt->findDescendant("Name");
+              AdtParser*  pUseStmt = *UseIter;
 
-              if (pName != 0)
+              if (pUseStmt != 0)
               {
-                pName->name("COMMON");
+                if (bFirstUse)
+                {
+                  AdtParser*  pName = pUseStmt->findDescendant("Name");
+
+                  if (pName != 0)
+                  {
+                    pName->name("COMMON");
+
+                    bFirstUse = false;
+                  }
+                }
+                else
+                {
+                  AdtParser*  pParentBodyConstruct = pUseStmt->findAscendantWithClassLineage("AdtFortranSpecificationPartConstruct,AdtFortranBodyConstruct");
+
+                  if ((pParentBodyConstruct != 0) && (pParentBodyConstruct->parent() != 0))
+                  {
+                    pParentBodyConstruct->lock();
+                    pParentBodyConstruct->parent()->remove(pParentBodyConstruct);
+                    UtlReleaseReference(pParentBodyConstruct);
+                  }
+                }
               }
             }
 
