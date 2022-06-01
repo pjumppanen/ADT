@@ -5755,7 +5755,7 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
 
                 if (nDims > 0)
                 {
-                  const char* pType = 0;
+                  const char* pType  = 0;
                   string      sCapsName(rAttributeName);
 
                   sCapsName.toUpper();
@@ -5848,6 +5848,47 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
                         }
 
                       } while (bMatched);
+
+                      if (bHasParentArray)
+                      {
+                        ObjIter = rNameObjectMap.find(sParentName);
+
+                        if (ObjIter != rNameObjectMap.end())
+                        {
+                          const AdtParser*  pNameObj = (*ObjIter).second;
+
+                          if (pNameObj != 0)
+                          {
+                            const AdtFortranEntityDecl*           pEntityDecl = (const AdtFortranEntityDecl*)pNameObj->findAscendantWithClass("AdtFortranEntityDecl");
+                            const AdtFortranTypeDeclarationStmt*  pTypeDecl   = (const AdtFortranTypeDeclarationStmt*)pNameObj->findAscendantWithClass("AdtFortranTypeDeclarationStmt");
+
+                            if ((pEntityDecl != 0) && (pTypeDecl != 0))
+                            {
+                              const AdtFortranTypeSpec* pTypeSpec = (const AdtFortranTypeSpec*)pTypeDecl->findDescendant("TypeSpec");
+
+                              if (pTypeSpec != 0)
+                              {
+                                size_t nDims = pEntityDecl->numberOfDimensions();
+
+                                if (nDims > 0)
+                                {
+                                  const char* pParentType = 0;
+                                  string      sCapsName(rAttributeName);
+
+                                  sCapsName.toUpper();
+
+                                  AdtCppBase::mapTypesToCpp(pTypeSpec->name(), pEntityDecl->numberOfDimensions(), pParentType);
+
+                                  if(strcmp(pType, pParentType) != 0)
+                                  {
+                                    bHasParentArray = false;
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
 
                     if (bHasParentArray)
