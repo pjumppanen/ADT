@@ -20,8 +20,9 @@ protected:
   /* AD_ALIAS Dd=DR_REDevC, DR_REDevB */
   /* AUTOINIT */
   /* AUTODEC 1 */
-  ARRAY_2D  Hessianb1_repar/* NR,NR */;
-  ARRAY_2D  Choleskyb1_repar/* NR,NR */;
+  ARRAY_2D      InvHessian/* NR,NR */;
+  ARRAY_1D      LaplaceGradRE/* NR */;
+  ARRAY_1D      LaplaceGradPar/* NP */;
 
 #include "Dd_array_plans.hpp"
 
@@ -35,14 +36,12 @@ public:
 
   // Gradient of Laplace approximation of Maximum Likelihood
   void gradientLaplacePar(const ARRAY_1D re/* NR */, 
-                          const ARRAY_1D par/* NP */, 
-                          ARRAY_2D pHessian/* NR,NR */, 
-                          ARRAY_2D pCholesky/* NR,NR */,
-                          ARRAY_2D pInvHessian/* NR,NR */, 
-                          ARRAY_1D pLaplaceGradRE/* NR */, 
-                          ARRAY_1D pLaplaceGradPar/* NP */, 
-                          ARRAY_2D pObjReParXCovar/* NR,NP */,
+                          const ARRAY_1D par/* NP */,
                           ARRAY_1D pGrad/* NP */);
+
+  // Gradient of Laplace approximation of Maximum Likelihood
+  void solveAndGradientLaplacePar(const ARRAY_1D par/* NP */,
+                                  ARRAY_1D pGrad/* NP */);
 };
 
 

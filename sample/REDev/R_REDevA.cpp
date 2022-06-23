@@ -76,3 +76,44 @@ double R_REDevA::diffRE(const ARRAY_1D re/* NR */,
   
   return (dDiff);
 }
+
+// ----------------------------------------------------------------------------
+
+//void R_REDevA::secondDiffMultiRE(const ARRAY_1D re/* NR */, 
+//                                 const ARRAY_1D par/* NP */,
+//                                 const ARRAY_1I dirs/* nDirs */,
+//                                 ARRAY_2D pDiff/* NR, nDirs */,
+//                                 int nDirs)
+//{
+//  int     cn;
+//  int     cm;
+//  double  loglikelihoodb2_re;
+//
+//  loglikelihoodb2_re = 1.0;
+//
+//  for (cm = 1 ; cm <= NR ; cm++)
+//  {
+//    reb2_re[cm] = 1.0;
+//
+//    for (cn = 1 ; cn <= nDirs ; cn++)
+//    {
+//      if (dirs[cn] == cm)
+//      {
+//        red3_re[cm][cn] = 1.0;
+//      }
+//      else
+//      {
+//        red3_re[cm][cn] = 0.0;
+//      }
+//      reb2_red3_re[cm][cn] = 0.0;
+//    }
+//  }
+//
+//  LOGLIKELIHOOD_BRE_DREV(re, 
+//                         red3_re, 
+//                         reb2_re, 
+//                         pDiff, 
+//                         par, 
+//                         loglikelihoodb2_re, 
+//                         nDirs);
+//}                           

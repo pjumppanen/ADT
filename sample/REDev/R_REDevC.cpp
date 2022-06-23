@@ -47,13 +47,7 @@ R_REDevC::~R_REDevC()
 // ----------------------------------------------------------------------------
 
 void R_REDevC::gradientLaplacePar(const ARRAY_1D re/* NR */, 
-                                  const ARRAY_1D par/* NP */, 
-                                  ARRAY_2D pHessian/* NR,NR */, 
-                                  ARRAY_2D pCholesky/* NR,NR */,
-                                  ARRAY_2D pInvHessian/* NR,NR */, 
-                                  ARRAY_1D pLaplaceGradRE/* NR */, 
-                                  ARRAY_1D pLaplaceGradPar/* NP */, 
-                                  ARRAY_2D pObjReParXCovar/* NR,NP */,
+                                  const ARRAY_1D par/* NP */,
                                   ARRAY_1D pGrad/* NP */)
 {
   int     cc;
@@ -63,10 +57,10 @@ void R_REDevC::gradientLaplacePar(const ARRAY_1D re/* NR */,
 
   rev = 1.0;
 
-  LAPLACE_BREPAR(re, pLaplaceGradRE, par, pLaplaceGradPar, pHessian, Hessianb1_repar, pObjReParXCovar, pCholesky, Choleskyb1_repar, rev);
+  LAPLACE_BREPAR(re, LaplaceGradRE, par, LaplaceGradPar, rev);
 
   // We assume here that Cholesky is calculated already from above.
-  matrixInverseFromChol(pCholesky, pInvHessian, NR);
+  matrixInverseFromChol(Cholesky, InvHessian, NR);
 
   for (cc = 1 ; cc <= NR ; cc++)
   {
@@ -74,7 +68,7 @@ void R_REDevC::gradientLaplacePar(const ARRAY_1D re/* NR */,
 
     for (cr = 1 ; cr <= NR ; cr++)
     {
-      dSum += pLaplaceGradRE[cr] * pInvHessian[cc][cr];
+      dSum += LaplaceGradRE[cr] * InvHessian[cc][cr];
     }
 
     TempRow[cc] = dSum;
@@ -87,10 +81,18 @@ void R_REDevC::gradientLaplacePar(const ARRAY_1D re/* NR */,
 
     for (cr = 1 ; cr <= NR ; cr++)
     {
-      dSum += TempRow[cr] * pObjReParXCovar[cr][cc];
+      dSum += TempRow[cr] * ReParXCovar[cr][cc];
     }
 
-    pGrad[cc] = pLaplaceGradPar[cc] - dSum;
+    pGrad[cc] = LaplaceGradPar[cc] - dSum;
   }
 }
 
+// ----------------------------------------------------------------------------
+
+void R_REDevC::solveAndGradientLaplacePar(const ARRAY_1D par/* NP */,
+                                          ARRAY_1D pGrad/* NP */)
+{
+  solveInner(par);
+  gradientLaplacePar(ReHat, par, pGrad);
+}                                          

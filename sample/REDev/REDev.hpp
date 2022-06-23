@@ -29,6 +29,7 @@ protected:
   ARRAY_1D  y/* NR */;
   int       NR; // total number of random effects
   int       NP; // total number of parameters
+  int       nbdirsmax; // maximum number of directions in multidirectional tangent mode differentiation
 
   /* AUTODEC */
   ARRAY_1D  par_u/* NR */;
@@ -45,7 +46,8 @@ private:
                      const double mean,
                      const double sigma);
 
-  double    thetalogLikelihood(const ARRAY_1D u/* NR */,
+  double    thetalogLikelihood(const ARRAY_1D u/* N */,
+                               int N,
                                const double logr0,
                                const double logtheta,
                                const double logK,
@@ -61,14 +63,14 @@ public:
                           const ARRAY_1D par/* NP */); // note that NR is N and NP is 5 in this case 
 
   void      sparseBandedLimitsByRows(const ARRAY_2D pA/* nRows, nColumns */, 
-                                     ARRAY_1L pLowerLimit/* nRows */, 
-                                     ARRAY_1L pUpperLimit/* nRows */, 
+                                     ARRAY_1I pLowerLimit/* nRows */, 
+                                     ARRAY_1I pUpperLimit/* nRows */, 
                                      const int nRows,
                                      const int nColumns);
 
   void      sparseBandedLimitsByColumns(const ARRAY_2D pA/* nRows, nColumns */, 
-                                        ARRAY_1L pLowerLimit/* nColumns */, 
-                                        ARRAY_1L pUpperLimit/* nColumns */, 
+                                        ARRAY_1I pLowerLimit/* nColumns */, 
+                                        ARRAY_1I pUpperLimit/* nColumns */, 
                                         const int nRows,
                                         const int nColumns);
 

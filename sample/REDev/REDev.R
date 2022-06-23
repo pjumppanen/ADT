@@ -60,7 +60,8 @@ NR <- length(Y)
 NP <- length(parameters)
 
 # create the object instance
-Db.Context <- Dd.create(Y, NR, NP)
+nMaxDirs <- 10
+Db.Context <- Dd.create(Y, NR, NP, nMaxDirs)
 
 # -----------------------------------------------------------------------------
 # Do determinant check
@@ -98,42 +99,63 @@ RInv - Inv
 # -----------------------------------------------------------------------------
 # Support for Outer Minimisation
 # -----------------------------------------------------------------------------
-OuterGrad             <- array(as.double(NA), dim=c(NP))
-Cholesky              <- array(as.double(NA), dim=c(NR,NR))
-InvHessian            <- array(as.double(NA), dim=c(NR,NR))
-LaplaceGradRE         <- array(as.double(NA), dim=c(NR))
-LaplaceGradPar        <- array(as.double(NA), dim=c(NP))
-ObjReParXCovar        <- array(as.double(NA), dim=c(NP,NR))
-HessianRE_LowerLimit  <- array(as.integer(NA), dim=c(NR))
-HessianRE_UpperLimit  <- array(as.integer(NA), dim=c(NR))
-CoVarPar_LowerLimit   <- array(as.integer(NA), dim=c(NR))
-CoVarPar_UpperLimit   <- array(as.integer(NA), dim=c(NR))
+OuterGrad <- array(as.double(NA), dim=c(NP))
 
 
 # Inner Objective function.
 outerObjFn <- function(par)
 {
+  InnerPar <<- par
+  innerRes <- nlminb(start = reHat,
+                     objective = innerObjFn,
+                     gradient = innerGradFn)
+
+  reHat <<- innerRes$par
+
   return (Dc.nt.laplace(Db.Context, 
                         reHat, 
-                        par, 
-                        InnerHessian, 
-                        Cholesky))
+                        par))
+}
+
+outerObj2Fn <- function(par)
+{
+  print("ObjFn Start\n")
+  
+  Result <- Dc.nt.solveAndLaplace(Db.Context, par)
+  
+  print("ObjFn End\n")
+
+  return (Result)
 }
 
 # Inner Gradient function. Note that InnerGrad should be declared with the
 # correct size in global scope.
 outerGradFn <- function(par)
 {
+  InnerPar <<- par
+  innerRes <- nlminb(start = reHat,
+                     objective = innerObjFn,
+                     gradient = innerGradFn)
+
+  reHat <<- innerRes$par
+
   Dd.nt.gradientLaplacePar(Db.Context, 
                           reHat, 
                           par, 
-                          InnerHessian, 
-                          Cholesky,
-                          InvHessian, 
-                          LaplaceGradRE, 
-                          LaplaceGradPar, 
-                          ObjReParXCovar,
                           OuterGrad)
+
+  return (OuterGrad)
+}
+
+outerGrad2Fn <- function(par)
+{
+  print("GradFn Start\n")
+  
+  Dd.nt.solveAndGradientLaplacePar(Db.Context, 
+                                   par, 
+                                   OuterGrad)
+
+  print("GradFn End\n")
 
   return (OuterGrad)
 }
@@ -184,79 +206,119 @@ reHat <- X
 
 # Multithreaded hessian calculation
 #Db.beginMultithreadedHessian(Db.Context)
-innerRes <- nlminb(start = reHat,
+system.time(innerRes <- nlminb(start = reHat,
+                   objective = innerObjFn,
+                   gradient = innerGradFn,
+#                   hessian = innerHessianFn,
+                   scale = 1,
+                   control = list(eval.max=100000,iter.max=10000,abs.tol=1e-18)))
+
+system.time(innerRes <- nlminb(start = innerRes$par,
                    objective = innerObjFn,
                    gradient = innerGradFn,
                    hessian = innerHessianFn,
                    scale = 1,
-                   control = list(eval.max=100000,iter.max=10000,abs.tol=1e-18))
+                   control = list(eval.max=100000,iter.max=10000,abs.tol=1e-18)))
 
+system.time(innerRes2 <- nlminb(start = reHat,
+                   objective = innerObjFn,
+                   gradient = innerGradFn,
+                   scale = 1,
+                   control = list(eval.max=100000,iter.max=10000,abs.tol=1e-18)))
+
+system.time(innerRes2 <- nlminb(start = reHat,
+                   objective = innerObjFn,
+                   gradient = innerGradFn))
 #RRd.endMultithreadedHessian(RRd.Context)
 
 reHat <- innerRes$par
 
-
-reb1_re       <- reHat * 0
-hessianb1_re  <- InnerHessian * 0
-choleskyb1_re <- Cholesky * 0
-laplaceb1_re  <- 1.0
-
-Dc.nt.LAPLACE_BRE(Db.Context, 
-                  reHat, 
-                  reb1_re, 
-                  InnerPar, 
-                  InnerHessian, 
-                  hessianb1_re, 
-                  Cholesky, 
-                  choleskyb1_re, 
-                  laplaceb1_re)
-
-
-parb2_par      <- InnerPar * 0;
-hessianb2_par  <- InnerHessian * 0;
-choleskyb2_par <- InnerHessian * 0;
-laplaceb2_par  <- 1.0                  
-
-Dc.nt.LAPLACE_BPAR(Db.Context, 
-                   reHat, 
-                   InnerPar, 
-                   parb2_par, 
-                   InnerHessian, 
-                   hessianb2_par, 
-                   Cholesky, 
-                   choleskyb2_par, 
-                   laplaceb2_par)
-
-Dc.nt.covarRE_Par(Db.Context, 
-                   reHat, 
-                   InnerPar, 
-                   ObjReParXCovar);
-
-LaplaceGrad <- InnerPar * 0
-
-Dd.nt.gradientLaplacePar(Db.Context, 
-                         reHat, 
-                         InnerPar, 
-                         InnerHessian, 
-                         Cholesky,
-                         InvHessian, 
-                         LaplaceGradRE, 
-                         LaplaceGradPar, 
-                         ObjReParXCovar,
-                         LaplaceGrad)
-
-outerGradFn(InnerPar)
-
-
 pars <- unlist(parameters)
-OuterRes <- nlminb(start = pars,
+system.time(OuterRes <- nlminb(start = pars,
                    objective = outerObjFn,
-                   gradient = outerGradFn,
-                   scale = 1,
-                   control = list(eval.max=100000,iter.max=10000,abs.tol=1e-18))
+                   gradient = outerGradFn))
 
-OuterRes <- nlminb(start = pars,
-                   objective = outerObjFn,
+Dc.nt.setInitialRE(Db.Context, reHat)
+system.time(OuterRes2 <- nlminb(start = pars,
+                   objective = outerObj2Fn,
+                   gradient = outerGrad2Fn))
+
+
+Dc.nt.setInitialRE(Db.Context, reHat)
+system.time(OuterRes2 <- nlminb(start = pars,
+                   objective = outerObj2Fn,
+                   gradient = outerGrad2Fn,
                    scale = 1,
-                   control = list(eval.max=100000,iter.max=10000,abs.tol=1e-18))
+                   control = list(eval.max=100000,iter.max=10000,abs.tol=1e-8)))
+
+
+
+Dc.set.nt.ReHat(Db.Context, reHat)
+Dc.nt.solveAndLaplace(Db.Context, pars)
+Dc.get.nt.ReHat(Db.Context)
+
+
+newton(eval(random.start),fn=f0,gr=function(x)f0(x,order=1),
+      #              he=function(x)f0(x,order=2))
+
+
+test <- newton(par = reHat,
+               fn = innerObjFn,
+               gr = innerGradFn,
+               he = innerHessianFn)
+
+  M <- new("dsTMatrix",
+           i = as.integer(attr(ADHess$ptr,"i")),
+           j = as.integer(attr(ADHess$ptr,"j")),
+           x = ev(obj$env$par), Dim = c(n,n), uplo = "L")
+
+nDirs <- 5           
+Dirs  <- array(as.integer(c(1,2,3,4,5)), dim=c(nDirs))
+Diff  <- array(as.double(NA), dim=c(NR,nDirs))
+
+Db.nt.secondDiffMultiRE(Db.Context,
+                        reHat, 
+                        InnerPar,
+                        Dirs,
+                        Diff,
+                        as.integer(nDirs))
+
+nDirs <- 1
+Dirs  <- array(as.integer(c(2)), dim=c(nDirs))
+Diff  <- array(as.double(NA), dim=c(NR,nDirs))
+
+Db.nt.secondDiffMultiRE(Db.Context,
+                        reHat, 
+                        InnerPar,
+                        Dirs,
+                        Diff,
+                        as.integer(nDirs))
+
+nDirs <- 3
+Dirs  <- array(as.integer(c(1,2,3)), dim=c(nDirs))
+Diff  <- array(as.double(NA), dim=c(nDirs,NR))
+
+system.time(Db.nt.secondDiffMultiRE(Db.Context,
+                        reHat, 
+                        InnerPar,
+                        Dirs,
+                        Diff,
+                        as.integer(nDirs)))
+
+system.time(innerHessianFn(reHat))
+
+# check
+InnerHessian[1:3,1:10]
+Diff[,1:10]
+InnerHessian[1:3,1:10]-Diff[,1:10]
+
+
+system.time(sapply(1:100, function(x){Db.nt.secondDiffMultiRE(Db.Context,
+                                                              reHat, 
+                                                              InnerPar,
+                                                              Dirs,
+                                                              Diff,
+                                                              as.integer(nDirs))}))
+
+system.time(sapply(1:100, function(x){innerHessianFn(reHat);return(0)}))
 

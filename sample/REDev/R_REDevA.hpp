@@ -24,6 +24,9 @@ protected:
   /* AD_ALIAS Db=DR_REDevA, D_REDev */
   /* AUTOINIT */
   /* AUTODEC 1 */
+  ARRAY_1D reb2_re /* nr */;
+  ARRAY_2D red3_re /* NR,nbdirsmax */;
+  ARRAY_2D reb2_red3_re /* NR,nbdirsmax */;
 
 #include "Db_array_plans.hpp"
 
@@ -44,6 +47,13 @@ public:
   double    diffRE(const ARRAY_1D re/* NR */, 
                    const ARRAY_1D par/* NP */,
                    const ARRAY_1D dir/* NR */);
+
+  // Partial differentiation of objective with respect to random effects evaluated in multiple directions
+  //void      secondDiffMultiRE(const ARRAY_1D re/* NR */, 
+  //                            const ARRAY_1D par/* NP */,
+  //                            const ARRAY_1I dirs/* nDirs */,
+  //                            ARRAY_2D pDiff/* NR, nDirs */,
+  //                            int nDirs);
 };
 
 

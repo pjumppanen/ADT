@@ -41,7 +41,8 @@ double REDev::dlognorm(const double x,
 
 // ----------------------------------------------------------------------------
 
-double REDev::thetalogLikelihood(const ARRAY_1D u/* NR */,
+double REDev::thetalogLikelihood(const ARRAY_1D u/* N */,
+                                 int N,
                                  const double logr0,
                                  const double logtheta,
                                  const double logK,
@@ -64,14 +65,14 @@ double REDev::thetalogLikelihood(const ARRAY_1D u/* NR */,
   R     = exp(logR);
   ll    = 0.0;
 
-  for (cn = 2 ; cn <= NR ; cn++)
+  for (cn = 2 ; cn <= N ; cn++)
   {
     mean = u[cn - 1] + r0 * (1.0 - pow(exp(u[cn - 1]) / K, theta));
 
     ll -= dlognorm(u[cn], mean, sqrt(Q));
   }
 
-  for(cn = 1 ; cn <= NR ; cn++)
+  for(cn = 1 ; cn <= N ; cn++)
   {
     ll -= dlognorm(y[cn], u[cn], sqrt(R));
   }
@@ -119,6 +120,7 @@ double REDev::logLikelihood(const ARRAY_1D re/* NR */,
 
   // Call likelihood function
   dLikelihood = thetalogLikelihood(par_u,
+                                   NR,
                                    par_logr0,
                                    par_logtheta,
                                    par_logK,
@@ -131,8 +133,8 @@ double REDev::logLikelihood(const ARRAY_1D re/* NR */,
 // ----------------------------------------------------------------------------
 
 void REDev::sparseBandedLimitsByRows(const ARRAY_2D pA/* nRows, nColumns */, 
-                                     ARRAY_1L pLowerLimit/* nRows */, 
-                                     ARRAY_1L pUpperLimit/* nRows */, 
+                                     ARRAY_1I pLowerLimit/* nRows */, 
+                                     ARRAY_1I pUpperLimit/* nRows */, 
                                      const int nRows,
                                      const int nColumns)
 {
@@ -167,8 +169,8 @@ void REDev::sparseBandedLimitsByRows(const ARRAY_2D pA/* nRows, nColumns */,
 // ----------------------------------------------------------------------------
 
 void REDev::sparseBandedLimitsByColumns(const ARRAY_2D pA/* nRows, nColumns */, 
-                                        ARRAY_1L pLowerLimit/* nColumns */, 
-                                        ARRAY_1L pUpperLimit/* nColumns */, 
+                                        ARRAY_1I pLowerLimit/* nColumns */, 
+                                        ARRAY_1I pUpperLimit/* nColumns */, 
                                         const int nRows,
                                         const int nColumns)
 {

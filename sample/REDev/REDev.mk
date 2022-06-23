@@ -1,8 +1,8 @@
 AD BEGIN
   PATHS: "../include", "../../src/ADLib";
   WORKING DIRECTORY: "./work/";
-//  SWITCHES: "rebuild","Oarray";
   SWITCHES: "rebuild","Oarray","WithStackSubstitution";
+//  SWITCHES: "rebuild","Oarray","WithoutStackSubstitution";
   BLACKBOX: common.bbdef;
   CPP OPTIONS FILE: cpp_macros.txt;
   PASCAL OPTIONS FILE: pascal_macros.txt;
@@ -12,6 +12,7 @@ AD BEGIN
   BEGIN
     FUNCTION=logLikelihood OUTVAR=logLikelihood VAR=re MODE=f PRAGMAS="PushPopDisable";  // f'u(u,theta)       - forward mode
     FUNCTION=logLikelihood OUTVAR=logLikelihood VAR=re MODE=r PRAGMAS="PushPopDisable";  // f'u(u,theta)       - reverse mode
+//    FUNCTION=LOGLIKELIHOOD_BRE OUTVAR=reb2_re VAR=re MODE=mf PRAGMAS="PushPopDisable";   // f''u(u,theta)      - multi-directional forward mode  
   END
 
   CLASS DR_REDevA(R_REDevA) SOURCE FILE: R_REDevA.cpp OUTPUT FILES: dR_REDevA.cpp dR_REDevA.hpp

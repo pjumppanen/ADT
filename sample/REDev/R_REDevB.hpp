@@ -20,12 +20,24 @@ protected:
   /* AD_ALIAS Dc=DR_REDevB, DR_REDevA */
   /* AUTOINIT */
   /* AUTODEC 1 */
+  ARRAY_1D      plower /* NR */;
+  ARRAY_1D      pupper /* NR */;
+  ARRAY_1I      pnbd /* NR */;
+  ARRAY_1D      ReRun /* NR */;
+  ARRAY_1D      ReHat /* NR */;
+  ARRAY_1D      Par /* NP */;
   ARRAY_1D      Dir /* NR */;
   ARRAY_1D      TempRow/* NR */;
   ARRAY_1D      TempRow2/* NP */;
+  ARRAY_2D      Hessian/* NR,NR */;
+  ARRAY_2D      Cholesky/* NR,NR */;
+  ARRAY_2D      ReParXCovar/* NR,NP */;
+  
+  bool          Dirty;
 #include "Dc_array_plans.hpp"
 
 #ifndef AD
+
 private:
   int       MultithreadedCount;
 
@@ -54,9 +66,26 @@ private:
     };
   };
 
-  static void hessianRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
-  static void hessianAndCovarRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
+  struct SolveContext
+  {
+    int       nFnCalls;
+    int       nGradCalls;
+    R_REDevB* pThis;
+  };
+
+  static void   hessianRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
+  static void   hessianAndCovarRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
+
+  static double inner_optimfn(int n, double* par, void* context);
+  static void   inner_optimgr(int n, double* par, double* gr, void* context);
+
+  double        innerObjective(int n, double* par);
+  void          innerGradient(int n, double* par, double* gr);
+
 #endif
+
+protected:
+  void          solveInner(const ARRAY_1D par/* NP */);
 
 public:
   R_REDevB(
@@ -69,12 +98,12 @@ public:
 #ifndef AD
   virtual AdtArrays* createShallowCopy() const;
 
-  void      beginMultithreaded(int nThreads = 0);
-  void      endMultithreaded();
+  void          beginMultithreaded(int nThreads = 0);
+  void          endMultithreaded();
 
 #endif //AD
 
-// Hessian of objective with respect to random effects
+  // Hessian of objective with respect to random effects
   void      hessianRE(const ARRAY_1D re/* NR */, 
                       const ARRAY_1D par/* NP */, 
                       ARRAY_2D pHessian/* NR,NR */);
@@ -93,10 +122,12 @@ public:
 
   // Laplace approximation of Maximum Likelihood
   double    laplace(const ARRAY_1D re/* NR */, 
-                    const ARRAY_1D par/* NP */,
-                    ARRAY_2D pHessian/* NR,NR */,
-                    ARRAY_2D pReParXCovar/* NR,NP */, 
-                    ARRAY_2D pCholesky/* NR,NR */);
+                    const ARRAY_1D par/* NP */);
+
+  // Solve the inner minimisation and calculate the laplace approximation
+  double    solveAndLaplace(const ARRAY_1D par/* NP */);
+
+  void      setInitialRE(const ARRAY_1D re/* NR */);
 };
 
 

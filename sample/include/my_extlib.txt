@@ -245,10 +245,11 @@ subroutine pushreal4:
   type:(modifiedTypeName(modifiers(intCst 4), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popreal4:
   external:
@@ -257,10 +258,11 @@ subroutine popreal4:
   type:(modifiedTypeName(modifiers(intCst 4), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookreal4:
   external:
@@ -269,10 +271,11 @@ subroutine lookreal4:
   type:(modifiedTypeName(modifiers(intCst 4), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushreal4array:
   external:
@@ -284,11 +287,12 @@ subroutine pushreal4array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popreal4array:
   external:
@@ -300,12 +304,12 @@ subroutine popreal4array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 4), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushreal8:
   external:
@@ -314,10 +318,11 @@ subroutine pushreal8:
   type:(modifiedTypeName(modifiers(intCst 8), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popreal8:
   external:
@@ -326,10 +331,11 @@ subroutine popreal8:
   type:(modifiedTypeName(modifiers(intCst 8), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookreal8:
   external:
@@ -338,10 +344,11 @@ subroutine lookreal8:
   type:(modifiedTypeName(modifiers(intCst 8), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushreal8array:
   external:
@@ -353,11 +360,12 @@ subroutine pushreal8array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popreal8array:
   external:
@@ -369,12 +377,12 @@ subroutine popreal8array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 8), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushreal16:
   external:
@@ -383,10 +391,11 @@ subroutine pushreal16:
   type:(modifiedTypeName(modifiers(intCst 16), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popreal16:
   external:
@@ -395,10 +404,11 @@ subroutine popreal16:
   type:(modifiedTypeName(modifiers(intCst 16), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookreal16:
   external:
@@ -407,10 +417,11 @@ subroutine lookreal16:
   type:(modifiedTypeName(modifiers(intCst 16), ident real),
         arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushreal16array:
   external:
@@ -422,11 +433,12 @@ subroutine pushreal16array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popreal16array:
   external:
@@ -438,12 +450,12 @@ subroutine popreal16array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 16), ident real),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushinteger1:
   external:
@@ -452,10 +464,11 @@ subroutine pushinteger1:
   type:(modifiedTypeName(modifiers(intCst 1), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popinteger1:
   external:
@@ -464,10 +477,11 @@ subroutine popinteger1:
   type:(modifiedTypeName(modifiers(intCst 1), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookinteger1:
   external:
@@ -476,10 +490,11 @@ subroutine lookinteger1:
   type:(modifiedTypeName(modifiers(intCst 1), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushinteger1array:
   external:
@@ -491,11 +506,12 @@ subroutine pushinteger1array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popinteger1array:
   external:
@@ -507,12 +523,12 @@ subroutine popinteger1array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 1), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushinteger2:
   external:
@@ -521,10 +537,11 @@ subroutine pushinteger2:
   type:(modifiedTypeName(modifiers(intCst 2), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popinteger2:
   external:
@@ -533,10 +550,11 @@ subroutine popinteger2:
   type:(modifiedTypeName(modifiers(intCst 2), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookinteger2:
   external:
@@ -545,10 +563,11 @@ subroutine lookinteger2:
   type:(modifiedTypeName(modifiers(intCst 2), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushinteger2array:
   external:
@@ -560,11 +579,12 @@ subroutine pushinteger2array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popinteger2array:
   external:
@@ -576,12 +596,12 @@ subroutine popinteger2array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 2), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushinteger4:
   external:
@@ -590,10 +610,11 @@ subroutine pushinteger4:
   type:(modifiedTypeName(modifiers(intCst 4), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popinteger4:
   external:
@@ -602,10 +623,11 @@ subroutine popinteger4:
   type:(modifiedTypeName(modifiers(intCst 4), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookinteger4:
   external:
@@ -614,10 +636,11 @@ subroutine lookinteger4:
   type:(modifiedTypeName(modifiers(intCst 4), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushinteger4array:
   external:
@@ -629,11 +652,12 @@ subroutine pushinteger4array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popinteger4array:
   external:
@@ -645,12 +669,12 @@ subroutine popinteger4array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 4), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushinteger8:
   external:
@@ -659,10 +683,11 @@ subroutine pushinteger8:
   type:(modifiedTypeName(modifiers(intCst 8), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popinteger8:
   external:
@@ -671,10 +696,11 @@ subroutine popinteger8:
   type:(modifiedTypeName(modifiers(intCst 8), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookinteger8:
   external:
@@ -683,10 +709,11 @@ subroutine lookinteger8:
   type:(modifiedTypeName(modifiers(intCst 8), ident integer),
         arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushinteger8array:
   external:
@@ -698,11 +725,12 @@ subroutine pushinteger8array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popinteger8array:
   external:
@@ -714,12 +742,12 @@ subroutine popinteger8array:
         ident integer,
         arrayType(modifiedTypeName(modifiers(intCst 8), ident integer),
                   dimColons(dimColon(none(),none()))))
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushcontrol1b:
   external:
@@ -727,10 +755,11 @@ subroutine pushcontrol1b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popcontrol1b:
   external:
@@ -738,10 +767,11 @@ subroutine popcontrol1b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookcontrol1b:
   external:
@@ -749,10 +779,11 @@ subroutine lookcontrol1b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushcontrol1barray:
   external:
@@ -762,11 +793,12 @@ subroutine pushcontrol1barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popcontrol1barray:
   external:
@@ -776,12 +808,12 @@ subroutine popcontrol1barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushcontrol2b:
   external:
@@ -789,10 +821,11 @@ subroutine pushcontrol2b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popcontrol2b:
   external:
@@ -800,10 +833,11 @@ subroutine popcontrol2b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookcontrol2b:
   external:
@@ -811,10 +845,11 @@ subroutine lookcontrol2b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushcontrol2barray:
   external:
@@ -824,11 +859,12 @@ subroutine pushcontrol2barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popcontrol2barray:
   external:
@@ -838,12 +874,12 @@ subroutine popcontrol2barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushcontrol3b:
   external:
@@ -851,10 +887,11 @@ subroutine pushcontrol3b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popcontrol3b:
   external:
@@ -862,10 +899,11 @@ subroutine popcontrol3b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookcontrol3b:
   external:
@@ -873,10 +911,11 @@ subroutine lookcontrol3b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushcontrol3barray:
   external:
@@ -886,11 +925,12 @@ subroutine pushcontrol3barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popcontrol3barray:
   external:
@@ -900,12 +940,12 @@ subroutine popcontrol3barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
 
 subroutine pushcontrol4b:
   external:
@@ -913,10 +953,11 @@ subroutine pushcontrol4b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(1, 0)
-  ReadThenWritten:(0, 1)
-  id: (0,0,
-       1,0)
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
 
 subroutine popcontrol4b:
   external:
@@ -924,10 +965,11 @@ subroutine popcontrol4b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadThenWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,1)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine lookcontrol4b:
   external:
@@ -935,10 +977,11 @@ subroutine lookcontrol4b:
          common /adstack_b/[0,*[)
   type:(ident integer,
         ident integer)
-  ReadNotWritten:(0, 1)
-  NotReadThenWritten:(1, 0)
-  id: (0,1,
-       0,0)
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
 
 subroutine pushcontrol4barray:
   external:
@@ -948,11 +991,12 @@ subroutine pushcontrol4barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(1, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  id: (0,0,0,
-       0,0,0,
-       1,1,0)
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
 
 subroutine popcontrol4barray:
   external:
@@ -962,10 +1006,9 @@ subroutine popcontrol4barray:
   type:(ident integer,
         ident integer,
         ident integer)
-  ReadNotWritten:(0, 1, 0)
-  ReadThenWritten:(0, 0, 1)
-  NotReadThenWritten:(1, 0, 0)
-  id: (0,1,1,
-       0,0,0,
-       0,1,1)
-
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
