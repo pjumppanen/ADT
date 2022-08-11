@@ -167,6 +167,8 @@ extern "C"
 
   void Rf_error(const char *, ...);
   void Rf_warning(const char *, ...);
+  void Rprintf(const char *, ...);
+  void REprintf(const char *, ...);
 }
 
 #ifdef __ADD_MISSING__

@@ -145,7 +145,7 @@ void ts_printf(const char* pFormat, ...)
     }
     else
     {
-      Rf_warning(sBuffer);
+      Rprintf(sBuffer);
     }
   }
   else
