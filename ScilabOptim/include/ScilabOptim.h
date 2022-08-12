@@ -1,3 +1,32 @@
+// ----------------------------------------------------------------------------
+// ScilabOptim.h
+// ----------------------------------------------------------------------------
+// Port of the ScilabOptim module of Scilab into a stand-alone C callable 
+// dynamic library allowing the use of the optimisers in other code projects.
+// 
+// Ported by Paavo Jumppanen, year 2022
+// ----------------------------------------------------------------------------
+
+
+#include <R.h>
+
+
+// begin extern "C"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+// ----------------------------------------------------------------------------
+// Message callback function type called when ScilabOptim prints text output
+// ----------------------------------------------------------------------------
+typedef void (*messageCallback)(const char* pMessage);
+
+// ----------------------------------------------------------------------------
+
+void registerMessageCallback(messageCallback pMessageCallback);
+
+
 /*
 minimization of a regular function without constraints
 
@@ -309,7 +338,7 @@ void F77_NAME(n1qn2)(simul_n1qn2_t simul,
                      int* ndz,
                      int* izs,
                      float* rzs,
-                     double* dzs)
+                     double* dzs);
 
 
 
@@ -537,7 +566,7 @@ meaning of some internal variables
 
 void F77_NAME(gcbd)(int* indgc,
                     simul_n1qn2_t simul,
-                    char[6] nomf,
+                    char nomf[6],
                     const int* n,
                     double* x,
                     double* f,
@@ -2083,7 +2112,7 @@ burton s. garbow, kenneth e. hillstrom, jorge j. more
 
 */
 
-typedef void (*fcn2_t)(const int* m const int* n, double* x, double* fvec, int* flag);
+typedef void (*fcn2_t)(const int* m, const int* n, double* x, double* fvec, int* flag);
 
 void F77_NAME(fdjac2)(fcn2_t fcn,
                       int* m,
@@ -2193,4 +2222,11 @@ void F77_NAME(fremf2)(prosca_t prosca,
                       int* izs,
                       float* rzs,
                       double* dzs);
+
+
+// End extern "C"
+#ifdef __cplusplus
+}
+#endif
+
 

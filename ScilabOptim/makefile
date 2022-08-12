@@ -1,7 +1,7 @@
 include Makeconf
 include $(R_HOME)/etc/x64/Makeconf
-MY_CFLAGS=$(ALL_CFLAGS) -I $(R_HOME)/include
-MY_CXXFLAGS=$(ALL_CXXFLAGS) -Wno-ignored-attributes -I $(R_HOME)/include
+MY_CFLAGS=$(ALL_CFLAGS) -I $(R_HOME)/include -I ./include
+MY_CXXFLAGS=$(ALL_CXXFLAGS) -Wno-ignored-attributes -I $(R_HOME)/include -I ./include
 MY_FFLAGS=$(ALL_FFLAGS)
 MY_LDFLAGS=$(SHLIB_LDFLAGS) $(LDFLAGS)
 MY_LDLIBS=$(FLIBS) $(BLAS_LIBS)

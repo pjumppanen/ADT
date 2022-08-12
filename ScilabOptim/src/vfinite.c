@@ -13,8 +13,14 @@
  *
  */
 
-#include <R.h>
-#include <R_ext/Print.h>
+
+#include <ScilabOptim.h>
+
+
+// begin extern "C"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifdef _MSC_VER
 #define NOMINMAX
@@ -32,11 +38,18 @@
 #include <float.h>
 #define finite(x) _finite(x)
 #else               //linux & mac
-#ifdef __cplusplus // C++
+#ifdef __cplusplus  // C++
 #define finite(x) std::isfinite(x)
 #endif
 #endif /* _MSC_VER */
 
+
+// ----------------------------------------------------------------------------
+// Message callback function to be called when ScilabOptim prints text output
+// ----------------------------------------------------------------------------
+messageCallback MessageCallback = 0;
+
+// ----------------------------------------------------------------------------
 
 int F77_NAME(vfinite)(int *n, double *v)
 {
@@ -49,16 +62,35 @@ int F77_NAME(vfinite)(int *n, double *v)
     return 1;
 }
 
+// ----------------------------------------------------------------------------
+
 int F77_NAME(basout)(int *io, int *lunit, char *string, long int nbcharacters)
 {
     char* strMsg = malloc((nbcharacters + 1) * sizeof(char));
     *io = 0;
     memcpy(strMsg, string, nbcharacters);
     strMsg[nbcharacters] = '\0';
-    Rprintf(strMsg);
+
+    if (MessageCallback != 0)
+    {
+      MessageCallback(strMsg);
+    }
 
     free(strMsg);
 
     return 0;
 }
+
+// ----------------------------------------------------------------------------
+
+void registerMessageCallback(messageCallback pMessageCallback)
+{
+  MessageCallback = pMessageCallback;
+}
+
+// End extern "C"
+#ifdef __cplusplus
+}
+#endif
+
 
