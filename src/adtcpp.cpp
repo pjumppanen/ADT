@@ -685,42 +685,84 @@ void AdtCppToFortranTypeConversion::initialise()
 //  ----------------------------------------------------------------------------
 //  AdtCppBase method implementations
 //  ----------------------------------------------------------------------------
-AdtFile& AdtCppBase::forAllWriteFortran(AdtFile& pOutFile, int nMode, const char* pDelimiter, bool bNewline, bool bExcludeLast, const char* pSuffix) const
+AdtFile& AdtCppBase::forAllWriteFortran(AdtFile& pOutFile, int nMode, const char* pDelimiter, bool bNewline, bool bExcludeLast, const char* pSuffix, bool bReverse) const
 {
   if (pOutFile.isOpen())
   {
-    AdtParserPtrListConstIter     Iter;
-    size_t                        nSize = objList().size();
-    int                           cn    = 0;
-
-    for (Iter = objList().begin() ; Iter != objList().end() ; ++Iter)
+    if (bReverse)
     {
-      AdtParser*  pObj = *Iter;
+      AdtParserPtrListConstRIter    Iter;
+      size_t                        nSize = objList().size();
+      int                           cn    = 0;
 
-      cn++;
-
-      if ((pObj != 0) && pObj->isType("AdtCppBase"))
+      for (Iter = objList().rbegin() ; Iter != objList().rend() ; ++Iter)
       {
-        AdtCppBase* pCppObj = (AdtCppBase*)pObj;
+        AdtParser*  pObj = *Iter;
 
-        pCppObj->writeFortran(pOutFile, nMode);
+        cn++;
 
-        if (pSuffix != 0)
+        if ((pObj != 0) && pObj->isType("AdtCppBase"))
         {
-          write(pOutFile, pSuffix);
-        }
+          AdtCppBase* pCppObj = (AdtCppBase*)pObj;
 
-        if (bExcludeLast && (cn == nSize))
-        {
-          //Do nothing
-        }
-        else
-        {
-          write(pOutFile, pDelimiter);
+          pCppObj->writeFortran(pOutFile, nMode);
 
-          if (bNewline)
+          if (pSuffix != 0)
           {
-            pOutFile.newline();
+            write(pOutFile, pSuffix);
+          }
+
+          if (bExcludeLast && (cn == nSize))
+          {
+            //Do nothing
+          }
+          else
+          {
+            write(pOutFile, pDelimiter);
+
+            if (bNewline)
+            {
+              pOutFile.newline();
+            }
+          }
+        }
+      }
+    }
+    else
+    {
+      AdtParserPtrListConstIter     Iter;
+      size_t                        nSize = objList().size();
+      int                           cn    = 0;
+
+      for (Iter = objList().begin() ; Iter != objList().end() ; ++Iter)
+      {
+        AdtParser*  pObj = *Iter;
+
+        cn++;
+
+        if ((pObj != 0) && pObj->isType("AdtCppBase"))
+        {
+          AdtCppBase* pCppObj = (AdtCppBase*)pObj;
+
+          pCppObj->writeFortran(pOutFile, nMode);
+
+          if (pSuffix != 0)
+          {
+            write(pOutFile, pSuffix);
+          }
+
+          if (bExcludeLast && (cn == nSize))
+          {
+            //Do nothing
+          }
+          else
+          {
+            write(pOutFile, pDelimiter);
+
+            if (bNewline)
+            {
+              pOutFile.newline();
+            }
           }
         }
       }
@@ -1407,7 +1449,9 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
 {
   //This method is used principally to create the variable definitions in the
   //MODULE and in function bodies. This method should therefore include the
-  //lower bound attributes in the comment (if there is any).
+  //lower bound attributes in the comment (if there is any). Note that we must
+  //reverse the order of bounds because of Row major Column major differences 
+  //between fortran and C++.
   if (embeddedComment().length() > 0)
   {
     string      sComment(embeddedComment());
@@ -1416,7 +1460,8 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
 
     if (AdtParse::matchWord(pChar, "/*"))
     {
-      pOutFile.write("(");
+      string sIndex("");
+      string sReversed("");
 
       while (*pChar != '\0')
       {
@@ -1436,13 +1481,13 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
             {
               ::sprintf(sBuffer, "%d:", nLowerBound);
 
-              pOutFile.write(sBuffer);
+              sIndex += sBuffer;
             }
           }
           else
           {
-            pOutFile.write(sName);
-            pOutFile.write(":");
+            sIndex += sName;
+            sIndex += ":";
           }
 
           pChar = AdtParse::nextWord(pChar);
@@ -1460,16 +1505,19 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
         if (::strchr(sName.c_str(), '<') != 0)
         {
           // Ragged array so leave the dimensions open
-          pOutFile.write(":");
+          sIndex += ":";
         }
         else
         {
-          pOutFile.write(sName);
+          sIndex += sName;
         }
+
+        sReversed = sIndex + sReversed;
+        sIndex    = "";
 
         if (AdtParse::matchWord(pChar, ","))
         {
-          pOutFile.write(",");
+          sReversed = "," + sReversed;
         }
         else
         {
@@ -1477,6 +1525,8 @@ void AdtCppEmbeddedComment::writeArrayBounds(AdtFile& pOutFile, const char* pAbs
         }
       }
 
+      pOutFile.write("(");
+      pOutFile.write(sReversed);
       pOutFile.write(")");
     }
   }
@@ -4155,7 +4205,8 @@ AdtFile& AdtCppDeclaratorExpressionDims::writeCPP(AdtFile& rOutFile, int nMode) 
 AdtFile& AdtCppDeclaratorExpressionDims::writeFortran(AdtFile& rOutFile, int nMode) const
 {
   rOutFile.write("(");
-  forAllWriteFortran(rOutFile, nMode, ",", false, true);
+  // Need to reverse indexing because of Row major Column major differences
+  forAllWriteFortran(rOutFile, nMode, ",", false, true, 0, true);
   rOutFile.write(")");
 
   return (rOutFile);

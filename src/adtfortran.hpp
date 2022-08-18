@@ -598,8 +598,8 @@ protected:
   static const char*                    AddPrefixString;
 
 protected:
-  AdtFile&                              forAllWriteGeneric(AdtFile& pOutFile, AdtFortranDestCodeType nDestCodeType, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0) const;
-  AdtFile&                              forAllWriteCPP(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0) const;
+  AdtFile&                              forAllWriteGeneric(AdtFile& pOutFile, AdtFortranDestCodeType nDestCodeType, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0, bool bReverse = false) const;
+  AdtFile&                              forAllWriteCPP(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0, bool bReverse = false) const;
   AdtFile&                              forAllWriteDelphi(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0) const;
   AdtFile&                              forAllWriteFortran(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false) const;
 
@@ -657,9 +657,9 @@ public:
 
 //  ----------------------------------------------------------------------------
 
-inline AdtFile& AdtFortranBase::forAllWriteCPP(AdtFile& pOutFile, int nMode, const char* pDelimiter, bool bNewline, bool bExcludeLast, const char* pSuffix) const
+inline AdtFile& AdtFortranBase::forAllWriteCPP(AdtFile& pOutFile, int nMode, const char* pDelimiter, bool bNewline, bool bExcludeLast, const char* pSuffix, bool bReverse) const
 {
-  return (forAllWriteGeneric(pOutFile, AdtFortranDestCodeCPP, nMode, pDelimiter, bNewline, bExcludeLast, pSuffix));
+  return (forAllWriteGeneric(pOutFile, AdtFortranDestCodeCPP, nMode, pDelimiter, bNewline, bExcludeLast, pSuffix, bReverse));
 }
 
 //  ----------------------------------------------------------------------------

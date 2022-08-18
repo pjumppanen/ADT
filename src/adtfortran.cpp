@@ -2286,7 +2286,8 @@ AdtFile& AdtFortranDeclarations::writeCPP_Allocations(AdtFile& pOutFile) const
       //  AdtArrayPlan  Plan_n_h_1(1, n_h);
       //
       //  Plan_n_h_1.create(MemAllocator, wt_A);
-      for (int cn = 0 ; cn < nDimensions ; cn++)
+      // Need to reverse dimensions.
+      for (int cn = nDimensions - 1 ; cn >= 0 ; cn--)
       {
         string  sLowerDim;
         string  sUpperDim;
@@ -2488,7 +2489,8 @@ AdtFile& AdtFortranDeclarations::writeDelphiAllocations(AdtFile& pOutFile,
       //  AdtArrayPlan  Plan_n_h_1(1, n_h);
       //
       //  Plan_n_h_1.create(MemAllocator, wt_A);
-      for (int cn = 0 ; cn < nDimensions ; cn++)
+      // Need to reverse dimensions.
+      for (int cn = nDimensions - 1 ; cn >= 0 ; cn--)
       {
         string  sLowerDim;
         string  sUpperDim;
@@ -2597,42 +2599,84 @@ AdtFile& AdtFortranDeclarations::writeDelphiReturnType(AdtFile& pOutFile, const 
 //  ----------------------------------------------------------------------------
 //  AdtDelphiBase method implementations
 //  ----------------------------------------------------------------------------
-AdtFile& AdtFortranBase::forAllWriteGeneric(AdtFile& pOutFile, AdtFortranDestCodeType nDestCodeType, int nMode, const char* pDelimiter, bool bNewline, bool bExcludeLast, const char* pSuffix) const
+AdtFile& AdtFortranBase::forAllWriteGeneric(AdtFile& pOutFile, AdtFortranDestCodeType nDestCodeType, int nMode, const char* pDelimiter, bool bNewline, bool bExcludeLast, const char* pSuffix, bool bReverse) const
 {
   if (pOutFile.isOpen())
   {
-    AdtParserPtrListConstIter     Iter;
-    size_t                        nSize = objList().size();
-    size_t                        cn    = 0;
-
-    for (Iter = objList().begin() ; Iter != objList().end() ; ++Iter)
+    if (bReverse)
     {
-      AdtParser*  pObj = *Iter;
+      AdtParserPtrListConstRIter    Iter;
+      size_t                        nSize = objList().size();
+      size_t                        cn    = 0;
 
-      cn++;
-
-      if ((pObj != 0) && pObj->isType("AdtFortranBase"))
+      for (Iter = objList().rbegin() ; Iter != objList().rend() ; ++Iter)
       {
-        AdtFortranBase* pFortranObj = (AdtFortranBase*)pObj;
+        AdtParser*  pObj = *Iter;
 
-        pFortranObj->writeGeneric(pOutFile, nDestCodeType, nMode);
+        cn++;
 
-        if (pSuffix != 0)
+        if ((pObj != 0) && pObj->isType("AdtFortranBase"))
         {
-          write(pOutFile, pSuffix);
-        }
+          AdtFortranBase* pFortranObj = (AdtFortranBase*)pObj;
 
-        if (bExcludeLast && (cn == nSize))
-        {
-          //Do nothing
-        }
-        else
-        {
-          write(pOutFile, pDelimiter);
+          pFortranObj->writeGeneric(pOutFile, nDestCodeType, nMode);
 
-          if (bNewline)
+          if (pSuffix != 0)
           {
-            pOutFile.newline();
+            write(pOutFile, pSuffix);
+          }
+
+          if (bExcludeLast && (cn == nSize))
+          {
+            //Do nothing
+          }
+          else
+          {
+            write(pOutFile, pDelimiter);
+
+            if (bNewline)
+            {
+              pOutFile.newline();
+            }
+          }
+        }
+      }
+    }
+    else
+    {
+      AdtParserPtrListConstIter     Iter;
+      size_t                        nSize = objList().size();
+      size_t                        cn    = 0;
+
+      for (Iter = objList().begin() ; Iter != objList().end() ; ++Iter)
+      {
+        AdtParser*  pObj = *Iter;
+
+        cn++;
+
+        if ((pObj != 0) && pObj->isType("AdtFortranBase"))
+        {
+          AdtFortranBase* pFortranObj = (AdtFortranBase*)pObj;
+
+          pFortranObj->writeGeneric(pOutFile, nDestCodeType, nMode);
+
+          if (pSuffix != 0)
+          {
+            write(pOutFile, pSuffix);
+          }
+
+          if (bExcludeLast && (cn == nSize))
+          {
+            //Do nothing
+          }
+          else
+          {
+            write(pOutFile, pDelimiter);
+
+            if (bNewline)
+            {
+              pOutFile.newline();
+            }
           }
         }
       }
@@ -5946,10 +5990,10 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
 
                         if (!bFirst)
                         {
-                          sArrayPlanArgs += ",";
+                          sArrayPlanArgs = "," + sArrayPlanArgs;
                         }
 
-                        sArrayPlanArgs += sBaseIndex + "," + sSize;
+                        sArrayPlanArgs = sBaseIndex + "," + sSize + sArrayPlanArgs;
 
                         bFirst = false;
                       }
@@ -6779,10 +6823,10 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
 
                           if (!bFirst)
                           {
-                            sArrayPlanArgs += ",";
+                            sArrayPlanArgs = "," + sArrayPlanArgs;
                           }
 
-                          sArrayPlanArgs += sBaseIndex + "," + sSize;
+                          sArrayPlanArgs = sBaseIndex + "," + sSize + sArrayPlanArgs;
 
                           bFirst = false;
                         }
@@ -11491,7 +11535,7 @@ AdtFortranShapeSpecList::~AdtFortranShapeSpecList()
 
 AdtFile& AdtFortranShapeSpecList::writeCPP(AdtFile& pOutFile, int nMode) const
 {
-  return (forAllWriteCPP(pOutFile, nMode, ",", false, true));
+  return (forAllWriteCPP(pOutFile, nMode, ",", false, true, 0, true));
 }
 
 //  ----------------------------------------------------------------------------
@@ -13377,9 +13421,9 @@ AdtFile& AdtFortranPrimary::writeCPP(AdtFile& pOutFile, int nMode) const
     {
       if (IsVariable)
       {
-        AdtParserPtrListConstIter  Iter;
+        AdtParserPtrListConstRIter  Iter;
 
-        for (Iter = SectionSubscriptList->objList().begin() ; Iter != SectionSubscriptList->objList().end() ; ++Iter)
+        for (Iter = SectionSubscriptList->objList().rbegin() ; Iter != SectionSubscriptList->objList().rend() ; ++Iter)
         {
           AdtFortranBase* pFortranObj = (AdtFortranBase*)((AdtParser*)*Iter);
 
@@ -15481,9 +15525,9 @@ AdtFile& AdtFortranAssignmentStmt::writeCPP(AdtFile& pOutFile, int nMode) const
 
   if (SectionSubscriptList != 0)
   {
-    AdtParserPtrListConstIter  Iter;
+    AdtParserPtrListConstRIter  Iter;
 
-    for (Iter = SectionSubscriptList->objList().begin() ; Iter != SectionSubscriptList->objList().end() ; ++Iter)
+    for (Iter = SectionSubscriptList->objList().rbegin() ; Iter != SectionSubscriptList->objList().rend() ; ++Iter)
     {
       AdtFortranBase* pFortranObj = (AdtFortranBase*)((AdtParser*)*Iter);
 

@@ -308,7 +308,7 @@ protected:
   static AdtCppToFortranTypeConversionByStringMap   CppTypeMap;
 
 protected:
-  AdtFile&                      forAllWriteFortran(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0) const;
+  AdtFile&                      forAllWriteFortran(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false, const char* pSuffix = 0, bool bReverse = false) const;
   AdtFile&                      forAllWriteCPP(AdtFile& pOutFile, int nMode, const char* pDelimiter = 0, bool bNewline = false, bool bExcludeLast = false) const;
   AdtFile&                      writePragmas(AdtFile& rOutFile) const;
 
