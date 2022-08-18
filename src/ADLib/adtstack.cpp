@@ -39,9 +39,9 @@
 
 
 //  ----------------------------------------------------------------------------
-//  AdtADStack implementations
+//  AdtADStackImpl implementations
 //  ----------------------------------------------------------------------------
-void AdtADStack::push(const char* pBuffer, size_t nSize)
+void AdtADStackImpl::push(const char* pBuffer, size_t nSize)
 {
   // On push if nSize is greater than half the Buffer size then we need to write
   // the unsaved buffer to disk and then write all but half a buffer size in
@@ -138,7 +138,7 @@ void AdtADStack::push(const char* pBuffer, size_t nSize)
 
 //  ----------------------------------------------------------------------------
 
-void AdtADStack::pop(char* pBuffer, size_t nSize)
+void AdtADStackImpl::pop(char* pBuffer, size_t nSize)
 {
   if (nSize > StackPtr)
   {
@@ -232,7 +232,7 @@ void AdtADStack::pop(char* pBuffer, size_t nSize)
 
 //  ----------------------------------------------------------------------------
 
-void AdtADStack::look(char* pBuffer, size_t nSize)
+void AdtADStackImpl::look(char* pBuffer, size_t nSize) const
 {
   if (nSize > StackPtr)
   {
@@ -299,7 +299,7 @@ void AdtADStack::look(char* pBuffer, size_t nSize)
 
 //  ----------------------------------------------------------------------------
 
-AdtADStack::AdtADStack(size_t nBufferSize)
+AdtADStackImpl::AdtADStackImpl(size_t nBufferSize, const char* pSuffix)
 {
   ::memset(StackFileName, 0, sizeof(StackFileName));
 
@@ -308,9 +308,12 @@ AdtADStack::AdtADStack(size_t nBufferSize)
   StackBuffer = 0;
   StackPtr    = 0;
 
-  if (nBufferSize > 0)
+  if ((nBufferSize > 0) && (pSuffix != 0))
   {
-    char* pTmpFileName = tempnam(0, "adttmpstack");
+    strcat(StackFileName, "adttmpstack");
+    strcat(StackFileName, pSuffix);
+
+    char* pTmpFileName = tempnam(0, StackFileName);
 
     strcpy(StackFileName, pTmpFileName);
 
@@ -336,7 +339,7 @@ AdtADStack::AdtADStack(size_t nBufferSize)
 
 //  ----------------------------------------------------------------------------
 
-AdtADStack::~AdtADStack()
+AdtADStackImpl::~AdtADStackImpl()
 {
   if (StackFile != 0)
   {
@@ -352,7 +355,7 @@ AdtADStack::~AdtADStack()
 
 //  ----------------------------------------------------------------------------
 
-void AdtADStack::memoryAndLength(const AdtMemAllocator& rAllocator, char* pArray, int nSize, char*& pData, size_t& nDataSize) const
+void AdtADStackImpl::memoryAndLength(const AdtMemAllocator& rAllocator, char* pArray, int nSize, char*& pData, size_t& nDataSize) const
 {
   int           nIndex  = 0;
   AdtArrayInfo* pInfo   = AdtArrayPlanActor::arrayInfo(rAllocator, pArray);
@@ -368,7 +371,7 @@ void AdtADStack::memoryAndLength(const AdtMemAllocator& rAllocator, char* pArray
 
 //  ----------------------------------------------------------------------------
 
-void AdtADStack::pushArray(const AdtMemAllocator& rAllocator, const char* pArray, int nSize)
+void AdtADStackImpl::pushArray(const AdtMemAllocator& rAllocator, const char* pArray, int nSize)
 {
   char*   pData     = 0;
   size_t  nDataSize = 0;
@@ -380,7 +383,7 @@ void AdtADStack::pushArray(const AdtMemAllocator& rAllocator, const char* pArray
 
 //  ----------------------------------------------------------------------------
 
-void AdtADStack::popArray(const AdtMemAllocator& rAllocator, char* pArray, int nSize)
+void AdtADStackImpl::popArray(const AdtMemAllocator& rAllocator, char* pArray, int nSize)
 {
   char*   pData     = 0;
   size_t  nDataSize = 0;
@@ -389,5 +392,286 @@ void AdtADStack::popArray(const AdtMemAllocator& rAllocator, char* pArray, int n
 
   pop(pData, nDataSize);
 }
+
+
+//  ----------------------------------------------------------------------------
+//  AdtADBitStackImpl method implementations
+//  ----------------------------------------------------------------------------
+void AdtADBitStackImpl::pushBit(bool bBit)
+{
+  int nMask = 1 << adbitibuf;
+
+  if (bBit)
+  {
+    adbitbuf = adbitbuf | nMask;
+  }
+  else
+  {
+    adbitbuf = adbitbuf & (~nMask);
+  }
+  
+  if (adbitibuf >= 31)
+  {
+    push((char*)&adbitbuf, sizeof(adbitbuf));
+    
+    adbitbuf  = 0;
+    adbitibuf = 0;
+  }
+  else
+  {
+    adbitibuf = adbitibuf + 1;
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtADBitStackImpl::popBit()
+{
+  bool bBit;
+
+  if (adbitibuf <= 0)
+  {
+    pop((char*)&adbitbuf, sizeof(adbitbuf));
+
+    adbitibuf = 31;
+  }
+  else
+  {
+    adbitibuf = adbitibuf - 1;
+  }
+
+  int nMask = 1 << adbitibuf;
+
+  bBit = ((adbitbuf & nMask) != 0);
+
+  return (bBit);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::pushBits(int nNum, int nHowMany)
+{
+  unsigned int nMask = 1;
+
+  for (int cn = 0 ; cn < nHowMany ; cn++)
+  {
+    bool bBit = ((((unsigned int)nNum) & nMask) != 0);
+
+    pushBit(bBit);
+
+    nMask <<= 1;
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+int AdtADBitStackImpl::popBits(int nHowMany)
+{
+  unsigned int nMask = 1 << (nHowMany - 1);
+  unsigned int nNum  = 0;
+
+  for (int cn = 0 ; cn < nHowMany ; cn++)
+  {
+    bool bBit = popBit();
+    
+    if (bBit)
+    {
+      nNum = nNum | nMask;
+    }
+
+    nMask >>= 1;
+  }
+
+  return ((int)nNum);
+}
+
+//  ----------------------------------------------------------------------------
+
+int AdtADBitStackImpl::lookBits(int nHowMany) const
+{
+  unsigned int nMask  = 1 << (nHowMany - 1);
+  unsigned int nNum   = 0;
+  int nBit            = adbitibuf;
+  int nBitField       = adbitbuf;
+
+  for (int cn = 0 ; cn < nHowMany ; cn++)
+  {
+    if (nBit <= 0)
+    {
+      look((char*)&nBitField, sizeof(nBitField));
+
+      nBit = 31;
+    }
+    else
+    {
+      nBit = nBit - 1;
+    }
+
+    int   nPopMask = 1 << nBit;
+    bool  bBit     = ((nBitField & nPopMask) != 0);
+    
+    if (bBit)
+    {
+      nNum = nNum | nMask;
+    }
+
+    nMask >>= 1;
+  }
+
+  return ((int)nNum);
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtADBitStackImpl::AdtADBitStackImpl(size_t nBufferSize, const char* pSuffix)
+ : AdtADStackImpl(nBufferSize, pSuffix)
+{
+  adbitbuf  = 0;
+  adbitibuf = 0;
+  bitcount  = 0;
+  callcount = 0;
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtADBitStackImpl::~AdtADBitStackImpl()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::PUSHCONTROL1BSCALAR(int nNum)
+{
+  bitcount++;
+  callcount++;
+  push((char*)&nNum, sizeof(nNum));
+//  pushBits(nNum, 1);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::POPCONTROL1BSCALAR(int& nNum)
+{
+  bitcount--;
+  callcount--;
+//  pop((char*)&nNum, sizeof(nNum));
+  nNum = popBits(1);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::LOOKCONTROL1BSCALAR(int& nNum) const
+{
+//  look((char*)&nNum, sizeof(nNum));
+  nNum = lookBits(1);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::PUSHCONTROL2BSCALAR(int nNum)
+{
+  bitcount += 2;
+  callcount++;
+//  push((char*)&nNum, sizeof(nNum));
+  pushBits(nNum, 2);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::POPCONTROL2BSCALAR(int& nNum)
+{
+  bitcount -= 2;
+  callcount--;
+//  pop((char*)&nNum, sizeof(nNum));
+  nNum = popBits(2);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::LOOKCONTROL2BSCALAR(int& nNum) const
+{
+//  look((char*)&nNum, sizeof(nNum));
+  nNum = lookBits(2);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::PUSHCONTROL3BSCALAR(int nNum)
+{
+  bitcount += 3;
+  callcount++;
+  pushBits(nNum, 3);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::POPCONTROL3BSCALAR(int& nNum)
+{
+  bitcount -= 3;
+  callcount--;
+  nNum = popBits(3);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::LOOKCONTROL3BSCALAR(int& nNum) const
+{
+  nNum = lookBits(3);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::PUSHCONTROL4BSCALAR(int nNum)
+{
+  bitcount += 4;
+  callcount++;
+  pushBits(nNum, 4);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::POPCONTROL4BSCALAR(int& nNum)
+{
+  bitcount -= 4;
+  callcount--;
+  nNum = popBits(4);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtADBitStackImpl::LOOKCONTROL4BSCALAR(int& nNum) const
+{
+  nNum = lookBits(4);
+}
+
+
+//  ----------------------------------------------------------------------------
+//  AdtADStack method implementations
+//  ----------------------------------------------------------------------------
+AdtADStack::AdtADStack(size_t nBufferSize)
+ : FloatStack(nBufferSize, "_float"),
+   DoubleStack(nBufferSize, "_double"),
+   CharStack(nBufferSize, "_char"),
+   UCharStack(nBufferSize, "_uchar"),
+   ShortStack(nBufferSize, "_short"),
+   UShortStack(nBufferSize, "_ushort"),
+   LongStack(nBufferSize, "_long"),
+   ULongStack(nBufferSize, "_ulong"),
+   IntStack(nBufferSize, "_int"),
+   UIntStack(nBufferSize, "_uint"),
+   BoolStack(nBufferSize, "_bool")
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtADStack::~AdtADStack()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
 
 

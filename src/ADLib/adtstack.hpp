@@ -77,73 +77,65 @@ class AdtADStack;
 //  ----------------------------------------------------------------------------
 //  Wrapper macros to incorporate Allocator into Tapenade Array push/pop calls
 //  ----------------------------------------------------------------------------
-#define PUSHREAL4(A)            PUSHREAL4SCALAR(Stack, (A))
-#define POPREAL4(A)             POPREAL4SCALAR(Stack, (A))
-#define LOOKREAL4(A)            LOOKREAL4SCALAR(Stack, (A))
-#define PUSHREAL4ARRAY(A,B)     PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPREAL4ARRAY(A,B)      POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHREAL8(A)            PUSHREAL8SCALAR(Stack, (A))
-#define POPREAL8(A)             POPREAL8SCALAR(Stack, (A))
-#define LOOKREAL8(A)            LOOKREAL8SCALAR(Stack, (A))
-#define PUSHREAL8ARRAY(A,B)     PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPREAL8ARRAY(A,B)      POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-//#define PUSHREAL16(A)            PUSHREAL16SCALAR(Stack, (A))
-//#define POPREAL16(A)             POPREAL16SCALAR(Stack, (A))
-//#define LOOKREAL16(A)            LOOKREAL16SCALAR(Stack, (A))
-// #define PUSHREAL16ARRAY(A,B)    PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-// #define POPREAL16ARRAY(A,B)     POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHINTEGER1(A)         PUSHINTEGER1SCALAR(Stack, (A))
-#define POPINTEGER1(A)          POPINTEGER1SCALAR(Stack, (A))
-#define LOOKINTEGER1(A)         LOOKINTEGER1SCALAR(Stack, (A))
-#define PUSHINTEGER1ARRAY(A,B)  PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPINTEGER1ARRAY(A,B)   POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHINTEGER2(A)         PUSHINTEGER2SCALAR(Stack, (A))
-#define POPINTEGER2(A)          POPINTEGER2SCALAR(Stack, (A))
-#define LOOKINTEGER2(A)         LOOKINTEGER2SCALAR(Stack, (A))
-#define PUSHINTEGER2ARRAY(A,B)  PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPINTEGER2ARRAY(A,B)   POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHINTEGER4(A)         PUSHINTEGER4SCALAR(Stack, (A))
-#define POPINTEGER4(A)          POPINTEGER4SCALAR(Stack, (A))
-#define LOOKINTEGER4(A)         LOOKINTEGER4SCALAR(Stack, (A))
-#define PUSHINTEGER4ARRAY(A,B)  PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPINTEGER4ARRAY(A,B)   POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-// #define PUSHINTEGER8(A)         PUSHINTEGER8SCALAR(Stack, (A))
-// #define POPINTEGER8(A)          POPINTEGER8SCALAR(Stack, (A))
-// #define LOOKINTEGER8(A)         LOOKINTEGER8SCALAR(Stack, (A))
-// #define PUSHINTEGER8ARRAY(A,B)  PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-// #define POPINTEGER8ARRAY(A,B)   POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHCONTROL1B(A)        PUSHCONTROL1BSCALAR(Stack, (A))
-#define POPCONTROL1B(A)         POPCONTROL1BSCALAR(Stack, (A))
-#define LOOKCONTROL1B(A)        LOOKCONTROL1BSCALAR(Stack, (A))
-#define PUSHCONTROL1BARRAY(A,B) PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPCONTROL1BARRAY(A,B)  POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHCONTROL2B(A)        PUSHCONTROL2BSCALAR(Stack, (A))
-#define POPCONTROL2B(A)         POPCONTROL2BSCALAR(Stack, (A))
-#define LOOKCONTROL2B(A)        LOOKCONTROL2BSCALAR(Stack, (A))
-#define PUSHCONTROL2BARRAY(A,B) PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPCONTROL2BARRAY(A,B)  POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHCONTROL3B(A)        PUSHCONTROL3BSCALAR(Stack, (A))
-#define POPCONTROL3B(A)         POPCONTROL3BSCALAR(Stack, (A))
-#define LOOKCONTROL3B(A)        LOOKCONTROL3BSCALAR(Stack, (A))
-#define PUSHCONTROL3BARRAY(A,B) PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPCONTROL3BARRAY(A,B)  POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
-#define PUSHCONTROL4B(A)        PUSHCONTROL4BSCALAR(Stack, (A))
-#define POPCONTROL4B(A)         POPCONTROL4BSCALAR(Stack, (A))
-#define LOOKCONTROL4B(A)        LOOKCONTROL4BSCALAR(Stack, (A))
-#define PUSHCONTROL4BARRAY(A,B) PUSHARRAY_allocator(Stack, MemAllocator, ((const char*)A), (B))
-#define POPCONTROL4BARRAY(A,B)  POPARRAY_allocator(Stack, MemAllocator, ((char*)A), (B))
+#define PUSHREAL4(A)            Stack.PUSHREAL4SCALAR((A))
+#define POPREAL4(A)             Stack.POPREAL4SCALAR((A))
+#define LOOKREAL4(A)            Stack.LOOKREAL4SCALAR((A))
+#define PUSHREAL4ARRAY(A,B)     Stack.PUSHREAL4ARRAY_allocator(MemAllocator, (A), (B))
+#define POPREAL4ARRAY(A,B)      Stack.POPREAL4ARRAY_allocator(MemAllocator, (A), (B))
+#define PUSHREAL8(A)            Stack.PUSHREAL8SCALAR((A))
+#define POPREAL8(A)             Stack.POPREAL8SCALAR((A))
+#define LOOKREAL8(A)            Stack.LOOKREAL8SCALAR((A))
+#define PUSHREAL8ARRAY(A,B)     Stack.PUSHREAL8ARRAY_allocator(MemAllocator, (A), (B))
+#define POPREAL8ARRAY(A,B)      Stack.POPREAL8ARRAY_allocator(MemAllocator, (A), (B))
+//#define PUSHREAL16(A)            Stack.PUSHREAL16SCALAR((A))
+//#define POPREAL16(A)             Stack.POPREAL16SCALAR((A))
+//#define LOOKREAL16(A)            Stack.LOOKREAL16SCALAR((A))
+// #define PUSHREAL16ARRAY(A,B)    Stack.PUSHREAL16ARRAY_allocator(MemAllocator, (A), (B))
+// #define POPREAL16ARRAY(A,B)     Stack.POPREAL16ARRAY_allocator(MemAllocator, (A), (B))
+#define PUSHINTEGER1(A)         Stack.PUSHINTEGER1SCALAR((A))
+#define POPINTEGER1(A)          Stack.POPINTEGER1SCALAR((A))
+#define LOOKINTEGER1(A)         Stack.LOOKINTEGER1SCALAR((A))
+#define PUSHINTEGER1ARRAY(A,B)  Stack.PUSHINTEGER1ARRAY_allocator(MemAllocator, (A), (B))
+#define POPINTEGER1ARRAY(A,B)   Stack.POPINTEGER1ARRAY_allocator(MemAllocator, (A), (B))
+#define PUSHINTEGER2(A)         Stack.PUSHINTEGER2SCALAR((A))
+#define POPINTEGER2(A)          Stack.POPINTEGER2SCALAR((A))
+#define LOOKINTEGER2(A)         Stack.LOOKINTEGER2SCALAR((A))
+#define PUSHINTEGER2ARRAY(A,B)  Stack.PUSHINTEGER2ARRAY_allocator(MemAllocator, (A), (B))
+#define POPINTEGER2ARRAY(A,B)   Stack.POPINTEGER2ARRAY_allocator(MemAllocator, (A), (B))
+#define PUSHINTEGER4(A)         Stack.PUSHINTEGER4SCALAR((A))
+#define POPINTEGER4(A)          Stack.POPINTEGER4SCALAR((A))
+#define LOOKINTEGER4(A)         Stack.LOOKINTEGER4SCALAR((A))
+#define PUSHINTEGER4ARRAY(A,B)  Stack.PUSHINTEGER4ARRAY_allocator(MemAllocator, (A), (B))
+#define POPINTEGER4ARRAY(A,B)   Stack.POPINTEGER4ARRAY_allocator(MemAllocator, (A), (B))
+// #define PUSHINTEGER8(A)         Stack.PUSHINTEGER8SCALAR((A))
+// #define POPINTEGER8(A)          Stack.POPINTEGER8SCALAR((A))
+// #define LOOKINTEGER8(A)         Stack.LOOKINTEGER8SCALAR((A))
+// #define PUSHINTEGER8ARRAY(A,B)  Stack.PUSHINTEGER8ARRAY_allocator(MemAllocator, (A), (B))
+// #define POPINTEGER8ARRAY(A,B)   Stack.POPINTEGER8ARRAY_allocator(MemAllocator, (A), (B))
+#define PUSHCONTROL1B(A)        Stack.PUSHCONTROL1BSCALAR((A))
+#define POPCONTROL1B(A)         Stack.POPCONTROL1BSCALAR((A))
+#define LOOKCONTROL1B(A)        Stack.LOOKCONTROL1BSCALAR((A))
+#define PUSHCONTROL2B(A)        Stack.PUSHCONTROL2BSCALAR((A))
+#define POPCONTROL2B(A)         Stack.POPCONTROL2BSCALAR((A))
+#define LOOKCONTROL2B(A)        Stack.LOOKCONTROL2BSCALAR((A))
+#define PUSHCONTROL3B(A)        Stack.PUSHCONTROL3BSCALAR((A))
+#define POPCONTROL3B(A)         Stack.POPCONTROL3BSCALAR((A))
+#define LOOKCONTROL3B(A)        Stack.LOOKCONTROL3BSCALAR((A))
+#define PUSHCONTROL4B(A)        Stack.PUSHCONTROL4BSCALAR((A))
+#define POPCONTROL4B(A)         Stack.POPCONTROL4BSCALAR((A))
+#define LOOKCONTROL4B(A)        Stack.LOOKCONTROL4BSCALAR((A))
 
 
 //  ----------------------------------------------------------------------------
-//  class AdtADStack
+//  class AdtADStackImpl
 //  ----------------------------------------------------------------------------
 //  This class implements a disk based stack that pages memory to disk to free
-//  space in the buffer when space is exhausted. This approach is likely to be
-//  more efficient that growing the stack and relying on operating system
+//  space in the buffer when space is exhausted. This approach is likely  to
+//  be more efficient that growing the stack and relying on operating system
 //  provided paging to take care of the rest. Should aim to minimise page faults
 //  as they are costly and this should do just that.
 //  ----------------------------------------------------------------------------
-class AdtADStack
+class AdtADStackImpl
 {
 private:
   FILE*       StackFile;
@@ -153,51 +145,16 @@ private:
   size_t      StackPtr;
 
 protected:
-  void        push(const char* pBuffer, size_t nSize);
-  void        pop(char* pBuffer, size_t nSize);
-  void        look(char* pBuffer, size_t nSize);
-
   void        memoryAndLength(const AdtMemAllocator& rAllocator, char* pArray, int nSize, char*& pData, size_t& nDataSize) const;
 
 public:
-  AdtADStack(size_t nBufferSize);
-  virtual ~AdtADStack();
+  AdtADStackImpl(size_t nBufferSize, const char* pSuffix);
+  virtual ~AdtADStackImpl();
 
-  void        push(float fNum);
-  void        push(double dNum);
-  void        push(char nNum);
-  void        push(unsigned char nNum);
-  void        push(short nNum);
-  void        push(unsigned short nNum);
-  void        push(long nNum);
-  void        push(unsigned long nNum);
-  void        push(int nNum);
-  void        push(unsigned int nNum);
-
-  void        pop(float& rNum);
-  void        pop(double& rNum);
-  void        pop(char& rNum);
-  void        pop(unsigned char& rNum);
-  void        pop(short& rNum);
-  void        pop(unsigned short& rNum);
-  void        pop(long& rNum);
-  void        pop(unsigned long& rNum);
-  void        pop(int& rNum);
-  void        pop(unsigned int& rNum);
-
-  void        look(float& rNum);
-  void        look(double& rNum);
-  void        look(char& rNum);
-  void        look(unsigned char& rNum);
-  void        look(short& rNum);
-  void        look(unsigned short& rNum);
-  void        look(long& rNum);
-  void        look(unsigned long& rNum);
-  void        look(int& rNum);
-  void        look(unsigned int& rNum);
-
+  void        push(const char* pBuffer, size_t nSize);
+  void        pop(char* pBuffer, size_t nSize);
+  void        look(char* pBuffer, size_t nSize) const;
   void        pushArray(const AdtMemAllocator& rAllocator, const char* pArray, int nSize);
-
   void        popArray(const AdtMemAllocator& rAllocator, char* pArray, int nSize);
 
   size_t      bufferSize() const;
@@ -205,573 +162,2107 @@ public:
 
 //  ----------------------------------------------------------------------------
 
-inline void AdtADStack::push(float fNum)
-{
-  push((const char*)&fNum, sizeof(fNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(double dNum)
-{
-  push((const char*)&dNum, sizeof(dNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(char nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(unsigned char nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(short nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(unsigned short nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(long nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(unsigned long nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(int nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::push(unsigned int nNum)
-{
-  push((const char*)&nNum, sizeof(nNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(float& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(double& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(char& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(unsigned char& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(short& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(unsigned short& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(long& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(unsigned long& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(int& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::pop(unsigned int& rNum)
-{
-  pop((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(float& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(double& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(char& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(unsigned char& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(short& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(unsigned short& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(long& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(unsigned long& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(int& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline void AdtADStack::look(unsigned int& rNum)
-{
-  look((char*)&rNum, sizeof(rNum));
-}
-
-//  ----------------------------------------------------------------------------
-
-inline size_t AdtADStack::bufferSize() const
+inline size_t AdtADStackImpl::bufferSize() const
 {
   return (BufferSize);
 }
 
 
 //  ----------------------------------------------------------------------------
+//  class AdtADBitStackImpl
+//  ----------------------------------------------------------------------------
+class AdtADBitStackImpl : public AdtADStackImpl
+{
+private:
+  int           adbitbuf;
+  int           adbitibuf;
+  int           bitcount;
+  int           callcount;
+
+private:
+  void          pushBit(bool bBit);
+  bool          popBit();
+  void          pushBits(int nNum, int nHowMany);
+  int           popBits(int nHowMany);
+  int           lookBits(int nHowMany) const;
+
+public:
+  AdtADBitStackImpl(size_t nBufferSize, const char* pSuffix);
+  virtual ~AdtADBitStackImpl();
+
+  void          PUSHCONTROL1BSCALAR(int nNum);
+  void          POPCONTROL1BSCALAR(int& nNum);
+  void          LOOKCONTROL1BSCALAR(int& nNum) const;
+
+  // Push, Pop, Look 2 bits
+  void          PUSHCONTROL2BSCALAR(int nNum);
+  void          POPCONTROL2BSCALAR(int& nNum);
+  void          LOOKCONTROL2BSCALAR(int& nNum) const;
+
+  // Push, Pop, Look 3 bits
+  void          PUSHCONTROL3BSCALAR(int nNum);
+  void          POPCONTROL3BSCALAR(int& nNum);
+  void          LOOKCONTROL3BSCALAR(int& nNum) const;
+
+  // Push, Pop, Look 4 bits
+  void          PUSHCONTROL4BSCALAR(int nNum);
+  void          POPCONTROL4BSCALAR(int& nNum);
+  void          LOOKCONTROL4BSCALAR(int& nNum) const;
+};
+
+
+//  ----------------------------------------------------------------------------
+//  class AdtADStack
+//  ----------------------------------------------------------------------------
+class AdtADStack
+{
+private:
+  AdtADStackImpl    FloatStack;
+  AdtADStackImpl    DoubleStack;
+  AdtADStackImpl    CharStack;
+  AdtADStackImpl    UCharStack;
+  AdtADStackImpl    ShortStack;
+  AdtADStackImpl    UShortStack;
+  AdtADStackImpl    LongStack;
+  AdtADStackImpl    ULongStack;
+  AdtADStackImpl    IntStack;
+  AdtADStackImpl    UIntStack;
+  AdtADBitStackImpl BoolStack;
+
+public:
+  AdtADStack(size_t nBufferSize);
+  virtual ~AdtADStack();
+
+  void            PUSHREAL4SCALAR(float fNum);
+  void            POPREAL4SCALAR(float& rNum);
+  void            LOOKREAL4SCALAR(float& rNum);
+
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9F pArray, int nSize);
+  void            PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10F pArray, int nSize);
+  void            POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10F pArray, int nSize);
+
+  void            PUSHREAL8SCALAR(double dNum);
+  void            POPREAL8SCALAR(double& rNum);
+  void            LOOKREAL8SCALAR(double& rNum);
+
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9D pArray, int nSize);
+  void            PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10D pArray, int nSize);
+  void            POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10D pArray, int nSize);
+
+// Not supported at this stage. Most C++ compilers have sizeof(double) == sizeof(long double)
+// ----------------------------------------------------
+//  void            PUSHREAL16SCALAR(long double dNum);
+//  void            POPREAL16SCALAR(long double& rNum);
+//  void            LOOKREAL16SCALAR(long double& rNum);
+
+  void            PUSHINTEGER1SCALAR(char cNum);
+  void            POPINTEGER1SCALAR(char& rNum);
+  void            LOOKINTEGER1SCALAR(char& rNum);
+
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9C pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10C pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10C pArray, int nSize);
+
+  void            PUSHINTEGER1SCALAR(unsigned char cNum);
+  void            POPINTEGER1SCALAR(unsigned char& rNum);
+  void            LOOKINTEGER1SCALAR(unsigned char& rNum);
+
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9UC pArray, int nSize);
+  void            PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10UC pArray, int nSize);
+  void            POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10UC pArray, int nSize);
+
+  void            PUSHINTEGER2SCALAR(short nNum);
+  void            POPINTEGER2SCALAR(short& rNum);
+  void            LOOKINTEGER2SCALAR(short& rNum);
+
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9S pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10S pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10S pArray, int nSize);
+
+  void            PUSHINTEGER2SCALAR(unsigned short nNum);
+  void            POPINTEGER2SCALAR(unsigned short& rNum);
+  void            LOOKINTEGER2SCALAR(unsigned short& rNum);
+
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9US pArray, int nSize);
+  void            PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10US pArray, int nSize);
+  void            POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10US pArray, int nSize);
+
+  void            PUSHINTEGER4SCALAR(long nNum);
+  void            POPINTEGER4SCALAR(long& rNum);
+  void            LOOKINTEGER4SCALAR(long& rNum);
+
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9L pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10L pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10L pArray, int nSize);
+
+  void            PUSHINTEGER4SCALAR(int nNum);
+  void            POPINTEGER4SCALAR(int& rNum);
+  void            LOOKINTEGER4SCALAR(int& rNum);
+
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9I pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10I pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10I pArray, int nSize);
+
+  void            PUSHINTEGER4SCALAR(unsigned long nNum);
+  void            POPINTEGER4SCALAR(unsigned long& rNum);
+  void            LOOKINTEGER4SCALAR(unsigned long& rNum);
+
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9UL pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10UL pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10UL pArray, int nSize);
+
+  void            PUSHINTEGER4SCALAR(unsigned int nNum);
+  void            POPINTEGER4SCALAR(unsigned int& rNum);
+  void            LOOKINTEGER4SCALAR(unsigned int& rNum);
+
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9UI pArray, int nSize);
+  void            PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10UI pArray, int nSize);
+  void            POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10UI pArray, int nSize);
+
+// Not supported at this stage and probably not needed.
+// ----------------------------------------------------
+//  void            PUSHINTEGER8SCALAR(long long nNum);
+//  void            POPINTEGER8SCALAR(long long& rNum);
+//  void            LOOKINTEGER8SCALAR(long long& rNum);
+
+  // Push, Pop, Look 1 bit
+  void            PUSHCONTROL1BSCALAR(int nNum);
+  void            POPCONTROL1BSCALAR(int& nNum);
+  void            LOOKCONTROL1BSCALAR(int& nNum);
+
+  // Push, Pop, Look 2 bits
+  void            PUSHCONTROL2BSCALAR(int nNum);
+  void            POPCONTROL2BSCALAR(int& nNum);
+  void            LOOKCONTROL2BSCALAR(int& nNum);
+
+  // Push, Pop, Look 3 bits
+  void            PUSHCONTROL3BSCALAR(int nNum);
+  void            POPCONTROL3BSCALAR(int& nNum);
+  void            LOOKCONTROL3BSCALAR(int& nNum);
+
+  // Push, Pop, Look 4 bits
+  void            PUSHCONTROL4BSCALAR(int nNum);
+  void            POPCONTROL4BSCALAR(int& nNum);
+  void            LOOKCONTROL4BSCALAR(int& nNum);
+
+  size_t          bufferSize() const;
+};
+
+//  ----------------------------------------------------------------------------
+
+inline size_t AdtADStack::bufferSize() const
+{
+  return (FloatStack.bufferSize());
+}
+
+
+//  ----------------------------------------------------------------------------
 //  Tapenade stack function wrappers
 //  ----------------------------------------------------------------------------
-inline void PUSHREAL4SCALAR(AdtADStack& rStack, float fNum)
+inline void AdtADStack::PUSHREAL4SCALAR(float rNum)
 {
-  rStack.push(fNum);
+  FloatStack.push((const char*)&rNum, sizeof(rNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPREAL4SCALAR(AdtADStack& rStack, float& rNum)
+inline void AdtADStack::POPREAL4SCALAR(float& rNum)
 {
-  rStack.pop(rNum);
+  FloatStack.pop((char*)&rNum, sizeof(rNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKREAL4SCALAR(AdtADStack& rStack, float& rNum)
+inline void AdtADStack::LOOKREAL4SCALAR(float& rNum)
 {
-  rStack.look(rNum);
+  FloatStack.look((char*)&rNum, sizeof(rNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHREAL8SCALAR(AdtADStack& rStack, double dNum)
+inline void AdtADStack::PUSHREAL8SCALAR(double rNum)
 {
-  rStack.push(dNum);
+  DoubleStack.push((const char*)&rNum, sizeof(rNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPREAL8SCALAR(AdtADStack& rStack, double& rNum)
+inline void AdtADStack::POPREAL8SCALAR(double& rNum)
 {
-  rStack.pop(rNum);
+  DoubleStack.pop((char*)&rNum, sizeof(rNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKREAL8SCALAR(AdtADStack& rStack, double& rNum)
+inline void AdtADStack::LOOKREAL8SCALAR(double& rNum)
 {
-  rStack.look(rNum);
+  DoubleStack.look((char*)&rNum, sizeof(rNum));
 }
 
 // Not supported at this stage. Most C++ compilers have sizeof(double) == sizeof(long double)
 //  //  ----------------------------------------------------------------------------
 //
-//  inline void PUSHREAL16SCALAR(AdtADStack& rStack, long double dNum)
+//  inline void AdtADStack::PUSHREAL16SCALAR(long double rNum)
 //  {
-//    rStack.push(dNum);
+//    LongDoubleStack.push((const char*)&rNum, sizeof(rNum));
 //  }
 //  
 //  //  ----------------------------------------------------------------------------
 //  
-//  inline void POPREAL16SCALAR(AdtADStack& rStack, long double& rNum)
+//  inline void AdtADStack::POPREAL16SCALAR(long double& rNum)
 //  {
-//    rStack.pop(rNum);
+//    LongDoubleStack.pop((char*)&rNum, sizeof(rNum));
 //  }
 //  
 //  //  ----------------------------------------------------------------------------
 //  
-//  inline void LOOKREAL16SCALAR(AdtADStack& rStack, long double& rNum)
+//  inline void AdtADStack::LOOKREAL16SCALAR(long double& rNum)
 //  {
-//    rStack.look(rNum);
+//    LongDoubleStack.look((char*)&rNum, sizeof(rNum));
 //  }
 //  
 //  //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER1SCALAR(AdtADStack& rStack, char cNum)
+inline void AdtADStack::PUSHINTEGER1SCALAR(char nNum)
 {
-  rStack.push(cNum);
+  CharStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER1SCALAR(AdtADStack& rStack, char& rNum)
+inline void AdtADStack::POPINTEGER1SCALAR(char& nNum)
 {
-  rStack.pop(rNum);
+  CharStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER1SCALAR(AdtADStack& rStack, char& rNum)
+inline void AdtADStack::LOOKINTEGER1SCALAR(char& nNum)
 {
-  rStack.look(rNum);
+  CharStack.look((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER1SCALAR(AdtADStack& rStack, unsigned char cNum)
+inline void AdtADStack::PUSHINTEGER1SCALAR(unsigned char nNum)
 {
-  rStack.push(cNum);
+  UCharStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER1SCALAR(AdtADStack& rStack, unsigned char& rNum)
+inline void AdtADStack::POPINTEGER1SCALAR(unsigned char& nNum)
 {
-  rStack.pop(rNum);
+  UCharStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER1SCALAR(AdtADStack& rStack, unsigned char& rNum)
+inline void AdtADStack::LOOKINTEGER1SCALAR(unsigned char& nNum)
 {
-  rStack.look(rNum);
+  UCharStack.look((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER2SCALAR(AdtADStack& rStack, short nNum)
+inline void AdtADStack::PUSHINTEGER2SCALAR(short nNum)
 {
-  rStack.push(nNum);
+  ShortStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER2SCALAR(AdtADStack& rStack, short& rNum)
+inline void AdtADStack::POPINTEGER2SCALAR(short& nNum)
 {
-  rStack.pop(rNum);
+  ShortStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER2SCALAR(AdtADStack& rStack, short& rNum)
+inline void AdtADStack::LOOKINTEGER2SCALAR(short& nNum)
 {
-  rStack.look(rNum);
+  ShortStack.look((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER2SCALAR(AdtADStack& rStack, unsigned short nNum)
+inline void AdtADStack::PUSHINTEGER2SCALAR(unsigned short nNum)
 {
-  rStack.push(nNum);
+  UShortStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER2SCALAR(AdtADStack& rStack, unsigned short& rNum)
+inline void AdtADStack::POPINTEGER2SCALAR(unsigned short& nNum)
 {
-  rStack.pop(rNum);
+  UShortStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER2SCALAR(AdtADStack& rStack, unsigned short& rNum)
+inline void AdtADStack::LOOKINTEGER2SCALAR(unsigned short& nNum)
 {
-  rStack.look(rNum);
+  UShortStack.look((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER4SCALAR(AdtADStack& rStack, long nNum)
+inline void AdtADStack::PUSHINTEGER4SCALAR(long nNum)
 {
-  rStack.push(nNum);
+  LongStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER4SCALAR(AdtADStack& rStack, long& rNum)
+inline void AdtADStack::POPINTEGER4SCALAR(long& nNum)
 {
-  rStack.pop(rNum);
+  LongStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER4SCALAR(AdtADStack& rStack, long& rNum)
+inline void AdtADStack::LOOKINTEGER4SCALAR(long& nNum)
 {
-  rStack.look(rNum);
+  LongStack.look((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER4SCALAR(AdtADStack& rStack, int nNum)
+inline void AdtADStack::PUSHINTEGER4SCALAR(int nNum)
 {
-  rStack.push(nNum);
+  IntStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER4SCALAR(AdtADStack& rStack, int& rNum)
+inline void AdtADStack::POPINTEGER4SCALAR(int& nNum)
 {
-  rStack.pop(rNum);
+  IntStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER4SCALAR(AdtADStack& rStack, int& rNum)
+inline void AdtADStack::LOOKINTEGER4SCALAR(int& nNum)
 {
-  rStack.look(rNum);
+  IntStack.look((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER4SCALAR(AdtADStack& rStack, unsigned long nNum)
+inline void AdtADStack::PUSHINTEGER4SCALAR(unsigned long nNum)
 {
-  rStack.push(nNum);
+  ULongStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER4SCALAR(AdtADStack& rStack, unsigned long& rNum)
+inline void AdtADStack::POPINTEGER4SCALAR(unsigned long& nNum)
 {
-  rStack.pop(rNum);
+  ULongStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER4SCALAR(AdtADStack& rStack, unsigned long& rNum)
+inline void AdtADStack::LOOKINTEGER4SCALAR(unsigned long& nNum)
 {
-  rStack.look(rNum);
+  ULongStack.look((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHINTEGER4SCALAR(AdtADStack& rStack, unsigned int nNum)
+inline void AdtADStack::PUSHINTEGER4SCALAR(unsigned int nNum)
 {
-  rStack.push(nNum);
+  UIntStack.push((const char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPINTEGER4SCALAR(AdtADStack& rStack, unsigned int& rNum)
+inline void AdtADStack::POPINTEGER4SCALAR(unsigned int& nNum)
 {
-  rStack.pop(rNum);
+  UIntStack.pop((char*)&nNum, sizeof(nNum));
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKINTEGER4SCALAR(AdtADStack& rStack, unsigned int& rNum)
+inline void AdtADStack::LOOKINTEGER4SCALAR(unsigned int& nNum)
 {
-  rStack.look(rNum);
+  UIntStack.look((char*)&nNum, sizeof(nNum));
 }
 
 // Not supported at this stage and probably not needed.
 //  //  ----------------------------------------------------------------------------
 //  
-//  inline void PUSHINTEGER8SCALAR(AdtADStack& rStack, long long nNum)
+//  inline void AdtADStack::PUSHINTEGER8SCALAR(long long nNum)
 //  {
-//    rStack.push(nNum);
+//    LongLongStack.push((const char*)&nNum, sizeof(nNum));
 //  }
 //  
 //  //  ----------------------------------------------------------------------------
 //  
-//  inline void POPINTEGER8SCALAR(AdtADStack& rStack, long long& rNum)
+//  inline void AdtADStack::POPINTEGER8SCALAR(long long& nNum)
 //  {
-//    rStack.pop(rNum);
+//    LongLongStack.pop((char*)&nNum, sizeof(nNum));
 //  }
 //  
 //  //  ----------------------------------------------------------------------------
 //  
-//  inline void LOOKINTEGER8SCALAR(AdtADStack& rStack, long long& rNum)
+//  inline void LOOKINTEGER8SCALAR(long long& nNum)
 //  {
-//    rStack.look(rNum);
+//    LongLongStack.look((char*)&nNum, sizeof(nNum));
 //  }
 //  
-//  //  ----------------------------------------------------------------------------
+//  ----------------------------------------------------------------------------
 
-inline void PUSHCONTROL1BSCALAR(AdtADStack& rStack, int nNum)
+inline void AdtADStack::PUSHCONTROL1BSCALAR(int nNum)
 {
-  rStack.push(nNum);
+  BoolStack.PUSHCONTROL1BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPCONTROL1BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::POPCONTROL1BSCALAR(int& nNum)
 {
-  rStack.pop(nNum);
+  BoolStack.POPCONTROL1BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKCONTROL1BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::LOOKCONTROL1BSCALAR(int& nNum)
 {
-  rStack.look(nNum);
+  BoolStack.LOOKCONTROL1BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHCONTROL2BSCALAR(AdtADStack& rStack, int nNum)
+inline void AdtADStack::PUSHCONTROL2BSCALAR(int nNum)
 {
-  rStack.push(nNum);
+  BoolStack.PUSHCONTROL2BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPCONTROL2BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::POPCONTROL2BSCALAR(int& nNum)
 {
-  rStack.pop(nNum);
+  BoolStack.POPCONTROL2BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKCONTROL2BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::LOOKCONTROL2BSCALAR(int& nNum)
 {
-  rStack.look(nNum);
+  BoolStack.LOOKCONTROL2BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHCONTROL3BSCALAR(AdtADStack& rStack, int nNum)
+inline void AdtADStack::PUSHCONTROL3BSCALAR(int nNum)
 {
-  rStack.push(nNum);
+  BoolStack.PUSHCONTROL3BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPCONTROL3BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::POPCONTROL3BSCALAR(int& nNum)
 {
-  rStack.pop(nNum);
+  BoolStack.POPCONTROL3BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKCONTROL3BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::LOOKCONTROL3BSCALAR(int& nNum)
 {
-  rStack.look(nNum);
+  BoolStack.LOOKCONTROL3BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHCONTROL4BSCALAR(AdtADStack& rStack, int nNum)
+inline void AdtADStack::PUSHCONTROL4BSCALAR(int nNum)
 {
-  rStack.push(nNum);
+  BoolStack.PUSHCONTROL4BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPCONTROL4BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::POPCONTROL4BSCALAR(int& nNum)
 {
-  rStack.pop(nNum);
+  BoolStack.POPCONTROL4BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void LOOKCONTROL4BSCALAR(AdtADStack& rStack, int& nNum)
+inline void AdtADStack::LOOKCONTROL4BSCALAR(int& nNum)
 {
-  rStack.look(nNum);
+  BoolStack.LOOKCONTROL4BSCALAR(nNum);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void PUSHARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, const char* pArray, int nSize)
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1F pArray, int nSize)
 {
-  rStack.pushArray(rAllocator, pArray, nSize);
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
 }
 
 //  ----------------------------------------------------------------------------
 
-inline void POPARRAY_allocator(AdtADStack& rStack, const AdtMemAllocator& rAllocator, char* pArray, int nSize)
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1F pArray, int nSize)
 {
-  rStack.popArray(rAllocator, pArray, nSize);
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10F pArray, int nSize)
+{
+  FloatStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10F pArray, int nSize)
+{
+  FloatStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10D pArray, int nSize)
+{
+  DoubleStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPREAL8ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10D pArray, int nSize)
+{
+  DoubleStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10C pArray, int nSize)
+{
+  CharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10C pArray, int nSize)
+{
+  CharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10UC pArray, int nSize)
+{
+  UCharStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER1ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10UC pArray, int nSize)
+{
+  UCharStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10S pArray, int nSize)
+{
+  ShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10S pArray, int nSize)
+{
+  ShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10US pArray, int nSize)
+{
+  UShortStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER2ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10US pArray, int nSize)
+{
+  UShortStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10L pArray, int nSize)
+{
+  LongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10L pArray, int nSize)
+{
+  LongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10I pArray, int nSize)
+{
+  IntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10I pArray, int nSize)
+{
+  IntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10UL pArray, int nSize)
+{
+  ULongStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10UL pArray, int nSize)
+{
+  ULongStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_1UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_1UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_2UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_2UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_3UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_3UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_4UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_4UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_5UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_5UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_6UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_6UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_7UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_7UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_8UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_8UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_9UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_9UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::PUSHINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator, const ARRAY_10UI pArray, int nSize)
+{
+  UIntStack.pushArray(rAllocator, (const char*)pArray, nSize);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtADStack::POPINTEGER4ARRAY_allocator(const AdtMemAllocator& rAllocator,  ARRAY_10UI pArray, int nSize)
+{
+  UIntStack.popArray(rAllocator, (char*)pArray, nSize);
 }
 
 
