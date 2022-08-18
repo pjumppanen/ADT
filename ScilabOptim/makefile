@@ -1,12 +1,12 @@
 include Makeconf
-include $(R_HOME)/etc/x64/Makeconf
+include $(R_HOME)/etc/$(ARCH)/Makeconf
 MY_CFLAGS=$(ALL_CFLAGS) -I $(R_HOME)/include -I ./include
 MY_CXXFLAGS=$(ALL_CXXFLAGS) -Wno-ignored-attributes -I $(R_HOME)/include -I ./include
 MY_FFLAGS=$(ALL_FFLAGS)
 MY_LDFLAGS=$(SHLIB_LDFLAGS) $(LDFLAGS)
 MY_LDLIBS=$(FLIBS) $(BLAS_LIBS)
-OUT = lib/ScilabOptim.dll
-OUTLIB = lib/ScilabOptim.lib
+OUT = lib/$(ARCH)/ScilabOptim$(SHLIB_EXT)
+OUTLIB = lib/$(ARCH)/ScilabOptim.$(STATICLIB_EXT)
 
 ifdef DLLTOOL
 	EXPORT_LIB = $(DLLTOOL) -D $(OUT) -l $(OUTLIB)
