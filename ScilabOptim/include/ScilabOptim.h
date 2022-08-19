@@ -79,23 +79,23 @@ program calling n1qn1.
                  izs, rzs, dzs memories reserved for the simulator (see doc)
 */
 
-typedef void (*simul_n1qn1_t)(const int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
+typedef void (*simul_n1qn1_t)(int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
 
 void F77_NAME(n1qn1)(simul_n1qn1_t simul, 
-                     const int* n, 
+                     int* n, 
                      double* x,
                      double* f,
                      double* g,
                      double* var,
                      double* eps,
-                     const int* mode,
+                     int* mode,
                      int* niter,
                      int* nsim,
-                     const int* iprint,
+                     int* iprint,
                      int* lp,
                      double* zm,
                      int* izs,
-                     double* rzs,
+                     float* rzs,
                      double* dzs);
 
 
@@ -317,21 +317,21 @@ Call list
               transmits to simul and prosca.
 */
 
-typedef void (*simul_n1qn2_t)(const int* indic, const int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
-typedef void (*prosca_t)(const int* n, double* u, double* v, double* ps, int* izs, float* rzs, double* dzs);
+typedef void (*simul_n1qn2_t)(int* indic, int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
+typedef void (*prosca_t)(int* n, double* u, double* v, double* ps, int* izs, float* rzs, double* dzs);
 
 void F77_NAME(n1qn2)(simul_n1qn2_t simul,
                      prosca_t prosca,
-                     const int* n,
+                     int* n,
                      double* x,
                      double* f,
                      double* g,
                      double* dxmin,
                      double* df1,
                      double* epsg,
-                     const int* iprint,
-                     const int* io,
-                     const int* mode,
+                     int* iprint,
+                     int* io,
+                     int* mode,
                      int* niter,
                      int* nsim,
                      double* dz,
@@ -400,23 +400,23 @@ double precision x(1),f,g(1),dxmin,df1,epsg,dz(1),dzs(1)
 external simul,prosca,ctonb,ctcab
 */
 
-typedef void (*ctonb_t)(const int* n, double* depl, double* aux, int* izs, float* rzs, double* dzs);
-typedef void (*ctcab_t)(const int* n, double* aux, double* depl, int* izs, float* rzs, double* dzs);
+typedef void (*ctonb_t)(int* n, double* depl, double* aux, int* izs, float* rzs, double* dzs);
+typedef void (*ctcab_t)(int* n, double* aux, double* depl, int* izs, float* rzs, double* dzs);
 
 void F77_NAME(n1qn3)(simul_n1qn2_t simul,
                      prosca_t prosca,
                      ctonb_t ctonb,
                      ctcab_t ctcab,
-                     const int* n,
+                     int* n,
                      double* x,
                      double* f,
                      double* g,
                      double* dxmin,
                      double* df1,
                      double* epsg,
-                     const int* iprint,
-                     const int* io,
-                     const int* mode,
+                     int* iprint,
+                     int* io,
+                     int* mode,
                      int* niter,
                      int* nsim,
                      double* dz,
@@ -567,12 +567,12 @@ meaning of some internal variables
 void F77_NAME(gcbd)(int* indgc,
                     simul_n1qn2_t simul,
                     char nomf[6],
-                    const int* n,
+                    int* n,
                     double* x,
                     double* f,
                     double* g,
-                    const int* iprint,
-                    const int* io,
+                    int* iprint,
+                    int* io,
                     double* zero,
                     int* napmax,
                     int* itmax,
@@ -637,7 +637,7 @@ uses the following subroutines:
 
 void F77_NAME(n1fc1)(simul_n1qn2_t simul,
                      prosca_t prosca,
-                     const int* n,
+                     int* n,
                      double* xn,
                      double* fn,
                      double* g,
@@ -645,9 +645,9 @@ void F77_NAME(n1fc1)(simul_n1qn2_t simul,
                      double* df1,
                      double* epsf,
                      double* zero,
-                     const int* iprint,
-                     const int* io,
-                     const int* mode,
+                     int* iprint,
+                     int* io,
+                     int* mode,
                      int* iter,
                      int* nsim,
                      int* memax,
@@ -754,12 +754,12 @@ linear search parameters
 
 void F77_NAME(qnbd)(int* indqn,
                     simul_n1qn2_t simul,
-                    const int* n,
+                    int* n,
                     double* x,
                     double* f,
                     double* g,
-                    const int* iprint,
-                    const int* io,
+                    int* iprint,
+                    int* io,
                     double* zero,
                     int* napmax,
                     int* itmax,
@@ -2021,7 +2021,7 @@ burton s. garbow, kenneth e. hillstrom, jorge j. more
 
 */
 
-typedef void (*fcn1_t)(const int* n, double* x, double* fvec, int* flag);
+typedef void (*fcn1_t)(int* n, double* x, double* fvec, int* flag);
 
 void F77_NAME(fdjac1)(fcn1_t fcn,
                       int* n,
@@ -2112,7 +2112,7 @@ burton s. garbow, kenneth e. hillstrom, jorge j. more
 
 */
 
-typedef void (*fcn2_t)(const int* m, const int* n, double* x, double* fvec, int* flag);
+typedef void (*fcn2_t)(int* m, int* n, double* x, double* fvec, int* flag);
 
 void F77_NAME(fdjac2)(fcn2_t fcn,
                       int* m,
