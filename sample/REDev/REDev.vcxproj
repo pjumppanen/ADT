@@ -122,7 +122,7 @@
     </BuildLog>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\src\ADLib;..\..\src\RMath\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src\ADLib;..\..\src\RMath\include;..\..\ScilabOptim\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>RMATH_DLL;MATHLIB_STANDALONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -137,8 +137,8 @@
       </PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\objs\x64\Debug\ADLib.lib;..\..\objs\x64\Debug\ADLibR.lib;R.lib;Rblas.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../src/RMath/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>..\..\objs\x64\Debug\ADLib.lib;..\..\objs\x64\Debug\ADLibR.lib;R.lib;Rblas.lib;ScilabOptimVC.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../src/RMath/lib/x64;../../ScilabOptim/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
@@ -182,7 +182,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\src\ADLib;..\..\src\RMath\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src\ADLib;..\..\src\RMath\include; ..\..\ScilabOptim\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>RMATH_DLL;MATHLIB_STANDALONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -196,8 +196,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\objs\x64\Release\ADLib.lib;..\..\objs\x64\Release\ADLibR.lib;R.lib;Rblas.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../src/RMath/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>..\..\objs\x64\Release\ADLib.lib;..\..\objs\x64\Release\ADLibR.lib;R.lib;Rblas.lib;ScilabOptimVC.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../src/RMath/lib/x64;../../ScilabOptim/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>

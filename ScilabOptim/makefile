@@ -122,3 +122,6 @@ $(OUT): $(objects)
 clean : 
 	rm $(OUTLIB) $(OUT) $(objects)
 
+install : 
+	cp $(OUT) ../objs/$(WIN_TARGET)/Debug/.
+	cp $(OUT) ../objs/$(WIN_TARGET)/Release/.
