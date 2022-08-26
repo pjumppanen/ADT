@@ -2,4 +2,3 @@ R_SHARE_DIR=C:/Users/jum002/Documents/R/R-4.0.5/share
 R_HOME=C:/Users/jum002/Documents/R/R-4.0.5
 ARCH=x64
 STATICLIB_EXT=lib
-WIN_TARGET=x64
