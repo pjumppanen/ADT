@@ -24,14 +24,18 @@ protected:
   ARRAY_1D      pupper /* NR */;
   ARRAY_1I      pnbd /* NR */;
   ARRAY_1D      ReRun /* NR */;
+  ARRAY_1D      GradRun /* NR */;
   ARRAY_1D      ReHat /* NR */;
   ARRAY_1D      Par /* NP */;
+  ARRAY_1D      CheckPar /* NP */;
   ARRAY_1D      Dir /* NR */;
   ARRAY_1D      TempRow/* NR */;
   ARRAY_1D      TempRow2/* NP */;
   ARRAY_2D      Hessian/* NR,NR */;
   ARRAY_2D      Cholesky/* NR,NR */;
   ARRAY_2D      ReParXCovar/* NR,NP */;
+  ARRAY_1D      var /* NR */;
+  ARRAY_1D      zm /* 0 : NR * (NR + 13) / 2 */;
   
   bool          Dirty;
 #include "Dc_array_plans.hpp"
@@ -76,6 +80,7 @@ private:
   static void   hessianRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
   static void   hessianAndCovarRow(void* pContext, int nIdx, int nThreadIdx, adtstring& StdOutString);
 
+  static void   inner_simfn(int* indic, int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
   static double inner_optimfn(int n, double* par, void* context);
   static void   inner_optimgr(int n, double* par, double* gr, void* context);
 

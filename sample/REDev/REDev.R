@@ -14,6 +14,7 @@ if (version$os == "mingw32")
 
     } else
     {
+      dyn.load("../../objs/x64/Debug/ScilabOptim.dll")
       dyn.load("../../objs/x64/Debug/REDev.dll")
     }
   }

@@ -8,12 +8,26 @@
 #include "adtparallel.hpp"
 #include "R_REDevB.hpp"
 #include <R_ext/Applic.h>
+#include "ScilabOptim.h"
 
 
 // ----------------------------------------------------------------------------
 // R_REDevB method implementations
 // ----------------------------------------------------------------------------
 #ifndef AD  
+void R_REDevB::inner_simfn(int* indic, int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs)
+{
+  R_REDevB::SolveContext* Context = (R_REDevB::SolveContext*)izs;
+
+  Context->nFnCalls++;
+  Context->nGradCalls++;
+
+  f[0] = Context->pThis->innerObjective(n[0], x);
+  Context->pThis->innerGradient(n[0], x, g);
+}
+            
+// ----------------------------------------------------------------------------
+
 double R_REDevB::inner_optimfn(int n, double* par, void* pContext)
 {
   R_REDevB::SolveContext* Context = (R_REDevB::SolveContext*)pContext;
@@ -56,20 +70,94 @@ void R_REDevB::solveInner(const ARRAY_1D par/* NP */)
 {
 #ifndef AD  
   int   cn;
+  int   cm;
   bool  bChanged = Dirty;
 
   for (cn = 1 ; cn <= NP ; cn++)
   {
-    bChanged = bChanged || (Par[cn] != par[cn]);
-    Par[cn]  = par[cn];
+    // As Par gets used and set in other parts of the code
+    // it's value isn't a reliable check for whether the random
+    // effects fit has been carried out or not. Thus we have 
+    // a second array, CheckPar, whose only purpose is to cache 
+    // the last fit parameters so we can tell if it needs fitting
+    // or not.
+    bChanged      = bChanged || (CheckPar[cn] != par[cn]);
+    Par[cn]       = par[cn];
+    CheckPar[cn]  = par[cn];
   }
-
-  Dirty = false;
 
   if (bChanged)
   {
+    if (1)
+    {
+      R_REDevB::SolveContext Context;
+
+      Context.nFnCalls   = 0;
+      Context.nGradCalls = 0;
+      Context.pThis      = this;
+
+      for (cn = 1 ; cn <= NR ; cn++)
+      {
+        ReRun[cn]  = ReHat[cn];
+        var[cn]    = 1.0;
+      }
+
+      if (!Dirty)
+      {
+        int cz = 0;
+
+        // Initialise hessian for minimiser based on last result
+        for (cn = 1 ; cn <= NR ; cn++)
+        {
+          for (cm = cn ; cm <= NR ; cm++)
+          {
+            zm[cz] = Hessian[cn][cm];
+
+            cz++;
+          }
+        }
+      }
+
+      double    f       = 0.0;
+      double    eps     = 1.0e-8;
+      int       mode    = Dirty ? 1 : 2;
+      int       niter   = 200;
+      int       nsim    = 200;
+      int       iprint  = 3;
+      int       lp      = 0;
+      int       indic   = 0;
+      int*      izs     = (int*)&Context; // use it as the context pointer
+      float*    rzs     = 0;              // unused
+      double*   dzs     = 0;              // unused
+
+      R_REDevB::inner_simfn(&indic, &NR, ReRun + 1, &f, GradRun + 1, izs, rzs, dzs);
+
+      F77_NAME(n1qn1)(R_REDevB::inner_simfn, 
+                      &NR, 
+                      ReRun + 1,
+                      &f,
+                      GradRun + 1,
+                      var + 1,
+                      &eps,
+                      &mode,
+                      &niter,
+                      &nsim,
+                      &iprint,
+                      &lp,
+                      zm,
+                      izs,
+                      rzs,
+                      dzs);
+
+      for (cn = 1 ; cn <= NR ; cn++)
+      {
+        ReHat[cn] = ReRun[cn];
+      }
+    }
+    else
+    {
     char    msg[256]  = {0};
-    int     trace     = 0; // Don't print minimsation messages
+    int     trace     = 6; // Don't print minimsation messages
     int     nREPORT   = 100000;
     int     mask      = 1;
     double  val       = 0.0;
@@ -89,7 +177,6 @@ void R_REDevB::solveInner(const ARRAY_1D par/* NP */)
     int     fncount   = 0;
     int     grcount   = 0;
     int     status    = 0;
-    int     nRetry    = 2;
     int     maxit     = 1000;
 
     R_REDevB::SolveContext Context;
@@ -138,12 +225,14 @@ void R_REDevB::solveInner(const ARRAY_1D par/* NP */)
     }
 
     Rprintf("Status:%d, value:%f, fn count:%d, gr count:%d\n", status, val, fncount, grcount);
+    }
   }
   else
   {
     Rprintf("No change.\n");
   }
   
+  Dirty = false;
 #endif //AD
 }
 
