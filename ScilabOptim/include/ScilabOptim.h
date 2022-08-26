@@ -79,9 +79,9 @@ program calling n1qn1.
                  izs, rzs, dzs memories reserved for the simulator (see doc)
 */
 
-typedef void (*simul_n1qn1_t)(int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
+typedef void (*simul_t)(int* indic, int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
 
-void F77_NAME(n1qn1)(simul_n1qn1_t simul, 
+void F77_NAME(n1qn1)(simul_t simul, 
                      int* n, 
                      double* x,
                      double* f,
@@ -317,10 +317,9 @@ Call list
               transmits to simul and prosca.
 */
 
-typedef void (*simul_n1qn2_t)(int* indic, int* n, double* x, double* f, double* g, int* izs, float* rzs, double* dzs);
 typedef void (*prosca_t)(int* n, double* u, double* v, double* ps, int* izs, float* rzs, double* dzs);
 
-void F77_NAME(n1qn2)(simul_n1qn2_t simul,
+void F77_NAME(n1qn2)(simul_t simul,
                      prosca_t prosca,
                      int* n,
                      double* x,
@@ -403,7 +402,7 @@ external simul,prosca,ctonb,ctcab
 typedef void (*ctonb_t)(int* n, double* depl, double* aux, int* izs, float* rzs, double* dzs);
 typedef void (*ctcab_t)(int* n, double* aux, double* depl, int* izs, float* rzs, double* dzs);
 
-void F77_NAME(n1qn3)(simul_n1qn2_t simul,
+void F77_NAME(n1qn3)(simul_t simul,
                      prosca_t prosca,
                      ctonb_t ctonb,
                      ctcab_t ctcab,
@@ -565,7 +564,7 @@ meaning of some internal variables
 */
 
 void F77_NAME(gcbd)(int* indgc,
-                    simul_n1qn2_t simul,
+                    simul_t simul,
                     char nomf[6],
                     int* n,
                     double* x,
@@ -635,7 +634,7 @@ uses the following subroutines:
   prosca  (duality product giving the gradient)
 */
 
-void F77_NAME(n1fc1)(simul_n1qn2_t simul,
+void F77_NAME(n1fc1)(simul_t simul,
                      prosca_t prosca,
                      int* n,
                      double* xn,
@@ -753,7 +752,7 @@ linear search parameters
 */
 
 void F77_NAME(qnbd)(int* indqn,
-                    simul_n1qn2_t simul,
+                    simul_t simul,
                     int* n,
                     double* x,
                     double* f,
@@ -1354,7 +1353,7 @@ call list
 
 void F77_NAME(rlbd)(int* indrl,
                     int* n,
-                    simul_n1qn2_t simul,
+                    simul_t simul,
                     double* x,
                     double* binf,
                     double* bsup,
