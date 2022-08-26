@@ -24,7 +24,7 @@ protected:
   /* AD_ALIAS Db=DR_REDevA, D_REDev */
   /* AUTOINIT */
   /* AUTODEC 1 */
-  ARRAY_1D reb2_re /* nr */;
+  ARRAY_1D reb2_re /* NR */;
   ARRAY_2D red3_re /* NR,nbdirsmax */;
   ARRAY_2D reb2_red3_re /* NR,nbdirsmax */;
 
