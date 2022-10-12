@@ -301,6 +301,34 @@ void make_CommandFunction(const char* pString)
 
 //  ----------------------------------------------------------------------------
 
+void make_CommandDiff(const char* pString)
+{
+  MakeSystem.commandDiff(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
+void make_CommandGrad(const char* pString)
+{
+  MakeSystem.commandGrad(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
+void make_CommandMultiDiff(const char* pString)
+{
+  MakeSystem.commandMultiDiff(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
+void make_CommandMultiGrad(const char* pString)
+{
+  MakeSystem.commandMultiGrad(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
 void make_PushString(const char* pString)
 {
   MakeSystem.pushString(pString);
@@ -442,6 +470,22 @@ bool AdtMakeIncremental::open(const char* pBuildCheckFileAndPath)
 void AdtMakeIncremental::close()
 {
   close(true);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtMakeIncremental::checkBool(bool bBoolean)
+{
+  if (bBoolean)
+  {
+    checkText("true");
+  }
+  else
+  {
+    checkText("false");
+  }
+
+  return (Build);
 }
 
 //  ----------------------------------------------------------------------------
@@ -815,7 +859,7 @@ AdtMakeCommandOperation::AdtMakeCommandOperation()
    Vars(),
    OutVars()
 {
-
+  MakeWrapper = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -835,7 +879,7 @@ AdtMakeCommandOperation::AdtMakeCommandOperation(const AdtMakeCommandOperation& 
    Vars(rCopy.Vars),
    OutVars(rCopy.OutVars)
 {
-
+  MakeWrapper = rCopy.MakeWrapper;
 }
 
 //  ----------------------------------------------------------------------------
@@ -849,6 +893,7 @@ AdtMakeCommandOperation::~AdtMakeCommandOperation()
 
 bool AdtMakeCommandOperation::shouldBuild(AdtMakeIncremental& rBuildCheck) const
 {
+  rBuildCheck.checkBool(MakeWrapper);
   rBuildCheck.checkText(FunctionName);
   rBuildCheck.checkText(UserOptions);
   rBuildCheck.checkText(PreCommand);
@@ -859,6 +904,41 @@ bool AdtMakeCommandOperation::shouldBuild(AdtMakeIncremental& rBuildCheck) const
   rBuildCheck.checkList(OutVars);
 
   return (rBuildCheck.build());
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
+                                          AdtFortranExecutableProgram* pWorkingRoot,
+                                          const char* pClassName) const
+{
+  if (makeWrapper()       && 
+      (pClassName   != 0) &&
+      (pAD_Root     != 0) && 
+      (pWorkingRoot != 0))
+  {
+    string                sFunctionName;
+    string                sADFunctionName;
+    string                sWrapperFunctionName;
+    AdtFortranWrapperType nWrapperType;
+
+    // Find AD'ed function and wrapper name
+    qualifiedADFunctionName(sADFunctionName, pClassName);
+    qualifiedFunctionName(sFunctionName, pClassName);
+    wrapperFunctionName(sWrapperFunctionName, nWrapperType, pClassName);
+  
+    // Add wrapper code to pRoot
+    pAD_Root->makeWrapper(pWorkingRoot, 
+                          sWrapperFunctionName,
+                          nWrapperType,
+                          sADFunctionName,
+                          sFunctionName,
+                          pClassName,
+                          VarSuffix,
+                          SubSuffix,
+                          ModuleSuffix,
+                          Vars);
+  }
 }
 
 //  ----------------------------------------------------------------------------
@@ -1330,6 +1410,8 @@ void AdtMakeCommandOperation::reset()
 const string& AdtMakeCommandOperation::qualifiedFunctionName(string& rFunctionName,
                                                              const char* pClassName) const
 {
+  rFunctionName.clear();
+
   if (pClassName != 0)
   {
     rFunctionName += pClassName;
@@ -1339,6 +1421,69 @@ const string& AdtMakeCommandOperation::qualifiedFunctionName(string& rFunctionNa
   rFunctionName += FunctionName;
 
   return (rFunctionName);
+}
+
+//  ----------------------------------------------------------------------------
+
+const string& AdtMakeCommandOperation::qualifiedADFunctionName(string& rFunctionName,
+                                                               const char* pClassName) const
+{
+  qualifiedFunctionName(rFunctionName, pClassName);
+
+  rFunctionName += BaseSubSuffix;
+
+  AdtStringListConstIter Iter;
+
+  for (Iter = Vars.begin() ; Iter != Vars.end() ; ++Iter)
+  {
+    const string& rVar = *Iter;
+
+    rFunctionName += rVar;
+  }
+
+  return (rFunctionName);
+}                                                               
+
+//  ----------------------------------------------------------------------------
+
+const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunctionName,
+                                                           AdtFortranWrapperType& nWrapperType, 
+                                                           const char* pClassName) const
+{
+  rWrapperFunctionName.clear();
+
+  if (pClassName != 0)
+  {
+    rWrapperFunctionName += pClassName;
+    rWrapperFunctionName += "__";
+  }
+
+  if (Mode == "f")
+  {
+    rWrapperFunctionName += "diff";
+    nWrapperType          = ForWrapper_DIFF;
+  }
+  else if (Mode == "mf")
+  {
+    rWrapperFunctionName += "multiDiff";
+    nWrapperType          = ForWrapper_MULTIDIFF;
+  }
+  else if (Mode == "r")
+  {
+    rWrapperFunctionName += "grad";
+    nWrapperType          = ForWrapper_GRAD;
+  }
+  else if (Mode == "mr")
+  {
+    rWrapperFunctionName += "multiGrad";
+    nWrapperType          = ForWrapper_MULTIGRAD;
+  }
+
+  rWrapperFunctionName += SubSuffix;
+  rWrapperFunctionName += "_";
+  rWrapperFunctionName += FunctionName;
+
+  return (rWrapperFunctionName);
 }
 
 //  ----------------------------------------------------------------------------
@@ -2124,6 +2269,9 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                             TestFortranOut.close();
                           }
                         }
+
+                        // make wrapper
+                        rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, ParentClassName);
 
                         // With the parse tree we need to figure out what functions / subroutines are new
                         // (ie. not in the original source) and add it to that source. Similarly,
@@ -3977,6 +4125,42 @@ void AdtMakeSystem::commandMode(const char* pString)
 void AdtMakeSystem::commandFunction(const char* pString)
 {
   CurrentCommandOperation.functionName(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeSystem::commandDiff(const char* pString)
+{
+  CurrentCommandOperation.functionName(pString);
+  CurrentCommandOperation.mode("f");
+  CurrentCommandOperation.makeWrapper(true);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeSystem::commandGrad(const char* pString)
+{
+  CurrentCommandOperation.functionName(pString);
+  CurrentCommandOperation.mode("r");
+  CurrentCommandOperation.makeWrapper(true);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeSystem::commandMultiDiff(const char* pString)
+{
+  CurrentCommandOperation.functionName(pString);
+  CurrentCommandOperation.mode("mf");
+  CurrentCommandOperation.makeWrapper(true);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeSystem::commandMultiGrad(const char* pString)
+{
+  CurrentCommandOperation.functionName(pString);
+  CurrentCommandOperation.mode("mr");
+  CurrentCommandOperation.makeWrapper(true);
 }
 
 //  ----------------------------------------------------------------------------

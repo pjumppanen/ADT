@@ -1077,7 +1077,7 @@ bool AdtFortranSliceLoopVars::initialise(int nIndex,
 //  ----------------------------------------------------------------------------
 //  AdtFortranVariableInfo method implementations
 //  ----------------------------------------------------------------------------
-void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationStmt* pTypeDecl)
+void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationStmt* pTypeDecl, bool bIsArguments)
 {
   if (pTypeDecl != 0)
   {
@@ -1134,6 +1134,11 @@ void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationS
             sStringFile.close();
 
             VariableInfoMap.insert(AdtStringByStringMap::value_type(rVarName, sTypeName));
+
+            if (bIsArguments)
+            {
+              ArgumentList.push_back(rVarName);
+            }
 
             if (pShapeSpecList == 0)
             {
@@ -1208,7 +1213,7 @@ void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationS
 
 //  ----------------------------------------------------------------------------
 
-void AdtFortranVariableInfo::extractTypeDeclarations(const AdtParserPtrByStringMap& rTypeDeclMap)
+void AdtFortranVariableInfo::extractTypeDeclarations(const AdtParserPtrByStringMap& rTypeDeclMap, bool bIsArguments)
 {
   AdtParserPtrByStringMapConstIter  TypeDeclIter;
 
@@ -1220,7 +1225,7 @@ void AdtFortranVariableInfo::extractTypeDeclarations(const AdtParserPtrByStringM
     {
       const AdtFortranTypeDeclarationStmt* pTypeDecl = (const AdtFortranTypeDeclarationStmt*)pObj;
 
-      extractTypeDefInfo(pTypeDecl);
+      extractTypeDefInfo(pTypeDecl, bIsArguments);
     }
     else
     {
@@ -1238,7 +1243,7 @@ void AdtFortranVariableInfo::extractTypeDeclarations(const AdtParserPtrByStringM
 
 //  ----------------------------------------------------------------------------
 
-void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj)
+void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj, const char* pModuleSuffix)
 {
   VariableInfoMap.clear();
 
@@ -1296,16 +1301,19 @@ void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj)
     }
 
     //Use the declarations object to enumerate the local variable definitions
-    if (pDeclarations != 0)
-    {
-      extractTypeDeclarations(pDeclarations->typeDeclarationMap());
-      extractTypeDeclarations(pDeclarations->parameterTypeDeclarationMap());
-    }
+    initialise(pDeclarations, false);
   }
 
   if (pRoot != 0)
   {
-    const AdtParser* pModuleObj = pRoot->findObject("AdtFortranModule", "COMMON");
+    string  sModuleName("COMMON");
+
+    if (pModuleSuffix != 0)
+    {
+      sModuleName += pModuleSuffix;
+    }
+
+    const AdtParser* pModuleObj = pRoot->findObject("AdtFortranModule", sModuleName);
 
     if (pModuleObj != 0)
     {
@@ -1319,7 +1327,7 @@ void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj)
       {
         const AdtFortranTypeDeclarationStmt*  pTypeDecl = (const AdtFortranTypeDeclarationStmt*)(const AdtParser*)*DeclIter;
 
-        extractTypeDefInfo(pTypeDecl);
+        extractTypeDefInfo(pTypeDecl, false);
       }
     }
   }
@@ -1327,37 +1335,44 @@ void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj)
 
 //  ----------------------------------------------------------------------------
 
-void AdtFortranVariableInfo::initialise(const AdtFortranDeclarations* pDeclarations)
+void AdtFortranVariableInfo::initialise(const AdtFortranDeclarations* pDeclarations, bool bReset)
 {
-  VariableInfoMap.clear();
+  if (bReset)
+  {
+    VariableInfoMap.clear();
+    ArgumentList.clear();
+  }
 
   if (pDeclarations != 0)
   {
-    extractTypeDeclarations(pDeclarations->typeDeclarationMap());
-    extractTypeDeclarations(pDeclarations->parameterTypeDeclarationMap());
+    extractTypeDeclarations(pDeclarations->typeDeclarationMap(), false);
+    extractTypeDeclarations(pDeclarations->parameterTypeDeclarationMap(), true);
   }
 }
 
 //  ----------------------------------------------------------------------------
 
-AdtFortranVariableInfo::AdtFortranVariableInfo(AdtParser* pCodeObj)
- : VariableInfoMap()
+AdtFortranVariableInfo::AdtFortranVariableInfo(AdtParser* pCodeObj, const char* pModuleSuffix)
+ : VariableInfoMap(),
+   ArgumentList()
 {
-  initialise(pCodeObj);
+  initialise(pCodeObj, pModuleSuffix);
 }
 
 //  ----------------------------------------------------------------------------
 
 AdtFortranVariableInfo::AdtFortranVariableInfo(const AdtFortranDeclarations* pDeclarations)
- : VariableInfoMap()
+ : VariableInfoMap(),
+   ArgumentList()
 {
-  initialise(pDeclarations);
+  initialise(pDeclarations, true);
 }
 
 //  ----------------------------------------------------------------------------
 
 AdtFortranVariableInfo::AdtFortranVariableInfo(const AdtFortranVariableInfo& rCopy)
- : VariableInfoMap(rCopy.VariableInfoMap)
+ : VariableInfoMap(rCopy.VariableInfoMap),
+   ArgumentList(rCopy.ArgumentList)
 {
 
 }
@@ -1480,6 +1495,58 @@ int AdtFortranVariableInfo::numberOfDimensions(const char* pVarName) const
   }
 
   return (nNumDims);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName, bool bWithIntent, string& rDeclaration) const
+{
+  string sType;
+  bool   bFound = false;
+
+  if (variableType(pVarName, sType))
+  {
+    int nDim = numberOfDimensions(pVarName);
+
+    bFound = true;
+
+    rDeclaration += sType;
+
+    if (bWithIntent)
+    {
+      rDeclaration += ", INTENT(";
+      rDeclaration += ")";
+
+    }
+
+    rDeclaration += " :: ";
+    rDeclaration += pVarName;
+    
+    if (nDim > 0)
+    {
+      rDeclaration += "(";
+
+      for (int cn = 0 ; cn < nDim ; cn++)
+      {
+        string sLowerDim;
+        string sUpperDim;
+
+        if (cn > 0)
+        {
+          rDeclaration += ",";
+        }
+
+        lowerDimension(pVarName, cn, sLowerDim);
+        upperDimension(pVarName, cn, sUpperDim);
+
+        rDeclaration += sLowerDim + ":" + sUpperDim;
+      }
+
+      rDeclaration += ")";
+    }
+  }
+
+  return (bFound);
 }
 
 //  ----------------------------------------------------------------------------
@@ -3911,6 +3978,173 @@ void AdtFortranExecutableProgram::createLocalVar(const char* pVarName,
     }
   }
 }
+
+//  ----------------------------------------------------------------------------
+
+AdtParser* AdtFortranExecutableProgram::findFunctionOrSubroutine(const char* pFunctionName, bool& bIsFunction) const
+{
+  AdtParser*  pFuncOrSubSubprogram = findObject("AdtFortranFunctionSubprogram",
+                                                pFunctionName,
+                                                false);
+
+  bIsFunction = true;
+
+  if (pFuncOrSubSubprogram == 0)
+  {
+    pFuncOrSubSubprogram = findObject("AdtFortranSubroutineSubprogram",
+                                      pFunctionName,
+                                      false);
+
+    bIsFunction = false;                                                                        
+  }
+
+  return (pFuncOrSubSubprogram);
+}
+
+//  ----------------------------------------------------------------------------
+
+bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWorkingRoot,
+                                              const char* pWrapperFunctionName,
+                                              AdtFortranWrapperType nWrapperType,
+                                              const char* pADFunctionName,
+                                              const char* pFunctionName,
+                                              const char* pClassName,
+                                              const char* pVarSuffix,
+                                              const char* pSubSuffix,
+                                              const char* pModuleSuffix,
+                                              const AdtStringList& Vars)
+{
+  bool  bMade = false;
+
+  if ((pWorkingRoot         != 0) &&
+      (pWrapperFunctionName != 0) && 
+      (pADFunctionName      != 0) && 
+      (pFunctionName        != 0) && 
+      (pClassName           != 0) && 
+      (pVarSuffix           != 0) && 
+      (pSubSuffix           != 0) &&
+      (pModuleSuffix        != 0))
+  {
+    string  sModuleName("COMMON");
+
+    sModuleName += pModuleSuffix;
+
+    AdtFortranModule* pModule = (AdtFortranModule*)findObject("AdtFortranModule",
+                                                              sModuleName,
+                                                              false);
+
+    if (pModule != 0)
+    {
+      bool        bIsFunction;
+      AdtParser*  pFuncOrSubSubprogram    = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
+      AdtParser*  pADFuncOrSubSubprogram  = findFunctionOrSubroutine(pADFunctionName, bIsFunction);
+
+      if ((pFuncOrSubSubprogram   != 0) && 
+          (pADFuncOrSubSubprogram != 0))
+      {
+        AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, pModuleSuffix);
+        AdtFortranVariableInfo  ADVariableInfo(pADFuncOrSubSubprogram, pModuleSuffix);
+        const AdtStringList&    rArgList    = VariableInfo.argumentList();
+        const AdtStringList&    rADArgList  = ADVariableInfo.argumentList();
+        AdtStringListConstIter  Iter;
+
+        // Found sub-routine or function. Now need to build code string for a new wrapper function or subroutine
+        // with appropriately named arguments and add appropriate variable definitions to the module for 
+        // arrays/variables that we need to add to COMMON. Then use the builder methods to create an object 
+        // representation of that new code and splice the needed additions into the parse tree. That is add
+        // one new function/subroutine and however many variables needed to COMMON.
+
+        // Begin FUNCTION / SUBROUTINE
+        AdtFile     FortranOut(true);
+        AdtFortran  FortranContext;
+        AdtParser*  pRoot       = 0;
+        AdtParser*  pCodeObject = 0;
+        bool        bFirst      = true;
+        const char* sType       = bIsFunction ? "FUNCTION" : "SUBROUTINE";
+        string      sCode;
+        string      sDeclarations;
+
+        FortranOut.open(sCode);
+
+        FortranOut.write(sType);
+        FortranOut.write(" ");
+        FortranOut.write(pWrapperFunctionName);
+        FortranOut.write("(");
+
+        // Do argument list
+        for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
+        {
+          const string rArg = *Iter;
+
+          if (bFirst)
+          {
+            bFirst = false;
+          }
+          else
+          {
+            FortranOut.write(", ");
+          }
+
+          FortranOut.write(rArg);
+        }
+
+        FortranOut.write(")");
+        FortranOut.incrementIndent();
+        FortranOut.newline();
+
+        // Do arg declarations
+        for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
+        {
+          string        sDeclaration;
+          const string  rArg = *Iter;
+
+//          VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
+          VariableInfo.buildVariableDeclaration(rArg, false, sDeclaration);
+          FortranOut.write(sDeclaration);
+          FortranOut.newline();
+        }
+
+        // Do Use commands
+        FortranOut.write("USE DIFFSIZES");
+        FortranOut.newline();
+        FortranOut.write("USE ");
+        FortranOut.write(sModuleName);
+        FortranOut.newline();
+
+        // Do local type declarations
+
+        // Initilise vars
+
+        // Call FUNCTION / SUBROUTINE
+
+        // Return function result
+
+        // End FUNCTION / SUBROUTINE
+        FortranOut.decrementIndent();
+        FortranOut.newline();
+        FortranOut.write("END ");
+        FortranOut.write(sType);
+        FortranOut.write(" ");
+        FortranOut.write(pWrapperFunctionName);
+        FortranOut.newline();
+        FortranOut.close();
+
+        bool bParsed = FortranContext.parseString(pRoot, sCode);
+
+        pCodeObject = (AdtFortranBase*)pRoot;
+
+        if (bParsed && (pCodeObject != 0))
+        {
+          pWorkingRoot->insertAfter(pFuncOrSubSubprogram->parent(), pCodeObject);
+        }
+
+        UtlReleaseReference(pCodeObject);
+      }
+    }
+  }
+
+  return (bMade);
+}                                              
 
 //  ----------------------------------------------------------------------------
 

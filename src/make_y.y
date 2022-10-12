@@ -15,29 +15,36 @@
  * Typical syntax:
  *
  *   AD BEGIN
- *     [SWITCHES: switch1,switch2,…,switchN;] //Optional
- *     [BLACKBOX: File1,File2,…,FileN;] // Optional
- *     PATHS: Path1,Path2,…,PathN;
- *     SOURCE FILES: File1,File2,…,FileN;
+ *     [SWITCHES: switch1,switch2,...,switchN;] //Optional
+ *     [BLACKBOX: File1,File2,...,FileN;] // Optional
+ *     PATHS: Path1,Path2,...,PathN;
+ *     SOURCE FILES: File1,File2,...,FileN;
  *     WORKING DIRECTORY: Path;
  *     [INCLUDE DIRECTORY: Path;] //Optional
  *     CPP OPTIONS FILE: FileBlah2;
  *     PASCAL OPTIONS FILE: FileBlah2;
- *     FORTRAN INCLUDE FILES: File1,File2,…,FileN;
+ *     FORTRAN INCLUDE FILES: File1,File2,...,FileN;
  *     CLASS NewClassNameA (ClassNameA) SOURCE FILE: File1 OUTPUT FILE: File2
  *     BEGIN
- *       [BOUNDS CHECK fn1, fn2,…,fnN;] //Optional
+ *       [BOUNDS CHECK fn1, fn2,...,fnN;] //Optional
  *       FUNCTION=Name1 VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes' PRE='command to run before tapenade' POST='command to run after tapenade';
  *       FUNCTION=Name2 VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes';
  *   	   .
  *   	   .
  *   	   .
  *       FUNCTION=NameN VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *   	   .
+ *   	   .
+ *   	   .
+ *       DIFF=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *       GRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *       MULTIDIFF=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *       MULTIGRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
  *     END
  *
  *     CLASS NewClassNameB (ClassNameB) SOURCE FILE: File1 OUTPUT FILE: File2
  *     BEGIN
- *       [BOUNDS CHECK fn1, fn2,…,fnN;] //Optional
+ *       [BOUNDS CHECK fn1, fn2,...,fnN;] //Optional
  *       FUNCTION=Name1 VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes';
  *       FUNCTION=Name2 VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes';
  *   	   .
@@ -75,7 +82,7 @@
 %token M_AD M_BEGIN M_BOUNDS M_CHECK M_END M_SOURCE M_OUTPUT M_FILE M_FILES
 %token M_WORKING M_DIRECTORY M_FUNCTION M_VAR M_OUTVAR M_MODE M_USER M_PRAGMAS
 %token M_PATHS M_CLASS M_OPTIONS M_PASCAL M_CPP M_FORTRAN M_INCLUDE M_SWITCHES
-%token M_BLACKBOX M_PRE M_POST
+%token M_BLACKBOX M_PRE M_POST M_DIFF M_GRAD M_MULTIDIFF M_MULTIGRAD
 
 /* make special character tokens */
 %token M_COMMA M_SEMICOLON M_COLON M_EQUALS M_LBRACKET M_RBRACKET
@@ -269,6 +276,10 @@ AutoDiffCommandOpList : AutoDiffCommandOp
 ;
 
 AutoDiffCommandOp : AutoDiffCommandFunctionOp
+                  | AutoDiffCommandDiffOp
+                  | AutoDiffCommandGradOp
+                  | AutoDiffCommandMultiDiffOp
+                  | AutoDiffCommandMultiGradOp
                   | AutoDiffCommandVarOp
                   | AutoDiffCommandOutVarOp
                   | AutoDiffCommandModeOp
@@ -281,6 +292,30 @@ AutoDiffCommandOp : AutoDiffCommandFunctionOp
 AutoDiffCommandFunctionOp : M_FUNCTION M_EQUALS M_IDENT
 {
   make_CommandFunction($3.sValue);
+}
+;
+
+AutoDiffCommandDiffOp : M_DIFF M_EQUALS M_IDENT
+{
+  make_CommandDiff($3.sValue);
+}
+;
+
+AutoDiffCommandGradOp : M_GRAD M_EQUALS M_IDENT
+{
+  make_CommandGrad($3.sValue);
+}
+;
+
+AutoDiffCommandMultiDiffOp : M_MULTIDIFF M_EQUALS M_IDENT
+{
+  make_CommandMultiDiff($3.sValue);
+}
+;
+
+AutoDiffCommandMultiGradOp : M_MULTIGRAD M_EQUALS M_IDENT
+{
+  make_CommandMultiGrad($3.sValue);
 }
 ;
 

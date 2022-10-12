@@ -87,6 +87,10 @@ C_FUNCTION void         make_CommandPost(const char* pString);
 C_FUNCTION void         make_CommandPragmas(const char* pString);
 C_FUNCTION void         make_CommandMode(const char* pString);
 C_FUNCTION void         make_CommandFunction(const char* pString);
+C_FUNCTION void         make_CommandDiff(const char* pString);
+C_FUNCTION void         make_CommandGrad(const char* pString);
+C_FUNCTION void         make_CommandMultiDiff(const char* pString);
+C_FUNCTION void         make_CommandMultiGrad(const char* pString);
 C_FUNCTION void         make_CommandBoundsCheckOpen();
 C_FUNCTION void         make_CommandBoundsCheckClose();
 
@@ -175,6 +179,7 @@ public:
   bool              open(const char* pBuildCheckFileAndPath);
   void              close();
 
+  bool              checkBool(bool bBoolean);
   bool              checkText(const char* pText);
   bool              checkList(const AdtStringList& rList);
   bool              checkMap(const AdtIntByStringMap& rMap);
@@ -226,6 +231,7 @@ private:
   mutable string  CopySubSuffix;
   AdtStringList   Vars;
   AdtStringList   OutVars;
+  bool            MakeWrapper;
 
 protected:
   void            executeCommandLine(const AdtMakeCommand& rParent,
@@ -241,7 +247,13 @@ public:
   void            reset();
 
   bool            isNull() const;
+  bool            makeWrapper() const;
   bool            shouldBuild(AdtMakeIncremental& rBuildCheck) const;
+
+  void            makeWrapper(bool bMakeWrapper);
+  void            makeWrapper(AdtFortranExecutableProgram* pAD_Root,
+                              AdtFortranExecutableProgram* pWorkingRoot,
+                              const char* pClassName) const;
 
   void            functionName(const char* pFunctionName);
   void            userOptions(const char* pUserOptions);
@@ -267,6 +279,13 @@ public:
   const string&   qualifiedFunctionName(string& rFunctionName,
                                         const char* pClassName) const;
 
+  const string&   qualifiedADFunctionName(string& rFunctionName,
+                                          const char* pClassName) const;
+
+  const string&   wrapperFunctionName(string& rWrapperFunctionName,
+                                      AdtFortranWrapperType& nWrapperType, 
+                                      const char* pClassName = 0) const;
+
   const string&   functionName() const;
   const string&   userOptions() const;
   const string&   preCommand() const;
@@ -286,6 +305,20 @@ public:
 inline bool AdtMakeCommandOperation::isNull() const
 {
   return (FunctionName.length() == 0);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtMakeCommandOperation::makeWrapper() const
+{
+  return (MakeWrapper);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline void AdtMakeCommandOperation::makeWrapper(bool bMakeWrapper)
+{
+  MakeWrapper = bMakeWrapper;
 }
 
 //  ----------------------------------------------------------------------------
@@ -910,7 +943,11 @@ public:
   static void                   commandPragmas(const char* pString);
   static void                   commandMode(const char* pString);
   static void                   commandFunction(const char* pString);
-
+  static void                   commandDiff(const char* pString);
+  static void                   commandGrad(const char* pString);
+  static void                   commandMultiDiff(const char* pString);
+  static void                   commandMultiGrad(const char* pString);
+  
   static void                   pushString(const char* pString);
 
   static void                   addInclude(const char* pFileName);

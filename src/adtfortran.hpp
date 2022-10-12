@@ -335,6 +335,16 @@ enum AdtFortranIntent
   ForIntent_IN_OUT  = 3,
 };
 
+//  ----------------------------------------------------------------------------
+
+enum AdtFortranWrapperType
+{
+  ForWrapper_DIFF       = 0,
+  ForWrapper_GRAD       = 1,
+  ForWrapper_MULTIDIFF  = 2,
+  ForWrapper_MULTIGRAD  = 3,
+};
+
 
 //  ----------------------------------------------------------------------------
 //  class AdtFortranVariableInfo
@@ -347,15 +357,16 @@ class AdtFortranVariableInfo
 {
 private:
   AdtStringByStringMap    VariableInfoMap;
+  AdtStringList           ArgumentList;
 
 private:
-  void                    extractTypeDefInfo(const AdtFortranTypeDeclarationStmt* pTypeDecl);
-  void                    extractTypeDeclarations(const AdtParserPtrByStringMap& rTypeDeclMap);
-  void                    initialise(AdtParser* pCodeObj);
-  void                    initialise(const AdtFortranDeclarations* pDeclarations);
+  void                    extractTypeDefInfo(const AdtFortranTypeDeclarationStmt* pTypeDecl, bool bIsArguments);
+  void                    extractTypeDeclarations(const AdtParserPtrByStringMap& rTypeDeclMap, bool bIsArguments);
+  void                    initialise(AdtParser* pCodeObj, const char* pModuleSuffix = 0);
+  void                    initialise(const AdtFortranDeclarations* pDeclarations, bool bReset);
 
 public:
-  AdtFortranVariableInfo(AdtParser* pCodeObj = 0);
+  AdtFortranVariableInfo(AdtParser* pCodeObj = 0, const char* pModuleSuffix = 0);
   AdtFortranVariableInfo(const AdtFortranDeclarations* pDeclarations);
   AdtFortranVariableInfo(const AdtFortranVariableInfo& rCopy);
   virtual ~AdtFortranVariableInfo();
@@ -365,8 +376,27 @@ public:
   bool                    lowerDimension(const char* pVarName, int nDimension, string& rRetDim) const;
   bool                    upperDimension(const char* pVarName, int nDimension, string& rRetDim) const;
   int                     numberOfDimensions(const char* pVarName) const;
+  bool                    buildVariableDeclaration(const char* pVarName, bool bWithIntent, string& rDeclaration) const;
+  bool                    hasArgumentList() const;
+  const AdtStringList&    argumentList() const;
   void                    dump() const;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtFortranVariableInfo::hasArgumentList() const
+{
+  bool bHasArgumentList = (ArgumentList.size() > 0);
+
+  return (bHasArgumentList);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline const AdtStringList& AdtFortranVariableInfo::argumentList() const
+{
+  return (ArgumentList);
+}  
 
 
 //  ----------------------------------------------------------------------------
@@ -814,6 +844,19 @@ public:
   virtual ~AdtFortranExecutableProgram();
 
   void                          initialise();
+
+  AdtParser*                    findFunctionOrSubroutine(const char* pFunctionName, bool& bIsFunction) const;
+
+  bool                          makeWrapper(AdtFortranExecutableProgram* pWorkingRoot, 
+                                            const char* pWrapperFunctionName,
+                                            AdtFortranWrapperType nWrapperType,
+                                            const char* pADFunctionName,
+                                            const char* pFunctionName,
+                                            const char* pClassName,
+                                            const char* pVarSuffix,
+                                            const char* pSubSuffix,
+                                            const char* pModuleSuffix,
+                                            const AdtStringList& Vars);
 
   static AdtFortranBase*        expressionBuild(const char* pCodeString,
                                                 bool bIncludeConditionalContext);
