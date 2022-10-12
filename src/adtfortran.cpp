@@ -1088,6 +1088,7 @@ void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationS
     if ((pTypeSpec != 0) && (pEntityDeclList != 0))
     {
       const AdtFortranShapeSpecList*  pGlobalShapeSpecList = 0;
+      string                          sIntent;
 
       if (pAttrSpecSeq != 0)
       {
@@ -1101,6 +1102,16 @@ void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationS
 
           if (pAttrSpec != 0)
           {
+            if (bIsArguments)
+            {
+              const AdtFortranIntentSpec* pIntentSpec = (const AdtFortranIntentSpec*)pAttrSpec->findDescendant("IntentSpec");
+
+              if (pIntentSpec != 0)
+              {
+                pIntentSpec->intent(sIntent);
+              }
+            }
+
             pGlobalShapeSpecList = (const AdtFortranShapeSpecList*)pAttrSpec->findDescendant("ShapeSpecList");
 
             if ((pGlobalShapeSpecList != 0) && (pGlobalShapeSpecList->listSize() > 0))
@@ -1138,6 +1149,11 @@ void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationS
             if (bIsArguments)
             {
               ArgumentList.push_back(rVarName);
+
+              if (sIntent.length() > 0)
+              {
+                VariableInfoMap.insert(AdtStringByStringMap::value_type(rVarName + "*", sIntent));
+              }
             }
 
             if (pShapeSpecList == 0)
@@ -1474,6 +1490,32 @@ bool AdtFortranVariableInfo::upperDimension(const char* pVarName, int nDimension
 
 //  ----------------------------------------------------------------------------
 
+bool AdtFortranVariableInfo::intent(const char* pVarName, string& rRetIntent) const
+{
+  bool  bDone = false;
+
+  rRetIntent.clear();
+
+  if (pVarName != 0)
+  {
+    string  sKeyName(pVarName);
+
+    sKeyName += "*";
+
+    AdtStringByStringMapConstIter Iter = VariableInfoMap.find(sKeyName);
+
+    if (Iter != VariableInfoMap.end())
+    {
+      rRetIntent = (*Iter).second;
+      bDone      = true;
+    }
+  }
+
+  return (bDone);
+}
+
+//  ----------------------------------------------------------------------------
+
 int AdtFortranVariableInfo::numberOfDimensions(const char* pVarName) const
 {
   int nNumDims = 0;
@@ -1506,17 +1548,18 @@ bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName, bool
 
   if (variableType(pVarName, sType))
   {
-    int nDim = numberOfDimensions(pVarName);
+    string  sIntent;
+    int     nDim = numberOfDimensions(pVarName);
 
     bFound = true;
 
     rDeclaration += sType;
 
-    if (bWithIntent)
+    if (bWithIntent && intent(pVarName, sIntent))
     {
       rDeclaration += ", INTENT(";
+      rDeclaration += sIntent;
       rDeclaration += ")";
-
     }
 
     rDeclaration += " :: ";
@@ -4025,12 +4068,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       (pSubSuffix           != 0) &&
       (pModuleSuffix        != 0))
   {
-    string  sModuleName("COMMON");
+    string  sDiffModuleName("COMMON");
 
-    sModuleName += pModuleSuffix;
+    sDiffModuleName += pModuleSuffix;
 
     AdtFortranModule* pModule = (AdtFortranModule*)findObject("AdtFortranModule",
-                                                              sModuleName,
+                                                              sDiffModuleName,
                                                               false);
 
     if (pModule != 0)
@@ -4098,8 +4141,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           string        sDeclaration;
           const string  rArg = *Iter;
 
-//          VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
-          VariableInfo.buildVariableDeclaration(rArg, false, sDeclaration);
+          VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
           FortranOut.write(sDeclaration);
           FortranOut.newline();
         }
@@ -4107,8 +4149,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         // Do Use commands
         FortranOut.write("USE DIFFSIZES");
         FortranOut.newline();
-        FortranOut.write("USE ");
-        FortranOut.write(sModuleName);
+        FortranOut.write("USE COMMON");
         FortranOut.newline();
 
         // Do local type declarations
@@ -20852,6 +20893,41 @@ AdtFortranIntentSpec::AdtFortranIntentSpec(const AdtFortranIntentSpec& rCopy)
 AdtFortranIntentSpec::~AdtFortranIntentSpec()
 {
 
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtFortranIntentSpec::intent(string& rIntent) const
+{
+  rIntent.clear();
+
+  switch (Intent)
+  {
+    case ForIntent_IN:
+    {
+      rIntent = "IN";
+      break;
+    }
+
+    case ForIntent_OUT:
+    {
+      rIntent = "OUT";
+      break;
+    }
+    
+    case ForIntent_INOUT:
+    default:
+    {
+      rIntent = "INOUT";
+      break;
+    }
+    
+    case ForIntent_IN_OUT:
+    {
+      rIntent = "IN OUT";
+      break;
+    }
+  }
 }
 
 //  ----------------------------------------------------------------------------

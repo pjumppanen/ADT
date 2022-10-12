@@ -375,6 +375,7 @@ public:
   bool                    variableType(const char* pVarName, string& rRetType) const;
   bool                    lowerDimension(const char* pVarName, int nDimension, string& rRetDim) const;
   bool                    upperDimension(const char* pVarName, int nDimension, string& rRetDim) const;
+  bool                    intent(const char* pVarName, string& rRetIntent) const;
   int                     numberOfDimensions(const char* pVarName) const;
   bool                    buildVariableDeclaration(const char* pVarName, bool bWithIntent, string& rDeclaration) const;
   bool                    hasArgumentList() const;
@@ -3499,6 +3500,7 @@ public:
   virtual ~AdtFortranIntentSpec();
 
   AdtFortranIntent               intent() const;
+  void                           intent(string& rIntent) const;
 
   virtual AdtFile&               writeCPP(AdtFile& pOutFile, int nMode = 0) const;
   virtual AdtFile&               writeDelphi(AdtFile& pOutFile, int nMode = 0) const;
