@@ -4125,6 +4125,8 @@ void AdtMakeSystem::commandMode(const char* pString)
 void AdtMakeSystem::commandFunction(const char* pString)
 {
   CurrentCommandOperation.functionName(pString);
+  CurrentCommandOperation.makeWrapper(false);
+  CurrentCommandOperation.mode("f");
 }
 
 //  ----------------------------------------------------------------------------

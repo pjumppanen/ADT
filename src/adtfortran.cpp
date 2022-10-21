@@ -4079,6 +4079,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     if (pModule != 0)
     {
       bool        bIsFunction;
+      bool        bSupported              = true;
       AdtParser*  pFuncOrSubSubprogram    = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
       AdtParser*  pADFuncOrSubSubprogram  = findFunctionOrSubroutine(pADFunctionName, bIsFunction);
 
@@ -4098,88 +4099,268 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         // one new function/subroutine and however many variables needed to COMMON.
 
         // Begin FUNCTION / SUBROUTINE
-        AdtFile     FortranOut(true);
-        AdtFortran  FortranContext;
-        AdtParser*  pRoot       = 0;
-        AdtParser*  pCodeObject = 0;
-        bool        bFirst      = true;
-        const char* sType       = bIsFunction ? "FUNCTION" : "SUBROUTINE";
-        string      sCode;
-        string      sDeclarations;
+        AdtFile       FortranOutFunction(true);
+        AdtFile       FortranOutModule(true);
+        AdtFortran    FortranContext;
+        AdtParser*    pRoot       = 0;
+        AdtParser*    pCodeObject = 0;
+        bool          bFirst      = true;
+        const char*   sType       = bIsFunction ? "FUNCTION" : "SUBROUTINE";
+        string        sCodeFunction;
+        string        sCodeBody;
+        string        sCodeModule;
+        string        sDeclarations;
+        string        sLastArg;
 
-        FortranOut.open(sCode);
+        sDeclarations = "INTEGER(4) :: cn\n";
 
-        FortranOut.write(sType);
-        FortranOut.write(" ");
-        FortranOut.write(pWrapperFunctionName);
-        FortranOut.write("(");
+        if (bIsFunction)
+        {
+          sDeclarations += "REAL(8) :: ";
+          sDeclarations += pFunctionName;
+          sDeclarations += "\n";
+        }
+
+        FortranOutModule.open(sCodeModule);
+
+        FortranOutModule.write("MODULE COMMON");
+        FortranOutModule.incrementIndent();
+        FortranOutModule.newline();
+
+        FortranOutFunction.open(sCodeFunction);
+
+        FortranOutFunction.write(sType);
+        FortranOutFunction.write(" ");
+        FortranOutFunction.write(pWrapperFunctionName);
+        FortranOutFunction.write("(");
 
         // Do argument list
-        for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
+        for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
         {
-          const string rArg = *Iter;
+          string       sDeclaration;
+          const string rArg       = *Iter;
+          bool         bNew       = !VariableInfo.hasVariable(rArg);
+          bool         bWriteArg  = true;
 
-          if (bFirst)
+          if (bNew)
           {
+            // Add alternate variables.
+            // For DIFF replace direction vector with direction scalar, add direction vector 
+            // and initialise it in the code according to directon scalar.
+            // For GRAD remove chaining vector and add vector to common and initialised to zero in code.
+            if (rArg.eq(pFunctionName))
+            {
+              // The original function value from diff of a function which we can discard
+              ADVariableInfo.buildVariableDeclaration(rArg, false, sDeclaration);
+
+              bWriteArg = false;
+            }
+            else if (rArg.eq(pADFunctionName))
+            {
+              // The gradient return value from grad of a function which we must keep and return
+            }
+            else
+            {
+              // Other added variables
+              string sIntent;
+              ADVariableInfo.buildVariableDeclaration(rArg, false, sDeclaration);
+              ADVariableInfo.intent(rArg, sIntent);
+
+              if (ADVariableInfo.numberOfDimensions(rArg) > 1)
+              {
+                ::printf("WARNING: Differentiation with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
+
+                bSupported = false;
+              }
+
+              string sLowerDim;
+              string sUpperDim;
+              bool   bIsOut = sIntent.eq("OUT");
+
+              ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
+              ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
+
+              FortranOutModule.write(sDeclaration);
+              FortranOutModule.newline();
+
+              switch (nWrapperType)
+              {
+                case ForWrapper_DIFF:
+                {
+                  string  sNewArg;
+                  string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
+
+                  sNewArg = sLastArg + "_dir";
+
+                  FortranOutFunction.write(", ");
+                  FortranOutFunction.write(sNewArg);
+
+                  sNewDeclaration += sNewArg;
+
+                  sDeclarations += sNewDeclaration;
+                  sDeclarations += "\n";
+
+                  sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                  sCodeBody += rArg + "(cn) = 0\n";
+                  sCodeBody += "ENDDO\n\n";
+                  sCodeBody += rArg + "(" + sNewArg + ") = 1\n\n";
+                  break;
+                }
+
+                case ForWrapper_MULTIDIFF:
+                {
+                  break;
+                }
+
+                case ForWrapper_GRAD:
+                {
+                  break;
+                }
+
+                case ForWrapper_MULTIGRAD:
+                {
+                  break;
+                }
+
+                default:
+                {
+                  FAIL();
+                  break;
+                }
+              }
+
+              bWriteArg = false;
+            }
+          }
+
+          if (bWriteArg)
+          {
+            if (!bFirst)
+            {
+              FortranOutFunction.write(", ");
+            }
+
+            ADVariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
+
+            sDeclarations += sDeclaration;
+            sDeclarations += "\n";
+
+            FortranOutFunction.write(rArg);
+
+            sLastArg = rArg;
+
             bFirst = false;
           }
-          else
-          {
-            FortranOut.write(", ");
-          }
-
-          FortranOut.write(rArg);
         }
 
-        FortranOut.write(")");
-        FortranOut.incrementIndent();
-        FortranOut.newline();
+        FortranOutFunction.write(")");
+        FortranOutFunction.incrementIndent();
+        FortranOutFunction.newline();
 
         // Do arg declarations
-        for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
-        {
-          string        sDeclaration;
-          const string  rArg = *Iter;
-
-          VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
-          FortranOut.write(sDeclaration);
-          FortranOut.newline();
-        }
+        FortranOutFunction.writeLines(sDeclarations);
 
         // Do Use commands
-        FortranOut.write("USE DIFFSIZES");
-        FortranOut.newline();
-        FortranOut.write("USE COMMON");
-        FortranOut.newline();
+        FortranOutFunction.write("USE DIFFSIZES");
+        FortranOutFunction.newline();
+        FortranOutFunction.write("USE COMMON");
+        FortranOutFunction.newline();
 
-        // Do local type declarations
-
-        // Initilise vars
-
-        // Call FUNCTION / SUBROUTINE
-
-        // Return function result
-
-        // End FUNCTION / SUBROUTINE
-        FortranOut.decrementIndent();
-        FortranOut.newline();
-        FortranOut.write("END ");
-        FortranOut.write(sType);
-        FortranOut.write(" ");
-        FortranOut.write(pWrapperFunctionName);
-        FortranOut.newline();
-        FortranOut.close();
-
-        bool bParsed = FortranContext.parseString(pRoot, sCode);
-
-        pCodeObject = (AdtFortranBase*)pRoot;
-
-        if (bParsed && (pCodeObject != 0))
+        // Add function call
+        if (bIsFunction)
         {
-          pWorkingRoot->insertAfter(pFuncOrSubSubprogram->parent(), pCodeObject);
+          sCodeBody += pWrapperFunctionName;
+          sCodeBody += " = ";
+          sCodeBody += pADFunctionName;
+          sCodeBody += "(";
+
+          bFirst = true;
+
+          for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
+          {
+            const string rArg = *Iter;
+
+            if (!bFirst)
+            {
+              sCodeBody += ", ";
+            }
+
+            bFirst     = false;
+            sCodeBody += rArg;
+          }
+
+          sCodeBody += ")\n";
+        }
+        else
+        {
+          sCodeBody += "CALL ";
+          sCodeBody += pADFunctionName;
+          sCodeBody += "(";
+
+          bFirst = true;
+
+          for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
+          {
+            const string rArg = *Iter;
+
+            if (!bFirst)
+            {
+              sCodeBody += ", ";
+            }
+
+            bFirst     = false;
+            sCodeBody += rArg;
+          }
+
+          sCodeBody += ")\n";
         }
 
-        UtlReleaseReference(pCodeObject);
+        // Do Code Body
+        FortranOutFunction.writeLines(sCodeBody);
+
+        // End FUNCTION / SUBROUTINE
+        FortranOutFunction.decrementIndent();
+        FortranOutFunction.newline();
+        FortranOutFunction.write("END ");
+        FortranOutFunction.write(sType);
+        FortranOutFunction.write(" ");
+        FortranOutFunction.write(pWrapperFunctionName);
+        FortranOutFunction.newline();
+        FortranOutFunction.close();
+
+        if (bSupported)
+        {
+          // Add function
+          bool bParsed = FortranContext.parseString(pRoot, sCodeFunction);
+
+          pCodeObject = (AdtFortranBase*)pRoot;
+
+          if (bParsed && (pCodeObject != 0))
+          {
+            pWorkingRoot->insertAfter(pFuncOrSubSubprogram->parent(), pCodeObject);
+          }
+
+          UtlReleaseReference(pCodeObject);
+
+          // End module declaration for adding new variables to COMMON module
+          FortranOutModule.decrementIndent();
+          FortranOutModule.newline();
+          FortranOutModule.write("END MODULE");
+          FortranOutModule.newline();
+          FortranOutModule.close();
+
+          // Add extra variable declarations to module
+          bParsed = FortranContext.parseString(pRoot, sCodeModule);
+
+          pCodeObject = (AdtFortranBase*)pRoot;
+
+          if (bParsed && (pCodeObject != 0))
+          {
+
+          }
+
+          UtlReleaseReference(pCodeObject);
+        }
       }
     }
   }
