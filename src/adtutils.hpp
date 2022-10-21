@@ -509,6 +509,7 @@ public:
   void          write(const string& rString) const;
   void          write(const char* pString) const;
   void          write(char nChar) const;
+  void          writeLines(const char* pString) const;
   void          readLines(AdtStringList& rStringList);
 
   void          tabSize(int nTabSize);

@@ -2360,6 +2360,31 @@ void AdtFile::write(char nChar) const
 
 //  ----------------------------------------------------------------------------
 
+void AdtFile::writeLines(const char* pString) const
+{
+  string sString;
+
+  if ((pString != 0) && isOpen() && IsEnabled)
+  {
+    const char* pStart = pString;
+    
+    do
+    {
+      size_t      nCount = 0;
+      const char* pNext  = AdtParse::nextLine(pStart, &nCount);
+      string      sLine(pStart, nCount);
+
+      write(sLine);
+      newline();
+
+      pStart = pNext;
+    }
+    while (pStart[0] != 0);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 void AdtFile::readLines(AdtStringList& rStringList)
 {
   string sString;
@@ -3015,6 +3040,7 @@ const char* AdtParse::nextLine(const char* pChar, size_t* pnCount)
       case '\r':
       {
         bContinue = false;
+        pWord++;
         break;
       }
 
