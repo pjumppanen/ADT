@@ -1839,18 +1839,6 @@ bool AdtCppTranslationUnit::compile(const AdtCppFunctionDefinition* pFunction,
       //Add it to the list of functions
       rFunctionsMap.insert(AdtParserPtrByStringMap::value_type(pCopyFunction->name(), AdtParserContext(pCopyFunction)));
 
-      const char*       pDirsMaxVar = "nbdirsmax";
-      const AdtParser*  pDirsMax    = 0;
-
-      // Add nbdimsmax variable definition if not there. We do this because it needs to be 
-      // there for multidirection differentiation but won't normally be included as it 
-      // isn't referenced except after the fact after differentiation is carried out.
-      if ((rVarsMap.find(pDirsMaxVar) == rVarsMap.end()) && findField(pDirsMaxVar, ClassName, pDirsMax))
-      {
-        //Is a variable
-        rVarsMap.insert(AdtParserPtrByStringMap::value_type(pDirsMaxVar, AdtParserContext((AdtParser*)pDirsMax)));
-      }
-
       //Find unresolved externals
       AdtStringListConstIter  Iter;
       AdtStringList           ExternalsList;
