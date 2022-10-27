@@ -1,0 +1,520 @@
+function plogis:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative : binary(call(none(), ident plogis, expressions(metavar X)),
+                      none(),
+                      expressions(binary(metavar X, none(), mul(call(none(), ident plogis, expressions( metavar X)),
+                      sub(realCst 1.0, call(none(),  ident plogis, expressions( metavar X)))))))
+
+function new_log1p:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident log1p, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(),
+                     call(none(), ident inv, expressions( add( metavar X, realCst 1.0), intCst 1)))))
+
+
+function log1p:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident log1p, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), div( realCst 1.0, add( realCst 1.0, metavar X)))))
+
+function expm1:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident expm1, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), call(none(), ident exp, expressions(metavar X)))))
+
+function logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident logit, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), div( realCst 1.0, mul( metavar X, sub( realCst 1.0, metavar X))))))
+
+function inv_logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident inv_logit, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(),
+                     mul(call(none(),  ident inv_logit, expressions( metavar X)),
+                     sub(realCst 1.0, call(none(),  ident inv_logit, expressions( metavar X)))))))
+
+function scal_logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident scal_logit, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), div( realCst 0.99609375, mul( 
+                     add(realCst 0.001953125, mul( realCst 0.99609375, metavar X)), 
+                     sub(realCst 0.998046875, mul( realCst 0.99609375, metavar X)))))))
+
+function scal_inv_logit:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident scal_inv_logit, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(),
+                     mul(realCst 0.99609375, 
+                     mul(call(none(), ident scal_inv_logit, expressions( metavar X)),
+                     sub(realCst 1.0, call(none(), ident scal_inv_logit, expressions( metavar X))))))))
+
+function cum_normal_prob:
+  intrinsic:
+  shape: (param 1 result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident cum_normal_prob, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), mul( realCst 0.39894228040143270, call(none(),  ident exp, expressions( mul( realCst -0.5, mul( metavar X, metavar X))))))))
+
+function pwr:
+  intrinsic:
+  shape: (param 1, param 2, result)
+  type: (float(), integer(), float())
+  derivative: binary(call(none(), ident pwr, expressions(metavar X, metavar N)),
+                     none(),
+                     expressions(
+                     binary(metavar X, none(), mul( metavar N, call(none(),  ident pwr, expressions( metavar X,
+                     sub( metavar N, intCst 1))))),
+                     binary( metavar N, none(), expressions())))
+
+function gammln:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident gammln, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), call(none(),  ident polygamma, expressions( metavar X, intCst 0)))))
+
+function polygamma:
+  intrinsic:
+  shape: (param 1, param 2, result)
+  type: (float(), integer(), float())
+  derivative: binary(call(none(), ident polygamma, expressions(metavar X, metavar N)),
+                     none(),
+                     expressions(
+                     binary(metavar X, none(), call(none(),  ident polygamma, expressions( metavar X, add( intCst 1, metavar N)))),
+                     binary( metavar N, none(), expressions())))
+
+function cheval:
+  intrinsic:
+  shape: (param 1, param 2, param 3, result)
+  type: (float(), integer(), complex(), float())
+  derivative: binary(call(none(), ident cheval, expressions(metavar X, metavar D, metavar C)),
+                     none(),
+                     expressions(
+                     binary(metavar X, none(), call(none(),  ident cheval, expressions( metavar X, add( intCst 1, metavar D), metavar C))),
+                     binary( metavar D, none(), expressions()),
+                     binary( metavar C, none(), expressions()),
+                     ))
+
+function ln:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident ln, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), call(none(),  ident inv, expressions( metavar X)))))
+
+function inv:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident inv, expressions(metavar X)),
+                     none(),
+                     expressions(
+                     binary(metavar X, none(),
+                     minus( power( call(none(),  ident inv, expressions(metavar X)), intCst 2)))))
+
+function pxe:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident pxe, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), call(none(), ident pxe, expressions(metavar X)))))
+
+function identity:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident identity, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), call(none(),  ident unity, expressions( metavar X)))))
+
+function unity:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident unity, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), call(none(),  ident nought, expressions( metavar X)))))
+
+function nought:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  derivative: binary(call(none(), ident nought, expressions(metavar X)),
+                     none(),
+                     expressions(binary(metavar X, none(), call(none(),  ident nought, expressions( metavar X)))))
+
+function vnought:
+  intrinsic:
+  shape: (param 1, result)
+  type: (arrayType(float(),dimColons()),
+         float()))
+  derivative: binary(call(none(), ident vnought, expressions(metavar X)),
+              none(),
+              expressions(binary(metavar X, none(), call(none(),  ident vnought, expressions( metavar X)))))
+
+function lgammafn:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+  ReadNotWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+
+function ipwr:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+
+function DNORM:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+
+function TRUNC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (float(), float())
+
+function PREINC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (integer(), integer())
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+function PREDEC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (integer(), integer())
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+function POSTINC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (integer(), integer())
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+function POSTDEC:
+  intrinsic:
+  shape: (param 1, result)
+  type: (integer(), integer())
+  ReadThenWritten:(1, 0)
+  NotReadThenWritten:(0, 1)
+  id: (1,0,
+       1,0)
+
+subroutine pushreal8:
+  external:
+  shape:(param 1,
+         common /adstack/[0,*[)
+  type:(modifiedType(modifiers(intCst 8), float()),
+        arrayType(modifiedType(modifiers(intCst 8), float()),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+  deps: (id,
+         1, 1)
+
+subroutine popreal8:
+  external:
+  shape:(param 1,
+         common /adstack/[0,*[)
+  type:(modifiedType(modifiers(intCst 8), float()),
+        arrayType(modifiedType(modifiers(intCst 8), float()),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+  deps: (0, 1,
+         0, 1)
+
+
+subroutine pushreal8array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack/[0,*[)
+  type:(arrayType(modifiedType(modifiers(intCst 8), float()),
+                  dimColons(dimColon(none(),none()))),
+        integer(),
+        arrayType(modifiedType(modifiers(intCst 8), float()),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 1, 0)
+  NotReadThenWritten: (0, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (id,
+         id,
+         1, 1, 1)
+
+subroutine popreal8array:
+  external:
+  shape:(param 1,
+         param 2,
+         common /adstack/[0,*[)
+  type:(arrayType(modifiedType(modifiers(intCst 8), float()),
+                  dimColons(dimColon(none(),none()))),   
+        integer(),
+        arrayType(modifiedType(modifiers(intCst 8), float()),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 1, 0)
+  NotReadThenWritten: (1, 0, 0)
+  ReadThenWritten: (0, 0, 1)
+  deps: (0, 1, 1,
+         id,
+         0, 1, 1)
+
+subroutine pushinteger4:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popinteger4:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol1b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol1b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol2b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol2b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol3b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol3b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol4b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol4b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol5b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol5b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol6b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol6b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol7b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol7b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol8b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol8b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine pushcontrol9b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (1, 0)
+  NotReadThenWritten: (0, 0)
+  ReadThenWritten: (0, 1)
+
+subroutine popcontrol9b:
+  external:
+  shape:(param 1,
+         common /adstackpassive/[0,*[)
+  type:(integer(),
+        arrayType(integer(),
+                  dimColons(dimColon(none(),none()))))
+  ReadNotWritten: (0, 0)
+  NotReadThenWritten: (1, 0)
+  ReadThenWritten: (0, 1)

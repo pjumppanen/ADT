@@ -927,6 +927,8 @@ void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
     qualifiedFunctionName(sFunctionName, pClassName);
     wrapperFunctionName(sWrapperFunctionName, nWrapperType, pClassName);
   
+    ::printf("Making wrapper %s\n", sWrapperFunctionName.c_str());
+
     // Add wrapper code to pRoot
     pAD_Root->makeWrapper(pWorkingRoot, 
                           sWrapperFunctionName,
@@ -2271,7 +2273,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                         }
 
                         // make wrapper
-                        rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, ParentClassName);
+                       rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, ParentClassName);
 
                         // With the parse tree we need to figure out what functions / subroutines are new
                         // (ie. not in the original source) and add it to that source. Similarly,
@@ -2712,10 +2714,20 @@ void AdtMakeClass::newMakeClass(const AdtMakeCommand& rMakeCommand,
     AdtBlackBoxCompiler::makeBlackBoxFile(rFileAndPath, BlackBoxFile, IsBlackBoxMap, true, TapenadeVersion);
   }
 
-  string sExtFileAndPath;
+  string      sExtFileAndPath;
+  const char* pExtLib = 0;
+
+  if (TapenadeVersion > 3.12)
+  {
+    pExtLib = "my_extlib_v2.txt";
+  }
+  else
+  {
+    pExtLib = "my_extlib.txt";
+  }
 
   // Append black box include file
-  if (rMakeCommand.findFile("my_extlib.txt", sExtFileAndPath))
+  if (rMakeCommand.findFile(pExtLib, sExtFileAndPath))
   {
     AdtFileCopy Append(sExtFileAndPath, BlackBoxFile, true);
   }
