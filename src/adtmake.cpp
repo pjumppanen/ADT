@@ -1262,6 +1262,30 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
 
     unlink(sDeleteFileName);
 
+    rParent.prefixWorkingDirectory(sDeleteFileName,
+                                   sOutputFileName + ".msg",
+                                   false);
+
+    unlink(sDeleteFileName);
+
+    rParent.prefixWorkingDirectory(sDeleteFileName,
+                                   sOutputFileName + ".f95~",
+                                   false);
+
+    unlink(sDeleteFileName);
+
+    rParent.prefixWorkingDirectory(sDeleteFileName,
+                                   sOutputFileName + ".f90~",
+                                   false);
+
+    unlink(sDeleteFileName);
+
+    rParent.prefixWorkingDirectory(sDeleteFileName,
+                                   sOutputFileName + ".msg~",
+                                   false);
+
+    unlink(sDeleteFileName);
+
     ::printf("\nrunning TAPENADE with:\n%s\n", Arguments.c_str());
 
     //Run tapenade through a pipe so we can capture stdout and redirect it here
@@ -1313,7 +1337,7 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
                                        sTestOutputFileName,
                                        false);
 
-        ::printf("WARNING: Expected .f95 output not found. Trying .f90 extension.\n");
+        ::printf("INFO: Expected .f95 output not found. Trying .f90 extension.\n");
 
         if (::stat(rOutputFileName, &finfo) != 0)
         {
