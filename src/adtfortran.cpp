@@ -4505,7 +4505,24 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             }
             else
             {
+              AdtParser* pSrcModuleObj  = pCodeObject->findObject("AdtFortranModule",
+                                                                  sDiffModuleName,
+                                                                  false);
 
+              AdtParser* pDestModuleObj = findObject("AdtFortranModule",
+                                                     sDiffModuleName,
+                                                     false);
+
+              if ((pSrcModuleObj != 0) && (pDestModuleObj != 0))
+              {
+                AdtParser* pSrcModuleBodyObj  = pSrcModuleObj->findObject("AdtFortranModuleBody");
+                AdtParser* pDestModuleBodyObj = pDestModuleObj->findObject("AdtFortranModuleBody");
+
+                if ((pSrcModuleBodyObj != 0) && (pDestModuleBodyObj != 0))
+                {
+                  pDestModuleBodyObj->addListCopy(pSrcModuleBodyObj, true);
+                }
+              }
             }
           }
           else
