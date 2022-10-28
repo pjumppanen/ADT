@@ -362,11 +362,14 @@ private:
 private:
   void                    extractTypeDefInfo(const AdtFortranTypeDeclarationStmt* pTypeDecl, bool bIsArguments);
   void                    extractTypeDeclarations(const AdtParserPtrByStringMap& rTypeDeclMap, bool bIsArguments);
+  void                    extractModuleTypeDeclarations(const AdtParser* pModuleObj);
+  void                    initialise(AdtParser* pCodeObj, const AdtParser* pModuleObj);
   void                    initialise(AdtParser* pCodeObj, const char* pModuleSuffix = 0);
   void                    initialise(const AdtFortranDeclarations* pDeclarations, bool bReset);
 
 public:
   AdtFortranVariableInfo(AdtParser* pCodeObj = 0, const char* pModuleSuffix = 0);
+  AdtFortranVariableInfo(AdtParser* pCodeObj, const AdtParser* pModuleObj);
   AdtFortranVariableInfo(const AdtFortranDeclarations* pDeclarations);
   AdtFortranVariableInfo(const AdtFortranVariableInfo& rCopy);
   virtual ~AdtFortranVariableInfo();

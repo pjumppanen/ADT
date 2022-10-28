@@ -1259,7 +1259,28 @@ void AdtFortranVariableInfo::extractTypeDeclarations(const AdtParserPtrByStringM
 
 //  ----------------------------------------------------------------------------
 
-void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj, const char* pModuleSuffix)
+void AdtFortranVariableInfo::extractModuleTypeDeclarations(const AdtParser* pModuleObj)
+{
+  if (pModuleObj != 0)
+  {
+    AdtParserPtrList          TypeDeclStmtList;
+    AdtParserPtrListConstIter DeclIter;
+
+    pModuleObj->findObjects(TypeDeclStmtList, "AdtFortranTypeDeclarationStmt");
+
+    //Step through all type declaration statments
+    for (DeclIter = TypeDeclStmtList.begin() ; DeclIter != TypeDeclStmtList.end() ; ++DeclIter)
+    {
+      const AdtFortranTypeDeclarationStmt*  pTypeDecl = (const AdtFortranTypeDeclarationStmt*)(const AdtParser*)*DeclIter;
+
+      extractTypeDefInfo(pTypeDecl, false);
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj, const AdtParser* pModuleObj)
 {
   VariableInfoMap.clear();
 
@@ -1320,6 +1341,16 @@ void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj, const char* pModule
     initialise(pDeclarations, false);
   }
 
+  extractModuleTypeDeclarations(pModuleObj);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj, const char* pModuleSuffix)
+{
+  const AdtParser*              pModuleObj  = 0; 
+  AdtFortranExecutableProgram*  pRoot       = AdtFortranBase::fortranRootObject();
+
   if (pRoot != 0)
   {
     string  sModuleName("COMMON");
@@ -1329,24 +1360,10 @@ void AdtFortranVariableInfo::initialise(AdtParser* pCodeObj, const char* pModule
       sModuleName += pModuleSuffix;
     }
 
-    const AdtParser* pModuleObj = pRoot->findObject("AdtFortranModule", sModuleName);
-
-    if (pModuleObj != 0)
-    {
-      AdtParserPtrList          TypeDeclStmtList;
-      AdtParserPtrListConstIter DeclIter;
-
-      pModuleObj->findObjects(TypeDeclStmtList, "AdtFortranTypeDeclarationStmt");
-
-      //Step through all type declaration statments
-      for (DeclIter = TypeDeclStmtList.begin() ; DeclIter != TypeDeclStmtList.end() ; ++DeclIter)
-      {
-        const AdtFortranTypeDeclarationStmt*  pTypeDecl = (const AdtFortranTypeDeclarationStmt*)(const AdtParser*)*DeclIter;
-
-        extractTypeDefInfo(pTypeDecl, false);
-      }
-    }
+    pModuleObj = pRoot->findObject("AdtFortranModule", sModuleName);
   }
+
+  initialise(pCodeObj, pModuleObj);
 }
 
 //  ----------------------------------------------------------------------------
@@ -1373,6 +1390,15 @@ AdtFortranVariableInfo::AdtFortranVariableInfo(AdtParser* pCodeObj, const char* 
    ArgumentList()
 {
   initialise(pCodeObj, pModuleSuffix);
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtFortranVariableInfo::AdtFortranVariableInfo(AdtParser* pCodeObj, const AdtParser* pModuleObj)
+ : VariableInfoMap(),
+   ArgumentList()
+{
+  initialise(pCodeObj, pModuleObj);
 }
 
 //  ----------------------------------------------------------------------------
@@ -4068,14 +4094,38 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       (pSubSuffix           != 0) &&
       (pModuleSuffix        != 0))
   {
-    string  sDiffModuleName("COMMON");
-
-    sDiffModuleName += pModuleSuffix;
-
+    // Note that in finding the module definition for COMMON variables we need
+    // to use an elaborate approach because of how Tapenade behaviour has changed
+    // over different versions. Originally Tapenade would always create a copy 
+    // of COMMON, for instance COMMON_d when doing forward mode, and include it 
+    // in the source code output for the AD'ed function. In current versions it
+    // does not but I suspect might do if it needs to add a variable to COMMON
+    // (not clear that it every does but have coded for the situation). The 
+    // extra findObject calls are there to obtain the module definition in these
+    // other scenarios as it will be needed to create the wrapper code. 
+    string            sModuleName("COMMON");
     AdtFortranModule* pModule = (AdtFortranModule*)findObject("AdtFortranModule",
-                                                              sDiffModuleName,
+                                                              sModuleName,
                                                               false);
 
+    if (pModule == 0)
+    {
+      string  sDiffModuleName("COMMON");
+
+      sDiffModuleName += pModuleSuffix;
+
+      pModule = (AdtFortranModule*)findObject("AdtFortranModule",
+                                              sDiffModuleName,
+                                              false);
+    }
+
+    if (pModule == 0)
+    {
+      pModule = (AdtFortranModule*)pWorkingRoot->findObject("AdtFortranModule",
+                                                            sModuleName,
+                                                            false);
+    }
+   
     if (pModule != 0)
     {
       bool        bIsFunction;
@@ -4086,8 +4136,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       if ((pFuncOrSubSubprogram   != 0) && 
           (pADFuncOrSubSubprogram != 0))
       {
-        AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, pModuleSuffix);
-        AdtFortranVariableInfo  ADVariableInfo(pADFuncOrSubSubprogram, pModuleSuffix);
+        AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, "");
+        AdtFortranVariableInfo  ADVariableInfo(pADFuncOrSubSubprogram, pModule);
         const AdtStringList&    rArgList    = VariableInfo.argumentList();
         const AdtStringList&    rADArgList  = ADVariableInfo.argumentList();
         AdtStringListConstIter  Iter;
@@ -4163,73 +4213,154 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             {
               // Other added variables
               string sIntent;
+              string sLowerDim;
+              string sUpperDim;
               ADVariableInfo.buildVariableDeclaration(rArg, false, sDeclaration);
               ADVariableInfo.intent(rArg, sIntent);
+              ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
+              ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
 
-              if (ADVariableInfo.numberOfDimensions(rArg) > 1)
+              if ((ADVariableInfo.numberOfDimensions(rArg) == 2) && (sUpperDim.eq("nbdirsmax")))
+              {
+                // Argument added from MULTIDIFF or MULTIGRAD operation
+                bool   bIsOut = sIntent.eq("OUT");
+
+                FortranOutModule.write(sDeclaration);
+                FortranOutModule.newline();
+
+                switch (nWrapperType)
+                {
+                  case ForWrapper_DIFF:
+                  {
+                    break;
+                  }
+
+                  case ForWrapper_MULTIDIFF:
+                  {
+                    string  sNewArg;
+                    string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
+
+                    sNewArg = sLastArg + "_dir";
+
+                    FortranOutFunction.write(", ");
+                    FortranOutFunction.write(sNewArg);
+
+                    sNewDeclaration += sNewArg;
+
+                    sDeclarations += sNewDeclaration;
+                    sDeclarations += "\n";
+
+                    if (sUpperDim.length() > 0)
+                    {
+                      sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                      sCodeBody += rArg + "(cn) = 0\n";
+                      sCodeBody += "ENDDO\n\n";
+                      sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
+                      sCodeBody += rArg + "(" + sNewArg + ") = 1\n";
+                      sCodeBody += "END IF\n\n";
+                    }
+                    else
+                    {
+                      sCodeBody += rArg + " = 0\n";
+                      sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
+                      sCodeBody += rArg + " = 1\n";
+                      sCodeBody += "END IF\n\n";
+                    }
+                    break;
+                  }
+
+                  case ForWrapper_GRAD:
+                  {
+                    break;
+                  }
+
+                  case ForWrapper_MULTIGRAD:
+                  {
+                    break;
+                  }
+
+                  default:
+                  {
+                    FAIL();
+                    break;
+                  }
+                }
+
+                bWriteArg = false;
+              }
+              else if (ADVariableInfo.numberOfDimensions(rArg) > 1)
               {
                 ::printf("WARNING: Differentiation with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
 
                 bSupported = false;
               }
-
-              string sLowerDim;
-              string sUpperDim;
-              bool   bIsOut = sIntent.eq("OUT");
-
-              ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
-              ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
-
-              FortranOutModule.write(sDeclaration);
-              FortranOutModule.newline();
-
-              switch (nWrapperType)
+              else
               {
-                case ForWrapper_DIFF:
+                bool   bIsOut = sIntent.eq("OUT");
+
+                FortranOutModule.write(sDeclaration);
+                FortranOutModule.newline();
+
+                switch (nWrapperType)
                 {
-                  string  sNewArg;
-                  string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
+                  case ForWrapper_DIFF:
+                  {
+                    string  sNewArg;
+                    string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
 
-                  sNewArg = sLastArg + "_dir";
+                    sNewArg = sLastArg + "_dir";
 
-                  FortranOutFunction.write(", ");
-                  FortranOutFunction.write(sNewArg);
+                    FortranOutFunction.write(", ");
+                    FortranOutFunction.write(sNewArg);
 
-                  sNewDeclaration += sNewArg;
+                    sNewDeclaration += sNewArg;
 
-                  sDeclarations += sNewDeclaration;
-                  sDeclarations += "\n";
+                    sDeclarations += sNewDeclaration;
+                    sDeclarations += "\n";
 
-                  sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                  sCodeBody += rArg + "(cn) = 0\n";
-                  sCodeBody += "ENDDO\n\n";
-                  sCodeBody += rArg + "(" + sNewArg + ") = 1\n\n";
-                  break;
+                    if (sUpperDim.length() > 0)
+                    {
+                      sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                      sCodeBody += rArg + "(cn) = 0\n";
+                      sCodeBody += "ENDDO\n\n";
+                      sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
+                      sCodeBody += rArg + "(" + sNewArg + ") = 1\n";
+                      sCodeBody += "END IF\n\n";
+                    }
+                    else
+                    {
+                      sCodeBody += rArg + " = 0\n";
+                      sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
+                      sCodeBody += rArg + " = 1\n";
+                      sCodeBody += "END IF\n\n";
+                    }
+                    break;
+                  }
+
+                  case ForWrapper_MULTIDIFF:
+                  {
+                    break;
+                  }
+
+                  case ForWrapper_GRAD:
+                  {
+                    break;
+                  }
+
+                  case ForWrapper_MULTIGRAD:
+                  {
+                    break;
+                  }
+
+                  default:
+                  {
+                    FAIL();
+                    break;
+                  }
                 }
 
-                case ForWrapper_MULTIDIFF:
-                {
-                  break;
-                }
-
-                case ForWrapper_GRAD:
-                {
-                  break;
-                }
-
-                case ForWrapper_MULTIGRAD:
-                {
-                  break;
-                }
-
-                default:
-                {
-                  FAIL();
-                  break;
-                }
+                bWriteArg = false;
               }
-
-              bWriteArg = false;
             }
           }
 
@@ -4339,6 +4470,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           {
             pWorkingRoot->insertAfter(pFuncOrSubSubprogram->parent(), pCodeObject);
           }
+          else
+          {
+            ::printf("%s\n", sCodeFunction.c_str());
+          }
 
           UtlReleaseReference(pCodeObject);
 
@@ -4357,6 +4492,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           if (bParsed && (pCodeObject != 0))
           {
 
+          }
+          else
+          {
+            ::printf("%s\n", sCodeModule.c_str());
           }
 
           UtlReleaseReference(pCodeObject);
