@@ -2433,6 +2433,8 @@ AdtFile& AdtDelphiGoal::writeFortran(AdtFile& pOutFile,
 
       pOutFile.incrementIndent();
       pOutFile.newline();
+
+      write(pOutFile, "USE DIFFSIZES");
       pOutFile.newline();
 
       writeArraySizes(pOutFile,
@@ -2510,7 +2512,15 @@ AdtFile& AdtDelphiGoal::writeFortran(AdtFile& pOutFile,
       // Write Empty module definition. We need to because the fortran compiler
       // will throw an error for empty files
       write(pOutFile, "MODULE COMMON");
+      
+      pOutFile.incrementIndent();
       pOutFile.newline();
+
+      write(pOutFile, "USE DIFFSIZES");
+
+      pOutFile.decrementIndent();
+      pOutFile.newline();
+
       write(pOutFile, "END");
       pOutFile.newline();
     }

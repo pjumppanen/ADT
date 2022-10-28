@@ -2626,6 +2626,8 @@ AdtFile& AdtCppTranslationUnit::writeFortran(AdtFile& rOutFile,
 
       rOutFile.incrementIndent();
       rOutFile.newline();
+
+      write(rOutFile, "USE DIFFSIZES");
       rOutFile.newline();
 
       writeArraySizes(rOutFile,
@@ -2707,7 +2709,15 @@ AdtFile& AdtCppTranslationUnit::writeFortran(AdtFile& rOutFile,
       // Write Empty module definition. We need to because the fortran compiler
       // will throw an error for empty files
       write(rOutFile, "MODULE COMMON");
+      
+      rOutFile.incrementIndent();
       rOutFile.newline();
+
+      write(rOutFile, "USE DIFFSIZES");
+
+      rOutFile.decrementIndent();
+      rOutFile.newline();
+
       write(rOutFile, "END");
       rOutFile.newline();
     }

@@ -3421,6 +3421,17 @@ int AdtMakeCommand::make(AdtMakeIncremental& rBuildCheck)
 
               FortranOut.write("! ----------------------------------------------------------------------------");
               FortranOut.newline();
+              FortranOut.write("MODULE DIFFSIZES");
+              FortranOut.incrementIndent();
+              FortranOut.newline();
+              FortranOut.write("INTEGER , parameter :: nbdirsmax = 25");
+              FortranOut.decrementIndent();
+              FortranOut.newline();
+              FortranOut.write("ENDMODULE");
+              FortranOut.newline();
+
+              FortranOut.write("! ----------------------------------------------------------------------------");
+              FortranOut.newline();
 
               sMessage  = "! Including ";
               sMessage += rIncludeFileName;
