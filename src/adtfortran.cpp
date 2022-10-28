@@ -4103,17 +4103,17 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     // (not clear that it every does but have coded for the situation). The 
     // extra findObject calls are there to obtain the module definition in these
     // other scenarios as it will be needed to create the wrapper code. 
+    bool              bAddEntireModule = false;
     string            sModuleName("COMMON");
+    string            sDiffModuleName("COMMON");
     AdtFortranModule* pModule = (AdtFortranModule*)findObject("AdtFortranModule",
                                                               sModuleName,
                                                               false);
 
+    sDiffModuleName += pModuleSuffix;
+
     if (pModule == 0)
     {
-      string  sDiffModuleName("COMMON");
-
-      sDiffModuleName += pModuleSuffix;
-
       pModule = (AdtFortranModule*)findObject("AdtFortranModule",
                                               sDiffModuleName,
                                               false);
@@ -4124,6 +4124,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       pModule = (AdtFortranModule*)pWorkingRoot->findObject("AdtFortranModule",
                                                             sModuleName,
                                                             false);
+
+      bAddEntireModule = true;
     }
    
     if (pModule != 0)
@@ -4173,7 +4175,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
         FortranOutModule.open(sCodeModule);
 
-        FortranOutModule.write("MODULE COMMON");
+        FortranOutModule.write("MODULE ");
+        FortranOutModule.write(sDiffModuleName);
         FortranOutModule.incrementIndent();
         FortranOutModule.newline();
 
@@ -4491,7 +4494,19 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           if (bParsed && (pCodeObject != 0))
           {
+            if (bAddEntireModule)
+            {
+              AdtParser* pProgramUnitObj = pCodeObject->findObject("AdtFortranProgramUnit");
 
+              if ((pProgramUnitObj != 0) && add(pProgramUnitObj))
+              {
+                pProgramUnitObj->lock();
+              }
+            }
+            else
+            {
+
+            }
           }
           else
           {
