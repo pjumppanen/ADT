@@ -380,7 +380,10 @@ public:
   bool                    upperDimension(const char* pVarName, int nDimension, string& rRetDim) const;
   bool                    intent(const char* pVarName, string& rRetIntent) const;
   int                     numberOfDimensions(const char* pVarName) const;
-  bool                    buildVariableDeclaration(const char* pVarName, bool bWithIntent, string& rDeclaration) const;
+  bool                    buildVariableDeclaration(const char* pVarName, 
+                                                   bool bWithIntent, 
+                                                   string& rDeclaration, 
+                                                   const char* pClassPrefix = 0) const;
   bool                    hasArgumentList() const;
   const AdtStringList&    argumentList() const;
   void                    dump() const;
@@ -860,7 +863,8 @@ public:
                                             const char* pVarSuffix,
                                             const char* pSubSuffix,
                                             const char* pModuleSuffix,
-                                            const AdtStringList& Vars);
+                                            const AdtStringList& Vars,
+                                            const AdtStringList& OutVars);
 
   static AdtFortranBase*        expressionBuild(const char* pCodeString,
                                                 bool bIncludeConditionalContext);

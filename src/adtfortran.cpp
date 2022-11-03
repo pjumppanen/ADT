@@ -1148,8 +1148,6 @@ void AdtFortranVariableInfo::extractTypeDefInfo(const AdtFortranTypeDeclarationS
 
             if (bIsArguments)
             {
-              ArgumentList.push_back(rVarName);
-
               if (sIntent.length() > 0)
               {
                 VariableInfoMap.insert(AdtStringByStringMap::value_type(rVarName + "*", sIntent));
@@ -1380,6 +1378,16 @@ void AdtFortranVariableInfo::initialise(const AdtFortranDeclarations* pDeclarati
   {
     extractTypeDeclarations(pDeclarations->typeDeclarationMap(), false);
     extractTypeDeclarations(pDeclarations->parameterTypeDeclarationMap(), true);
+
+    const AdtParserPtrList&   rParList = pDeclarations->parameterList();
+    AdtParserPtrListConstIter Iter;
+
+    for (Iter = rParList.begin() ; Iter != rParList.end() ; ++Iter)
+    {
+      const AdtParser* pObj = *Iter;
+
+      ArgumentList.push_back(pObj->name());
+    }
   }
 }
 
@@ -1567,7 +1575,10 @@ int AdtFortranVariableInfo::numberOfDimensions(const char* pVarName) const
 
 //  ----------------------------------------------------------------------------
 
-bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName, bool bWithIntent, string& rDeclaration) const
+bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName, 
+                                                      bool bWithIntent, 
+                                                      string& rDeclaration, 
+                                                      const char* pClassPrefix) const
 {
   string sType;
   bool   bFound = false;
@@ -1575,7 +1586,13 @@ bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName, bool
   if (variableType(pVarName, sType))
   {
     string  sIntent;
+    string  sVarName(pVarName);
     int     nDim = numberOfDimensions(pVarName);
+
+    if (pClassPrefix != 0)
+    {
+      AdtParser::stripPrefix(sVarName, pClassPrefix, false);
+    }
 
     bFound = true;
 
@@ -1589,7 +1606,7 @@ bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName, bool
     }
 
     rDeclaration += " :: ";
-    rDeclaration += pVarName;
+    rDeclaration += sVarName;
     
     if (nDim > 0)
     {
@@ -4081,7 +4098,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                                               const char* pVarSuffix,
                                               const char* pSubSuffix,
                                               const char* pModuleSuffix,
-                                              const AdtStringList& Vars)
+                                              const AdtStringList& Vars,
+                                              const AdtStringList& OutVars)
 {
   bool  bMade = false;
 
@@ -4109,6 +4127,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     AdtFortranModule* pModule = (AdtFortranModule*)findObject("AdtFortranModule",
                                                               sModuleName,
                                                               false);
+
+    AdtStringByStringMap  VarsMap;
+    AdtStringByStringMap  OutVarsMap;
+
+    nameListToNameMap(VarsMap, Vars);
+    nameListToNameMap(OutVarsMap, OutVars);
 
     sDiffModuleName += pModuleSuffix;
 
@@ -4163,13 +4187,19 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         string        sCodeModule;
         string        sDeclarations;
         string        sLastArg;
+        string        sClassPrefix(pClassName);
+        const char*   pRawFunctionName = pFunctionName;
+
+        sClassPrefix += "__";
 
         sDeclarations = "INTEGER(4) :: cn\n";
 
         if (bIsFunction)
         {
+          AdtParse::matchWord(pRawFunctionName, sClassPrefix, false);
+
           sDeclarations += "REAL(8) :: ";
-          sDeclarations += pFunctionName;
+          sDeclarations += pRawFunctionName;
           sDeclarations += "\n";
         }
 
@@ -4191,179 +4221,130 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
         {
           string       sDeclaration;
-          const string rArg       = *Iter;
-          bool         bNew       = !VariableInfo.hasVariable(rArg);
-          bool         bWriteArg  = true;
+          string       sIntent;
+          string       sLowerDim;
+          string       sUpperDim;
+          const string rArg         = *Iter;
+          bool         bIsOutVar    = (OutVarsMap.find(rArg)     != OutVarsMap.end());
+          bool         bAD_Result   = (OutVarsMap.find(sLastArg) != OutVarsMap.end());
+          bool         bAD_Input    = (VarsMap.find(sLastArg)    != VarsMap.end());
+          bool         bIsFuncVal   = bIsFunction && rArg.eq(pFunctionName);
+          bool         bNew         = !VariableInfo.hasVariable(rArg) && !bIsFuncVal;
+          bool         bIsNewInVar  = bNew && !bAD_Result && !bIsOutVar;
+          bool         bWriteArg    = !bIsOutVar && !(bAD_Input && bNew) && !bIsFuncVal;
+          int          nDimensions  = ADVariableInfo.numberOfDimensions(rArg);
+          bool         bAddLocal    = (bAD_Input && (nDimensions == 0)) || bAD_Result || (!bNew && (bIsOutVar || bWriteArg));
+          bool         bAddDecl     = bIsOutVar || bNew || bWriteArg;
+          bool         bWithIntent  = bWriteArg;
+          string       sRawArg(rArg);
+
+          AdtParser::stripPrefix(sRawArg, sClassPrefix, false);
+          AdtParser::stripPrefix(sLastArg, sClassPrefix, false);
+
+          ADVariableInfo.intent(rArg, sIntent);
+          ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
+          ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
+
+          if (bIsNewInVar && (nDimensions > 1))
+          {
+            ::printf("WARNING: Differentiation with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
+
+            bSupported = false;
+
+            // Break from loop
+            break;
+          }
 
           if (bNew)
           {
-            // Add alternate variables.
-            // For DIFF replace direction vector with direction scalar, add direction vector 
-            // and initialise it in the code according to directon scalar.
-            // For GRAD remove chaining vector and add vector to common and initialised to zero in code.
-            if (rArg.eq(pFunctionName))
+            switch (nWrapperType)
             {
-              // The original function value from diff of a function which we can discard
-              ADVariableInfo.buildVariableDeclaration(rArg, false, sDeclaration);
+              case ForWrapper_DIFF:
+              {
+                string  sNewArg;
+                string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
 
-              bWriteArg = false;
+                if (bAD_Result)
+                {
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += sRawArg + "(cn) = 0\n";
+                    sCodeBody += "ENDDO\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += sRawArg + " = 0\n";
+                  }
+                }
+                else
+                {
+                  sNewArg = sLastArg + "_dir";
+
+                  FortranOutFunction.write(", ");
+                  FortranOutFunction.write(sNewArg);
+
+                  sNewDeclaration += sNewArg;
+
+                  sDeclarations += sNewDeclaration;
+                  sDeclarations += "\n";
+
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += sRawArg + "(cn) = 0\n";
+                    sCodeBody += "ENDDO\n\n";
+                    sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
+                    sCodeBody += sRawArg + "(" + sNewArg + ") = 1\n";
+                    sCodeBody += "END IF\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += sRawArg + " = 0\n";
+                    sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
+                    sCodeBody += sRawArg + " = 1\n";
+                    sCodeBody += "END IF\n\n";
+                  }
+                }
+              }
+
+              case ForWrapper_MULTIDIFF:
+              {
+                break;
+              }
+
+              case ForWrapper_GRAD:
+              {
+                break;
+              }
+
+              case ForWrapper_MULTIGRAD:
+              {
+                break;
+              }
+
+              default:
+              {
+                FAIL();
+                break;
+              }
             }
-            else if (rArg.eq(pADFunctionName))
+          }
+
+          if (bAddDecl)
+          {
+            sDeclaration.clear();
+            ADVariableInfo.buildVariableDeclaration(rArg, bWithIntent, sDeclaration, sClassPrefix);
+
+            if (bAddLocal)
             {
-              // The gradient return value from grad of a function which we must keep and return
+              sDeclarations += sDeclaration;
+              sDeclarations += "\n";
             }
             else
             {
-              // Other added variables
-              string sIntent;
-              string sLowerDim;
-              string sUpperDim;
-              ADVariableInfo.buildVariableDeclaration(rArg, false, sDeclaration);
-              ADVariableInfo.intent(rArg, sIntent);
-              ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
-              ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
-
-              if ((ADVariableInfo.numberOfDimensions(rArg) == 2) && (sUpperDim.eq("nbdirsmax")))
-              {
-                // Argument added from MULTIDIFF or MULTIGRAD operation
-                bool   bIsOut = sIntent.eq("OUT");
-
-                FortranOutModule.write(sDeclaration);
-                FortranOutModule.newline();
-
-                switch (nWrapperType)
-                {
-                  case ForWrapper_DIFF:
-                  {
-                    break;
-                  }
-
-                  case ForWrapper_MULTIDIFF:
-                  {
-                    string  sNewArg;
-                    string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
-
-                    sNewArg = sLastArg + "_dir";
-
-                    FortranOutFunction.write(", ");
-                    FortranOutFunction.write(sNewArg);
-
-                    sNewDeclaration += sNewArg;
-
-                    sDeclarations += sNewDeclaration;
-                    sDeclarations += "\n";
-
-                    if (sUpperDim.length() > 0)
-                    {
-                      sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                      sCodeBody += rArg + "(cn) = 0\n";
-                      sCodeBody += "ENDDO\n\n";
-                      sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
-                      sCodeBody += rArg + "(" + sNewArg + ") = 1\n";
-                      sCodeBody += "END IF\n\n";
-                    }
-                    else
-                    {
-                      sCodeBody += rArg + " = 0\n";
-                      sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
-                      sCodeBody += rArg + " = 1\n";
-                      sCodeBody += "END IF\n\n";
-                    }
-                    break;
-                  }
-
-                  case ForWrapper_GRAD:
-                  {
-                    break;
-                  }
-
-                  case ForWrapper_MULTIGRAD:
-                  {
-                    break;
-                  }
-
-                  default:
-                  {
-                    FAIL();
-                    break;
-                  }
-                }
-
-                bWriteArg = false;
-              }
-              else if (ADVariableInfo.numberOfDimensions(rArg) > 1)
-              {
-                ::printf("WARNING: Differentiation with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
-
-                bSupported = false;
-              }
-              else
-              {
-                bool   bIsOut = sIntent.eq("OUT");
-
-                FortranOutModule.write(sDeclaration);
-                FortranOutModule.newline();
-
-                switch (nWrapperType)
-                {
-                  case ForWrapper_DIFF:
-                  {
-                    string  sNewArg;
-                    string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
-
-                    sNewArg = sLastArg + "_dir";
-
-                    FortranOutFunction.write(", ");
-                    FortranOutFunction.write(sNewArg);
-
-                    sNewDeclaration += sNewArg;
-
-                    sDeclarations += sNewDeclaration;
-                    sDeclarations += "\n";
-
-                    if (sUpperDim.length() > 0)
-                    {
-                      sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                      sCodeBody += rArg + "(cn) = 0\n";
-                      sCodeBody += "ENDDO\n\n";
-                      sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
-                      sCodeBody += rArg + "(" + sNewArg + ") = 1\n";
-                      sCodeBody += "END IF\n\n";
-                    }
-                    else
-                    {
-                      sCodeBody += rArg + " = 0\n";
-                      sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
-                      sCodeBody += rArg + " = 1\n";
-                      sCodeBody += "END IF\n\n";
-                    }
-                    break;
-                  }
-
-                  case ForWrapper_MULTIDIFF:
-                  {
-                    break;
-                  }
-
-                  case ForWrapper_GRAD:
-                  {
-                    break;
-                  }
-
-                  case ForWrapper_MULTIGRAD:
-                  {
-                    break;
-                  }
-
-                  default:
-                  {
-                    FAIL();
-                    break;
-                  }
-                }
-
-                bWriteArg = false;
-              }
+              FortranOutModule.write(sDeclaration);
+              FortranOutModule.newline();
             }
           }
 
@@ -4374,17 +4355,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
               FortranOutFunction.write(", ");
             }
 
-            ADVariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
-
-            sDeclarations += sDeclaration;
-            sDeclarations += "\n";
-
-            FortranOutFunction.write(rArg);
-
-            sLastArg = rArg;
+            FortranOutFunction.write(sRawArg);
 
             bFirst = false;
           }
+
+          sLastArg = rArg;
         }
 
         FortranOutFunction.write(")");
@@ -4412,7 +4388,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
           {
-            const string rArg = *Iter;
+            const string rArg     = *Iter;
+            const char*  pRawArg  = rArg;
+
+            AdtParse::matchWord(pRawArg, sClassPrefix, false);
 
             if (!bFirst)
             {
@@ -4420,7 +4399,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             }
 
             bFirst     = false;
-            sCodeBody += rArg;
+            sCodeBody += pRawArg;
           }
 
           sCodeBody += ")\n";
@@ -4435,7 +4414,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
           {
-            const string rArg = *Iter;
+            const string rArg     = *Iter;
+            const char*  pRawArg  = rArg;
+
+            AdtParse::matchWord(pRawArg, sClassPrefix, false);
 
             if (!bFirst)
             {
@@ -4443,7 +4425,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             }
 
             bFirst     = false;
-            sCodeBody += rArg;
+            sCodeBody += pRawArg;
           }
 
           sCodeBody += ")\n";

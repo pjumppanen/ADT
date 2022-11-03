@@ -939,7 +939,8 @@ void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
                           VarSuffix,
                           SubSuffix,
                           ModuleSuffix,
-                          Vars);
+                          Vars, 
+                          OutVars);
   }
 }
 
