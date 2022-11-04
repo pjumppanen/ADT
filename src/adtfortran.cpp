@@ -4155,9 +4155,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     if (pModule != 0)
     {
       bool        bIsFunction;
+      bool        bIsAD_Function;
       bool        bSupported              = true;
       AdtParser*  pFuncOrSubSubprogram    = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
-      AdtParser*  pADFuncOrSubSubprogram  = findFunctionOrSubroutine(pADFunctionName, bIsFunction);
+      AdtParser*  pADFuncOrSubSubprogram  = findFunctionOrSubroutine(pADFunctionName, bIsAD_Function);
 
       if ((pFuncOrSubSubprogram   != 0) && 
           (pADFuncOrSubSubprogram != 0))
@@ -4181,18 +4182,21 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         AdtParser*    pRoot       = 0;
         AdtParser*    pCodeObject = 0;
         bool          bFirst      = true;
-        const char*   sType       = bIsFunction ? "FUNCTION" : "SUBROUTINE";
+        const char*   sType       = bIsAD_Function ? "FUNCTION" : "SUBROUTINE";
         string        sCodeFunction;
         string        sCodeBody;
         string        sCodeModule;
         string        sDeclarations;
+        string        sCallArgs;
         string        sLastArg;
         string        sClassPrefix(pClassName);
         const char*   pRawFunctionName = pFunctionName;
+        bool          bMulti           = false;
 
         sClassPrefix += "__";
 
-        sDeclarations = "INTEGER(4) :: cn\n";
+        sDeclarations  = "INTEGER(4) :: cn\n";
+        sDeclarations += "INTEGER(4) :: cm\n";
 
         if (bIsFunction)
         {
@@ -4236,6 +4240,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           bool         bAddLocal    = (bAD_Input && (nDimensions == 0)) || bAD_Result || (!bNew && (bIsOutVar || bWriteArg));
           bool         bAddDecl     = bIsOutVar || bNew || bWriteArg;
           bool         bWithIntent  = bWriteArg;
+          int          nLimit       = 1;
+          int          nDummy       = 0;
           string       sRawArg(rArg);
 
           AdtParser::stripPrefix(sRawArg, sClassPrefix, false);
@@ -4245,12 +4251,41 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
           ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
 
-          if (bIsNewInVar && (nDimensions > 1))
+          if ((::strcmp(rArg, "nbdirs") == 0) || (::sscanf(rArg, "nbdirs%d", &nDummy) == 1))
+          {
+            bWriteArg      = true;
+            bAddDecl       = false;
+            bNew           = false;
+            bIsNewInVar    = false;
+            sRawArg        = "nbdirs";
+            sDeclarations += "INTEGER(4), INTENT(IN):: nbdirs\n";
+          }
+
+          if (sCallArgs.length() > 0)
+          {
+            sCallArgs += ",";
+          }
+
+          sCallArgs += sRawArg;
+
+          if (sUpperDim.eq("nbdirsmax"))
+          {
+            sLowerDim.clear();
+            sUpperDim.clear();
+
+            if (nDimensions > 1)
+            {
+              ADVariableInfo.lowerDimension(rArg, 1, sLowerDim);
+              ADVariableInfo.upperDimension(rArg, 1, sUpperDim);
+              nLimit++;
+            }
+          }
+
+          if (bIsNewInVar && (nDimensions > nLimit))
           {
             ::printf("WARNING: Differentiation with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
 
             bSupported = false;
-
             // Break from loop
             break;
           }
@@ -4306,10 +4341,58 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                     sCodeBody += "END IF\n\n";
                   }
                 }
+                break;
               }
 
               case ForWrapper_MULTIDIFF:
               {
+                string  sNewArg;
+                string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
+
+                if (bAD_Result)
+                {
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += sRawArg + "(cm,cn) = 0\n";
+                    sCodeBody += "ENDDO\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += sRawArg + "(cm) = 0\n";
+                  }
+                }
+                else
+                {
+                  sNewArg = sLastArg + "_dir";
+
+                  FortranOutFunction.write(", ");
+                  FortranOutFunction.write(sNewArg);
+
+                  sNewDeclaration += sNewArg;
+
+                  sDeclarations += sNewDeclaration + "(nbdirsmax)";
+                  sDeclarations += "\n";
+
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += sRawArg + "(cm,cn) = 0\n";
+                    sCodeBody += "ENDDO\n\n";
+                    sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
+                    sCodeBody += sRawArg + "(cm," + sNewArg + ") = 1\n";
+                    sCodeBody += "END IF\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += sRawArg + "(cm) = 0\n";
+                    sCodeBody += "IF (" + sNewArg + "(cm) > 0) THEN\n";
+                    sCodeBody += sRawArg + "(cm) = 1\n";
+                    sCodeBody += "END IF\n\n";
+                  }
+                }
+
+                bMulti = true;
                 break;
               }
 
@@ -4320,6 +4403,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
               case ForWrapper_MULTIGRAD:
               {
+                bMulti = true;
                 break;
               }
 
@@ -4376,32 +4460,20 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         FortranOutFunction.write("USE COMMON");
         FortranOutFunction.newline();
 
+        // Add multidirectional loop
+        if (bMulti)
+        {
+          sCodeBody = "\nDO cm = 1,nbdirs\n" + sCodeBody + "ENDDO\n\n";
+        }
+
         // Add function call
-        if (bIsFunction)
+        if (bIsAD_Function)
         {
           sCodeBody += pWrapperFunctionName;
           sCodeBody += " = ";
           sCodeBody += pADFunctionName;
           sCodeBody += "(";
-
-          bFirst = true;
-
-          for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
-          {
-            const string rArg     = *Iter;
-            const char*  pRawArg  = rArg;
-
-            AdtParse::matchWord(pRawArg, sClassPrefix, false);
-
-            if (!bFirst)
-            {
-              sCodeBody += ", ";
-            }
-
-            bFirst     = false;
-            sCodeBody += pRawArg;
-          }
-
+          sCodeBody += sCallArgs;
           sCodeBody += ")\n";
         }
         else
@@ -4409,25 +4481,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           sCodeBody += "CALL ";
           sCodeBody += pADFunctionName;
           sCodeBody += "(";
-
-          bFirst = true;
-
-          for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
-          {
-            const string rArg     = *Iter;
-            const char*  pRawArg  = rArg;
-
-            AdtParse::matchWord(pRawArg, sClassPrefix, false);
-
-            if (!bFirst)
-            {
-              sCodeBody += ", ";
-            }
-
-            bFirst     = false;
-            sCodeBody += pRawArg;
-          }
-
+          sCodeBody += sCallArgs;
           sCodeBody += ")\n";
         }
 

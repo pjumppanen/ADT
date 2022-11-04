@@ -1457,16 +1457,7 @@ const string& AdtMakeCommandOperation::qualifiedADFunctionName(string& rFunction
 {
   qualifiedFunctionName(rFunctionName, pClassName);
 
-  rFunctionName += BaseSubSuffix;
-
-  AdtStringListConstIter Iter;
-
-  for (Iter = Vars.begin() ; Iter != Vars.end() ; ++Iter)
-  {
-    const string& rVar = *Iter;
-
-    rFunctionName += rVar;
-  }
+  rFunctionName += SubSuffix;
 
   return (rFunctionName);
 }                                                               
