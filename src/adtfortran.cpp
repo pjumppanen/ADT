@@ -4228,7 +4228,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           string       sIntent;
           string       sLowerDim;
           string       sUpperDim;
-          const string rArg         = *Iter;
+          string       rArg         = *Iter;
           bool         bIsOutVar    = (OutVarsMap.find(rArg)     != OutVarsMap.end());
           bool         bAD_Result   = (OutVarsMap.find(sLastArg) != OutVarsMap.end());
           bool         bAD_Input    = (VarsMap.find(sLastArg)    != VarsMap.end());
@@ -4242,10 +4242,6 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           bool         bWithIntent  = bWriteArg;
           int          nLimit       = 1;
           int          nDummy       = 0;
-          string       sRawArg(rArg);
-
-          AdtParser::stripPrefix(sRawArg, sClassPrefix, false);
-          AdtParser::stripPrefix(sLastArg, sClassPrefix, false);
 
           ADVariableInfo.intent(rArg, sIntent);
           ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
@@ -4257,7 +4253,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             bAddDecl       = false;
             bNew           = false;
             bIsNewInVar    = false;
-            sRawArg        = "nbdirs";
+            rArg           = "nbdirs";
             sDeclarations += "INTEGER(4), INTENT(IN):: nbdirs\n";
           }
 
@@ -4266,7 +4262,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             sCallArgs += ",";
           }
 
-          sCallArgs += sRawArg;
+          sCallArgs += rArg;
 
           if (sUpperDim.eq("nbdirsmax"))
           {
@@ -4304,12 +4300,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += sRawArg + "(cn) = 0\n";
+                    sCodeBody += rArg + "(cn) = 0\n";
                     sCodeBody += "ENDDO\n\n";
                   }
                   else
                   {
-                    sCodeBody += sRawArg + " = 0\n";
+                    sCodeBody += rArg + " = 0\n";
                   }
                 }
                 else
@@ -4327,17 +4323,17 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += sRawArg + "(cn) = 0\n";
+                    sCodeBody += rArg + "(cn) = 0\n";
                     sCodeBody += "ENDDO\n\n";
                     sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
-                    sCodeBody += sRawArg + "(" + sNewArg + ") = 1\n";
+                    sCodeBody += rArg + "(" + sNewArg + ") = 1\n";
                     sCodeBody += "END IF\n\n";
                   }
                   else
                   {
-                    sCodeBody += sRawArg + " = 0\n";
+                    sCodeBody += rArg + " = 0\n";
                     sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
-                    sCodeBody += sRawArg + " = 1\n";
+                    sCodeBody += rArg + " = 1\n";
                     sCodeBody += "END IF\n\n";
                   }
                 }
@@ -4354,12 +4350,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += sRawArg + "(cm,cn) = 0\n";
+                    sCodeBody += rArg + "(cm,cn) = 0\n";
                     sCodeBody += "ENDDO\n\n";
                   }
                   else
                   {
-                    sCodeBody += sRawArg + "(cm) = 0\n";
+                    sCodeBody += rArg + "(cm) = 0\n";
                   }
                 }
                 else
@@ -4377,17 +4373,17 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += sRawArg + "(cm,cn) = 0\n";
+                    sCodeBody += rArg + "(cm,cn) = 0\n";
                     sCodeBody += "ENDDO\n\n";
                     sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
-                    sCodeBody += sRawArg + "(cm," + sNewArg + ") = 1\n";
+                    sCodeBody += rArg + "(cm," + sNewArg + ") = 1\n";
                     sCodeBody += "END IF\n\n";
                   }
                   else
                   {
-                    sCodeBody += sRawArg + "(cm) = 0\n";
+                    sCodeBody += rArg + "(cm) = 0\n";
                     sCodeBody += "IF (" + sNewArg + "(cm) > 0) THEN\n";
-                    sCodeBody += sRawArg + "(cm) = 1\n";
+                    sCodeBody += rArg + "(cm) = 1\n";
                     sCodeBody += "END IF\n\n";
                   }
                 }
@@ -4439,7 +4435,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
               FortranOutFunction.write(", ");
             }
 
-            FortranOutFunction.write(sRawArg);
+            FortranOutFunction.write(rArg);
 
             bFirst = false;
           }
@@ -21718,6 +21714,44 @@ AdtFortranFunctionStmt::AdtFortranFunctionStmt(AdtParser* pLblDefObj,
   if (FunctionName != 0)
   {
     name(FunctionName->name());
+
+    if (ParameterList != 0)
+    {
+      // Remove any class prefix from any of the arguments
+      string           sClassName;
+      const char*      pName = name();
+      const char*      pWordDelimiters[] = {"__", "\0"};
+
+      if (AdtParse::extractWord(sClassName,
+                                pWordDelimiters,
+                                pName,
+                                true))
+      {
+        AdtParserPtrList rNameList;
+
+        sClassName += "__";
+
+        ParameterList->findObjects(rNameList,
+                                  "AdtFortranName",
+                                  sClassName,
+                                  false,
+                                  0,
+                                  true);
+
+        for (AdtParserPtrListIter Iter = rNameList.begin() ; Iter != rNameList.end() ; ++Iter)
+        {
+          AdtParser* pObj = *Iter;
+
+          if (pObj != 0)
+          {
+            string sArgument(pObj->name());
+
+            AdtParser::stripPrefix(sArgument, sClassName);
+            pObj->name(sArgument);
+          }
+        }
+      }                              
+    }
   }
 
   CanBindComments = true;
@@ -22494,6 +22528,44 @@ AdtFortranSubroutineStmt::AdtFortranSubroutineStmt(AdtParser* pLblDefObj,
   if (SubroutineName != 0)
   {
     name(SubroutineName->name());
+
+    if (ParameterList != 0)
+    {
+      // Remove any class prefix from any of the arguments
+      string           sClassName;
+      const char*      pName = name();
+      const char*      pWordDelimiters[] = {"__", "\0"};
+
+      if (AdtParse::extractWord(sClassName,
+                                pWordDelimiters,
+                                pName,
+                                true))
+      {
+        AdtParserPtrList rNameList;
+
+        sClassName += "__";
+
+        ParameterList->findObjects(rNameList,
+                                  "AdtFortranName",
+                                  sClassName,
+                                  false,
+                                  0,
+                                  true);
+
+        for (AdtParserPtrListIter Iter = rNameList.begin() ; Iter != rNameList.end() ; ++Iter)
+        {
+          AdtParser* pObj = *Iter;
+
+          if (pObj != 0)
+          {
+            string sArgument(pObj->name());
+
+            AdtParser::stripPrefix(sArgument, sClassName);
+            pObj->name(sArgument);
+          }
+        }
+      }
+    }
   }
 
   CanBindComments = true;
