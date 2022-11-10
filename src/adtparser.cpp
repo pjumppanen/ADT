@@ -1290,14 +1290,18 @@ void AdtParser::printDescendants(AdtFile& rOutFile) const
 
 //  ----------------------------------------------------------------------------
 
-void AdtParser::stripPrefix(string& rString, const char* sClassPrefix, bool bMatchCase)
+bool AdtParser::stripPrefix(string& rString, const char* sClassPrefix, bool bMatchCase)
 {
-  const char*  pRaw = rString;
+  const char*  pRaw       = rString;
+  bool         bStripped  = false;
 
   if (AdtParse::matchWord(pRaw, sClassPrefix, bMatchCase))
   {
-    rString = string(pRaw);
+    rString   = string(pRaw);
+    bStripped = true;
   }
+
+  return (bStripped);
 }
 
 //  ----------------------------------------------------------------------------

@@ -511,7 +511,7 @@ public:
 
   AdtParser*                          findDescendantMatch(AdtParser* pMatchTo, AdtParser*& pNewMatchTo);
 
-  static void                         stripPrefix(string& rString, const char* sClassPrefix, bool bMatchCase = false);
+  static bool                         stripPrefix(string& rString, const char* sClassPrefix, bool bMatchCase = false);
 
   static bool                         hasSubString(const char* pString,
                                                    const char* pSubString,
