@@ -3638,9 +3638,26 @@ public:
 
 
 //  ----------------------------------------------------------------------------
+//  AdtFortranFuncSubBase method implementations
+//  ----------------------------------------------------------------------------
+class AdtFortranFuncSubBase : public AdtFortranBase
+{
+protected:  
+  void argumentsStripClassPrefix(AdtFortranNameList* pParameterList);
+
+public:  
+  AdtFortranFuncSubBase();
+  AdtFortranFuncSubBase(const AdtFortranFuncSubBase& rCopy);
+  virtual ~AdtFortranFuncSubBase();
+  
+  declType;
+};
+
+
+//  ----------------------------------------------------------------------------
 //  AdtFortranFunctionStmt class
 //  ----------------------------------------------------------------------------
-class AdtFortranFunctionStmt : public AdtFortranBase
+class AdtFortranFunctionStmt : public AdtFortranFuncSubBase
 {
 private:
   AdtFortranLblDef*             LblDef;
@@ -3664,6 +3681,8 @@ public:
 
   AdtFortranFunctionStmt(const AdtFortranFunctionStmt& rCopy);
   virtual ~AdtFortranFunctionStmt();
+
+  void                            argumentsStripClassPrefix();
 
   AdtFortranDeclarations*         declarations();
 
@@ -3691,6 +3710,13 @@ public:
   declType;
 };
 
+//  ----------------------------------------------------------------------------
+
+inline void AdtFortranFunctionStmt::argumentsStripClassPrefix()
+{
+  AdtFortranFuncSubBase::argumentsStripClassPrefix(ParameterList);
+}
+  
 //  ----------------------------------------------------------------------------
 
 inline AdtFortranDeclarations* AdtFortranFunctionStmt::declarations()
@@ -3806,7 +3832,7 @@ public:
 //  ----------------------------------------------------------------------------
 //  AdtFortranSubroutineStmt class
 //  ----------------------------------------------------------------------------
-class AdtFortranSubroutineStmt : public AdtFortranBase
+class AdtFortranSubroutineStmt : public AdtFortranFuncSubBase
 {
 private:
   AdtFortranLblDef*               LblDef;
@@ -3827,6 +3853,8 @@ public:
   AdtFortranSubroutineStmt(const AdtFortranSubroutineStmt& rCopy);
   virtual ~AdtFortranSubroutineStmt();
 
+  void                            argumentsStripClassPrefix();
+  
   AdtFortranDeclarations*         declarations();
 
   bool                            hasVarDeclarations() const;
@@ -3853,6 +3881,13 @@ public:
   declType;
 };
 
+//  ----------------------------------------------------------------------------
+
+inline void AdtFortranSubroutineStmt::argumentsStripClassPrefix()
+{
+  AdtFortranFuncSubBase::argumentsStripClassPrefix(ParameterList);
+}
+  
 //  ----------------------------------------------------------------------------
 
 inline AdtFortranDeclarations* AdtFortranSubroutineStmt::declarations()

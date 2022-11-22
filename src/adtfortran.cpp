@@ -4124,15 +4124,42 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     bool              bAddEntireModule = false;
     string            sModuleName("COMMON");
     string            sDiffModuleName("COMMON");
+    string            sClassPrefix(pClassName);
     AdtFortranModule* pModule = (AdtFortranModule*)findObject("AdtFortranModule",
                                                               sModuleName,
                                                               false);
+    
+    sClassPrefix += "__";
 
     AdtStringByStringMap  VarsMap;
     AdtStringByStringMap  OutVarsMap;
 
     nameListToNameMap(VarsMap, Vars);
-    nameListToNameMap(OutVarsMap, OutVars);
+
+    AdtStringListConstIter  OutVarsIter;
+
+    // If the out var corresponds to the function name we need to add it to the 
+    // OutVarsMap with a '_' prefix because the AD'ed function will get a new
+    // variable the same name as the function less the class prefix but with a '_'
+    // prefix instead. If we don't do this the logic will fail to recognise this 
+    // new argument as an out var.
+    for (OutVarsIter = OutVars.begin() ; OutVarsIter != OutVars.end() ; ++OutVarsIter)
+    {
+      const string& rOutVar = *OutVarsIter;
+      string        sPrefixed(sClassPrefix);
+
+      sPrefixed += rOutVar;
+
+      if (sPrefixed.eq(pFunctionName))
+      {
+        string  sUscoreOutVar("_");
+
+        sUscoreOutVar            += rOutVar;
+        OutVarsMap[sUscoreOutVar] = sUscoreOutVar;
+      }
+
+      OutVarsMap[rOutVar] = rOutVar;
+    }
 
     sDiffModuleName += pModuleSuffix;
 
@@ -4189,23 +4216,11 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         string        sDeclarations;
         string        sCallArgs;
         string        sLastArg;
-        string        sClassPrefix(pClassName);
         const char*   pRawFunctionName = pFunctionName;
         bool          bMulti           = false;
 
-        sClassPrefix += "__";
-
         sDeclarations  = "INTEGER(4) :: cn\n";
         sDeclarations += "INTEGER(4) :: cm\n";
-
-        if (bIsFunction)
-        {
-          AdtParse::matchWord(pRawFunctionName, sClassPrefix, false);
-
-          sDeclarations += "REAL(8) :: ";
-          sDeclarations += pRawFunctionName;
-          sDeclarations += "\n";
-        }
 
         FortranOutModule.open(sCodeModule);
 
@@ -4228,11 +4243,19 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           string       sIntent;
           string       sLowerDim;
           string       sUpperDim;
+          string       sPrefixedArg(pClassName);
           string       rArg         = *Iter;
+
+          // Tapenade generated output vars with class prefix will have been replaced with '_'
+          // By adding {ClassName}_ it should now look like the function name and be recognised
+          // as such.
+          sPrefixedArg += "_";
+          sPrefixedArg += rArg;
+
           bool         bIsOutVar    = (OutVarsMap.find(rArg)     != OutVarsMap.end());
           bool         bAD_Result   = (OutVarsMap.find(sLastArg) != OutVarsMap.end());
           bool         bAD_Input    = (VarsMap.find(sLastArg)    != VarsMap.end());
-          bool         bIsFuncVal   = bIsFunction && rArg.eq(pFunctionName);
+          bool         bIsFuncVal   = bIsFunction && sPrefixedArg.eq(pFunctionName);
           bool         bNew         = !VariableInfo.hasVariable(rArg) && !bIsFuncVal;
           bool         bIsNewInVar  = bNew && !bAD_Result && !bIsOutVar;
           bool         bWriteArg    = !bIsOutVar && !(bAD_Input && bNew) && !bIsFuncVal;
@@ -4414,7 +4437,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           if (bAddDecl)
           {
             sDeclaration.clear();
-            ADVariableInfo.buildVariableDeclaration(rArg, bWithIntent, sDeclaration, sClassPrefix);
+            ADVariableInfo.buildVariableDeclaration(rArg, bWithIntent, sDeclaration);
 
             if (bAddLocal)
             {
@@ -5682,7 +5705,7 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
             string                    sInitLocalsCode;
 
             //Look for new output variables and remove the class prefix from them
-            pDeclarations->removeOutputVarPrefix(pObjCopy, pParentClassName);
+//            pDeclarations->removeOutputVarPrefix(pObjCopy, pParentClassName);
 
             //Eliminate unused local variables and initialise unitialised variables.
             if ((pSuffix          != 0) &&
@@ -5749,7 +5772,7 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
                       }
                     }
                   }
-                  else
+                  else if (pEntityDeclObj != 0)
                   {
                     AdtParser*  pEntityDeclListObj = pEntityDeclObj->parent();
 
@@ -8770,6 +8793,7 @@ AdtFortranFunctionSubprogram::AdtFortranFunctionSubprogram(AdtParser* pFunctionS
 
   if (FunctionStmt != 0)
   {
+    FunctionStmt->argumentsStripClassPrefix();
     name(FunctionStmt->name());
   }
 }
@@ -9033,6 +9057,7 @@ AdtFortranSubroutineSubprogram::AdtFortranSubroutineSubprogram(AdtParser* pSubro
 
   if (SubroutineStmt != 0)
   {
+    SubroutineStmt->argumentsStripClassPrefix();
     name(SubroutineStmt->name());
   }
 }
@@ -21689,6 +21714,119 @@ implType(AdtFortranCallStmt, AdtFortranBase);
 
 
 //  ----------------------------------------------------------------------------
+//  AdtFortranFuncSubBase method implementations
+//  ----------------------------------------------------------------------------
+AdtFortranFuncSubBase::AdtFortranFuncSubBase()
+ : AdtFortranBase()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtFortranFuncSubBase::AdtFortranFuncSubBase(const AdtFortranFuncSubBase& rCopy)
+ : AdtFortranBase(rCopy)
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtFortranFuncSubBase::~AdtFortranFuncSubBase()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtFortranFuncSubBase::argumentsStripClassPrefix(AdtFortranNameList* pParameterList)
+{
+  if (pParameterList != 0)
+  {
+    AdtParser* pBody = 0;
+
+    if (pParameterList->parent() != 0)
+    {
+      AdtParser* pRoot = pParameterList->parent()->parent();
+
+      pBody = pRoot->findDescendant("Body");
+    }
+
+    // Remove any class prefix from any of the arguments
+    string           sClassName;
+    const char*      pName = name();
+    const char*      pWordDelimiters[] = {"__", "\0"};
+
+    if (AdtParse::extractWord(sClassName,
+                              pWordDelimiters,
+                              pName,
+                              true))
+    {
+      AdtParserPtrList rNameList;
+
+      sClassName += "__";
+
+      pParameterList->findObjects(rNameList,
+                                  "AdtFortranName",
+                                  sClassName,
+                                  false,
+                                  0,
+                                  true);
+
+      for (AdtParserPtrListIter Iter = rNameList.begin() ; Iter != rNameList.end() ; ++Iter)
+      {
+        AdtParser* pObj = *Iter;
+
+        if (pObj != 0)
+        {
+          string sArgument(pObj->name());
+
+          // Change argument name
+          if (AdtParser::stripPrefix(sArgument, sClassName))
+          {
+            // Add an '_' prefix to avoid the arguments having the same name as existing function
+            sArgument = "_" + sArgument;
+
+            if (pBody != 0)
+            {
+              AdtParserPtrList rUseNameList;
+
+              pBody->findObjects(rUseNameList,
+                                 "AdtFortranName",
+                                 pObj->name(),
+                                 false);
+
+              pBody->findObjects(rUseNameList,
+                                 "AdtFortranEntityDecl",
+                                 pObj->name(),
+                                 false);
+
+              for (AdtParserPtrListIter UseIter = rUseNameList.begin() ; UseIter != rUseNameList.end() ; ++UseIter)
+              {
+                AdtParser* pUseObj = *UseIter;
+
+                if (pUseObj != 0)
+                {
+                  // Change the use instances of previous argument name in body
+                  pUseObj->name(sArgument);
+                }
+              }
+            }
+
+            pObj->name(sArgument);
+          }
+        }
+      }
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+implType(AdtFortranFuncSubBase, AdtFortranBase);
+
+
+//  ----------------------------------------------------------------------------
 //  AdtFortranFunctionStmt method implementations
 //  ----------------------------------------------------------------------------
 AdtFortranFunctionStmt::AdtFortranFunctionStmt(AdtParser* pLblDefObj,
@@ -21698,7 +21836,7 @@ AdtFortranFunctionStmt::AdtFortranFunctionStmt(AdtParser* pLblDefObj,
                                                bool bEmptyParameterList,
                                                bool bRecursive,
                                                AdtParser* pResultNameObj)
- : AdtFortranBase()
+ : AdtFortranFuncSubBase()
 {
   initObject(LblDef,        pLblDefObj,         AdtFortranLblDef,   true);
   initObject(TypeSpec,      pTypeSpecObj,       AdtFortranTypeSpec, true);
@@ -21714,44 +21852,6 @@ AdtFortranFunctionStmt::AdtFortranFunctionStmt(AdtParser* pLblDefObj,
   if (FunctionName != 0)
   {
     name(FunctionName->name());
-
-    if (ParameterList != 0)
-    {
-      // Remove any class prefix from any of the arguments
-      string           sClassName;
-      const char*      pName = name();
-      const char*      pWordDelimiters[] = {"__", "\0"};
-
-      if (AdtParse::extractWord(sClassName,
-                                pWordDelimiters,
-                                pName,
-                                true))
-      {
-        AdtParserPtrList rNameList;
-
-        sClassName += "__";
-
-        ParameterList->findObjects(rNameList,
-                                  "AdtFortranName",
-                                  sClassName,
-                                  false,
-                                  0,
-                                  true);
-
-        for (AdtParserPtrListIter Iter = rNameList.begin() ; Iter != rNameList.end() ; ++Iter)
-        {
-          AdtParser* pObj = *Iter;
-
-          if (pObj != 0)
-          {
-            string sArgument(pObj->name());
-
-            AdtParser::stripPrefix(sArgument, sClassName);
-            pObj->name(sArgument);
-          }
-        }
-      }                              
-    }
   }
 
   CanBindComments = true;
@@ -21760,7 +21860,7 @@ AdtFortranFunctionStmt::AdtFortranFunctionStmt(AdtParser* pLblDefObj,
 //  ----------------------------------------------------------------------------
 
 AdtFortranFunctionStmt::AdtFortranFunctionStmt(const AdtFortranFunctionStmt& rCopy)
- : AdtFortranBase(rCopy)
+ : AdtFortranFuncSubBase(rCopy)
 {
   copyObject(LblDef,        rCopy, AdtFortranLblDef);
   copyObject(TypeSpec,      rCopy, AdtFortranTypeSpec);
@@ -22204,7 +22304,7 @@ AdtFile& AdtFortranFunctionStmt::writeFortran(AdtFile& pOutFile, int nMode) cons
 
 //  ----------------------------------------------------------------------------
 
-implType(AdtFortranFunctionStmt, AdtFortranBase);
+implType(AdtFortranFunctionStmt, AdtFortranFuncSubBase);
 
 
 //  ----------------------------------------------------------------------------
@@ -22514,7 +22614,7 @@ AdtFortranSubroutineStmt::AdtFortranSubroutineStmt(AdtParser* pLblDefObj,
                                                    AdtParser* pParameterListObj,
                                                    bool bEmptyParameterList,
                                                    bool bRecursive)
- : AdtFortranBase()
+ : AdtFortranFuncSubBase()
 {
   initObject(LblDef,          pLblDefObj,         AdtFortranLblDef,   true);
   initObject(SubroutineName,  pSubroutineNameObj, AdtFortranName,     true);
@@ -22528,44 +22628,6 @@ AdtFortranSubroutineStmt::AdtFortranSubroutineStmt(AdtParser* pLblDefObj,
   if (SubroutineName != 0)
   {
     name(SubroutineName->name());
-
-    if (ParameterList != 0)
-    {
-      // Remove any class prefix from any of the arguments
-      string           sClassName;
-      const char*      pName = name();
-      const char*      pWordDelimiters[] = {"__", "\0"};
-
-      if (AdtParse::extractWord(sClassName,
-                                pWordDelimiters,
-                                pName,
-                                true))
-      {
-        AdtParserPtrList rNameList;
-
-        sClassName += "__";
-
-        ParameterList->findObjects(rNameList,
-                                  "AdtFortranName",
-                                  sClassName,
-                                  false,
-                                  0,
-                                  true);
-
-        for (AdtParserPtrListIter Iter = rNameList.begin() ; Iter != rNameList.end() ; ++Iter)
-        {
-          AdtParser* pObj = *Iter;
-
-          if (pObj != 0)
-          {
-            string sArgument(pObj->name());
-
-            AdtParser::stripPrefix(sArgument, sClassName);
-            pObj->name(sArgument);
-          }
-        }
-      }
-    }
   }
 
   CanBindComments = true;
@@ -22574,7 +22636,7 @@ AdtFortranSubroutineStmt::AdtFortranSubroutineStmt(AdtParser* pLblDefObj,
 //  ----------------------------------------------------------------------------
 
 AdtFortranSubroutineStmt::AdtFortranSubroutineStmt(const AdtFortranSubroutineStmt& rCopy)
- : AdtFortranBase(rCopy)
+ : AdtFortranFuncSubBase(rCopy)
 {
   copyObject(LblDef,          rCopy, AdtFortranLblDef);
   copyObject(SubroutineName,  rCopy, AdtFortranName);
@@ -22894,7 +22956,7 @@ AdtFile& AdtFortranSubroutineStmt::writeFortran(AdtFile& pOutFile, int nMode) co
 
 //  ----------------------------------------------------------------------------
 
-implType(AdtFortranSubroutineStmt, AdtFortranBase);
+implType(AdtFortranSubroutineStmt, AdtFortranFuncSubBase);
 
 
 //  ----------------------------------------------------------------------------
