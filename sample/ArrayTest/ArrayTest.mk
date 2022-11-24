@@ -21,5 +21,14 @@ AD BEGIN
     FUNCTION=test_one_if OUTVAR=test_one_if VAR=v MODE=r;
     FUNCTION=test_one_if_internal OUTVAR=test_one_if_internal VAR=v MODE=f;
     FUNCTION=test_one_if_internal OUTVAR=test_one_if_internal VAR=v MODE=r;
+
+    DIFF=trigA OUTVAR=rOut VAR=x,y;
+    DIFF=trigB OUTVAR=trigB VAR=x,y;
+    MULTIDIFF=trigA OUTVAR=rOut VAR=x,y;
+    MULTIDIFF=trigB OUTVAR=trigB VAR=x,y;
+    GRAD=trigA OUTVAR=rOut VAR=x,y;
+    GRAD=trigB OUTVAR=trigB VAR=x,y;
+    MULTIGRAD=trigA OUTVAR=rOut VAR=x,y;
+    MULTIGRAD=trigB OUTVAR=trigB VAR=x,y;
   END
 END

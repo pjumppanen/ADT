@@ -122,6 +122,8 @@ ArrayTest::ArrayTest(
   #include "include/AT_constructor_scalars_phase_2.hpp"
   #include "include/AT_constructor_arrays_phase_2.hpp"
   #include "include/AT_array_plans_init.hpp"
+
+  nbdirsmax = 10;
 }
 
 // ----------------------------------------------------------------------------
@@ -302,3 +304,35 @@ longbool ArrayTest::isPositive(double dValue)
 
   return (bResult);
 }
+
+// ----------------------------------------------------------------------------
+
+void ArrayTest::trigA(double& rOut, const ARRAY_1D x/* 1:ix */, const ARRAY_1D y/* 1:ix */)
+{
+  int cn;
+
+  rOut = 0.0;
+
+  for (cn = 1 ; cn <= ix ; cn++)
+  {
+    rOut = rOut + cos(cn * x[cn]) + sin(cn * y[cn]);
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+double ArrayTest::trigB(const ARRAY_1D x/* 1:ix */, const ARRAY_1D y/* 1:ix */)
+{
+  int     cn;
+  double  rOut;
+
+  rOut = 0.0;
+
+  for (cn = 1 ; cn <= ix ; cn++)
+  {
+    rOut = rOut + cos(cn * x[cn]) + sin(cn * y[cn]);
+  }
+
+  return (rOut);
+}
+

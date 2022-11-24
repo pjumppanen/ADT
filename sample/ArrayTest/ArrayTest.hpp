@@ -64,6 +64,7 @@ protected:
 
   // Check for null sized arrays
   ARRAY_1D  N1_D /*1:0*/;
+  int       nbdirsmax;
 
 #include "include/AT_array_plans.hpp"
 
@@ -100,6 +101,10 @@ public:
 
   bool     isNegative(double dValue);
   longbool isPositive(double dValue);
+
+  // Functions to test DIFF and GRAD wrappers
+  void     trigA(double& rOut, const ARRAY_1D x/* 1:ix */, const ARRAY_1D y/* 1:ix */);
+  double   trigB(const ARRAY_1D x/* 1:ix */, const ARRAY_1D y/* 1:ix */);
 };
 
 
