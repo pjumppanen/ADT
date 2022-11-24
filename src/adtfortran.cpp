@@ -4133,6 +4133,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
     AdtStringByStringMap  VarsMap;
     AdtStringByStringMap  OutVarsMap;
+    AdtStringByStringMap  OutVarsIndexMap;
+    int                   nOutVarsIndex = 1;
 
     nameListToNameMap(VarsMap, Vars);
 
@@ -4147,6 +4149,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     {
       const string& rOutVar = *OutVarsIter;
       string        sPrefixed(sClassPrefix);
+      char          sIndex[16] = {0};
+
+      ::itoa(nOutVarsIndex, sIndex, 10);
 
       sPrefixed += rOutVar;
 
@@ -4154,11 +4159,15 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       {
         string  sUscoreOutVar("_");
 
-        sUscoreOutVar            += rOutVar;
-        OutVarsMap[sUscoreOutVar] = sUscoreOutVar;
+        sUscoreOutVar                 += rOutVar;
+        OutVarsMap[sUscoreOutVar]      = sUscoreOutVar;
+        OutVarsIndexMap[sUscoreOutVar] = sIndex;
       }
 
-      OutVarsMap[rOutVar] = rOutVar;
+      OutVarsMap[rOutVar]       = rOutVar;
+      OutVarsIndexMap[rOutVar]  = sIndex;
+
+      nOutVarsIndex++;
     }
 
     sDiffModuleName += pModuleSuffix;
@@ -4218,6 +4227,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         string        sLastArg;
         const char*   pRawFunctionName = pFunctionName;
         bool          bMulti           = false;
+        bool          bIsGrad          = (nWrapperType == ForWrapper_GRAD) || (nWrapperType == ForWrapper_MULTIGRAD);
+        bool          bMultipleOuts    = (OutVars.size() > 1);
 
         sDeclarations  = "INTEGER(4) :: cn\n";
         sDeclarations += "INTEGER(4) :: cm\n";
@@ -4252,19 +4263,21 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           sPrefixedArg += "_";
           sPrefixedArg += rArg;
 
-          bool         bIsOutVar    = (OutVarsMap.find(rArg)     != OutVarsMap.end());
-          bool         bAD_Result   = (OutVarsMap.find(sLastArg) != OutVarsMap.end());
-          bool         bAD_Input    = (VarsMap.find(sLastArg)    != VarsMap.end());
-          bool         bIsFuncVal   = bIsFunction && sPrefixedArg.eq(pFunctionName);
-          bool         bNew         = !VariableInfo.hasVariable(rArg) && !bIsFuncVal;
-          bool         bIsNewInVar  = bNew && !bAD_Result && !bIsOutVar;
-          bool         bWriteArg    = !bIsOutVar && !(bAD_Input && bNew) && !bIsFuncVal;
-          int          nDimensions  = ADVariableInfo.numberOfDimensions(rArg);
-          bool         bAddLocal    = (bAD_Input && (nDimensions == 0)) || bAD_Result || (!bNew && (bIsOutVar || bWriteArg));
-          bool         bAddDecl     = bIsOutVar || bNew || bWriteArg;
-          bool         bWithIntent  = bWriteArg;
-          int          nLimit       = 1;
-          int          nDummy       = 0;
+          bool         bIsOutVar      = (OutVarsMap.find(rArg)     != OutVarsMap.end());
+          bool         bAD_Result     = (OutVarsMap.find(sLastArg) != OutVarsMap.end());
+          bool         bAD_Input      = (VarsMap.find(sLastArg)    != VarsMap.end());
+          bool         bIsFuncVal     = bIsFunction && sPrefixedArg.eq(pFunctionName);
+          bool         bNew           = !VariableInfo.hasVariable(rArg) && !bIsFuncVal;
+          bool         bIsNewInVar    = bNew && !bAD_Result && !bIsOutVar;
+          bool         bDiffWriteArg  = !bIsGrad && !bIsOutVar && !(bAD_Input && bNew) && !bIsFuncVal;
+          bool         bGradWriteArg  = bIsGrad && ((bAD_Input && bNew) || (!bNew && !bIsFuncVal)) && !(bIsOutVar || bAD_Result);
+          bool         bWriteArg      = bGradWriteArg || bDiffWriteArg;
+          int          nDimensions    = ADVariableInfo.numberOfDimensions(rArg);
+          bool         bAddLocal      = bWriteArg || (nDimensions == 0);
+          bool         bAddDecl       = bIsOutVar || bNew || bWriteArg;
+          bool         bWithIntent    = bWriteArg;
+          int          nLimit         = 1;
+          int          nDummy         = 0;
 
           ADVariableInfo.intent(rArg, sIntent);
           ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
@@ -4323,12 +4336,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cn) = 0\n";
+                    sCodeBody += rArg + "(cn) = 0.0\n";
                     sCodeBody += "ENDDO\n\n";
                   }
                   else
                   {
-                    sCodeBody += rArg + " = 0\n";
+                    sCodeBody += rArg + " = 0.0\n";
                   }
                 }
                 else
@@ -4346,10 +4359,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cn) = 0\n";
+                    sCodeBody += rArg + "(cn) = 0.0\n";
                     sCodeBody += "ENDDO\n\n";
                     sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
-                    sCodeBody += rArg + "(" + sNewArg + ") = 1\n";
+                    sCodeBody += rArg + "(" + sNewArg + ") = 1.0\n";
                     sCodeBody += "END IF\n\n";
                   }
                   else
@@ -4373,12 +4386,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cm,cn) = 0\n";
+                    sCodeBody += rArg + "(cm,cn) = 0.0\n";
                     sCodeBody += "ENDDO\n\n";
                   }
                   else
                   {
-                    sCodeBody += rArg + "(cm) = 0\n";
+                    sCodeBody += rArg + "(cm) = 0.0\n";
                   }
                 }
                 else
@@ -4396,17 +4409,17 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   if (sUpperDim.length() > 0)
                   {
                     sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cm,cn) = 0\n";
+                    sCodeBody += rArg + "(cm,cn) = 0.0\n";
                     sCodeBody += "ENDDO\n\n";
                     sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
-                    sCodeBody += rArg + "(cm," + sNewArg + ") = 1\n";
+                    sCodeBody += rArg + "(cm," + sNewArg + ") = 1.0\n";
                     sCodeBody += "END IF\n\n";
                   }
                   else
                   {
-                    sCodeBody += rArg + "(cm) = 0\n";
+                    sCodeBody += rArg + "(cm) = 0.0\n";
                     sCodeBody += "IF (" + sNewArg + "(cm) > 0) THEN\n";
-                    sCodeBody += rArg + "(cm) = 1\n";
+                    sCodeBody += rArg + "(cm) = 1.0\n";
                     sCodeBody += "END IF\n\n";
                   }
                 }
@@ -4417,6 +4430,49 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
               case ForWrapper_GRAD:
               {
+                if (bAD_Input)
+                {
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += rArg + "(cn) = 0.0\n";
+                    sCodeBody += "ENDDO\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += rArg + " = 0.0\n";
+                  }
+                }
+                else
+                {
+                  string  sSelector;
+
+                  if (bMultipleOuts)
+                  {
+                    sCodeBody += "\nIF (which == " + OutVarsIndexMap[rArg] + ") THEN\n";
+                    sCodeBody += "GradSelect = 1.0\n";
+                    sCodeBody += "ELSE\n";
+                    sCodeBody += "GradSelect = 0.0\n";
+                    sCodeBody += "END IF\n\n";
+
+                    sSelector = "GradSelect";
+                  }
+                  else
+                  {
+                    sSelector = "1.0";
+                  }
+
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += rArg + "(cn) = " + sSelector + "\n";
+                    sCodeBody += "ENDDO\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += rArg + " = " + sSelector + "\n";
+                  }
+                }
                 break;
               }
 
@@ -4464,6 +4520,31 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           }
 
           sLastArg = rArg;
+        }
+
+        // For GRAD mode if we have multiple outs then add a 'which' integer parameter
+        // that selects which out var we are obtaining the gradient for, selected by 
+        // number starting from 1 to the number of out vars in the list order.
+        if (bIsGrad && bMultipleOuts)
+        {
+          string  sNewArg;
+
+          sDeclarations += "REAL(8) :: GradSelect\n";
+          sDeclarations += "INTEGER(4), INTENT(IN):: which";
+
+          if (bMulti)
+          {
+            sDeclarations += "(nbdirsmax)";
+          }
+
+          sDeclarations += "\n";
+
+          if (!bFirst)
+          {
+            FortranOutFunction.write(", ");
+          }
+
+          FortranOutFunction.write("which");
         }
 
         FortranOutFunction.write(")");
