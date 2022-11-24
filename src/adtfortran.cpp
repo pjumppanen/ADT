@@ -4478,6 +4478,50 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
               case ForWrapper_MULTIGRAD:
               {
+                if (bAD_Input)
+                {
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += rArg + "(cm,cn) = 0.0\n";
+                    sCodeBody += "ENDDO\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += rArg + "(cm) = 0.0\n";
+                  }
+                }
+                else
+                {
+                  string  sSelector;
+
+                  if (bMultipleOuts)
+                  {
+                    sCodeBody += "\nIF (which == " + OutVarsIndexMap[rArg] + ") THEN\n";
+                    sCodeBody += "GradSelect = 1.0\n";
+                    sCodeBody += "ELSE\n";
+                    sCodeBody += "GradSelect = 0.0\n";
+                    sCodeBody += "END IF\n\n";
+
+                    sSelector = "GradSelect";
+                  }
+                  else
+                  {
+                    sSelector = "1.0";
+                  }
+
+                  if (sUpperDim.length() > 0)
+                  {
+                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                    sCodeBody += rArg + "(cm,cn) = " + sSelector + "\n";
+                    sCodeBody += "ENDDO\n\n";
+                  }
+                  else
+                  {
+                    sCodeBody += rArg + "(cm) = " + sSelector + "\n";
+                  }
+                }
+
                 bMulti = true;
                 break;
               }
