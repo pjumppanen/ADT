@@ -343,6 +343,8 @@ enum AdtFortranWrapperType
   ForWrapper_GRAD       = 1,
   ForWrapper_MULTIDIFF  = 2,
   ForWrapper_MULTIGRAD  = 3,
+  ForWrapper_HESSIAN    = 4,
+  ForWrapper_REML       = 5,
 };
 
 
@@ -864,7 +866,8 @@ public:
                                             const char* pSubSuffix,
                                             const char* pModuleSuffix,
                                             const AdtStringList& Vars,
-                                            const AdtStringList& OutVars);
+                                            const AdtStringList& OutVars,
+                                            AdtStringByStringMap& rAddedMethodsMap);
 
   static AdtFortranBase*        expressionBuild(const char* pCodeString,
                                                 bool bIncludeConditionalContext);

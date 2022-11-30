@@ -302,6 +302,7 @@ IDENTIFIER_LITERAL      [a-zA-Z_]([a-zA-Z0-9_])*
 <*>GRAD                                           return (dispatchToken(&yylval, yytext, M_GRAD));
 <*>MULTIDIFF                                      return (dispatchToken(&yylval, yytext, M_MULTIDIFF));
 <*>MULTIGRAD                                      return (dispatchToken(&yylval, yytext, M_MULTIGRAD));
+<*>HESSIAN                                        return (dispatchToken(&yylval, yytext, M_HESSIAN));
 <*>VAR                                            return (dispatchToken(&yylval, yytext, M_VAR));
 <*>OUTVAR                                         return (dispatchToken(&yylval, yytext, M_OUTVAR));
 <*>MODE                                           return (dispatchToken(&yylval, yytext, M_MODE));

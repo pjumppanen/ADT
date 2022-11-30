@@ -40,6 +40,7 @@
  *       GRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
  *       MULTIDIFF=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
  *       MULTIGRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *       HESSIAN=NameN VAR=a OUTVAR=b USER='any custom tapenade command line options you wish to add enclosed in quotes');
  *     END
  *
  *     CLASS NewClassNameB (ClassNameB) SOURCE FILE: File1 OUTPUT FILE: File2
@@ -82,7 +83,7 @@
 %token M_AD M_BEGIN M_BOUNDS M_CHECK M_END M_SOURCE M_OUTPUT M_FILE M_FILES
 %token M_WORKING M_DIRECTORY M_FUNCTION M_VAR M_OUTVAR M_MODE M_USER M_PRAGMAS
 %token M_PATHS M_CLASS M_OPTIONS M_PASCAL M_CPP M_FORTRAN M_INCLUDE M_SWITCHES
-%token M_BLACKBOX M_PRE M_POST M_DIFF M_GRAD M_MULTIDIFF M_MULTIGRAD
+%token M_BLACKBOX M_PRE M_POST M_DIFF M_GRAD M_MULTIDIFF M_MULTIGRAD M_HESSIAN
 
 /* make special character tokens */
 %token M_COMMA M_SEMICOLON M_COLON M_EQUALS M_LBRACKET M_RBRACKET
@@ -276,6 +277,7 @@ AutoDiffCommandOpList : AutoDiffCommandOp
 ;
 
 AutoDiffCommandOp : AutoDiffCommandFunctionOp
+                  | AutoDiffCommandHessianOp
                   | AutoDiffCommandDiffOp
                   | AutoDiffCommandGradOp
                   | AutoDiffCommandMultiDiffOp
@@ -292,6 +294,12 @@ AutoDiffCommandOp : AutoDiffCommandFunctionOp
 AutoDiffCommandFunctionOp : M_FUNCTION M_EQUALS M_IDENT
 {
   make_CommandFunction($3.sValue);
+}
+;
+
+AutoDiffCommandHessianOp : M_HESSIAN M_EQUALS M_IDENT
+{
+  make_CommandHessian($3.sValue);
 }
 ;
 

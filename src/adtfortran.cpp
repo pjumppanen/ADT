@@ -4099,7 +4099,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                                               const char* pSubSuffix,
                                               const char* pModuleSuffix,
                                               const AdtStringList& Vars,
-                                              const AdtStringList& OutVars)
+                                              const AdtStringList& OutVars,
+                                              AdtStringByStringMap& rAddedMethodsMap)
 {
   bool  bMade = false;
 
@@ -4110,7 +4111,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       (pClassName           != 0) && 
       (pVarSuffix           != 0) && 
       (pSubSuffix           != 0) &&
-      (pModuleSuffix        != 0))
+      (pModuleSuffix        != 0) && 
+      (rAddedMethodsMap.find(pWrapperFunctionName) == rAddedMethodsMap.end()))
   {
     // Note that in finding the module definition for COMMON variables we need
     // to use an elaborate approach because of how Tapenade behaviour has changed
@@ -4526,6 +4528,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                 break;
               }
 
+              case ForWrapper_HESSIAN:
+              case ForWrapper_REML:
               default:
               {
                 FAIL();
@@ -4704,6 +4708,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                 }
               }
             }
+
+            rAddedMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
+
+            bMade = true;
           }
           else
           {

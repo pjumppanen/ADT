@@ -87,6 +87,8 @@ C_FUNCTION void         make_CommandPost(const char* pString);
 C_FUNCTION void         make_CommandPragmas(const char* pString);
 C_FUNCTION void         make_CommandMode(const char* pString);
 C_FUNCTION void         make_CommandFunction(const char* pString);
+C_FUNCTION void         make_CommandHessian(const char* pString);
+C_FUNCTION void         make_CommandReml(const char* pString);
 C_FUNCTION void         make_CommandDiff(const char* pString);
 C_FUNCTION void         make_CommandGrad(const char* pString);
 C_FUNCTION void         make_CommandMultiDiff(const char* pString);
@@ -253,6 +255,7 @@ public:
   void            makeWrapper(bool bMakeWrapper);
   void            makeWrapper(AdtFortranExecutableProgram* pAD_Root,
                               AdtFortranExecutableProgram* pWorkingRoot,
+                              AdtStringByStringMap& rAddedMethodsMap,
                               const char* pClassName) const;
 
   void            functionName(const char* pFunctionName);
@@ -268,6 +271,7 @@ public:
                           AdtFortranExecutableProgram* pWorkingRoot,
                           AdtStringList& rNewFunctionsList,
                           AdtStringByStringMap& rPublicMethodsMap,
+                          AdtStringByStringMap& rAddedMethodsMap,
                           AdtStringList& rTranslateFunctionsFromList,
                           AdtStringList& rTranslateFunctionsToList,
                           string& rOutputFileName,
@@ -943,6 +947,8 @@ public:
   static void                   commandPragmas(const char* pString);
   static void                   commandMode(const char* pString);
   static void                   commandFunction(const char* pString);
+  static void                   commandHessian(const char* pString);
+  static void                   commandReml(const char* pString);
   static void                   commandDiff(const char* pString);
   static void                   commandGrad(const char* pString);
   static void                   commandMultiDiff(const char* pString);

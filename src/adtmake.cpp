@@ -301,6 +301,20 @@ void make_CommandFunction(const char* pString)
 
 //  ----------------------------------------------------------------------------
 
+void make_CommandHessian(const char* pString)
+{
+  MakeSystem.commandHessian(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
+void make_CommandReml(const char* pString)
+{
+  MakeSystem.commandReml(pString);
+}
+
+//  ----------------------------------------------------------------------------
+
 void make_CommandDiff(const char* pString)
 {
   MakeSystem.commandDiff(pString);
@@ -910,6 +924,7 @@ bool AdtMakeCommandOperation::shouldBuild(AdtMakeIncremental& rBuildCheck) const
 
 void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
                                           AdtFortranExecutableProgram* pWorkingRoot,
+                                          AdtStringByStringMap& rAddedMethodsMap,
                                           const char* pClassName) const
 {
   if (makeWrapper()       && 
@@ -940,7 +955,8 @@ void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
                           SubSuffix,
                           ModuleSuffix,
                           Vars, 
-                          OutVars);
+                          OutVars,
+                          rAddedMethodsMap);
   }
 }
 
@@ -950,6 +966,7 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
                                       AdtFortranExecutableProgram* pWorkingRoot,
                                       AdtStringList& rNewFunctionsList,
                                       AdtStringByStringMap& rPublicMethodsMap,
+                                      AdtStringByStringMap& rAddedMethodsMap,
                                       AdtStringList& rTranslateFunctionsFromList,
                                       AdtStringList& rTranslateFunctionsToList,
                                       string& rOutputFileName,
@@ -964,449 +981,477 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
 
   if (pSourceFile != 0)
   {
-    AdtStringListConstIter  Iter;
-    AdtStringList           FunctionAndSubroutineList;
-    string                  Arguments("tapenade -inputlanguage fortran95 -outputlanguage fortran95 ");
-    string                  WrtSuffix;
-    string                  sNewFunctionName;
-    string                  sFunctionName;
-    string                  sOutputFileName;
-    string                  sDeleteFileName;
-    string                  sTestOutputFileName;
-
-    VarSuffix     = "";
-    SubSuffix     = "";
-    ModuleSuffix  = "";
-    BaseSubSuffix = "";
-    CopySubSuffix = "";
-
-    if (FunctionName.length() > 0)
+    if (Mode.eq("hessian"))
     {
-      qualifiedFunctionName(sFunctionName, pClassName);
-
-      //-head, -root <proc>     set the differentiation root procedure
-      Arguments         += "-head \"" + sFunctionName;
-      sNewFunctionName  += sFunctionName;
+      // Carry out needed operations for hessian synthesis
+    } 
+    else if (Mode.eq("reml"))
+    {
+      // Carry out needed operations for reml synthesis
     }
-
-    if (OutVars.size() > 0)
+    else
     {
-      // set outvars with -head directive.
-      // Syntax:
-      //  -head "{function name}({outvars list})/({w.r.t. vars list})"
-      AdtParserPtrByStringMap FunctionMap;
+      // Carry out AD operation
+      AdtStringListConstIter  Iter;
+      AdtStringList           FunctionAndSubroutineList;
+      string                  Arguments("tapenade -inputlanguage fortran95 -outputlanguage fortran95 ");
+      string                  WrtSuffix;
+      string                  sNewFunctionName;
+      string                  sFunctionName;
+      string                  sOutputFileName;
+      string                  sDeleteFileName;
+      string                  sTestOutputFileName;
 
-      Arguments += "(";
+      VarSuffix     = "";
+      SubSuffix     = "";
+      ModuleSuffix  = "";
+      BaseSubSuffix = "";
+      CopySubSuffix = "";
 
-      if (pWorkingRoot != 0)
+      if (FunctionName.length() > 0)
       {
-        AdtParserPtrList      FunctionList;
-        AdtParserPtrListIter  ObjIter;
+        qualifiedFunctionName(sFunctionName, pClassName);
 
-        // Build a map of all the functions in the code to be differentiated.
-        // We use this to determine if the outvar is a function or var name.
-        pWorkingRoot->findObjects(FunctionList,
-                                  "AdtFortranFunctionSubprogram",
-                                  0,
-                                  false,
-                                  "AdtFortranProgramUnit");
-
-        pWorkingRoot->listToMap(FunctionMap, FunctionList);
-
-        // Need to enumerate the subroutines for building the FunctionAndSubroutineList
-        pWorkingRoot->findObjects(FunctionList,
-                                  "AdtFortranSubroutineSubprogram",
-                                  0,
-                                  false,
-                                  "AdtFortranProgramUnit");
-
-        AdtParser::objListToNameList(FunctionAndSubroutineList, FunctionList);
+        //-head, -root <proc>     set the differentiation root procedure
+        Arguments         += "-head \"" + sFunctionName;
+        sNewFunctionName  += sFunctionName;
       }
 
-      for (Iter = OutVars.begin() ; Iter != OutVars.end() ; ++Iter)
+      if (OutVars.size() > 0)
       {
-        const string& rOutVar = *Iter;
-        string        sFunctionName;
-        bool          bIsFunctionName;
+        // set outvars with -head directive.
+        // Syntax:
+        //  -head "{function name}({outvars list})/({w.r.t. vars list})"
+        AdtParserPtrByStringMap FunctionMap;
 
-        if (pClassName != 0)
+        Arguments += "(";
+
+        if (pWorkingRoot != 0)
         {
-          sFunctionName += pClassName;
-          sFunctionName += "__";
+          AdtParserPtrList      FunctionList;
+          AdtParserPtrListIter  ObjIter;
+
+          // Build a map of all the functions in the code to be differentiated.
+          // We use this to determine if the outvar is a function or var name.
+          pWorkingRoot->findObjects(FunctionList,
+                                    "AdtFortranFunctionSubprogram",
+                                    0,
+                                    false,
+                                    "AdtFortranProgramUnit");
+
+          pWorkingRoot->listToMap(FunctionMap, FunctionList);
+
+          // Need to enumerate the subroutines for building the FunctionAndSubroutineList
+          pWorkingRoot->findObjects(FunctionList,
+                                    "AdtFortranSubroutineSubprogram",
+                                    0,
+                                    false,
+                                    "AdtFortranProgramUnit");
+
+          AdtParser::objListToNameList(FunctionAndSubroutineList, FunctionList);
         }
 
-        sFunctionName += rOutVar;
-
-        bIsFunctionName = (FunctionMap.find(sFunctionName) != FunctionMap.end());
-
-        if (Iter != OutVars.begin())
+        for (Iter = OutVars.begin() ; Iter != OutVars.end() ; ++Iter)
         {
-           Arguments += " ";
+          const string& rOutVar = *Iter;
+          string        sFunctionName;
+          bool          bIsFunctionName;
+
+          if (pClassName != 0)
+          {
+            sFunctionName += pClassName;
+            sFunctionName += "__";
+          }
+
+          sFunctionName += rOutVar;
+
+          bIsFunctionName = (FunctionMap.find(sFunctionName) != FunctionMap.end());
+
+          if (Iter != OutVars.begin())
+          {
+            Arguments += " ";
+          }
+
+          Arguments += bIsFunctionName ? sFunctionName : rOutVar;
         }
 
-        Arguments += bIsFunctionName ? sFunctionName : rOutVar;
+        Arguments += ")";
       }
 
-      Arguments += ")";
-    }
-
-    if (Vars.size() > 0)
-    {
-      Arguments += "/(";
-
-      // set with respect to vars with -head directive.
-      // Syntax:
-      //  -head "{function name}({outvars list})/({w.r.t. vars list})"
-      for (Iter = Vars.begin() ; Iter != Vars.end() ; ++Iter)
+      if (Vars.size() > 0)
       {
-        const string& rVar = *Iter;
+        Arguments += "/(";
 
-        if (Iter != Vars.begin())
+        // set with respect to vars with -head directive.
+        // Syntax:
+        //  -head "{function name}({outvars list})/({w.r.t. vars list})"
+        for (Iter = Vars.begin() ; Iter != Vars.end() ; ++Iter)
         {
-           Arguments += " ";
+          const string& rVar = *Iter;
+
+          if (Iter != Vars.begin())
+          {
+            Arguments += " ";
+          }
+
+          Arguments += rVar;
+          WrtSuffix += rVar;
         }
 
-        Arguments += rVar;
-        WrtSuffix += rVar;
+        Arguments += ")";
       }
 
-      Arguments += ")";
-    }
+      Arguments += "\" ";
 
-    Arguments += "\" ";
+      bool bAddV = false;
 
-    bool bAddV = false;
+      string DiffVarNameOption("-tgtvarname");
+      string DiffFuncNameOption("-tgtfuncname");
 
-    string DiffVarNameOption("-tgtvarname");
-    string DiffFuncNameOption("-tgtfuncname");
-
-    if (Mode.length() > 0)
-    {
-      char  sVarSuffix[32] = {0};
-
-      //f => -tangent, -d            differentiate in the tangent mode
-      //r => -reverse, -b            differentiate in the reverse mode
-      if (Mode == "f")
+      if (Mode.length() > 0)
       {
-        ::sprintf(sVarSuffix, "d%d_", nIteration);
+        char  sVarSuffix[32] = {0};
 
-        Arguments    += "-d ";
-        SubSuffix     = "_d";
-        ModuleSuffix  = "_d";
-        BaseSubSuffix = "_d";
+        //f => -tangent, -d            differentiate in the tangent mode
+        //r => -reverse, -b            differentiate in the reverse mode
+        if (Mode == "f")
+        {
+          ::sprintf(sVarSuffix, "d%d_", nIteration);
+
+          Arguments    += "-d ";
+          SubSuffix     = "_d";
+          ModuleSuffix  = "_d";
+          BaseSubSuffix = "_d";
+        }
+        else if (Mode == "mf")
+        {
+          ::sprintf(sVarSuffix, "d%d_", nIteration);
+
+          Arguments    += "-d -multi ";
+          SubSuffix     = "_d";
+          ModuleSuffix  = "_d";
+          BaseSubSuffix = "_d";
+          bAddV         = true;
+        }
+        else if (Mode == "r")
+        {
+          ::sprintf(sVarSuffix, "b%d_", nIteration);
+
+          Arguments    += "-b ";
+          SubSuffix     = "_b";
+          ModuleSuffix  = "_b";
+          BaseSubSuffix = "_b";
+
+          DiffVarNameOption  = "-adjvarname";
+          DiffFuncNameOption = "-adjfuncname";
+        }
+        else if (Mode == "mr")
+        {
+          ::sprintf(sVarSuffix, "b%d_", nIteration);
+
+          Arguments    += "-b  -multi ";
+          SubSuffix     = "_b";
+          ModuleSuffix  = "_b";
+          BaseSubSuffix = "_b";
+          bAddV         = true;
+
+          DiffVarNameOption  = "-adjvarname";
+          DiffFuncNameOption = "-adjfuncname";
+        }
+        else
+        {
+          ::sprintf(sVarSuffix, "d%d_", nIteration);
+
+          Arguments    += "-d ";
+          SubSuffix     = "_d";
+          ModuleSuffix  = "_d";
+          BaseSubSuffix = "_d";
+        }
+
+        CopySubSuffix = string("_c") + sVarSuffix;
+        VarSuffix     = sVarSuffix;
       }
-      else if (Mode == "mf")
-      {
-        ::sprintf(sVarSuffix, "d%d_", nIteration);
 
-        Arguments    += "-d -multi ";
-        SubSuffix     = "_d";
-        ModuleSuffix  = "_d";
-        BaseSubSuffix = "_d";
-        bAddV         = true;
+      VarSuffix     += WrtSuffix;
+      SubSuffix     += WrtSuffix;
+      CopySubSuffix += WrtSuffix;
+
+      CopySubSuffix.toUpper();
+
+      if (TapenadeVersion > 3.12)
+      {
+        Arguments += "-tgtmodulename _d -adjmodulename _b -copyname _c ";
       }
-      else if (Mode == "r")
+
+      //Special option to force more error message reporting
+      Arguments += "-debug 1 ";
+
+      //If -diffvarname is specified in user options then don't add defaults to argument list
+      if (strstr(UserOptions, DiffVarNameOption.c_str()) == 0)
       {
-        ::sprintf(sVarSuffix, "b%d_", nIteration);
-
-        Arguments    += "-b ";
-        SubSuffix     = "_b";
-        ModuleSuffix  = "_b";
-        BaseSubSuffix = "_b";
-
-        DiffVarNameOption  = "-adjvarname";
-        DiffFuncNameOption = "-adjfuncname";
+        // -diffvarname <str>      set differentiation suffix for variables (default d and b)
+        Arguments += DiffVarNameOption + " " + VarSuffix + " ";
       }
-      else if (Mode == "mr")
+
+      //If -difffuncname is specified in user options then don't add defaults to argument list
+      const char* pDiffFuncName = strstr(UserOptions, DiffFuncNameOption.c_str());
+
+      if (pDiffFuncName == 0)
       {
-        ::sprintf(sVarSuffix, "b%d_", nIteration);
-
-        Arguments    += "-b  -multi ";
-        SubSuffix     = "_b";
-        ModuleSuffix  = "_b";
-        BaseSubSuffix = "_b";
-        bAddV         = true;
-
-        DiffVarNameOption  = "-adjvarname";
-        DiffFuncNameOption = "-adjfuncname";
+        // -difffuncname <str>     set differentiation suffix for procedures (default _D and _B)
+        Arguments += DiffFuncNameOption + " " + SubSuffix + " ";
       }
       else
       {
-        ::sprintf(sVarSuffix, "d%d_", nIteration);
+        // Need to extract the SubSuffix as it is used to determine the output file name
+        const char* pParseText = pDiffFuncName;
 
-        Arguments    += "-d ";
-        SubSuffix     = "_d";
-        ModuleSuffix  = "_d";
-        BaseSubSuffix = "_d";
+        //This extract word extracts '-difffuncname'
+        AdtParse::extractWord(SubSuffix, " \t\n\r", pParseText);
+
+        //This extract word extracts <str>
+        pParseText = AdtParse::nextWord(pParseText);
+        AdtParse::extractWord(SubSuffix, " \t\n\r", pParseText);
       }
 
-      CopySubSuffix = string("_c") + sVarSuffix;
-      VarSuffix     = sVarSuffix;
-    }
-
-    VarSuffix     += WrtSuffix;
-    SubSuffix     += WrtSuffix;
-    CopySubSuffix += WrtSuffix;
-
-    CopySubSuffix.toUpper();
-
-    if (TapenadeVersion > 3.12)
-    {
-      Arguments += "-tgtmodulename _d -adjmodulename _b -copyname _c ";
-    }
-
-    //Special option to force more error message reporting
-    Arguments += "-debug 1 ";
-
-    //If -diffvarname is specified in user options then don't add defaults to argument list
-    if (strstr(UserOptions, DiffVarNameOption.c_str()) == 0)
-    {
-      // -diffvarname <str>      set differentiation suffix for variables (default d and b)
-      Arguments += DiffVarNameOption + " " + VarSuffix + " ";
-    }
-
-    //If -difffuncname is specified in user options then don't add defaults to argument list
-    const char* pDiffFuncName = strstr(UserOptions, DiffFuncNameOption.c_str());
-
-    if (pDiffFuncName == 0)
-    {
-      // -difffuncname <str>     set differentiation suffix for procedures (default _D and _B)
-      Arguments += DiffFuncNameOption + " " + SubSuffix + " ";
-    }
-    else
-    {
-      // Need to extract the SubSuffix as it is used to determine the output file name
-      const char* pParseText = pDiffFuncName;
-
-      //This extract word extracts '-difffuncname'
-      AdtParse::extractWord(SubSuffix, " \t\n\r", pParseText);
-
-      //This extract word extracts <str>
-      pParseText = AdtParse::nextWord(pParseText);
-      AdtParse::extractWord(SubSuffix, " \t\n\r", pParseText);
-    }
-
-    if (sFunctionName.length() > 0)
-    {
-      sOutputFileName += sFunctionName;
-    }
-    else
-    {
-      sOutputFileName += pClassName;
-    }
-
-    // -output, -o <file>      put all generated procedures into a single <file>
-    Arguments += "-o " + sOutputFileName + " ";
-
-    if (rParent.workingDirectory().length() > 0)
-    {
-      // -outputdirectory, -O <directory>  put all generated files in <directory> (default .)
-      Arguments += "-O " + rParent.workingDirectory() + " ";
-    }
-
-    // -ext <file>   Add any black box routine definition files to command line
-    if ((pBlackBoxFile != 0) && (pBlackBoxFile[0] != 0))
-    {
-      Arguments += "-ext " + string(pBlackBoxFile) + " ";
-    }
-
-    if (UserOptions.length() > 0)
-    {
-      Arguments += " " + UserOptions + " ";
-    }
-
-    if (pSourceFile != 0)
-    {
-      Arguments += pSourceFile;
-    }
-
-    if (bAddV)
-    {
-      SubSuffix     += "v";
-      ModuleSuffix  += "v";
-      BaseSubSuffix += "v";
-    }
-
-    sNewFunctionName  += SubSuffix;
-    sOutputFileName   += SubSuffix;
-
-    rNewFunctionsList.push_back(sNewFunctionName);
-
-    // Should only add to rPublicMethodsMap if parent is public.
-    if (rPublicMethodsMap.find(sFunctionName) != rPublicMethodsMap.end())
-    {
-      rPublicMethodsMap[sNewFunctionName] = sNewFunctionName;
-    }
-
-    string  sMessageFile(sOutputFileName);
-    bool    bWriteMessageFile = true;
-
-    sMessageFile    += ".msg";
-
-    if (PreCommand.length() > 0)
-    {
-      executeCommandLine(rParent, PreCommand, pSourceFile, "pre-step");
-    }
-
-    // delete previous output files so we can be sure we know when Tapenade
-    // has run correctly. As it doesn't return a non-zero exit code we won't
-    // know when it has failed otherwise.
-    rParent.prefixWorkingDirectory(sDeleteFileName,
-                                   sOutputFileName + ".f95",
-                                   false);
-
-    unlink(sDeleteFileName);
-
-    rParent.prefixWorkingDirectory(sDeleteFileName,
-                                   sOutputFileName + ".f90",
-                                   false);
-
-    unlink(sDeleteFileName);
-
-    rParent.prefixWorkingDirectory(sDeleteFileName,
-                                   sOutputFileName + ".msg",
-                                   false);
-
-    unlink(sDeleteFileName);
-
-    rParent.prefixWorkingDirectory(sDeleteFileName,
-                                   sOutputFileName + ".f95~",
-                                   false);
-
-    unlink(sDeleteFileName);
-
-    rParent.prefixWorkingDirectory(sDeleteFileName,
-                                   sOutputFileName + ".f90~",
-                                   false);
-
-    unlink(sDeleteFileName);
-
-    rParent.prefixWorkingDirectory(sDeleteFileName,
-                                   sOutputFileName + ".msg~",
-                                   false);
-
-    unlink(sDeleteFileName);
-
-    ::printf("\nrunning TAPENADE with:\n%s\n", Arguments.c_str());
-
-    //Run tapenade through a pipe so we can capture stdout and redirect it here
-    FILE* pPipe = popen(Arguments, "r");
-
-    if (pPipe != 0)
-    {
-      char  pBuffer[128]    = {0};
-      bool  bErrorMessages  = false;
-
-      ::printf("\n");
-
-      while(!feof(pPipe))
+      if (sFunctionName.length() > 0)
       {
-        if (::fgets(pBuffer, 128, pPipe) != 0)
-        {
-          ::printf("  %s", pBuffer);
+        sOutputFileName += sFunctionName;
+      }
+      else
+      {
+        sOutputFileName += pClassName;
+      }
 
-          if ((::strstr(pBuffer, "Command:") != 0) ||
-              (::strstr(pBuffer, "(DD"     ) != 0) ||
-              (::strstr(pBuffer, "(TC"     ) != 0) ||
-              (::strstr(pBuffer, "(CF"     ) != 0) ||
-              (::strstr(pBuffer, "(DF"     ) != 0) ||
-              (::strstr(pBuffer, "(AD"     ) != 0))
-          {
-            bErrorMessages = true;
-          }
+      // -output, -o <file>      put all generated procedures into a single <file>
+      Arguments += "-o " + sOutputFileName + " ";
+
+      if (rParent.workingDirectory().length() > 0)
+      {
+        // -outputdirectory, -O <directory>  put all generated files in <directory> (default .)
+        Arguments += "-O " + rParent.workingDirectory() + " ";
+      }
+
+      // -ext <file>   Add any black box routine definition files to command line
+      if ((pBlackBoxFile != 0) && (pBlackBoxFile[0] != 0))
+      {
+        Arguments += "-ext " + string(pBlackBoxFile) + " ";
+      }
+
+      if (UserOptions.length() > 0)
+      {
+        Arguments += " " + UserOptions + " ";
+      }
+
+      if (pSourceFile != 0)
+      {
+        Arguments += pSourceFile;
+      }
+
+      if (bAddV)
+      {
+        SubSuffix     += "v";
+        ModuleSuffix  += "v";
+        BaseSubSuffix += "v";
+      }
+
+      sNewFunctionName  += SubSuffix;
+      sOutputFileName   += SubSuffix;
+
+      if (rAddedMethodsMap.find(sNewFunctionName) != rAddedMethodsMap.end())
+      {
+        // AD'ed function already exists. Make output equal input. This will
+        // allow the makeWrapper() stuff to work in the case where no operations
+        // occur. Should have no negative effect on outome as merge() will only
+        // bring in new code of which there is none except for possibly a new 
+        // wrapper function.
+        rOutputFileName = pSourceFile;
+
+        bDone = true;
+      }
+      else
+      {
+        rNewFunctionsList.push_back(sNewFunctionName);
+
+        rAddedMethodsMap[sNewFunctionName] = sNewFunctionName;
+
+        // Should only add to rPublicMethodsMap if parent is public.
+        if (rPublicMethodsMap.find(sFunctionName) != rPublicMethodsMap.end())
+        {
+          rPublicMethodsMap[sNewFunctionName] = sNewFunctionName;
         }
-      }
 
-      int nExitCode = pclose(pPipe);
+        string  sMessageFile(sOutputFileName);
+        bool    bWriteMessageFile = true;
 
-      ::printf("\nexit code: %d\n\n", nExitCode);
+        sMessageFile    += ".msg";
 
-      // Test for output file existence. If non-exstent there is a problem.
-      sTestOutputFileName = sOutputFileName + ".f95";
-
-      rParent.prefixWorkingDirectory(rOutputFileName,
-                                     sTestOutputFileName,
-                                     false);
-
-      struct stat finfo = {0};
-
-      if (::stat(rOutputFileName, &finfo) != 0)
-      {
-        sTestOutputFileName = sOutputFileName + ".f90";
-
-        rParent.prefixWorkingDirectory(rOutputFileName,
-                                       sTestOutputFileName,
-                                       false);
-
-        ::printf("INFO: Expected .f95 output not found. Trying .f90 extension.\n");
-
-        if (::stat(rOutputFileName, &finfo) != 0)
+        if (PreCommand.length() > 0)
         {
-          ::printf("ERROR: Tapenade output file %s (.f95 / .f90) not found.\n", sOutputFileName.c_str());
-
-          bErrorMessages = true;
+          executeCommandLine(rParent, PreCommand, pSourceFile, "pre-step");
         }
-      }
 
-      if ((nExitCode != 0) || bErrorMessages)
-      {
-        ::printf("TAPENADE failed to compile cleanly. Please fix issues\n");
+        // delete previous output files so we can be sure we know when Tapenade
+        // has run correctly. As it doesn't return a non-zero exit code we won't
+        // know when it has failed otherwise.
+        rParent.prefixWorkingDirectory(sDeleteFileName,
+                                      sOutputFileName + ".f95",
+                                      false);
 
-        AdtExit(-1);
-      }
+        unlink(sDeleteFileName);
 
-      if (bWriteMessageFile)
-      {
-        //Write the message file to standard io.
-        FILE* pMsgFile = fopen(sMessageFile, "r");
+        rParent.prefixWorkingDirectory(sDeleteFileName,
+                                      sOutputFileName + ".f90",
+                                      false);
 
-        if (pMsgFile != 0)
+        unlink(sDeleteFileName);
+
+        rParent.prefixWorkingDirectory(sDeleteFileName,
+                                      sOutputFileName + ".msg",
+                                      false);
+
+        unlink(sDeleteFileName);
+
+        rParent.prefixWorkingDirectory(sDeleteFileName,
+                                      sOutputFileName + ".f95~",
+                                      false);
+
+        unlink(sDeleteFileName);
+
+        rParent.prefixWorkingDirectory(sDeleteFileName,
+                                      sOutputFileName + ".f90~",
+                                      false);
+
+        unlink(sDeleteFileName);
+
+        rParent.prefixWorkingDirectory(sDeleteFileName,
+                                      sOutputFileName + ".msg~",
+                                      false);
+
+        unlink(sDeleteFileName);
+
+        ::printf("\nrunning TAPENADE with:\n%s\n", Arguments.c_str());
+
+        //Run tapenade through a pipe so we can capture stdout and redirect it here
+        FILE* pPipe = popen(Arguments, "r");
+
+        if (pPipe != 0)
         {
-          while(!feof(pMsgFile))
+          char  pBuffer[128]    = {0};
+          bool  bErrorMessages  = false;
+
+          ::printf("\n");
+
+          while(!feof(pPipe))
           {
-            if (::fgets(pBuffer, 128, pMsgFile) != 0)
+            if (::fgets(pBuffer, 128, pPipe) != 0)
             {
               ::printf("  %s", pBuffer);
+
+              if ((::strstr(pBuffer, "Command:") != 0) ||
+                  (::strstr(pBuffer, "(DD"     ) != 0) ||
+                  (::strstr(pBuffer, "(TC"     ) != 0) ||
+                  (::strstr(pBuffer, "(CF"     ) != 0) ||
+                  (::strstr(pBuffer, "(DF"     ) != 0) ||
+                  (::strstr(pBuffer, "(AD"     ) != 0))
+              {
+                bErrorMessages = true;
+              }
             }
           }
 
-          fclose(pMsgFile);
+          int nExitCode = pclose(pPipe);
 
-          ::printf("\n");
+          ::printf("\nexit code: %d\n\n", nExitCode);
+
+          // Test for output file existence. If non-exstent there is a problem.
+          sTestOutputFileName = sOutputFileName + ".f95";
+
+          rParent.prefixWorkingDirectory(rOutputFileName,
+                                        sTestOutputFileName,
+                                        false);
+
+          struct stat finfo = {0};
+
+          if (::stat(rOutputFileName, &finfo) != 0)
+          {
+            sTestOutputFileName = sOutputFileName + ".f90";
+
+            rParent.prefixWorkingDirectory(rOutputFileName,
+                                          sTestOutputFileName,
+                                          false);
+
+            ::printf("INFO: Expected .f95 output not found. Trying .f90 extension.\n");
+
+            if (::stat(rOutputFileName, &finfo) != 0)
+            {
+              ::printf("ERROR: Tapenade output file %s (.f95 / .f90) not found.\n", sOutputFileName.c_str());
+
+              bErrorMessages = true;
+            }
+          }
+
+          if ((nExitCode != 0) || bErrorMessages)
+          {
+            ::printf("TAPENADE failed to compile cleanly. Please fix issues\n");
+
+            AdtExit(-1);
+          }
+
+          if (bWriteMessageFile)
+          {
+            //Write the message file to standard io.
+            FILE* pMsgFile = fopen(sMessageFile, "r");
+
+            if (pMsgFile != 0)
+            {
+              while(!feof(pMsgFile))
+              {
+                if (::fgets(pBuffer, 128, pMsgFile) != 0)
+                {
+                  ::printf("  %s", pBuffer);
+                }
+              }
+
+              fclose(pMsgFile);
+
+              ::printf("\n");
+            }
+          }
+
+          // Seems current versions of Tapenade no longer create copies of code
+          // that needs elimination so this is not longer required.
+          if (false)
+          {
+            // Build translation lists. New versions of Tapenade create literal copies
+            // of old code in AD'ed code with the suffix CopySubSuffix. This causes
+            // massive code bloating in ADT so we swap them back using the compiler
+            // translation feature.
+            rTranslateFunctionsFromList.clear();
+            rTranslateFunctionsToList.clear();
+
+            for (Iter = FunctionAndSubroutineList.begin() ; Iter != FunctionAndSubroutineList.end() ; ++Iter)
+            {
+              const string& rToName = *Iter;
+              string        sFromName(rToName);
+
+              sFromName += CopySubSuffix;
+
+              rTranslateFunctionsFromList.push_back(sFromName);
+              rTranslateFunctionsToList.push_back(rToName);
+            }
+          }
+
+          bDone = true;
         }
-      }
 
-      // Seems current versions of Tapenade no longer create copies of code
-      // that needs elimination so this is not longer required.
-      if (false)
-      {
-        // Build translation lists. New versions of Tapenade create literal copies
-        // of old code in AD'ed code with the suffix CopySubSuffix. This causes
-        // massive code bloating in ADT so we swap them back using the compiler
-        // translation feature.
-        rTranslateFunctionsFromList.clear();
-        rTranslateFunctionsToList.clear();
+        sOutputFileName = sTestOutputFileName;
 
-        for (Iter = FunctionAndSubroutineList.begin() ; Iter != FunctionAndSubroutineList.end() ; ++Iter)
+        if (PostCommand.length() > 0)
         {
-          const string& rToName = *Iter;
-          string        sFromName(rToName);
-
-          sFromName += CopySubSuffix;
-
-          rTranslateFunctionsFromList.push_back(sFromName);
-          rTranslateFunctionsToList.push_back(rToName);
+          executeCommandLine(rParent, PostCommand, sOutputFileName, "post-step");
         }
       }
-
-      bDone = true;
-    }
-
-    sOutputFileName = sTestOutputFileName;
-
-    if (PostCommand.length() > 0)
-    {
-      executeCommandLine(rParent, PostCommand, sOutputFileName, "post-step");
     }
   }
 
@@ -1495,6 +1540,16 @@ const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunct
   {
     rWrapperFunctionName += "multiGrad";
     nWrapperType          = ForWrapper_MULTIGRAD;
+  }
+  else if (Mode == "hessian")
+  {
+    rWrapperFunctionName += "hessian";
+    nWrapperType          = ForWrapper_HESSIAN;
+  }
+  else if (Mode == "reml")
+  {
+    rWrapperFunctionName += "reml";
+    nWrapperType          = ForWrapper_REML;
   }
 
   rWrapperFunctionName += SubSuffix;
@@ -1906,6 +1961,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
           AdtStringByStringMap  rRegardAsClassFunctionsMap;
           AdtStringByStringMap  rRegardAsClassSubroutineMap;
           AdtStringByStringMap  rPublicMethodsMap;
+          AdtStringByStringMap  rAddedMethodsMap;
           AdtStringList         ConstructorList;
           AdtParserPtrList      IdentList;
           AdtParserPtrListIter  Iter;
@@ -2236,6 +2292,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                                            pWorkingRoot,
                                            rNewFunctionsList,
                                            rPublicMethodsMap,
+                                           rAddedMethodsMap,
                                            rTranslateFunctionsFromList,
                                            rTranslateFunctionsToList,
                                            sOutputFile,
@@ -2289,7 +2346,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                         }
 
                         // make wrapper
-                       rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, ParentClassName);
+                        rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, rAddedMethodsMap, ParentClassName);
 
                         // With the parse tree we need to figure out what functions / subroutines are new
                         // (ie. not in the original source) and add it to that source. Similarly,
@@ -4166,6 +4223,30 @@ void AdtMakeSystem::commandFunction(const char* pString)
   CurrentCommandOperation.functionName(pString);
   CurrentCommandOperation.makeWrapper(false);
   CurrentCommandOperation.mode("f");
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeSystem::commandHessian(const char* pString)
+{
+  // Need to add a whole bunch of AD commands to support generation of reml
+  // code which also includes the checking of the command operation list 
+  // to see if it already contains the needed commands.
+  CurrentCommandOperation.functionName(pString);
+  CurrentCommandOperation.makeWrapper(true);
+  CurrentCommandOperation.mode("hessian");
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtMakeSystem::commandReml(const char* pString)
+{
+  // Need to add a whole bunch of AD commands to support generation of reml
+  // code which also includes the checking of the command operation list 
+  // to see if it already contains the needed commands.
+  CurrentCommandOperation.functionName(pString);
+  CurrentCommandOperation.makeWrapper(true);
+  CurrentCommandOperation.mode("reml");
 }
 
 //  ----------------------------------------------------------------------------
