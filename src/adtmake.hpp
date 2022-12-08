@@ -220,88 +220,96 @@ inline void AdtMakeIncremental::build(bool bMarkForBuild)
 class AdtMakeCommandOperation
 {
 private:
-  string          FunctionName;
-  string          UserOptions;
-  string          PreCommand;
-  string          PostCommand;
-  string          Pragmas;
-  string          Mode;
-  mutable string  VarSuffix;
-  mutable string  SubSuffix;
-  mutable string  ModuleSuffix;
-  mutable string  BaseSubSuffix;
-  mutable string  CopySubSuffix;
-  AdtStringList   Vars;
-  AdtStringList   OutVars;
-  bool            MakeWrapper;
+  string                FunctionName;
+  string                UserOptions;
+  string                PreCommand;
+  string                PostCommand;
+  string                Pragmas;
+  string                Mode;
+  mutable string        VarSuffix;
+  mutable string        SubSuffix;
+  mutable string        ModuleSuffix;
+  mutable string        BaseSubSuffix;
+  mutable string        CopySubSuffix;
+  AdtStringList         Vars;
+  AdtStringList         OutVars;
+  bool                  MakeWrapper;
 
 protected:
-  void            executeCommandLine(const AdtMakeCommand& rParent,
-                                     const string& rCommandline,
-                                     const char* pSourceFile,
-                                     const char* pTypeMsg) const;
+  void                  executeCommandLine(const AdtMakeCommand& rParent,
+                                           const string& rCommandline,
+                                           const char* pSourceFile,
+                                           const char* pTypeMsg) const;
 
 public:
   AdtMakeCommandOperation();
   AdtMakeCommandOperation(const AdtMakeCommandOperation& rCopy);
   virtual ~AdtMakeCommandOperation();
 
-  void            reset();
+  void                  reset();
 
-  bool            isNull() const;
-  bool            makeWrapper() const;
-  bool            shouldBuild(AdtMakeIncremental& rBuildCheck) const;
+  bool                  isNull() const;
+  bool                  makeWrapper() const;
+  bool                  shouldBuild(AdtMakeIncremental& rBuildCheck) const;
 
-  void            makeWrapper(bool bMakeWrapper);
-  void            makeWrapper(AdtFortranExecutableProgram* pAD_Root,
-                              AdtFortranExecutableProgram* pWorkingRoot,
-                              AdtStringByStringMap& rAddedMethodsMap,
-                              const char* pClassName) const;
+  void                  makeWrapper(bool bMakeWrapper);
+  void                  makeWrapper(AdtFortranExecutableProgram* pAD_Root,
+                                    AdtFortranExecutableProgram* pWorkingRoot,
+                                    AdtStringByStringMap& rAddedMethodsMap,
+                                    const char* pClassName) const;
 
-  void            functionName(const char* pFunctionName);
-  void            userOptions(const char* pUserOptions);
-  void            preCommand(const char* pCommandText);
-  void            postCommand(const char* pCommandText);
-  void            pragmas(const char* pPragmas);
-  void            mode(const char* pMode);
-  void            vars(const AdtStringList& rVars);
-  void            outVars(const AdtStringList& rOutVars);
+  void                  functionName(const char* pFunctionName);
+  void                  userOptions(const char* pUserOptions);
+  void                  preCommand(const char* pCommandText);
+  void                  postCommand(const char* pCommandText);
+  void                  pragmas(const char* pPragmas);
+  void                  mode(const char* pMode);
+  void                  vars(const AdtStringList& rVars);
+  void                  outVars(const AdtStringList& rOutVars);
 
-  bool            execute(const AdtMakeCommand& rParent,
-                          AdtFortranExecutableProgram* pWorkingRoot,
-                          AdtStringList& rNewFunctionsList,
-                          AdtStringByStringMap& rPublicMethodsMap,
-                          AdtStringByStringMap& rAddedMethodsMap,
-                          AdtStringList& rTranslateFunctionsFromList,
-                          AdtStringList& rTranslateFunctionsToList,
-                          string& rOutputFileName,
-                          const char* pSourceFile,
-                          const char* pBlackBoxFile,
-                          const char* pClassName,
-                          int nIteration) const;
+  void                  initSuffixes(int nIteration);
 
-  const string&   qualifiedFunctionName(string& rFunctionName,
-                                        const char* pClassName) const;
+  bool                  execute(const AdtMakeCommand& rParent,
+                                AdtFortranExecutableProgram* pWorkingRoot,
+                                AdtStringList& rNewFunctionsList,
+                                AdtStringByStringMap& rPublicMethodsMap,
+                                AdtStringByStringMap& rAddedMethodsMap,
+                                AdtStringList& rTranslateFunctionsFromList,
+                                AdtStringList& rTranslateFunctionsToList,
+                                string& rOutputFileName,
+                                const char* pSourceFile,
+                                const char* pBlackBoxFile,
+                                const char* pClassName,
+                                int nIteration) const;
 
-  const string&   qualifiedADFunctionName(string& rFunctionName,
-                                          const char* pClassName) const;
+  const string&         qualifiedFunctionName(string& rFunctionName,
+                                              const char* pClassName) const;
 
-  const string&   wrapperFunctionName(string& rWrapperFunctionName,
-                                      AdtFortranWrapperType& nWrapperType, 
-                                      const char* pClassName = 0) const;
+  const string&         qualifiedADFunctionName(string& rFunctionName,
+                                                const char* pClassName) const;
 
-  const string&   functionName() const;
-  const string&   userOptions() const;
-  const string&   preCommand() const;
-  const string&   postCommand() const;
-  const string&   pragmas() const;
-  bool            pragma(const char* pPragmas) const;
-  const string&   mode() const;
-  const string&   varSuffix() const;
-  const string&   subSuffix() const;
-  const string&   moduleSuffix() const;
-  const string&   baseSubSuffix() const;
-  const string&   copySubSuffix() const;
+  const string&         wrapperFunctionName(string& rWrapperFunctionName,
+                                            AdtFortranWrapperType& nWrapperType, 
+                                            const char* pClassName = 0) const;
+
+  const string&         functionName() const;
+  const string&         userOptions() const;
+  const string&         preCommand() const;
+  const string&         postCommand() const;
+  const string&         pragmas() const;
+  bool                  pragma(const char* pPragmas) const;
+  const string&         mode() const;
+  const AdtStringList&  vars() const;
+  const AdtStringList&  outVars() const;
+  const string&         varSuffix() const;
+  const string&         subSuffix() const;
+  const string&         moduleSuffix() const;
+  const string&         baseSubSuffix() const;
+  const string&         copySubSuffix() const;
+
+  bool                  eq(const AdtMakeCommandOperation& rOperation) const;
+  bool                  operator == (const AdtMakeCommandOperation& rOperation) const;
+  bool                  operator != (const AdtMakeCommandOperation& rOperation) const;
 };
 
 //  ----------------------------------------------------------------------------
@@ -451,6 +459,20 @@ inline const string& AdtMakeCommandOperation::mode() const
 
 //  ----------------------------------------------------------------------------
 
+inline const AdtStringList& AdtMakeCommandOperation::vars() const
+{
+  return (Vars);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline const AdtStringList& AdtMakeCommandOperation::outVars() const
+{
+  return (OutVars);
+}
+
+//  ----------------------------------------------------------------------------
+
 inline const string& AdtMakeCommandOperation::varSuffix() const
 {
   return (VarSuffix);
@@ -482,6 +504,20 @@ inline const string& AdtMakeCommandOperation::baseSubSuffix() const
 inline const string& AdtMakeCommandOperation::copySubSuffix() const
 {
   return (CopySubSuffix);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtMakeCommandOperation::operator == (const AdtMakeCommandOperation& rOperation) const
+{
+  return (eq(rOperation));
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtMakeCommandOperation::operator != (const AdtMakeCommandOperation& rOperation) const
+{
+  return (!eq(rOperation));
 }
 
 
@@ -568,7 +604,7 @@ public:
                                      const char* pOutputFile,
                                      const char* pOutputFile2);
 
-  void                  addOperation(const AdtMakeCommandOperation& rOperation);
+  int                   addOperation(const AdtMakeCommandOperation& rOperation);
 
   void                  boundsCheck(const AdtStringList& rBoundsCheckList);
   const AdtStringList&  boundsCheck() const;

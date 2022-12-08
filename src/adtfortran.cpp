@@ -4172,10 +4172,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       nOutVarsIndex++;
     }
 
-    sDiffModuleName += pModuleSuffix;
-
     if (pModule == 0)
     {
+      sDiffModuleName += pModuleSuffix;
+
       pModule = (AdtFortranModule*)findObject("AdtFortranModule",
                                               sDiffModuleName,
                                               false);
@@ -4651,11 +4651,23 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           // Add function
           bool bParsed = FortranContext.parseString(pRoot, sCodeFunction);
 
-          pCodeObject = (AdtFortranBase*)pRoot;
+          pCodeObject = (AdtFortranBase*)pRoot->object(0);
 
           if (bParsed && (pCodeObject != 0))
           {
-            pWorkingRoot->insertAfter(pFuncOrSubSubprogram->parent(), pCodeObject);
+            // Need to add the new function and re-parent it
+            AdtParser* pProgramUnit = pFuncOrSubSubprogram->parent();
+
+            if (pProgramUnit != 0)
+            {
+              AdtParser* pContainer = pProgramUnit->parent();
+
+              if (pContainer != 0)
+              {
+                pContainer->insertAfter(pProgramUnit, pCodeObject);
+                pCodeObject->parent(pContainer, true, true);
+              }
+            }
           }
           else
           {
@@ -4708,6 +4720,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                 }
               }
             }
+
+            // Need to re-initialise the root to ensure type information queries work
+            pWorkingRoot->initialise();
 
             rAddedMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
 
@@ -5766,7 +5781,7 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
 
         if ((DestIter == DestFunctionMap.end()) && (pObj->parent() != 0))
         {
-          //Add the new tapenade generated function
+          // Add the new tapenade generated function
           AdtParser*  pParentObjCopy  = pObj->parent()->copy();
           AdtParser*  pObjCopy        = pParentObjCopy->findObject(pObj->type());
 
@@ -5777,7 +5792,7 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
             rNewMethodMap[pObjCopy->name()] = pObjCopy->name();
             rNewMethodList.push_back(pObjCopy->name());
 
-            //Change the USE statement to point to COMMON and remove other USE statements
+            // Change the USE statement to point to COMMON and remove other USE statements
             AdtParserPtrList      UseList;
             AdtParserPtrListIter  UseIter;
             bool                  bFirstUse = true;

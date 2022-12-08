@@ -962,6 +962,105 @@ void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
 
 //  ----------------------------------------------------------------------------
 
+void AdtMakeCommandOperation::initSuffixes(int nIteration)
+{
+  // Initialisation of suffixes usually happens in execute() method but we 
+  // need to detemine the suffixes for AdtMakeCommandOperation instances
+  // as they are added to the AdtMakeCommandOperationList because for 
+  // make operations like HESSIAN and REML we add operations on functions
+  // or subroutines resulting from previous operations that need valid 
+  // SubSuffix to be able to determine the resulting function name apriori.
+  string  WrtSuffix;
+
+  VarSuffix     = "";
+  SubSuffix     = "";
+  ModuleSuffix  = "";
+  BaseSubSuffix = "";
+  CopySubSuffix = "";
+
+  if (Vars.size() > 0)
+  {
+    AdtStringListConstIter  Iter;
+
+    for (Iter = Vars.begin() ; Iter != Vars.end() ; ++Iter)
+    {
+      const string& rVar = *Iter;
+
+      WrtSuffix += rVar;
+    }
+  }
+
+  bool bAddV = false;
+
+  if (Mode.length() > 0)
+  {
+    char  sVarSuffix[32] = {0};
+
+    //f => -tangent, -d            differentiate in the tangent mode
+    //r => -reverse, -b            differentiate in the reverse mode
+    if (Mode == "f")
+    {
+      ::sprintf(sVarSuffix, "d%d_", nIteration);
+
+      SubSuffix     = "_d";
+      ModuleSuffix  = "_d";
+      BaseSubSuffix = "_d";
+    }
+    else if (Mode == "mf")
+    {
+      ::sprintf(sVarSuffix, "d%d_", nIteration);
+
+      SubSuffix     = "_d";
+      ModuleSuffix  = "_d";
+      BaseSubSuffix = "_d";
+      bAddV         = true;
+    }
+    else if (Mode == "r")
+    {
+      ::sprintf(sVarSuffix, "b%d_", nIteration);
+
+      SubSuffix     = "_b";
+      ModuleSuffix  = "_b";
+      BaseSubSuffix = "_b";
+    }
+    else if (Mode == "mr")
+    {
+      ::sprintf(sVarSuffix, "b%d_", nIteration);
+
+      SubSuffix     = "_b";
+      ModuleSuffix  = "_b";
+      BaseSubSuffix = "_b";
+      bAddV         = true;
+    }
+    else
+    {
+      ::sprintf(sVarSuffix, "d%d_", nIteration);
+
+      SubSuffix     = "_d";
+      ModuleSuffix  = "_d";
+      BaseSubSuffix = "_d";
+    }
+
+    CopySubSuffix = string("_c") + VarSuffix;
+    VarSuffix     = sVarSuffix;
+  }
+
+  VarSuffix     += WrtSuffix;
+  SubSuffix     += WrtSuffix;
+  CopySubSuffix += WrtSuffix;
+
+  CopySubSuffix.toUpper();
+
+  if (bAddV)
+  {
+    SubSuffix     += "v";
+    ModuleSuffix  += "v";
+    BaseSubSuffix += "v";
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
                                       AdtFortranExecutableProgram* pWorkingRoot,
                                       AdtStringList& rNewFunctionsList,
@@ -984,6 +1083,9 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
     if (Mode.eq("hessian"))
     {
       // Carry out needed operations for hessian synthesis
+      rOutputFileName = pSourceFile;
+
+      bDone = true;
     } 
     else if (Mode.eq("reml"))
     {
@@ -1587,6 +1689,22 @@ bool AdtMakeCommandOperation::pragma(const char* pPragmas) const
 
   return (bSet);
 }
+
+//  ----------------------------------------------------------------------------
+
+bool AdtMakeCommandOperation::eq(const AdtMakeCommandOperation& rOperation) const
+{
+  bool bEqual = (FunctionName.eq(rOperation.FunctionName)                 && 
+                 Mode.eq(rOperation.Mode)                                 && 
+                 (MakeWrapper    == rOperation.MakeWrapper)               && 
+                 (Vars.size()    == rOperation.Vars.size())               &&
+                 (OutVars.size() == rOperation.OutVars.size())            && 
+                 equal(Vars.begin(), Vars.end(), rOperation.Vars.begin()) && 
+                 equal(OutVars.begin(), OutVars.end(), rOperation.OutVars.begin()));
+
+  return (bEqual);
+}
+
 
 
 //  ----------------------------------------------------------------------------
@@ -2326,6 +2444,9 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
 
                         pAutodiffRoot->initialise();
 
+                        // make wrapper
+                        rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, rAddedMethodsMap, ParentClassName);
+
                         if (0)
                         {
                           char  sBuffer[16];
@@ -2344,9 +2465,6 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                             TestFortranOut.close();
                           }
                         }
-
-                        // make wrapper
-                        rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, rAddedMethodsMap, ParentClassName);
 
                         // With the parse tree we need to figure out what functions / subroutines are new
                         // (ie. not in the original source) and add it to that source. Similarly,
@@ -2808,9 +2926,33 @@ void AdtMakeClass::newMakeClass(const AdtMakeCommand& rMakeCommand,
 
 //  ----------------------------------------------------------------------------
 
-void AdtMakeClass::addOperation(const AdtMakeCommandOperation& rOperation)
+int AdtMakeClass::addOperation(const AdtMakeCommandOperation& rOperation)
 {
-  OperationsList.push_back(rOperation);
+  bool  bFound     = false;
+  int   nIteration = 1;
+
+  // Don't add operations that have already been done before
+  AdtMakeCommandOperationListConstIter Iter;
+
+  for (Iter = OperationsList.begin() ; Iter != OperationsList.end() ; ++Iter)
+  {
+    if (*Iter == rOperation)
+    {
+      bFound = true;
+      break;
+    }
+
+    nIteration++;
+  }
+
+  if (!bFound)
+  {
+    OperationsList.push_back(rOperation);
+
+    nIteration = (int)OperationsList.size();
+  }
+
+  return (nIteration);
 }
 
 //  ----------------------------------------------------------------------------
@@ -4176,7 +4318,83 @@ void AdtMakeSystem::commandClose()
 {
   if (!CurrentCommandOperation.isNull())
   {
+    if (CurrentCommandOperation.mode().eq("hessian"))
+    {
+      if (CurrentCommandOperation.vars().size() != 1)
+      {
+        // ERROR: Hessian command should only have one in var
+        ::printf("ERROR: HESSIAN command should only have one VAR.\n");
+
+        AdtExit(-1);
+      }
+
+      if (CurrentCommandOperation.outVars().size() != 1)
+      {
+        // ERROR: Hessian command should only have one out var
+        ::printf("ERROR: HESSIAN command should only have one OUTVAR.\n");
+
+        AdtExit(-1);
+      }
+
+      // Add command to find diff of function
+      AdtMakeCommandOperation DiffFn;
+      int                     nIteration;
+
+      DiffFn.functionName(CurrentCommandOperation.functionName());
+      DiffFn.userOptions(CurrentCommandOperation.userOptions());
+      DiffFn.pragmas(CurrentCommandOperation.pragmas());
+      DiffFn.vars(CurrentCommandOperation.vars());
+      DiffFn.outVars(CurrentCommandOperation.outVars());
+      DiffFn.mode("f");
+      DiffFn.makeWrapper(true);
+
+      nIteration = CurrentClass.addOperation(DiffFn);
+
+      DiffFn.initSuffixes(nIteration);
+
+      // Add command to find grad of diff of function
+      AdtMakeCommandOperation GradDiffFn;
+      string                  DiffWrapperName;
+      AdtFortranWrapperType   nWrapperType;
+      string                  sOutVar(CurrentCommandOperation.outVars().front());
+      AdtStringList           rOutVars;
+
+      DiffFn.wrapperFunctionName(DiffWrapperName, nWrapperType);
+
+      if (sOutVar.eq(CurrentCommandOperation.functionName()))
+      {
+        // Assume function return
+        sOutVar = DiffWrapperName;
+      }
+      else
+      {
+        // argument return
+        sOutVar += DiffFn.varSuffix();
+      }
+
+      rOutVars.push_front(sOutVar);
+
+      GradDiffFn.functionName(DiffWrapperName);
+      GradDiffFn.userOptions(CurrentCommandOperation.userOptions());
+      GradDiffFn.pragmas(CurrentCommandOperation.pragmas());
+      GradDiffFn.vars(CurrentCommandOperation.vars());
+      GradDiffFn.outVars(rOutVars);
+      GradDiffFn.mode("r");
+      GradDiffFn.makeWrapper(true);
+
+      nIteration = CurrentClass.addOperation(GradDiffFn);
+
+      GradDiffFn.initSuffixes(nIteration);
+    }
+    else if (CurrentCommandOperation.mode().eq("reml"))
+    {
+      // Need to add a whole bunch of AD commands to support generation of reml
+      // code which also includes the checking of the command operation list 
+      // to see if it already contains the needed commands.
+    }
+
     CurrentClass.addOperation(CurrentCommandOperation);
+
     CurrentCommandOperation.reset();
   }
 }
@@ -4229,9 +4447,6 @@ void AdtMakeSystem::commandFunction(const char* pString)
 
 void AdtMakeSystem::commandHessian(const char* pString)
 {
-  // Need to add a whole bunch of AD commands to support generation of reml
-  // code which also includes the checking of the command operation list 
-  // to see if it already contains the needed commands.
   CurrentCommandOperation.functionName(pString);
   CurrentCommandOperation.makeWrapper(true);
   CurrentCommandOperation.mode("hessian");
@@ -4241,9 +4456,6 @@ void AdtMakeSystem::commandHessian(const char* pString)
 
 void AdtMakeSystem::commandReml(const char* pString)
 {
-  // Need to add a whole bunch of AD commands to support generation of reml
-  // code which also includes the checking of the command operation list 
-  // to see if it already contains the needed commands.
   CurrentCommandOperation.functionName(pString);
   CurrentCommandOperation.makeWrapper(true);
   CurrentCommandOperation.mode("reml");
