@@ -2926,7 +2926,7 @@ void AdtMakeClass::newMakeClass(const AdtMakeCommand& rMakeCommand,
 
 //  ----------------------------------------------------------------------------
 
-int AdtMakeClass::addOperation(const AdtMakeCommandOperation& rOperation)
+int AdtMakeClass::addOperation(AdtMakeCommandOperation& rOperation)
 {
   bool  bFound     = false;
   int   nIteration = 1;
@@ -2938,6 +2938,7 @@ int AdtMakeClass::addOperation(const AdtMakeCommandOperation& rOperation)
   {
     if (*Iter == rOperation)
     {
+      rOperation.initSuffixes(nIteration);
       bFound = true;
       break;
     }
@@ -2947,6 +2948,7 @@ int AdtMakeClass::addOperation(const AdtMakeCommandOperation& rOperation)
 
   if (!bFound)
   {
+    rOperation.initSuffixes(OperationsList.size() + 1);
     OperationsList.push_back(rOperation);
 
     nIteration = (int)OperationsList.size();
@@ -4338,7 +4340,6 @@ void AdtMakeSystem::commandClose()
 
       // Add command to find diff of function
       AdtMakeCommandOperation DiffFn;
-      int                     nIteration;
 
       DiffFn.functionName(CurrentCommandOperation.functionName());
       DiffFn.userOptions(CurrentCommandOperation.userOptions());
@@ -4348,9 +4349,7 @@ void AdtMakeSystem::commandClose()
       DiffFn.mode("f");
       DiffFn.makeWrapper(true);
 
-      nIteration = CurrentClass.addOperation(DiffFn);
-
-      DiffFn.initSuffixes(nIteration);
+      CurrentClass.addOperation(DiffFn);
 
       // Add command to find grad of diff of function
       AdtMakeCommandOperation GradDiffFn;
@@ -4382,9 +4381,18 @@ void AdtMakeSystem::commandClose()
       GradDiffFn.mode("r");
       GradDiffFn.makeWrapper(true);
 
-      nIteration = CurrentClass.addOperation(GradDiffFn);
+      CurrentClass.addOperation(GradDiffFn);
 
-      GradDiffFn.initSuffixes(nIteration);
+//      string rGradDiffWrapperFunctionName;
+
+//      sOutVar = string(CurrentCommandOperation.vars().front()) + GradDiffFn.varSuffix();  
+
+//      rOutVars.clear();
+//      rOutVars.push_front(sOutVar);
+
+//      GradDiffFn.wrapperFunctionName(rGradDiffWrapperFunctionName, nWrapperType);
+//      CurrentCommandOperation.functionName(rGradDiffWrapperFunctionName);
+//      CurrentCommandOperation.outVars(rOutVars);  
     }
     else if (CurrentCommandOperation.mode().eq("reml"))
     {

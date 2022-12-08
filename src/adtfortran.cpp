@@ -4133,45 +4133,6 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     
     sClassPrefix += "__";
 
-    AdtStringByStringMap  VarsMap;
-    AdtStringByStringMap  OutVarsMap;
-    AdtStringByStringMap  OutVarsIndexMap;
-    int                   nOutVarsIndex = 1;
-
-    nameListToNameMap(VarsMap, Vars);
-
-    AdtStringListConstIter  OutVarsIter;
-
-    // If the out var corresponds to the function name we need to add it to the 
-    // OutVarsMap with a '_' prefix because the AD'ed function will get a new
-    // variable the same name as the function less the class prefix but with a '_'
-    // prefix instead. If we don't do this the logic will fail to recognise this 
-    // new argument as an out var.
-    for (OutVarsIter = OutVars.begin() ; OutVarsIter != OutVars.end() ; ++OutVarsIter)
-    {
-      const string& rOutVar = *OutVarsIter;
-      string        sPrefixed(sClassPrefix);
-      char          sIndex[16] = {0};
-
-      ::itoa(nOutVarsIndex, sIndex, 10);
-
-      sPrefixed += rOutVar;
-
-      if (sPrefixed.eq(pFunctionName))
-      {
-        string  sUscoreOutVar("_");
-
-        sUscoreOutVar                 += rOutVar;
-        OutVarsMap[sUscoreOutVar]      = sUscoreOutVar;
-        OutVarsIndexMap[sUscoreOutVar] = sIndex;
-      }
-
-      OutVarsMap[rOutVar]       = rOutVar;
-      OutVarsIndexMap[rOutVar]  = sIndex;
-
-      nOutVarsIndex++;
-    }
-
     if (pModule == 0)
     {
       sDiffModuleName += pModuleSuffix;
@@ -4192,461 +4153,583 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
    
     if (pModule != 0)
     {
-      bool        bIsFunction;
-      bool        bIsAD_Function;
-      bool        bSupported              = true;
-      AdtParser*  pFuncOrSubSubprogram    = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
-      AdtParser*  pADFuncOrSubSubprogram  = findFunctionOrSubroutine(pADFunctionName, bIsAD_Function);
+      bool        bSupported = true;
+      string      sCodeFunction;
+      string      sCodeModule;
+      AdtParser*  pFuncOrSubSubprogram = 0;
 
-      if ((pFuncOrSubSubprogram   != 0) && 
-          (pADFuncOrSubSubprogram != 0))
+      switch (nWrapperType)
       {
-        AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, "");
-        AdtFortranVariableInfo  ADVariableInfo(pADFuncOrSubSubprogram, pModule);
-        const AdtStringList&    rArgList    = VariableInfo.argumentList();
-        const AdtStringList&    rADArgList  = ADVariableInfo.argumentList();
-        AdtStringListConstIter  Iter;
-
-        // Found sub-routine or function. Now need to build code string for a new wrapper function or subroutine
-        // with appropriately named arguments and add appropriate variable definitions to the module for 
-        // arrays/variables that we need to add to COMMON. Then use the builder methods to create an object 
-        // representation of that new code and splice the needed additions into the parse tree. That is add
-        // one new function/subroutine and however many variables needed to COMMON.
-
-        // Begin FUNCTION / SUBROUTINE
-        AdtFile       FortranOutFunction(true);
-        AdtFile       FortranOutModule(true);
-        AdtFortran    FortranContext;
-        AdtParser*    pRoot       = 0;
-        AdtParser*    pCodeObject = 0;
-        bool          bFirst      = true;
-        const char*   sType       = bIsAD_Function ? "FUNCTION" : "SUBROUTINE";
-        string        sCodeFunction;
-        string        sCodeBody;
-        string        sCodeModule;
-        string        sDeclarations;
-        string        sCallArgs;
-        string        sLastArg;
-        const char*   pRawFunctionName = pFunctionName;
-        bool          bMulti           = false;
-        bool          bIsGrad          = (nWrapperType == ForWrapper_GRAD) || (nWrapperType == ForWrapper_MULTIGRAD);
-        bool          bMultipleOuts    = (OutVars.size() > 1);
-
-        sDeclarations  = "INTEGER(4) :: cn\n";
-        sDeclarations += "INTEGER(4) :: cm\n";
-
-        FortranOutModule.open(sCodeModule);
-
-        FortranOutModule.write("MODULE ");
-        FortranOutModule.write(sDiffModuleName);
-        FortranOutModule.incrementIndent();
-        FortranOutModule.newline();
-
-        FortranOutFunction.open(sCodeFunction);
-
-        FortranOutFunction.write(sType);
-        FortranOutFunction.write(" ");
-        FortranOutFunction.write(pWrapperFunctionName);
-        FortranOutFunction.write("(");
-
-        // Do argument list
-        for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
+        case ForWrapper_DIFF:
+        case ForWrapper_MULTIDIFF:
+        case ForWrapper_GRAD:
+        case ForWrapper_MULTIGRAD:
         {
-          string       sDeclaration;
-          string       sIntent;
-          string       sLowerDim;
-          string       sUpperDim;
-          string       sPrefixedArg(pClassName);
-          string       rArg         = *Iter;
+          bool                  bIsFunction;
+          bool                  bIsAD_Function;
+          AdtParser*            pADFuncOrSubSubprogram  = findFunctionOrSubroutine(pADFunctionName, bIsAD_Function);
+          AdtStringByStringMap  VarsMap;
+          AdtStringByStringMap  OutVarsMap;
+          AdtStringByStringMap  OutVarsIndexMap;
+          int                   nOutVarsIndex = 1;
 
-          // Tapenade generated output vars with class prefix will have been replaced with '_'
-          // By adding {ClassName}_ it should now look like the function name and be recognised
-          // as such.
-          sPrefixedArg += "_";
-          sPrefixedArg += rArg;
+          pFuncOrSubSubprogram = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
 
-          bool         bIsOutVar      = (OutVarsMap.find(rArg)     != OutVarsMap.end());
-          bool         bAD_Result     = (OutVarsMap.find(sLastArg) != OutVarsMap.end());
-          bool         bAD_Input      = (VarsMap.find(sLastArg)    != VarsMap.end());
-          bool         bIsFuncVal     = bIsFunction && sPrefixedArg.eq(pFunctionName);
-          bool         bNew           = !VariableInfo.hasVariable(rArg) && !bIsFuncVal;
-          bool         bIsNewInVar    = bNew && !bAD_Result && !bIsOutVar;
-          bool         bDiffWriteArg  = !bIsGrad && !bIsOutVar && !(bAD_Input && bNew) && !bIsFuncVal;
-          bool         bGradWriteArg  = bIsGrad && ((bAD_Input && bNew) || (!bNew && !bIsFuncVal)) && !(bIsOutVar || bAD_Result);
-          bool         bWriteArg      = bGradWriteArg || bDiffWriteArg;
-          int          nDimensions    = ADVariableInfo.numberOfDimensions(rArg);
-          bool         bAddLocal      = bWriteArg || (nDimensions == 0);
-          bool         bAddDecl       = bIsOutVar || bNew || bWriteArg;
-          bool         bWithIntent    = bWriteArg;
-          int          nLimit         = 1;
-          int          nDummy         = 0;
+          nameListToNameMap(VarsMap, Vars);
 
-          ADVariableInfo.intent(rArg, sIntent);
-          ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
-          ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
+          AdtStringListConstIter  OutVarsIter;
 
-          if ((::strcmp(rArg, "nbdirs") == 0) || (::sscanf(rArg, "nbdirs%d", &nDummy) == 1))
+          // If the out var corresponds to the function name we need to add it to the 
+          // OutVarsMap with a '_' prefix because the AD'ed function will get a new
+          // variable the same name as the function less the class prefix but with a '_'
+          // prefix instead. If we don't do this the logic will fail to recognise this 
+          // new argument as an out var.
+          for (OutVarsIter = OutVars.begin() ; OutVarsIter != OutVars.end() ; ++OutVarsIter)
           {
-            bWriteArg      = true;
-            bAddDecl       = false;
-            bNew           = false;
-            bIsNewInVar    = false;
-            rArg           = "nbdirs";
-            sDeclarations += "INTEGER(4), INTENT(IN):: nbdirs\n";
-          }
+            const string& rOutVar = *OutVarsIter;
+            string        sPrefixed(sClassPrefix);
+            char          sIndex[16] = {0};
 
-          if (sCallArgs.length() > 0)
-          {
-            sCallArgs += ",";
-          }
+            ::itoa(nOutVarsIndex, sIndex, 10);
 
-          sCallArgs += rArg;
+            sPrefixed += rOutVar;
 
-          if (sUpperDim.eq("nbdirsmax"))
-          {
-            sLowerDim.clear();
-            sUpperDim.clear();
-
-            if (nDimensions > 1)
+            if (sPrefixed.eq(pFunctionName))
             {
-              ADVariableInfo.lowerDimension(rArg, 1, sLowerDim);
-              ADVariableInfo.upperDimension(rArg, 1, sUpperDim);
-              nLimit++;
+              string  sUscoreOutVar("_");
+
+              sUscoreOutVar                 += rOutVar;
+              OutVarsMap[sUscoreOutVar]      = sUscoreOutVar;
+              OutVarsIndexMap[sUscoreOutVar] = sIndex;
             }
+
+            OutVarsMap[rOutVar]       = rOutVar;
+            OutVarsIndexMap[rOutVar]  = sIndex;
+
+            nOutVarsIndex++;
           }
 
-          if (bIsNewInVar && (nDimensions > nLimit))
+          if ((pFuncOrSubSubprogram   != 0) && 
+              (pADFuncOrSubSubprogram != 0))
           {
-            ::printf("WARNING: Differentiation with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
+            AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, "");
+            AdtFortranVariableInfo  ADVariableInfo(pADFuncOrSubSubprogram, pModule);
+            const AdtStringList&    rArgList    = VariableInfo.argumentList();
+            const AdtStringList&    rADArgList  = ADVariableInfo.argumentList();
+            AdtStringListConstIter  Iter;
 
-            bSupported = false;
-            // Break from loop
-            break;
-          }
+            // Found sub-routine or function. Now need to build code string for a new wrapper function or subroutine
+            // with appropriately named arguments and add appropriate variable definitions to the module for 
+            // arrays/variables that we need to add to COMMON. Then use the builder methods to create an object 
+            // representation of that new code and splice the needed additions into the parse tree. That is add
+            // one new function/subroutine and however many variables needed to COMMON.
 
-          if (bNew)
-          {
-            switch (nWrapperType)
+            // Begin FUNCTION / SUBROUTINE
+            AdtFile       FortranOutFunction(true);
+            AdtFile       FortranOutModule(true);
+            string        sCodeBody;
+            string        sDeclarations;
+            string        sCallArgs;
+            string        sLastArg;
+            bool          bFirst           = true;
+            const char*   sType            = bIsAD_Function ? "FUNCTION" : "SUBROUTINE";
+            const char*   pRawFunctionName = pFunctionName;
+            bool          bMulti           = false;
+            bool          bIsGrad          = (nWrapperType == ForWrapper_GRAD) || (nWrapperType == ForWrapper_MULTIGRAD);
+            bool          bMultipleOuts    = (OutVars.size() > 1);
+
+            sDeclarations  = "INTEGER(4) :: cn\n";
+            sDeclarations += "INTEGER(4) :: cm\n";
+
+            FortranOutModule.open(sCodeModule);
+
+            FortranOutModule.write("MODULE ");
+            FortranOutModule.write(sDiffModuleName);
+            FortranOutModule.incrementIndent();
+            FortranOutModule.newline();
+
+            FortranOutFunction.open(sCodeFunction);
+
+            FortranOutFunction.write(sType);
+            FortranOutFunction.write(" ");
+            FortranOutFunction.write(pWrapperFunctionName);
+            FortranOutFunction.write("(");
+
+            // Do argument list
+            for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
             {
-              case ForWrapper_DIFF:
-              {
-                string  sNewArg;
-                string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
+              string       sDeclaration;
+              string       sIntent;
+              string       sLowerDim;
+              string       sUpperDim;
+              string       sPrefixedArg(pClassName);
+              string       rArg         = *Iter;
 
-                if (bAD_Result)
+              // Tapenade generated output vars with class prefix will have been replaced with '_'
+              // By adding {ClassName}_ it should now look like the function name and be recognised
+              // as such.
+              sPrefixedArg += "_";
+              sPrefixedArg += rArg;
+
+              bool         bIsOutVar      = (OutVarsMap.find(rArg)     != OutVarsMap.end());
+              bool         bAD_Result     = (OutVarsMap.find(sLastArg) != OutVarsMap.end());
+              bool         bAD_Input      = (VarsMap.find(sLastArg)    != VarsMap.end());
+              bool         bIsFuncVal     = bIsFunction && sPrefixedArg.eq(pFunctionName);
+              bool         bNew           = !VariableInfo.hasVariable(rArg) && !bIsFuncVal;
+              bool         bIsNewInVar    = bNew && !bAD_Result && !bIsOutVar;
+              bool         bDiffWriteArg  = !bIsGrad && !bIsOutVar && !(bAD_Input && bNew) && !bIsFuncVal;
+              bool         bGradWriteArg  = bIsGrad && ((bAD_Input && bNew) || (!bNew && !bIsFuncVal)) && !(bIsOutVar || bAD_Result);
+              bool         bWriteArg      = bGradWriteArg || bDiffWriteArg;
+              int          nDimensions    = ADVariableInfo.numberOfDimensions(rArg);
+              bool         bAddLocal      = bWriteArg || (nDimensions == 0);
+              bool         bAddDecl       = bIsOutVar || bNew || bWriteArg;
+              bool         bWithIntent    = bWriteArg;
+              int          nLimit         = 1;
+              int          nDummy         = 0;
+
+              ADVariableInfo.intent(rArg, sIntent);
+              ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
+              ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
+
+              if ((::strcmp(rArg, "nbdirs") == 0) || (::sscanf(rArg, "nbdirs%d", &nDummy) == 1))
+              {
+                bWriteArg      = true;
+                bAddDecl       = false;
+                bNew           = false;
+                bIsNewInVar    = false;
+                rArg           = "nbdirs";
+                sDeclarations += "INTEGER(4), INTENT(IN):: nbdirs\n";
+              }
+
+              if (sCallArgs.length() > 0)
+              {
+                sCallArgs += ",";
+              }
+
+              sCallArgs += rArg;
+
+              if (sUpperDim.eq("nbdirsmax"))
+              {
+                sLowerDim.clear();
+                sUpperDim.clear();
+
+                if (nDimensions > 1)
                 {
-                  if (sUpperDim.length() > 0)
+                  ADVariableInfo.lowerDimension(rArg, 1, sLowerDim);
+                  ADVariableInfo.upperDimension(rArg, 1, sUpperDim);
+                  nLimit++;
+                }
+              }
+
+              if (bIsNewInVar && (nDimensions > nLimit))
+              {
+                ::printf("WARNING: Differentiation with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
+
+                bSupported = false;
+                // Break from loop
+                break;
+              }
+
+              if (bNew)
+              {
+                switch (nWrapperType)
+                {
+                  case ForWrapper_DIFF:
                   {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cn) = 0.0\n";
-                    sCodeBody += "ENDDO\n\n";
+                    string  sNewArg;
+                    string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
+
+                    if (bAD_Result)
+                    {
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cn) = 0.0\n";
+                        sCodeBody += "ENDDO\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + " = 0.0\n";
+                      }
+                    }
+                    else
+                    {
+                      sNewArg = sLastArg + "_dir";
+
+                      FortranOutFunction.write(", ");
+                      FortranOutFunction.write(sNewArg);
+
+                      sNewDeclaration += sNewArg;
+
+                      sDeclarations += sNewDeclaration;
+                      sDeclarations += "\n";
+
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cn) = 0.0\n";
+                        sCodeBody += "ENDDO\n\n";
+                        sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
+                        sCodeBody += rArg + "(" + sNewArg + ") = 1.0\n";
+                        sCodeBody += "END IF\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + " = 0\n";
+                        sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
+                        sCodeBody += rArg + " = 1\n";
+                        sCodeBody += "END IF\n\n";
+                      }
+                    }
+                    break;
                   }
-                  else
+
+                  case ForWrapper_MULTIDIFF:
                   {
-                    sCodeBody += rArg + " = 0.0\n";
+                    string  sNewArg;
+                    string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
+
+                    if (bAD_Result)
+                    {
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cm,cn) = 0.0\n";
+                        sCodeBody += "ENDDO\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + "(cm) = 0.0\n";
+                      }
+                    }
+                    else
+                    {
+                      sNewArg = sLastArg + "_dir";
+
+                      FortranOutFunction.write(", ");
+                      FortranOutFunction.write(sNewArg);
+
+                      sNewDeclaration += sNewArg;
+
+                      sDeclarations += sNewDeclaration + "(nbdirsmax)";
+                      sDeclarations += "\n";
+
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cm,cn) = 0.0\n";
+                        sCodeBody += "ENDDO\n\n";
+                        sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
+                        sCodeBody += rArg + "(cm," + sNewArg + ") = 1.0\n";
+                        sCodeBody += "END IF\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + "(cm) = 0.0\n";
+                        sCodeBody += "IF (" + sNewArg + "(cm) > 0) THEN\n";
+                        sCodeBody += rArg + "(cm) = 1.0\n";
+                        sCodeBody += "END IF\n\n";
+                      }
+                    }
+
+                    bMulti = true;
+                    break;
+                  }
+
+                  case ForWrapper_GRAD:
+                  {
+                    if (bAD_Input)
+                    {
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cn) = 0.0\n";
+                        sCodeBody += "ENDDO\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + " = 0.0\n";
+                      }
+                    }
+                    else
+                    {
+                      string  sSelector;
+
+                      if (bMultipleOuts)
+                      {
+                        sCodeBody += "\nIF (which == " + OutVarsIndexMap[rArg] + ") THEN\n";
+                        sCodeBody += "GradSelect = 1.0\n";
+                        sCodeBody += "ELSE\n";
+                        sCodeBody += "GradSelect = 0.0\n";
+                        sCodeBody += "END IF\n\n";
+
+                        sSelector = "GradSelect";
+                      }
+                      else
+                      {
+                        sSelector = "1.0";
+                      }
+
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cn) = " + sSelector + "\n";
+                        sCodeBody += "ENDDO\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + " = " + sSelector + "\n";
+                      }
+                    }
+                    break;
+                  }
+
+                  case ForWrapper_MULTIGRAD:
+                  {
+                    if (bAD_Input)
+                    {
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cm,cn) = 0.0\n";
+                        sCodeBody += "ENDDO\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + "(cm) = 0.0\n";
+                      }
+                    }
+                    else
+                    {
+                      string  sSelector;
+
+                      if (bMultipleOuts)
+                      {
+                        sCodeBody += "\nIF (which == " + OutVarsIndexMap[rArg] + ") THEN\n";
+                        sCodeBody += "GradSelect = 1.0\n";
+                        sCodeBody += "ELSE\n";
+                        sCodeBody += "GradSelect = 0.0\n";
+                        sCodeBody += "END IF\n\n";
+
+                        sSelector = "GradSelect";
+                      }
+                      else
+                      {
+                        sSelector = "1.0";
+                      }
+
+                      if (sUpperDim.length() > 0)
+                      {
+                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
+                        sCodeBody += rArg + "(cm,cn) = " + sSelector + "\n";
+                        sCodeBody += "ENDDO\n\n";
+                      }
+                      else
+                      {
+                        sCodeBody += rArg + "(cm) = " + sSelector + "\n";
+                      }
+                    }
+
+                    bMulti = true;
+                    break;
+                  }
+
+                  case ForWrapper_HESSIAN:
+                  case ForWrapper_REML:
+                  default:
+                  {
+                    FAIL();
+                    break;
                   }
                 }
-                else
+              }
+
+              if (bAddDecl)
+              {
+                sDeclaration.clear();
+                ADVariableInfo.buildVariableDeclaration(rArg, bWithIntent, sDeclaration);
+
+                if (bAddLocal)
                 {
-                  sNewArg = sLastArg + "_dir";
-
-                  FortranOutFunction.write(", ");
-                  FortranOutFunction.write(sNewArg);
-
-                  sNewDeclaration += sNewArg;
-
-                  sDeclarations += sNewDeclaration;
+                  sDeclarations += sDeclaration;
                   sDeclarations += "\n";
-
-                  if (sUpperDim.length() > 0)
-                  {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cn) = 0.0\n";
-                    sCodeBody += "ENDDO\n\n";
-                    sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
-                    sCodeBody += rArg + "(" + sNewArg + ") = 1.0\n";
-                    sCodeBody += "END IF\n\n";
-                  }
-                  else
-                  {
-                    sCodeBody += rArg + " = 0\n";
-                    sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
-                    sCodeBody += rArg + " = 1\n";
-                    sCodeBody += "END IF\n\n";
-                  }
-                }
-                break;
-              }
-
-              case ForWrapper_MULTIDIFF:
-              {
-                string  sNewArg;
-                string  sNewDeclaration("INTEGER(4), INTENT(IN):: ");
-
-                if (bAD_Result)
-                {
-                  if (sUpperDim.length() > 0)
-                  {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cm,cn) = 0.0\n";
-                    sCodeBody += "ENDDO\n\n";
-                  }
-                  else
-                  {
-                    sCodeBody += rArg + "(cm) = 0.0\n";
-                  }
                 }
                 else
                 {
-                  sNewArg = sLastArg + "_dir";
+                  FortranOutModule.write(sDeclaration);
+                  FortranOutModule.newline();
+                }
+              }
 
+              if (bWriteArg)
+              {
+                if (!bFirst)
+                {
                   FortranOutFunction.write(", ");
-                  FortranOutFunction.write(sNewArg);
-
-                  sNewDeclaration += sNewArg;
-
-                  sDeclarations += sNewDeclaration + "(nbdirsmax)";
-                  sDeclarations += "\n";
-
-                  if (sUpperDim.length() > 0)
-                  {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cm,cn) = 0.0\n";
-                    sCodeBody += "ENDDO\n\n";
-                    sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
-                    sCodeBody += rArg + "(cm," + sNewArg + ") = 1.0\n";
-                    sCodeBody += "END IF\n\n";
-                  }
-                  else
-                  {
-                    sCodeBody += rArg + "(cm) = 0.0\n";
-                    sCodeBody += "IF (" + sNewArg + "(cm) > 0) THEN\n";
-                    sCodeBody += rArg + "(cm) = 1.0\n";
-                    sCodeBody += "END IF\n\n";
-                  }
                 }
 
-                bMulti = true;
-                break;
+                FortranOutFunction.write(rArg);
+
+                bFirst = false;
               }
 
-              case ForWrapper_GRAD:
-              {
-                if (bAD_Input)
-                {
-                  if (sUpperDim.length() > 0)
-                  {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cn) = 0.0\n";
-                    sCodeBody += "ENDDO\n\n";
-                  }
-                  else
-                  {
-                    sCodeBody += rArg + " = 0.0\n";
-                  }
-                }
-                else
-                {
-                  string  sSelector;
-
-                  if (bMultipleOuts)
-                  {
-                    sCodeBody += "\nIF (which == " + OutVarsIndexMap[rArg] + ") THEN\n";
-                    sCodeBody += "GradSelect = 1.0\n";
-                    sCodeBody += "ELSE\n";
-                    sCodeBody += "GradSelect = 0.0\n";
-                    sCodeBody += "END IF\n\n";
-
-                    sSelector = "GradSelect";
-                  }
-                  else
-                  {
-                    sSelector = "1.0";
-                  }
-
-                  if (sUpperDim.length() > 0)
-                  {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cn) = " + sSelector + "\n";
-                    sCodeBody += "ENDDO\n\n";
-                  }
-                  else
-                  {
-                    sCodeBody += rArg + " = " + sSelector + "\n";
-                  }
-                }
-                break;
-              }
-
-              case ForWrapper_MULTIGRAD:
-              {
-                if (bAD_Input)
-                {
-                  if (sUpperDim.length() > 0)
-                  {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cm,cn) = 0.0\n";
-                    sCodeBody += "ENDDO\n\n";
-                  }
-                  else
-                  {
-                    sCodeBody += rArg + "(cm) = 0.0\n";
-                  }
-                }
-                else
-                {
-                  string  sSelector;
-
-                  if (bMultipleOuts)
-                  {
-                    sCodeBody += "\nIF (which == " + OutVarsIndexMap[rArg] + ") THEN\n";
-                    sCodeBody += "GradSelect = 1.0\n";
-                    sCodeBody += "ELSE\n";
-                    sCodeBody += "GradSelect = 0.0\n";
-                    sCodeBody += "END IF\n\n";
-
-                    sSelector = "GradSelect";
-                  }
-                  else
-                  {
-                    sSelector = "1.0";
-                  }
-
-                  if (sUpperDim.length() > 0)
-                  {
-                    sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                    sCodeBody += rArg + "(cm,cn) = " + sSelector + "\n";
-                    sCodeBody += "ENDDO\n\n";
-                  }
-                  else
-                  {
-                    sCodeBody += rArg + "(cm) = " + sSelector + "\n";
-                  }
-                }
-
-                bMulti = true;
-                break;
-              }
-
-              case ForWrapper_HESSIAN:
-              case ForWrapper_REML:
-              default:
-              {
-                FAIL();
-                break;
-              }
+              sLastArg = rArg;
             }
-          }
 
-          if (bAddDecl)
-          {
-            sDeclaration.clear();
-            ADVariableInfo.buildVariableDeclaration(rArg, bWithIntent, sDeclaration);
-
-            if (bAddLocal)
+            // For GRAD mode if we have multiple outs then add a 'which' integer parameter
+            // that selects which out var we are obtaining the gradient for, selected by 
+            // number starting from 1 to the number of out vars in the list order.
+            if (bIsGrad && bMultipleOuts)
             {
-              sDeclarations += sDeclaration;
+              string  sNewArg;
+
+              sDeclarations += "REAL(8) :: GradSelect\n";
+              sDeclarations += "INTEGER(4), INTENT(IN):: which";
+
+              if (bMulti)
+              {
+                sDeclarations += "(nbdirsmax)";
+              }
+
               sDeclarations += "\n";
+
+              if (!bFirst)
+              {
+                FortranOutFunction.write(", ");
+              }
+
+              FortranOutFunction.write("which");
+            }
+
+            FortranOutFunction.write(")");
+            FortranOutFunction.incrementIndent();
+            FortranOutFunction.newline();
+
+            // Do arg declarations
+            FortranOutFunction.writeLines(sDeclarations);
+
+            // Do Use commands
+            FortranOutFunction.write("USE DIFFSIZES");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("USE COMMON");
+            FortranOutFunction.newline();
+
+            // Add multidirectional loop
+            if (bMulti)
+            {
+              sCodeBody = "\nDO cm = 1,nbdirs\n" + sCodeBody + "ENDDO\n\n";
+            }
+
+            // Add function call
+            if (bIsAD_Function)
+            {
+              sCodeBody += pWrapperFunctionName;
+              sCodeBody += " = ";
+              sCodeBody += pADFunctionName;
+              sCodeBody += "(";
+              sCodeBody += sCallArgs;
+              sCodeBody += ")\n";
             }
             else
             {
-              FortranOutModule.write(sDeclaration);
-              FortranOutModule.newline();
+              sCodeBody += "CALL ";
+              sCodeBody += pADFunctionName;
+              sCodeBody += "(";
+              sCodeBody += sCallArgs;
+              sCodeBody += ")\n";
             }
-          }
 
-          if (bWriteArg)
+            // Do Code Body
+            FortranOutFunction.writeLines(sCodeBody);
+
+            // End FUNCTION / SUBROUTINE
+            FortranOutFunction.decrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("END ");
+            FortranOutFunction.write(sType);
+            FortranOutFunction.write(" ");
+            FortranOutFunction.write(pWrapperFunctionName);
+            FortranOutFunction.newline();
+            FortranOutFunction.close();
+
+            // End module declaration for adding new variables to COMMON module
+            FortranOutModule.decrementIndent();
+            FortranOutModule.newline();
+            FortranOutModule.write("END MODULE");
+            FortranOutModule.newline();
+            FortranOutModule.close();
+          }
+          break;
+        }
+
+        case ForWrapper_HESSIAN:
+        case ForWrapper_REML:
+        default:
+        {
+//          FAIL();
+          break;
+        }
+      }
+
+      if (bSupported)
+      {
+        AdtFortran  FortranContext;
+        AdtParser*  pRoot       = 0;
+        AdtParser*  pCodeObject = 0;
+
+        bMade = true;
+
+        if (sCodeModule.length() > 0)
+        {
+          // Add extra variable declarations to module
+          bool bParsed = FortranContext.parseString(pRoot, sCodeModule);
+
+          pCodeObject = (AdtFortranBase*)pRoot;
+
+          if (bParsed && (pCodeObject != 0))
           {
-            if (!bFirst)
+            if (bAddEntireModule)
             {
-              FortranOutFunction.write(", ");
+              AdtParser* pProgramUnitObj = pCodeObject->findObject("AdtFortranProgramUnit");
+
+              if ((pProgramUnitObj != 0) && add(pProgramUnitObj))
+              {
+                pProgramUnitObj->lock();
+              }
             }
+            else
+            {
+              AdtParser* pSrcModuleObj  = pCodeObject->findObject("AdtFortranModule",
+                                                                  sDiffModuleName,
+                                                                  false);
 
-            FortranOutFunction.write(rArg);
+              AdtParser* pDestModuleObj = findObject("AdtFortranModule",
+                                                      sDiffModuleName,
+                                                      false);
 
-            bFirst = false;
+              if ((pSrcModuleObj != 0) && (pDestModuleObj != 0))
+              {
+                AdtParser* pSrcModuleBodyObj  = pSrcModuleObj->findObject("AdtFortranModuleBody");
+                AdtParser* pDestModuleBodyObj = pDestModuleObj->findObject("AdtFortranModuleBody");
+
+                if ((pSrcModuleBodyObj != 0) && (pDestModuleBodyObj != 0))
+                {
+                  pDestModuleBodyObj->addListCopy(pSrcModuleBodyObj, true);
+                }
+              }
+            }
           }
-
-          sLastArg = rArg;
-        }
-
-        // For GRAD mode if we have multiple outs then add a 'which' integer parameter
-        // that selects which out var we are obtaining the gradient for, selected by 
-        // number starting from 1 to the number of out vars in the list order.
-        if (bIsGrad && bMultipleOuts)
-        {
-          string  sNewArg;
-
-          sDeclarations += "REAL(8) :: GradSelect\n";
-          sDeclarations += "INTEGER(4), INTENT(IN):: which";
-
-          if (bMulti)
+          else
           {
-            sDeclarations += "(nbdirsmax)";
+            bMade = true;
+
+            ::printf("%s\n", sCodeModule.c_str());
           }
 
-          sDeclarations += "\n";
-
-          if (!bFirst)
-          {
-            FortranOutFunction.write(", ");
-          }
-
-          FortranOutFunction.write("which");
+          UtlReleaseReference(pCodeObject);
         }
 
-        FortranOutFunction.write(")");
-        FortranOutFunction.incrementIndent();
-        FortranOutFunction.newline();
-
-        // Do arg declarations
-        FortranOutFunction.writeLines(sDeclarations);
-
-        // Do Use commands
-        FortranOutFunction.write("USE DIFFSIZES");
-        FortranOutFunction.newline();
-        FortranOutFunction.write("USE COMMON");
-        FortranOutFunction.newline();
-
-        // Add multidirectional loop
-        if (bMulti)
-        {
-          sCodeBody = "\nDO cm = 1,nbdirs\n" + sCodeBody + "ENDDO\n\n";
-        }
-
-        // Add function call
-        if (bIsAD_Function)
-        {
-          sCodeBody += pWrapperFunctionName;
-          sCodeBody += " = ";
-          sCodeBody += pADFunctionName;
-          sCodeBody += "(";
-          sCodeBody += sCallArgs;
-          sCodeBody += ")\n";
-        }
-        else
-        {
-          sCodeBody += "CALL ";
-          sCodeBody += pADFunctionName;
-          sCodeBody += "(";
-          sCodeBody += sCallArgs;
-          sCodeBody += ")\n";
-        }
-
-        // Do Code Body
-        FortranOutFunction.writeLines(sCodeBody);
-
-        // End FUNCTION / SUBROUTINE
-        FortranOutFunction.decrementIndent();
-        FortranOutFunction.newline();
-        FortranOutFunction.write("END ");
-        FortranOutFunction.write(sType);
-        FortranOutFunction.write(" ");
-        FortranOutFunction.write(pWrapperFunctionName);
-        FortranOutFunction.newline();
-        FortranOutFunction.close();
-
-        if (bSupported)
+        if (sCodeFunction.length() > 0)
         {
           // Add function
           bool bParsed = FortranContext.parseString(pRoot, sCodeFunction);
@@ -4671,67 +4754,15 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           }
           else
           {
+            bMade = false;
+
             ::printf("%s\n", sCodeFunction.c_str());
           }
 
-          UtlReleaseReference(pCodeObject);
+          // Need to re-initialise the root to ensure type information queries work
+          pWorkingRoot->initialise();
 
-          // End module declaration for adding new variables to COMMON module
-          FortranOutModule.decrementIndent();
-          FortranOutModule.newline();
-          FortranOutModule.write("END MODULE");
-          FortranOutModule.newline();
-          FortranOutModule.close();
-
-          // Add extra variable declarations to module
-          bParsed = FortranContext.parseString(pRoot, sCodeModule);
-
-          pCodeObject = (AdtFortranBase*)pRoot;
-
-          if (bParsed && (pCodeObject != 0))
-          {
-            if (bAddEntireModule)
-            {
-              AdtParser* pProgramUnitObj = pCodeObject->findObject("AdtFortranProgramUnit");
-
-              if ((pProgramUnitObj != 0) && add(pProgramUnitObj))
-              {
-                pProgramUnitObj->lock();
-              }
-            }
-            else
-            {
-              AdtParser* pSrcModuleObj  = pCodeObject->findObject("AdtFortranModule",
-                                                                  sDiffModuleName,
-                                                                  false);
-
-              AdtParser* pDestModuleObj = findObject("AdtFortranModule",
-                                                     sDiffModuleName,
-                                                     false);
-
-              if ((pSrcModuleObj != 0) && (pDestModuleObj != 0))
-              {
-                AdtParser* pSrcModuleBodyObj  = pSrcModuleObj->findObject("AdtFortranModuleBody");
-                AdtParser* pDestModuleBodyObj = pDestModuleObj->findObject("AdtFortranModuleBody");
-
-                if ((pSrcModuleBodyObj != 0) && (pDestModuleBodyObj != 0))
-                {
-                  pDestModuleBodyObj->addListCopy(pSrcModuleBodyObj, true);
-                }
-              }
-            }
-
-            // Need to re-initialise the root to ensure type information queries work
-            pWorkingRoot->initialise();
-
-            rAddedMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
-
-            bMade = true;
-          }
-          else
-          {
-            ::printf("%s\n", sCodeModule.c_str());
-          }
+          rAddedMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
 
           UtlReleaseReference(pCodeObject);
         }

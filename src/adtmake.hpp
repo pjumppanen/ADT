@@ -604,7 +604,7 @@ public:
                                      const char* pOutputFile,
                                      const char* pOutputFile2);
 
-  int                   addOperation(const AdtMakeCommandOperation& rOperation);
+  int                   addOperation(AdtMakeCommandOperation& rOperation);
 
   void                  boundsCheck(const AdtStringList& rBoundsCheckList);
   const AdtStringList&  boundsCheck() const;
