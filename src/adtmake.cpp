@@ -1082,14 +1082,17 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
   {
     if (Mode.eq("hessian"))
     {
-      // Carry out needed operations for hessian synthesis
+      // Make this succeed to allow hessian code to be added in makeWrapper() call
       rOutputFileName = pSourceFile;
 
       bDone = true;
     } 
     else if (Mode.eq("reml"))
     {
-      // Carry out needed operations for reml synthesis
+      // Make this succeed to allow reml code to be added in makeWrapper() call
+      rOutputFileName = pSourceFile;
+
+      bDone = true;
     }
     else
     {
@@ -2948,7 +2951,7 @@ int AdtMakeClass::addOperation(AdtMakeCommandOperation& rOperation)
 
   if (!bFound)
   {
-    rOperation.initSuffixes(OperationsList.size() + 1);
+    rOperation.initSuffixes((int)OperationsList.size() + 1);
     OperationsList.push_back(rOperation);
 
     nIteration = (int)OperationsList.size();
@@ -4382,17 +4385,6 @@ void AdtMakeSystem::commandClose()
       GradDiffFn.makeWrapper(true);
 
       CurrentClass.addOperation(GradDiffFn);
-
-//      string rGradDiffWrapperFunctionName;
-
-//      sOutVar = string(CurrentCommandOperation.vars().front()) + GradDiffFn.varSuffix();  
-
-//      rOutVars.clear();
-//      rOutVars.push_front(sOutVar);
-
-//      GradDiffFn.wrapperFunctionName(rGradDiffWrapperFunctionName, nWrapperType);
-//      CurrentCommandOperation.functionName(rGradDiffWrapperFunctionName);
-//      CurrentCommandOperation.outVars(rOutVars);  
     }
     else if (CurrentCommandOperation.mode().eq("reml"))
     {

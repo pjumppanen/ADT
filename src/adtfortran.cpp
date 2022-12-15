@@ -4663,10 +4663,192 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         }
 
         case ForWrapper_HESSIAN:
+        {
+          bool          bIsFunction;
+          const string& sByVar = Vars.front();
+          string        sInnerFunction(sClassPrefix);
+          const char*   pFunctionNameBase = pFunctionName + sClassPrefix.length();
+          AdtParser*    pInnerFuncOrSubSubprogram;
+
+          sInnerFunction += "grad_b";
+          sInnerFunction += sByVar;
+          sInnerFunction += "_diff_d";
+          sInnerFunction += sByVar;
+          sInnerFunction += "_";
+          sInnerFunction += pFunctionNameBase;
+
+          pInnerFuncOrSubSubprogram = pWorkingRoot->findFunctionOrSubroutine(sInnerFunction, bIsFunction);
+          pFuncOrSubSubprogram      = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
+
+          if ((pFuncOrSubSubprogram != 0) && (pInnerFuncOrSubSubprogram != 0))
+          {
+            AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, "");
+            AdtFortranVariableInfo  InnerVariableInfo(pInnerFuncOrSubSubprogram, "");
+
+            if (VariableInfo.numberOfDimensions(sByVar) == 1)
+            {
+              AdtStringByStringMap    VarsMap;
+              string                  sDeclarations;
+              string                  sLowerDim;
+              string                  sUpperDim;
+              AdtFile                 FortranOutFunction(true);
+              AdtFile                 FortranOutModule(true);
+              const AdtStringList&    rArgList      = VariableInfo.argumentList();
+              const AdtStringList&    rInnerArgList = InnerVariableInfo.argumentList();
+              AdtStringListConstIter  Iter;
+          
+              nameListToNameMap(VarsMap, Vars);
+
+              FortranOutModule.open(sCodeModule);
+
+              FortranOutModule.write("MODULE ");
+              FortranOutModule.write(sDiffModuleName);
+              FortranOutModule.incrementIndent();
+              FortranOutModule.newline();
+
+              FortranOutFunction.open(sCodeFunction);
+
+              FortranOutFunction.write("SUBROUTINE ");
+              FortranOutFunction.write(pWrapperFunctionName);
+              FortranOutFunction.write("(");
+
+              VariableInfo.lowerDimension(sByVar, 0, sLowerDim);
+              VariableInfo.upperDimension(sByVar, 0, sUpperDim);
+
+              sDeclarations += "INTEGER(4) :: cn\n";
+              sDeclarations += "REAL(8), INTENT (OUT) :: pHessian(";
+              sDeclarations += sLowerDim;
+              sDeclarations += ":";
+              sDeclarations += sUpperDim;
+              sDeclarations += ",";
+              sDeclarations += sLowerDim;
+              sDeclarations += ":";
+              sDeclarations += sUpperDim;
+              sDeclarations += ")\n";
+
+              FortranOutFunction.write("pHessian");
+
+              // Do argument list
+              for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
+              {
+                string       sDeclaration;
+                string       rArg = *Iter;
+
+                VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
+
+                FortranOutFunction.write(", ");
+
+                sDeclarations += sDeclaration;
+                sDeclarations += "\n";
+
+                FortranOutFunction.write(rArg);
+              }
+
+              FortranOutFunction.write(")");
+              FortranOutFunction.incrementIndent();
+              FortranOutFunction.newline();
+
+              // Do arg declarations
+              FortranOutFunction.writeLines(sDeclarations);
+
+              // Do Use commands
+              FortranOutFunction.write("USE DIFFSIZES");
+              FortranOutFunction.newline();
+              FortranOutFunction.write("USE COMMON");
+              FortranOutFunction.newline();
+
+              // Find the Hessian
+              FortranOutFunction.newline();
+              FortranOutFunction.write("DO cn = ");
+              FortranOutFunction.write(sLowerDim);
+              FortranOutFunction.write(",");
+              FortranOutFunction.write(sUpperDim);
+              FortranOutFunction.incrementIndent();
+              FortranOutFunction.newline();
+
+              // Do inner function call
+              bool    bFirst = true;
+              string  sLastArg;
+              
+              FortranOutFunction.write("CALL ");
+              FortranOutFunction.write(sInnerFunction);
+              FortranOutFunction.write("(");
+
+              for (Iter = rInnerArgList.begin() ; Iter != rInnerArgList.end() ; ++Iter)
+              {
+                string       rArg = *Iter;
+
+                if (!bFirst)
+                {
+                  FortranOutFunction.write(", ");
+                }
+
+                if (::strstr(rArg, "_dir"))
+                {
+                  // Write direction argument
+                  FortranOutFunction.write("cn");
+                }
+                else if (sLastArg.eq(sByVar))
+                {
+                  // Write result argument
+                  FortranOutFunction.write("pHessian(cn)");
+                }
+                else
+                {
+                  // Write other arguments
+                  FortranOutFunction.write(rArg);
+                }
+
+                sLastArg = rArg;
+                bFirst   = false;
+              }
+
+              FortranOutFunction.write(")");
+              FortranOutFunction.newline();
+
+              FortranOutFunction.decrementIndent();
+              FortranOutFunction.newline();
+              FortranOutFunction.write("ENDDO");
+
+              // End FUNCTION / SUBROUTINE
+              FortranOutFunction.decrementIndent();
+              FortranOutFunction.newline();
+              FortranOutFunction.write("END SUBROUTINE ");
+              FortranOutFunction.write(pWrapperFunctionName);
+              FortranOutFunction.newline();
+              FortranOutFunction.close();
+
+              // End module declaration for adding new variables to COMMON module
+              FortranOutModule.decrementIndent();
+              FortranOutModule.newline();
+              FortranOutModule.write("END MODULE");
+              FortranOutModule.newline();
+              FortranOutModule.close();
+            }
+            else
+            {
+              ::printf("WARNING: Hessian with respect to variables of dimension greater than 1 not supported in wrapper function %s.\n", pWrapperFunctionName);
+
+              bSupported = false;
+            }
+          }
+          else
+          {
+            ::printf("WARNING: Function %s not found is source when creating wrapper function %s.\n", pFunctionName, pWrapperFunctionName);
+
+            bSupported = false;
+          }
+          break;
+        }
+
         case ForWrapper_REML:
+        {
+          break;
+        }
+
         default:
         {
-//          FAIL();
+          FAIL();
           break;
         }
       }
@@ -4674,20 +4856,21 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
       if (bSupported)
       {
         AdtFortran  FortranContext;
-        AdtParser*  pRoot       = 0;
-        AdtParser*  pCodeObject = 0;
 
         bMade = true;
 
         if (sCodeModule.length() > 0)
         {
+          AdtParser*  pRoot       = 0;
+          AdtParser*  pCodeObject = 0;
+
           // Add extra variable declarations to module
           bool bParsed = FortranContext.parseString(pRoot, sCodeModule);
 
-          pCodeObject = (AdtFortranBase*)pRoot;
-
-          if (bParsed && (pCodeObject != 0))
+          if (bParsed && (pRoot != 0))
           {
+            pCodeObject = (AdtFortranBase*)pRoot;
+
             if (bAddEntireModule)
             {
               AdtParser* pProgramUnitObj = pCodeObject->findObject("AdtFortranProgramUnit");
@@ -4731,13 +4914,16 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
         if (sCodeFunction.length() > 0)
         {
+          AdtParser*  pRoot       = 0;
+          AdtParser*  pCodeObject = 0;
+
           // Add function
           bool bParsed = FortranContext.parseString(pRoot, sCodeFunction);
-
-          pCodeObject = (AdtFortranBase*)pRoot->object(0);
-
-          if (bParsed && (pCodeObject != 0))
+          
+          if (bParsed && (pRoot != 0))
           {
+            pCodeObject = (AdtFortranBase*)pRoot->object(0);
+
             // Need to add the new function and re-parent it
             AdtParser* pProgramUnit = pFuncOrSubSubprogram->parent();
 
