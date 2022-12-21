@@ -5902,24 +5902,28 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
     AdtParserPtrList  DestFunctionList;
     AdtParserPtrList  SrcFunctionList;
 
+    // Find destination functions
     findObjects(DestFunctionList,
                 "AdtFortranFunctionSubprogram",
                 0,
                 false,
                 "AdtFortranProgramUnit");
 
+    // Find destination subroutines
     findObjects(DestFunctionList,
                 "AdtFortranSubroutineSubprogram",
                 0,
                 false,
                 "AdtFortranProgramUnit");
 
+    // Find source functions
     pSource->findObjects(SrcFunctionList,
                          "AdtFortranFunctionSubprogram",
                          0,
                          false,
                          "AdtFortranProgramUnit");
 
+    // Find source subroutines
     pSource->findObjects(SrcFunctionList,
                          "AdtFortranSubroutineSubprogram",
                          0,
