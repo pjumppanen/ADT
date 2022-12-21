@@ -4100,6 +4100,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                                               const char* pModuleSuffix,
                                               const AdtStringList& Vars,
                                               const AdtStringList& OutVars,
+                                              AdtStringList& rNewFunctionsList,
                                               AdtStringByStringMap& rAddedMethodsMap)
 {
   bool  bMade = false;
@@ -4935,6 +4936,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           initialise();
 
           rAddedMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
+          
+          rNewFunctionsList.push_back(pWrapperFunctionName);
 
           UtlReleaseReference(pCodeObject);
         }

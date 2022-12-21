@@ -867,6 +867,7 @@ public:
                                             const char* pModuleSuffix,
                                             const AdtStringList& Vars,
                                             const AdtStringList& OutVars,
+                                            AdtStringList& rNewFunctionsList,
                                             AdtStringByStringMap& rAddedMethodsMap);
 
   static AdtFortranBase*        expressionBuild(const char* pCodeString,
