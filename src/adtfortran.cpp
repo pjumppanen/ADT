@@ -4875,10 +4875,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             {
               AdtParser* pProgramUnitObj = pCodeObject->findObject("AdtFortranProgramUnit");
 
-              if ((pProgramUnitObj != 0) && add(pProgramUnitObj))
-              {
-                pProgramUnitObj->lock();
-              }
+              add(pProgramUnitObj);
             }
             else
             {
@@ -4922,21 +4919,10 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           
           if (bParsed && (pRoot != 0))
           {
+            // AdtFortranProgramUnit parent of the parsed function / subroutine code
             pCodeObject = (AdtFortranBase*)pRoot->object(0);
 
-            // Need to add the new function and re-parent it
-            AdtParser* pProgramUnit = pFuncOrSubSubprogram->parent();
-
-            if (pProgramUnit != 0)
-            {
-              AdtParser* pContainer = pProgramUnit->parent();
-
-              if (pContainer != 0)
-              {
-                pContainer->insertAfter(pProgramUnit, pCodeObject);
-                pCodeObject->parent(pContainer, true, true);
-              }
-            }
+            add(pCodeObject);
           }
           else
           {
@@ -4946,7 +4932,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           }
 
           // Need to re-initialise the root to ensure type information queries work
-          pWorkingRoot->initialise();
+          initialise();
 
           rAddedMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
 
@@ -5839,16 +5825,18 @@ bool AdtFortranExecutableProgram::mergeWith(AdtFortranExecutableProgram* pSource
       pNewLocalsMap   = &rNewAttributeMap;
     }
 
-    string      SourceName("COMMON");
     bool        bFailed       = true;
-
-    if (pModuleSuffix != 0)
-    {
-      SourceName += pModuleSuffix;
-    }
-
     AdtParser*  pDestModule   = findObject("AdtFortranModule", "COMMON");
-    AdtParser*  pSourceModule = pSource->findObject("AdtFortranModule", SourceName);
+    AdtParser*  pSourceModule = pSource->findObject("AdtFortranModule", "COMMON");
+
+    if ((pSourceModule == 0) && (pModuleSuffix != 0))
+    {
+      string  SourceName("COMMON");
+
+      SourceName += pModuleSuffix;
+
+      pSourceModule = pSource->findObject("AdtFortranModule", SourceName);
+    }
 
     if (pDestModule != 0)
     {
