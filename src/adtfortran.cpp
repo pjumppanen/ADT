@@ -4101,6 +4101,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                                               const AdtStringList& Vars,
                                               const AdtStringList& OutVars,
                                               AdtStringList& rNewFunctionsList,
+                                              AdtStringByStringMap& rPublicMethodsMap,
                                               AdtStringByStringMap& rAddedMethodsMap)
 {
   bool  bMade = false;
@@ -4154,7 +4155,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
    
     if (pModule != 0)
     {
-      bool        bSupported = true;
+      bool        bSupported         = true;
+      bool        bWrapperIsFunction = false;
+      string      sCommentBlock("! ----------------------------------------------------------------------------\n");
       string      sCodeFunction;
       string      sCodeModule;
       AdtParser*  pFuncOrSubSubprogram = 0;
@@ -4178,16 +4181,47 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           nameListToNameMap(VarsMap, Vars);
 
-          AdtStringListConstIter  OutVarsIter;
+          switch (nWrapperType)
+          {
+            case ForWrapper_DIFF:
+            {
+              sCommentBlock += "! Differential of";
+              break;
+            }
+            case ForWrapper_MULTIDIFF:
+            {
+              sCommentBlock += "! Multi-directional differential of";
+              break;
+            }
+            case ForWrapper_GRAD:
+            {
+              sCommentBlock += "! Gradient of";
+              break;
+            }
+
+            case ForWrapper_MULTIGRAD:
+            {
+              sCommentBlock += "! Multi-objective gradient of";
+              break;
+            }
+
+            default:
+            {
+              FAIL();
+              break;
+            }
+          }
+
+          AdtStringListConstIter  VarsIter;
 
           // If the out var corresponds to the function name we need to add it to the 
           // OutVarsMap with a '_' prefix because the AD'ed function will get a new
           // variable the same name as the function less the class prefix but with a '_'
           // prefix instead. If we don't do this the logic will fail to recognise this 
           // new argument as an out var.
-          for (OutVarsIter = OutVars.begin() ; OutVarsIter != OutVars.end() ; ++OutVarsIter)
+          for (VarsIter = OutVars.begin() ; VarsIter != OutVars.end() ; ++VarsIter)
           {
-            const string& rOutVar = *OutVarsIter;
+            const string& rOutVar = *VarsIter;
             string        sPrefixed(sClassPrefix);
             char          sIndex[16] = {0};
 
@@ -4207,8 +4241,26 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             OutVarsMap[rOutVar]       = rOutVar;
             OutVarsIndexMap[rOutVar]  = sIndex;
 
+            sCommentBlock += "\n!   ";
+            sCommentBlock += rOutVar;
+
             nOutVarsIndex++;
           }
+
+          sCommentBlock += "\n! with respect to";
+
+          for (VarsIter = Vars.begin() ; VarsIter != Vars.end() ; ++VarsIter)
+          {
+            const string& rVar = *VarsIter;
+
+            sCommentBlock += "\n!   ";
+            sCommentBlock += rVar;
+          }
+
+          sCommentBlock += "\n! in\n!   ";
+          sCommentBlock += pFunctionName;
+
+          sCommentBlock += "()\n! ----------------------------------------------------------------------------\n";
 
           if ((pFuncOrSubSubprogram   != 0) && 
               (pADFuncOrSubSubprogram != 0))
@@ -4250,6 +4302,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutModule.newline();
 
             FortranOutFunction.open(sCodeFunction);
+
+            if (bIsAD_Function)
+            {
+              FortranOutFunction.write("REAL(8) ");
+              bWrapperIsFunction = true;
+            }
 
             FortranOutFunction.write(sType);
             FortranOutFunction.write(" ");
@@ -4629,7 +4687,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
               sCodeBody += pADFunctionName;
               sCodeBody += "(";
               sCodeBody += sCallArgs;
-              sCodeBody += ")\n";
+              sCodeBody += ")\nRETURN\n";
             }
             else
             {
@@ -4680,6 +4738,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           pInnerFuncOrSubSubprogram = pWorkingRoot->findFunctionOrSubroutine(sInnerFunction, bIsFunction);
           pFuncOrSubSubprogram      = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
+
+          sCommentBlock  += "\n! Hessian of \n!   ";
+          sCommentBlock  += pFunctionName;
+          sCommentBlock  += "()\n! with respect to \n!   ";
+          sCommentBlock  += sByVar;
+          sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
 
           if ((pFuncOrSubSubprogram != 0) && (pInnerFuncOrSubSubprogram != 0))
           {
@@ -4917,11 +4981,28 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           // Add function
           bool bParsed = FortranContext.parseString(pRoot, sCodeFunction);
-          
+
           if (bParsed && (pRoot != 0))
           {
+            AdtParser* pFuncOrSub = 0;
+
             // AdtFortranProgramUnit parent of the parsed function / subroutine code
             pCodeObject = (AdtFortranBase*)pRoot->object(0);
+
+            // Add comment block to statement
+            if (bWrapperIsFunction)
+            {
+              pFuncOrSub = pCodeObject->findObject("AdtFortranFunctionStmt");
+            }
+            else
+            {
+              pFuncOrSub = pCodeObject->findObject("AdtFortranSubroutineStmt");
+            }
+
+            if (pFuncOrSub != 0)
+            {
+              pFuncOrSub->comment(sCommentBlock);
+            }
 
             add(pCodeObject);
           }
@@ -4935,8 +5016,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           // Need to re-initialise the root to ensure type information queries work
           initialise();
 
-          rAddedMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
-          
+          rAddedMethodsMap[pWrapperFunctionName]  = pWrapperFunctionName;
+          rPublicMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
+
           rNewFunctionsList.push_back(pWrapperFunctionName);
 
           UtlReleaseReference(pCodeObject);

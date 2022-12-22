@@ -256,6 +256,7 @@ public:
   void                  makeWrapper(AdtFortranExecutableProgram* pAD_Root,
                                     AdtFortranExecutableProgram* pWorkingRoot,
                                     AdtStringList& rNewFunctionsList,
+                                    AdtStringByStringMap& rPublicMethodsMap,
                                     AdtStringByStringMap& rAddedMethodsMap,
                                     const char* pClassName) const;
 

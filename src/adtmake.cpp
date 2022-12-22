@@ -925,6 +925,7 @@ bool AdtMakeCommandOperation::shouldBuild(AdtMakeIncremental& rBuildCheck) const
 void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
                                           AdtFortranExecutableProgram* pWorkingRoot,
                                           AdtStringList& rNewFunctionsList,
+                                          AdtStringByStringMap& rPublicMethodsMap,
                                           AdtStringByStringMap& rAddedMethodsMap,
                                           const char* pClassName) const
 {
@@ -958,6 +959,7 @@ void AdtMakeCommandOperation::makeWrapper(AdtFortranExecutableProgram* pAD_Root,
                           Vars, 
                           OutVars,
                           rNewFunctionsList,
+                          rPublicMethodsMap,
                           rAddedMethodsMap);
   }
 }
@@ -2450,7 +2452,12 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                         pAutodiffRoot->initialise();
 
                         // make wrapper
-                        rOperation.makeWrapper(pAutodiffRoot, pWorkingRoot, rNewFunctionsList, rAddedMethodsMap, ParentClassName);
+                        rOperation.makeWrapper(pAutodiffRoot, 
+                                               pWorkingRoot, 
+                                               rNewFunctionsList, 
+                                               rPublicMethodsMap, 
+                                               rAddedMethodsMap, 
+                                               ParentClassName);
 
                         if (1)
                         {

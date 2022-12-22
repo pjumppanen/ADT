@@ -868,6 +868,7 @@ public:
                                             const AdtStringList& Vars,
                                             const AdtStringList& OutVars,
                                             AdtStringList& rNewFunctionsList,
+                                            AdtStringByStringMap& rPublicMethodsMap,
                                             AdtStringByStringMap& rAddedMethodsMap);
 
   static AdtFortranBase*        expressionBuild(const char* pCodeString,
