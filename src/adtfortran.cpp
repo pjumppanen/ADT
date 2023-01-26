@@ -4679,12 +4679,16 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
               sCodeBody = "\nDO cm = 1,nbdirs\n" + sCodeBody + "ENDDO\n\n";
             }
 
+            string sCallFunction(pADFunctionName);
+
+            sCallFunction.toUpper();
+
             // Add function call
             if (bIsAD_Function)
             {
               sCodeBody += pWrapperFunctionName;
               sCodeBody += " = ";
-              sCodeBody += pADFunctionName;
+              sCodeBody += sCallFunction;
               sCodeBody += "(";
               sCodeBody += sCallArgs;
               sCodeBody += ")\nRETURN\n";
@@ -4692,7 +4696,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             else
             {
               sCodeBody += "CALL ";
-              sCodeBody += pADFunctionName;
+              sCodeBody += sCallFunction;
               sCodeBody += "(";
               sCodeBody += sCallArgs;
               sCodeBody += ")\n";
@@ -7056,6 +7060,10 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
                             }
                           }
                         }
+                        else
+                        {
+                          bHasParentArray = false;
+                        }
                       }
                     }
 
@@ -7083,13 +7091,13 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
                       // Get the indices of the array into strings
                       File.open(sSizes);
 
-                      pEntityDecl->writeDelphi(File, 4);
+                      pEntityDecl->writeCPP(File, 4);
 
                       File.close();
 
                       File.open(sBaseIndices);
 
-                      pEntityDecl->writeDelphi(File, 5);
+                      pEntityDecl->writeCPP(File, 5);
 
                       File.close();
 
@@ -7891,6 +7899,9 @@ void AdtFortranExecutableProgram::writeDelphiClass(AdtFile& pOutFile,
 
                         } while (bMatched);
                       }
+
+                      // FixMe : If bHasParentArray true need to check that array exists in module. If it doesn't 
+                      // then need to set bHasParentArray to false
 
                       if (bHasParentArray)
                       {
