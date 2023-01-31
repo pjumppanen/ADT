@@ -7040,9 +7040,9 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
 
                               if (pTypeSpec != 0)
                               {
-                                size_t nDims = pEntityDecl->numberOfDimensions();
+                                size_t nParentDims = pEntityDecl->numberOfDimensions();
 
-                                if (nDims > 0)
+                                if (nParentDims > 0)
                                 {
                                   const char* pParentType = 0;
                                   string      sCapsName(rAttributeName);
@@ -7051,7 +7051,7 @@ void AdtFortranExecutableProgram::writeCPP_ClassImplementation(AdtFile& pOutFile
 
                                   AdtCppBase::mapTypesToCpp(pTypeSpec->name(), pEntityDecl->numberOfDimensions(), pParentType);
 
-                                  if(strcmp(pType, pParentType) != 0)
+                                  if ((strcmp(pType, pParentType) != 0) || (nParentDims != nDims))
                                   {
                                     bHasParentArray = false;
                                   }

@@ -1,0 +1,1008 @@
+//  ----------------------------------------------------------------------------
+//  ADT - automatic differentiation through translation
+//  ----------------------------------------------------------------------------
+//  Software for the generation of auto-differentiated code using TAPENADE.
+//
+//  Copyright by the COMMONWEALTH SCIENTIFIC AND INDUSTRIAL RESEARCH
+//  ORGANISATION (CSIRO), Australia.
+//  All rights reserved.
+//
+//  This file is part of ADT.  The full ADT copyright notice, including
+//  terms governing use, modification, and redistribution, is contained in
+//  the file COPYING. COPYING can be found at the root of the source code
+//  distribution tree;
+//  ----------------------------------------------------------------------------
+//  File:
+//    adtmaths.hpp
+//
+//  Purpose:
+//    This file includes declarations of useful mathematic functions ported
+//    from Mark Bravingtons Delphi code.
+//
+//  Author:
+//    Paavo Jumppanen
+//  ----------------------------------------------------------------------------
+//  ----------------------------------------------------------------------------
+double sqr(const double x);
+double inv(const double x);
+int trunc_to_int(const double x);
+int round_to_int(const double x);
+double frac(const double x);
+double pwr(const double x, const double& y);
+double logit(const double x);
+double inv_logit(const double x);
+double scal_logit(const double x);
+double scal_inv_logit(const double x);
+double dinv_logit(const double x);
+double LIL(const double x);
+double rel_delta(const double a, const double b);
+// ----------------------------------------------------------------------------
+double exp_cached(const double x);
+double inv_cached(const double x);
+double inv_logit_cached(const double x);
+// ----------------------------------------------------------------------------
+
+inline double sign(double x)
+{
+  if (x == 0)
+  {
+    return 0.0;
+  }
+  else
+  {
+    return ((x < 0) ? -1.0 : 1.0);
+  }
+}
+
+
+// ----------------------------------------------------------------------------
+
+inline double sqr(const double x)
+{
+  return (x * x);
+}
+
+
+// ----------------------------------------------------------------------------
+
+inline double inv(const double x)
+{
+  return (1.0 / x);
+}
+
+
+// ----------------------------------------------------------------------------
+
+inline double frac(const double x)
+{
+  return (x - FLOOR(x));
+}
+
+
+// ----------------------------------------------------------------------------
+
+inline double pwr(const double x, const double& y)
+{
+  return (R_pow(x,y));
+}
+
+
+// ----------------------------------------------------------------------------
+// Code to develop generalised RE modelling code.
+// ----------------------------------------------------------------------------
+// This layer implements generalisation of loglikelihood interface plus
+// support functions:
+//
+//  choleskyDecomposition()
+//  logDeterminantFromChol()
+//  matrixInverseFromChol()
+//
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+class REDev  : public AdtArrays
+{
+protected: 
+  
+  ARRAY_1D y/* NR */;
+  // total number of random effects
+  int NR;
+  // total number of parameters
+  int NP;
+  // maximum number of directions in multidirectional tangent mode differentiation
+  int nbdirsmax;
+  ARRAY_1D par_u/* NR */;
+  double par_logr0;
+  double par_logtheta;
+  double par_logK;
+  double par_logQ;
+  double par_logR;
+private: 
+  
+  double dlognorm(const double x, const double mean, const double sigma);
+  double thetalogLikelihood(const ARRAY_1D u/* N */, int N, const double logr0, const double logtheta, const double logK, const double logQ, const double logR);
+public: 
+  
+  REDev(const ARRAY_1D arg_y, int arg_NR, int arg_NP, int arg_nbdirsmax);
+  double negativeLogLikelihood(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */);
+  // note that NR is N and NP is 5 in this case 
+  void sparseBandedLimitsByRows(const ARRAY_2D pA/* nRows, nColumns */, ARRAY_1I pLowerLimit/* nRows */, ARRAY_1I pUpperLimit/* nRows */, const int nRows, const int nColumns);
+  void sparseBandedLimitsByColumns(const ARRAY_2D pA/* nRows, nColumns */, ARRAY_1I pLowerLimit/* nColumns */, ARRAY_1I pUpperLimit/* nColumns */, const int nRows, const int nColumns);
+  void choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize);
+  double logDeterminantFromChol(const ARRAY_2D pL/* nSize, nSize */, const int nSize);
+  void matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
+  
+};
+//  ----------------------------------------------------------------------------
+//  ADT generated header defining class D_REDev
+//  ----------------------------------------------------------------------------
+class D_REDev  : public REDev
+{
+protected: 
+  
+  ARRAY_1D par_ud1_re/* NR */;
+  ARRAY_1D yd1_re/* NR */;
+  ARRAY_1D par_ub2_re/* NR */;
+  ARRAY_1D yb2_re/* NR */;
+  ARRAY_1I i4stack_1_2/* dim_stack */;
+  int i4stack_1_2i;
+  ARRAY_1I i4stack_2_2/* dim_stack */;
+  int i4stack_2_2i;
+  ARRAY_1D r8stack_2_2/* dim_stack */;
+  int r8stack_2_2i;
+  ARRAY_1D red1_re/* 1:NR */;
+  ARRAY_1D par_ub5_re/* NR */;
+  ARRAY_1D yb5_re/* NR */;
+  ARRAY_1D par_ud1_reb5_re/* NR */;
+  ARRAY_1I i4stack_2_5/* dim_stack */;
+  int i4stack_2_5i;
+  ARRAY_1I i4stack_3_5/* dim_stack */;
+  int i4stack_3_5i;
+  ARRAY_1D r8stack_3_5/* dim_stack */;
+  int r8stack_3_5i;
+  ARRAY_1I bstack_3_5/* dim_stack */;
+  int bstack_3_5i;
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  double THETALOGLIKELIHOOD_DRE(const ARRAY_1D u/* N */, const ARRAY_1D ud1_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihood);
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  double DLOGNORM_DRE(double x, double xd1_re, double mean, double meand1_re, double sigma, double& _dlognorm);
+  //   Differentiation of redev__thetaloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_BRE(const ARRAY_1D u/* N */, ARRAY_1D ub2_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihoodb2_re);
+  //   Differentiation of redev__dlognorm in reverse (adjoint) mode:
+  //    gradient     of useful results: x redev__dlognorm mean
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_BRE(double x, double& xb2_re, double mean, double& meanb2_re, double sigma, double& _dlognormb2_re);
+  //   Differentiation of redev__negativeloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood_dre
+  //    with respect to varying inputs: re
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_DRE_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb5_re/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihood, double& _negativeloglikelihood_dreb5_re);
+  //   Differentiation of redev__thetaloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood_dre
+  //    with respect to varying inputs: u
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_DRE_BRE(const ARRAY_1D u/* N */, ARRAY_1D ub5_re/* N */, const ARRAY_1D ud1_re/* N */, ARRAY_1D ud1_reb5_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihood, double& _thetaloglikelihood_dreb5_re);
+  //   Differentiation of redev__dlognorm_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__dlognorm_dre x mean
+  //    with respect to varying inputs: x meand1_re mean
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_DRE_BRE(double x, double& xb5_re, double xd1_re, double mean, double& meanb5_re, double meand1_re, double& meand1_reb5_re, double sigma, double& _dlognorm, double& _dlognorm_dreb5_re);
+public: 
+  
+  D_REDev(const ARRAY_1D arg_y, int arg_NR, int arg_NP, int arg_nbdirsmax);
+  D_REDev(const D_REDev& rCopy);
+  virtual ~D_REDev();
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  double NEGATIVELOGLIKELIHOOD_DRE(const ARRAY_1D re/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihood);
+  //   Differentiation of redev__negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:in-killed
+  //                 re:out
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb2_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihoodb2_re);
+  //  ----------------------------------------------------------------------------
+  //  Differential of
+  //    negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  double diff_dre_negativeLogLikelihood(const ARRAY_1D re/* 1:NR */, int re_dir, const ARRAY_1D par/* 1:NP */);
+  //  ----------------------------------------------------------------------------
+  //  Gradient of
+  //    negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  void grad_bre_negativeLogLikelihood(const ARRAY_1D re/* 1:NR */, ARRAY_1D reb2_re/* 1:NR */, const ARRAY_1D par/* 1:NP */);
+  //   Differentiation of redev__diff_dre_negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__diff_dre_negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_ud1_re:(loc) par_u:(loc)
+  //                 re:out redev__diff_dre_negativeloglikelihood:in-killed
+  //  ----------------------------------------------------------------------------
+  //  Differential of
+  //    negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  void DIFF_DRE_NEGATIVELOGLIKELIHOOD_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb5_re/* NR */, int re_dir, const ARRAY_1D par/* NP */, double& _diff_dre_negativeloglikelihoodb5_re);
+  //  ----------------------------------------------------------------------------
+  //  Gradient of
+  //    diff_dre_negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__diff_dre_negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  void grad_bre_diff_dre_negativeLogLikelihood(const ARRAY_1D re/* 1:NR */, ARRAY_1D reb5_re/* 1:NR */, int re_dir, const ARRAY_1D par/* 1:NP */);
+  //  ----------------------------------------------------------------------------
+  //  Hessian of 
+  //    REDev__negativeLogLikelihood()
+  //  with respect to 
+  //    re
+  //  ----------------------------------------------------------------------------
+  void hessian_dre_negativeLogLikelihood(ARRAY_2D pHessian/* 1:NR,1:NR */, const ARRAY_1D re/* 1:NR */, const ARRAY_1D par/* 1:NP */);
+  
+};
+// ----------------------------------------------------------------------------
+// Code to develop generalised RE modelling code.
+// ----------------------------------------------------------------------------
+// This layer implements:
+//
+//  gradientRE()
+//  diffRE()
+//
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+class R_REDevA  : public D_REDev
+{
+protected: 
+  
+  ARRAY_1D reb2_re/* NR */;
+  ARRAY_2D red3_re/* NR,nbdirsmax */;
+  ARRAY_2D reb2_red3_re/* NR,nbdirsmax */;
+public: 
+  
+  R_REDevA(const ARRAY_1D arg_y, int arg_NR, int arg_NP, int arg_nbdirsmax);
+  R_REDevA(const R_REDevA& rCopy);
+  virtual ~R_REDevA();
+  // Gradient of objective with respect to random effects
+  void gradientRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D pGrad/* NR */);
+  // Partial differentiation of objective with respect to random effects evaluated in the direction dir
+  double diffRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D dir/* NR */);
+  
+};
+//  ----------------------------------------------------------------------------
+//  ADT generated header defining class DR_REDevA
+//  ----------------------------------------------------------------------------
+class DR_REDevA  : public R_REDevA
+{
+protected: 
+  
+  ARRAY_1D par_ub1_re/* NR */;
+  ARRAY_1D yb1_re/* NR */;
+  ARRAY_1D par_ud1_reb1_re/* NR */;
+  ARRAY_1I i4stack_2_1/* dim_stack */;
+  int i4stack_2_1i;
+  ARRAY_1I i4stack_3_1/* dim_stack */;
+  int i4stack_3_1i;
+  ARRAY_1D r8stack_3_1/* dim_stack */;
+  int r8stack_3_1i;
+  ARRAY_1I bstack_3_1/* dim_stack */;
+  int bstack_3_1i;
+  double par_logkb2_repar;
+  double par_logqb2_repar;
+  double par_logrb2_repar;
+  double par_logr0b2_repar;
+  double par_logthetab2_repar;
+  ARRAY_1D par_ub2_repar/* NR */;
+  ARRAY_1D yb2_repar/* NR */;
+  ARRAY_1D par_ud1_reb2_repar/* NR */;
+  ARRAY_1I i4stack_2_2/* dim_stack */;
+  int i4stack_2_2i;
+  ARRAY_1I i4stack_3_2/* dim_stack */;
+  int i4stack_3_2i;
+  ARRAY_1D r8stack_3_2/* dim_stack */;
+  int r8stack_3_2i;
+  ARRAY_1I bstack_3_2/* dim_stack */;
+  int bstack_3_2i;
+  ARRAY_1D par_ud3_re/* NR */;
+  ARRAY_1D yd3_re/* NR */;
+  ARRAY_1D par_ub2_red3_re/* NR */;
+  ARRAY_1D yb2_red3_re/* NR */;
+  ARRAY_1D r8stack_2_2d3_re/* dim_stack */;
+  double par_logkd4_par;
+  double par_logqd4_par;
+  double par_logrd4_par;
+  double par_logr0d4_par;
+  double par_logthetad4_par;
+  ARRAY_1D par_ub2_red4_par/* NR */;
+  ARRAY_1D yb2_red4_par/* NR */;
+  ARRAY_1D r8stack_2_2d4_par/* dim_stack */;
+  ARRAY_1D par_ud4_par/* NR */;
+  //   Differentiation of r_redeva__negativeloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__negativeloglikelihood_dre
+  //    with respect to varying inputs: re
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_DRE_BRE0(const ARRAY_1D re/* NR */, ARRAY_1D reb1_re/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihood, double& _negativeloglikelihood_dreb1_re);
+  //   Differentiation of r_redeva__thetaloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__thetaloglikelihood_dre
+  //    with respect to varying inputs: u
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_DRE_BRE0(const ARRAY_1D u/* N */, ARRAY_1D ub1_re/* N */, const ARRAY_1D ud1_re/* N */, ARRAY_1D ud1_reb1_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihood, double& _thetaloglikelihood_dreb1_re);
+  //   Differentiation of r_redeva__dlognorm_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: x r_redeva__dlognorm_dre mean
+  //    with respect to varying inputs: x meand1_re mean
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_DRE_BRE0(double x, double& xb1_re, double xd1_re, double mean, double& meanb1_re, double meand1_re, double& meand1_reb1_re, double sigma, double& _dlognorm, double& _dlognorm_dreb1_re);
+  //   Differentiation of r_redeva__negativeloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__negativeloglikelihood_dre
+  //    with respect to varying inputs: re par
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_DRE_BREPAR(const ARRAY_1D re/* NR */, ARRAY_1D reb2_repar/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D parb2_repar/* NP */, double& _negativeloglikelihood, double& _negativeloglikelihood_dreb2_repar);
+  //   Differentiation of r_redeva__thetaloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__thetaloglikelihood_dre
+  //    with respect to varying inputs: logq logr u logr0 logtheta
+  //                 logk
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_DRE_BREPAR(const ARRAY_1D u/* N */, ARRAY_1D ub2_repar/* N */, const ARRAY_1D ud1_re/* N */, ARRAY_1D ud1_reb2_repar/* N */, int N, double logr0, double& logr0b2_repar, double logtheta, double& logthetab2_repar, double logK, double& logkb2_repar, double logQ, double& logqb2_repar, double logR, double& logrb2_repar, double& _thetaloglikelihood, double& _thetaloglikelihood_dreb2_repar);
+  //   Differentiation of r_redeva__dlognorm_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: x r_redeva__dlognorm_dre mean
+  //    with respect to varying inputs: x sigma meand1_re mean
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_DRE_BREPAR(double x, double& xb2_repar, double xd1_re, double mean, double& meanb2_repar, double meand1_re, double& meand1_reb2_repar, double sigma, double& sigmab2_repar, double& _dlognorm, double& _dlognorm_dreb2_repar);
+  //   Differentiation of r_redeva__negativeloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: reb2_re
+  //    with respect to varying inputs: re
+  //   Differentiation of redev__negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:in-killed
+  //                 re:out
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_BRE_DRE(const ARRAY_1D re/* NR */, const ARRAY_1D red3_re/* NR */, ARRAY_1D reb2_re/* NR */, ARRAY_1D reb2_red3_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihoodb2_re);
+  //   Differentiation of r_redeva__thetaloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: ub2_re
+  //    with respect to varying inputs: u
+  //   Differentiation of redev__thetaloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_BRE_DRE(const ARRAY_1D u/* N */, const ARRAY_1D ud3_re/* N */, ARRAY_1D ub2_re/* N */, ARRAY_1D ub2_red3_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihoodb2_re);
+  //   Differentiation of r_redeva__dlognorm_bre in forward (tangent) mode:
+  //    variations   of useful results: meanb2_re xb2_re
+  //    with respect to varying inputs: x sigma meanb2_re xb2_re mean
+  //   Differentiation of redev__dlognorm in reverse (adjoint) mode:
+  //    gradient     of useful results: x redev__dlognorm mean
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_BRE_DRE(double x, double xd3_re, double& xb2_re, double& xb2_red3_re, double mean, double meand3_re, double& meanb2_re, double& meanb2_red3_re, double sigma, double sigmad3_re, double& _dlognormb2_re);
+  //   Differentiation of r_redeva__negativeloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: reb2_re
+  //    with respect to varying inputs: par
+  //   Differentiation of redev__negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:in-killed
+  //                 re:out
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_BRE_DPAR(const ARRAY_1D re/* NR */, ARRAY_1D reb2_re/* NR */, ARRAY_1D reb2_red4_par/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D pard4_par/* NP */, double& _negativeloglikelihoodb2_re);
+  //   Differentiation of r_redeva__thetaloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: ub2_re
+  //    with respect to varying inputs: logq logr logr0 logtheta logk
+  //   Differentiation of redev__thetaloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_BRE_DPAR(const ARRAY_1D u/* N */, const ARRAY_1D ud4_par/* N */, ARRAY_1D ub2_re/* N */, ARRAY_1D ub2_red4_par/* N */, int N, double logr0, double logr0d4_par, double logtheta, double logthetad4_par, double logK, double logkd4_par, double logQ, double logqd4_par, double logR, double logrd4_par, double& _thetaloglikelihoodb2_re);
+  //   Differentiation of r_redeva__dlognorm_bre in forward (tangent) mode:
+  //    variations   of useful results: meanb2_re xb2_re
+  //    with respect to varying inputs: sigma meanb2_re xb2_re mean
+  //   Differentiation of redev__dlognorm in reverse (adjoint) mode:
+  //    gradient     of useful results: x redev__dlognorm mean
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_BRE_DPAR(double x, double& xb2_re, double& xb2_red4_par, double mean, double meand4_par, double& meanb2_re, double& meanb2_red4_par, double sigma, double sigmad4_par, double& _dlognormb2_re);
+public: 
+  
+  DR_REDevA(const ARRAY_1D arg_y, int arg_NR, int arg_NP, int arg_nbdirsmax);
+  DR_REDevA(const DR_REDevA& rCopy);
+  virtual ~DR_REDevA();
+  //   Differentiation of r_redeva__diffre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__diffre
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_ud1_re:(loc) par_u:(loc)
+  //                 r_redeva__diffre:in-killed re:out
+  //  ----------------------------------------------------------------------------
+  //   ----------------------------------------------------------------------------
+  void DIFFRE_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb1_re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D dir/* NR */, double& _diffreb1_re);
+  //   Differentiation of r_redeva__diffre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__diffre
+  //    with respect to varying inputs: re par
+  //    RW status of diff variables: par_logr0:(loc) y:(loc) par_logk:(loc)
+  //                 par_ud1_re:(loc) par_logq:(loc) par_logr:(loc)
+  //                 par_logtheta:(loc) par_u:(loc) r_redeva__diffre:in-killed
+  //                 re:out par:out
+  //  ----------------------------------------------------------------------------
+  //   ----------------------------------------------------------------------------
+  void DIFFRE_BREPAR(const ARRAY_1D re/* NR */, ARRAY_1D reb2_repar/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D parb2_repar/* NP */, const ARRAY_1D dir/* NR */, double& _diffreb2_repar);
+  //   Differentiation of r_redeva__gradientre in forward (tangent) mode:
+  //    variations   of useful results: pgrad
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: par_ub2_re:(loc) yb2_re:(loc)
+  //                 y:(loc) r8stack_2_2:(loc) par_u:(loc) re:in pgrad:out
+  //   ----------------------------------------------------------------------------
+  void GRADIENTRE_DRE(const ARRAY_1D re/* NR */, const ARRAY_1D red3_re/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D pGrad/* NR */, ARRAY_1D pgradd3_re/* NR */);
+  //   Differentiation of r_redeva__gradientre in forward (tangent) mode:
+  //    variations   of useful results: pgrad
+  //    with respect to varying inputs: par
+  //    RW status of diff variables: par_ub2_re:(loc) yb2_re:(loc)
+  //                 par_logr0:(loc) r8stack_2_2:(loc) par_logk:(loc)
+  //                 par_logq:(loc) par_logr:(loc) par_logtheta:(loc)
+  //                 par_u:(loc) par:in pgrad:out
+  //   ----------------------------------------------------------------------------
+  void GRADIENTRE_DPAR(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D pard4_par/* NP */, ARRAY_1D pGrad/* NR */, ARRAY_1D pgradd4_par/* NR */);
+  
+};
+// ----------------------------------------------------------------------------
+// Code to develop generalised RE modelling code.
+// ----------------------------------------------------------------------------
+// This layer implements the full random effects fitting process.
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+class R_REDevB 
+{
+protected: 
+  
+  ARRAY_1D plower/* NR */;
+  ARRAY_1D pupper/* NR */;
+  ARRAY_1I pnbd/* NR */;
+  ARRAY_1D ReRun/* NR */;
+  ARRAY_1D GradRun/* NR */;
+  ARRAY_1D Par/* NP */;
+  ARRAY_1D CheckPar/* NP */;
+  ARRAY_1D Dir/* NR */;
+  ARRAY_1D Dir2/* NP */;
+  ARRAY_1D TempRow/* NR */;
+  ARRAY_1D TempRow2/* NP */;
+  ARRAY_2D Hessian/* NR,NR */;
+  ARRAY_2D Cholesky/* NR,NR */;
+  ARRAY_2D ReParXCovar/* NR,NP */;
+  ARRAY_1D var/* NR */;
+  ARRAY_1D zm/* 0 : NR * (NR + 13) / 2 */;
+  bool Dirty;
+protected: 
+  
+  // < BLACKBOX ReadNotWritten:(0,1)
+  // ReadThenWritten:(1,0)
+  // deps:(1,1,id); >
+  void solveInner(ARRAY_1D reHat/* NR */, const ARRAY_1D par/* NP */);
+public: 
+  
+  R_REDevB(const ARRAY_1D arg_y, int arg_NR, int arg_NP, int arg_nbdirsmax);
+  R_REDevB(const R_REDevB& rCopy);
+  virtual ~R_REDevB();
+  // Hessian of objective with respect to random effects
+  void hessianRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, ARRAY_2D pHessian/* NR,NR */);
+  // Covariance matrix of objective with respect to random effects against parameters (ie. dRE dPar)
+  void hessianAndCovarRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, ARRAY_2D pHessian/* NR,NR */, ARRAY_2D pReParXCovar/* NR,NP */);
+  // Log determinant of Hessian with respect to random effects
+  double logDetHessianRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_2D pHessian/* NR,NR */, ARRAY_2D pCholesky/* NR,NR */);
+  // Negative Log Laplace approximation of Maximum Likelihood
+  double negativeLogLaplace(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */);
+  // The objective to minimize for the outer problem
+  double outerNegativeLogLikelihood(ARRAY_1D reHat/* NR */, const ARRAY_1D par/* NP */);
+  //   Differentiation of r_redeva__negativeloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__negativeloglikelihood_dre
+  //    with respect to varying inputs: re
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_DRE_BRE0(const ARRAY_1D re/* NR */, ARRAY_1D reb1_re/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihood, double& _negativeloglikelihood_dreb1_re);
+  //   Differentiation of r_redeva__thetaloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__thetaloglikelihood_dre
+  //    with respect to varying inputs: u
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_DRE_BRE0(const ARRAY_1D u/* N */, ARRAY_1D ub1_re/* N */, const ARRAY_1D ud1_re/* N */, ARRAY_1D ud1_reb1_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihood, double& _thetaloglikelihood_dreb1_re);
+  //   Differentiation of r_redeva__dlognorm_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: x r_redeva__dlognorm_dre mean
+  //    with respect to varying inputs: x meand1_re mean
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_DRE_BRE0(double x, double& xb1_re, double xd1_re, double mean, double& meanb1_re, double meand1_re, double& meand1_reb1_re, double sigma, double& _dlognorm, double& _dlognorm_dreb1_re);
+  //   Differentiation of r_redeva__negativeloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__negativeloglikelihood_dre
+  //    with respect to varying inputs: re par
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_DRE_BREPAR(const ARRAY_1D re/* NR */, ARRAY_1D reb2_repar/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D parb2_repar/* NP */, double& _negativeloglikelihood, double& _negativeloglikelihood_dreb2_repar);
+  //   Differentiation of r_redeva__thetaloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__thetaloglikelihood_dre
+  //    with respect to varying inputs: logq logr u logr0 logtheta
+  //                 logk
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_DRE_BREPAR(const ARRAY_1D u/* N */, ARRAY_1D ub2_repar/* N */, const ARRAY_1D ud1_re/* N */, ARRAY_1D ud1_reb2_repar/* N */, int N, double logr0, double& logr0b2_repar, double logtheta, double& logthetab2_repar, double logK, double& logkb2_repar, double logQ, double& logqb2_repar, double logR, double& logrb2_repar, double& _thetaloglikelihood, double& _thetaloglikelihood_dreb2_repar);
+  //   Differentiation of r_redeva__dlognorm_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: x r_redeva__dlognorm_dre mean
+  //    with respect to varying inputs: x sigma meand1_re mean
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_DRE_BREPAR(double x, double& xb2_repar, double xd1_re, double mean, double& meanb2_repar, double meand1_re, double& meand1_reb2_repar, double sigma, double& sigmab2_repar, double& _dlognorm, double& _dlognorm_dreb2_repar);
+  //   Differentiation of r_redeva__negativeloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: reb2_re
+  //    with respect to varying inputs: re
+  //   Differentiation of redev__negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:in-killed
+  //                 re:out
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_BRE_DRE(const ARRAY_1D re/* NR */, const ARRAY_1D red3_re/* NR */, ARRAY_1D reb2_re/* NR */, ARRAY_1D reb2_red3_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihoodb2_re);
+  //   Differentiation of r_redeva__thetaloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: ub2_re
+  //    with respect to varying inputs: u
+  //   Differentiation of redev__thetaloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_BRE_DRE(const ARRAY_1D u/* N */, const ARRAY_1D ud3_re/* N */, ARRAY_1D ub2_re/* N */, ARRAY_1D ub2_red3_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihoodb2_re);
+  //   Differentiation of r_redeva__dlognorm_bre in forward (tangent) mode:
+  //    variations   of useful results: meanb2_re xb2_re
+  //    with respect to varying inputs: x sigma meanb2_re xb2_re mean
+  //   Differentiation of redev__dlognorm in reverse (adjoint) mode:
+  //    gradient     of useful results: x redev__dlognorm mean
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_BRE_DRE(double x, double xd3_re, double& xb2_re, double& xb2_red3_re, double mean, double meand3_re, double& meanb2_re, double& meanb2_red3_re, double sigma, double sigmad3_re, double& _dlognormb2_re);
+  //   Differentiation of r_redeva__negativeloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: reb2_re
+  //    with respect to varying inputs: par
+  //   Differentiation of redev__negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:in-killed
+  //                 re:out
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_BRE_DPAR(const ARRAY_1D re/* NR */, ARRAY_1D reb2_re/* NR */, ARRAY_1D reb2_red4_par/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D pard4_par/* NP */, double& _negativeloglikelihoodb2_re);
+  //   Differentiation of r_redeva__thetaloglikelihood_bre in forward (tangent) mode:
+  //    variations   of useful results: ub2_re
+  //    with respect to varying inputs: logq logr logr0 logtheta logk
+  //   Differentiation of redev__thetaloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_BRE_DPAR(const ARRAY_1D u/* N */, const ARRAY_1D ud4_par/* N */, ARRAY_1D ub2_re/* N */, ARRAY_1D ub2_red4_par/* N */, int N, double logr0, double logr0d4_par, double logtheta, double logthetad4_par, double logK, double logkd4_par, double logQ, double logqd4_par, double logR, double logrd4_par, double& _thetaloglikelihoodb2_re);
+  //   Differentiation of r_redeva__dlognorm_bre in forward (tangent) mode:
+  //    variations   of useful results: meanb2_re xb2_re
+  //    with respect to varying inputs: sigma meanb2_re xb2_re mean
+  //   Differentiation of redev__dlognorm in reverse (adjoint) mode:
+  //    gradient     of useful results: x redev__dlognorm mean
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_BRE_DPAR(double x, double& xb2_re, double& xb2_red4_par, double mean, double meand4_par, double& meanb2_re, double& meanb2_red4_par, double sigma, double sigmad4_par, double& _dlognormb2_re);
+  //   Differentiation of r_redeva__diffre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__diffre
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_ud1_re:(loc) par_u:(loc)
+  //                 r_redeva__diffre:in-killed re:out
+  //  ----------------------------------------------------------------------------
+  //   ----------------------------------------------------------------------------
+  void DIFFRE_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb1_re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D dir/* NR */, double& _diffreb1_re);
+  //   Differentiation of r_redeva__diffre in reverse (adjoint) mode:
+  //    gradient     of useful results: r_redeva__diffre
+  //    with respect to varying inputs: re par
+  //    RW status of diff variables: par_logr0:(loc) y:(loc) par_logk:(loc)
+  //                 par_ud1_re:(loc) par_logq:(loc) par_logr:(loc)
+  //                 par_logtheta:(loc) par_u:(loc) r_redeva__diffre:in-killed
+  //                 re:out par:out
+  //  ----------------------------------------------------------------------------
+  //   ----------------------------------------------------------------------------
+  void DIFFRE_BREPAR(const ARRAY_1D re/* NR */, ARRAY_1D reb2_repar/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D parb2_repar/* NP */, const ARRAY_1D dir/* NR */, double& _diffreb2_repar);
+  //   Differentiation of r_redeva__gradientre in forward (tangent) mode:
+  //    variations   of useful results: pgrad
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: par_ub2_re:(loc) yb2_re:(loc)
+  //                 y:(loc) r8stack_2_2:(loc) par_u:(loc) re:in pgrad:out
+  //   ----------------------------------------------------------------------------
+  void GRADIENTRE_DRE(const ARRAY_1D re/* NR */, const ARRAY_1D red3_re/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D pGrad/* NR */, ARRAY_1D pgradd3_re/* NR */);
+  //   Differentiation of r_redeva__gradientre in forward (tangent) mode:
+  //    variations   of useful results: pgrad
+  //    with respect to varying inputs: par
+  //    RW status of diff variables: par_ub2_re:(loc) yb2_re:(loc)
+  //                 par_logr0:(loc) r8stack_2_2:(loc) par_logk:(loc)
+  //                 par_logq:(loc) par_logr:(loc) par_logtheta:(loc)
+  //                 par_u:(loc) par:in pgrad:out
+  //   ----------------------------------------------------------------------------
+  void GRADIENTRE_DPAR(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D pard4_par/* NP */, ARRAY_1D pGrad/* NR */, ARRAY_1D pgradd4_par/* NR */);
+  // Gradient of objective with respect to random effects
+  void gradientRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, ARRAY_1D pGrad/* NR */);
+  // Partial differentiation of objective with respect to random effects evaluated in the direction dir
+  double diffRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_1D dir/* NR */);
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  double THETALOGLIKELIHOOD_DRE(const ARRAY_1D u/* N */, const ARRAY_1D ud1_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihood);
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  double DLOGNORM_DRE(double x, double xd1_re, double mean, double meand1_re, double sigma, double& _dlognorm);
+  //   Differentiation of redev__thetaloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_BRE(const ARRAY_1D u/* N */, ARRAY_1D ub2_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihoodb2_re);
+  //   Differentiation of redev__dlognorm in reverse (adjoint) mode:
+  //    gradient     of useful results: x redev__dlognorm mean
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_BRE(double x, double& xb2_re, double mean, double& meanb2_re, double sigma, double& _dlognormb2_re);
+  //   Differentiation of redev__negativeloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood_dre
+  //    with respect to varying inputs: re
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_DRE_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb5_re/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihood, double& _negativeloglikelihood_dreb5_re);
+  //   Differentiation of redev__thetaloglikelihood_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__thetaloglikelihood_dre
+  //    with respect to varying inputs: u
+  //   Differentiation of redev__thetaloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__thetaloglikelihood
+  //    with respect to varying inputs: u
+  //   ----------------------------------------------------------------------------
+  void THETALOGLIKELIHOOD_DRE_BRE(const ARRAY_1D u/* N */, ARRAY_1D ub5_re/* N */, const ARRAY_1D ud1_re/* N */, ARRAY_1D ud1_reb5_re/* N */, int N, double logr0, double logtheta, double logK, double logQ, double logR, double& _thetaloglikelihood, double& _thetaloglikelihood_dreb5_re);
+  //   Differentiation of redev__dlognorm_dre in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__dlognorm_dre x mean
+  //    with respect to varying inputs: x meand1_re mean
+  //   Differentiation of redev__dlognorm in forward (tangent) mode:
+  //    variations   of useful results: redev__dlognorm
+  //    with respect to varying inputs: x mean
+  //   ----------------------------------------------------------------------------
+  void DLOGNORM_DRE_BRE(double x, double& xb5_re, double xd1_re, double mean, double& meanb5_re, double meand1_re, double& meand1_reb5_re, double sigma, double& _dlognorm, double& _dlognorm_dreb5_re);
+  //   Differentiation of redev__negativeloglikelihood in forward (tangent) mode:
+  //    variations   of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:out
+  //                 re:in
+  //   ----------------------------------------------------------------------------
+  double NEGATIVELOGLIKELIHOOD_DRE(const ARRAY_1D re/* NR */, const ARRAY_1D red1_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihood);
+  //   Differentiation of redev__negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_u:(loc) redev__negativeloglikelihood:in-killed
+  //                 re:out
+  //   ----------------------------------------------------------------------------
+  void NEGATIVELOGLIKELIHOOD_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb2_re/* NR */, const ARRAY_1D par/* NP */, double& _negativeloglikelihoodb2_re);
+  //  ----------------------------------------------------------------------------
+  //  Differential of
+  //    negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  double diff_dre_negativeLogLikelihood(const ARRAY_1D re/* 1:NR */, int re_dir, const ARRAY_1D par/* 1:NP */);
+  //  ----------------------------------------------------------------------------
+  //  Gradient of
+  //    negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  void grad_bre_negativeLogLikelihood(const ARRAY_1D re/* 1:NR */, ARRAY_1D reb2_re/* 1:NR */, const ARRAY_1D par/* 1:NP */);
+  //   Differentiation of redev__diff_dre_negativeloglikelihood in reverse (adjoint) mode:
+  //    gradient     of useful results: redev__diff_dre_negativeloglikelihood
+  //    with respect to varying inputs: re
+  //    RW status of diff variables: y:(loc) par_ud1_re:(loc) par_u:(loc)
+  //                 re:out redev__diff_dre_negativeloglikelihood:in-killed
+  //  ----------------------------------------------------------------------------
+  //  Differential of
+  //    negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  void DIFF_DRE_NEGATIVELOGLIKELIHOOD_BRE(const ARRAY_1D re/* NR */, ARRAY_1D reb5_re/* NR */, int re_dir, const ARRAY_1D par/* NP */, double& _diff_dre_negativeloglikelihoodb5_re);
+  //  ----------------------------------------------------------------------------
+  //  Gradient of
+  //    diff_dre_negativeLogLikelihood
+  //  with respect to
+  //    re
+  //  in
+  //    REDev__diff_dre_negativeLogLikelihood()
+  //  ----------------------------------------------------------------------------
+  void grad_bre_diff_dre_negativeLogLikelihood(const ARRAY_1D re/* 1:NR */, ARRAY_1D reb5_re/* 1:NR */, int re_dir, const ARRAY_1D par/* 1:NP */);
+  //  ----------------------------------------------------------------------------
+  //  Hessian of 
+  //    REDev__negativeLogLikelihood()
+  //  with respect to 
+  //    re
+  //  ----------------------------------------------------------------------------
+  void hessian_dre_negativeLogLikelihood(ARRAY_2D pHessian/* 1:NR,1:NR */, const ARRAY_1D re/* 1:NR */, const ARRAY_1D par/* 1:NP */);
+  double dlognorm(const double x, const double mean, const double sigma);
+  double thetalogLikelihood(const ARRAY_1D u/* N */, int N, const double logr0, const double logtheta, const double logK, const double logQ, const double logR);
+  double negativeLogLikelihood(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */);
+  // note that NR is N and NP is 5 in this case 
+  void sparseBandedLimitsByRows(const ARRAY_2D pA/* nRows, nColumns */, ARRAY_1I pLowerLimit/* nRows */, ARRAY_1I pUpperLimit/* nRows */, const int nRows, const int nColumns);
+  void sparseBandedLimitsByColumns(const ARRAY_2D pA/* nRows, nColumns */, ARRAY_1I pLowerLimit/* nColumns */, ARRAY_1I pUpperLimit/* nColumns */, const int nRows, const int nColumns);
+  void choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize);
+  double logDeterminantFromChol(const ARRAY_2D pL/* nSize, nSize */, const int nSize);
+  void matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
+  
+};
+// ----------------------------------------------------------------------------
+// Code to develop generalised RE modelling code.
+// ----------------------------------------------------------------------------
+// This layer implements the full random effects fitting process.
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// R_REDevB method implementations
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+R_REDevB::R_REDevB(const ARRAY_1D arg_y, int arg_NR, int arg_NP, int arg_nbdirsmax)
+ : DR_REDevA(arg_y,arg_NR,arg_NP,arg_nbdirsmax)
+{
+  Dirty = true;
+}
+
+
+// ----------------------------------------------------------------------------
+
+R_REDevB::R_REDevB(const R_REDevB& rCopy)
+ : DR_REDevA(rCopy)
+{
+  Dirty = true;
+}
+
+
+// ----------------------------------------------------------------------------
+
+R_REDevB::~R_REDevB()
+{
+  if (IsShallowCopy)
+  {
+    destroy(Dir);
+  }
+}
+
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+void R_REDevB::hessianRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, ARRAY_2D pHessian/* NR,NR */)
+{
+  int cn;
+  int cm;
+  double diffreb1_re;
+  diffreb1_re = 1.0;
+  
+  for (cn = 1;cn <= NR; cn++)
+  {
+    Dir[cn] = 0.0;
+  }
+  
+  for (cn = 1;cn <= NR; cn++)
+  {
+    Dir[cn] = 1.0;
+    // Hessian matrix is symmetric and we construct the matrix row by row by
+    // taking the tangent derivative of the adjoint derivative in each basis
+    // direction. The hessian result goes into an ARRAY_2D but we pass the
+    // n'th column to be filled by indexing the array.
+    DIFFRE_BRE(re,TempRow,par,Dir,diffreb1_re);
+    
+    for (cm = 1;cm <= NR; cm++)
+    {
+      pHessian[cn][cm] = TempRow[cm];
+    }
+    
+    Dir[cn] = 0.0;
+  }
+}
+
+
+// ----------------------------------------------------------------------------
+
+void R_REDevB::hessianAndCovarRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, ARRAY_2D pHessian/* NR,NR */, ARRAY_2D pReParXCovar/* NR,NP */)
+{
+  int cn;
+  int cm;
+  double diffreb2_repar;
+  diffreb2_repar = 1.0;
+  
+  for (cn = 1;cn <= NR; cn++)
+  {
+    Dir[cn] = 0.0;
+  }
+  
+  for (cn = 1;cn <= NP; cn++)
+  {
+    Dir2[cn] = 0.0;
+  }
+  
+  /*
+    for (cn = 1 ; cn <= NR ; cn++)
+    {
+      Dir[cn] = 1.0;
+  
+      // Hessian matrix is symmetric and we construct the matrix row by row by
+      // taking the tangent derivative of the adjoint derivative in each basis
+      // direction. The hessian result goes into an ARRAY_2D but we pass the
+      // n'th column to be filled by indexing the array.
+      DIFFRE_BREPAR(re, 
+                    TempRow, 
+                    par, 
+                    TempRow2, 
+                    Dir, 
+                    diffreb2_repar);
+    
+      for (cm = 1 ; cm <= NR ; cm++)
+      {
+        pHessian[cn][cm] = TempRow[cm];
+      }
+  
+      for (cm = 1 ; cm <= NP ; cm++)
+      {
+        pReParXCovar[cn][cm] = TempRow2[cm];
+      }
+  
+      Dir[cn] = 0.0;
+    }
+  */// Calculate Hessian
+  for (cn = 1;cn <= NR; cn++)
+  {
+    Dir[cn] = 1.0;
+    // Hessian matrix is symmetric and we construct the matrix row by row by
+    // taking the tangent derivative of the adjoint derivative in each basis
+    // direction. The hessian result goes into an ARRAY_2D but we pass the
+    // n'th column to be filled by indexing the array.
+    GRADIENTRE_DRE(re,Dir,par,GradRun,TempRow);
+    
+    for (cm = 1;cm <= NR; cm++)
+    {
+      pHessian[cn][cm] = TempRow[cm];
+    }
+    
+    Dir[cn] = 0.0;
+  }
+  
+  // Calculate CoVar
+  for (cn = 1;cn <= NP; cn++)
+  {
+    Dir2[cn] = 1.0;
+    GRADIENTRE_DPAR(re,par,Dir2,GradRun,TempRow);
+    
+    for (cm = 1;cm <= NR; cm++)
+    {
+      pReParXCovar[cm][cn] = TempRow[cm];
+    }
+    
+    Dir2[cn] = 0.0;
+  }
+}
+
+
+// ----------------------------------------------------------------------------
+
+double R_REDevB::logDetHessianRE(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */, const ARRAY_2D pHessian/* NR,NR */, ARRAY_2D pCholesky/* NR,NR */)
+{
+  double logdet;
+  int cn;
+  int cm;
+  
+  for (cn = 1;cn <= NR; cn++)
+  {
+    for (cm = 1;cm <= NR; cm++)
+    {
+      Cholesky[cn][cm] = 0.0;
+    }
+  }
+  
+  choleskyDecomposition(pHessian,pCholesky,NR);
+  logdet = logDeterminantFromChol(pCholesky,NR);
+  return (logdet);
+}
+
+
+// ----------------------------------------------------------------------------
+
+double R_REDevB::negativeLogLaplace(const ARRAY_1D re/* NR */, const ARRAY_1D par/* NP */)
+{
+  double h;
+  h = ((-NR * LOG(2 * M_PI) + logDetHessianRE(re,par,Hessian,Cholesky)) * 0.5) + negativeLogLikelihood(re,par);
+  return (h);
+}
+
+
+// ----------------------------------------------------------------------------
+
+double R_REDevB::outerNegativeLogLikelihood(ARRAY_1D reHat/* NR */, const ARRAY_1D par/* NP */)
+{
+  double h;
+  solveInner(reHat,par);
+  hessianRE(reHat,par,Hessian);
+  h = negativeLogLaplace(reHat,par);
+  return (h);
+}
+
+
