@@ -305,6 +305,9 @@ IDENTIFIER_LITERAL      [a-zA-Z_]([a-zA-Z0-9_])*
 <*>HESSIAN                                        return (dispatchToken(&yylval, yytext, M_HESSIAN));
 <*>VAR                                            return (dispatchToken(&yylval, yytext, M_VAR));
 <*>OUTVAR                                         return (dispatchToken(&yylval, yytext, M_OUTVAR));
+<*>REML                                           return (dispatchToken(&yylval, yytext, M_REML));
+<*>PARAMETERS                                     return (dispatchToken(&yylval, yytext, M_PARAMETERS));
+<*>RANDOM                                         return (dispatchToken(&yylval, yytext, M_RANDOM));
 <*>MODE                                           return (dispatchToken(&yylval, yytext, M_MODE));
 <*>USER                                           return (dispatchToken(&yylval, yytext, M_USER));
 <*>PRE                                            return (dispatchToken(&yylval, yytext, M_PRE));

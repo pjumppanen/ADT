@@ -1036,6 +1036,15 @@ void AdtMakeCommandOperation::initSuffixes(int nIteration)
       BaseSubSuffix = "_b";
       bAddV         = true;
     }
+    else if (Mode == "reml")
+    {
+      ::sprintf(sVarSuffix, "re%d_", nIteration);
+
+      SubSuffix     = "_";
+      ModuleSuffix  = "";
+      BaseSubSuffix = "_";
+      bAddV         = false;
+    }
     else
     {
       ::sprintf(sVarSuffix, "d%d_", nIteration);

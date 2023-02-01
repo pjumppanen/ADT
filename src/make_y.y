@@ -32,15 +32,16 @@
  *   	   .
  *   	   .
  *   	   .
- *       FUNCTION=NameN VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *       FUNCTION=NameN VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes';
  *   	   .
  *   	   .
  *   	   .
- *       DIFF=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
- *       GRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
- *       MULTIDIFF=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
- *       MULTIGRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes');
- *       HESSIAN=NameN VAR=a OUTVAR=b USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *       DIFF=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes';
+ *       GRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes';
+ *       MULTIDIFF=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes';
+ *       MULTIGRAD=NameN VAR=a,b,c,d OUTVAR=e,f USER='any custom tapenade command line options you wish to add enclosed in quotes';
+ *       HESSIAN=NameN VAR=a OUTVAR=b USER='any custom tapenade command line options you wish to add enclosed in quotes';
+ *       REML=NameN PARAMETERS=a,b,c,d RANDOM=c,d USER='any custom tapenade command line options you wish to add enclosed in quotes';
  *     END
  *
  *     CLASS NewClassNameB (ClassNameB) SOURCE FILE: File1 OUTPUT FILE: File2
@@ -51,7 +52,7 @@
  *   	   .
  *   	   .
  *   	   .
- *       FUNCTION=NameN VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes');
+ *       FUNCTION=NameN VAR=a,b,c,d OUTVAR=e,f MODE=f USER='any custom tapenade command line options you wish to add enclosed in quotes';
  *     END
  *      .
  *      .
@@ -84,6 +85,7 @@
 %token M_WORKING M_DIRECTORY M_FUNCTION M_VAR M_OUTVAR M_MODE M_USER M_PRAGMAS
 %token M_PATHS M_CLASS M_OPTIONS M_PASCAL M_CPP M_FORTRAN M_INCLUDE M_SWITCHES
 %token M_BLACKBOX M_PRE M_POST M_DIFF M_GRAD M_MULTIDIFF M_MULTIGRAD M_HESSIAN
+%token M_REML M_PARAMETERS M_RANDOM
 
 /* make special character tokens */
 %token M_COMMA M_SEMICOLON M_COLON M_EQUALS M_LBRACKET M_RBRACKET
@@ -282,8 +284,11 @@ AutoDiffCommandOp : AutoDiffCommandFunctionOp
                   | AutoDiffCommandGradOp
                   | AutoDiffCommandMultiDiffOp
                   | AutoDiffCommandMultiGradOp
+                  | AutoDiffCommandRemlOp
                   | AutoDiffCommandVarOp
                   | AutoDiffCommandOutVarOp
+                  | AutoDiffCommandParametersOp
+                  | AutoDiffCommandRandomOp
                   | AutoDiffCommandModeOp
                   | AutoDiffCommandUserOp
                   | AutoDiffCommandPreOp
@@ -327,6 +332,12 @@ AutoDiffCommandMultiGradOp : M_MULTIGRAD M_EQUALS M_IDENT
 }
 ;
 
+AutoDiffCommandRemlOp : M_REML M_EQUALS M_IDENT
+{
+  make_CommandReml($3.sValue);
+}
+;
+
 AutoDiffCommandVarOp : BeginAutoDiffCommandVarOp NameList
 ;
 
@@ -342,6 +353,24 @@ AutoDiffCommandOutVarOp : BeginAutoDiffCommandOutVarOp NameList
 BeginAutoDiffCommandOutVarOp : M_OUTVAR M_EQUALS
 {
   make_CommandOutVarOpen();
+}
+;
+
+AutoDiffCommandParametersOp : BeginAutoDiffCommandParametersOp NameList
+;
+
+BeginAutoDiffCommandParametersOp : M_PARAMETERS M_EQUALS
+{
+  make_CommandOutVarOpen();
+}
+;
+
+AutoDiffCommandRandomOp : BeginAutoDiffCommandRandomOp NameList
+;
+
+BeginAutoDiffCommandRandomOp : M_RANDOM M_EQUALS
+{
+  make_CommandVarOpen();
 }
 ;
 
