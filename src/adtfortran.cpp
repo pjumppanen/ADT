@@ -4155,12 +4155,13 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
    
     if (pModule != 0)
     {
-      bool        bSupported         = true;
-      bool        bWrapperIsFunction = false;
-      string      sCommentBlock("! ----------------------------------------------------------------------------\n");
-      string      sCodeFunction;
-      string      sCodeModule;
-      AdtParser*  pFuncOrSubSubprogram = 0;
+      bool                  bSupported         = true;
+      bool                  bWrapperIsFunction = false;
+      string                sCommentBlock("! ----------------------------------------------------------------------------\n");
+      AdtStringByStringMap  rCodeFunctionMap;
+      AdtStringByStringMap  rCommentBlockMap;
+      string                sCodeModule;
+      AdtParser*            pFuncOrSubSubprogram = 0;
 
       switch (nWrapperType)
       {
@@ -4284,6 +4285,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             string        sDeclarations;
             string        sCallArgs;
             string        sLastArg;
+            string        sCodeFunction;
             bool          bFirst           = true;
             const char*   sType            = bIsAD_Function ? "FUNCTION" : "SUBROUTINE";
             const char*   pRawFunctionName = pFunctionName;
@@ -4595,6 +4597,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
                   case ForWrapper_HESSIAN:
                   case ForWrapper_REML:
+                  case ForWrapper_LIKELIHOOD:
                   default:
                   {
                     FAIL();
@@ -4721,6 +4724,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutModule.write("END MODULE");
             FortranOutModule.newline();
             FortranOutModule.close();
+
+            rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
+            rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
           }
           break;
         }
@@ -4760,6 +4766,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
               string                  sDeclarations;
               string                  sLowerDim;
               string                  sUpperDim;
+              string                  sCodeFunction;
               AdtFile                 FortranOutFunction(true);
               AdtFile                 FortranOutModule(true);
               const AdtStringList&    rArgList      = VariableInfo.argumentList();
@@ -4893,6 +4900,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
               FortranOutModule.write("END MODULE");
               FortranOutModule.newline();
               FortranOutModule.close();
+
+              rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
+              rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
             }
             else
             {
@@ -4912,6 +4922,142 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
         case ForWrapper_REML:
         {
+          break;
+        }
+
+        case ForWrapper_LIKELIHOOD:
+        {
+          AdtStringByStringMap    ParametersMap;
+          const AdtStringList&    rRandomEffectsList  = Vars;
+          const AdtStringList&    rParametersList     = OutVars;
+          bool                    bIsFunction;
+      
+          pFuncOrSubSubprogram = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
+
+          if (pFuncOrSubSubprogram != 0)
+          {
+            AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, "");
+            string                  sCodeFunction;
+            string                  sDeclarations;
+            string                  sLowerDim;
+            string                  sUpperDim;
+            string                  sEncodeFunction(pWrapperFunctionName);
+            string                  sDecodeFunction(pWrapperFunctionName);
+            string                  sAdditionalArgs;
+            string                  sLocalDeclarations;
+            string                  sCallArgs;
+            AdtFile                 FortranOutFunction(true);
+            AdtFile                 FortranOutModule(true);
+            const AdtStringList&    rArgList = VariableInfo.argumentList();
+            AdtStringListConstIter  Iter;
+
+            sEncodeFunction += "_encode";
+            sDecodeFunction += "_decode";
+
+            nameListToNameMap(ParametersMap, rParametersList);
+            
+            // Create likelihood arguments encode and decode functions and likelihood wrapper function
+            FortranOutModule.open(sCodeModule);
+
+            FortranOutModule.write("MODULE ");
+            FortranOutModule.write(sDiffModuleName);
+            FortranOutModule.incrementIndent();
+            FortranOutModule.newline();
+
+            FortranOutFunction.open(sCodeFunction);
+
+            FortranOutFunction.write("REAL(8) FUNCTION ");
+            FortranOutFunction.write(pWrapperFunctionName);
+            FortranOutFunction.write("(re,par");
+
+            bool bFirst = true;
+
+            // Write other arguments that aren't part of the parameters list
+            for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
+            {
+              string       sDeclaration;
+              const string rArg         = *Iter;
+              bool         bLocal       = (VariableInfo.numberOfDimensions(rArg) == 0);
+              bool         bWithIntent  = bLocal;
+
+              if (ParametersMap.find(rArg) == ParametersMap.end())
+              {
+                sAdditionalArgs += ",";
+                sAdditionalArgs += rArg;
+                bWithIntent      = true;
+                bLocal           = true;
+              }
+              else
+              {
+                bWithIntent      = false;
+              }
+
+              VariableInfo.buildVariableDeclaration(rArg, bWithIntent, sDeclaration);
+
+              if (bLocal)
+              {
+                sLocalDeclarations += sDeclaration;
+                sLocalDeclarations += "\n";
+              }
+              else
+              {
+                FortranOutModule.write(sDeclaration);
+                FortranOutModule.newline();
+              }
+          
+              if (!bFirst)
+              {
+                sCallArgs += ",";
+              }
+
+              sCallArgs += rArg;
+              bFirst     = false;
+            }
+
+            FortranOutFunction.write(sAdditionalArgs);
+            FortranOutFunction.write(")");
+            FortranOutFunction.incrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (IN) :: re(NR)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("USE COMMON");
+            FortranOutFunction.newline();
+            FortranOutFunction.writeLines(sLocalDeclarations);
+            FortranOutFunction.write("REAL(8) dLikelihood");
+            FortranOutFunction.newline();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("CALL ");
+            FortranOutFunction.write(sDecodeFunction);
+            FortranOutFunction.write("(re,par");
+
+            if (sCallArgs.length() > 0)
+            {
+              FortranOutFunction.write(",");
+              FortranOutFunction.write(sCallArgs);
+            }
+
+            FortranOutFunction.write(")");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("dLikelihood = -");
+            FortranOutFunction.write(pFunctionName);
+            FortranOutFunction.write("(");
+            FortranOutFunction.write(sCallArgs);
+            FortranOutFunction.write(")");
+            FortranOutFunction.newline();
+            FortranOutFunction.write(pWrapperFunctionName);
+            FortranOutFunction.write(" = (dLikelihood)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("RETURN");
+            FortranOutFunction.decrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("END");
+            FortranOutFunction.close();
+
+            rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
+            rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
+          }
           break;
         }
 
@@ -4978,54 +5124,64 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           UtlReleaseReference(pCodeObject);
         }
 
-        if (sCodeFunction.length() > 0)
+        for (AdtStringByStringMapIter Iter = rCodeFunctionMap.begin() ; Iter != rCodeFunctionMap.end() ; ++Iter)
         {
-          AdtParser*  pRoot       = 0;
-          AdtParser*  pCodeObject = 0;
+          const string& sCodeFunction        = Iter->second;
+          const string& sWrapperFunctionName = Iter->first;
+          string        sCommentBlock;
 
-          // Add function
-          bool bParsed = FortranContext.parseString(pRoot, sCodeFunction);
-
-          if (bParsed && (pRoot != 0))
+          if (rCommentBlockMap.find(sWrapperFunctionName) != rCommentBlockMap.end())
           {
-            AdtParser* pFuncOrSub = 0;
+            sCommentBlock = rCommentBlockMap[sWrapperFunctionName];
+          }
 
-            // AdtFortranProgramUnit parent of the parsed function / subroutine code
-            pCodeObject = (AdtFortranBase*)pRoot->object(0);
+          if (sCodeFunction.length() > 0)
+          {
+            AdtParser*  pRoot       = 0;
+            AdtParser*  pCodeObject = 0;
 
-            // Add comment block to statement
-            if (bWrapperIsFunction)
+            // Add function
+            bool bParsed = FortranContext.parseString(pRoot, sCodeFunction);
+
+            if (bParsed && (pRoot != 0))
             {
+              AdtParser* pFuncOrSub = 0;
+
+              // AdtFortranProgramUnit parent of the parsed function / subroutine code
+              pCodeObject = (AdtFortranBase*)pRoot->object(0);
+
+              // Add comment block to statement
               pFuncOrSub = pCodeObject->findObject("AdtFortranFunctionStmt");
+
+              if (pFuncOrSub == 0)
+              {
+                pFuncOrSub = pCodeObject->findObject("AdtFortranSubroutineStmt");
+              }
+
+              if (pFuncOrSub != 0)
+              {
+                pFuncOrSub->comment(sCommentBlock);
+              }
+
+              add(pCodeObject);
             }
             else
             {
-              pFuncOrSub = pCodeObject->findObject("AdtFortranSubroutineStmt");
+              bMade = false;
+
+              ::printf("%s\n", sCodeFunction.c_str());
             }
 
-            if (pFuncOrSub != 0)
-            {
-              pFuncOrSub->comment(sCommentBlock);
-            }
+            // Need to re-initialise the root to ensure type information queries work
+            initialise();
 
-            add(pCodeObject);
+            rAddedMethodsMap[sWrapperFunctionName]  = sWrapperFunctionName;
+            rPublicMethodsMap[sWrapperFunctionName] = sWrapperFunctionName;
+
+            rNewFunctionsList.push_back(sWrapperFunctionName);
+
+            UtlReleaseReference(pCodeObject);
           }
-          else
-          {
-            bMade = false;
-
-            ::printf("%s\n", sCodeFunction.c_str());
-          }
-
-          // Need to re-initialise the root to ensure type information queries work
-          initialise();
-
-          rAddedMethodsMap[pWrapperFunctionName]  = pWrapperFunctionName;
-          rPublicMethodsMap[pWrapperFunctionName] = pWrapperFunctionName;
-
-          rNewFunctionsList.push_back(pWrapperFunctionName);
-
-          UtlReleaseReference(pCodeObject);
         }
       }
     }

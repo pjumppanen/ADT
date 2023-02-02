@@ -345,6 +345,7 @@ enum AdtFortranWrapperType
   ForWrapper_MULTIGRAD  = 3,
   ForWrapper_HESSIAN    = 4,
   ForWrapper_REML       = 5,
+  ForWrapper_LIKELIHOOD = 6,
 };
 
 

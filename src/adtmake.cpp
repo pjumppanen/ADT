@@ -1036,14 +1036,13 @@ void AdtMakeCommandOperation::initSuffixes(int nIteration)
       BaseSubSuffix = "_b";
       bAddV         = true;
     }
-    else if (Mode == "reml")
+    else if ((Mode == "reml") || (Mode == "likelihood"))
     {
       ::sprintf(sVarSuffix, "re%d_", nIteration);
 
       SubSuffix     = "_";
       ModuleSuffix  = "";
       BaseSubSuffix = "_";
-      bAddV         = false;
     }
     else
     {
@@ -1100,7 +1099,7 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
 
       bDone = true;
     } 
-    else if (Mode.eq("reml"))
+    else if ((Mode == "reml") || (Mode == "likelihood") || (Mode == "decode"))
     {
       // Make this succeed to allow reml code to be added in makeWrapper() call
       rOutputFileName = pSourceFile;
@@ -1275,6 +1274,14 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
 
           DiffVarNameOption  = "-adjvarname";
           DiffFuncNameOption = "-adjfuncname";
+        }
+        else if ((Mode == "reml") || (Mode == "likelihood"))
+        {
+          ::sprintf(sVarSuffix, "re%d_", nIteration);
+
+          SubSuffix     = "_";
+          ModuleSuffix  = "";
+          BaseSubSuffix = "_";
         }
         else
         {
@@ -1668,6 +1675,11 @@ const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunct
   {
     rWrapperFunctionName += "reml";
     nWrapperType          = ForWrapper_REML;
+  }
+  else if (Mode == "likelihood")
+  {
+    rWrapperFunctionName += "lkh";
+    nWrapperType          = ForWrapper_LIKELIHOOD;
   }
 
   rWrapperFunctionName += SubSuffix;
@@ -4337,80 +4349,147 @@ void AdtMakeSystem::commandOpClose()
 
 //  ----------------------------------------------------------------------------
 
+void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOperation)
+{
+  if (rCommandOperation.mode().eq("hessian"))
+  {
+    if (rCommandOperation.vars().size() != 1)
+    {
+      // ERROR: Hessian command should only have one in var
+      ::printf("ERROR: HESSIAN command should only have one VAR.\n");
+
+      AdtExit(-1);
+    }
+
+    if (rCommandOperation.outVars().size() != 1)
+    {
+      // ERROR: Hessian command should only have one out var
+      ::printf("ERROR: HESSIAN command should only have one OUTVAR.\n");
+
+      AdtExit(-1);
+    }
+
+    // Add command to find diff of function
+    AdtMakeCommandOperation DiffFn;
+
+    DiffFn.functionName(rCommandOperation.functionName());
+    DiffFn.userOptions(rCommandOperation.userOptions());
+    DiffFn.pragmas(rCommandOperation.pragmas());
+    DiffFn.vars(rCommandOperation.vars());
+    DiffFn.outVars(rCommandOperation.outVars());
+    DiffFn.mode("f");
+    DiffFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffFn);
+
+    // Add command to find grad of diff of function
+    AdtMakeCommandOperation GradDiffFn;
+    string                  DiffWrapperName;
+    AdtFortranWrapperType   nWrapperType;
+    string                  sOutVar(rCommandOperation.outVars().front());
+    AdtStringList           rOutVars;
+
+    DiffFn.wrapperFunctionName(DiffWrapperName, nWrapperType);
+
+    if (sOutVar.eq(rCommandOperation.functionName()))
+    {
+      // Assume function return
+      sOutVar = DiffWrapperName;
+    }
+    else
+    {
+      // argument return
+      sOutVar += DiffFn.varSuffix();
+    }
+
+    rOutVars.push_front(sOutVar);
+
+    GradDiffFn.functionName(DiffWrapperName);
+    GradDiffFn.userOptions(rCommandOperation.userOptions());
+    GradDiffFn.pragmas(rCommandOperation.pragmas());
+    GradDiffFn.vars(rCommandOperation.vars());
+    GradDiffFn.outVars(rOutVars);
+    GradDiffFn.mode("r");
+    GradDiffFn.makeWrapper(true);
+
+    CurrentClass.addOperation(GradDiffFn);
+  }
+  else if (rCommandOperation.mode().eq("reml"))
+  {
+    // Add command to add likelihood, encode and decode functions
+    AdtMakeCommandOperation LikelihoodFn;
+    AdtFortranWrapperType   nWrapperType;
+    string                  LikelihoodWrapperName;
+    AdtStringList           rVars;
+    AdtStringList           rOutVars;
+
+    LikelihoodFn.functionName(rCommandOperation.functionName());
+    LikelihoodFn.userOptions(rCommandOperation.userOptions());
+    LikelihoodFn.pragmas(rCommandOperation.pragmas());
+    LikelihoodFn.vars(rCommandOperation.vars());
+    LikelihoodFn.outVars(rCommandOperation.outVars());
+    LikelihoodFn.mode("likelihood");
+    LikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(LikelihoodFn);
+
+    LikelihoodFn.wrapperFunctionName(LikelihoodWrapperName, nWrapperType);
+
+    // Add command to find gradient of likelihood function
+    rVars.push_front("re");
+    rOutVars.push_front(LikelihoodWrapperName);
+
+    AdtMakeCommandOperation GradLikelihoodFn(rCommandOperation);
+
+    GradLikelihoodFn.functionName(LikelihoodWrapperName);
+    GradLikelihoodFn.vars(rVars);
+    GradLikelihoodFn.outVars(rOutVars);
+    GradLikelihoodFn.mode("r");
+    GradLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(GradLikelihoodFn);
+
+    // Add command to find hessian of likelihood function
+    AdtMakeCommandOperation HessianLikelihoodFn(rCommandOperation);
+
+    HessianLikelihoodFn.functionName(LikelihoodWrapperName);
+    HessianLikelihoodFn.vars(rVars);
+    HessianLikelihoodFn.outVars(rOutVars);
+    HessianLikelihoodFn.mode("hessian");
+    HessianLikelihoodFn.makeWrapper(true);
+
+    checkAddCommandOperation(HessianLikelihoodFn);
+
+    // Add command to find diff of hessian of likelihood function
+    string HessianWrapperName;
+
+    HessianLikelihoodFn.wrapperFunctionName(HessianWrapperName, nWrapperType);
+
+    rVars.clear();
+    rOutVars.clear();
+
+    rVars.push_front("par");
+    rOutVars.push_front("pHessian");
+
+    AdtMakeCommandOperation DiffHessianLikelihoodFn(rCommandOperation);
+
+    DiffHessianLikelihoodFn.functionName(HessianWrapperName);
+    DiffHessianLikelihoodFn.vars(rVars);
+    DiffHessianLikelihoodFn.outVars(rOutVars);
+    DiffHessianLikelihoodFn.mode("f");
+    DiffHessianLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffHessianLikelihoodFn);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
 void AdtMakeSystem::commandClose()
 {
   if (!CurrentCommandOperation.isNull())
   {
-    if (CurrentCommandOperation.mode().eq("hessian"))
-    {
-      if (CurrentCommandOperation.vars().size() != 1)
-      {
-        // ERROR: Hessian command should only have one in var
-        ::printf("ERROR: HESSIAN command should only have one VAR.\n");
-
-        AdtExit(-1);
-      }
-
-      if (CurrentCommandOperation.outVars().size() != 1)
-      {
-        // ERROR: Hessian command should only have one out var
-        ::printf("ERROR: HESSIAN command should only have one OUTVAR.\n");
-
-        AdtExit(-1);
-      }
-
-      // Add command to find diff of function
-      AdtMakeCommandOperation DiffFn;
-
-      DiffFn.functionName(CurrentCommandOperation.functionName());
-      DiffFn.userOptions(CurrentCommandOperation.userOptions());
-      DiffFn.pragmas(CurrentCommandOperation.pragmas());
-      DiffFn.vars(CurrentCommandOperation.vars());
-      DiffFn.outVars(CurrentCommandOperation.outVars());
-      DiffFn.mode("f");
-      DiffFn.makeWrapper(true);
-
-      CurrentClass.addOperation(DiffFn);
-
-      // Add command to find grad of diff of function
-      AdtMakeCommandOperation GradDiffFn;
-      string                  DiffWrapperName;
-      AdtFortranWrapperType   nWrapperType;
-      string                  sOutVar(CurrentCommandOperation.outVars().front());
-      AdtStringList           rOutVars;
-
-      DiffFn.wrapperFunctionName(DiffWrapperName, nWrapperType);
-
-      if (sOutVar.eq(CurrentCommandOperation.functionName()))
-      {
-        // Assume function return
-        sOutVar = DiffWrapperName;
-      }
-      else
-      {
-        // argument return
-        sOutVar += DiffFn.varSuffix();
-      }
-
-      rOutVars.push_front(sOutVar);
-
-      GradDiffFn.functionName(DiffWrapperName);
-      GradDiffFn.userOptions(CurrentCommandOperation.userOptions());
-      GradDiffFn.pragmas(CurrentCommandOperation.pragmas());
-      GradDiffFn.vars(CurrentCommandOperation.vars());
-      GradDiffFn.outVars(rOutVars);
-      GradDiffFn.mode("r");
-      GradDiffFn.makeWrapper(true);
-
-      CurrentClass.addOperation(GradDiffFn);
-    }
-    else if (CurrentCommandOperation.mode().eq("reml"))
-    {
-      // Need to add a whole bunch of AD commands to support generation of reml
-      // code which also includes the checking of the command operation list 
-      // to see if it already contains the needed commands.
-    }
-
+    checkAddCommandOperation(CurrentCommandOperation);
     CurrentClass.addOperation(CurrentCommandOperation);
 
     CurrentCommandOperation.reset();
