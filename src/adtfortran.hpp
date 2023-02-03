@@ -386,7 +386,8 @@ public:
   bool                    buildVariableDeclaration(const char* pVarName, 
                                                    bool bWithIntent, 
                                                    string& rDeclaration, 
-                                                   const char* pClassPrefix = 0) const;
+                                                   const char* pClassPrefix = 0,
+                                                   const char* pOverrideIntent = 0) const;
   bool                    hasArgumentList() const;
   const AdtStringList&    argumentList() const;
   void                    dump() const;
@@ -847,6 +848,17 @@ protected:
                                                                const AdtStringByStringMap& rPublicMethodsMap,
                                                                const AdtStringList& rMethodList,
                                                                const char* pParentClassName) const;
+
+  void                          buildEncodeDecodeCode(const AdtStringList& rVarList, 
+                                                      const AdtFortranVariableInfo& rInfo,
+                                                      const AdtStringByStringMap* pExcludeMap, 
+                                                      bool bEncode, 
+                                                      bool bRandomEffects, 
+                                                      AdtStringByStringMap rDefinedMap, 
+                                                      string& sLocalDeclarations,
+                                                      string& sInit,
+                                                      string& sSize) const;
+
 
 public:
   AdtFortranExecutableProgram(AdtParser* pProgramUnitObj);

@@ -1578,7 +1578,8 @@ int AdtFortranVariableInfo::numberOfDimensions(const char* pVarName) const
 bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName, 
                                                       bool bWithIntent, 
                                                       string& rDeclaration, 
-                                                      const char* pClassPrefix) const
+                                                      const char* pClassPrefix,
+                                                      const char* pOverrideIntent) const
 {
   string sType;
   bool   bFound = false;
@@ -1598,11 +1599,20 @@ bool AdtFortranVariableInfo::buildVariableDeclaration(const char* pVarName,
 
     rDeclaration += sType;
 
-    if (bWithIntent && intent(pVarName, sIntent))
+    if (bWithIntent)
     {
-      rDeclaration += ", INTENT(";
-      rDeclaration += sIntent;
-      rDeclaration += ")";
+      if (pOverrideIntent != 0)
+      {
+        rDeclaration += ", INTENT(";
+        rDeclaration += pOverrideIntent;
+        rDeclaration += ")";
+      }
+      else if (intent(pVarName, sIntent))
+      {
+        rDeclaration += ", INTENT(";
+        rDeclaration += sIntent;
+        rDeclaration += ")";
+      }
     }
 
     rDeclaration += " :: ";
@@ -4089,6 +4099,190 @@ AdtParser* AdtFortranExecutableProgram::findFunctionOrSubroutine(const char* pFu
 
 //  ----------------------------------------------------------------------------
 
+void AdtFortranExecutableProgram::buildEncodeDecodeCode(const AdtStringList& rVarList, 
+                                                        const AdtFortranVariableInfo& rInfo,
+                                                        const AdtStringByStringMap* pExcludeMap, 
+                                                        bool bEncode, 
+                                                        bool bRandomEffects, 
+                                                        AdtStringByStringMap rDefinedMap, 
+                                                        string& sLocalDeclarations,
+                                                        string& sInit,
+                                                        string& sSize) const
+{
+  const char* pArrayStr;
+  const char* pLoopVar;
+
+  if (bRandomEffects)
+  {
+    sSize     = "NR = ";
+    pArrayStr = "re";
+    pLoopVar  = "cn";
+  }
+  else
+  {
+    sSize     = "NP = ";
+    pArrayStr = "par";
+    pLoopVar  = "cm";
+  }
+
+  bool bFirst = true;
+
+  for (AdtStringListConstIter Iter = rVarList.begin() ; Iter != rVarList.end() ; ++Iter)
+  {
+    const string  rVar        = *Iter;
+    int           nDimensions = rInfo.numberOfDimensions(rVar);
+
+    if (pExcludeMap != 0)
+    {
+      if (pExcludeMap->find(rVar) != pExcludeMap->end())
+      {
+        continue;
+      }
+    }
+
+    if (!bFirst)
+    {
+      sSize += " + ";
+      sInit += "\n";
+    }
+
+    if (nDimensions >= 1)
+    {
+      sSize += "(";
+
+      string sIndent("  ");
+      string sLoopsOpen;
+      string sLoopsAssign;
+      string sLoopsClose;
+
+      if (bEncode)
+      {
+        sLoopsAssign += pArrayStr;
+        sLoopsAssign += "(";
+        sLoopsAssign += pLoopVar;
+        sLoopsAssign += ") = ";
+        sLoopsAssign += rVar;
+        sLoopsAssign += "(";
+      }
+      else
+      {
+        sLoopsAssign += rVar;
+        sLoopsAssign += "(";
+      }
+
+      for (int nDimension = 0 ; nDimension < nDimensions ; nDimension++)
+      {
+        string sLowerDim;
+        string sUpperDim;
+        string sClosure;
+        char   sLoopCounter[16] = {0};
+
+        ::sprintf(sLoopCounter, "cc%d", nDimension);
+
+        if (rDefinedMap.find(sLoopCounter) == rDefinedMap.end())
+        {
+          sLocalDeclarations += "INTEGER(4) :: ";
+          sLocalDeclarations += sLoopCounter;
+          sLocalDeclarations += "\n";
+
+          rDefinedMap[sLoopCounter] = sLoopCounter;
+        }
+
+        rInfo.lowerDimension(rVar, nDimension, sLowerDim);
+        rInfo.upperDimension(rVar, nDimension, sUpperDim);
+
+        // Open loop construct
+        sLoopsOpen += "DO ";
+        sLoopsOpen += sLoopCounter;
+        sLoopsOpen += " = ";
+        sLoopsOpen += sLowerDim;
+        sLoopsOpen += ",";
+        sLoopsOpen += sUpperDim;
+        sLoopsOpen += "\n";
+
+        // Close loop construct
+        sClosure   += "END DO\n";
+
+        sLoopsClose = sClosure + sLoopsClose;
+
+        // NR initialisation
+        if (nDimension != 0)
+        {
+          sSize        += " * ";
+          sLoopsAssign += ",";
+        }
+
+        sSize      += "((";
+        sSize      += sUpperDim;
+        sSize      += ") - (";
+        sSize      += sLowerDim;
+        sSize      += ") + 1)";
+
+        sIndent    += "  ";
+
+        // Loop assignment
+        sLoopsAssign += sLoopCounter;
+      }
+
+      if (bEncode)
+      {
+        sLoopsAssign += ")\n";
+      }
+      else
+      {
+        sLoopsAssign += ") = ";
+        sLoopsAssign += pArrayStr;
+        sLoopsAssign += "(";
+        sLoopsAssign += pLoopVar;
+        sLoopsAssign += ")\n";
+      }
+
+      sInit += sLoopsOpen;
+      sInit += sIndent;
+      sInit += sLoopsAssign;
+      sInit += sIndent;
+      sInit += pLoopVar;
+      sInit += " = ";
+      sInit += pLoopVar;
+      sInit += " + 1\n";
+      sInit += sLoopsClose;
+
+      sSize += ")";
+    }
+    else
+    {
+      if (bEncode)
+      {
+        sInit += pArrayStr;
+        sInit += "(";
+        sInit += pLoopVar;
+        sInit += ") = ";
+        sInit += rVar;
+        sInit += "\n";
+      }
+      else
+      {
+        sInit += rVar;
+        sInit += " = ";
+        sInit += pArrayStr;
+        sInit += "(";
+        sInit += pLoopVar;
+        sInit += ")\n";
+      }
+
+      sInit += pLoopVar;
+      sInit += " = ";
+      sInit += pLoopVar;
+      sInit += " + 1\n";
+      sSize += "1";
+    }
+
+    bFirst = false;
+  }
+}                                                        
+
+//  ----------------------------------------------------------------------------
+
 bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWorkingRoot,
                                               const char* pWrapperFunctionName,
                                               AdtFortranWrapperType nWrapperType,
@@ -4928,12 +5122,16 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
         case ForWrapper_LIKELIHOOD:
         {
           AdtStringByStringMap    ParametersMap;
+          AdtStringByStringMap    RandomEffectsMap;
           const AdtStringList&    rRandomEffectsList  = Vars;
           const AdtStringList&    rParametersList     = OutVars;
           bool                    bIsFunction;
-      
-          pFuncOrSubSubprogram = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
 
+          nameListToNameMap(ParametersMap, rParametersList);
+          nameListToNameMap(RandomEffectsMap, rRandomEffectsList);
+            
+          pFuncOrSubSubprogram = pWorkingRoot->findFunctionOrSubroutine(pFunctionName, bIsFunction);
+      
           if (pFuncOrSubSubprogram != 0)
           {
             AdtFortranVariableInfo  VariableInfo(pFuncOrSubSubprogram, "");
@@ -4954,8 +5152,6 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             sEncodeFunction += "_encode";
             sDecodeFunction += "_decode";
 
-            nameListToNameMap(ParametersMap, rParametersList);
-            
             // Create likelihood arguments encode and decode functions and likelihood wrapper function
             FortranOutModule.open(sCodeModule);
 
@@ -4964,6 +5160,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutModule.incrementIndent();
             FortranOutModule.newline();
 
+            // Create likelihood wrapper function
             FortranOutFunction.open(sCodeFunction);
 
             FortranOutFunction.write("REAL(8) FUNCTION ");
@@ -5052,11 +5249,233 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutFunction.write("RETURN");
             FortranOutFunction.decrementIndent();
             FortranOutFunction.newline();
-            FortranOutFunction.write("END");
+            FortranOutFunction.write("END FUNCTION");
+            FortranOutFunction.newline();
             FortranOutFunction.close();
+
+            sCommentBlock  += "\n! Negative Log Likelihood wrapper of \n!   ";
+            sCommentBlock  += pFunctionName;
+            sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
 
             rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
             rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
+
+            // Create encode function
+            sCommentBlock  = "! ----------------------------------------------------------------------------\n";
+            sCommentBlock  += "\n! Negative Log Likelihood wrapper argument encoding for \n!   ";
+            sCommentBlock  += pFunctionName;
+            sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+            sCodeFunction.clear();
+            FortranOutFunction.open(sCodeFunction);
+
+            FortranOutFunction.write("SUBROUTINE ");
+            FortranOutFunction.write(sEncodeFunction);
+            FortranOutFunction.write("(re,par");
+
+            sAdditionalArgs.clear();
+            sLocalDeclarations.clear();
+
+            // build parameters list
+            for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
+            {
+              const string rArg = *Iter;
+
+              string sDeclaration;
+
+              sAdditionalArgs += ",";
+              sAdditionalArgs += rArg;
+
+              if (ParametersMap.find(rArg) != ParametersMap.end())
+              {
+                VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration, 0, "IN");
+              }
+              else
+              {
+                VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
+              }
+
+              sLocalDeclarations += sDeclaration;
+              sLocalDeclarations += "\n";
+          
+              sCallArgs += rArg;
+              bFirst     = false;
+            }
+
+            // Build code to initialise re[]
+            AdtStringByStringMap  DefinedMap;
+            string                sReInit;
+            string                sNR;
+
+            buildEncodeDecodeCode(rRandomEffectsList, 
+                                  VariableInfo,
+                                  0, 
+                                  true, 
+                                  true, 
+                                  DefinedMap, 
+                                  sLocalDeclarations,
+                                  sReInit,
+                                  sNR);
+
+            // Build code to initialise par[]
+            string                sParInit;
+            string                sNP;
+
+            buildEncodeDecodeCode(rParametersList, 
+                                  VariableInfo,
+                                  &RandomEffectsMap, 
+                                  true, 
+                                  false, 
+                                  DefinedMap, 
+                                  sLocalDeclarations,
+                                  sParInit,
+                                  sNP);
+
+            FortranOutFunction.write(sAdditionalArgs);
+            FortranOutFunction.write(")");
+            FortranOutFunction.incrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (OUT) :: re(NR)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (OUT) :: par(NP)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("INTEGER(4) :: cn");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("INTEGER(4) :: cm");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("USE COMMON");
+            FortranOutFunction.newline();
+            FortranOutFunction.writeLines(sLocalDeclarations);
+            FortranOutFunction.newline();
+            FortranOutFunction.write("cn = 1");
+            FortranOutFunction.newline();
+            FortranOutFunction.newline();
+            FortranOutFunction.writeLines(sReInit);
+            FortranOutFunction.newline();
+            FortranOutFunction.write("cm = 1");
+            FortranOutFunction.newline();
+            FortranOutFunction.newline();
+            FortranOutFunction.writeLines(sParInit);
+            FortranOutFunction.decrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("END SUBROUTINE");
+            FortranOutFunction.newline();
+            FortranOutFunction.close();
+
+            rCodeFunctionMap[sEncodeFunction] = sCodeFunction;
+            rCommentBlockMap[sEncodeFunction] = sCommentBlock;
+
+            // Create decode function
+            sCommentBlock  = "! ----------------------------------------------------------------------------\n";
+            sCommentBlock  += "\n! Negative Log Likelihood wrapper argument decoding for \n!   ";
+            sCommentBlock  += pFunctionName;
+            sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+            sCodeFunction.clear();
+            FortranOutFunction.open(sCodeFunction);
+
+            FortranOutFunction.write("SUBROUTINE ");
+            FortranOutFunction.write(sDecodeFunction);
+            FortranOutFunction.write("(re,par");
+
+            sAdditionalArgs.clear();
+            sLocalDeclarations.clear();
+
+            // build parameters list
+            for (Iter = rArgList.begin() ; Iter != rArgList.end() ; ++Iter)
+            {
+              const string rArg = *Iter;
+
+              string sDeclaration;
+
+              sAdditionalArgs += ",";
+              sAdditionalArgs += rArg;
+
+              if (ParametersMap.find(rArg) != ParametersMap.end())
+              {
+                VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration, 0, "OUT");
+              }
+              else
+              {
+                VariableInfo.buildVariableDeclaration(rArg, true, sDeclaration);
+              }
+
+              sLocalDeclarations += sDeclaration;
+              sLocalDeclarations += "\n";
+          
+              sCallArgs += rArg;
+              bFirst     = false;
+            }
+
+            DefinedMap.clear();
+            sReInit.clear();
+            sNR.clear();
+
+            // Build code to initialise re[]
+            buildEncodeDecodeCode(rRandomEffectsList, 
+                                  VariableInfo,
+                                  0, 
+                                  false, 
+                                  true, 
+                                  DefinedMap, 
+                                  sLocalDeclarations,
+                                  sReInit,
+                                  sNR);
+
+            // Build code to initialise par[]
+            sParInit.clear();
+            sNP.clear();
+
+            buildEncodeDecodeCode(rParametersList, 
+                                  VariableInfo,
+                                  &RandomEffectsMap, 
+                                  false, 
+                                  false, 
+                                  DefinedMap, 
+                                  sLocalDeclarations,
+                                  sParInit,
+                                  sNP);
+
+            FortranOutFunction.write(sAdditionalArgs);
+            FortranOutFunction.write(")");
+            FortranOutFunction.incrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (IN) :: re(NR)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("INTEGER(4) :: cn");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("INTEGER(4) :: cm");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("USE COMMON");
+            FortranOutFunction.newline();
+            FortranOutFunction.writeLines(sLocalDeclarations);
+            FortranOutFunction.newline();
+            FortranOutFunction.write("cn = 1");
+            FortranOutFunction.newline();
+            FortranOutFunction.newline();
+            FortranOutFunction.writeLines(sReInit);
+            FortranOutFunction.newline();
+            FortranOutFunction.write("cm = 1");
+            FortranOutFunction.newline();
+            FortranOutFunction.newline();
+            FortranOutFunction.writeLines(sParInit);
+            FortranOutFunction.decrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("END SUBROUTINE");
+            FortranOutFunction.newline();
+            FortranOutFunction.close();
+
+            rCodeFunctionMap[sDecodeFunction] = sCodeFunction;
+            rCommentBlockMap[sDecodeFunction] = sCommentBlock;
+
+            // End module declaration for adding new variables to COMMON module
+            FortranOutModule.decrementIndent();
+            FortranOutModule.newline();
+            FortranOutModule.write("END MODULE");
+            FortranOutModule.newline();
+            FortranOutModule.close();
           }
           break;
         }
