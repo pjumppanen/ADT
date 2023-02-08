@@ -2378,7 +2378,12 @@ AdtFile& AdtDelphiGoal::writeFortran(AdtFile& pOutFile,
                                      const char* pFunctionNames,
                                      bool bExpandMacros) const
 {
-  AdtDelphiGoal*  pDelphiRootObject = delphiRootObject();
+  string                  rParentClassName;
+  AdtParserPtrByStringMap rClassMap;
+  AdtDelphiClassType*     pClassTypeObj     = 0;
+  AdtDelphiGoal*          pDelphiRootObject = delphiRootObject();
+
+  isClassType(rClassMap, pClassName, &pClassTypeObj);
 
   if (pDelphiRootObject != 0)
   {
@@ -2395,6 +2400,12 @@ AdtFile& AdtDelphiGoal::writeFortran(AdtFile& pOutFile,
     bool                    bCompiled = false;
     const char*             pStart    = pFunctionNames;
     const char*             pEnd      = 0;
+
+    if (pClassTypeObj != 0)
+    {
+      // Add all class variables
+      pClassTypeObj->enumerateVariables(VarsMap);
+    }
 
     do
     {
@@ -14671,6 +14682,23 @@ AdtDelphiClassType::~AdtDelphiClassType()
   UtlReleaseReference(ClassFieldList);
   UtlReleaseReference(ClassMethodList);
   UtlReleaseReference(ClassPropertyList);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtDelphiClassType::enumerateVariables(AdtParserPtrByStringMap& rMap) const
+{
+  AdtParserPtrByStringMapConstIter  Iter;
+
+  for (Iter = FieldMap.begin() ; Iter != FieldMap.end() ; ++Iter)
+  {
+    rMap[Iter->first] = Iter->second;
+  }
+
+  for (Iter = PropertyMap.begin() ; Iter != PropertyMap.end() ; ++Iter)
+  {
+    rMap[Iter->first] = Iter->second;
+  }
 }
 
 //  ----------------------------------------------------------------------------

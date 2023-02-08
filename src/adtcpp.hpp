@@ -2081,6 +2081,8 @@ public:
   virtual bool                  isForwardDeclaration(bool bClassScope) const;
   bool                          isEmpty() const;
 
+  void                          enumerateVariables(AdtParserPtrByStringMap& rMap) const;
+
   bool                          flattenClass(AdtCppTranslationUnit* pRoot,
                                              const AdtParserPtrList& rRootList,
                                              string& rUsesList,

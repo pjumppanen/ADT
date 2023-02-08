@@ -2576,6 +2576,8 @@ AdtFile& AdtCppTranslationUnit::writeFortran(AdtFile& rOutFile,
                                              const char* pFunctionNames,
                                              bool bExpandMacros) const
 {
+  string                  rParentClassName;
+  AdtCppClassSpecifier*   pClass = findClass(pClassName, rParentClassName);
   AdtCppTranslationUnit*  pCppRootObject = cppRootObject();
 
   if (pCppRootObject != 0)
@@ -2595,6 +2597,12 @@ AdtFile& AdtCppTranslationUnit::writeFortran(AdtFile& rOutFile,
     bool                    bCompiled = false;
     const char*             pStart    = pFunctionNames;
     const char*             pEnd      = 0;
+
+    if (pClass != 0)
+    {
+      // Add all class variables
+      pClass->enumerateVariables(VarsMap);
+    }
 
     do
     {
@@ -8291,6 +8299,19 @@ AdtCppClassSpecifier::~AdtCppClassSpecifier()
   UtlReleaseReference(ClassKey);
   UtlReleaseReference(BaseSpecifierList);
   UtlReleaseReference(MemberSpecification);
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtCppClassSpecifier::enumerateVariables(AdtParserPtrByStringMap& rMap) const
+{
+  if (MemberSpecification != 0)
+  {
+    for (AdtParserPtrByStringMapConstIter Iter = MemberSpecification->varDefinitionMap().begin() ; Iter != MemberSpecification->varDefinitionMap().end() ; ++Iter)
+    {
+      rMap[Iter->first] = Iter->second;
+    }
+  }
 }
 
 //  ----------------------------------------------------------------------------

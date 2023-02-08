@@ -3860,6 +3860,8 @@ public:
   AdtDelphiClassType(const AdtDelphiClassType& rCopy);
   virtual ~AdtDelphiClassType();
 
+  void                            enumerateVariables(AdtParserPtrByStringMap& rMap) const;
+
   bool                            flattenClass(AdtDelphiGoal* pGoal, 
                                                const AdtParserPtrList& rGoalList,
                                                AdtStringByStringMap& rPublicMethodsMap);
