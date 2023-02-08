@@ -5152,6 +5152,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             sEncodeFunction += "_encode";
             sDecodeFunction += "_decode";
 
+            sEncodeFunction.toUpper();
+            sDecodeFunction.toUpper();
+
             // Create likelihood arguments encode and decode functions and likelihood wrapper function
             FortranOutModule.open(sCodeModule);
 

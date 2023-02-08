@@ -4459,6 +4459,7 @@ void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOp
     HessianLikelihoodFn.makeWrapper(true);
 
     checkAddCommandOperation(HessianLikelihoodFn);
+    CurrentClass.addOperation(HessianLikelihoodFn);
 
     // Add command to find diff of hessian of likelihood function
     string HessianWrapperName;
