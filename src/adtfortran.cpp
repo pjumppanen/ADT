@@ -4319,13 +4319,14 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
     // (not clear that it every does but have coded for the situation). The 
     // extra findObject calls are there to obtain the module definition in these
     // other scenarios as it will be needed to create the wrapper code. 
-    bool              bAddEntireModule = false;
-    string            sModuleName("COMMON");
-    string            sDiffModuleName("COMMON");
-    string            sClassPrefix(pClassName);
-    AdtFortranModule* pModule = (AdtFortranModule*)findObject("AdtFortranModule",
-                                                              sModuleName,
-                                                              false);
+    bool                  bAddEntireModule = false;
+    string                sModuleName("COMMON");
+    string                sDiffModuleName("COMMON");
+    string                sClassPrefix(pClassName);
+    AdtStringByStringMap  PrivateMethodsMap;
+    AdtFortranModule*     pModule = (AdtFortranModule*)findObject("AdtFortranModule",
+                                                                  sModuleName,
+                                                                  false);
     
     sClassPrefix += "__";
 
@@ -5482,6 +5483,92 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutModule.newline();
             FortranOutModule.close();
 
+            // Build inner objective
+            sCommentBlock.clear();
+            sCommentBlock  = "! ----------------------------------------------------------------------------\n";
+            sCommentBlock  += "\n! innerObjective called by optimizer \n!   ";
+            sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+            sCodeFunction.clear();
+            FortranOutFunction.open(sCodeFunction);
+
+            string sInnerObjective(sClassPrefix);
+
+            sInnerObjective += "innerObjective";
+
+            FortranOutFunction.write("REAL(8) FUNCTION ");
+            FortranOutFunction.write(sInnerObjective);
+            FortranOutFunction.write("(n,reHat)");
+            FortranOutFunction.incrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (INOUT) :: reHat(:)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("INTEGER(4) , INTENT (IN) :: n");
+            FortranOutFunction.newline();
+            FortranOutFunction.write(sInnerObjective);
+            FortranOutFunction.write(" = ");
+            FortranOutFunction.write(pWrapperFunctionName);
+            FortranOutFunction.write("(reHat, Par)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("RETURN");
+            FortranOutFunction.decrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("END FUNCTION");
+            FortranOutFunction.newline();
+            FortranOutFunction.close();
+
+            rCodeFunctionMap[sInnerObjective]   = sCodeFunction;
+            rCommentBlockMap[sInnerObjective]   = sCommentBlock;
+            PrivateMethodsMap[sInnerObjective]  = sInnerObjective;
+
+            // Build inner gradient
+            sCommentBlock.clear();
+            sCommentBlock  = "! ----------------------------------------------------------------------------\n";
+            sCommentBlock  += "\n! innerGradient called by optimizer \n!   ";
+            sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+            sCodeFunction.clear();
+            FortranOutFunction.open(sCodeFunction);
+
+            string      sInnerGradient(sClassPrefix);
+            string      sGradFunction(sClassPrefix);
+            const char* pFnPrefix = strstr(pWrapperFunctionName, sClassPrefix);
+
+            sGradFunction += "grad_bre_";
+
+            if (pFnPrefix == pWrapperFunctionName)
+            {
+              const char* pBaseName = pFnPrefix + sClassPrefix.length();
+
+              sGradFunction += pBaseName;
+            }
+
+            sInnerGradient += "innerGradient";
+
+            FortranOutFunction.write("SUBROUTINE ");
+            FortranOutFunction.write(sInnerGradient);
+            FortranOutFunction.write("(n,reHat,gr)");
+            FortranOutFunction.incrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (INOUT) :: reHat(:)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("REAL(8) , INTENT (OUT) :: gr(:)");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("INTEGER(4) , INTENT (IN) :: n");
+            FortranOutFunction.newline();
+            FortranOutFunction.write("CALL ");
+            FortranOutFunction.write(sGradFunction);
+            FortranOutFunction.write("(reHat, Par, gr)");
+            FortranOutFunction.decrementIndent();
+            FortranOutFunction.newline();
+            FortranOutFunction.write("END SUBROUTINE");
+            FortranOutFunction.newline();
+            FortranOutFunction.close();
+
+            rCodeFunctionMap[sInnerGradient]   = sCodeFunction;
+            rCommentBlockMap[sInnerGradient]   = sCommentBlock;
+            PrivateMethodsMap[sInnerGradient]  = sInnerGradient;
+
             // Create RE NP init function
             AdtAutoClass::initNRandNP(pClassName, sNP, sNR);
           }
@@ -5603,7 +5690,11 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             initialise();
 
             rAddedMethodsMap[sWrapperFunctionName]  = sWrapperFunctionName;
-            rPublicMethodsMap[sWrapperFunctionName] = sWrapperFunctionName;
+
+            if (PrivateMethodsMap.find(sWrapperFunctionName) == PrivateMethodsMap.end())
+            {
+              rPublicMethodsMap[sWrapperFunctionName] = sWrapperFunctionName;
+            }
 
             rNewFunctionsList.push_back(sWrapperFunctionName);
 
