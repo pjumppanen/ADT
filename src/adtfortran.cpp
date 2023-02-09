@@ -5264,6 +5264,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
 
             // Create encode function
+            sCommentBlock.clear();
             sCommentBlock  = "! ----------------------------------------------------------------------------\n";
             sCommentBlock  += "\n! Negative Log Likelihood wrapper argument encoding for \n!   ";
             sCommentBlock  += pFunctionName;
@@ -5369,6 +5370,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             rCommentBlockMap[sEncodeFunction] = sCommentBlock;
 
             // Create decode function
+            sCommentBlock.clear();
             sCommentBlock  = "! ----------------------------------------------------------------------------\n";
             sCommentBlock  += "\n! Negative Log Likelihood wrapper argument decoding for \n!   ";
             sCommentBlock  += pFunctionName;
@@ -5479,6 +5481,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutModule.write("END MODULE");
             FortranOutModule.newline();
             FortranOutModule.close();
+
+            // Create RE NP init function
+            AdtAutoClass::initNRandNP(pClassName, sNP, sNR);
           }
           break;
         }

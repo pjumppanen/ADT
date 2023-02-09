@@ -82,9 +82,9 @@ FILE* lex_fopen(const char* pFileName, const char* pMode)
 
 //  ----------------------------------------------------------------------------
 
-void automate_DisableAutomation(int nDisable)
+void automate_DisableAutomation(int nDisable, const char* pFileName)
 {
-  AdtAutoClass::includeDisableAutomation(nDisable != 0);
+  AdtAutoClass::includeDisableAutomation(nDisable != 0, pFileName);
 }
 
 //  ----------------------------------------------------------------------------

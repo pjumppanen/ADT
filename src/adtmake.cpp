@@ -2695,7 +2695,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                                    NewMethodList,
                                    NewMethodMap);
 
-                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, sIncludeFolder, ClassName, nClassNumber);
+                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, sIncludeFolder, ClassName, ParentClassName, nClassNumber);
                         AdtAutoClass::enableAutomation(false, false);
                       }
                       else
@@ -2785,7 +2785,7 @@ int AdtMakeClass::make(AdtMakeCommand& rParent,
                                    NewMethodList,
                                    NewMethodMap);
 
-                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, sIncludeFolder, ClassName, nClassNumber);
+                        AdtAutoClass::exportAutomationFiles(SourceFileType, SourceFolder, sIncludeFolder, ClassName, ParentClassName, nClassNumber);
                         AdtAutoClass::enableAutomation(false, false);
 
                         AdtCommon::removeTranslation("__FILE__");

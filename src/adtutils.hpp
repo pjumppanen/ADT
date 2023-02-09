@@ -77,7 +77,7 @@
 //  ----------------------------------------------------------------------------
 C_FUNCTION FILE*        lex_fopen(const char* pFileName, const char* pMode);
 
-C_FUNCTION void         automate_DisableAutomation(int nDisable);
+C_FUNCTION void         automate_DisableAutomation(int nDisable, const char* pFileName);
 C_FUNCTION void         automate_AD_LibName(const char* pText, const char* pFileName, int nLineNumber);
 C_FUNCTION void         automate_AD_Alias(const char* pText, const char* pFileName, int nLineNumber);
 C_FUNCTION void         automate_VarModeAndPhase(int nMode, const char* pText, const char* pFileName, int nLineNumber);
