@@ -1740,6 +1740,7 @@ bool AdtMakeCommandOperation::eq(const AdtMakeCommandOperation& rOperation) cons
 //  ----------------------------------------------------------------------------
 void AdtMakeClass::reset()
 {
+  HasReml           = false;
   ClassName         = "";
   ParentClassName   = "";
   SourceFile        = "";
@@ -1917,6 +1918,7 @@ AdtMakeClass::AdtMakeClass()
    OperationsList(),
    BoundsCheckList()
 {
+  HasReml           = false;
   SourceFileType    = DelphiSourceFileType;
   DestFileType      = DelphiSourceFileType;
   LastModifiedTime  = 0;
@@ -1937,6 +1939,7 @@ AdtMakeClass::AdtMakeClass(const AdtMakeClass& rCopy)
    OperationsList(rCopy.OperationsList),
    BoundsCheckList(rCopy.BoundsCheckList)
 {
+  HasReml           = rCopy.HasReml;
   SourceFileType    = rCopy.SourceFileType;
   DestFileType      = rCopy.DestFileType;
   LastModifiedTime  = rCopy.LastModifiedTime;
@@ -2983,6 +2986,11 @@ int AdtMakeClass::addOperation(AdtMakeCommandOperation& rOperation)
   {
     rOperation.initSuffixes((int)OperationsList.size() + 1);
     OperationsList.push_back(rOperation);
+
+    if (rOperation.mode() == "reml")
+    {
+      HasReml = true;
+    }
 
     nIteration = (int)OperationsList.size();
   }
@@ -4356,7 +4364,7 @@ void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOp
     if (rCommandOperation.vars().size() != 1)
     {
       // ERROR: Hessian command should only have one in var
-      ::printf("ERROR: HESSIAN command should only have one VAR.\n");
+      ::printf("ERROR: HESSIAN command should only have one VAR in file %s on line %d\n", yyMake_fileName(), yyMake_lineNumber());
 
       AdtExit(-1);
     }
@@ -4364,7 +4372,7 @@ void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOp
     if (rCommandOperation.outVars().size() != 1)
     {
       // ERROR: Hessian command should only have one out var
-      ::printf("ERROR: HESSIAN command should only have one OUTVAR.\n");
+      ::printf("ERROR: HESSIAN command should only have one OUTVAR in file %s on line %d\n", yyMake_fileName(), yyMake_lineNumber());
 
       AdtExit(-1);
     }
@@ -4416,6 +4424,14 @@ void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOp
   }
   else if (rCommandOperation.mode().eq("reml"))
   {
+    if (CurrentClass.hasReml())
+    {
+      // ERROR: REML command should only appear once in a given class
+      ::printf("ERROR: REML command should only appear once in makefile class definition. Multiple definition in file %s on line %d\n", yyMake_fileName(), yyMake_lineNumber());
+
+      AdtExit(-1);
+    }
+
     // Add command to add likelihood, encode and decode functions
     AdtMakeCommandOperation LikelihoodFn;
     AdtFortranWrapperType   nWrapperType;

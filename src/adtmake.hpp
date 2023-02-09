@@ -555,6 +555,7 @@ private:
   string                      OutputHeaderFile;
   string                      WorkingFile;
   string                      BlackBoxFile;
+  bool                        HasReml;
   AdtIntByStringMap           IsBlackBoxMap;
   AdtSourceFileType           SourceFileType;
   AdtSourceFileType           DestFileType;
@@ -608,6 +609,8 @@ public:
 
   int                   addOperation(AdtMakeCommandOperation& rOperation);
 
+  bool                  hasReml() const;
+
   void                  boundsCheck(const AdtStringList& rBoundsCheckList);
   const AdtStringList&  boundsCheck() const;
 
@@ -632,6 +635,13 @@ public:
   bool                  workingFile(string& rWorkingFile, size_t nIteration) const;
   bool                  lastWorkingFile(string& rWorkingFile) const;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtMakeClass::hasReml() const
+{
+  return (HasReml);
+}
 
 //  ----------------------------------------------------------------------------
 
