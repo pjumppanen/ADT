@@ -4657,7 +4657,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                 {
                   ADVariableInfo.lowerDimension(rArg, 1, sLowerDim);
                   ADVariableInfo.upperDimension(rArg, 1, sUpperDim);
-                  
+
                   nLimit++;
                 }
               }
@@ -5188,6 +5188,113 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
         case ForWrapper_REML:
         {
+          string sBaseFunctionName(pFunctionName);
+          string sNegLogLikelihoodFunctionName("lkh");
+          string sNegLogLaplaceFunctionName("negLogLaplace_");
+          string sHessianFunctionName("hessian_dre_");
+
+          sBaseFunctionName.trimLeft(sClassPrefix);
+
+          sNegLogLikelihoodFunctionName += pSubSuffix;
+          sNegLogLikelihoodFunctionName += "_";
+          sNegLogLikelihoodFunctionName += sBaseFunctionName;
+
+          sHessianFunctionName       += sNegLogLikelihoodFunctionName;
+          sNegLogLaplaceFunctionName += sNegLogLikelihoodFunctionName;
+
+          sNegLogLikelihoodFunctionName = sClassPrefix + sNegLogLikelihoodFunctionName;
+          sNegLogLaplaceFunctionName    = sClassPrefix + sNegLogLaplaceFunctionName;
+          sHessianFunctionName          = sClassPrefix + sHessianFunctionName;
+
+          AdtFile FortranOutFunction(true);
+          string  sCodeFunction;
+
+          // Create Negative Log Laplace function
+          sCommentBlock   = "\n! ----------------------------------------------------------------------------\n";
+          sCommentBlock  += "\n! negative log laplace function for\n!   ";
+          sCommentBlock  += pFunctionName;
+          sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+          FortranOutFunction.open(sCodeFunction);
+
+          FortranOutFunction.write("REAL(8) FUNCTION ");
+          FortranOutFunction.write(sNegLogLaplaceFunctionName);
+          FortranOutFunction.write("(re,par)");
+          FortranOutFunction.incrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: re(NR)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("USE COMMON");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) h");
+          FortranOutFunction.newline();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("h = ((-NR * log(2 * M_PI) + logDetHessianRE(re, par, Hessian, Cholesky)) * 0.5) + ");
+          FortranOutFunction.write(sNegLogLikelihoodFunctionName);
+          FortranOutFunction.write("(re,par)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write(sNegLogLaplaceFunctionName);
+          FortranOutFunction.write(" = h");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("RETURN");
+          FortranOutFunction.newline();
+          FortranOutFunction.decrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("END FUNCTION ");
+          FortranOutFunction.newline();
+          FortranOutFunction.close();
+
+          rCodeFunctionMap[sNegLogLaplaceFunctionName] = sCodeFunction;
+          rCommentBlockMap[sNegLogLaplaceFunctionName] = sCommentBlock;
+
+          // Create reml objective function
+          sCommentBlock   = "\n! ----------------------------------------------------------------------------\n";
+          sCommentBlock  += "\n! reml objective function for\n!   ";
+          sCommentBlock  += pFunctionName;
+          sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+          sCodeFunction.clear();
+          FortranOutFunction.open(sCodeFunction);
+
+          FortranOutFunction.write("REAL(8) FUNCTION ");
+          FortranOutFunction.write(pWrapperFunctionName);
+          FortranOutFunction.write("(reHat,par)");
+          FortranOutFunction.incrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: reHat(NR)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("USE COMMON");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) h");
+          FortranOutFunction.newline();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("CALL solveInner(reHat,par)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("CALL ");
+          FortranOutFunction.write(sHessianFunctionName);
+          FortranOutFunction.write("(Hessian,reHat,par)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("h = ");
+          FortranOutFunction.write(sNegLogLaplaceFunctionName);
+          FortranOutFunction.write("(reHat,par)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write(pWrapperFunctionName);
+          FortranOutFunction.write(" = h");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("RETURN");
+          FortranOutFunction.newline();
+          FortranOutFunction.decrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("END FUNCTION ");
+          FortranOutFunction.newline();
+          FortranOutFunction.close();
+
+          rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
+          rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
           break;
         }
 
