@@ -849,6 +849,13 @@ protected:
                                                                const AdtStringList& rMethodList,
                                                                const char* pParentClassName) const;
 
+  void                          buildArgumentInitCode(const string& sVar, 
+                                                      const AdtFortranVariableInfo& rInfo,
+                                                      AdtStringByStringMap& rDefinedMap, 
+                                                      const char* pInitialiser,
+                                                      string& sLocalDeclarations,
+                                                      string& sCode) const;
+
   void                          buildEncodeDecodeCode(const AdtStringList& rVarList, 
                                                       const AdtFortranVariableInfo& rInfo,
                                                       const AdtStringByStringMap* pExcludeMap, 

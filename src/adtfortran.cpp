@@ -4099,6 +4099,92 @@ AdtParser* AdtFortranExecutableProgram::findFunctionOrSubroutine(const char* pFu
 
 //  ----------------------------------------------------------------------------
 
+void AdtFortranExecutableProgram::buildArgumentInitCode(const string& sVar, 
+                                                        const AdtFortranVariableInfo& rInfo,
+                                                        AdtStringByStringMap& rDefinedMap, 
+                                                        const char* pInitialiser,
+                                                        string& sLocalDeclarations,
+                                                        string& sCode) const
+{
+  int nDimensions = rInfo.numberOfDimensions(sVar);
+
+  if (nDimensions >= 1)
+  {
+    string sIndent("  ");
+    string sLoopsOpen;
+    string sLoopsAssign;
+    string sLoopsClose;
+    bool   bFirst = true;
+
+    sLoopsAssign += sVar;
+    sLoopsAssign += "(";
+
+    for (int nDimension = 0 ; nDimension < nDimensions ; nDimension++)
+    {
+      string sLowerDim;
+      string sUpperDim;
+      string sClosure;
+      char   sLoopCounter[16] = {0};
+
+      ::sprintf(sLoopCounter, "cc%d", nDimension);
+
+      if (rDefinedMap.find(sLoopCounter) == rDefinedMap.end())
+      {
+        sLocalDeclarations += "INTEGER(4) :: ";
+        sLocalDeclarations += sLoopCounter;
+        sLocalDeclarations += "\n";
+
+        rDefinedMap[sLoopCounter] = sLoopCounter;
+      }
+
+      rInfo.lowerDimension(sVar, nDimension, sLowerDim);
+      rInfo.upperDimension(sVar, nDimension, sUpperDim);
+
+      // Open loop construct
+      sLoopsOpen += "DO ";
+      sLoopsOpen += sLoopCounter;
+      sLoopsOpen += " = ";
+      sLoopsOpen += sLowerDim;
+      sLoopsOpen += ",";
+      sLoopsOpen += sUpperDim;
+      sLoopsOpen += "\n";
+
+      // Close loop construct
+      sClosure   += "END DO\n";
+      sLoopsClose = sClosure + sLoopsClose;
+      sIndent    += "  ";
+
+      if (!bFirst)
+      {
+        sLoopsAssign += ",";
+      }
+
+      // Loop assignment
+      sLoopsAssign += sLoopCounter;
+
+      bFirst = false;
+    }
+
+    sLoopsAssign += ") = ";
+    sLoopsAssign += pInitialiser;
+    sLoopsAssign += "\n";
+
+    sCode += sLoopsOpen;
+    sCode += sIndent;
+    sCode += sLoopsAssign;
+    sCode += sLoopsClose;
+  }
+  else
+  {
+    sCode += sVar;
+    sCode += " = ";
+    sCode += pInitialiser;
+    sCode += "\n";
+  }
+}                                                        
+
+//  ----------------------------------------------------------------------------
+
 void AdtFortranExecutableProgram::buildEncodeDecodeCode(const AdtStringList& rVarList, 
                                                         const AdtFortranVariableInfo& rInfo,
                                                         const AdtStringByStringMap* pExcludeMap, 
@@ -4488,9 +4574,6 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             bool          bIsGrad          = (nWrapperType == ForWrapper_GRAD) || (nWrapperType == ForWrapper_MULTIGRAD);
             bool          bMultipleOuts    = (OutVars.size() > 1);
 
-            sDeclarations  = "INTEGER(4) :: cn\n";
-            sDeclarations += "INTEGER(4) :: cm\n";
-
             FortranOutModule.open(sCodeModule);
 
             FortranOutModule.write("MODULE ");
@@ -4510,6 +4593,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutFunction.write(" ");
             FortranOutFunction.write(pWrapperFunctionName);
             FortranOutFunction.write("(");
+
+            AdtStringByStringMap rDefinedMap;
 
             // Do argument list
             for (Iter = rADArgList.begin() ; Iter != rADArgList.end() ; ++Iter)
@@ -4543,7 +4628,6 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
               int          nLimit         = 1;
               int          nDummy         = 0;
 
-              ADVariableInfo.intent(rArg, sIntent);
               ADVariableInfo.lowerDimension(rArg, 0, sLowerDim);
               ADVariableInfo.upperDimension(rArg, 0, sUpperDim);
 
@@ -4573,6 +4657,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                 {
                   ADVariableInfo.lowerDimension(rArg, 1, sLowerDim);
                   ADVariableInfo.upperDimension(rArg, 1, sUpperDim);
+                  
                   nLimit++;
                 }
               }
@@ -4597,16 +4682,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
                     if (bAD_Result)
                     {
-                      if (sUpperDim.length() > 0)
-                      {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cn) = 0.0\n";
-                        sCodeBody += "ENDDO\n\n";
-                      }
-                      else
-                      {
-                        sCodeBody += rArg + " = 0.0\n";
-                      }
+                      buildArgumentInitCode(rArg, 
+                                            ADVariableInfo,
+                                            rDefinedMap, 
+                                            "0.0",
+                                            sDeclarations,
+                                            sCodeBody);
                     }
                     else
                     {
@@ -4622,9 +4703,14 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
                       if (sUpperDim.length() > 0)
                       {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cn) = 0.0\n";
-                        sCodeBody += "ENDDO\n\n";
+                        buildArgumentInitCode(rArg, 
+                                              ADVariableInfo,
+                                              rDefinedMap, 
+                                              "0.0",
+                                              sDeclarations,
+                                              sCodeBody);
+
+                        sCodeBody += "\n";
                         sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
                         sCodeBody += rArg + "(" + sNewArg + ") = 1.0\n";
                         sCodeBody += "END IF\n\n";
@@ -4647,16 +4733,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
                     if (bAD_Result)
                     {
-                      if (sUpperDim.length() > 0)
-                      {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cm,cn) = 0.0\n";
-                        sCodeBody += "ENDDO\n\n";
-                      }
-                      else
-                      {
-                        sCodeBody += rArg + "(cm) = 0.0\n";
-                      }
+                      buildArgumentInitCode(rArg, 
+                                            ADVariableInfo,
+                                            rDefinedMap, 
+                                            "0.0",
+                                            sDeclarations,
+                                            sCodeBody);
                     }
                     else
                     {
@@ -4672,9 +4754,14 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
                       if (sUpperDim.length() > 0)
                       {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cm,cn) = 0.0\n";
-                        sCodeBody += "ENDDO\n\n";
+                        buildArgumentInitCode(rArg, 
+                                              ADVariableInfo,
+                                              rDefinedMap, 
+                                              "0.0",
+                                              sDeclarations,
+                                              sCodeBody);
+
+                        sCodeBody += "\n";
                         sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
                         sCodeBody += rArg + "(cm," + sNewArg + ") = 1.0\n";
                         sCodeBody += "END IF\n\n";
@@ -4696,16 +4783,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   {
                     if (bAD_Input)
                     {
-                      if (sUpperDim.length() > 0)
-                      {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cn) = 0.0\n";
-                        sCodeBody += "ENDDO\n\n";
-                      }
-                      else
-                      {
-                        sCodeBody += rArg + " = 0.0\n";
-                      }
+                      buildArgumentInitCode(rArg, 
+                                            ADVariableInfo,
+                                            rDefinedMap, 
+                                            "0.0",
+                                            sDeclarations,
+                                            sCodeBody);
                     }
                     else
                     {
@@ -4726,16 +4809,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                         sSelector = "1.0";
                       }
 
-                      if (sUpperDim.length() > 0)
-                      {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cn) = " + sSelector + "\n";
-                        sCodeBody += "ENDDO\n\n";
-                      }
-                      else
-                      {
-                        sCodeBody += rArg + " = " + sSelector + "\n";
-                      }
+                      buildArgumentInitCode(rArg, 
+                                            ADVariableInfo,
+                                            rDefinedMap, 
+                                            sSelector,
+                                            sDeclarations,
+                                            sCodeBody);
                     }
                     break;
                   }
@@ -4744,16 +4823,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                   {
                     if (bAD_Input)
                     {
-                      if (sUpperDim.length() > 0)
-                      {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cm,cn) = 0.0\n";
-                        sCodeBody += "ENDDO\n\n";
-                      }
-                      else
-                      {
-                        sCodeBody += rArg + "(cm) = 0.0\n";
-                      }
+                      buildArgumentInitCode(rArg, 
+                                            ADVariableInfo,
+                                            rDefinedMap, 
+                                            "0.0",
+                                            sDeclarations,
+                                            sCodeBody);
                     }
                     else
                     {
@@ -4774,16 +4849,12 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                         sSelector = "1.0";
                       }
 
-                      if (sUpperDim.length() > 0)
-                      {
-                        sCodeBody += "\nDO cn = " + sLowerDim + "," + sUpperDim + "\n";
-                        sCodeBody += rArg + "(cm,cn) = " + sSelector + "\n";
-                        sCodeBody += "ENDDO\n\n";
-                      }
-                      else
-                      {
-                        sCodeBody += rArg + "(cm) = " + sSelector + "\n";
-                      }
+                      buildArgumentInitCode(rArg, 
+                                            ADVariableInfo,
+                                            rDefinedMap, 
+                                            sSelector,
+                                            sDeclarations,
+                                            sCodeBody);
                     }
 
                     bMulti = true;
