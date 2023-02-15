@@ -2535,6 +2535,111 @@ AdtSourceFileType adtSourceFileTypeFromFile(const string& rSourceFile)
   return (nSourceFileType);
 }
 
+//  ----------------------------------------------------------------------------
+
+void adtSourceExtensionFromType(string& rSourceFileExtension, AdtSourceFileType nSourceFileType)
+{
+  switch (nSourceFileType)
+  {
+    case CppHeaderFileType:
+    {
+      rSourceFileExtension = ".hpp";
+      break;
+    }
+    case CppSourceFileType:
+    {
+      rSourceFileExtension = ".cpp";
+      break;
+    }
+    case DelphiSourceFileType:
+    {
+      rSourceFileExtension = ".pas";
+      break;
+    }
+    case JavaSourceFileType:
+    {
+      rSourceFileExtension = ".j";
+      break;
+    }
+    case FortranSourceFileType:
+    {
+      rSourceFileExtension = ".f";
+      break;
+    }
+    default:
+    {
+      FAIL();
+      break;
+    }
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+bool adtCopyFileAndSubstitute(const char* pDestFile, const char* pSrcFile, const AdtStringByStringMap& rSubstitutionMap)
+{
+  bool bDone = false;
+
+  if ((pDestFile != 0) && (pSrcFile != 0))
+  {
+    AdtFile SrcFile;
+    AdtFile DestFile;
+
+    if (SrcFile.open(pSrcFile, "rt") && DestFile.open(pDestFile, "wt"))
+    {
+      AdtStringList           Lines;
+      AdtStringListConstIter  LinesIter;
+
+      SrcFile.readLines(Lines);
+
+      for (LinesIter = Lines.begin() ; LinesIter != Lines.end() ; ++LinesIter)
+      {
+        string sLine(*LinesIter);
+
+        for (AdtStringByStringMapConstIter Iter = rSubstitutionMap.begin() ; Iter != rSubstitutionMap.end() ; ++Iter)
+        {
+          string        sSubtitutedLine;
+          const string& sKey      = Iter->first;
+          const string& sSub      = Iter->second;
+          size_t        nKeyLen   = sKey.length();
+          const char*   pMatch    = ::strstr(sLine, sKey);
+          const char*   pLast     = sLine;
+          size_t        nLeftLen  = pMatch - pLast;
+
+          while ((pMatch != 0) && (pLast[0] != 0))
+          {
+            if (nLeftLen > 0)
+            {
+              sSubtitutedLine += string(sLine).left(nLeftLen);
+            }
+
+            sSubtitutedLine += sSub;
+
+            pLast     = pMatch + nKeyLen;
+            pMatch    = ::strstr(pLast, sKey);
+            nLeftLen  = pMatch - pLast;
+          }
+
+          sSubtitutedLine += pLast;
+          sLine            = sSubtitutedLine;
+
+          sSubtitutedLine.clear();
+        }
+
+        DestFile.write(sLine);
+        DestFile.newline();
+      }
+
+      SrcFile.close();
+      DestFile.close();
+
+      bDone = true;
+    }
+  }
+
+  return (bDone);
+}
+
 
 //  ----------------------------------------------------------------------------
 //  AdtSourceRoot method implementations

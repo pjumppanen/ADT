@@ -1181,6 +1181,8 @@ private:
   string                                R_TypeName;
   string                                ParentConstructorCallArgsFileName;
 
+  static AdtStringByStringMap           InitNP_Map;
+  static AdtStringByStringMap           InitNR_Map;
   static AdtAutoAttributePtrByStringMap GlobalsMap;
   static AdtAutoClassPtrByStringMap     ClassMap;
   static AdtAutoClass*                  CurrentClass;
@@ -1250,6 +1252,7 @@ protected:
 
   bool                  writeConstructorPhaseFiles(AdtSourceFileType nDestType,
                                                    AdtStringByStringMap& rLocalsMap,
+                                                   const char* pParentClassName,
                                                    const char* pDestFolder) const;
 
   bool                  writeArrayPlansInitFile(AdtSourceFileType nDestType,
@@ -1327,7 +1330,7 @@ public:
                                         const char* pFileName,
                                         int nLineNumber);
 
-  static void           includeDisableAutomation(bool bDisable);
+  static void           includeDisableAutomation(bool bDisable, const char* pFileName);
   static void           enableAutomation(bool bEnable, bool bWithAttributeDefsEnabled);
   static bool           automationEnabled();
   static bool           attributeDefsEnabled();
@@ -1342,6 +1345,7 @@ public:
                                               const char* pDestFolder,
                                               const char* pDestIncludeFolder,
                                               const char* pConstructorClassName,
+                                              const char* pParentClassName,
                                               int nClassNumber);
 
   static bool           buildClassConstructor(AdtStringList& rConstructorList,
@@ -1379,6 +1383,10 @@ public:
                                                     AdtSourceFileType nDestType,
                                                     const char* pClassName,
                                                     const char* pPathPrefix);
+
+  static void           initNRandNP(const char* pClass, 
+                                    const char* pNP, 
+                                    const char* pNR);
 
   static AdtAutoClass*  findClass(const char* pClassName);
 
@@ -1434,6 +1442,7 @@ public:
                                              const char* pDestFolder,
                                              const char* pDestIncludeFolder,
                                              const char* pConstructorClassName,
+                                             const char* pParentClassName,
                                              int nClassNumber) const;
 
   void                  inheritFrom(const AdtAutoClass* pParentClass);

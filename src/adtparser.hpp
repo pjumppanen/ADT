@@ -881,6 +881,8 @@ inline bool AdtParserContext::operator <=(const AdtParserContext& rA) const
 //  ----------------------------------------------------------------------------
 
 AdtSourceFileType adtSourceFileTypeFromFile(const string& rSourceFile);
+void              adtSourceExtensionFromType(string& rSourceFileExtension, AdtSourceFileType nSourceFileType);
+bool              adtCopyFileAndSubstitute(const char* pDestFile, const char* pSrcFile, const AdtStringByStringMap& rSubstitutionMap);
 
 
 //  ----------------------------------------------------------------------------

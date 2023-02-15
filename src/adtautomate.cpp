@@ -7398,6 +7398,8 @@ AdtAutoArray* AdtAutoFunction::addArray(const char* pName,
 //  ----------------------------------------------------------------------------
 //  AdtAutoClass method implementations
 //  ----------------------------------------------------------------------------
+AdtStringByStringMap            AdtAutoClass::InitNP_Map;
+AdtStringByStringMap            AdtAutoClass::InitNR_Map;
 AdtAutoAttributePtrByStringMap  AdtAutoClass::GlobalsMap;
 AdtAutoClassPtrByStringMap      AdtAutoClass::ClassMap;
 AdtAutoClass*                   AdtAutoClass::CurrentClass         = 0;
@@ -7589,8 +7591,32 @@ bool AdtAutoClass::setModeAndPhase(int nMode,
 
 //  ----------------------------------------------------------------------------
 
-void AdtAutoClass::includeDisableAutomation(bool bDisable)
+void AdtAutoClass::includeDisableAutomation(bool bDisable, const char* pFileName)
 {
+  // Only check reml file if not currently disabled. This should prevent multiple inclusion 
+  // of reml files for child classes.
+  if (!AdtAutoClass::IncludeDisabled)
+  {
+    string sFileName;
+
+    // If the include file matches partially with {ClassName}_reml. then don't disable it cos we want the content of those files
+    // to be processed. 
+    if (CurrentClass != 0)
+    {
+      UtlFilePath Path(pFileName);
+      sFileName += CurrentClass->ClassName;
+      sFileName += "_reml";
+      sFileName += Path.extension();
+
+      const char* pMatch = ::strstr(sFileName, pFileName);
+
+      if ((pMatch != 0) && (::strcmp(pFileName, pMatch) == 0) && bDisable)
+      {
+        bDisable = false;
+      }
+    }
+  }
+
   AdtAutoClass::IncludeDisabled = bDisable;
 }
 
@@ -7660,11 +7686,12 @@ void AdtAutoClass::exportAutomationFiles(AdtSourceFileType nDestType,
                                          const char* pDestFolder,
                                          const char* pDestIncludeFolder,
                                          const char* pConstructorClassName,
+                                         const char* pParentClassName,
                                          int nClassNumber)
 {
   if (CurrentClass != 0)
   {
-    CurrentClass->writeAutomationFiles(nDestType, pDestFolder, pDestIncludeFolder, pConstructorClassName, nClassNumber);
+    CurrentClass->writeAutomationFiles(nDestType, pDestFolder, pDestIncludeFolder, pConstructorClassName, pParentClassName, nClassNumber);
   }
 }
 
@@ -7915,6 +7942,26 @@ void AdtAutoClass::writeConstructorImplInclude(AdtFile& rFile,
                         nDestType,
                         pClassName);
 }
+
+//  ----------------------------------------------------------------------------
+
+void AdtAutoClass::initNRandNP(const char* pClass, 
+                               const char* pNP, 
+                               const char* pNR)
+{
+  if (pClass != 0)
+  {
+    if (pNP != 0)
+    {
+      InitNP_Map[pClass] = pNP;
+    }
+
+    if (pNR != 0)
+    {
+      InitNR_Map[pClass] = pNR;
+    }
+  }
+}                               
 
 //  ----------------------------------------------------------------------------
 
@@ -8925,10 +8972,31 @@ bool AdtAutoClass::writeConstructorLocalsFile(AdtSourceFileType nDestType,
 
 bool AdtAutoClass::writeConstructorPhaseFiles(AdtSourceFileType nDestType,
                                               AdtStringByStringMap& rLocalsMap,
+                                              const char* pParentClassName,
                                               const char* pDestFolder) const
 {
   AdtFile rFile;
   bool    bWritten = false;
+  string  sDelimeter;
+
+  switch (nDestType)
+  {
+    case DelphiSourceFileType:
+    case CppSourceFileType:
+    case CppHeaderFileType:
+    case JavaSourceFileType:
+    {
+      sDelimeter = ";";
+      break;
+    }
+
+    case FortranSourceFileType:
+    case UnknownSourceFileType:
+    default:
+    {
+      break;
+    }
+  }
 
   for (int cn = 1 ; cn <= MaxPhase ; cn++)
   {
@@ -8989,6 +9057,28 @@ bool AdtAutoClass::writeConstructorPhaseFiles(AdtSourceFileType nDestType,
               (pAttribute->mode()      == AdtAutoMode_AUTOINIT))
           {
             pAttribute->writeVarInitialisation(rFile, nDestType, rLocalsMap, ClassName, !rIsScalar[cm]);
+          }
+        }
+
+        if ((pParentClassName != 0       ) && 
+            (cn               == MaxPhase) && rIsScalar[cm])
+        {
+          AdtStringByStringMapIter Iter = InitNP_Map.find(pParentClassName);
+
+          if (Iter != InitNP_Map.end())
+          {
+            rFile.write(Iter->second);
+            rFile.write(sDelimeter);
+            rFile.newline();
+          }
+
+          Iter = InitNR_Map.find(pParentClassName);
+
+          if (Iter != InitNR_Map.end())
+          {
+            rFile.write(Iter->second);
+            rFile.write(sDelimeter);
+            rFile.newline();
           }
         }
 
@@ -9918,6 +10008,7 @@ bool AdtAutoClass::writeAutomationFiles(AdtSourceFileType nDestType,
                                         const char* pDestFolder,
                                         const char* pDestIncludeFolder,
                                         const char* pConstructorClassName,
+                                        const char* pParentClassName,
                                         int nClassNumber) const
 {
   bool bWritten = false;
@@ -9931,7 +10022,7 @@ bool AdtAutoClass::writeAutomationFiles(AdtSourceFileType nDestType,
 
     writeConstructorArgsFile(nDestType, pDestIncludeFolder, false);
     writeConstructorArgsFile(nDestType, pDestIncludeFolder, true);
-    writeConstructorPhaseFiles(nDestType, LocalsMap, pDestIncludeFolder);
+    writeConstructorPhaseFiles(nDestType, LocalsMap, pParentClassName, pDestIncludeFolder);
     writeDeclLibInterfaceMethodsFile(nDestType, pDestIncludeFolder);
     writeDeclLibInterfaceConstructorFile(nDestType, pDestIncludeFolder, pConstructorClassName);
     writeImplLibInterfaceConstructorFile(nDestType, pDestIncludeFolder, pConstructorClassName);

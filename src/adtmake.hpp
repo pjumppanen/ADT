@@ -788,6 +788,7 @@ private:
   AdtStringList             FortranIncludeFiles;
   AdtMakeClassList          ClassList;
   AdtSourceFileType         SourceFileType;
+  bool                      HasReml;
 
 protected:
   void                      reset();
@@ -838,6 +839,7 @@ public:
   const string&             sourceOptionsFile(AdtSourceFileType nType) const;
   const AdtStringList&      paths() const;
   const AdtStringList&      blackBoxList() const;
+  bool                      hasReml() const;
 
   static int                fileTypeToIndex(AdtSourceFileType nType);
   static AdtSourceFileType  sourceFileType(const string& rSourceFile);
@@ -906,6 +908,13 @@ inline const AdtStringList& AdtMakeCommand::paths() const
 inline const AdtStringList& AdtMakeCommand::blackBoxList() const
 {
   return (BlackBoxList);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtMakeCommand::hasReml() const
+{
+  return (HasReml);
 }
 
 

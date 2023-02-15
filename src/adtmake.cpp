@@ -3040,6 +3040,7 @@ void AdtMakeCommand::reset()
   WorkingDirectory  = "";
   IncludeDirectory  = "";
   SourceFileType    = UnknownSourceFileType;
+  HasReml           = false;
 
   Switches.clear();
   Paths.clear();
@@ -3078,6 +3079,13 @@ void AdtMakeCommand::addDefaultPaths()
   string      sExePath(sPath);
   string      sExePathLessSlash(sExePath);
   string      sRootPath;
+  const char* pObjs = ::strstr(sExePath, "objs");
+
+  // Check if running a development version to simplify debugging
+  if (pObjs != 0)
+  {
+    sExePathLessSlash.left(sExePathLessSlash.length() - strlen(pObjs) + 5);
+  }
 
   sExePathLessSlash.left(sExePathLessSlash.length() - 1);
 
@@ -3281,6 +3289,7 @@ AdtMakeCommand::AdtMakeCommand()
    ClassList()
 {
   SourceFileType = UnknownSourceFileType;
+  HasReml        = false;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3301,6 +3310,8 @@ AdtMakeCommand::AdtMakeCommand(const AdtMakeCommand& rCopy)
   {
     SourceOptionsFile[cn] = rCopy.SourceOptionsFile[cn];
   }
+
+  HasReml = rCopy.HasReml;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3480,6 +3491,94 @@ int AdtMakeCommand::make(AdtMakeIncremental& rBuildCheck)
 
   AdtCppScopeManager::resetGlobalScopeManager();
   AdtCppScopeManager::mapNames(false);
+
+  if (HasReml)
+  {
+    // Need to check for existence of reml source files and if not present then
+    // copy over and macro substitute it. reml code should only be copied over 
+    // and included for the base class.
+    AdtMakeClass&         rMakeClass = ClassList.front();
+    AdtSourceFileType     nType      = adtSourceFileTypeFromFile(rMakeClass.sourceFile());
+    UtlFilePath           Path(rMakeClass.sourceFile());
+    string                sBaseName(rMakeClass.parentClassName());
+    AdtStringByStringMap  SubstitutionMap;
+
+    SubstitutionMap["$(classname)"] = rMakeClass.parentClassName();
+
+    sBaseName += "_reml";
+
+    Path.name(sBaseName);
+
+    switch (nType)
+    {
+      case CppHeaderFileType:
+      case CppSourceFileType:
+      {
+        string sFileAndPath;
+        string sIncludeFile;
+        string sSourceFile;
+
+        Path.extension(".hpp");
+        Path.join(sIncludeFile);
+
+        if (!findFile(sIncludeFile, sFileAndPath))
+        {
+          // Add reml include
+          if (findFile("reml.hpp", sFileAndPath))
+          {
+            if (!adtCopyFileAndSubstitute(sIncludeFile, sFileAndPath, SubstitutionMap))
+            {
+              // Failed, display error message and quit
+            }
+          }
+        }
+
+        Path.extension(".cpp");
+        Path.join(sSourceFile);
+
+        if (!findFile(sSourceFile, sFileAndPath))
+        {
+          // Add reml source
+          if (findFile("reml.cpp", sFileAndPath))
+          {
+            if (!adtCopyFileAndSubstitute(sSourceFile, sFileAndPath, SubstitutionMap))
+            {
+              // Failed, display error message and quit
+            }
+          }
+        }
+        break;
+      }
+      case DelphiSourceFileType:
+      {
+        string sFileAndPath;
+        string sSourceFile;
+
+        Path.extension(".pas");
+        Path.join(sSourceFile);
+
+        if (!findFile(sSourceFile, sFileAndPath))
+        {
+          // Add reml source
+          if (findFile("reml.pas", sFileAndPath))
+          {
+            if (!adtCopyFileAndSubstitute(sSourceFile, sFileAndPath, SubstitutionMap))
+            {
+              // Failed, display error message and quit
+            }
+          }
+        }
+        break;
+      }
+      case JavaSourceFileType:
+      case FortranSourceFileType:
+      default:
+      {
+        // Not supported at present
+        break;
+      }
+    }
+  }
 
   //Open and read options file
   for (cn = 0 ; cn < NUM_SOURCE_TYPES ; cn++)
@@ -3813,6 +3912,8 @@ int AdtMakeCommand::make(AdtMakeIncremental& rBuildCheck)
 void AdtMakeCommand::addClass(const AdtMakeClass& rClass)
 {
   ClassList.push_back(rClass);
+
+  HasReml = HasReml || rClass.hasReml();
 }
 
 //  ----------------------------------------------------------------------------
