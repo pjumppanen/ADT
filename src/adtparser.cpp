@@ -2603,19 +2603,22 @@ bool adtCopyFileAndSubstitute(const char* pDestFile, const char* pSrcFile, const
           const string& sSub      = Iter->second;
           size_t        nKeyLen   = sKey.length();
           const char*   pMatch    = ::strstr(sLine, sKey);
-          const char*   pLast     = sLine;
+          const char*   pFirst    = sLine;
+          const char*   pLast     = pFirst;
+          size_t        nPos      = 0;
           size_t        nLeftLen  = pMatch - pLast;
 
           while ((pMatch != 0) && (pLast[0] != 0))
           {
             if (nLeftLen > 0)
             {
-              sSubtitutedLine += string(sLine).left(nLeftLen);
+              sSubtitutedLine += string(sLine).mid(nPos, nLeftLen);
             }
 
             sSubtitutedLine += sSub;
 
             pLast     = pMatch + nKeyLen;
+            nPos      = pLast - pFirst;
             pMatch    = ::strstr(pLast, sKey);
             nLeftLen  = pMatch - pLast;
           }
