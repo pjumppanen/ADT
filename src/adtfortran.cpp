@@ -4863,6 +4863,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
                   case ForWrapper_HESSIAN:
                   case ForWrapper_REML:
+                  case ForWrapper_REMLGRAD:
                   case ForWrapper_LIKELIHOOD:
                   default:
                   {
@@ -5295,6 +5296,11 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
           rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
+          break;
+        }
+
+        case ForWrapper_REMLGRAD:
+        {
           break;
         }
 

@@ -948,6 +948,7 @@ private:
 protected:
   static void                   updateOptions(AdtOpType nNextOpType = OtherOpType);
   static void                   checkAddCommandOperation(AdtMakeCommandOperation& rCommandOperation);
+  static void                   checkPostAddCommandOperation(AdtMakeCommandOperation& rCommandOperation);
 
 public:
   AdtMakeSystem();

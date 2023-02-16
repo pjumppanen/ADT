@@ -1099,7 +1099,7 @@ bool AdtMakeCommandOperation::execute(const AdtMakeCommand& rParent,
 
       bDone = true;
     } 
-    else if ((Mode == "reml") || (Mode == "likelihood") || (Mode == "decode"))
+    else if ((Mode == "reml") || (Mode == "likelihood") || (Mode == "decode") || (Mode == "remlgrad"))
     {
       // Make this succeed to allow reml code to be added in makeWrapper() call
       rOutputFileName = pSourceFile;
@@ -1675,6 +1675,11 @@ const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunct
   {
     rWrapperFunctionName += "reml";
     nWrapperType          = ForWrapper_REML;
+  }
+  else if (Mode == "remlgrad")
+  {
+    rWrapperFunctionName += "grad";
+    nWrapperType          = ForWrapper_REMLGRAD;
   }
   else if (Mode == "likelihood")
   {
@@ -4577,27 +4582,39 @@ void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOp
 
     checkAddCommandOperation(HessianLikelihoodFn);
     CurrentClass.addOperation(HessianLikelihoodFn);
+  }
+}
 
-    // Add command to find diff of hessian of likelihood function
-    string HessianWrapperName;
+//  ----------------------------------------------------------------------------
 
-    HessianLikelihoodFn.wrapperFunctionName(HessianWrapperName, nWrapperType);
+void AdtMakeSystem::checkPostAddCommandOperation(AdtMakeCommandOperation& rCommandOperation)
+{
+  if (rCommandOperation.mode().eq("reml"))
+  {
+    // Add command to find diff of reml function
+    AdtMakeCommandOperation DiffFn;
+    AdtStringList           rVars;
+    AdtStringList           rOutVars;
+    AdtFortranWrapperType   nWrapperType;
+    string                  RemlFunctionName;
 
-    rVars.clear();
-    rOutVars.clear();
+    rCommandOperation.wrapperFunctionName(RemlFunctionName, nWrapperType);
 
     rVars.push_front("par");
-    rOutVars.push_front("pHessian");
+    rOutVars.push_front(RemlFunctionName);
 
-    AdtMakeCommandOperation DiffHessianLikelihoodFn(rCommandOperation);
+    DiffFn.functionName(RemlFunctionName);
+    DiffFn.userOptions(rCommandOperation.userOptions());
+    DiffFn.pragmas(rCommandOperation.pragmas());
+    DiffFn.vars(rVars);
+    DiffFn.outVars(rOutVars);
+    DiffFn.mode("f");
+    DiffFn.makeWrapper(true);
 
-    DiffHessianLikelihoodFn.functionName(HessianWrapperName);
-    DiffHessianLikelihoodFn.vars(rVars);
-    DiffHessianLikelihoodFn.outVars(rOutVars);
-    DiffHessianLikelihoodFn.mode("f");
-    DiffHessianLikelihoodFn.makeWrapper(true);
+    CurrentClass.addOperation(DiffFn);
 
-    CurrentClass.addOperation(DiffHessianLikelihoodFn);
+    // Add command to add gradient function built add of remldiff
+    // FixMe
   }
 }
 
@@ -4609,6 +4626,7 @@ void AdtMakeSystem::commandClose()
   {
     checkAddCommandOperation(CurrentCommandOperation);
     CurrentClass.addOperation(CurrentCommandOperation);
+    checkPostAddCommandOperation(CurrentCommandOperation);
 
     CurrentCommandOperation.reset();
   }
