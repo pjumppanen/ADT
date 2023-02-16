@@ -5232,7 +5232,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           FortranOutFunction.write("REAL(8) h");
           FortranOutFunction.newline();
           FortranOutFunction.newline();
-          FortranOutFunction.write("h = ((-NR * log(2 * M_PI) + logDetHessianRE(re, par, Hessian, Cholesky)) * 0.5) + ");
+          FortranOutFunction.write("h = ((-NR * log(2 * M_PI) + ");
+          FortranOutFunction.write(sClassPrefix);
+          FortranOutFunction.write("logDetHessianRE(re, par, Hessian, Cholesky)) * 0.5) + ");
           FortranOutFunction.write(sNegLogLikelihoodFunctionName);
           FortranOutFunction.write("(re,par)");
           FortranOutFunction.newline();
@@ -5273,7 +5275,9 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           FortranOutFunction.write("REAL(8) h");
           FortranOutFunction.newline();
           FortranOutFunction.newline();
-          FortranOutFunction.write("CALL solveInner(reHat,par)");
+          FortranOutFunction.write("CALL ");
+          FortranOutFunction.write(sClassPrefix);
+          FortranOutFunction.write("solveInner(reHat,par)");
           FortranOutFunction.newline();
           FortranOutFunction.write("CALL ");
           FortranOutFunction.write(sHessianFunctionName);
