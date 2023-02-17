@@ -4691,36 +4691,62 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                     }
                     else
                     {
-                      sNewArg = sLastArg + "_dir";
-
-                      FortranOutFunction.write(", ");
-                      FortranOutFunction.write(sNewArg);
-
-                      sNewDeclaration += sNewArg;
-
-                      sDeclarations += sNewDeclaration;
-                      sDeclarations += "\n";
-
-                      if (sUpperDim.length() > 0)
+                      if (VarsMap.find(sLastArg) != VarsMap.end())
                       {
-                        buildArgumentInitCode(rArg, 
-                                              ADVariableInfo,
-                                              rDefinedMap, 
-                                              "0.0",
-                                              sDeclarations,
-                                              sCodeBody);
+                        sNewArg = sLastArg + "_dir";
 
-                        sCodeBody += "\n";
-                        sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
-                        sCodeBody += rArg + "(" + sNewArg + ") = 1.0\n";
-                        sCodeBody += "END IF\n\n";
+                        FortranOutFunction.write(", ");
+                        FortranOutFunction.write(sNewArg);
+
+                        sNewDeclaration += sNewArg;
+
+                        sDeclarations += sNewDeclaration;
+                        sDeclarations += "\n";
+
+                        if (sUpperDim.length() > 0)
+                        {
+                          buildArgumentInitCode(rArg, 
+                                                ADVariableInfo,
+                                                rDefinedMap, 
+                                                "0.0",
+                                                sDeclarations,
+                                                sCodeBody);
+
+                          sCodeBody += "\n";
+                          sCodeBody += "IF (" + sNewArg + " >= " + sLowerDim + " .AND. " + sNewArg + " <= " + sUpperDim + ") THEN\n";
+                          sCodeBody += rArg + "(" + sNewArg + ") = 1.0\n";
+                          sCodeBody += "END IF\n\n";
+                        }
+                        else
+                        {
+                          sCodeBody += rArg + " = 0.0\n";
+                          sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
+                          sCodeBody += rArg + " = 1.0\n";
+                          sCodeBody += "END IF\n\n";
+                        }
                       }
                       else
                       {
-                        sCodeBody += rArg + " = 0\n";
-                        sCodeBody += "IF (" + sNewArg + " > 0) THEN\n";
-                        sCodeBody += rArg + " = 1\n";
-                        sCodeBody += "END IF\n\n";
+                        // Diff var is input that needs to be 1 initialised and created with 
+                        // module scope if it is a vector.
+                        bAddLocal   = (nDimensions == 0);
+                        bAddDecl    = true;
+                        bWriteArg   = false;
+                        bWithIntent = false;
+
+                        if (sUpperDim.length() > 0)
+                        {
+                          buildArgumentInitCode(rArg, 
+                                                ADVariableInfo,
+                                                rDefinedMap, 
+                                                "1.0",
+                                                sDeclarations,
+                                                sCodeBody);
+                        }
+                        else
+                        {
+                          sCodeBody += rArg + " = 1.0\n";
+                        }
                       }
                     }
                     break;
@@ -4742,36 +4768,62 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                     }
                     else
                     {
-                      sNewArg = sLastArg + "_dir";
-
-                      FortranOutFunction.write(", ");
-                      FortranOutFunction.write(sNewArg);
-
-                      sNewDeclaration += sNewArg;
-
-                      sDeclarations += sNewDeclaration + "(nbdirsmax)";
-                      sDeclarations += "\n";
-
-                      if (sUpperDim.length() > 0)
+                      if (VarsMap.find(sLastArg) != VarsMap.end())
                       {
-                        buildArgumentInitCode(rArg, 
-                                              ADVariableInfo,
-                                              rDefinedMap, 
-                                              "0.0",
-                                              sDeclarations,
-                                              sCodeBody);
+                        sNewArg = sLastArg + "_dir";
 
-                        sCodeBody += "\n";
-                        sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
-                        sCodeBody += rArg + "(cm," + sNewArg + ") = 1.0\n";
-                        sCodeBody += "END IF\n\n";
+                        FortranOutFunction.write(", ");
+                        FortranOutFunction.write(sNewArg);
+
+                        sNewDeclaration += sNewArg;
+
+                        sDeclarations += sNewDeclaration + "(nbdirsmax)";
+                        sDeclarations += "\n";
+
+                        if (sUpperDim.length() > 0)
+                        {
+                          buildArgumentInitCode(rArg, 
+                                                ADVariableInfo,
+                                                rDefinedMap, 
+                                                "0.0",
+                                                sDeclarations,
+                                                sCodeBody);
+
+                          sCodeBody += "\n";
+                          sCodeBody += "IF (" + sNewArg + "(cm) >= " + sLowerDim + " .AND. " + sNewArg + "(cm) <= " + sUpperDim + ") THEN\n";
+                          sCodeBody += rArg + "(cm," + sNewArg + ") = 1.0\n";
+                          sCodeBody += "END IF\n\n";
+                        }
+                        else
+                        {
+                          sCodeBody += rArg + "(cm) = 0.0\n";
+                          sCodeBody += "IF (" + sNewArg + "(cm) > 0) THEN\n";
+                          sCodeBody += rArg + "(cm) = 1.0\n";
+                          sCodeBody += "END IF\n\n";
+                        }
                       }
                       else
                       {
-                        sCodeBody += rArg + "(cm) = 0.0\n";
-                        sCodeBody += "IF (" + sNewArg + "(cm) > 0) THEN\n";
-                        sCodeBody += rArg + "(cm) = 1.0\n";
-                        sCodeBody += "END IF\n\n";
+                        // Multi-Diff var is input that needs to be 1 initialised and created with 
+                        // module scope if it is a vector.
+                        bAddLocal   = (nDimensions == 0);
+                        bAddDecl    = true;
+                        bWriteArg   = false;
+                        bWithIntent = false;
+
+                        if (sUpperDim.length() > 0)
+                        {
+                          buildArgumentInitCode(rArg, 
+                                                ADVariableInfo,
+                                                rDefinedMap, 
+                                                "1.0",
+                                                sDeclarations,
+                                                sCodeBody);
+                        }
+                        else
+                        {
+                          sCodeBody += rArg + "(cm) = 1.0\n";
+                        }
                       }
                     }
 
@@ -5305,6 +5357,22 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
         case ForWrapper_REMLGRAD:
         {
+          int cn = 1;
+          // FixMe
+          // Structure of required gradient function needed to be generated
+          // SUBROUTINE REDev__grad_dpar_reml_u_thetalogLikelihood(pGradient, reHat, Par)
+          //   REAL(8) , INTENT (IN) :: reHat(NR) 
+          //   REAL(8) , INTENT (IN) :: Par(NP) 
+          //   REAL(8) , INTENT (OUT) :: pGradient(NP)
+          //   INTEGER(4) :: cn 
+          //
+          //   USE COMMON
+          //
+          //   DO cn = 1,NP
+          //     pGradient(cn) = REDev__diff_dpar_reml_u_thetalogLikelihood(reHat, Par, cn)
+          //   ENDDO
+          //
+          // END SUBROUTINE
           break;
         }
 
