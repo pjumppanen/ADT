@@ -1634,9 +1634,10 @@ const string& AdtMakeCommandOperation::qualifiedADFunctionName(string& rFunction
 
 //  ----------------------------------------------------------------------------
 
-const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunctionName,
-                                                           AdtFortranWrapperType& nWrapperType, 
-                                                           const char* pClassName) const
+const string& AdtMakeCommandOperation::wrapperFunctionNameFromMode(string& rWrapperFunctionName,
+                                                                   const string& rMode, 
+                                                                   AdtFortranWrapperType& nWrapperType, 
+                                                                   const char* pClassName) const
 {
   rWrapperFunctionName.clear();
 
@@ -1646,42 +1647,42 @@ const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunct
     rWrapperFunctionName += "__";
   }
 
-  if (Mode == "f")
+  if (rMode == "f")
   {
     rWrapperFunctionName += "diff";
     nWrapperType          = ForWrapper_DIFF;
   }
-  else if (Mode == "mf")
+  else if (rMode == "mf")
   {
     rWrapperFunctionName += "multiDiff";
     nWrapperType          = ForWrapper_MULTIDIFF;
   }
-  else if (Mode == "r")
+  else if (rMode == "r")
   {
     rWrapperFunctionName += "grad";
     nWrapperType          = ForWrapper_GRAD;
   }
-  else if (Mode == "mr")
+  else if (rMode == "mr")
   {
     rWrapperFunctionName += "multiGrad";
     nWrapperType          = ForWrapper_MULTIGRAD;
   }
-  else if (Mode == "hessian")
+  else if (rMode == "hessian")
   {
     rWrapperFunctionName += "hessian";
     nWrapperType          = ForWrapper_HESSIAN;
   }
-  else if (Mode == "reml")
+  else if (rMode == "reml")
   {
     rWrapperFunctionName += "reml";
     nWrapperType          = ForWrapper_REML;
   }
-  else if (Mode == "remlgrad")
+  else if (rMode == "remlgrad")
   {
     rWrapperFunctionName += "grad";
     nWrapperType          = ForWrapper_REMLGRAD;
   }
-  else if (Mode == "likelihood")
+  else if (rMode == "likelihood")
   {
     rWrapperFunctionName += "lkh";
     nWrapperType          = ForWrapper_LIKELIHOOD;
@@ -1692,6 +1693,18 @@ const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunct
   rWrapperFunctionName += FunctionName;
 
   return (rWrapperFunctionName);
+}                                                                   
+
+//  ----------------------------------------------------------------------------
+
+const string& AdtMakeCommandOperation::wrapperFunctionName(string& rWrapperFunctionName,
+                                                           AdtFortranWrapperType& nWrapperType, 
+                                                           const char* pClassName) const
+{
+  return (wrapperFunctionNameFromMode(rWrapperFunctionName,
+                                      Mode, 
+                                      nWrapperType, 
+                                      pClassName));
 }
 
 //  ----------------------------------------------------------------------------
@@ -4613,8 +4626,27 @@ void AdtMakeSystem::checkPostAddCommandOperation(AdtMakeCommandOperation& rComma
 
     CurrentClass.addOperation(DiffFn);
 
-    // Add command to add gradient function built add of remldiff
-    // FixMe
+    // Add command to add gradient function for reml built from remldiff
+    AdtMakeCommandOperation RemlDiffFn;
+    string                  FunctionName;
+
+    rCommandOperation.wrapperFunctionNameFromMode(FunctionName, "reml", nWrapperType);
+
+    rVars.clear();
+    rOutVars.clear();
+
+    rVars.push_front("par");
+    rOutVars.push_front("pGradient");
+
+    RemlDiffFn.functionName(FunctionName);
+    RemlDiffFn.userOptions(rCommandOperation.userOptions());
+    RemlDiffFn.pragmas(rCommandOperation.pragmas());
+    RemlDiffFn.vars(rVars);
+    RemlDiffFn.outVars(rOutVars);
+    RemlDiffFn.mode("remlgrad");
+    RemlDiffFn.makeWrapper(true);
+
+    CurrentClass.addOperation(RemlDiffFn);
   }
 }
 

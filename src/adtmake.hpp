@@ -290,6 +290,11 @@ public:
   const string&         qualifiedADFunctionName(string& rFunctionName,
                                                 const char* pClassName) const;
 
+  const string&         wrapperFunctionNameFromMode(string& rWrapperFunctionName,
+                                                    const string& rMode, 
+                                                    AdtFortranWrapperType& nWrapperType, 
+                                                    const char* pClassName = 0) const;
+
   const string&         wrapperFunctionName(string& rWrapperFunctionName,
                                             AdtFortranWrapperType& nWrapperType, 
                                             const char* pClassName = 0) const;

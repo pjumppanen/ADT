@@ -5357,8 +5357,6 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
         case ForWrapper_REMLGRAD:
         {
-          int cn = 1;
-          // FixMe
           // Structure of required gradient function needed to be generated
           // SUBROUTINE REDev__grad_dpar_reml_u_thetalogLikelihood(pGradient, reHat, Par)
           //   REAL(8) , INTENT (IN) :: reHat(NR) 
@@ -5373,6 +5371,66 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           //   ENDDO
           //
           // END SUBROUTINE
+          // Create required reml gradient function
+          AdtFile     FortranOutFunction(true);
+          string      sCodeFunction;
+          string      sRemlDiffFunctionName(sClassPrefix);
+          string      sGradPrefix(sClassPrefix);
+
+          sGradPrefix += "grad";
+
+          const char* pFnPrefix = strstr(pWrapperFunctionName, sGradPrefix);
+
+          sRemlDiffFunctionName += "diff";
+
+          if (pFnPrefix == pWrapperFunctionName)
+          {
+            const char* pBaseName = pFnPrefix + sGradPrefix.length();
+
+            sRemlDiffFunctionName += pBaseName;
+          }
+
+          sCommentBlock   = "\n! ----------------------------------------------------------------------------\n";
+          sCommentBlock  += "\n! reml gradient function for\n!   ";
+          sCommentBlock  += pFunctionName;
+          sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+          FortranOutFunction.open(sCodeFunction);
+
+          FortranOutFunction.write("SUBROUTINE ");
+          FortranOutFunction.write(pWrapperFunctionName);
+          FortranOutFunction.write("(pGradient, reHat, par)");
+          FortranOutFunction.incrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: reHat(NR)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (OUT) :: pGradient(NP)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("INTEGER(4) :: cn");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("USE COMMON");
+          FortranOutFunction.newline();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("DO cn = 1,NP");
+          FortranOutFunction.incrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("pGradient(cn) = ");
+          FortranOutFunction.write(sRemlDiffFunctionName);
+          FortranOutFunction.write("(reHat, par, cn)");
+          FortranOutFunction.decrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("ENDDO");
+          FortranOutFunction.newline();
+          FortranOutFunction.decrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("END SUBROUTINE ");
+          FortranOutFunction.newline();
+          FortranOutFunction.close();
+
+          rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
+          rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
           break;
         }
 
