@@ -5318,7 +5318,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           FortranOutFunction.write("(reHat,par)");
           FortranOutFunction.incrementIndent();
           FortranOutFunction.newline();
-          FortranOutFunction.write("REAL(8) , INTENT (IN) :: reHat(NR)");
+          FortranOutFunction.write("REAL(8) , INTENT (INOUT) :: reHat(NR)");
           FortranOutFunction.newline();
           FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
           FortranOutFunction.newline();
@@ -5377,7 +5377,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           FortranOutFunction.write("(reHat, dpar_bre_best, par, dir)");
           FortranOutFunction.incrementIndent();
           FortranOutFunction.newline();
-          FortranOutFunction.write("REAL(8) , INTENT (IN) :: reHat(NR)");
+          FortranOutFunction.write("REAL(8) , INTENT (INOUT) :: reHat(NR)");
           FortranOutFunction.newline();
           FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
           FortranOutFunction.newline();
@@ -5450,7 +5450,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           FortranOutFunction.write("(pGradient, reHat, par)");
           FortranOutFunction.incrementIndent();
           FortranOutFunction.newline();
-          FortranOutFunction.write("REAL(8) , INTENT (IN) :: reHat(NR)");
+          FortranOutFunction.write("REAL(8) , INTENT (INOUT) :: reHat(NR)");
           FortranOutFunction.newline();
           FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
           FortranOutFunction.newline();
@@ -5920,7 +5920,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
             FortranOutFunction.newline();
             FortranOutFunction.write("CALL ");
             FortranOutFunction.write(sGradFunction);
-            FortranOutFunction.write("(reHat, Par, gr)");
+            FortranOutFunction.write("(reHat, gr, Par)");
             FortranOutFunction.decrementIndent();
             FortranOutFunction.newline();
             FortranOutFunction.write("END SUBROUTINE");
