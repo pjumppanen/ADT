@@ -141,7 +141,7 @@ void $(classname)::inner_simfn(int* indic, int* n, double* re, double* f, double
 
   //re - 1 and gr - 1 because we are using 1 based arrays
   f[0] = Context->pThis->innerObjective(n[0], re - 1);
-  Context->pThis->innerGradient(n[0], re, gr - 1);
+  Context->pThis->innerGradient(n[0], re - 1, gr - 1);
 }
             
 // ----------------------------------------------------------------------------
