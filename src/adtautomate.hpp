@@ -284,6 +284,7 @@ class AdtAutoAttribute : public UtlReferenceCount
 private:
   string              ClassName;
   string              Name;
+  string              R_Name;
   AdtAtributeType     AttributeType;
   AdtAutoType         Type;
   AdtAutoMode         Mode;
@@ -407,6 +408,7 @@ public:
 
   const string&       className() const;
   const string&       name() const;
+  const string&       R_name() const;
   AdtAtributeType     attributeType() const;
   AdtAutoType         type() const;
   AdtAutoMode         mode() const;
@@ -485,6 +487,13 @@ inline const string& AdtAutoAttribute::className() const
 inline const string& AdtAutoAttribute::name() const
 {
   return (Name);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline const string&  AdtAutoAttribute::R_name() const
+{
+  return (R_Name);
 }
 
 //  ----------------------------------------------------------------------------

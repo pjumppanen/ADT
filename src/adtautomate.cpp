@@ -3219,6 +3219,7 @@ AdtAutoAttribute::AdtAutoAttribute(const char* pName,
                                    int nLineNumber)
  : UtlReferenceCount(),
    Name(pName),
+   R_Name(),
    ClassName(pClassName),
    FileName(pFileName)
 {
@@ -3230,6 +3231,13 @@ AdtAutoAttribute::AdtAutoAttribute(const char* pName,
   NoInterface         = bNoInterface;
   WithInitialisation  = bWithInitialisation;
   LineNumber          = nLineNumber;
+
+  if (Name[0] == '_')
+  {
+    R_Name = "r";
+  }
+
+  R_Name += Name;
 }
 
 //  ----------------------------------------------------------------------------
@@ -3237,6 +3245,7 @@ AdtAutoAttribute::AdtAutoAttribute(const char* pName,
 AdtAutoAttribute::AdtAutoAttribute(const AdtAutoAttribute& rCopy)
  : UtlReferenceCount(),
    Name(rCopy.Name),
+   R_Name(rCopy.R_Name),
    ClassName(rCopy.ClassName),
    FileName(rCopy.FileName)
 {
@@ -7254,7 +7263,7 @@ void AdtAutoFunction::writeRInterface(AdtFile& rFile,
 
       if (pAttribute != 0)
       {
-        rFile.write(pAttribute->name().c_str());
+        rFile.write(pAttribute->R_name().c_str());
       }
       else
       {
@@ -7300,12 +7309,12 @@ void AdtAutoFunction::writeRInterface(AdtFile& rFile,
         {
           Helper.writeR_typeCast(rFile,
                                  pAttribute->type(),
-                                 pAttribute->name().c_str(),
-                                 pAttribute->name().c_str());
+                                 pAttribute->R_name().c_str(),
+                                 pAttribute->R_name().c_str());
         }
         else
         {
-          rFile.write(pAttribute->name());
+          rFile.write(pAttribute->R_name());
         }
       }
       else
