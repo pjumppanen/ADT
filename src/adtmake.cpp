@@ -4595,6 +4595,31 @@ void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOp
 
     checkAddCommandOperation(HessianLikelihoodFn);
     CurrentClass.addOperation(HessianLikelihoodFn);
+
+     // Add command to find diff of gradient of likelihood function
+    string GradLikelihoodWrapperName;
+
+    GradLikelihoodFn.wrapperFunctionName(GradLikelihoodWrapperName, nWrapperType);
+
+    rVars.clear();
+    rOutVars.clear();
+
+    string  sOutVar("re");
+
+    sOutVar += GradLikelihoodFn.varSuffix();
+
+    rVars.push_front("par");
+    rOutVars.push_front(sOutVar);
+
+    AdtMakeCommandOperation DiffGradLikelihoodFn(rCommandOperation);
+
+    DiffGradLikelihoodFn.functionName(GradLikelihoodWrapperName);
+    DiffGradLikelihoodFn.vars(rVars);
+    DiffGradLikelihoodFn.outVars(rOutVars);
+    DiffGradLikelihoodFn.mode("f");
+    DiffGradLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffGradLikelihoodFn);
   }
 }
 

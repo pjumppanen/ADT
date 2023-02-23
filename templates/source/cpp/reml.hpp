@@ -9,15 +9,12 @@ protected:
   ARRAY_1D      GradRun /* NR */;
   ARRAY_1D      Par /* NP */;
   ARRAY_1D      CheckPar /* NP */;
-  ARRAY_1D      Dir /* NR */;
-  ARRAY_1D      Dir2 /* NP */;
-  ARRAY_1D      TempRow/* NR */;
-  ARRAY_1D      TempRow2/* NP */;
   ARRAY_2D      Hessian/* NR,NR */;
   ARRAY_2D      Cholesky/* NR,NR */;
-  ARRAY_2D      ReParXCovar/* NR,NP */;
+  ARRAY_2D      InvHessian/* NR,NR */;
   ARRAY_1D      var /* NR */;
   ARRAY_1D      zm /* 0 : NR * (NR + 13) / 2 */;
+  ARRAY_1D      dpar_bre_best /* NR */;
   bool          Dirty;
 
 protected:
@@ -50,6 +47,9 @@ protected:
 
   virtual double  innerObjective(int n, ARRAY_1D re) = 0;
   virtual void    innerGradient(int n, ARRAY_1D re, ARRAY_1D gr) = 0;
+  virtual void    diff_par_grad_re_likelihood(const ARRAY_1D reHat  /* NR */, ARRAY_1D dpar_bre_best /* NR */, const ARRAY_1D Par /* NP */, int nDir) = 0;
+
+  void            SOLVEINNER_DPAR(const ARRAY_1D reHat/* NR */, ARRAY_1D pDiff/* NR*/, const ARRAY_1D Par/* NP */, const ARRAY_1D pard_par/* NP */);
 #endif
 
   // < BLACKBOX ReadNotWritten:(0,1)

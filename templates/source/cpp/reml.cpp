@@ -338,6 +338,39 @@ void $(classname)::solveInner(ARRAY_1D reHat/* NR */, const ARRAY_1D par/* NP */
   Dirty = false;
 }
 
+// ----------------------------------------------------------------------------
+
+void $(classname)::SOLVEINNER_DPAR(const ARRAY_1D reHat/* NR */, ARRAY_1D pDiff/* NR*/, const ARRAY_1D Par/* NP */, const ARRAY_1D pard_par/* NP */)
+{
+  int cr;
+  int cc;
+  int nDir = 0;
+
+  for (cr = 1 ; cr <= NP ; cr++)
+  {
+    if (pard_par[cr] != 0)
+    {
+      nDir = cr;
+      break;
+    }
+  }
+
+  this->diff_par_grad_re_likelihood(reHat, dpar_bre_best, Par, nDir);
+  matrixInverseFromChol(Cholesky, InvHessian, NR);
+
+  for (cr = 1 ; cr <= NR ; cr++)
+  {
+    double dSum = 0.0;
+
+    for (cc = 1 ; cc <= NR ; cc++)
+    {
+      dSum += InvHessian[cr][cc] * dpar_bre_best[cc];
+    }
+
+    pDiff[cc] = dSum;
+  }
+}
+
 #endif //AD 
 
 // ----------------------------------------------------------------------------

@@ -5352,6 +5352,54 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
 
           rCodeFunctionMap[pWrapperFunctionName] = sCodeFunction;
           rCommentBlockMap[pWrapperFunctionName] = sCommentBlock;
+
+          sCommentBlock.clear();
+          sCodeFunction.clear();
+
+          sCommentBlock   = "\n! ----------------------------------------------------------------------------\n";
+          sCommentBlock  += "\n! derivative needed for derivative of SolveInner\n!   ";
+          sCommentBlock  += "\n! ----------------------------------------------------------------------------\n";
+
+          FortranOutFunction.open(sCodeFunction);
+
+          string sDiffParGradReLikelihoodFunction(sClassPrefix);
+          string sDiffParGradReLikelihoodWrapperFunction(sClassPrefix);
+
+          sDiffParGradReLikelihoodFunction += "diff_dpar_grad_bre_lkh";
+          sDiffParGradReLikelihoodFunction += pSubSuffix;
+          sDiffParGradReLikelihoodFunction += "_";
+          sDiffParGradReLikelihoodFunction += sBaseFunctionName;
+
+          sDiffParGradReLikelihoodWrapperFunction += "diff_par_grad_re_likelihood";
+
+          FortranOutFunction.write("SUBROUTINE ");
+          FortranOutFunction.write(sDiffParGradReLikelihoodWrapperFunction);
+          FortranOutFunction.write("(reHat, dpar_bre_best, par, dir)");
+          FortranOutFunction.incrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: reHat(NR)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (IN) :: par(NP)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("REAL(8) , INTENT (OUT) :: dpar_bre_best(NR)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("INTEGER(4), INTENT (IN)  :: dir");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("USE COMMON");
+          FortranOutFunction.newline();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("CALL ");
+          FortranOutFunction.write(sDiffParGradReLikelihoodFunction);
+          FortranOutFunction.write("(reHat, dpar_bre_best, par, dir)");
+          FortranOutFunction.newline();
+          FortranOutFunction.decrementIndent();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("END SUBROUTINE");
+          FortranOutFunction.newline();
+
+          rCodeFunctionMap[sDiffParGradReLikelihoodWrapperFunction]   = sCodeFunction;
+          rCommentBlockMap[sDiffParGradReLikelihoodWrapperFunction]   = sCommentBlock;
+          PrivateMethodsMap[sDiffParGradReLikelihoodWrapperFunction]  = sDiffParGradReLikelihoodWrapperFunction;
           break;
         }
 
