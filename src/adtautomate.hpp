@@ -877,6 +877,7 @@ protected:
                                         int& nSmallestIndex) const;
 
   void                arrayBoundsArguments(string& rArguments,
+                                           bool bForCreate,
                                            bool bInConstructor,
                                            bool bR_Prefix) const;
 

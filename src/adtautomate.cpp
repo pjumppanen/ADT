@@ -4847,12 +4847,14 @@ void AdtAutoArray::checkDependencies(bool& bOk,
 //  ----------------------------------------------------------------------------
 
 void AdtAutoArray::arrayBoundsArguments(string& rArguments,
+                                        bool bForCreate,
                                         bool bInConstructor,
                                         bool bR_Prefix) const
 {
   for (int cn = 0 ; cn < dimensions() ; cn++)
   {
     AdtStringByIntMapConstIter  Iter;
+    string                      sLowerBound("1");
 
     if (cn != 0)
     {
@@ -4873,6 +4875,7 @@ void AdtAutoArray::arrayBoundsArguments(string& rArguments,
                                                bR_Prefix);
 
       rArguments += sIndexExpression + ", ";
+      sLowerBound = sIndexExpression;
     }
     else
     {
@@ -4892,7 +4895,14 @@ void AdtAutoArray::arrayBoundsArguments(string& rArguments,
                                                bInConstructor,
                                                bR_Prefix);
 
-      rArguments += sIndexExpression;
+      if (bForCreate)
+      {
+        rArguments += "(" + sIndexExpression + ") - (" + sLowerBound + ") + 1";
+      }
+      else
+      {
+        rArguments += sIndexExpression;
+      }
     }
     else
     {
@@ -5407,7 +5417,7 @@ void AdtAutoArray::writeDelphiVarCheckType(AdtFile& rFile,
     Prefixed = "arg_" + name();
   }
 
-  arrayBoundsArguments(sArguments, bInConstructor, true);
+  arrayBoundsArguments(sArguments, false, bInConstructor, true);
 
   Helper.writeDelphiVarCheckType(rFile,
                                  Prefixed.c_str(),
@@ -5562,7 +5572,7 @@ void AdtAutoArray::writeDelphiVarInitialisation(AdtFile& rFile,
         {
           string  sArrayBounds;
 
-          arrayBoundsArguments(sArrayBounds, false, true);
+          arrayBoundsArguments(sArrayBounds, true, false, true);
 
           rFile.write("AdtArrayPlan_create(MemAllocator, ");
           rFile.write("arg_");
@@ -5921,7 +5931,7 @@ void AdtAutoArray::writeCppVarCheckType(AdtFile& rFile,
     Prefixed = "arg_" + name();
   }
 
-  arrayBoundsArguments(sArguments, bInConstructor, false);
+  arrayBoundsArguments(sArguments, false, bInConstructor, false);
 
   Helper.writeCppVarCheckType(rFile,
                               Prefixed.c_str(),
@@ -6069,7 +6079,7 @@ void AdtAutoArray::writeCppVarInitialisation(AdtFile& rFile,
         {
           string  sArrayBounds;
 
-          arrayBoundsArguments(sArrayBounds, false, false);
+          arrayBoundsArguments(sArrayBounds, true, false, false);
 
           rFile.write("AdtArrayPlan::create(MemAllocator, ");
           rFile.write("arg_");
