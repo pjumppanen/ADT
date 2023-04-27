@@ -1425,7 +1425,12 @@ public:
   void                  classNameAndAlias(const char* pClassName,
                                           const char* pAlias = 0);
 
-  AdtAutoScalar*        addScalar(const char* pName,
+ AdtAutoScalar*         addR_CALL(const char* pName,
+                                  AdtAutoDir nDir,
+                                  const char* pFileName,
+                                  int nLineNumber);
+
+ AdtAutoScalar*        addScalar(const char* pName,
                                   AdtAutoType nType,
                                   AdtAutoDir nDir,
                                   const char* pFileName,

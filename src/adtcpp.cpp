@@ -2654,10 +2654,16 @@ AdtFile& AdtCppTranslationUnit::writeFortran(AdtFile& rOutFile,
           {
             const AdtCppDeclarator*         pDeclarator         = (const AdtCppDeclarator*)pObj;
             const AdtCppMemberDeclaration*  pMemberDeclaration  = (const AdtCppMemberDeclaration*)pDeclarator->findAscendantWithClassLineage("AdtCppMemberDeclarator,AdtCppMemberDeclarationList,AdtCppMemberDeclaration");
-
+  
             if (pMemberDeclaration != 0)
             {
-              pMemberDeclaration->writeFortranDeclaration(rOutFile, pDeclarator);
+              // R_CALL is a callback variable for calling an R code callback and should appear 
+              // in the fortran code as a variable, although defining a black box for it 
+              // should be possible.
+              if (!pMemberDeclaration->isR_CALL())
+              {
+                pMemberDeclaration->writeFortranDeclaration(rOutFile, pDeclarator);
+              }
             }
             else
             {
@@ -11884,10 +11890,7 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
     {
       if ((SimpleTypeSpecifier != 0) && (MemberDeclarationList != 0))
       {
-        int         nDimensions = 0;
-        AdtAutoType nVarType    = SimpleTypeSpecifier->autoType(nDimensions);
-
-        if (nVarType != AdtAutoType_UNDEFINED)
+        if (SimpleTypeSpecifier->isR_CALL())
         {
           AdtParserPtrListConstIter Iter;
           const AdtParserPtrList&   rIdentList = MemberDeclarationList->objList();
@@ -11900,54 +11903,83 @@ AdtCppMemberDeclaration::AdtCppMemberDeclaration(AdtParser* pClassSpecifierObj,
             {
               AdtCppEmbeddedComment* pDeclaratorObj = (AdtCppEmbeddedComment*)pObj->findDescendant("Declarator");
 
-              // Only add variables that aren't stack related. Stack vars fail
-              // automation dependency checking cos dim_stack isn't defined.
-              if (strstr(pDeclaratorObj->name(), "stack") == 0)
+              if (pDeclaratorObj != 0)
               {
-                if (nDimensions > 0)
+                pClass->addR_CALL(pDeclaratorObj->name(),
+                                  AdtAutoDir_UNDEFINED,
+                                  pDeclaratorObj->fileName(),
+                                  pDeclaratorObj->lineNumber());
+              }
+            }
+          }
+        }
+        else
+        {
+          int         nDimensions = 0;
+          AdtAutoType nVarType    = SimpleTypeSpecifier->autoType(nDimensions);
+
+          if (nVarType != AdtAutoType_UNDEFINED)
+          {
+            AdtParserPtrListConstIter Iter;
+            const AdtParserPtrList&   rIdentList = MemberDeclarationList->objList();
+
+            for (Iter = rIdentList.begin() ; Iter != rIdentList.end() ; ++Iter)
+            {
+              AdtParser*  pObj = *Iter;
+
+              if (pObj != 0)
+              {
+                AdtCppEmbeddedComment* pDeclaratorObj = (AdtCppEmbeddedComment*)pObj->findDescendant("Declarator");
+
+                // Only add variables that aren't stack related. Stack vars fail
+                // automation dependency checking cos dim_stack isn't defined.
+                if (strstr(pDeclaratorObj->name(), "stack") == 0)
                 {
-                  AdtStringList rArrayUpperBoundList;
-                  AdtStringList rArrayLowerBoundList;
-
-                  pDeclaratorObj->enumerateArraySizes(rArrayUpperBoundList, rArrayLowerBoundList);
-
-                  if ((rArrayLowerBoundList.size() == nDimensions) &&
-                      (rArrayUpperBoundList.size() == nDimensions))
+                  if (nDimensions > 0)
                   {
-                    AdtAutoArray* pArray = pClass->addArray(pDeclaratorObj->name(),
-                                                            nVarType,
-                                                            AdtAutoDir_UNDEFINED,
-                                                            nDimensions,
-                                                            pDeclaratorObj->fileName(),
-                                                            pDeclaratorObj->lineNumber());
+                    AdtStringList rArrayUpperBoundList;
+                    AdtStringList rArrayLowerBoundList;
 
-                    if (pArray != 0)
+                    pDeclaratorObj->enumerateArraySizes(rArrayUpperBoundList, rArrayLowerBoundList);
+
+                    if ((rArrayLowerBoundList.size() == nDimensions) &&
+                        (rArrayUpperBoundList.size() == nDimensions))
                     {
-                      AdtStringListConstIter  IterL = rArrayLowerBoundList.begin();
-                      AdtStringListConstIter  IterU = rArrayUpperBoundList.begin();
+                      AdtAutoArray* pArray = pClass->addArray(pDeclaratorObj->name(),
+                                                              nVarType,
+                                                              AdtAutoDir_UNDEFINED,
+                                                              nDimensions,
+                                                              pDeclaratorObj->fileName(),
+                                                              pDeclaratorObj->lineNumber());
 
-                      for (int cn = 0 ; cn < nDimensions ; cn++)
+                      if (pArray != 0)
                       {
-                        const string& rArrayLowerBound = *IterL;
-                        const string& rArrayUpperBound = *IterU;
+                        AdtStringListConstIter  IterL = rArrayLowerBoundList.begin();
+                        AdtStringListConstIter  IterU = rArrayUpperBoundList.begin();
 
-                        pArray->addArrayIndex(rArrayLowerBound,
-                                              rArrayUpperBound,
-                                              cn);
+                        for (int cn = 0 ; cn < nDimensions ; cn++)
+                        {
+                          const string& rArrayLowerBound = *IterL;
+                          const string& rArrayUpperBound = *IterU;
 
-                        IterL++;
-                        IterU++;
+                          pArray->addArrayIndex(rArrayLowerBound,
+                                                rArrayUpperBound,
+                                                cn);
+
+                          IterL++;
+                          IterU++;
+                        }
                       }
                     }
                   }
-                }
-                else
-                {
-                  pClass->addScalar(pDeclaratorObj->name(),
-                                    nVarType,
-                                    AdtAutoDir_UNDEFINED,
-                                    pDeclaratorObj->fileName(),
-                                    pDeclaratorObj->lineNumber());
+                  else
+                  {
+                    pClass->addScalar(pDeclaratorObj->name(),
+                                      nVarType,
+                                      AdtAutoDir_UNDEFINED,
+                                      pDeclaratorObj->fileName(),
+                                      pDeclaratorObj->lineNumber());
+                  }
                 }
               }
             }

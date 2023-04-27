@@ -174,7 +174,7 @@ void yyCpp_beginInclude(const char* pFileName, int* pPreserveInclude)
     if (adtCpp_IncludeSP > 1)
     {
       /* disable automation for includes higher than this level to avoid duplicate processing of parent class */
-      automate_DisableAutomation(1);
+      automate_DisableAutomation(1, adtCpp_pFileName);
     }
   }
   else
@@ -195,7 +195,7 @@ int yyCpp_endInclude()
 
     if (adtCpp_IncludeSP <= 1)
     {
-      automate_DisableAutomation(0);
+      automate_DisableAutomation(0, adtCpp_pFileName);
     }
 
     /* For C++ files we only allow one level of include to allow inclusion of

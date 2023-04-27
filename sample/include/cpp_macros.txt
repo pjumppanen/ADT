@@ -3,6 +3,7 @@
 #def_type CHECK_CONTEXT
 #def_type RAGGED_CONTEXT
 #def_type SEXP
+#def_type R_CALL
 #def_type AdtArrays
 #def_type AdtArrayPlan
 #type_map   ARRAY_1D   : REAL(8), 1

@@ -134,7 +134,7 @@ extern const SEXP OBJ##_type_tag;
 //  ----------------------------------------------------------------------------
 
 #define IMPL_TYPE_TAG(OBJ) \
-const SEXP OBJ##_type_tag = install(#OBJ"TYPE_TAG");
+const SEXP OBJ##_type_tag = Rf_install(#OBJ"TYPE_TAG");
 
 //  ----------------------------------------------------------------------------
 

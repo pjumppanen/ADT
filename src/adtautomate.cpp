@@ -542,6 +542,18 @@ const char* AdtAutoHelper::cppType(AdtAutoType nType) const
       break;
     }
 
+    case AdtAutoType_R_CALL:
+    {
+      pType = "R_CALL";
+      break;
+    }
+
+    case AdtAutoType_R_ENV:
+    {
+      pType = "R_ENV";
+      break;
+    }
+
     default:
     {
       FAIL();
@@ -591,6 +603,18 @@ const char* AdtAutoHelper::R_Type(AdtAutoType nType) const
     case AdtAutoType_LONGBOOL:
     {
       pType = "LGLSXP";
+      break;
+    }
+
+    case AdtAutoType_R_CALL:
+    {
+      pType = "CLOSXP";
+      break;
+    }
+
+    case AdtAutoType_R_ENV:
+    {
+      pType = "ENVSXP";
       break;
     }
 
@@ -656,6 +680,8 @@ const char* AdtAutoHelper::R_AccessType(AdtAutoType nType) const
       break;
     }
 
+    case AdtAutoType_R_CALL:
+    case AdtAutoType_R_ENV:
     default:
     {
       FAIL();
@@ -1785,7 +1811,7 @@ void AdtAutoHelper::writeCppR_AllocReturn(AdtFile& rFile,
 {
   if (pReturn != 0)
   {
-    rFile.write("SEXP Result = allocVector(");
+    rFile.write("SEXP Result = Rf_allocVector(");
     rFile.write(R_Type(nType));
     rFile.write(", 1);");
     rFile.newline();
@@ -2858,6 +2884,13 @@ void AdtAutoHelper::writeR_typeCast(AdtFile& rFile,
       break;
     }
 
+    case AdtAutoType_R_CALL:
+    case AdtAutoType_R_ENV:
+    {
+      rFile.write(pVar);
+      break;
+    }
+
     default:
     {
       FAIL();
@@ -3867,7 +3900,7 @@ void AdtAutoScalar::writeDelphiVarDeclaration(AdtFile& rFile,
     rFile.newline();
   }
 
-  ASSERT(mode() == AdtAutoMode_AUTOINIT || mode() == AdtAutoMode_FN_ARGUMENT);
+  ASSERT(mode() == AdtAutoMode_MANUAL || mode() == AdtAutoMode_AUTOINIT || mode() == AdtAutoMode_FN_ARGUMENT);
 
   // Prepend an underscore as this is an argument being passed into the
   // constructor.
@@ -4140,6 +4173,11 @@ void AdtAutoScalar::writeCppVarDeclaration(AdtFile& rFile,
 {
   const char* pType = cppType();
 
+  if ((type() == AdtAutoType_R_CALL) || (type() == AdtAutoType_R_ENV))
+  {
+    pType = "SEXP";
+  }
+  
   if (bPrependSeperator)
   {
     rFile.write(",");
@@ -4148,7 +4186,7 @@ void AdtAutoScalar::writeCppVarDeclaration(AdtFile& rFile,
 
   rFile.write(pType);
 
-  ASSERT(mode() == AdtAutoMode_AUTOINIT || mode() == AdtAutoMode_FN_ARGUMENT);
+  ASSERT(mode() == AdtAutoMode_MANUAL || mode() == AdtAutoMode_AUTOINIT || mode() == AdtAutoMode_FN_ARGUMENT);
 
   // Prepend an underscore as this is an argument being passed into the
   // constructor.
@@ -8694,14 +8732,22 @@ void AdtAutoClass::writeConstructorImpl(AdtFile& rFile,
         {
           const AdtAutoAttribute* pAttribute = (*AttrIter).second;
 
-          rFile.write(Helper.R_AccessType(pAttribute->type()));
-          rFile.write("(arg_");
-          rFile.write(rArg);
-          rFile.write(")");
-
-          if (pAttribute->dimensions() == 0)
+          if ((pAttribute->type() == AdtAutoType_R_CALL) || (pAttribute->type() == AdtAutoType_R_ENV))
           {
-            rFile.write("[0]");
+            rFile.write("arg_");
+            rFile.write(rArg);
+          }
+          else
+          {
+            rFile.write(Helper.R_AccessType(pAttribute->type()));
+            rFile.write("(arg_");
+            rFile.write(rArg);
+            rFile.write(")");
+
+            if (pAttribute->dimensions() == 0)
+            {
+              rFile.write("[0]");
+            }
           }
         }
         else
@@ -9058,7 +9104,10 @@ bool AdtAutoClass::writeConstructorPhaseFiles(AdtSourceFileType nDestType,
               case AdtAutoMode_AUTODEC:
               case AdtAutoMode_FN_ARGUMENT:
               {
-                pAttribute->writeVarInitialisation(rFile, nDestType, rLocalsMap, ClassName, false);
+                if ((pAttribute->type() != AdtAutoType_R_CALL) && (pAttribute->type() != AdtAutoType_R_ENV))
+                {
+                  pAttribute->writeVarInitialisation(rFile, nDestType, rLocalsMap, ClassName, false);
+                }
                 break;
               }
             }
@@ -9075,7 +9124,22 @@ bool AdtAutoClass::writeConstructorPhaseFiles(AdtSourceFileType nDestType,
               (pAttribute->isScalar()  == rIsScalar[cm]       ) &&
               (pAttribute->mode()      == AdtAutoMode_AUTOINIT))
           {
-            pAttribute->writeVarInitialisation(rFile, nDestType, rLocalsMap, ClassName, !rIsScalar[cm]);
+            if (pAttribute->type() == AdtAutoType_R_CALL)
+            {
+              rFile.write(pAttribute->name());
+              rFile.write(".initialise(arg_");
+              rFile.write(pAttribute->name());
+              rFile.write(", arg_");
+              rFile.write(pAttribute->name());
+              rFile.write("_env, arg_");
+              rFile.write(pAttribute->name());
+              rFile.write("_nt, MemAllocator);");
+              rFile.newline();
+            }
+            else if (pAttribute->type() != AdtAutoType_R_ENV)
+            {
+              pAttribute->writeVarInitialisation(rFile, nDestType, rLocalsMap, ClassName, !rIsScalar[cm]);
+            }
           }
         }
 
@@ -9854,6 +9918,96 @@ void AdtAutoClass::classNameAndAlias(const char* pClassName,
       AliasName = ClassName;
     }
   }
+}
+
+//  ----------------------------------------------------------------------------
+
+AdtAutoScalar* AdtAutoClass::addR_CALL(const char* pName,
+                                       AdtAutoDir nDir,
+                                       const char* pFileName,
+                                       int nLineNumber)
+{
+  AdtAutoScalar* pAttribute = 0;
+
+  if (Mode != AdtAutoMode_AUTOINIT)
+  {
+    ::printf("ERROR:R_CALL must be declared in AUTOINIT section of %s in file %s on line %d\n", pName, pFileName, nLineNumber);
+  }
+  else if (AttributeByNameMap.find(pName) == AttributeByNameMap.end())
+  {
+    bool bNoInterface = true;
+
+    pAttribute = new AdtAutoScalar(pName,
+                                   ClassName,
+                                   AdtAutoType_R_CALL,
+                                   Mode,
+                                   nDir,
+                                   Phase,
+                                   bNoInterface,
+                                   AttributeDefsEnabled,
+                                   pFileName,
+                                   nLineNumber);
+
+    if (pAttribute != 0)
+    {
+      AttributeByNameMap[pAttribute->name()] = pAttribute;
+      AttributeByPhaseMap.insert(AdtAutoAttributePtrIntPair(Phase, pAttribute));
+    }
+
+    // For R_CALL we also need an environment for the call
+    string sEnv(pName);
+
+    sEnv += "_env";
+
+    AdtAutoScalar* pEnvAttribute = new AdtAutoScalar(sEnv,
+                                                     ClassName,
+                                                     AdtAutoType_R_ENV,
+                                                     Mode,
+                                                     nDir,
+                                                     Phase,
+                                                     bNoInterface,
+                                                     AttributeDefsEnabled,
+                                                     pFileName,
+                                                     nLineNumber);
+
+    if (pEnvAttribute != 0)
+    {
+      AttributeByNameMap[pEnvAttribute->name()] = pEnvAttribute;
+      AttributeByPhaseMap.insert(AdtAutoAttributePtrIntPair(Phase, pEnvAttribute));
+    }
+
+    // For R_CALL we also need A NoTranslation boolean for the call
+    string sNoTranslation(pName);
+
+    sNoTranslation += "_nt";
+
+    AdtAutoScalar* pNT_Attribute = new AdtAutoScalar(sNoTranslation,
+                                                     ClassName,
+                                                     AdtAutoType_BOOL,
+                                                     AdtAutoMode_MANUAL,
+                                                     nDir,
+                                                     Phase,
+                                                     bNoInterface,
+                                                     AttributeDefsEnabled,
+                                                     pFileName,
+                                                     nLineNumber);
+
+    if (pNT_Attribute != 0)
+    {
+      AttributeByNameMap[pNT_Attribute->name()] = pNT_Attribute;
+      AttributeByPhaseMap.insert(AdtAutoAttributePtrIntPair(Phase, pNT_Attribute));
+    }
+
+    ArgumentList.push_back(pName);
+    ArgumentList.push_back(sEnv);
+    ArgumentList.push_back(sNoTranslation);
+  }
+  else
+  {
+    ::printf("ERROR:Duplicate definition of %s in file %s on line %d\n", pName, pFileName, nLineNumber);
+  }
+
+  return (pAttribute);
 }
 
 //  ----------------------------------------------------------------------------

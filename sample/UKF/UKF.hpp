@@ -18,6 +18,21 @@
 
 
 // ----------------------------------------------------------------------------
+// log likelihood of kalman filter is,
+// 
+// -0.5 * Sum(log det(SigmaYYi) + t(Yi) * inverse(SigmaYYi) * Yi) + c
+//
+// where SigmaYYi is the output covariance matrix for time i 
+// and Yi is the predicted model output for time i
+//
+// Should be able to update this on the fly through a model run.
+//
+// Also in state update if we have missing data the variance updates should
+// not occur and should inherit the previous time steps estimates.
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
 
 class UnscentedKalmanFilter : public AdtArrays
 {
@@ -30,7 +45,9 @@ protected:
   double  kappa;
   double  alfa;
   double  beta;
-
+  R_CALL  model_output;
+  R_CALL  model_state;
+  
   /* AUTODEC */
   // UKF params
   double  lambda_;
@@ -106,9 +123,6 @@ public:
   void    resetUKF(double _Q, double _R, const ARRAY_1D x_0 /* 0:n-1 */);
   void    timeUpdate(ARRAY_1D w/* 0:n-1 */);
   void    measurementUpdate(const ARRAY_1D z/* 0:m-1 */);
-
-  void    model_output(ARRAY_1D pyi /* 0:m-1 */, const ARRAY_1D pxi /* 0:n-1 */);
-  void    model_state(ARRAY_1D pxi /* 0:n-1 */, const ARRAY_1D pw /* 0:n-1 */, const ARRAY_1D pxp /* 0:n-1 */);
 };
 
 #endif  __UKF_HPP__

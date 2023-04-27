@@ -30,6 +30,7 @@
 
 #ifndef AD
 
+#define R_NO_REMAP
 
 #include "adtarrays.hpp"
 #include <R_ext/Rdynload.h>
@@ -40,6 +41,620 @@
 //  MACRO to force inclusion of R interface code in Linkage process
 //  ----------------------------------------------------------------------------
 #define INCLUDE_R_INTERFACE   void* GlobalR_ADLibDebug = (void*)R_ADLibDebug;
+
+
+//  ----------------------------------------------------------------------------
+//  R_CALLARG class
+//  ----------------------------------------------------------------------------
+class R_CALLARG
+{
+private:
+  char*       Array;
+  AdtVarType  VarType;
+  bool        IsScalar;
+
+public:
+  R_CALLARG(int nValue);
+  R_CALLARG(double dValue);
+
+  R_CALLARG(const ARRAY_1D pArray);
+  R_CALLARG(const ARRAY_2D pArray);
+  R_CALLARG(const ARRAY_3D pArray);
+  R_CALLARG(const ARRAY_4D pArray);
+  R_CALLARG(const ARRAY_5D pArray);
+  R_CALLARG(const ARRAY_6D pArray);
+  R_CALLARG(const ARRAY_7D pArray);
+  R_CALLARG(const ARRAY_8D pArray);
+  R_CALLARG(const ARRAY_9D pArray);
+  R_CALLARG(const ARRAY_10D pArray);
+
+  R_CALLARG(const ARRAY_1I pArray);
+  R_CALLARG(const ARRAY_2I pArray);
+  R_CALLARG(const ARRAY_3I pArray);
+  R_CALLARG(const ARRAY_4I pArray);
+  R_CALLARG(const ARRAY_5I pArray);
+  R_CALLARG(const ARRAY_6I pArray);
+  R_CALLARG(const ARRAY_7I pArray);
+  R_CALLARG(const ARRAY_8I pArray);
+  R_CALLARG(const ARRAY_9I pArray);
+  R_CALLARG(const ARRAY_10I pArray);
+
+  SEXP  wrapArgument(const AdtMemAllocator& rMemAllocator,
+                     bool bNoTranslation);
+};
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(int nValue)
+{
+  Array     = (char*)&nValue;
+  VarType   = AdtVarType_INT;
+  IsScalar  = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(double dValue)
+{
+  Array     = (char*)&dValue;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = true;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_1D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_2D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_3D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_4D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_5D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_6D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_7D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_8D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_9D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_10D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_1I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_2I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_3I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_4I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_5I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_6I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_7I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_8I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_9I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_CALLARG::R_CALLARG(const ARRAY_10I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+}
+
+
+//  ----------------------------------------------------------------------------
+//  R_RETARG class
+//  ----------------------------------------------------------------------------
+class R_RETARG
+{
+private:
+  char*       Array;
+  AdtVarType  VarType;
+  SEXPTYPE    RType;
+  bool        IsScalar;
+
+public:
+  R_RETARG(int& nValue);
+  R_RETARG(double& dValue);
+
+  R_RETARG(ARRAY_1D pArray);
+  R_RETARG(ARRAY_2D pArray);
+  R_RETARG(ARRAY_3D pArray);
+  R_RETARG(ARRAY_4D pArray);
+  R_RETARG(ARRAY_5D pArray);
+  R_RETARG(ARRAY_6D pArray);
+  R_RETARG(ARRAY_7D pArray);
+  R_RETARG(ARRAY_8D pArray);
+  R_RETARG(ARRAY_9D pArray);
+  R_RETARG(ARRAY_10D pArray);
+
+  R_RETARG(ARRAY_1I pArray);
+  R_RETARG(ARRAY_2I pArray);
+  R_RETARG(ARRAY_3I pArray);
+  R_RETARG(ARRAY_4I pArray);
+  R_RETARG(ARRAY_5I pArray);
+  R_RETARG(ARRAY_6I pArray);
+  R_RETARG(ARRAY_7I pArray);
+  R_RETARG(ARRAY_8I pArray);
+  R_RETARG(ARRAY_9I pArray);
+  R_RETARG(ARRAY_10I pArray);
+
+  void        assign(SEXP Result,
+                     const AdtMemAllocator& rMemAllocator,
+                     bool bNoTranslation);
+
+  SEXPTYPE    type() const;
+};
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(int& nValue)
+{
+  Array     = (char*)&nValue;
+  VarType   = AdtVarType_INT;
+  IsScalar  = true;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(double& dValue)
+{
+  Array     = (char*)&dValue;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = true;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_1D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_2D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_3D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_4D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_5D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_6D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_7D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_8D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_9D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_10D pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_DOUBLE;
+  IsScalar  = false;
+  RType     = REALSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_1I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_2I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_3I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_4I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_5I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_6I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_7I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_8I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_9I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline R_RETARG::R_RETARG(ARRAY_10I pArray)
+{
+  Array     = (char*)pArray;
+  VarType   = AdtVarType_INT;
+  IsScalar  = false;
+  RType     = INTSXP;
+}
+
+//  ----------------------------------------------------------------------------
+
+inline SEXPTYPE R_RETARG::type() const
+{
+  return (RType);
+}
+
+
+//  ----------------------------------------------------------------------------
+//  R_CALL class
+//  ----------------------------------------------------------------------------
+class R_CALL
+{
+private:
+  bool                    Valid;
+  SEXP                    Function;
+  SEXP                    Environment;
+  bool                    NoTranslation;
+  const AdtMemAllocator*  MemAllocator;
+  
+protected:
+  void                    callR(R_RETARG& ret, R_CALLARG* Arguments[], int nArguments);
+  SEXP                    langN(int nArguments) const;
+
+public:
+  R_CALL();
+  R_CALL(SEXP func, SEXP env, bool bNoTranslation, const AdtMemAllocator& rAllocator);
+  R_CALL(const R_CALL& rCopy);
+  ~R_CALL();
+
+  void                    initialise(SEXP func, SEXP env, bool bNoTranslation, const AdtMemAllocator& rAllocator);
+
+  void                    operator () (R_RETARG ret);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2, 
+                                       R_CALLARG arg3);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2, 
+                                       R_CALLARG arg3, 
+                                       R_CALLARG arg4);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2, 
+                                       R_CALLARG arg3, 
+                                       R_CALLARG arg4, 
+                                       R_CALLARG arg5);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2, 
+                                       R_CALLARG arg3, 
+                                       R_CALLARG arg4, 
+                                       R_CALLARG arg5, 
+                                       R_CALLARG arg6);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2, 
+                                       R_CALLARG arg3, 
+                                       R_CALLARG arg4, 
+                                       R_CALLARG arg5, 
+                                       R_CALLARG arg6, 
+                                       R_CALLARG arg7);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2, 
+                                       R_CALLARG arg3, 
+                                       R_CALLARG arg4, 
+                                       R_CALLARG arg5, 
+                                       R_CALLARG arg6, 
+                                       R_CALLARG arg7, 
+                                       R_CALLARG arg8);
+
+  void                    operator () (R_RETARG ret, 
+                                       R_CALLARG arg0, 
+                                       R_CALLARG arg1, 
+                                       R_CALLARG arg2, 
+                                       R_CALLARG arg3, 
+                                       R_CALLARG arg4, 
+                                       R_CALLARG arg5, 
+                                       R_CALLARG arg6, 
+                                       R_CALLARG arg7, 
+                                       R_CALLARG arg8, 
+                                       R_CALLARG arg9);
+};
 
 
 //  ----------------------------------------------------------------------------

@@ -53,8 +53,39 @@ kappa <- 0.0
 alfa  <- 0.001
 beta  <- 2.0
 
+# ----------------------------------------------------------------------------
+
+model_output <- function(xi)
+{
+  yi    <- Oarray(data=NA, dim=2, offset=0)
+  yi[0] <- (xi[0] * 2) / 9.0 + (xi[1] * 2) / 7.0;
+  yi[1] <- (xi[0] * 2) / 6.0 + (xi[1] * 2) / 2.0;
+
+  print("output")
+  print(yi)
+
+  return (yi)
+}
+
+# ----------------------------------------------------------------------------
+
+model_state <- function(w, xp)
+{
+  xi    <- xp * 0
+  xi[0] <- 0.5 * xp[0] - 0.1 * xp[1] + 0.7 * (xp[0] / (1.0 + xp[0] * xp[0])) + 2.2 * cos(1.2 * (w[0] - 1));
+  xi[1] <- 0.8 * xp[1] - 0.2 * xp[0] + 0.9 * (xp[1] / (1.0 + xp[1] * xp[1])) + 2.4 * cos(2.2 * (w[1] - 1));
+
+  print("state")
+  print(xi)
+
+  return (xi)
+}
+
+
+# ----------------------------------------------------------------------------
 # create the object instance
-UKF.Context <- UKF.create(n,m,kappa,alfa,beta)
+# ----------------------------------------------------------------------------
+UKF.Context <- UKF.create(n,m,kappa,alfa,beta, model_output, environment(), F, model_state, environment(), F)
 
 A <- matrix(c(4, 2, 2,
               2, 3, 1,
@@ -105,6 +136,7 @@ est_output              <- array(0.0, c(size_n, n))
 # estimation loop
 for (i in 1:size_n)
 {
+  print(i)
   timeUpdateInput[]      <- i - 1
   measurementUpdateInput <- x[i, ]
 
@@ -129,6 +161,8 @@ for (i in 1:size_n)
 
 print(paste("total error:", err_total))
 
+require(ggplot2)
+
 df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
                  value=c(x[,1], est_state[,1], x[,2], est_state[,2]),
                  groups=c(rep("x1.original", size_n), rep("x1.estimate", size_n), rep("x2.original", size_n), rep("x2.estimate", size_n)))
@@ -147,4 +181,3 @@ print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
              theme_bw() + 
              theme(legend.title=element_blank()))
-

@@ -28,6 +28,551 @@
 #include <stdarg.h>
 
 
+SEXP R_CALLARG::wrapArgument(const AdtMemAllocator& rMemAllocator,
+                             bool bNoTranslation)
+{
+  SEXP  Result(R_NilValue);
+
+  try
+  {
+    if (IsScalar)
+    {
+      switch (VarType)
+      {
+        case AdtVarType_INT:
+        {
+          PROTECT(Result = Rf_allocVector(INTSXP, 1));
+          INTEGER(Result)[0] = ((int*)Array)[0];
+          UNPROTECT(1);
+          break;
+        }
+
+        case AdtVarType_DOUBLE:
+        {
+          PROTECT(Result = Rf_allocVector(REALSXP, 1));
+          REAL(Result)[0] = ((double*)Array)[0];
+          UNPROTECT(1);
+          break;
+        }
+
+        case AdtVarType_LONGBOOL:
+        case AdtVarType_CHAR:
+        case AdtVarType_UCHAR:
+        case AdtVarType_BOOL:
+        default:
+        {
+          break;
+        }
+      }
+    }
+    else
+    {
+      AdtArrayCoord aCoords[ADLIB_MAX_COORDS]   = {0};
+      AdtArrayInfo* pInfo                       = AdtArrayPlanActor::arrayInfo(rMemAllocator, Array);
+      unsigned int  nCoords                     = pInfo->Actor->getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
+
+      switch (pInfo->VarType)
+      {
+        case AdtVarType_INT:
+        case AdtVarType_DOUBLE:
+        case AdtVarType_LONGBOOL:
+        case AdtVarType_CHAR:
+        case AdtVarType_UCHAR:
+        case AdtVarType_BOOL:
+        {
+          char* pResultData = 0;
+
+          // Full array get operation
+          switch(pInfo->VarType)
+          {
+            case AdtVarType_INT:
+            {
+              Result      = R_CreateArray(nCoords, aCoords, INTSXP);
+              pResultData = (char*)INTEGER(Result);
+              break;
+            }
+
+            case AdtVarType_DOUBLE:
+            {
+              Result      = R_CreateArray(nCoords, aCoords, REALSXP);
+              pResultData = (char*)REAL(Result);
+              break;
+            }
+
+            case AdtVarType_LONGBOOL:
+            {
+              Result      = R_CreateArray(nCoords, aCoords, LGLSXP);
+              pResultData = (char*)LOGICAL(Result);
+              break;
+            }
+
+            case AdtVarType_CHAR:
+            case AdtVarType_UCHAR:
+            case AdtVarType_BOOL:
+            {
+              Result      = R_CreateArray(nCoords, aCoords, RAWSXP);
+              pResultData = (char*)RAW(Result);
+              break;
+            }
+
+            default:
+            {
+              break;
+            }
+          }
+
+          if (pResultData != 0)
+          {
+            if (bNoTranslation)
+            {
+              ::memcpy(pResultData, pInfo->firstData(), pInfo->lengthOfData());
+            }
+            else
+            {
+              AdtArrayPlanActor::ADlib_to_R(rMemAllocator, Array, pResultData);
+            }
+          }
+        }
+      }
+    }
+  }
+  catch (std::runtime_error &e)
+  {
+    Rf_error("ERROR: R_CALL::wrapArgument threw a runtime exception, %s", e.what());
+  }
+
+  return (Result);
+}                             
+
+
+//  ----------------------------------------------------------------------------
+//  R_RETARG class method implementations
+//  ----------------------------------------------------------------------------
+void R_RETARG::assign(SEXP Result,
+                      const AdtMemAllocator& rMemAllocator,
+                      bool bNoTranslation)
+{
+  try
+  {
+    if (IsScalar)
+    {
+      switch (VarType)
+      {
+        case AdtVarType_INT:
+        {
+          Result = Rf_coerceVector(Result, INTSXP);
+
+          PROTECT(Result);
+          ((int*)Array)[0] = INTEGER(Result)[0];
+          UNPROTECT(1);
+          break;
+        }
+
+        case AdtVarType_DOUBLE:
+        {
+          Result = Rf_coerceVector(Result, REALSXP);
+
+          PROTECT(Result);
+          ((double*)Array)[0] = REAL(Result)[0];
+          UNPROTECT(1);
+          break;
+        }
+
+        case AdtVarType_LONGBOOL:
+        case AdtVarType_CHAR:
+        case AdtVarType_UCHAR:
+        case AdtVarType_BOOL:
+        default:
+        {
+          break;
+        }
+      }
+    }
+    else
+    {
+      AdtArrayCoord aCoords[ADLIB_MAX_COORDS] = {0};
+      AdtArrayInfo* pInfo                     = AdtArrayPlanActor::arrayInfo(rMemAllocator, Array);
+      unsigned int  nCoords                   = pInfo->Actor->getCoords(aCoords, ADLIB_MAX_COORDS, bNoTranslation);
+
+      switch (pInfo->VarType)
+      {
+        case AdtVarType_INT:
+        case AdtVarType_DOUBLE:
+        {
+          char*       pSrcArgData     = 0;
+          SEXPTYPE    nSrcArgType     = 0;
+          const char* pSrcArgTypeName = "";
+
+          switch(pInfo->VarType)
+          {
+            case AdtVarType_INT:
+            {
+              Result = Rf_coerceVector(Result, INTSXP);
+
+              PROTECT(Result);
+
+              pSrcArgData     = (char*)INTEGER(Result);
+              nSrcArgType     = INTSXP;
+              pSrcArgTypeName = "INTSXP";
+              break;
+            }
+
+            case AdtVarType_DOUBLE:
+            {
+              Result = Rf_coerceVector(Result, REALSXP);
+
+              PROTECT(Result);
+
+              pSrcArgData     = (char*)REAL(Result);
+              nSrcArgType     = REALSXP;
+              pSrcArgTypeName = "REALSXP";
+              break;
+            }
+
+            case AdtVarType_LONGBOOL:
+            case AdtVarType_CHAR:
+            case AdtVarType_UCHAR:
+            case AdtVarType_BOOL:
+            default:
+            {
+              break;
+            }
+          }
+
+          if (pSrcArgData != 0)
+          {
+            if (bNoTranslation)
+            {
+              ::memcpy(pInfo->firstData(), pSrcArgData, pInfo->lengthOfData());
+            }
+            else
+            {
+              AdtArrayPlanActor::R_to_ADlib(rMemAllocator, pSrcArgData, Array);
+            }
+
+            UNPROTECT(1);
+          }
+        }
+
+        case AdtVarType_LONGBOOL:
+        case AdtVarType_CHAR:
+        case AdtVarType_UCHAR:
+        case AdtVarType_BOOL:
+        default:
+        {
+          break;
+        }
+      }  
+    }
+  }
+  catch (std::runtime_error &e)
+  {
+    Rf_error("ERROR: R_RETARG::assign threw a runtime exception, %s", e.what());
+  }
+}
+
+
+//  ----------------------------------------------------------------------------
+//  R_CALL class method implementations
+//  ----------------------------------------------------------------------------
+void R_CALL::callR(R_RETARG& ret, R_CALLARG* Arguments[], int nArguments)
+{
+  if (Valid)
+  {
+    int           cn;
+    SEXP          Nil(R_NilValue);
+    SEXP          Result(R_NilValue);
+    SEXP          Call = langN(nArguments);
+    PROTECT_INDEX ipx;
+
+    // Initialise args and do call
+    SEXP  tcall = Call;
+
+    for (cn = 0 ; cn < nArguments ; cn++)
+    {
+      SETCADR(tcall, Arguments[cn]->wrapArgument(*MemAllocator, NoTranslation));
+      tcall = CDR(tcall);
+    }
+
+    PROTECT_WITH_INDEX(Result = Rf_eval(Call, Environment), &ipx);
+    REPROTECT(Result = Rf_coerceVector(Result, ret.type()), ipx);
+    ret.assign(Result, *MemAllocator, NoTranslation);
+    UNPROTECT(1);
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+SEXP R_CALL::langN(int nArguments) const
+{
+  SEXP List = Rf_cons(PROTECT(R_NilValue), R_NilValue);
+
+  for (int cn = 0 ; cn < nArguments - 1 ; cn++)
+  {
+    List = Rf_cons(PROTECT(R_NilValue), List);
+  }
+
+  SEXP Call = Rf_lcons(PROTECT(Function), List); 
+  UNPROTECT(1 + nArguments);
+
+  return (Call);
+}
+
+//  ----------------------------------------------------------------------------
+
+R_CALL::R_CALL()
+ : Function(R_NilValue),
+   Environment(R_NilValue),
+   MemAllocator(0)
+{
+  NoTranslation = false;
+  Valid         = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+R_CALL::R_CALL(SEXP func, SEXP env, bool bNoTranslation, const AdtMemAllocator& rAllocator)
+ : Function(func),
+   Environment(env),
+   MemAllocator(&rAllocator)
+{
+  NoTranslation = false;
+  Valid         = false;
+
+  initialise(func, env, bNoTranslation, rAllocator);
+}
+
+//  ----------------------------------------------------------------------------
+
+R_CALL::R_CALL(const R_CALL& rCopy)
+ : Function(R_NilValue),
+   Environment(R_NilValue),
+   MemAllocator(0)
+{
+  NoTranslation = false;
+  Valid         = false;
+}
+
+//  ----------------------------------------------------------------------------
+
+R_CALL::~R_CALL()
+{
+
+}
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::initialise(SEXP func, SEXP env, bool bNoTranslation, const AdtMemAllocator& rAllocator)
+{
+  NoTranslation = bNoTranslation;
+  Valid         = Rf_isFunction(func) && Rf_isEnvironment(env);
+
+  if (Valid)
+  {
+    Function      = func;
+    Environment   = env;
+    MemAllocator  = &rAllocator; 
+  }
+}
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret)
+{
+  callR(ret, 0, 0);
+}
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0)
+{
+  R_CALLARG* Arguments[1] = {&arg0};
+
+  callR(ret, Arguments, 1);
+}                          
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1)
+{
+  R_CALLARG* Arguments[2] = {&arg0, 
+                             &arg1};
+
+  callR(ret, Arguments, 2);
+}
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2)
+{
+  R_CALLARG* Arguments[3] = {&arg0, 
+                             &arg1, 
+                             &arg2};
+
+  callR(ret, Arguments, 3);
+}
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2, 
+                          R_CALLARG arg3)
+{
+  R_CALLARG* Arguments[4] = {&arg0, 
+                             &arg1, 
+                             &arg2, 
+                             &arg3};
+
+  callR(ret, Arguments, 4);
+}                          
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2, 
+                          R_CALLARG arg3, 
+                          R_CALLARG arg4)
+{
+  R_CALLARG* Arguments[5] = {&arg0, 
+                             &arg1, 
+                             &arg2, 
+                             &arg3, 
+                             &arg4};
+
+  callR(ret, Arguments, 5);
+}                          
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2, 
+                          R_CALLARG arg3, 
+                          R_CALLARG arg4, 
+                          R_CALLARG arg5)
+{
+  R_CALLARG* Arguments[6] = {&arg0, 
+                             &arg1, 
+                             &arg2, 
+                             &arg3, 
+                             &arg4, 
+                             &arg5};
+
+  callR(ret, Arguments, 6);
+}                          
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2, 
+                          R_CALLARG arg3, 
+                          R_CALLARG arg4, 
+                          R_CALLARG arg5, 
+                          R_CALLARG arg6)
+{
+  R_CALLARG* Arguments[7] = {&arg0, 
+                             &arg1, 
+                             &arg2, 
+                             &arg3, 
+                             &arg4, 
+                             &arg5, 
+                             &arg6};
+
+  callR(ret, Arguments, 7);
+}                        
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2, 
+                          R_CALLARG arg3, 
+                          R_CALLARG arg4, 
+                          R_CALLARG arg5, 
+                          R_CALLARG arg6, 
+                          R_CALLARG arg7)
+{
+  R_CALLARG* Arguments[8] = {&arg0, 
+                             &arg1, 
+                             &arg2, 
+                             &arg3, 
+                             &arg4, 
+                             &arg5, 
+                             &arg6, 
+                             &arg7};
+
+  callR(ret, Arguments, 8);
+}                        
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2, 
+                          R_CALLARG arg3, 
+                          R_CALLARG arg4, 
+                          R_CALLARG arg5, 
+                          R_CALLARG arg6, 
+                          R_CALLARG arg7, 
+                          R_CALLARG arg8)
+{
+  R_CALLARG* Arguments[9] = {&arg0, 
+                             &arg1, 
+                             &arg2, 
+                             &arg3, 
+                             &arg4, 
+                             &arg5, 
+                             &arg6, 
+                             &arg7, 
+                             &arg8};
+
+  callR(ret, Arguments, 9);
+}                          
+
+//  ----------------------------------------------------------------------------
+
+void R_CALL::operator () (R_RETARG ret, 
+                          R_CALLARG arg0, 
+                          R_CALLARG arg1, 
+                          R_CALLARG arg2, 
+                          R_CALLARG arg3, 
+                          R_CALLARG arg4, 
+                          R_CALLARG arg5, 
+                          R_CALLARG arg6, 
+                          R_CALLARG arg7, 
+                          R_CALLARG arg8, 
+                          R_CALLARG arg9)
+{
+  R_CALLARG* Arguments[10] = {&arg0, 
+                              &arg1, 
+                              &arg2, 
+                              &arg3, 
+                              &arg4, 
+                              &arg5, 
+                              &arg6, 
+                              &arg7, 
+                              &arg8, 
+                              &arg9};
+
+  callR(ret, Arguments, 10);
+}
+
+
 //  ----------------------------------------------------------------------------
 //  R Interface helper functions used to simplify interface code
 //  ----------------------------------------------------------------------------
@@ -729,13 +1274,25 @@ void R_CheckArgument(const char* pName,
 
     if (nDims < 1)
     {
-      // Expect scalar
-      if (nArgLength > 1)
+      switch (TYPEOF(Argument))
       {
-        Rf_warning("WARNING: Scalar expected but %s is a vector or array. See line %d in file %s",
-                   pName,
-                   nLineNumber,
-                   pFileName);
+        case CLOSXP:
+        case ENVSXP:
+        {
+          break;
+        }
+
+        default:
+        {
+          // Expect scalar
+          if (nArgLength > 1)
+          {
+            Rf_warning("WARNING: Scalar expected but %s is a vector or array. See line %d in file %s",
+                      pName,
+                      nLineNumber,
+                      pFileName);
+          }
+        }
       }
     }
     else
@@ -1060,7 +1617,7 @@ SEXP R_CreateArray(int nDims, SEXPTYPE nType, ...)
 
 SEXP R_Scalar(const int& nResult)
 {
-  SEXP Result = allocVector(INTSXP, 1);
+  SEXP Result = Rf_allocVector(INTSXP, 1);
 
   PROTECT(Result);
   INTEGER(Result)[0] = nResult;
@@ -1073,7 +1630,7 @@ SEXP R_Scalar(const int& nResult)
 
 SEXP R_Scalar(const double& dResult)
 {
-  SEXP Result = allocVector(REALSXP, 1);
+  SEXP Result = Rf_allocVector(REALSXP, 1);
 
   PROTECT(Result);
   REAL(Result)[0] = dResult;
@@ -1086,7 +1643,7 @@ SEXP R_Scalar(const double& dResult)
 
 SEXP R_Scalar(const longbool& lbResult)
 {
-  SEXP Result = allocVector(LGLSXP, 1);
+  SEXP Result = Rf_allocVector(LGLSXP, 1);
 
   PROTECT(Result);
   LOGICAL(Result)[0] = lbResult;
@@ -1099,7 +1656,7 @@ SEXP R_Scalar(const longbool& lbResult)
 
 SEXP R_Scalar(const char& cResult)
 {
-  SEXP Result = allocVector(RAWSXP, 1);
+  SEXP Result = Rf_allocVector(RAWSXP, 1);
 
   PROTECT(Result);
   RAW(Result)[0] = (unsigned char)cResult;

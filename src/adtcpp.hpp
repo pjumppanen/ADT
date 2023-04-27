@@ -2211,6 +2211,7 @@ public:
   AdtCppSimpleTypeSpecifier(const AdtCppSimpleTypeSpecifier& rCopy);
   virtual ~AdtCppSimpleTypeSpecifier();
 
+  bool                          isR_CALL() const;
   bool                          isVoid() const;
   bool                          isByRef() const;
   bool                          isInOut() const;
@@ -2232,6 +2233,15 @@ public:
 
   declType;
 };
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppSimpleTypeSpecifier::isR_CALL() const
+{
+  bool bIsR_CALL = name().eq("R_CALL");
+
+  return (bIsR_CALL);
+}
 
 //  ----------------------------------------------------------------------------
 
@@ -2934,6 +2944,7 @@ public:
   bool                          isCtor() const;
   bool                          isInlineFunction() const;
   bool                          isVirtual() const;
+  bool                          isR_CALL() const;
   AdtCppMemberScopeType         scopeType() const;
   void                          checkLookForDefinition(AdtStringList& rImportDefinitionList) const;
   void                          addPublicMethods(AdtStringByStringMap& rPublicMethodsMap, 
@@ -2958,6 +2969,15 @@ inline bool AdtCppMemberDeclaration::isVirtual() const
   bool bIsVirtual = (DeclModifierList != 0) ? DeclModifierList->hasModifier(AdtCppDeclModifierType_VIRTUAL) : false;
 
   return (bIsVirtual);
+}
+
+//  ----------------------------------------------------------------------------
+
+inline bool AdtCppMemberDeclaration::isR_CALL() const
+{
+  bool bIsR_CALL = (SimpleTypeSpecifier != 0) ? SimpleTypeSpecifier->isR_CALL() : false;
+
+  return (bIsR_CALL);
 }
 
 //  ----------------------------------------------------------------------------

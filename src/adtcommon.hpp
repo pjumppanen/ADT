@@ -770,6 +770,8 @@ enum AdtAutoType
   AdtAutoType_UNSIGNED_LONG_LONG,
   AdtAutoType_BOOL,
   AdtAutoType_LONGBOOL,
+  AdtAutoType_R_CALL,
+  AdtAutoType_R_ENV,
   AdtAutoType_UNDEFINED
 };
 

@@ -103,6 +103,8 @@ void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* 0:nSize-1,
 UnscentedKalmanFilter::UnscentedKalmanFilter(
 #include "UKF_constructor_args.hpp"
 )
+ : model_output(),
+   model_state()
 {
   #include "UKF_constructor_locals.hpp"
   #include "UKF_constructor_scalars_phase_1.hpp"
@@ -524,20 +526,4 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
       P_aposteriori[cn][cm] = P_apriori[cn][cm] - dSum;
     }
   }
-}
-
-// ----------------------------------------------------------------------------
-
-void UnscentedKalmanFilter::model_output(ARRAY_1D pyi /* 0:m-1 */, const ARRAY_1D pxi /* 0:n-1 */)
-{
-  pyi[0] = (pxi[0] * 2) / 9.0 + (pxi[1] * 2) / 7.0;
-  pyi[1] = (pxi[0] * 2) / 6.0 + (pxi[1] * 2) / 2.0;
-}
-
-// ----------------------------------------------------------------------------
-
-void UnscentedKalmanFilter::model_state(ARRAY_1D pxi /* 0:n-1 */, const ARRAY_1D pw /* 0:n-1 */, const ARRAY_1D pxp /* 0:n-1 */)
-{
-  pxi[0] = 0.5 * pxp[0] - 0.1 * pxp[1] + 0.7 * (pxp[0] / (1.0 + pxp[0] * pxp[0])) + 2.2 * cos(1.2 * (pw[0] - 1));
-  pxi[1] = 0.8 * pxp[1] - 0.2 * pxp[0] + 0.9 * (pxp[1] / (1.0 + pxp[1] * pxp[1])) + 2.4 * cos(2.2 * (pw[1] - 1));
 }
