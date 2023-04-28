@@ -57,12 +57,9 @@ beta  <- 2.0
 
 model_output <- function(xi)
 {
-  yi    <- Oarray(data=NA, dim=2, offset=0)
-  yi[0] <- (xi[0] * 2) / 9.0 + (xi[1] * 2) / 7.0;
-  yi[1] <- (xi[0] * 2) / 6.0 + (xi[1] * 2) / 2.0;
-
-  print("output")
-  print(yi)
+  yi    <- array(data=NA, dim=2)
+  yi[1] <- (xi[1] * 2) / 9.0 + (xi[2] * 2) / 7.0;
+  yi[2] <- (xi[1] * 2) / 6.0 + (xi[2] * 2) / 2.0;
 
   return (yi)
 }
@@ -72,34 +69,17 @@ model_output <- function(xi)
 model_state <- function(w, xp)
 {
   xi    <- xp * 0
-  xi[0] <- 0.5 * xp[0] - 0.1 * xp[1] + 0.7 * (xp[0] / (1.0 + xp[0] * xp[0])) + 2.2 * cos(1.2 * (w[0] - 1));
-  xi[1] <- 0.8 * xp[1] - 0.2 * xp[0] + 0.9 * (xp[1] / (1.0 + xp[1] * xp[1])) + 2.4 * cos(2.2 * (w[1] - 1));
-
-  print("state")
-  print(xi)
+  xi[1] <- 0.5 * xp[1] - 0.1 * xp[2] + 0.7 * (xp[1] / (1.0 + xp[1] * xp[1])) + 2.2 * cos(1.2 * (w[1] - 1));
+  xi[2] <- 0.8 * xp[2] - 0.2 * xp[1] + 0.9 * (xp[2] / (1.0 + xp[2] * xp[2])) + 2.4 * cos(2.2 * (w[2] - 1));
 
   return (xi)
 }
 
 
 # ----------------------------------------------------------------------------
+
 # create the object instance
-# ----------------------------------------------------------------------------
 UKF.Context <- UKF.create(n,m,kappa,alfa,beta, model_output, environment(), F, model_state, environment(), F)
-
-A <- matrix(c(4, 2, 2,
-              2, 3, 1,
-              2, 1, 3), nrow=3, byrow=TRUE)
-
-det(A)
-
-L <- A * 0
-
-UKF.choleskyDecomposition(UKF.Context, A, L, as.integer(3))
-
-InvA <- A * 0
-
-UKF.matrixInverseFromChol(UKF.Context, L, InvA, as.integer(3))
 
 # initial x value
 x_0    <- array(NA, n)
@@ -118,12 +98,12 @@ x[1,] <- x_0
 
 for (i in 1:(size_n - 1))
 {
-  x[i+1,1] <- 0.5 * x[i,1] - 0.1 * x[i,2] + 0.7 * (x[i,1] / (1 + x[i,1] ** 2)) + 2.2 * cos(1.2 * (i - 1)) + u[i+1,1]
-  x[i+1,2] <- 0.8 * x[i,2] - 0.2 * x[i,1] + 0.9 * (x[i,2] / (1 + x[i,2] ** 2)) + 2.4 * cos(2.2 * (i - 1)) + u[i+1,2]
-  y[i+1,1] <- (x[i,1] * 2) / 9.0 + (x[i,2] * 2) / 7.0 + v[i+1,1]
-  y[i+1,2] <- (x[i,1] * 2) / 6.0 + (x[i,2] * 2) / 2.0 + v[i+1,2]
+  w       <- c(i,i)
+  x[i+1,] <- model_state(w, x[i,]) + u[i+1,]
+  y[i+1,] <- model_output(x[i,]) + v[i+1,]
 }
 
+# reset and run the UKF
 UKF.resetUKF(UKF.Context, 0.1,  0.1, x_0)
 
 timeUpdateInput         <- rep(0.0, n)
@@ -132,11 +112,9 @@ err_total               <- 0.0
 est_state               <- array(0.0, c(size_n, n))
 est_output              <- array(0.0, c(size_n, n))
 
-
 # estimation loop
 for (i in 1:size_n)
 {
-  print(i)
   timeUpdateInput[]      <- i - 1
   measurementUpdateInput <- x[i, ]
 
@@ -148,19 +126,20 @@ for (i in 1:size_n)
 
   for (j in 1:n)
   {
-    err <- err + (UKF.get.x_aposteriori(UKF.Context)[j-1] - x[i, j]) ** 2
+    err <- err + (UKF.get.x_aposteriori(UKF.Context)[j] - x[i, j]) ** 2
   }
 
-  est_state[i, 1]  <- UKF.get.x_aposteriori(UKF.Context)[0]
-  est_state[i, 2]  <- UKF.get.x_aposteriori(UKF.Context)[1]
-  est_output[i, 1] <- UKF.get.yi(UKF.Context)[0]
-  est_output[i, 2] <- UKF.get.yi(UKF.Context)[1]
+  est_state[i, 1]  <- UKF.get.x_aposteriori(UKF.Context)[1]
+  est_state[i, 2]  <- UKF.get.x_aposteriori(UKF.Context)[2]
+  est_output[i, 1] <- UKF.get.yi(UKF.Context)[1]
+  est_output[i, 2] <- UKF.get.yi(UKF.Context)[2]
 
   err_total <- err_total + err
 }
 
 print(paste("total error:", err_total))
 
+# plot results
 require(ggplot2)
 
 df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 

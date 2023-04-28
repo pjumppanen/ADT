@@ -13,20 +13,20 @@
 #include "UKF.hpp"
 
 
-void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* 0:nSize-1, 0:nSize-1 */, ARRAY_2D pL/* 0:nSize-1, 0:nSize-1 */, const int nSize)
+void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize)
 {
   //--------------------------------------------------------------------------
-  // A is symetric positive definite matrix in lower triangular form
+  // A is symetric positive definite matrix
   // L is the cholesky decomposition in upper triangular form
   //--------------------------------------------------------------------------
   double sum;
   int    ci, cj, ck;
 
-  for (ci = 0 ; ci < nSize ; ci++)
+  for (ci = 1 ; ci <= nSize ; ci++)
   {
     sum = pA[ci][ci];
 
-    for (cj = 0 ; cj < ci ; cj++)
+    for (cj = 1 ; cj <= ci - 1 ; cj++)
     {
       sum = sum - pL[cj][ci] * pL[cj][ci];
     }
@@ -36,11 +36,11 @@ void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* 0:nSize-1,
 #endif    
     pL[ci][ci] = sqrt(sum);
 
-    for (cj = ci + 1 ; cj < nSize ; cj++)
+    for (cj = ci + 1 ; cj <= nSize ; cj++)
     {
       sum = pA[ci][cj];
-      
-      for (ck = 0 ; ck < ci ; ck++)
+
+      for (ck = 1 ; ck <= ci - 1 ; ck++)
       {
         sum = sum - pL[ck][ci] * pL[ck][cj];
       }
@@ -52,10 +52,10 @@ void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* 0:nSize-1,
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* 0:nSize-1, 0:nSize-1 */, ARRAY_2D pInv/* 0:nSize-1, 0:nSize-1 */, const int nSize)
+void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize)
 {
   //--------------------------------------------------------------------------
-  // pL is the cholesky decomposition of A in lower triangular form
+  // pL is the cholesky decomposition of A in upper triangular form
   // pInv is the resulting upper triangular inverse matrix
   //--------------------------------------------------------------------------
   int     cc;
@@ -64,9 +64,9 @@ void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* 0:nSize-1,
   double  b;
   double  dEntry;
 
-  for (cc = nSize - 1 ; cc >= 0 ; cc--)
+  for (cc = nSize ; cc >= 1 ; cc--)
   {
-    for (cr = cc ; cr >= 0 ; cr--)
+    for (cr = cc ; cr >= 1 ; cr--)
     {
       b = 0.0;
 
@@ -75,9 +75,9 @@ void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* 0:nSize-1,
         b = (1.0 / pL[cr][cr]);
       }
 
-      if (cr < nSize - 1)
+      if (cr < nSize)
       {
-        for (cq = 1 + cr ; cq < nSize ; cq++)
+        for (cq = 1 + cr ; cq <= nSize ; cq++)
         {
           if (cc <= cq)
           {
@@ -90,7 +90,7 @@ void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* 0:nSize-1,
         }
       }
 
-      dEntry    = b * (1.0 / pL[cr][cr]);
+      dEntry = b * (1.0 / pL[cr][cr]);
 
       pInv[cc][cr] = dEntry;
       pInv[cr][cc] = dEntry;
@@ -165,7 +165,7 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
 // R - measurement noise covariance,
 // P - init covariance noise
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::resetUKF(double _Q, double _R, const ARRAY_1D x_0 /* 0:n-1 */)
+void UnscentedKalmanFilter::resetUKF(double _Q, double _R, const ARRAY_1D x_0 /* n */)
 {
   int cn;
 
@@ -189,7 +189,7 @@ void UnscentedKalmanFilter::resetUKF(double _Q, double _R, const ARRAY_1D x_0 /*
   zero(P_aprioriP);
   zero(P_aposteriori);
 
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
     x_apriori[cn]         = x_0[cn];
     x_aposteriori[cn]     = x_0[cn];
@@ -211,12 +211,12 @@ void UnscentedKalmanFilter::setCovariances(double _Q, double _R)
   zero(Q);
   zero(R);
 
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
     Q[cn][cn] = _Q;
   }
 
-  for (cn = 0 ; cn < m ; cn++)
+  for (cn = 1 ; cn <= m ; cn++)
   {
     R[cn][cn] = _R;
   }
@@ -226,19 +226,19 @@ void UnscentedKalmanFilter::setCovariances(double _Q, double _R)
 // vect_X - state vector
 // sigma points are drawn from P
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::sigma_points(const ARRAY_1D vect_X /* 0:n-1 */, const ARRAY_2D matrix_S /* 0:n-1,0:n-1 */)
+void UnscentedKalmanFilter::sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */)
 {
   int ck;
   int cn;
 
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
-    x_sigma[cn][0] = vect_X[cn];
+    x_sigma[cn][1] = vect_X[cn];
   }
 
-  for (ck = 1 ; ck < n + 1 ; ck++)
+  for (ck = 2 ; ck <= n + 1 ; ck++)
   {
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
       x_sigma[cn][ck]     = vect_X[cn] + gamma * matrix_S[cn][ck - 1];
       x_sigma[cn][n + ck] = vect_X[cn] - gamma * matrix_S[cn][ck - 1];
@@ -255,30 +255,30 @@ void UnscentedKalmanFilter::y_UKF_calc()
   int ck;
   int cn;
 
-  for (ck = 0 ; ck < 2 * n + 1; ck++)
+  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
   {
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
       xi[cn] = x_sigma_f[cn][ck];
     }
 
     model_output(yi, xi);
 
-    for (cn = 0 ; cn < m ; cn++)
+    for (cn = 1 ; cn <= m ; cn++)
     {
       y_sigma[cn][ck] = yi[cn];
     }
   }
 
   // y_UKF
-  for (cn = 0 ; cn < m ; cn++)
+  for (cn = 1 ; cn <= m ; cn++)
   {
-    y[cn] = W0m * y_sigma[cn][0];
+    y[cn] = W0m * y_sigma[cn][1];
   }
 
-  for (ck = 1 ; ck < 2 * n + 1; ck++)
+  for (ck = 2 ; ck <= 2 * n + 1; ck++)
   {
-    for (cn = 0 ; cn < m ; cn++)
+    for (cn = 1 ; cn <= m ; cn++)
     {
       y[cn] += W * y_sigma[cn][ck];
     }
@@ -288,21 +288,21 @@ void UnscentedKalmanFilter::y_UKF_calc()
 // ----------------------------------------------------------------------------
 // w - input vector data
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::state(ARRAY_1D w/* 0:n-1 */)
+void UnscentedKalmanFilter::state(ARRAY_1D w/* n */)
 {
   int j;
   int cn;
 
-  for (j = 0 ; j < 2 * n + 1 ; j++)
+  for (j = 1 ; j <= 2 * n + 1 ; j++)
   {
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
       xp[cn] = x_sigma[cn][j];
     }
 
     model_state(xi, w, xp);
 
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
       x_sigma_f[cn][j] = xi[cn];
     }
@@ -311,7 +311,7 @@ void UnscentedKalmanFilter::state(ARRAY_1D w/* 0:n-1 */)
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* 0:n-1 */)
+void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* n */)
 {
   int     cn;
   int     cm;
@@ -325,11 +325,11 @@ void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* 0:n-1 */)
   state(w);
 
   // apriori state:
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
-    x_apriori[cn] = W0m * x_sigma_f[cn][0];
+    x_apriori[cn] = W0m * x_sigma_f[cn][1];
 
-    for (ck = 1 ; ck < 2 * n + 1 ; ck++)
+    for (ck = 2 ; ck <= 2 * n + 1 ; ck++)
     {
       x_apriori[cn] += W * x_sigma_f[cn][ck]; 
     }
@@ -338,9 +338,9 @@ void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* 0:n-1 */)
   // apriori covariance matrix:
   zero(P_apriori);
 
-  for (ck = 0 ; ck < 2 * n + 1 ; ck++)
+  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
   {
-    if (ck == 0)
+    if (ck == 1)
     {
       dW = W0c;
     }
@@ -349,14 +349,14 @@ void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* 0:n-1 */)
       dW = W;
     }
 
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
       x_P[cn] = x_sigma_f[cn][ck] - x_apriori[cn];
     }
 
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
-      for (cm = 0 ; cm < n ; cm++)
+      for (cm = 1 ; cm <= n ; cm++)
       {
         P_aprioriP[cn][cm] = dW * x_P[cn] * x_P[cm];
         P_apriori[cn][cm] += P_aprioriP[cn][cm];
@@ -364,9 +364,9 @@ void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* 0:n-1 */)
     }
   }
 
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
-    for (cm = 0 ; cm < n ; cm++)
+    for (cm = 1 ; cm <= n ; cm++)
     {
       P_apriori[cn][cm] += Q[cn][cm];
     }
@@ -377,7 +377,7 @@ void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* 0:n-1 */)
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
+void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
 {
   int     ck;
   int     cn;
@@ -388,9 +388,9 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
 
   zero(P_y);
 
-  for (ck = 0 ; ck < 2 * n + 1 ; ck++)
+  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
   {
-    if (ck == 0)
+    if (ck == 1)
     {
       dW = W0c;
     }
@@ -400,14 +400,14 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
     }
 
     // cov matrix oytpu/output
-    for (cn = 0 ; cn < m ; cn++)
+    for (cn = 1 ; cn <= m ; cn++)
     {
       y_P[cn] = y_sigma[cn][ck] - y[cn];
     }
 
-    for (cn = 0 ; cn < m ; cn++)
+    for (cn = 1 ; cn <= m ; cn++)
     {
-      for (cm = 0 ; cm < m ; cm++)
+      for (cm = 1 ; cm <= m ; cm++)
       {
         P_y_P[cn][cm] = dW * y_P[cn] * y_P[cm];
         P_y[cn][cm]  += P_y_P[cn][cm];
@@ -415,9 +415,9 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
     }
   }
 
-  for (cn = 0 ; cn < m ; cn++)
+  for (cn = 1 ; cn <= m ; cn++)
   {
-    for (cm = 0 ; cm < m ; cm++)
+    for (cm = 1 ; cm <= m ; cm++)
     {
       P_y[cn][cm]  += R[cn][cm];
     }
@@ -425,9 +425,9 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
 
   zero(P_xy);
 
-  for (ck = 0 ; ck < 2 * n + 1 ; ck++)
+  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
   {
-    if (ck == 0)
+    if (ck == 1)
     {
       dW = W0c;
     }
@@ -437,19 +437,19 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
     }
 
     // cross cov matrix input/output:
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
       x_P[cn] = x_sigma_f[cn][ck] - x_apriori[cn];
     }
 
-    for (cn = 0 ; cn < m ; cn++)
+    for (cn = 1 ; cn <= m ; cn++)
     {
       y_P[cn] = y_sigma[cn][ck] - y[cn];
     }
 
-    for (cn = 0 ; cn < n ; cn++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
-      for (cm = 0 ; cm < m ; cm++)
+      for (cm = 1 ; cm <= m ; cm++)
       {
         P_xyP[cn][cm]  = dW * x_P[cn] * y_P[cm];
         P_xy[cn][cm]  += P_xyP[cn][cm];
@@ -463,13 +463,13 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
   choleskyDecomposition(P_y, chol_P_y, m);
   matrixInverseFromChol(chol_P_y, inv_P_y, m);
 
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
-    for (cm = 0 ; cm < m ; cm++)
+    for (cm = 1 ; cm <= m ; cm++)
     {
       dSum = 0.0;
 
-      for (cr = 0 ; cr < m ; cr++)
+      for (cr = 1 ; cr <= m ; cr++)
       {
         dSum += P_xy[cn][cr] * inv_P_y[cr][cm];
       }
@@ -479,16 +479,16 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
   }
 
   // aposteriori state:
-  for (cn = 0 ; cn < m ; cn++)
+  for (cn = 1 ; cn <= m ; cn++)
   {
     y_P[cn] = z[cn] - y[cn];
   }
 
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
     dSum = 0.0;
 
-    for (cr = 0 ; cr < m ; cr++)
+    for (cr = 1 ; cr <= m ; cr++)
     {
       dSum += K[cn][cr] * y_P[cr];
     }
@@ -497,13 +497,13 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
   }
 
   // cov aposteriori:
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
-    for (cm = 0 ; cm < m ; cm++)
+    for (cm = 1 ; cm <= m ; cm++)
     {
       dSum = 0.0;
 
-      for (cr = 0 ; cr < m ; cr++)
+      for (cr = 1 ; cr <= m ; cr++)
       {
         dSum += K[cn][cr] * P_y[cr][cm];
       }
@@ -512,13 +512,13 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* 0:m-1 */)
     }
   }
 
-  for (cn = 0 ; cn < n ; cn++)
+  for (cn = 1 ; cn <= n ; cn++)
   {
-    for (cm = 0 ; cm < n ; cm++)
+    for (cm = 1 ; cm <= n ; cm++)
     {
       dSum = 0.0;
 
-      for (cr = 0 ; cr < m ; cr++)
+      for (cr = 1 ; cr <= m ; cr++)
       {
         dSum += K_P_y[cn][cr] * K[cm][cr];
       }

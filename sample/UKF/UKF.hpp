@@ -57,49 +57,49 @@ protected:
   double  W;
 
   // all vectors used in the UKF process
-  ARRAY_1D  x_apriori /* 0:n-1 */;
-  ARRAY_1D  x_aposteriori /* 0:n-1 */;
-  ARRAY_1D  x_P /* 0:n-1 */;
-  ARRAY_1D  y_P /* 0:m-1 */;
-  ARRAY_1D  in_ /* 0:m-1 */;
-  ARRAY_1D  y /* 0:m-1 */;
-  ARRAY_1D  xi /* 0:n-1 */;
-  ARRAY_1D  xp /* 0:n-1 */;
-  ARRAY_1D  yi /* 0:m-1 */;
+  ARRAY_1D  x_apriori /* n */;
+  ARRAY_1D  x_aposteriori /* n */;
+  ARRAY_1D  x_P /* n */;
+  ARRAY_1D  y_P /* m */;
+  ARRAY_1D  in_ /* m */;
+  ARRAY_1D  y /* m */;
+  ARRAY_1D  xi /* n */;
+  ARRAY_1D  xp /* n */;
+  ARRAY_1D  yi /* m */;
 
   // covarince matrices used in the process
 
-  ARRAY_2D  P_apriori /* 0:n-1,0:n-1 */;
-  ARRAY_2D  P_aprioriP /* 0:n-1,0:n-1 */;
-  ARRAY_2D  P_aposteriori /* 0:n-1,0:n-1 */;
+  ARRAY_2D  P_apriori /* n,n */;
+  ARRAY_2D  P_aprioriP /* n,n */;
+  ARRAY_2D  P_aposteriori /* n,n */;
 
   // square root product of a given covariances s
-  ARRAY_2D  sP_apriori /* 0:n-1,0:n-1 */;
-  ARRAY_2D  sP_aposteriori /* 0:n-1,0:n-1 */;
+  ARRAY_2D  sP_apriori /* n,n */;
+  ARRAY_2D  sP_aposteriori /* n,n */;
 
   // clear sigma points
-  ARRAY_2D  y_sigma /* 0:m-1, 0:2*n */;
-  ARRAY_2D  x_sigma /* 0:n-1, 0:2*n */;
+  ARRAY_2D  y_sigma /* m, 2 * n + 1 */;
+  ARRAY_2D  x_sigma /* n, 2 * n + 1 */;
 
   // sigma points after passing through the function f/h
-  ARRAY_2D  x_sigma_f /* 0:n-1, 0:2*n */;
+  ARRAY_2D  x_sigma_f /* n, 2 * n + 1 */;
 
   // cross covariances
-  ARRAY_2D  P_xy /* 0:n-1,0:m-1 */;
-  ARRAY_2D  P_xyP /* 0:n-1,0:m-1 */;
+  ARRAY_2D  P_xy /* n,m */;
+  ARRAY_2D  P_xyP /* n,m */;
 
-  ARRAY_2D  P_y /* 0:m-1,0:m-1 */;
-  ARRAY_2D  chol_P_y /* 0:m-1,0:m-1 */;
-  ARRAY_2D  inv_P_y /* 0:m-1,0:m-1 */;
-  ARRAY_2D  oP_y /* 0:m-1,0:m-1 */;
-  ARRAY_2D  P_y_P /* 0:m-1,0:m-1 */;
-  ARRAY_2D  K /* 0:n-1,0:m-1 */;
-  ARRAY_2D  K_P_y /* 0:n-1,0:m-1 */;
-  ARRAY_2D  K_0 /* 0:n-1,0:m-1 */;
-  ARRAY_2D  K_UKF_T /* 0:m-1,0:n-1  */;
+  ARRAY_2D  P_y /* m,m */;
+  ARRAY_2D  chol_P_y /* m,m */;
+  ARRAY_2D  inv_P_y /* m,m */;
+  ARRAY_2D  oP_y /* m,m */;
+  ARRAY_2D  P_y_P /* m,m */;
+  ARRAY_2D  K /* n,m */;
+  ARRAY_2D  K_P_y /* n,m */;
+  ARRAY_2D  K_0 /* n,m */;
+  ARRAY_2D  K_UKF_T /* m,n */;
 
-  ARRAY_2D  Q /* 0:n-1,0:n-1 */;
-  ARRAY_2D  R /* 0:m-1,0:m-1 */;
+  ARRAY_2D  Q /* n,n */;
+  ARRAY_2D  R /* m,m */;
 
   double Rs;
   double Qs;
@@ -107,22 +107,22 @@ protected:
 #include "UKF_array_plans.hpp"
 
 public:
-  void    choleskyDecomposition(const ARRAY_2D pA/* 0:nSize-1, 0:nSize-1 */, ARRAY_2D pL/* 0:nSize-1, 0:nSize-1 */, const int nSize);
-  void    matrixInverseFromChol(const ARRAY_2D pL/* 0:nSize-1, 0:nSize-1 */, ARRAY_2D pInv/* 0:nSize-1, 0:nSize-1 */, const int nSize);
+  void    choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize);
+  void    matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
 
   void    setCovariances(double _Q, double _R);
-  void    sigma_points(const ARRAY_1D vect_X /* 0:n-1 */, const ARRAY_2D matrix_S /* 0:n-1,0:n-1 */);
+  void    sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */);
   void    y_UKF_calc();
-  void    state(ARRAY_1D w/* 0:n-1 */);
+  void    state(ARRAY_1D w/* n */);
 
 public:
   UnscentedKalmanFilter(
 #include "UKF_constructor_args.hpp"
   );
 
-  void    resetUKF(double _Q, double _R, const ARRAY_1D x_0 /* 0:n-1 */);
-  void    timeUpdate(ARRAY_1D w/* 0:n-1 */);
-  void    measurementUpdate(const ARRAY_1D z/* 0:m-1 */);
+  void    resetUKF(double _Q, double _R, const ARRAY_1D x_0 /* n */);
+  void    timeUpdate(ARRAY_1D w/* n */);
+  void    measurementUpdate(const ARRAY_1D z/* m */);
 };
 
 #endif  __UKF_HPP__
