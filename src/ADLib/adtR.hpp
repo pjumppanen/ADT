@@ -54,8 +54,8 @@ private:
   bool        IsScalar;
 
 public:
-  R_CALLARG(int nValue);
-  R_CALLARG(double dValue);
+  R_CALLARG(const int& nValue);
+  R_CALLARG(const double& dValue);
 
   R_CALLARG(const ARRAY_1D pArray);
   R_CALLARG(const ARRAY_2D pArray);
@@ -85,7 +85,7 @@ public:
 
 //  ----------------------------------------------------------------------------
 
-inline R_CALLARG::R_CALLARG(int nValue)
+inline R_CALLARG::R_CALLARG(const int& nValue)
 {
   Array     = (char*)&nValue;
   VarType   = AdtVarType_INT;
@@ -94,7 +94,7 @@ inline R_CALLARG::R_CALLARG(int nValue)
 
 //  ----------------------------------------------------------------------------
 
-inline R_CALLARG::R_CALLARG(double dValue)
+inline R_CALLARG::R_CALLARG(const double& dValue)
 {
   Array     = (char*)&dValue;
   VarType   = AdtVarType_DOUBLE;
