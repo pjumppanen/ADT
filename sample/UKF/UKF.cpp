@@ -393,7 +393,7 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
 
   for (cn = 1 ; cn <= m ; cn++)
   {
-    if (ISNA(z[cn]))
+    if (ISNA(z[cn]) || ISNAN(z[cn]))
     {
       bIsNA = true;
       break;
