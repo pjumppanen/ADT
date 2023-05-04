@@ -111,7 +111,7 @@ UKF.resetUKF(UKF.Context, 0.1,  0.1, x_0)
 
 err_total               <- 0.0
 est_state               <- array(0.0, c(size_n, n))
-est_output              <- array(0.0, c(size_n, n))
+est_output              <- array(0.0, c(size_n, m))
 
 # estimation loop
 for (i in 1:size_n)
@@ -158,3 +158,38 @@ print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
              theme_bw() + 
              theme(legend.title=element_blank()))
+
+# direct approach to running filtering
+est_state[]  <- 0.0
+est_state[]  <- 0.0
+est_output[] <- 0.0
+est_output[] <- 0.0
+
+UKF.filter(UKF.Context,
+           est_output, 
+           est_state, 
+           0.1, 
+           0.1, 
+           x_0, 
+           y, 
+           as.integer(size_n))
+
+df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
+                 value=c(x[,1], est_state[,1], x[,2], est_state[,2]),
+                 groups=c(rep("x1.original", size_n), rep("x1.estimate", size_n), rep("x2.original", size_n), rep("x2.estimate", size_n)))
+
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             theme_bw() + 
+             theme(legend.title=element_blank()))
+
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
+             theme_bw() + 
+             theme(legend.title=element_blank()))
+

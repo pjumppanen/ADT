@@ -165,7 +165,7 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
 // R - measurement noise covariance,
 // P - init covariance noise
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::resetUKF(double _Q, double _R, const ARRAY_1D x_0 /* n */)
+void UnscentedKalmanFilter::resetUKF(const double _Q, const double _R, const ARRAY_1D x_0 /* n */)
 {
   int cn;
 
@@ -250,7 +250,7 @@ void UnscentedKalmanFilter::sigma_points(const ARRAY_1D vect_X /* n */, const AR
 // finding the y = h(x, ...)
 // the input is x_sigma, which is using h(...) then we find y_sigma_UKF from which we get to the y_UKF
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::y_UKF_calc(int t)
+void UnscentedKalmanFilter::y_UKF_calc(const int t)
 {
   int ck;
   int cn;
@@ -288,7 +288,7 @@ void UnscentedKalmanFilter::y_UKF_calc(int t)
 // ----------------------------------------------------------------------------
 // w - input vector data
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::state(int t)
+void UnscentedKalmanFilter::state(const int t)
 {
   int j;
   int cn;
@@ -311,7 +311,7 @@ void UnscentedKalmanFilter::state(int t)
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::timeUpdate(int t)
+void UnscentedKalmanFilter::timeUpdate(const int t)
 {
   int     cn;
   int     cm;
@@ -527,3 +527,35 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
     }
   }
 }
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::filter(ARRAY_2D y_est /* size, m */, 
+                                   ARRAY_2D x_est /* size, n */, 
+                                   const double _Q, 
+                                   const double _R, 
+                                   const ARRAY_1D x_0 /* n */, 
+                                   const ARRAY_2D y /* size, m */, 
+                                   const int size)
+{
+  int t;
+  int i;
+
+  resetUKF(_Q, _R, x_0);
+
+  for (t = 1 ; t <= size ; t++)
+  {
+    timeUpdate(t);
+    measurementUpdate(y[t]);
+
+    for (i = 1 ; i <= n ; i++)
+    {
+      x_est[t][i] = xi[i];
+    }
+
+    for (i = 1 ; i <= m ; i++)
+    {
+      y_est[t][i] = yi[i];
+    }
+  }
+}                                   

@@ -112,17 +112,24 @@ public:
 
   void    setCovariances(double _Q, double _R);
   void    sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */);
-  void    y_UKF_calc(int t);
-  void    state(int t);
+  void    y_UKF_calc(const int t);
+  void    state(const int t);
 
 public:
   UnscentedKalmanFilter(
 #include "UKF_constructor_args.hpp"
   );
 
-  void    resetUKF(double _Q, double _R, const ARRAY_1D x_0 /* n */);
-  void    timeUpdate(int t);
+  void    resetUKF(const double _Q, const double _R, const ARRAY_1D x_0 /* n */);
+  void    timeUpdate(const int t);
   void    measurementUpdate(const ARRAY_1D z/* m */);
+  void    filter(ARRAY_2D y_est /* size, m */, 
+                 ARRAY_2D x_est /* size, n */, 
+                 const double _Q, 
+                 const double _R, 
+                 const ARRAY_1D x_0 /* n */, 
+                 const ARRAY_2D y /* size, m */, 
+                 const int size);
 };
 
 #endif  __UKF_HPP__
