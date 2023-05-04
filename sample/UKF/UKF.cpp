@@ -385,145 +385,161 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
   int     cr;
   double  dW;
   double  dSum;
+  bool    bIsNA;
 
   zero(P_y);
 
-  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-  {
-    if (ck == 1)
-    {
-      dW = W0c;
-    }
-    else
-    {
-      dW = W;
-    }
+  bIsNA = false;
 
-    // cov matrix oytpu/output
-    for (cn = 1 ; cn <= m ; cn++)
+  for (cn = 1 ; cn <= m ; cn++)
+  {
+    if (ISNA(z[cn]))
     {
-      y_P[cn] = y_sigma[cn][ck] - y[cn];
+      bIsNA = true;
+      break;
+    }
+  }
+
+  // only do measurement update if we have a new measurement
+  if (!bIsNA)
+  {
+    for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
+    {
+      if (ck == 1)
+      {
+        dW = W0c;
+      }
+      else
+      {
+        dW = W;
+      }
+
+      // cov matrix oytpu/output
+      for (cn = 1 ; cn <= m ; cn++)
+      {
+        y_P[cn] = y_sigma[cn][ck] - y[cn];
+      }
+
+      for (cn = 1 ; cn <= m ; cn++)
+      {
+        for (cm = 1 ; cm <= m ; cm++)
+        {
+          P_y_P[cn][cm] = dW * y_P[cn] * y_P[cm];
+          P_y[cn][cm]  += P_y_P[cn][cm];
+        }
+      }
     }
 
     for (cn = 1 ; cn <= m ; cn++)
     {
       for (cm = 1 ; cm <= m ; cm++)
       {
-        P_y_P[cn][cm] = dW * y_P[cn] * y_P[cm];
-        P_y[cn][cm]  += P_y_P[cn][cm];
+        P_y[cn][cm]  += R[cn][cm];
       }
     }
-  }
 
-  for (cn = 1 ; cn <= m ; cn++)
-  {
-    for (cm = 1 ; cm <= m ; cm++)
-    {
-      P_y[cn][cm]  += R[cn][cm];
-    }
-  }
+    zero(P_xy);
 
-  zero(P_xy);
+    for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
+    {
+      if (ck == 1)
+      {
+        dW = W0c;
+      }
+      else
+      {
+        dW = W;
+      }
 
-  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-  {
-    if (ck == 1)
-    {
-      dW = W0c;
-    }
-    else
-    {
-      dW = W;
+      // cross cov matrix input/output:
+      for (cn = 1 ; cn <= n ; cn++)
+      {
+        x_P[cn] = x_sigma_f[cn][ck] - x_apriori[cn];
+      }
+
+      for (cn = 1 ; cn <= m ; cn++)
+      {
+        y_P[cn] = y_sigma[cn][ck] - y[cn];
+      }
+
+      for (cn = 1 ; cn <= n ; cn++)
+      {
+        for (cm = 1 ; cm <= m ; cm++)
+        {
+          P_xyP[cn][cm]  = dW * x_P[cn] * y_P[cm];
+          P_xy[cn][cm]  += P_xyP[cn][cm];
+        }
+      }
     }
 
-    // cross cov matrix input/output:
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      x_P[cn] = x_sigma_f[cn][ck] - x_apriori[cn];
-    }
+    // kalman gain:
+    zero(chol_P_y);
 
-    for (cn = 1 ; cn <= m ; cn++)
-    {
-      y_P[cn] = y_sigma[cn][ck] - y[cn];
-    }
+    choleskyDecomposition(P_y, chol_P_y, m);
+    matrixInverseFromChol(chol_P_y, inv_P_y, m);
 
     for (cn = 1 ; cn <= n ; cn++)
     {
       for (cm = 1 ; cm <= m ; cm++)
       {
-        P_xyP[cn][cm]  = dW * x_P[cn] * y_P[cm];
-        P_xy[cn][cm]  += P_xyP[cn][cm];
+        dSum = 0.0;
+
+        for (cr = 1 ; cr <= m ; cr++)
+        {
+          dSum += P_xy[cn][cr] * inv_P_y[cr][cm];
+        }
+
+        K[cn][cm] = dSum;
       }
     }
-  }
 
-  // kalman gain:
-  zero(chol_P_y);
+    // aposteriori state:
+    for (cn = 1 ; cn <= m ; cn++)
+    {
+      y_P[cn] = z[cn] - y[cn];
+    }
 
-  choleskyDecomposition(P_y, chol_P_y, m);
-  matrixInverseFromChol(chol_P_y, inv_P_y, m);
-
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    for (cm = 1 ; cm <= m ; cm++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
       dSum = 0.0;
 
       for (cr = 1 ; cr <= m ; cr++)
       {
-        dSum += P_xy[cn][cr] * inv_P_y[cr][cm];
+        dSum += K[cn][cr] * y_P[cr];
       }
 
-      K[cn][cm] = dSum;
-    }
-  }
-
-  // aposteriori state:
-  for (cn = 1 ; cn <= m ; cn++)
-  {
-    y_P[cn] = z[cn] - y[cn];
-  }
-
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    dSum = 0.0;
-
-    for (cr = 1 ; cr <= m ; cr++)
-    {
-      dSum += K[cn][cr] * y_P[cr];
+      x_aposteriori[cn] = x_apriori[cn] + dSum;
     }
 
-    x_aposteriori[cn] = x_apriori[cn] + dSum;
-  }
-
-  // cov aposteriori:
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    for (cm = 1 ; cm <= m ; cm++)
+    // cov aposteriori:
+    for (cn = 1 ; cn <= n ; cn++)
     {
-      dSum = 0.0;
-
-      for (cr = 1 ; cr <= m ; cr++)
+      for (cm = 1 ; cm <= m ; cm++)
       {
-        dSum += K[cn][cr] * P_y[cr][cm];
-      }
+        dSum = 0.0;
 
-      K_P_y[cn][cm] = dSum;
+        for (cr = 1 ; cr <= m ; cr++)
+        {
+          dSum += K[cn][cr] * P_y[cr][cm];
+        }
+
+        K_P_y[cn][cm] = dSum;
+      }
     }
-  }
 
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    for (cm = 1 ; cm <= n ; cm++)
+    for (cn = 1 ; cn <= n ; cn++)
     {
-      dSum = 0.0;
-
-      for (cr = 1 ; cr <= m ; cr++)
+      for (cm = 1 ; cm <= n ; cm++)
       {
-        dSum += K_P_y[cn][cr] * K[cm][cr];
-      }
+        dSum = 0.0;
 
-      P_aposteriori[cn][cm] = P_apriori[cn][cm] - dSum;
+        for (cr = 1 ; cr <= m ; cr++)
+        {
+          dSum += K_P_y[cn][cr] * K[cm][cr];
+        }
+
+        P_aposteriori[cn][cm] = P_apriori[cn][cm] - dSum;
+      }
     }
   }
 }
