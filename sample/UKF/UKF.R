@@ -55,26 +55,25 @@ beta  <- 2.0
 
 # ----------------------------------------------------------------------------
 
-model_output <- function(xi)
+model_output <- function(x, t)
 {
-  yi    <- array(data=NA, dim=2)
-  yi[1] <- (xi[1] * 2) / 9.0 + (xi[2] * 2) / 7.0;
-  yi[2] <- (xi[1] * 2) / 6.0 + (xi[2] * 2) / 2.0;
+  y    <- array(data=NA, dim=2)
+  y[1] <- (x[1] * 2) / 9.0 + (x[2] * 2) / 7.0;
+  y[2] <- (x[1] * 2) / 6.0 + (x[2] * 2) / 2.0;
 
-  return (yi)
+  return (y)
 }
 
 # ----------------------------------------------------------------------------
 
-model_state <- function(w, xp)
+model_state <- function(xp, t)
 {
-  xi    <- xp * 0
-  xi[1] <- 0.5 * xp[1] - 0.1 * xp[2] + 0.7 * (xp[1] / (1.0 + xp[1] * xp[1])) + 2.2 * cos(1.2 * (w[1] - 1));
-  xi[2] <- 0.8 * xp[2] - 0.2 * xp[1] + 0.9 * (xp[2] / (1.0 + xp[2] * xp[2])) + 2.4 * cos(2.2 * (w[2] - 1));
+  x    <- xp * 0
+  x[1] <- 0.5 * xp[1] - 0.1 * xp[2] + 0.7 * (xp[1] / (1.0 + xp[1] * xp[1])) + 2.2 * cos(1.2 * (t - 1));
+  x[2] <- 0.8 * xp[2] - 0.2 * xp[1] + 0.9 * (xp[2] / (1.0 + xp[2] * xp[2])) + 2.4 * cos(2.2 * (t - 1));
 
-  return (xi)
+  return (x)
 }
-
 
 # ----------------------------------------------------------------------------
 
@@ -103,15 +102,13 @@ y[1,] <- y_0
 for (i in 2:size_n)
 {
   w       <- c(i,i)
-  x[i,] <- model_state(w, x[i-1,]) + u[i,]
-  y[i,] <- model_output(x[i-1,]) + v[i,]
+  x[i,] <- model_state(x[i-1,], i) + u[i,]
+  y[i,] <- model_output(x[i-1,], i) + v[i,]
 }
 
 # reset and run the UKF
 UKF.resetUKF(UKF.Context, 0.1,  0.1, x_0)
 
-timeUpdateInput         <- rep(0.0, n)
-measurementUpdateInput  <- rep(0.0, m)
 err_total               <- 0.0
 est_state               <- array(0.0, c(size_n, n))
 est_output              <- array(0.0, c(size_n, n))
@@ -119,12 +116,9 @@ est_output              <- array(0.0, c(size_n, n))
 # estimation loop
 for (i in 1:size_n)
 {
-  timeUpdateInput[]        <- i
-  measurementUpdateInput[] <- y[i, ]
-
   # recursively go through time update and measurement correction
-  UKF.timeUpdate(UKF.Context, timeUpdateInput)
-  UKF.measurementUpdate(UKF.Context, measurementUpdateInput)
+  UKF.timeUpdate(UKF.Context, i)
+  UKF.measurementUpdate(UKF.Context, y[i, ])
 
   err <- 0.0
 

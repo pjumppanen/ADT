@@ -250,7 +250,7 @@ void UnscentedKalmanFilter::sigma_points(const ARRAY_1D vect_X /* n */, const AR
 // finding the y = h(x, ...)
 // the input is x_sigma, which is using h(...) then we find y_sigma_UKF from which we get to the y_UKF
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::y_UKF_calc()
+void UnscentedKalmanFilter::y_UKF_calc(int t)
 {
   int ck;
   int cn;
@@ -262,7 +262,7 @@ void UnscentedKalmanFilter::y_UKF_calc()
       xi[cn] = x_sigma_f[cn][ck];
     }
 
-    model_output(yi, xi);
+    model_output(yi, xi, t);
 
     for (cn = 1 ; cn <= m ; cn++)
     {
@@ -288,7 +288,7 @@ void UnscentedKalmanFilter::y_UKF_calc()
 // ----------------------------------------------------------------------------
 // w - input vector data
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::state(ARRAY_1D w/* n */)
+void UnscentedKalmanFilter::state(int t)
 {
   int j;
   int cn;
@@ -300,7 +300,7 @@ void UnscentedKalmanFilter::state(ARRAY_1D w/* n */)
       xp[cn] = x_sigma[cn][j];
     }
 
-    model_state(xi, w, xp);
+    model_state(xi, xp, t);
 
     for (cn = 1 ; cn <= n ; cn++)
     {
@@ -311,7 +311,7 @@ void UnscentedKalmanFilter::state(ARRAY_1D w/* n */)
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* n */)
+void UnscentedKalmanFilter::timeUpdate(int t)
 {
   int     cn;
   int     cm;
@@ -322,7 +322,7 @@ void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* n */)
 
   choleskyDecomposition(P_aposteriori, sP_aposteriori, n);
   sigma_points(x_aposteriori, sP_aposteriori);
-  state(w);
+  state(t);
 
   // apriori state:
   for (cn = 1 ; cn <= n ; cn++)
@@ -372,7 +372,7 @@ void UnscentedKalmanFilter::timeUpdate(ARRAY_1D w/* n */)
     }
   }
 
-  y_UKF_calc();
+  y_UKF_calc(t);
 }
 
 // ----------------------------------------------------------------------------
