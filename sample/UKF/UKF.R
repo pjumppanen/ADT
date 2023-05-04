@@ -83,8 +83,11 @@ UKF.Context <- UKF.create(n,m,kappa,alfa,beta, model_output, environment(), F, m
 
 # initial x value
 x_0    <- array(NA, n)
+y_0    <- array(NA, m)
 x_0[1] <- 0.1
 x_0[2] <- 0.1
+y_0[1] <- 0.0
+y_0[2] <- 0.0
 
 # generate model data
 size_n <- 500
@@ -95,12 +98,13 @@ u <- array(rnorm(2 * size_n, 0., 1.0), c(size_n, 2))
 v <- array(rnorm(2 * size_n, 0., 1.0), c(size_n, 2))
 
 x[1,] <- x_0
+y[1,] <- y_0
 
-for (i in 1:(size_n - 1))
+for (i in 2:size_n)
 {
   w       <- c(i,i)
-  x[i+1,] <- model_state(w, x[i,]) + u[i+1,]
-  y[i+1,] <- model_output(x[i,]) + v[i+1,]
+  x[i,] <- model_state(w, x[i-1,]) + u[i,]
+  y[i,] <- model_output(x[i-1,]) + v[i,]
 }
 
 # reset and run the UKF
@@ -115,8 +119,8 @@ est_output              <- array(0.0, c(size_n, n))
 # estimation loop
 for (i in 1:size_n)
 {
-  timeUpdateInput[]      <- i - 1
-  measurementUpdateInput <- x[i, ]
+  timeUpdateInput[]        <- i
+  measurementUpdateInput[] <- y[i, ]
 
   # recursively go through time update and measurement correction
   UKF.timeUpdate(UKF.Context, timeUpdateInput)
