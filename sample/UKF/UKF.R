@@ -77,9 +77,7 @@ model_state <- function(xp, t)
 
 # ----------------------------------------------------------------------------
 
-# create the object instance
-UKF.Context <- UKF.create(n,m,kappa,alfa,beta, model_output, environment(), F, model_state, environment(), F)
-
+# Create model test data
 # initial x value
 x_0    <- array(NA, n)
 y_0    <- array(NA, m)
@@ -91,51 +89,35 @@ y_0[2] <- 0.0
 # generate model data
 size_n <- 500
 
-x <- array(NA, c(size_n, 2))
-y <- array(NA, c(size_n, 2))
-u <- array(rnorm(2 * size_n, 0., 1.0), c(size_n, 2))
-v <- array(rnorm(2 * size_n, 0., 1.0), c(size_n, 2))
+x <- array(NA, c(size_n, n))
+y <- array(NA, c(size_n, m))
+u <- array(rnorm(2 * size_n, 0., 1.0), c(size_n, n))
+v <- array(rnorm(2 * size_n, 0., 1.0), c(size_n, m))
 
 x[1,] <- x_0
 y[1,] <- y_0
 
 for (i in 2:size_n)
 {
-  w       <- c(i,i)
   x[i,] <- model_state(x[i-1,], i) + u[i,]
   y[i,] <- model_output(x[i-1,], i) + v[i,]
 }
 
-# reset and run the UKF
-UKF.resetUKF(UKF.Context, 0.1,  0.1, x_0)
+# ----------------------------------------------------------------------------
 
-err_total               <- 0.0
-est_state               <- array(0.0, c(size_n, n))
-est_output              <- array(0.0, c(size_n, m))
+# create the object instance
+UKF.Context <- UKF.create(n,m,size_n,kappa,alfa,beta, model_output, environment(), F, model_state, environment(), F, y)
 
-# estimation loop
-for (i in 1:size_n)
-{
-  # recursively go through time update and measurement correction
-  UKF.timeUpdate(UKF.Context, i)
-  UKF.measurementUpdate(UKF.Context, y[i, ])
+est_state  <- array(as.double(NA), c(size_n, 2))
+est_output <- array(as.double(NA), c(size_n, 2))
 
-  err <- 0.0
-
-  for (j in 1:n)
-  {
-    err <- err + (UKF.get.x_aposteriori(UKF.Context)[j] - x[i, j]) ** 2
-  }
-
-  est_state[i, 1]  <- UKF.get.x_aposteriori(UKF.Context)[1]
-  est_state[i, 2]  <- UKF.get.x_aposteriori(UKF.Context)[2]
-  est_output[i, 1] <- UKF.get.yi(UKF.Context)[1]
-  est_output[i, 2] <- UKF.get.yi(UKF.Context)[2]
-
-  err_total <- err_total + err
-}
-
-print(paste("total error:", err_total))
+# run filtering
+UKF.filter(UKF.Context,
+           est_state,
+           est_output,
+           0.1, 
+           0.1, 
+           x_0)
 
 # plot results
 require(ggplot2)
@@ -159,61 +141,25 @@ print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              theme_bw() + 
              theme(legend.title=element_blank()))
 
-# direct approach to running filtering
-est_state[]  <- 0.0
-est_state[]  <- 0.0
-est_output[] <- 0.0
-est_output[] <- 0.0
-
-UKF.filter(UKF.Context,
-           est_output, 
-           est_state, 
-           0.1, 
-           0.1, 
-           x_0, 
-           y, 
-           as.integer(size_n))
-
-df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
-                 value=c(x[,1], est_state[,1], x[,2], est_state[,2]),
-                 groups=c(rep("x1.original", size_n), rep("x1.estimate", size_n), rep("x2.original", size_n), rep("x2.estimate", size_n)))
-
-print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
-             geom_line() +
-             xlab('') + 
-             ylab('') + 
-             theme_bw() + 
-             theme(legend.title=element_blank()))
-
-print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
-             geom_line() +
-             xlab('') + 
-             ylab('') + 
-             scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
-             theme_bw() + 
-             theme(legend.title=element_blank()))
-
+#make some input data NA's
 y_with_NAs <- y
 y_with_NAs[50:100] <- NA
 
-est_state[]  <- 0.0
-est_state[]  <- 0.0
-est_output[] <- 0.0
-est_output[] <- 0.0
+UKF.set.y(UKF.Context, y_with_NAs)
 
+# run filtering
 UKF.filter(UKF.Context,
-           est_output, 
-           est_state, 
+           est_state,
+           est_output,
            0.1, 
            0.1, 
-           x_0, 
-           y_with_NAs, 
-           as.integer(size_n))
+           x_0)
 
 df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
                  value=c(x[,1], est_state[,1], x[,2], est_state[,2]),
                  groups=c(rep("x1.original", size_n), rep("x1.estimate", size_n), rep("x2.original", size_n), rep("x2.estimate", size_n)))
 
+# plot results
 print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              geom_line() +
              xlab('') + 
@@ -247,4 +193,6 @@ print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
              theme_bw() + 
              theme(legend.title=element_blank()))
+
+UKF.smooth(UKF.Context)
 

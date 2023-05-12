@@ -6,18 +6,30 @@
 // Companion article:
 //
 // https://jgoslinski.medium.com/the-unscented-kalman-filter-simply-the-best-python-code-5cd5ebaebf5f
-// 
+//
+// Implements UKF Kalman smoothing based on the Jacobian Equivalent Rauch-Tung-Striebel
+// smoother (abbreviated as JE-RTS method) described in:
+//
+//   "A computatonally efficient unscented Kalman smoother for ameliorated tracking
+//    of subatomic particles in high energy physics experiments", Jahanzeb Akhtar,
+//   Imran Ghous, Muhammad Jawad, Zhaoxia Duan, Ikram Ullah Khosa, Saim Ahmed, 
+//   Computer Physics Communications 283 (2023) 108585.
+//
+//  https://doi.org/10.1016/j.cpc.2022.108585
 // -----------------------------------------------------------------------------
 
 
 #include "UKF.hpp"
 
 
-void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize)
+// ----------------------------------------------------------------------------
+// UnscentedKalmanFilter method implementations
+// ----------------------------------------------------------------------------
+void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize)
 {
   //--------------------------------------------------------------------------
-  // A is symetric positive definite matrix
-  // L is the cholesky decomposition in upper triangular form
+  // pA is symetric positive definite matrix
+  // pU is the cholesky decomposition in upper triangular form
   //--------------------------------------------------------------------------
   double sum;
   int    ci, cj, ck;
@@ -28,13 +40,13 @@ void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSi
 
     for (cj = 1 ; cj <= ci - 1 ; cj++)
     {
-      sum = sum - pL[cj][ci] * pL[cj][ci];
+      sum = sum - pU[cj][ci] * pU[cj][ci];
     }
 
 #ifndef AD
     assert(sum > 0.0);
 #endif    
-    pL[ci][ci] = sqrt(sum);
+    pU[ci][ci] = sqrt(sum);
 
     for (cj = ci + 1 ; cj <= nSize ; cj++)
     {
@@ -42,20 +54,39 @@ void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSi
 
       for (ck = 1 ; ck <= ci - 1 ; ck++)
       {
-        sum = sum - pL[ck][ci] * pL[ck][cj];
+        sum = sum - pU[ck][ci] * pU[ck][cj];
       }
 
-      pL[ci][cj] = sum / pL[ci][ci];
+      pU[ci][cj] = sum / pU[ci][ci];
     }
   }
 }
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize)
+double UnscentedKalmanFilter::logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, const int nSize)
+{
+  double dLogDet;
+  int    ci;
+
+  dLogDet = 0.0;
+
+  for (ci = 1 ; ci <= nSize ; ci++)
+  {
+    dLogDet += log(pU[ci][ci]);
+  }
+
+  dLogDet *= 2.0;
+
+  return (dLogDet);
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize)
 {
   //--------------------------------------------------------------------------
-  // pL is the cholesky decomposition of A in upper triangular form
+  // pU is the cholesky decomposition of A in upper triangular form
   // pInv is the resulting upper triangular inverse matrix
   //--------------------------------------------------------------------------
   int     cc;
@@ -72,7 +103,7 @@ void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSi
 
       if (cr == cc)
       {
-        b = (1.0 / pL[cr][cr]);
+        b = (1.0 / pU[cr][cr]);
       }
 
       if (cr < nSize)
@@ -81,16 +112,16 @@ void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSi
         {
           if (cc <= cq)
           {
-            b = b - pInv[cq][cc] * pL[cr][cq];
+            b = b - pInv[cq][cc] * pU[cr][cq];
           }
           else
           {
-            b = b - pInv[cc][cq] * pL[cr][cq];
+            b = b - pInv[cc][cq] * pU[cr][cq];
           }
         }
       }
 
-      dEntry = b * (1.0 / pL[cr][cr]);
+      dEntry = b * (1.0 / pU[cr][cr]);
 
       pInv[cc][cr] = dEntry;
       pInv[cr][cc] = dEntry;
@@ -118,22 +149,21 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
   W0c         = lambda_ / (n + lambda_) + (1.0 - alfa * alfa + beta);
   W           = 1.0 / (2.0 * (n + lambda_));
 
+  zero(y_k);
+  zero(x_k);
+  zero(y_k_smooth);
+  zero(x_k_smooth);
+
   // all vectors used in the UKF process
-  zero(x_apriori);
-  zero(x_aposteriori);
   zero(x_P);
   zero(y_P);
-  zero(in_);
-  zero(y);
+  zero(ym);
 
   // covarince matrices used in the process
-  zero(P_apriori);
+  zero(P_k);
+  zero(chol_P_k);
+  zero(Ps_k);
   zero(P_aprioriP);
-  zero(P_aposteriori);
-
-  // square root product of a given covariances s
-  zero(sP_apriori);
-  zero(sP_aposteriori);
 
   // clear sigma points
   zero(y_sigma);
@@ -158,6 +188,9 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
 
   Rs = 0.0;
   Qs = 0.0;
+
+  Filtered = false;
+  Smoothed = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -169,8 +202,12 @@ void UnscentedKalmanFilter::resetUKF(const double _Q, const double _R, const ARR
 {
   int cn;
 
-  // init of all vectors and matrices where the first dim := n
-  zero(y);
+  zero(y_k);
+  zero(x_k);
+  zero(y_k_smooth);
+  zero(x_k_smooth);
+
+  zero(ym);
   zero(y_P);
   zero(P_y);
   zero(P_y_P);
@@ -185,21 +222,24 @@ void UnscentedKalmanFilter::resetUKF(const double _Q, const double _R, const ARR
   zero(x_sigma);
   zero(x_sigma_f);
 
-  zero(P_apriori);
+  zero(P_k);
+  zero(chol_P_k);
   zero(P_aprioriP);
-  zero(P_aposteriori);
 
   for (cn = 1 ; cn <= n ; cn++)
   {
-    x_apriori[cn]         = x_0[cn];
-    x_aposteriori[cn]     = x_0[cn];
-    P_apriori[cn][cn]     = _Q;
-    P_aposteriori[cn][cn] = _Q;
+    x_k[0][cn]      = x_0[cn];
+    P_k[0][cn][cn]  = _Q;
   }
 
   zero(x_P);
 
   setCovariances(_Q, _R);
+
+  LogLikelihood = 0.0;
+  
+  Filtered = false;
+  Smoothed = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -273,14 +313,14 @@ void UnscentedKalmanFilter::y_UKF_calc(const int t)
   // y_UKF
   for (cn = 1 ; cn <= m ; cn++)
   {
-    y[cn] = W0m * y_sigma[cn][1];
+    ym[cn] = W0m * y_sigma[cn][1];
   }
 
   for (ck = 2 ; ck <= 2 * n + 1; ck++)
   {
     for (cn = 1 ; cn <= m ; cn++)
     {
-      y[cn] += W * y_sigma[cn][ck];
+      ym[cn] += W * y_sigma[cn][ck];
     }
   }
 }
@@ -318,25 +358,29 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
   int     ck;
   double  dW;
 
-  zero(sP_aposteriori);
-
-  choleskyDecomposition(P_aposteriori, sP_aposteriori, n);
-  sigma_points(x_aposteriori, sP_aposteriori);
+  choleskyDecomposition(P_k[t-1], chol_P_k[t], n);
+  sigma_points(x_k[t-1], chol_P_k[t]);
   state(t);
 
   // apriori state:
   for (cn = 1 ; cn <= n ; cn++)
   {
-    x_apriori[cn] = W0m * x_sigma_f[cn][1];
+    x_k[t-1][cn] = W0m * x_sigma_f[cn][1];
 
     for (ck = 2 ; ck <= 2 * n + 1 ; ck++)
     {
-      x_apriori[cn] += W * x_sigma_f[cn][ck]; 
+      x_k[t-1][cn] += W * x_sigma_f[cn][ck]; 
     }
   }
 
   // apriori covariance matrix:
-  zero(P_apriori);
+  for (cn = 1 ; cn <= n ; cn++)
+  {
+    for (cm = 1 ; cm <= n ; cm++)
+    {
+      P_k[t-1][cn][cm] = 0.0;
+    }
+  }
 
   for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
   {
@@ -351,15 +395,15 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
 
     for (cn = 1 ; cn <= n ; cn++)
     {
-      x_P[cn] = x_sigma_f[cn][ck] - x_apriori[cn];
+      x_P[cn] = x_sigma_f[cn][ck] - x_k[t-1][cn];
     }
 
     for (cn = 1 ; cn <= n ; cn++)
     {
       for (cm = 1 ; cm <= n ; cm++)
       {
-        P_aprioriP[cn][cm] = dW * x_P[cn] * x_P[cm];
-        P_apriori[cn][cm] += P_aprioriP[cn][cm];
+        P_aprioriP[cn][cm]  = dW * x_P[cn] * x_P[cm];
+        P_k[t-1][cn][cm]   += P_aprioriP[cn][cm];
       }
     }
   }
@@ -368,7 +412,7 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
   {
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_apriori[cn][cm] += Q[cn][cm];
+      P_k[t-1][cn][cm] += Q[cn][cm];
     }
   }
 
@@ -377,7 +421,8 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
+void UnscentedKalmanFilter::measurementUpdate(const int t,
+                                              const ARRAY_1D z/* m */)
 {
   int     ck;
   int     cn;
@@ -385,6 +430,7 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
   int     cr;
   double  dW;
   double  dSum;
+  double  yt_invPy_y; 
   bool    bIsNA;
 
   zero(P_y);
@@ -400,9 +446,22 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
     }
   }
 
-  // only do measurement update if we have a new measurement
-  if (!bIsNA)
+  if (bIsNA)
   {
+    // with NA data next state equals previous state
+    for (cn = 1 ; cn <= n ; cn++)
+    {
+      x_k[t][cn] = x_k[t-1][cn];
+
+      for (cm = 1 ; cm <= n ; cm++)
+      {
+        P_k[t][cn][cm]  = P_k[t-1][cn][cm];
+      }
+    }
+  }
+  else
+  {
+    // only do measurement update if we have a new measurement
     for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
     {
       if (ck == 1)
@@ -414,10 +473,10 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
         dW = W;
       }
 
-      // cov matrix oytpu/output
+      // cov matrix output/output
       for (cn = 1 ; cn <= m ; cn++)
       {
-        y_P[cn] = y_sigma[cn][ck] - y[cn];
+        y_P[cn] = y_sigma[cn][ck] - ym[cn];
       }
 
       for (cn = 1 ; cn <= m ; cn++)
@@ -454,12 +513,12 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
       // cross cov matrix input/output:
       for (cn = 1 ; cn <= n ; cn++)
       {
-        x_P[cn] = x_sigma_f[cn][ck] - x_apriori[cn];
+        x_P[cn] = x_sigma_f[cn][ck] - x_k[t-1][cn];
       }
 
       for (cn = 1 ; cn <= m ; cn++)
       {
-        y_P[cn] = y_sigma[cn][ck] - y[cn];
+        y_P[cn] = y_sigma[cn][ck] - ym[cn];
       }
 
       for (cn = 1 ; cn <= n ; cn++)
@@ -493,10 +552,27 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
       }
     }
 
+    // log likelihood
+    yt_invPy_y = 0.0;
+
+    for (cn = 1 ; cn <= m ; cn++)
+    {
+      dSum = 0.0;
+
+      for (cr = 1 ; cr <= m ; cr++)
+      {
+        dSum += inv_P_y[cn][cr] * ym[cr];
+      }
+
+      yt_invPy_y += dSum * ym[cn];
+    }
+
+    LogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y);
+
     // aposteriori state:
     for (cn = 1 ; cn <= m ; cn++)
     {
-      y_P[cn] = z[cn] - y[cn];
+      y_P[cn] = z[cn] - ym[cn];
     }
 
     for (cn = 1 ; cn <= n ; cn++)
@@ -508,7 +584,7 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
         dSum += K[cn][cr] * y_P[cr];
       }
 
-      x_aposteriori[cn] = x_apriori[cn] + dSum;
+      x_k[t][cn] = x_k[t-1][cn] + dSum;
     }
 
     // cov aposteriori:
@@ -538,7 +614,7 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
           dSum += K_P_y[cn][cr] * K[cm][cr];
         }
 
-        P_aposteriori[cn][cm] = P_apriori[cn][cm] - dSum;
+        P_k[t][cn][cm] = P_k[t-1][cn][cm] - dSum;
       }
     }
   }
@@ -546,32 +622,170 @@ void UnscentedKalmanFilter::measurementUpdate(const ARRAY_1D z/* m */)
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::filter(ARRAY_2D y_est /* size, m */, 
-                                   ARRAY_2D x_est /* size, n */, 
-                                   const double _Q, 
-                                   const double _R, 
-                                   const ARRAY_1D x_0 /* n */, 
-                                   const ARRAY_2D y /* size, m */, 
-                                   const int size)
+void UnscentedKalmanFilter::smoothingUpdate(const int t)
+{
+  // Implement UKF Kalman smoothing based on the Jacobian Equivalent 
+  // Rauch-Tung-Striebel smoother (abbreviated as JE-RTS method).
+  int     cr;
+  int     cc;
+  int     cn;
+  double  dSum;
+
+  zero(Ye_k);
+
+  // using A_k as temp to find Ye_k
+  for (cr = 1 ; cr <= n ; cr++)
+  {
+    for (cc = 1 ; cc <= n ; cc++)
+    {
+      A_k[cr][cc] = P_k[t][cr][cc] - Q[cr][cc];
+    }
+  }
+
+  choleskyDecomposition(A_k, Ye_k, n);
+
+  zero(inv_root_P_km1);
+
+  // using A_k as temp to find inverse of root of P_k at t-1
+  choleskyDecomposition(chol_P_k[t-1], A_k, n);
+  matrixInverseFromChol(A_k, inv_root_P_km1, n);
+
+  zero(inv_P_k);
+
+  // find inverse of P_k at t
+  matrixInverseFromChol(chol_P_k[t], inv_P_k, n);
+
+  // find smoothing gain A_k
+  // Ak = inv_root_P_km1 * inv_P_k
+  for (cc = 1 ; cc <= n ; cc++)
+  {
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      dSum = 0.0;
+
+      for (cn = 1 ; cn <= n ; cn++)
+      {
+         dSum += inv_root_P_km1[cr][cn] * inv_P_k[cn][cc];
+      }
+
+      A_k[cr][cc] = dSum;
+    }
+  }
+
+  // Ak = Yk * Ak
+  for (cc = 1 ; cc <= n ; cc++)
+  {
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      x_Temp[cr] = A_k[cr][cc];
+    }
+
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      dSum = 0.0;
+
+      for (cn = 1 ; cn <= n ; cn++)
+      {
+         dSum += inv_root_P_km1[cr][cn] * x_Temp[cn];
+      }
+
+      A_k[cr][cc] = dSum;
+    }
+  }
+
+  // Ak = Pk[t-1] * Ak
+  for (cc = 1 ; cc <= n ; cc++)
+  {
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      x_Temp[cr] = A_k[cr][cc];
+    }
+
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      dSum = 0.0;
+
+      for (cn = 1 ; cn <= n ; cn++)
+      {
+         dSum += P_k[t-1][cr][cn] * x_Temp[cn];
+      }
+
+      A_k[cr][cc] = dSum;
+    }
+  }
+
+  // find smoothed state
+
+
+  // find smoothed covariance
+
+}
+
+// ----------------------------------------------------------------------------
+
+double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */, 
+                                     ARRAY_2D  y_est /* ns, m */, 
+                                     const double _Q, 
+                                     const double _R, 
+                                     const ARRAY_1D x_0 /* n */)
 {
   int t;
   int i;
 
   resetUKF(_Q, _R, x_0);
 
-  for (t = 1 ; t <= size ; t++)
+  for (t = 1 ; t <= ns ; t++)
   {
     timeUpdate(t);
-    measurementUpdate(y[t]);
+    measurementUpdate(t, y[t]);
 
     for (i = 1 ; i <= n ; i++)
     {
+      xi[i]       = x_k[t][i];
       x_est[t][i] = xi[i];
     }
 
+    model_output(yi, xi, t);
+
     for (i = 1 ; i <= m ; i++)
     {
+      y_k[t][i]   = yi[i];
       y_est[t][i] = yi[i];
     }
   }
+
+  LogLikelihood *= -0.5;
+
+  Filtered = true;
+  Smoothed = false;
+
+  return (LogLikelihood);
 }                                   
+
+// ----------------------------------------------------------------------------
+
+double UnscentedKalmanFilter::smooth()
+{
+  int t;
+
+  if (Filtered && !Smoothed)
+  {
+    zero(y_k_smooth);
+    zero(x_k_smooth);
+    zero(Ps_k);
+
+    SmoothedLogLikelihood = 0.0;
+
+    for (t = ns ; t > 1 ; t--)
+    {
+      smoothingUpdate(t);
+    }
+
+    SmoothedLogLikelihood *= -0.5;
+
+    Smoothed = true;
+  }
+
+  return (SmoothedLogLikelihood);
+}
+

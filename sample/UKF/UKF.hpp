@@ -6,8 +6,18 @@
 // Companion article:
 //
 // https://jgoslinski.medium.com/the-unscented-kalman-filter-simply-the-best-python-code-5cd5ebaebf5f
-// 
+//
+// Implements UKF Kalman smoothing based on the Jacobian Equivalent Rauch-Tung-Striebel
+// smoother (abbreviated as JE-RTS method) described in:
+//
+//   "A computatonally efficient unscented Kalman smoother for ameliorated tracking
+//    of subatomic particles in high energy physics experiments", Jahanzeb Akhtar,
+//   Imran Ghous, Muhammad Jawad, Zhaoxia Duan, Ikram Ullah Khosa, Saim Ahmed, 
+//   Computer Physics Communications 283 (2023) 108585.
+//
+//  https://doi.org/10.1016/j.cpc.2022.108585
 // -----------------------------------------------------------------------------
+
 
 #ifndef __UKF_HPP__
 #define __UKF_HPP__
@@ -18,35 +28,23 @@
 
 
 // ----------------------------------------------------------------------------
-// log likelihood of kalman filter is,
-// 
-// -0.5 * Sum(log det(SigmaYYi) + t(Yi) * inverse(SigmaYYi) * Yi) + c
-//
-// where SigmaYYi is the output covariance matrix for time i 
-// and Yi is the predicted model output for time i
-//
-// Should be able to update this on the fly through a model run.
-//
-// Also in state update if we have missing data the variance updates should
-// not occur and should inherit the previous time steps estimates.
+// class UnscentedKalmanFilter
 // ----------------------------------------------------------------------------
-
-
-// ----------------------------------------------------------------------------
-
 class UnscentedKalmanFilter : public AdtArrays
 {
 protected:
   /* AD_LIBNAME UKF */
   /* AD_ALIAS UKF=I_UnscentedKalmanFilter */
   /* AUTOINIT */
-  int     n;  // size of the state vector
-  int     m;  // size of the output vector
-  double  kappa;
-  double  alfa;
-  double  beta;
-  R_CALL  model_output;
-  R_CALL  model_state;
+  int       n;  // size of the state vector
+  int       m;  // size of the output vector
+  int       ns; // number of samples
+  double    kappa;
+  double    alfa;
+  double    beta;
+  R_CALL    model_output;
+  R_CALL    model_state;
+  ARRAY_2D  y /* ns, m */; // observed measurement data
   
   /* AUTODEC */
   // UKF params
@@ -56,27 +54,33 @@ protected:
   double  W0c;
   double  W;
 
+  // Result data
+  ARRAY_2D  y_k /* 0:ns, m */;
+  ARRAY_2D  x_k /* 0:ns, n */; 
+  ARRAY_2D  y_k_smooth /* 0:ns, m */;
+  ARRAY_2D  x_k_smooth /* 0:ns, n */; 
+                 
   // all vectors used in the UKF process
-  ARRAY_1D  x_apriori /* n */;
-  ARRAY_1D  x_aposteriori /* n */;
   ARRAY_1D  x_P /* n */;
   ARRAY_1D  y_P /* m */;
-  ARRAY_1D  in_ /* m */;
-  ARRAY_1D  y /* m */;
+  ARRAY_1D  ym /* m */;
   ARRAY_1D  xi /* n */;
   ARRAY_1D  xp /* n */;
   ARRAY_1D  yi /* m */;
 
   // covarince matrices used in the process
-
-  ARRAY_2D  P_apriori /* n,n */;
+  ARRAY_3D  P_k /* 0:ns,n,n */;   // Kalman filter covariance
+  ARRAY_3D  chol_P_k /* ns,n,n */;
+  ARRAY_3D  Ps_k /* 0:ns,n,n */;  // JE-RTS smoothed covariance
   ARRAY_2D  P_aprioriP /* n,n */;
-  ARRAY_2D  P_aposteriori /* n,n */;
 
-  // square root product of a given covariances s
-  ARRAY_2D  sP_apriori /* n,n */;
-  ARRAY_2D  sP_aposteriori /* n,n */;
-
+  // Arrays used in smoothing
+  ARRAY_2D  inv_P_k /* n,n */;
+  ARRAY_2D  inv_root_P_km1 /* n,n */;
+  ARRAY_2D  Ye_k /* n,n */;
+  ARRAY_2D  A_k /* n,n */;
+  ARRAY_1D  x_Temp /* n */;
+  
   // clear sigma points
   ARRAY_2D  y_sigma /* m, 2 * n + 1 */;
   ARRAY_2D  x_sigma /* n, 2 * n + 1 */;
@@ -101,35 +105,47 @@ protected:
   ARRAY_2D  Q /* n,n */;
   ARRAY_2D  R /* m,m */;
 
-  double Rs;
-  double Qs;
+  double    Rs;
+  double    Qs;
+  double    LogLikelihood;
+  double    SmoothedLogLikelihood;
+
+  bool      Filtered;
+  bool      Smoothed;
   
 #include "UKF_array_plans.hpp"
 
-public:
-  void    choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pL/* nSize, nSize */, const int nSize);
-  void    matrixInverseFromChol(const ARRAY_2D pL/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
+protected:
+  void      choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize);
+  double    logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, const int nSize);
+  void      matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
 
-  void    setCovariances(double _Q, double _R);
-  void    sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */);
-  void    y_UKF_calc(const int t);
-  void    state(const int t);
+  void      setCovariances(double _Q, double _R);
+  void      sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */);
+  void      y_UKF_calc(const int t);
+  void      state(const int t);
+
+  void      resetUKF(const double _Q, const double _R, const ARRAY_1D x_0 /* n */);
+
+  void      timeUpdate(const int t);
+
+  void      measurementUpdate(const int t,
+                              const ARRAY_1D z/* m */);
+
+  void      smoothingUpdate(const int t);
 
 public:
   UnscentedKalmanFilter(
 #include "UKF_constructor_args.hpp"
   );
 
-  void    resetUKF(const double _Q, const double _R, const ARRAY_1D x_0 /* n */);
-  void    timeUpdate(const int t);
-  void    measurementUpdate(const ARRAY_1D z/* m */);
-  void    filter(ARRAY_2D y_est /* size, m */, 
-                 ARRAY_2D x_est /* size, n */, 
-                 const double _Q, 
-                 const double _R, 
-                 const ARRAY_1D x_0 /* n */, 
-                 const ARRAY_2D y /* size, m */, 
-                 const int size);
+  double    filter(ARRAY_2D  x_est /* ns, n */,
+                   ARRAY_2D  y_est /* ns, m */,
+                   const double _Q, 
+                   const double _R, 
+                   const ARRAY_1D x_0 /* n */);
+
+  double    smooth();
 };
 
 #endif  __UKF_HPP__
