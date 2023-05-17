@@ -141,6 +141,31 @@ print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              theme_bw() + 
              theme(legend.title=element_blank()))
 
+# do smoothing
+UKF.smooth(UKF.Context)
+
+est_state  <- UKF.get.x_k_smooth(UKF.Context)[1:500,]
+est_output <- UKF.get.y_k_smooth(UKF.Context)[1:500,]
+
+df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
+                 value=c(x[,1], est_state[,1], x[,2], est_state[,2]),
+                 groups=c(rep("x1.original", size_n), rep("x1.estimate", size_n), rep("x2.original", size_n), rep("x2.estimate", size_n)))
+
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             theme_bw() + 
+             theme(legend.title=element_blank()))
+
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
+             theme_bw() + 
+             theme(legend.title=element_blank()))
+
 #make some input data NA's
 y_with_NAs <- y
 y_with_NAs[50:100] <- NA

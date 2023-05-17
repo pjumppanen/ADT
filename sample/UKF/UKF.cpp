@@ -715,10 +715,55 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
   }
 
   // find smoothed state
+  for (cr = 1 ; cr <= n ; cr++)
+  {
+    dSum = x_k[t-1][cr];
 
+    for (cc = 1 ; cc <= n ; cc++)
+    {
+      dSum += A_k[cr][cc] * (x_k_smooth[t][cc] - x_k[t][cc]);
+    }
+
+    x_k_smooth[t-1][cr] = dSum;
+    xi[cr]              = dSum;
+  }
+
+  model_output(yi, xi, t-1);
 
   // find smoothed covariance
+  // Ps_k[t-1] = (P_k[t] - Ps_k[t]) * t(A_k)
+  for (cc = 1 ; cc <= n ; cc++)
+  {
+    y_k_smooth[t-1][cc] = yi[cc];
+    
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      dSum = 0.0;
 
+      for (cn = 1 ; cn <= n ; cn++)
+      {
+         dSum += (P_k[t][cr][cn] - Ps_k[t][cr][cn]) * A_k[cc][cn];
+      }
+
+      Ps_k[t-1][cr][cc] = dSum;
+    }
+  }
+
+  // Ps_k[t-1] = Ps_k[t] - A_k * Ps_k[t-1]
+  for (cc = 1 ; cc <= n ; cc++)
+  {
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      dSum = Ps_k[t][cr][cc];
+
+      for (cn = 1 ; cn <= n ; cn++)
+      {
+         dSum += -A_k[cr][cn] * Ps_k[t-1][cn][cc];
+      }
+
+      Ps_k[t-1][cr][cc] = dSum;
+    }
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -767,12 +812,25 @@ double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */,
 double UnscentedKalmanFilter::smooth()
 {
   int t;
+  int cr;
+  int cc;
 
   if (Filtered && !Smoothed)
   {
     zero(y_k_smooth);
     zero(x_k_smooth);
     zero(Ps_k);
+
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      x_k_smooth[ns][cr] = x_k[ns][cr];
+      y_k_smooth[ns][cr] = y_k[ns][cr];
+
+      for (cc = 1 ; cc <= n ; cc++)
+      {
+        Ps_k[ns][cr][cc] = P_k[ns][cr][cc];
+      }
+    }
 
     SmoothedLogLikelihood = 0.0;
 
