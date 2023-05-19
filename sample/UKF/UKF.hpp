@@ -119,8 +119,7 @@ protected:
   
 #include "UKF_array_plans.hpp"
 
-//protected:
-public:
+protected:
   void      choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize);
   double    logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, const int nSize);
   void      matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
