@@ -142,10 +142,10 @@ print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              theme(legend.title=element_blank()))
 
 # do smoothing
-UKF.smooth(UKF.Context)
-
-est_state  <- UKF.get.x_k_smooth(UKF.Context)[1:500,]
-est_output <- UKF.get.y_k_smooth(UKF.Context)[1:500,]
+UKF.smooth(UKF.Context, 
+           est_state, 
+           est_output,
+           as.raw(T))
 
 df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
                  value=c(x[,1], est_state[,1], x[,2], est_state[,2]),
@@ -219,5 +219,8 @@ print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
              theme_bw() + 
              theme(legend.title=element_blank()))
 
-UKF.smooth(UKF.Context)
+UKF.smooth(UKF.Context, 
+           est_state, 
+           est_output,
+           as.raw(T))
 

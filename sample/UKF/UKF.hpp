@@ -57,8 +57,10 @@ protected:
   // Result data
   ARRAY_2D  y_k /* 0:ns, m */;
   ARRAY_2D  x_k /* 0:ns, n */; 
+  ARRAY_2D  x_k_bar /* ns, n */; 
   ARRAY_2D  y_k_smooth /* 0:ns, m */;
-  ARRAY_2D  x_k_smooth /* 0:ns, n */; 
+  ARRAY_2D  x_k_smooth /* 0:ns, n */;
+  ARRAY_1B  naData /* 1:ns */;
                  
   // all vectors used in the UKF process
   ARRAY_1D  x_P /* n */;
@@ -70,6 +72,7 @@ protected:
 
   // covarince matrices used in the process
   ARRAY_3D  P_k /* 0:ns,n,n */;   // Kalman filter covariance
+  ARRAY_3D  P_k_bar /* ns,n,n */;   // Kalman filter covariance
   ARRAY_3D  chol_P_k /* ns,n,n */;
   ARRAY_3D  Ps_k /* 0:ns,n,n */;  // JE-RTS smoothed covariance
   ARRAY_2D  P_aprioriP /* n,n */;
@@ -80,6 +83,7 @@ protected:
   ARRAY_2D  Ye_k /* n,n */;
   ARRAY_2D  A_k /* n,n */;
   ARRAY_1D  x_Temp /* n */;
+  ARRAY_2D  chol_Ps_k /* n,n */;
   
   // clear sigma points
   ARRAY_2D  y_sigma /* m, 2 * n + 1 */;
@@ -115,7 +119,8 @@ protected:
   
 #include "UKF_array_plans.hpp"
 
-protected:
+//protected:
+public:
   void      choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize);
   double    logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, const int nSize);
   void      matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
@@ -132,7 +137,10 @@ protected:
   void      measurementUpdate(const int t,
                               const ARRAY_1D z/* m */);
 
-  void      smoothingUpdate(const int t);
+  void      smoothingUpdate(ARRAY_1D  x_smooth /* n */, 
+                            ARRAY_1D  y_smooth /* m */, 
+                            const int t, 
+                            const bool bWithLogLikelihood);
 
 public:
   UnscentedKalmanFilter(
@@ -145,7 +153,9 @@ public:
                    const double _R, 
                    const ARRAY_1D x_0 /* n */);
 
-  double    smooth();
+  double    smooth(ARRAY_2D  x_smooth /* ns, n */, 
+                   ARRAY_2D  y_smooth /* ns, m */, 
+                   const bool bWithLogLikelihood);
 };
 
 #endif  __UKF_HPP__
