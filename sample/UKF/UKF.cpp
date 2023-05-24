@@ -185,12 +185,6 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
   zero(K_0);
   zero(K_UKF_T);
 
-  zero(Q);
-  zero(R);
-
-  Rs = 0.0;
-  Qs = 0.0;
-
   Filtered = false;
   Smoothed = false;
 }
@@ -200,9 +194,13 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
 // R - measurement noise covariance,
 // P - init covariance noise
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::resetUKF(const double _Q, const double _R, const ARRAY_1D x_0 /* n */)
+void UnscentedKalmanFilter::resetUKF(const ARRAY_3D _Q /* ns,n,n */, 
+                                     const ARRAY_3D _R /* ns,m,m */, 
+                                     const ARRAY_1D x_0 /* n */)
 {
   int cn;
+  int cm;
+  int ct;
 
   zero(y_k);
   zero(x_k);
@@ -230,41 +228,44 @@ void UnscentedKalmanFilter::resetUKF(const double _Q, const double _R, const ARR
   zero(chol_P_k);
   zero(P_aprioriP);
 
+  for (ct = 1 ; ct <= ns ; ct++)
+  {
+    for (cn = 1 ; cn <= n ; cn++)
+    {
+      for (cm = 1 ; cm <= n ; cm++)
+      {
+        Q[ct][cn][cm] = _Q[ct][cn][cm];
+      }
+    }
+
+    for (cn = 1 ; cn <= m ; cn++)
+    {
+      for (cm = 1 ; cm <= m ; cm++)
+      {
+        R[ct][cn][cm] = _R[ct][cn][cm];
+      }
+    }
+  }
+
   for (cn = 1 ; cn <= n ; cn++)
   {
-    x_k[0][cn]      = x_0[cn];
-    P_k[0][cn][cn]  = _Q;
+    x_k[0][cn] = x_0[cn];
+
+    for (cm = 1 ; cm <= n ; cm++)
+    {
+      P_k[0][cn][cm] = Q[1][cn][cm];
+    }
   }
 
   zero(x_P);
 
-  setCovariances(_Q, _R);
-
-  LogLikelihood = 0.0;
+  LogLikelihood         = 0.0;
+  SmoothedLogLikelihood = 0.0;
   
   Filtered = false;
   Smoothed = false;
 }
 
-// ----------------------------------------------------------------------------
-
-void UnscentedKalmanFilter::setCovariances(double _Q, double _R)
-{
-  int cn;
-
-  zero(Q);
-  zero(R);
-
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    Q[cn][cn] = _Q;
-  }
-
-  for (cn = 1 ; cn <= m ; cn++)
-  {
-    R[cn][cn] = _R;
-  }
-}
 
 // ----------------------------------------------------------------------------
 // vect_X - state vector
@@ -416,7 +417,7 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
   {
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k_bar[t][cn][cm] += Q[cn][cm];
+      P_k_bar[t][cn][cm] += Q[t][cn][cm];
     }
   }
 
@@ -499,7 +500,7 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
     {
       for (cm = 1 ; cm <= m ; cm++)
       {
-        P_y[cn][cm]  += R[cn][cm];
+        P_y[cn][cm]  += R[t][cn][cm];
       }
     }
 
@@ -667,7 +668,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
     {
       for (cc = 1 ; cc <= n ; cc++)
       {
-        A_k[cr][cc] = P_k[t][cr][cc] - Q[cr][cc];
+        A_k[cr][cc] = P_k[t][cr][cc] - Q[t][cr][cc];
       }
     }
 
@@ -843,7 +844,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
       {
         for (cm = 1 ; cm <= m ; cm++)
         {
-          P_y[cn][cm]  += R[cn][cm];
+          P_y[cn][cm]  += R[t][cn][cm];
         }
       }
 
@@ -876,8 +877,8 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
 double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */, 
                                      ARRAY_2D  y_est /* ns, m */, 
-                                     const double _Q, 
-                                     const double _R, 
+                                     const ARRAY_3D _Q /* ns,n,n */, 
+                                     const ARRAY_3D _R /* ns,m,m */, 
                                      const ARRAY_1D x_0 /* n */)
 {
   int t;

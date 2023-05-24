@@ -44,7 +44,7 @@ protected:
   double    beta;
   R_CALL    model_output;
   R_CALL    model_state;
-  ARRAY_2D  y /* ns, m */; // observed measurement data
+  ARRAY_2D  y /* ns, m */;  // observed measurement data
   
   /* AUTODEC */
   // UKF params
@@ -106,11 +106,9 @@ protected:
   ARRAY_2D  K_0 /* n,m */;
   ARRAY_2D  K_UKF_T /* m,n */;
 
-  ARRAY_2D  Q /* n,n */;
-  ARRAY_2D  R /* m,m */;
+  ARRAY_3D  Q /* ns,n,n */; // Process noise covariance by sample
+  ARRAY_3D  R /* ns,m,m */; // Observation noise covariance by sample
 
-  double    Rs;
-  double    Qs;
   double    LogLikelihood;
   double    SmoothedLogLikelihood;
 
@@ -129,7 +127,9 @@ protected:
   void      y_UKF_calc(const int t);
   void      state(const int t);
 
-  void      resetUKF(const double _Q, const double _R, const ARRAY_1D x_0 /* n */);
+  void      resetUKF(const ARRAY_3D _Q /* ns,n,n */, 
+                     const ARRAY_3D _R /* ns,m,m */, 
+                     const ARRAY_1D x_0 /* n */);
 
   void      timeUpdate(const int t);
 
@@ -148,8 +148,8 @@ public:
 
   double    filter(ARRAY_2D  x_est /* ns, n */,
                    ARRAY_2D  y_est /* ns, m */,
-                   const double _Q, 
-                   const double _R, 
+                   const ARRAY_3D _Q /* ns,n,n */, 
+                   const ARRAY_3D _R /* ns,m,m */, 
                    const ARRAY_1D x_0 /* n */);
 
   double    smooth(ARRAY_2D  x_smooth /* ns, n */, 

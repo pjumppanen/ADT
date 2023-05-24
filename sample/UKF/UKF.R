@@ -106,17 +106,37 @@ for (i in 2:size_n)
 # ----------------------------------------------------------------------------
 
 # create the object instance
-UKF.Context <- UKF.create(n,m,size_n,kappa,alfa,beta, model_output, environment(), F, model_state, environment(), F, y)
+UKF.Context <- UKF.create(n,
+                          m,
+                          size_n,
+                          kappa,
+                          alfa,
+                          beta,
+                          model_output, 
+                          environment(), 
+                          F, 
+                          model_state, 
+                          environment(), 
+                          F, 
+                          y)
 
-est_state  <- array(as.double(NA), c(size_n, 2))
-est_output <- array(as.double(NA), c(size_n, 2))
+est_state  <- array(as.double(NA), c(size_n, n))
+est_output <- array(as.double(NA), c(size_n, m))
+
+Q       <- array(as.double(0.0), c(size_n, n, n))
+Q[,1,1] <- 0.1
+Q[,2,2] <- 0.1
+
+R       <- array(as.double(0.0), c(size_n, m, m))
+R[,1,1] <- 0.1
+R[,2,2] <- 0.1
 
 # run filtering
 UKF.filter(UKF.Context,
            est_state,
            est_output,
-           0.1, 
-           0.1, 
+           Q, 
+           R, 
            x_0)
 
 # plot results
@@ -176,8 +196,8 @@ UKF.set.y(UKF.Context, y_with_NAs)
 UKF.filter(UKF.Context,
            est_state,
            est_output,
-           0.1, 
-           0.1, 
+           Q, 
+           R, 
            x_0)
 
 df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
@@ -223,4 +243,43 @@ UKF.smooth(UKF.Context,
            est_state, 
            est_output,
            as.raw(T))
+
+df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
+                 value=c(x[,1], est_state[,1], x[,2], est_state[,2]),
+                 groups=c(rep("x1.original", size_n), rep("x1.estimate", size_n), rep("x2.original", size_n), rep("x2.estimate", size_n)))
+
+# plot results
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             theme_bw() + 
+             theme(legend.title=element_blank()))
+
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
+             theme_bw() + 
+             theme(legend.title=element_blank()))
+
+df <- data.frame(sample=c(1:size_n, 1:size_n, 1:size_n, 1:size_n), 
+                 value=c(y_with_NAs[,1], est_output[,1], y_with_NAs[,2], est_output[,2]),
+                 groups=c(rep("y1.original", size_n), rep("y1.estimate", size_n), rep("y2.original", size_n), rep("y2.estimate", size_n)))
+
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             theme_bw() + 
+             theme(legend.title=element_blank()))
+
+print(ggplot(data=df, aes(x=sample, y=value, group=groups, color=groups)) +
+             geom_line() +
+             xlab('') + 
+             ylab('') + 
+             scale_x_continuous(limits=c(0, 100), expand=c(0, 0)) +
+             theme_bw() + 
+             theme(legend.title=element_blank()))
 
