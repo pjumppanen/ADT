@@ -338,6 +338,18 @@ void UnscentedKalmanFilter::state(const int t)
   int j;
   int cn;
 
+  // get last state that the sigma points are based on. This is then
+  // passed to the model_state() function as the previous state reference
+  // point. Why this is necessary is because if the model has non-linearity
+  // based upon relative change the model code will not be able to implement 
+  // it without the previous state because it needs it to figure out if the 
+  // change in state implied by a given sigma point exceeds the limit imposed
+  // by the non-linearity. 
+  for (j = 1 ; j <= n ; j++)
+  {
+    xlast[j] = x_k[t-1][j];  
+  }
+
   for (j = 1 ; j <= 2 * n + 1 ; j++)
   {
     for (cn = 1 ; cn <= n ; cn++)
@@ -345,7 +357,7 @@ void UnscentedKalmanFilter::state(const int t)
       xp[cn] = x_sigma[cn][j];
     }
 
-    model_state(xi, xp, t);
+    model_state(xi, xp, xlast, t);
 
     for (cn = 1 ; cn <= n ; cn++)
     {
@@ -668,7 +680,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
     {
       for (cc = 1 ; cc <= n ; cc++)
       {
-        A_k[cr][cc] = P_k[t][cr][cc] - Q[t][cr][cc];
+        A_k[cr][cc] = P_k_bar[t][cr][cc] - Q[t][cr][cc];
       }
     }
 
@@ -792,7 +804,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
       for (cr = 1 ; cr <= n ; cr++)
       {
-        dSum = P_k[t][cr][cc];
+        dSum = P_k[t-1][cr][cc];
 
         for (cn = 1 ; cn <= n ; cn++)
         {

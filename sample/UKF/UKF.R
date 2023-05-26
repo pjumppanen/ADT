@@ -66,7 +66,7 @@ model_output <- function(x, t)
 
 # ----------------------------------------------------------------------------
 
-model_state <- function(xp, t)
+model_state <- function(xp, xlast, t)
 {
   x    <- xp * 0
   x[1] <- 0.5 * xp[1] - 0.1 * xp[2] + 0.7 * (xp[1] / (1.0 + xp[1] * xp[1])) + 2.2 * cos(1.2 * (t - 1));
@@ -99,7 +99,7 @@ y[1,] <- y_0
 
 for (i in 2:size_n)
 {
-  x[i,] <- model_state(x[i-1,], i) + u[i,]
+  x[i,] <- model_state(x[i-1,], x[i-1,], i) + u[i,]
   y[i,] <- model_output(x[i-1,], i) + v[i,]
 }
 

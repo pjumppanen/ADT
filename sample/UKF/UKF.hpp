@@ -68,6 +68,7 @@ protected:
   ARRAY_1D  ym /* m */;
   ARRAY_1D  xi /* n */;
   ARRAY_1D  xp /* n */;
+  ARRAY_1D  xlast /* n */;
   ARRAY_1D  yi /* m */;
 
   // covarince matrices used in the process
