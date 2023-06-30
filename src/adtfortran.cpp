@@ -4365,7 +4365,43 @@ void AdtFortranExecutableProgram::buildEncodeDecodeCode(const AdtStringList& rVa
 
     bFirst = false;
   }
-}                                                        
+}
+
+//  ----------------------------------------------------------------------------
+
+void AdtFortranExecutableProgram::makeNewArg(string& rNewArg, 
+                                             const AdtFortranVariableInfo& rInfo,
+                                             const char* pBaseName, 
+                                             const char* pSuffix) const
+{
+  ASSERT(pBaseName != 0);
+  ASSERT(pSuffix   != 0);
+
+  rNewArg  = pBaseName;
+  rNewArg += "_";
+  rNewArg += pSuffix;
+
+  string  sTestArg(rNewArg);
+  int     nCount   = 0;
+  bool    bChanged = false;
+
+  while (rInfo.hasVariable(sTestArg))
+  {
+    char sExtra[16] = {0};
+
+    ::sprintf(sExtra, "%d", nCount);
+
+    sTestArg = rNewArg + sExtra;
+    bChanged = true;
+
+    nCount++;
+  }
+
+  if (bChanged)
+  {
+    rNewArg = sTestArg;
+  }
+}                                             
 
 //  ----------------------------------------------------------------------------
 
@@ -4693,7 +4729,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                     {
                       if (VarsMap.find(sLastArg) != VarsMap.end())
                       {
-                        sNewArg = sLastArg + "_dir";
+                        makeNewArg(sNewArg, ADVariableInfo, sLastArg, "dir");
 
                         FortranOutFunction.write(", ");
                         FortranOutFunction.write(sNewArg);
@@ -4770,7 +4806,7 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
                     {
                       if (VarsMap.find(sLastArg) != VarsMap.end())
                       {
-                        sNewArg = sLastArg + "_dir";
+                        makeNewArg(sNewArg, ADVariableInfo, sLastArg, "dir");
 
                         FortranOutFunction.write(", ");
                         FortranOutFunction.write(sNewArg);
@@ -5414,6 +5450,8 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           //
           //   USE COMMON
           //
+          //   CALL REDev__matrixInverseFromChol(Cholesky, InvHessian, NR)
+          //
           //   DO cn = 1,NP
           //     pGradient(cn) = REDev__diff_dpar_reml_u_thetalogLikelihood(reHat, Par, cn)
           //   ENDDO
@@ -5460,6 +5498,14 @@ bool AdtFortranExecutableProgram::makeWrapper(AdtFortranExecutableProgram* pWork
           FortranOutFunction.newline();
           FortranOutFunction.write("USE COMMON");
           FortranOutFunction.newline();
+          FortranOutFunction.newline();
+          FortranOutFunction.write("CALL ");
+          FortranOutFunction.write(sClassPrefix);
+          FortranOutFunction.write("sparseBandedLimitsByRows(Hessian,LowerLimit,UpperLimit,NR,NR)");
+          FortranOutFunction.newline();
+          FortranOutFunction.write("CALL ");
+          FortranOutFunction.write(sClassPrefix);
+          FortranOutFunction.write("matrixInverseFromChol(Cholesky, InvHessian, NR)");
           FortranOutFunction.newline();
           FortranOutFunction.write("DO cn = 1,NP");
           FortranOutFunction.incrementIndent();

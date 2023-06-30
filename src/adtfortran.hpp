@@ -867,6 +867,10 @@ protected:
                                                       string& sInit,
                                                       string& sSize) const;
 
+  void                          makeNewArg(string& rNewArg, 
+                                           const AdtFortranVariableInfo& rInfo,
+                                           const char* pBaseName, 
+                                           const char* pSuffix) const;
 
 public:
   AdtFortranExecutableProgram(AdtParser* pProgramUnitObj);

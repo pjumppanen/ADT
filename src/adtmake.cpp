@@ -4596,30 +4596,161 @@ void AdtMakeSystem::checkAddCommandOperation(AdtMakeCommandOperation& rCommandOp
     checkAddCommandOperation(HessianLikelihoodFn);
     CurrentClass.addOperation(HessianLikelihoodFn);
 
-     // Add command to find diff of gradient of likelihood function
+    // Add command to find diff of likelihood function
+    AdtMakeCommandOperation DiffParLikelihoodFn(rCommandOperation);
+
+    rVars.clear();
+    rVars.push_front("par");
+
+    DiffParLikelihoodFn.functionName(LikelihoodWrapperName);
+    DiffParLikelihoodFn.vars(rVars);
+    DiffParLikelihoodFn.outVars(rOutVars);
+    DiffParLikelihoodFn.mode("f");
+    DiffParLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffParLikelihoodFn);
+
+    // Add command to find diff par of hessian of likelihood function
+    AdtMakeCommandOperation DiffParHessianLikelihoodFn(rCommandOperation);
+
+    rOutVars.clear();
+    rOutVars.push_front("pHessian");
+
+    string  HessianLikelihoodWrapperName;
+
+    HessianLikelihoodFn.wrapperFunctionName(HessianLikelihoodWrapperName, nWrapperType);
+
+    DiffParHessianLikelihoodFn.functionName(HessianLikelihoodWrapperName);
+    DiffParHessianLikelihoodFn.vars(rVars);
+    DiffParHessianLikelihoodFn.outVars(rOutVars);
+    DiffParHessianLikelihoodFn.mode("f");
+    DiffParHessianLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffParHessianLikelihoodFn);
+
+    // Add command to find diff of likelihood function
+    AdtMakeCommandOperation DiffReLikelihoodFn(rCommandOperation);
+
+    rVars.clear();
+    rVars.push_front("re");
+
+    rOutVars.clear();
+    rOutVars.push_front(LikelihoodWrapperName);
+
+    DiffReLikelihoodFn.functionName(LikelihoodWrapperName);
+    DiffReLikelihoodFn.vars(rVars);
+    DiffReLikelihoodFn.outVars(rOutVars);
+    DiffReLikelihoodFn.mode("f");
+    DiffReLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffReLikelihoodFn);
+
+    // Add command to find diff re of hessian of likelihood function
+    AdtMakeCommandOperation DiffReHessianLikelihoodFn(rCommandOperation);
+
+    rOutVars.clear();
+    rOutVars.push_front("pHessian");
+
+    DiffReHessianLikelihoodFn.functionName(HessianLikelihoodWrapperName);
+    DiffReHessianLikelihoodFn.vars(rVars);
+    DiffReHessianLikelihoodFn.outVars(rOutVars);
+    DiffReHessianLikelihoodFn.mode("f");
+    DiffReHessianLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffReHessianLikelihoodFn);
+
+/*
+    // Add command to find grad of diff of likelihood function
+    AdtMakeCommandOperation GradDiffLikelihoodFn(rCommandOperation);
+    string                  DiffLikelihoodWrapperName;
+    string                  sOutVar(rOutVars.front());
+
+    DiffReLikelihoodFn.wrapperFunctionName(DiffLikelihoodWrapperName, nWrapperType);
+
+    rOutVars.clear();
+
+    if (sOutVar.eq(HessianLikelihoodFn.functionName()))
+    {
+      // Assume function return
+      sOutVar = DiffLikelihoodWrapperName;
+    }
+    else
+    {
+      // argument return
+      sOutVar += DiffReLikelihoodFn.varSuffix();
+    }
+
+    rOutVars.push_front(sOutVar);
+
+    GradDiffLikelihoodFn.functionName(DiffLikelihoodWrapperName);
+    GradDiffLikelihoodFn.vars(rVars);
+    GradDiffLikelihoodFn.outVars(rOutVars);
+    GradDiffLikelihoodFn.mode("r");
+    GradDiffLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(GradDiffLikelihoodFn);
+
+    // Add command to find diff re of grad of diff of likelihood function
+    AdtMakeCommandOperation DiffReGradDiffLikelihoodFn(rCommandOperation);
+    string                  GradDiffLikelihoodWrapperName;
+
+    GradDiffLikelihoodFn.wrapperFunctionName(GradDiffLikelihoodWrapperName, nWrapperType);
+
+    rOutVars.clear();
+
+    sOutVar  = "re";
+    sOutVar += GradDiffLikelihoodFn.varSuffix();
+
+    rOutVars.push_front(sOutVar);
+
+    DiffReGradDiffLikelihoodFn.functionName(GradDiffLikelihoodWrapperName);
+    DiffReGradDiffLikelihoodFn.vars(rVars);
+    DiffReGradDiffLikelihoodFn.outVars(rOutVars);
+    DiffReGradDiffLikelihoodFn.mode("f");
+    DiffReGradDiffLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffReGradDiffLikelihoodFn);
+
+    // Add command to find diff par of grad of diff of likelihood function
+    AdtMakeCommandOperation DiffParGradDiffLikelihoodFn(rCommandOperation);
+
+    rVars.clear();
+    rVars.push_front("par");
+
+    DiffParGradDiffLikelihoodFn.functionName(GradDiffLikelihoodWrapperName);
+    DiffParGradDiffLikelihoodFn.vars(rVars);
+    DiffParGradDiffLikelihoodFn.outVars(rOutVars);
+    DiffParGradDiffLikelihoodFn.mode("f");
+    DiffParGradDiffLikelihoodFn.makeWrapper(true);
+
+    CurrentClass.addOperation(DiffParGradDiffLikelihoodFn);
+*/
+    // Add command to find diff par of gradient of likelihood function
     string GradLikelihoodWrapperName;
 
     GradLikelihoodFn.wrapperFunctionName(GradLikelihoodWrapperName, nWrapperType);
 
     rVars.clear();
+    rVars.push_front("par");
+
     rOutVars.clear();
 
-    string  sOutVar("re");
-
+    string  sOutVar;
+    
+    sOutVar  = "re";
     sOutVar += GradLikelihoodFn.varSuffix();
 
-    rVars.push_front("par");
     rOutVars.push_front(sOutVar);
 
-    AdtMakeCommandOperation DiffGradLikelihoodFn(rCommandOperation);
+    AdtMakeCommandOperation DiffParGradLikelihoodFn(rCommandOperation);
 
-    DiffGradLikelihoodFn.functionName(GradLikelihoodWrapperName);
-    DiffGradLikelihoodFn.vars(rVars);
-    DiffGradLikelihoodFn.outVars(rOutVars);
-    DiffGradLikelihoodFn.mode("f");
-    DiffGradLikelihoodFn.makeWrapper(true);
+    DiffParGradLikelihoodFn.functionName(GradLikelihoodWrapperName);
+    DiffParGradLikelihoodFn.vars(rVars);
+    DiffParGradLikelihoodFn.outVars(rOutVars);
+    DiffParGradLikelihoodFn.mode("f");
+    DiffParGradLikelihoodFn.makeWrapper(true);
 
-    CurrentClass.addOperation(DiffGradLikelihoodFn);
+    CurrentClass.addOperation(DiffParGradLikelihoodFn);
   }
 }
 
