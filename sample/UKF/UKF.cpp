@@ -25,7 +25,7 @@
 // ----------------------------------------------------------------------------
 // UnscentedKalmanFilter method implementations
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize)
+bool UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize)
 {
   //--------------------------------------------------------------------------
   // pA is symetric positive definite matrix
@@ -33,6 +33,9 @@ void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSi
   //--------------------------------------------------------------------------
   double sum;
   int    ci, cj, ck;
+  bool   bOk;
+
+  bOk = true;
 
   for (ci = 1 ; ci <= nSize ; ci++)
   {
@@ -44,8 +47,12 @@ void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSi
     }
 
 #ifndef AD
-    assert(sum > 0.0);
-#endif    
+    if (sum < 0.0)
+    {
+      bOk = false;
+    }
+#endif
+
     pU[ci][ci] = sqrt(sum);
 
     for (cj = ci + 1 ; cj <= nSize ; cj++)
@@ -60,6 +67,8 @@ void UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSi
       pU[ci][cj] = sum / pU[ci][ci];
     }
   }
+
+  return (bOk);
 }
 
 // ----------------------------------------------------------------------------
@@ -165,7 +174,6 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
   zero(P_k_bar);
   zero(chol_P_k);
   zero(Ps_k);
-  zero(P_aprioriP);
 
   // clear sigma points
   zero(y_sigma);
@@ -179,8 +187,6 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
   zero(P_xyP);
 
   zero(P_y);
-  zero(oP_y);
-  zero(P_y_P);
   zero(K);
   zero(K_0);
   zero(K_UKF_T);
@@ -190,11 +196,13 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
 }
 
 // ----------------------------------------------------------------------------
-// Q - filter process noise covraiance
+// Q - process noise covraiance,
+// Qscale - process noise covraiance scaling by sample
 // R - measurement noise covariance,
-// P - init covariance noise
+// x_0 - initial state
 // ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::resetUKF(const ARRAY_3D _Q /* ns,n,n */, 
+void UnscentedKalmanFilter::resetUKF(const ARRAY_2D _Q /* n,n */, 
+                                     const ARRAY_1D _Qscale /* ns */, 
                                      const ARRAY_3D _R /* ns,m,m */, 
                                      const ARRAY_1D x_0 /* n */)
 {
@@ -211,10 +219,9 @@ void UnscentedKalmanFilter::resetUKF(const ARRAY_3D _Q /* ns,n,n */,
   zero(ym);
   zero(y_P);
   zero(P_y);
-  zero(P_y_P);
   zero(P_xy);
   zero(P_xyP);
-
+  
   zero(K);
   zero(K_0);
   zero(K_UKF_T);
@@ -226,17 +233,18 @@ void UnscentedKalmanFilter::resetUKF(const ARRAY_3D _Q /* ns,n,n */,
   zero(P_k);
   zero(P_k_bar);
   zero(chol_P_k);
-  zero(P_aprioriP);
+
+  for (cn = 1 ; cn <= n ; cn++)
+  {
+    for (cm = 1 ; cm <= n ; cm++)
+    {
+      Q[cn][cm] = _Q[cn][cm];
+    }
+  }
 
   for (ct = 1 ; ct <= ns ; ct++)
   {
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      for (cm = 1 ; cm <= n ; cm++)
-      {
-        Q[ct][cn][cm] = _Q[ct][cn][cm];
-      }
-    }
+    Qscale[ct] = _Qscale[ct];
 
     for (cn = 1 ; cn <= m ; cn++)
     {
@@ -253,7 +261,7 @@ void UnscentedKalmanFilter::resetUKF(const ARRAY_3D _Q /* ns,n,n */,
 
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k[0][cn][cm] = Q[1][cn][cm];
+      P_k[0][cn][cm] = Qscale[1] * Q[cn][cm];
     }
   }
 
@@ -374,8 +382,16 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
   int     cm;
   int     ck;
   double  dW;
+  bool    bIsOk;
 
-  choleskyDecomposition(P_k[t-1], chol_P_k[t], n);
+  bIsOk = choleskyDecomposition(P_k[t-1], chol_P_k[t], n);
+#ifndef AD
+  if (!bIsOk)
+  {
+    Rf_error("P_k in timeUpdate() has no Cholesky decomposition");
+  }
+#endif
+
   sigma_points(x_k[t-1], chol_P_k[t]);
   state(t);
 
@@ -419,8 +435,7 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
     {
       for (cm = 1 ; cm <= n ; cm++)
       {
-        P_aprioriP[cn][cm]  = dW * x_P[cn] * x_P[cm];
-        P_k_bar[t][cn][cm] += P_aprioriP[cn][cm];
+        P_k_bar[t][cn][cm] += dW * x_P[cn] * x_P[cm];
       }
     }
   }
@@ -429,7 +444,7 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
   {
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k_bar[t][cn][cm] += Q[t][cn][cm];
+      P_k_bar[t][cn][cm] += Qscale[t] * Q[cn][cm];
     }
   }
 
@@ -449,8 +464,7 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
   double  dSum;
   double  yt_invPy_y; 
   bool    bIsNA;
-
-  zero(P_y);
+  bool    bIsOk;
 
   bIsNA = false;
 
@@ -480,6 +494,8 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
   }
   else
   {
+    zero(P_y);
+
     // only do measurement update if we have a new measurement
     for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
     {
@@ -502,8 +518,7 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
       {
         for (cm = 1 ; cm <= m ; cm++)
         {
-          P_y_P[cn][cm] = dW * y_P[cn] * y_P[cm];
-          P_y[cn][cm]  += P_y_P[cn][cm];
+          P_y[cn][cm]  += dW * y_P[cn] * y_P[cm];
         }
       }
     }
@@ -553,7 +568,14 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
     // kalman gain:
     zero(chol_P_y);
 
-    choleskyDecomposition(P_y, chol_P_y, m);
+    bIsOk = choleskyDecomposition(P_y, chol_P_y, m);
+#ifndef AD
+    if (!bIsOk)
+    {
+      Rf_error("P_y in measurementUpdate() has no Cholesky decomposition");
+    }
+#endif
+
     matrixInverseFromChol(chol_P_y, inv_P_y, m);
 
     for (cn = 1 ; cn <= n ; cn++)
@@ -580,13 +602,13 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
 
       for (cr = 1 ; cr <= m ; cr++)
       {
-        dSum += inv_P_y[cn][cr] * ym[cr];
+        dSum += inv_P_y[cn][cr] * (z[cr] - ym[cr]);
       }
 
-      yt_invPy_y += dSum * ym[cn];
+      yt_invPy_y += dSum * (z[cn] - ym[cn]);
     }
 
-    LogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y);
+    LogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y + (m * log(2 * M_PI)));
 
     // aposteriori state:
     for (cn = 1 ; cn <= m ; cn++)
@@ -654,52 +676,146 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
   double  dSum;
   double  dW;
   double  yt_invPy_y;
+  bool    bIsOk;
+
+  // Find new sigma points
+  sigma_points(x_k[t-1], chol_P_k[t]);
+  state(t);
+
+  // apriori state:
+  for (cn = 1 ; cn <= n ; cn++)
+  {
+    x_k_bar[t][cn] = W0m * x_sigma_f[cn][1];
+
+    for (ck = 2 ; ck <= 2 * n + 1 ; ck++)
+    {
+      x_k_bar[t][cn] += W * x_sigma_f[cn][ck]; 
+    }
+  }
+
+  // apriori covariance matrix:
+  for (cn = 1 ; cn <= n ; cn++)
+  {
+    for (cm = 1 ; cm <= n ; cm++)
+    {
+      P_k_bar[t][cn][cm] = 0.0;
+      C_k[cn][cm]        = 0.0;
+    }
+  }
+
+  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
+  {
+    if (ck == 1)
+    {
+      dW = W0c;
+    }
+    else
+    {
+      dW = W;
+    }
+
+    for (cn = 1 ; cn <= n ; cn++)
+    {
+      x_P[cn]  = x_sigma_f[cn][ck] - x_k_bar[t][cn];
+      x_Pc[cn] = x_sigma[cn][ck] - x_k_bar[t-1][cn];
+    }
+
+    for (cn = 1 ; cn <= n ; cn++)
+    {
+      for (cm = 1 ; cm <= n ; cm++)
+      {
+        C_k[cn][cm]        += dW * x_Pc[cn] * x_P[cm];
+        P_k_bar[t][cn][cm] += dW * x_P[cn] * x_P[cm];
+      }
+    }
+  }
+
+  for (cn = 1 ; cn <= n ; cn++)
+  {
+    for (cm = 1 ; cm <= n ; cm++)
+    {
+      P_k_bar[t][cn][cm] += Qscale[t] * Q[cn][cm];
+    }
+  }
+
+  y_UKF_calc(t);
 
   if (naData[t])
   {
     // with NA data next smoothed state equals previous state
     for (cc = 1 ; cc <= n ; cc++)
     {
-      x_k_smooth[t-1][cc] = x_k_smooth[t][cc];
-      y_k_smooth[t-1][cc] = y_k_smooth[t][cc];
+      x_smooth[cc]        = x_k_smooth[t][cc];
+      x_k_smooth[t-1][cc] = x_k[t-1][cc];
 
       for (cr = 1 ; cr <= n ; cr++)
       {
         Ps_k[t-1][cr][cc] = Ps_k[t][cr][cc];
       }
     }
+
+    for (cc = 1 ; cc <= m ; cc++)
+    {
+      y_smooth[cc]        = y_k_smooth[t][cc];
+      y_k_smooth[t-1][cc] = yi[cc];
+    }
   }
   else
   {
-    // Implement UKF Kalman smoothing based on the Jacobian Equivalent 
-    // Rauch-Tung-Striebel smoother (abbreviated as JE-RTS method).
-    zero(Ye_k);
+    zero(P_y);
 
-    // using A_k as temp to find Ye_k
-    for (cr = 1 ; cr <= n ; cr++)
+    // Find P_y
+    for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
     {
-      for (cc = 1 ; cc <= n ; cc++)
+      if (ck == 1)
       {
-        A_k[cr][cc] = P_k_bar[t][cr][cc] - Q[t][cr][cc];
+        dW = W0c;
+      }
+      else
+      {
+        dW = W;
+      }
+
+      // cov matrix output/output
+      for (cn = 1 ; cn <= m ; cn++)
+      {
+        y_P[cn] = y_sigma[cn][ck] - ym[cn];
+      }
+
+      for (cn = 1 ; cn <= m ; cn++)
+      {
+        for (cm = 1 ; cm <= m ; cm++)
+        {
+          P_y[cn][cm]  += dW * y_P[cn] * y_P[cm];
+        }
       }
     }
 
-    choleskyDecomposition(A_k, Ye_k, n);
+    for (cn = 1 ; cn <= m ; cn++)
+    {
+      for (cm = 1 ; cm <= m ; cm++)
+      {
+        P_y[cn][cm]  += R[t][cn][cm];
+      }
+    }
 
-    zero(inv_root_P_km1);
+    // find smoothing gain
+    zero(A_k);
 
-    // using A_k as temp to find inverse of root of P_k at t-1
-    choleskyDecomposition(chol_P_k[t], A_k, n);
-    matrixInverseFromChol(A_k, inv_root_P_km1, n);
+    // Use A_k as temp to find inv_P_k_bar
+    bIsOk = choleskyDecomposition(P_k_bar[t], A_k, n);
+#ifndef AD
+    if (!bIsOk)
+    {
+      Rf_error("P_k_bar[t] in smoothingUpdate() has no Cholesky decomposition");
+    }
+#endif
 
-    zero(inv_P_k);
+    zero(inv_P_k_bar);
 
-    // using A_k as temp to find inverse of P_k_bar at t
-    choleskyDecomposition(P_k_bar[t], A_k, n);
-    matrixInverseFromChol(A_k, inv_P_k, n);
+    matrixInverseFromChol(A_k, inv_P_k_bar, n);
 
-    // find smoothing gain A_k
-    // Ak = inv_root_P_km1 * inv_P_k
+    // A_k = C_k * inv_P_k_bar
     for (cc = 1 ; cc <= n ; cc++)
     {
       for (cr = 1 ; cr <= n ; cr++)
@@ -708,49 +824,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
         for (cn = 1 ; cn <= n ; cn++)
         {
-          dSum += inv_root_P_km1[cr][cn] * inv_P_k[cn][cc];
-        }
-
-        A_k[cr][cc] = dSum;
-      }
-    }
-
-    // Ak = Yk * Ak
-    for (cc = 1 ; cc <= n ; cc++) 
-    {
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        x_Temp[cr] = A_k[cr][cc];
-      }
-
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        dSum = 0.0;
-
-        for (cn = 1 ; cn <= n ; cn++)
-        {
-          dSum += Ye_k[cr][cn] * x_Temp[cn];
-        }
-
-        A_k[cr][cc] = dSum;
-      }
-    }
-
-    // Ak = Pk[t-1] * Ak
-    for (cc = 1 ; cc <= n ; cc++)
-    {
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        x_Temp[cr] = A_k[cr][cc];
-      }
-
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        dSum = 0.0;
-
-        for (cn = 1 ; cn <= n ; cn++)
-        {
-          dSum += P_k[t-1][cr][cn] * x_Temp[cn];
+          dSum += C_k[cr][cn] * inv_P_k_bar[cn][cc];
         }
 
         A_k[cr][cc] = dSum;
@@ -772,15 +846,18 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
       xi[cr]              = dSum;
     }
 
-    model_output(yi, xi, t-1);
+    model_output(yi, xi, t);
+
+    for (cc = 1 ; cc <= m ; cc++)
+    {
+      y_smooth[cc]        = y_k_smooth[t][cc];
+      y_k_smooth[t-1][cc] = yi[cc];
+    }
 
     // find smoothed covariance
     // Ps_k[t-1] = (P_k_bar[t] - Ps_k[t]) * t(A_k)
     for (cc = 1 ; cc <= n ; cc++)
     {
-      y_smooth[cc]        = y_k_smooth[t][cc];
-      y_k_smooth[t-1][cc] = yi[cc];
-
       for (cr = 1 ; cr <= n ; cr++)
       {
         dSum = 0.0;
@@ -794,7 +871,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
       }
     }
 
-    // Ps_k[t-1] = P_k[t] - A_k * Ps_k[t-1]
+    // Ps_k[t-1] = P_k[t-1] - A_k * Ps_k[t-1]
     for (cc = 1 ; cc <= n ; cc++)
     {
       for (cr = 1 ; cr <= n ; cr++)
@@ -815,73 +892,34 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
       }
     }
 
-    if (bWithLogLikelihood)
+    // Find loglikelihood
+    zero(chol_P_y);
+
+    bIsOk = choleskyDecomposition(P_y, chol_P_y, m);
+#ifndef AD
+    if (!bIsOk)
     {
-      // Find new sigma points
-      zero(chol_Ps_k);
-
-      choleskyDecomposition(Ps_k[t-1], chol_Ps_k, n);
-      sigma_points(x_k_smooth[t-1], chol_Ps_k);
-      y_UKF_calc(t-1);
-
-      // Find P_y
-      for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-      {
-        if (ck == 1)
-        {
-          dW = W0c;
-        }
-        else
-        {
-          dW = W;
-        }
-
-        // cov matrix output/output
-        for (cn = 1 ; cn <= m ; cn++)
-        {
-          y_P[cn] = y_sigma[cn][ck] - ym[cn];
-        }
-
-        for (cn = 1 ; cn <= m ; cn++)
-        {
-          for (cm = 1 ; cm <= m ; cm++)
-          {
-            P_y_P[cn][cm] = dW * y_P[cn] * y_P[cm];
-            P_y[cn][cm]  += P_y_P[cn][cm];
-          }
-        }
-      }
-
-      for (cn = 1 ; cn <= m ; cn++)
-      {
-        for (cm = 1 ; cm <= m ; cm++)
-        {
-          P_y[cn][cm]  += R[t][cn][cm];
-        }
-      }
-
-      // Find loglikelihood
-      zero(chol_P_y);
-
-      choleskyDecomposition(P_y, chol_P_y, m);
-      matrixInverseFromChol(chol_P_y, inv_P_y, m);
-
-      yt_invPy_y = 0.0;
-
-      for (cn = 1 ; cn <= m ; cn++)
-      {
-        dSum = 0.0;
-
-        for (cr = 1 ; cr <= m ; cr++)
-        {
-          dSum += inv_P_y[cn][cr] * ym[cr];
-        }
-
-        yt_invPy_y += dSum * ym[cn];
-      }
-
-      SmoothedLogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y);
+      Rf_error("P_y in smoothingUpdate() has no Cholesky decomposition");
     }
+#endif
+
+    matrixInverseFromChol(chol_P_y, inv_P_y, m);
+
+    yt_invPy_y = 0.0;
+
+    for (cn = 1 ; cn <= m ; cn++)
+    {
+      dSum = 0.0;
+
+      for (cr = 1 ; cr <= m ; cr++)
+      {
+        dSum += inv_P_y[cn][cr] * (y[t][cr] - ym[cr]);
+      }
+
+      yt_invPy_y += dSum * (y[t][cn] - ym[cn]);
+    }
+
+    SmoothedLogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y + (m * log(2 * M_PI)));
   }
 }
 
@@ -889,14 +927,15 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
 double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */, 
                                      ARRAY_2D  y_est /* ns, m */, 
-                                     const ARRAY_3D _Q /* ns,n,n */, 
+                                     const ARRAY_2D _Q /* n,n */, 
+                                     const ARRAY_1D _Qscale /* ns */, 
                                      const ARRAY_3D _R /* ns,m,m */, 
                                      const ARRAY_1D x_0 /* n */)
 {
   int t;
   int i;
 
-  resetUKF(_Q, _R, x_0);
+  resetUKF(_Q, _Qscale, _R, x_0);
 
   for (t = 1 ; t <= ns ; t++)
   {

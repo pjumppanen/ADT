@@ -64,6 +64,7 @@ protected:
                  
   // all vectors used in the UKF process
   ARRAY_1D  x_P /* n */;
+  ARRAY_1D  x_Pc /* n */;
   ARRAY_1D  y_P /* m */;
   ARRAY_1D  ym /* m */;
   ARRAY_1D  xi /* n */;
@@ -75,39 +76,38 @@ protected:
   ARRAY_3D  P_k /* 0:ns,n,n */;   // Kalman filter covariance
   ARRAY_3D  P_k_bar /* ns,n,n */;   // Kalman filter covariance
   ARRAY_3D  chol_P_k /* ns,n,n */;
-  ARRAY_3D  Ps_k /* 0:ns,n,n */;  // JE-RTS smoothed covariance
-  ARRAY_2D  P_aprioriP /* n,n */;
-
+  ARRAY_3D  Ps_k /* 0:ns,n,n */;  // URTS smoothed covariance
+  
   // Arrays used in smoothing
-  ARRAY_2D  inv_P_k /* n,n */;
-  ARRAY_2D  inv_root_P_km1 /* n,n */;
-  ARRAY_2D  Ye_k /* n,n */;
+  ARRAY_2D  inv_P_k_bar /* n,n */;
   ARRAY_2D  A_k /* n,n */;
   ARRAY_1D  x_Temp /* n */;
   ARRAY_2D  chol_Ps_k /* n,n */;
-  
-  // clear sigma points
-  ARRAY_2D  y_sigma /* m, 2 * n + 1 */;
+  ARRAY_2D  C_k /* n,n */;
+
+  // sigma points
   ARRAY_2D  x_sigma /* n, 2 * n + 1 */;
 
   // sigma points after passing through the function f/h
   ARRAY_2D  x_sigma_f /* n, 2 * n + 1 */;
 
-  // cross covariances
+  // sigma output points (ie. after passing through the function f/h)
+  ARRAY_2D  y_sigma /* m, 2 * n + 1 */;
+  
+  // cross covariance
   ARRAY_2D  P_xy /* n,m */;
   ARRAY_2D  P_xyP /* n,m */;
 
   ARRAY_2D  P_y /* m,m */;
   ARRAY_2D  chol_P_y /* m,m */;
   ARRAY_2D  inv_P_y /* m,m */;
-  ARRAY_2D  oP_y /* m,m */;
-  ARRAY_2D  P_y_P /* m,m */;
   ARRAY_2D  K /* n,m */;
   ARRAY_2D  K_P_y /* n,m */;
   ARRAY_2D  K_0 /* n,m */;
   ARRAY_2D  K_UKF_T /* m,n */;
 
-  ARRAY_3D  Q /* ns,n,n */; // Process noise covariance by sample
+  ARRAY_2D  Q /* n,n */; // Process noise covariance matrix
+  ARRAY_1D  Qscale /* ns */; // vector of Q scaling to cater for non-uniform sample time
   ARRAY_3D  R /* ns,m,m */; // Observation noise covariance by sample
 
   double    LogLikelihood;
@@ -119,7 +119,7 @@ protected:
 #include "UKF_array_plans.hpp"
 
 protected:
-  void      choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize);
+  bool      choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize);
   double    logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, const int nSize);
   void      matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
 
@@ -128,7 +128,8 @@ protected:
   void      y_UKF_calc(const int t);
   void      state(const int t);
 
-  void      resetUKF(const ARRAY_3D _Q /* ns,n,n */, 
+  void      resetUKF(const ARRAY_2D _Q /* n,n */, 
+                     const ARRAY_1D _Qscale /* ns */, 
                      const ARRAY_3D _R /* ns,m,m */, 
                      const ARRAY_1D x_0 /* n */);
 
@@ -149,7 +150,8 @@ public:
 
   double    filter(ARRAY_2D  x_est /* ns, n */,
                    ARRAY_2D  y_est /* ns, m */,
-                   const ARRAY_3D _Q /* ns,n,n */, 
+                   const ARRAY_2D _Q /* n,n */, 
+                   const ARRAY_1D _Qscale /* ns */, 
                    const ARRAY_3D _R /* ns,m,m */, 
                    const ARRAY_1D x_0 /* n */);
 
