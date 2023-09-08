@@ -44,6 +44,7 @@ protected:
   double    beta;
   R_CALL    model_output;
   R_CALL    model_state;
+  R_CALL    model_limit_state;
   ARRAY_2D  y /* ns, m */;  // observed measurement data
   
   /* AUTODEC */
@@ -107,7 +108,7 @@ protected:
   ARRAY_2D  K_UKF_T /* m,n */;
 
   ARRAY_2D  Q /* n,n */; // Process noise covariance matrix
-  ARRAY_1D  Qscale /* ns */; // vector of Q scaling to cater for non-uniform sample time
+  ARRAY_2D  Qscale /* ns,n */; // vector of Q scaling to cater for non-uniform sample time
   ARRAY_3D  R /* ns,m,m */; // Observation noise covariance by sample
 
   double    LogLikelihood;
@@ -127,9 +128,10 @@ protected:
   void      sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */);
   void      y_UKF_calc(const int t);
   void      state(const int t);
+  void      limitState(ARRAY_1D xout, const ARRAY_1D xin, const ARRAY_1D xprev, const int t);
 
   void      resetUKF(const ARRAY_2D _Q /* n,n */, 
-                     const ARRAY_1D _Qscale /* ns */, 
+                     const ARRAY_2D _Qscale /* ns,n */, 
                      const ARRAY_3D _R /* ns,m,m */, 
                      const ARRAY_1D x_0 /* n */);
 
@@ -151,7 +153,7 @@ public:
   double    filter(ARRAY_2D  x_est /* ns, n */,
                    ARRAY_2D  y_est /* ns, m */,
                    const ARRAY_2D _Q /* n,n */, 
-                   const ARRAY_1D _Qscale /* ns */, 
+                   const ARRAY_2D _Qscale /* ns,n */, 
                    const ARRAY_3D _R /* ns,m,m */, 
                    const ARRAY_1D x_0 /* n */);
 

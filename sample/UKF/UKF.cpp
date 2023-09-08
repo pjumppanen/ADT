@@ -144,7 +144,8 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
 #include "UKF_constructor_args.hpp"
 )
  : model_output(),
-   model_state()
+   model_state(),
+   model_limit_state()
 {
   #include "UKF_constructor_locals.hpp"
   #include "UKF_constructor_scalars_phase_1.hpp"
@@ -202,7 +203,7 @@ UnscentedKalmanFilter::UnscentedKalmanFilter(
 // x_0 - initial state
 // ----------------------------------------------------------------------------
 void UnscentedKalmanFilter::resetUKF(const ARRAY_2D _Q /* n,n */, 
-                                     const ARRAY_1D _Qscale /* ns */, 
+                                     const ARRAY_2D _Qscale /* ns,n */, 
                                      const ARRAY_3D _R /* ns,m,m */, 
                                      const ARRAY_1D x_0 /* n */)
 {
@@ -244,7 +245,10 @@ void UnscentedKalmanFilter::resetUKF(const ARRAY_2D _Q /* n,n */,
 
   for (ct = 1 ; ct <= ns ; ct++)
   {
-    Qscale[ct] = _Qscale[ct];
+    for (cn = 1 ; cn <= n ; cn++)
+    {
+      Qscale[ct][cn] = _Qscale[ct][cn];
+    }
 
     for (cn = 1 ; cn <= m ; cn++)
     {
@@ -261,7 +265,7 @@ void UnscentedKalmanFilter::resetUKF(const ARRAY_2D _Q /* n,n */,
 
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k[0][cn][cm] = Qscale[1] * Q[cn][cm];
+      P_k[0][cn][cm] = Qscale[1][cn] * Q[cn][cm] * Qscale[1][cm];
     }
   }
 
@@ -376,6 +380,32 @@ void UnscentedKalmanFilter::state(const int t)
 
 // ----------------------------------------------------------------------------
 
+// This method is needed to set the next state into a valid state. The process
+// within the UKF is to use sigma points to calculate the next state through 
+// a weighted mean. If the non-linearity in our model restricts the next state
+// to a particular range (ie. in the sea and not on land), the weighted mean 
+// will no necessarily be in the valid range. To avoid this happening we make
+// sure that it is in the valid range by 
+void UnscentedKalmanFilter::limitState(ARRAY_1D xout, const ARRAY_1D xin, const ARRAY_1D xprev, const int t)
+{
+  int j;
+
+  for (j = 1 ; j <= n ; j++)
+  {
+    xlast[j] = xprev[j];  
+    xp[j]    = xin[j];
+  }
+
+  model_limit_state(xi, xp, xlast, t);
+
+  for (j = 1 ; j <= n ; j++)
+  {
+    xout[j] = xi[j];
+  }
+}
+
+// ----------------------------------------------------------------------------
+
 void UnscentedKalmanFilter::timeUpdate(const int t)
 {
   int     cn;
@@ -444,7 +474,7 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
   {
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k_bar[t][cn][cm] += Qscale[t] * Q[cn][cm];
+      P_k_bar[t][cn][cm] += Qscale[t][cn] * Q[cn][cm] * Qscale[t][cm];
     }
   }
 
@@ -628,6 +658,9 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
       x_k[t][cn] = x_k_bar[t][cn] + dSum;
     }
 
+    // need to make next state comply with non-linear requirements of model
+    limitState(x_k[t], x_k[t], x_k[t-1], t);
+
     // cov aposteriori:
     for (cn = 1 ; cn <= n ; cn++)
     {
@@ -734,7 +767,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
   {
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k_bar[t][cn][cm] += Qscale[t] * Q[cn][cm];
+      P_k_bar[t][cn][cm] += Qscale[t][cn] * Q[cn][cm] * Qscale[t][cm];
     }
   }
 
@@ -843,7 +876,14 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
       x_smooth[cr]        = x_k_smooth[t][cr];
       x_k_smooth[t-1][cr] = dSum;
-      xi[cr]              = dSum;
+    }
+
+    // need to make next state comply with non-linear requirements of model
+    limitState(x_k_smooth[t-1], x_k_smooth[t-1], x_k_smooth[t], t);
+
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      xi[cr] = x_k_smooth[t-1][cr];
     }
 
     model_output(yi, xi, t);
@@ -928,7 +968,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */, 
                                      ARRAY_2D  y_est /* ns, m */, 
                                      const ARRAY_2D _Q /* n,n */, 
-                                     const ARRAY_1D _Qscale /* ns */, 
+                                     const ARRAY_2D _Qscale /* ns,n */, 
                                      const ARRAY_3D _R /* ns,m,m */, 
                                      const ARRAY_1D x_0 /* n */)
 {
