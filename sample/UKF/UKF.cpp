@@ -436,6 +436,9 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
     }
   }
 
+  // need to make next state comply with non-linear requirements of model
+  limitState(x_k_bar[t], x_k_bar[t], x_k[t-1], t);
+
   // apriori covariance matrix:
   for (cn = 1 ; cn <= n ; cn++)
   {
@@ -711,18 +714,32 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
   double  yt_invPy_y;
   bool    bIsOk;
 
+  // find smoothing gain
+  zero(A_k);
+
+  // find chol_Ps_k
+  bIsOk = choleskyDecomposition(Ps_k[t+1], chol_Ps_k, n);
+#ifndef AD
+  if (!bIsOk)
+  {
+    Rf_error("P_k_bar[t] in smoothingUpdate() has no Cholesky decomposition");
+  }
+#endif
+
   // Find new sigma points
-  sigma_points(x_k[t-1], chol_P_k[t]);
+  sigma_points(x_k[t], chol_Ps_k);
   state(t);
 
   // apriori state:
   for (cn = 1 ; cn <= n ; cn++)
   {
-    x_k_bar[t][cn] = W0m * x_sigma_f[cn][1];
+    x_k_bar[t+1][cn] = W0m * x_sigma_f[cn][1];
+    xi[cn]           = W0m * x_sigma[cn][1];
 
     for (ck = 2 ; ck <= 2 * n + 1 ; ck++)
     {
-      x_k_bar[t][cn] += W * x_sigma_f[cn][ck]; 
+      x_k_bar[t+1][cn] += W * x_sigma_f[cn][ck]; 
+      xi[cn]           += W * x_sigma[cn][ck]; 
     }
   }
 
@@ -731,8 +748,8 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
   {
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k_bar[t][cn][cm] = 0.0;
-      C_k[cn][cm]        = 0.0;
+      P_k_bar[t+1][cn][cm] = 0.0;
+      C_k[cn][cm]          = 0.0;
     }
   }
 
@@ -749,16 +766,16 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
     for (cn = 1 ; cn <= n ; cn++)
     {
-      x_P[cn]  = x_sigma_f[cn][ck] - x_k_bar[t][cn];
-      x_Pc[cn] = x_sigma[cn][ck] - x_k_bar[t-1][cn];
+      x_P[cn]  = x_sigma_f[cn][ck] - x_k_bar[t+1][cn];
+      x_Pc[cn] = x_sigma[cn][ck] - xi[cn]; // This looks like it is using the wrong x_sigma
     }
 
     for (cn = 1 ; cn <= n ; cn++)
     {
       for (cm = 1 ; cm <= n ; cm++)
       {
-        C_k[cn][cm]        += dW * x_Pc[cn] * x_P[cm];
-        P_k_bar[t][cn][cm] += dW * x_P[cn] * x_P[cm];
+        C_k[cn][cm]          += dW * x_Pc[cn] * x_P[cm];
+        P_k_bar[t+1][cn][cm] += dW * x_P[cn] * x_P[cm];
       }
     }
   }
@@ -767,30 +784,30 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
   {
     for (cm = 1 ; cm <= n ; cm++)
     {
-      P_k_bar[t][cn][cm] += Qscale[t][cn] * Q[cn][cm] * Qscale[t][cm];
+      P_k_bar[t+1][cn][cm] += Qscale[t+1][cn] * Q[cn][cm] * Qscale[t+1][cm];
     }
   }
 
-  y_UKF_calc(t);
+  y_UKF_calc(t+1);
 
   if (naData[t])
   {
     // with NA data next smoothed state equals previous state
     for (cc = 1 ; cc <= n ; cc++)
     {
-      x_smooth[cc]        = x_k_smooth[t][cc];
-      x_k_smooth[t-1][cc] = x_k[t-1][cc];
+      x_smooth[cc]      = x_k_smooth[t+1][cc];
+      x_k_smooth[t][cc] = x_k[t][cc];
 
       for (cr = 1 ; cr <= n ; cr++)
       {
-        Ps_k[t-1][cr][cc] = Ps_k[t][cr][cc];
+        Ps_k[t][cr][cc] = Ps_k[t+1][cr][cc];
       }
     }
 
     for (cc = 1 ; cc <= m ; cc++)
     {
-      y_smooth[cc]        = y_k_smooth[t][cc];
-      y_k_smooth[t-1][cc] = yi[cc];
+      y_smooth[cc]      = y_k_smooth[t+1][cc];
+      y_k_smooth[t][cc] = yi[cc];
     }
   }
   else
@@ -828,7 +845,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
     {
       for (cm = 1 ; cm <= m ; cm++)
       {
-        P_y[cn][cm]  += R[t][cn][cm];
+        P_y[cn][cm]  += R[t+1][cn][cm];
       }
     }
 
@@ -836,7 +853,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
     zero(A_k);
 
     // Use A_k as temp to find inv_P_k_bar
-    bIsOk = choleskyDecomposition(P_k_bar[t], A_k, n);
+    bIsOk = choleskyDecomposition(P_k_bar[t+1], A_k, n);
 #ifndef AD
     if (!bIsOk)
     {
@@ -864,71 +881,92 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
       }
     }
 
-    // find smoothed state
-    for (cr = 1 ; cr <= n ; cr++)
-    {
-      dSum = x_k[t-1][cr];
-
-      for (cc = 1 ; cc <= n ; cc++)
-      {
-        dSum += A_k[cr][cc] * (x_k_smooth[t][cc] - x_k_bar[t][cc]);
-      }
-
-      x_smooth[cr]        = x_k_smooth[t][cr];
-      x_k_smooth[t-1][cr] = dSum;
-    }
-
-    // need to make next state comply with non-linear requirements of model
-    limitState(x_k_smooth[t-1], x_k_smooth[t-1], x_k_smooth[t], t);
-
-    for (cr = 1 ; cr <= n ; cr++)
-    {
-      xi[cr] = x_k_smooth[t-1][cr];
-    }
-
-    model_output(yi, xi, t);
-
-    for (cc = 1 ; cc <= m ; cc++)
-    {
-      y_smooth[cc]        = y_k_smooth[t][cc];
-      y_k_smooth[t-1][cc] = yi[cc];
-    }
-
-    // find smoothed covariance
-    // Ps_k[t-1] = (P_k_bar[t] - Ps_k[t]) * t(A_k)
+    // A_k = Ps_k[t] * A_k 
     for (cc = 1 ; cc <= n ; cc++)
     {
+      for (cr = 1 ; cr <= n ; cr++)
+      {
+        x_Temp[cr] = A_k[cr][cc];
+      }
+
       for (cr = 1 ; cr <= n ; cr++)
       {
         dSum = 0.0;
 
         for (cn = 1 ; cn <= n ; cn++)
         {
-          dSum += (P_k_bar[t][cr][cn] - Ps_k[t][cr][cn]) * A_k[cc][cn];
+          dSum += Ps_k[t][cr][cn] * x_Temp[cn];
         }
 
-        Ps_k[t-1][cr][cc] = dSum;
+        A_k[cr][cc] = dSum;
       }
     }
 
-    // Ps_k[t-1] = P_k[t-1] - A_k * Ps_k[t-1]
+    // find smoothed state
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      dSum = x_k[t][cr];
+
+      for (cc = 1 ; cc <= n ; cc++)
+      {
+        dSum += A_k[cr][cc] * (x_k_smooth[t+1][cc] - x_k_bar[t+1][cc]);
+      }
+
+      x_k_smooth[t][cr] = dSum;
+      x_smooth[cr]      = dSum;
+    }
+
+    // need to make next state comply with non-linear requirements of model
+    limitState(x_k_smooth[t], x_k_smooth[t], x_k_smooth[t], t+1);
+
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      xi[cr] = x_k_smooth[t][cr];
+    }
+
+    model_output(yi, xi, t+1);
+
+    for (cc = 1 ; cc <= m ; cc++)
+    {
+      y_k_smooth[t][cc] = yi[cc];
+      y_smooth[cc]      = yi[cc];
+    }
+
+    // find smoothed covariance
+    // Ps_k[t] = (P_k_bar[t+1] - Ps_k[t+1]) * t(A_k)
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      for (cc = 1 ; cc <= n ; cc++)
+      {
+        dSum = 0.0;
+
+        for (cn = 1 ; cn <= n ; cn++)
+        {
+          dSum += (P_k_bar[t+1][cr][cn] - Ps_k[t+1][cr][cn]) * A_k[cc][cn];
+        }
+
+        Ps_k[t][cr][cc] = dSum;
+      }
+    }
+
+    // Ps_k[t] = P_k[t] - A_k * Ps_k[t]
     for (cc = 1 ; cc <= n ; cc++)
     {
       for (cr = 1 ; cr <= n ; cr++)
       {
-        x_Temp[cr] = Ps_k[t-1][cr][cc];
+        x_Temp[cr] = Ps_k[t][cr][cc];
       }
 
       for (cr = 1 ; cr <= n ; cr++)
       {
-        dSum = P_k[t-1][cr][cc];
+        dSum = P_k[t][cr][cc];
 
         for (cn = 1 ; cn <= n ; cn++)
         {
           dSum += -A_k[cr][cn] * x_Temp[cn];
         }
 
-        Ps_k[t-1][cr][cc] = dSum;
+        Ps_k[t][cr][cc] = dSum;
       }
     }
 
@@ -1021,10 +1059,16 @@ double UnscentedKalmanFilter::smooth(ARRAY_2D  x_smooth /* ns, n */,
     zero(x_k_smooth);
     zero(Ps_k);
 
+    for (cr = 1 ; cr <= m ; cr++)
+    {
+      y_k_smooth[ns][cr] = y_k[ns][cr];
+      y_smooth[ns][cr]   = y_k[ns][cr];
+    }
+
     for (cr = 1 ; cr <= n ; cr++)
     {
       x_k_smooth[ns][cr] = x_k[ns][cr];
-      y_k_smooth[ns][cr] = y_k[ns][cr];
+      x_smooth[ns][cr]   = x_k[ns][cr];
 
       for (cc = 1 ; cc <= n ; cc++)
       {
@@ -1034,7 +1078,7 @@ double UnscentedKalmanFilter::smooth(ARRAY_2D  x_smooth /* ns, n */,
 
     SmoothedLogLikelihood = 0.0;
 
-    for (t = ns ; t > 1 ; t--)
+    for (t = ns-1 ; t > 1 ; t--)
     {
       smoothingUpdate(x_smooth[t], y_smooth[t], t, bWithLogLikelihood);
     }
