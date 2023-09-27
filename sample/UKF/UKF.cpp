@@ -319,7 +319,7 @@ void UnscentedKalmanFilter::y_UKF_calc(const int t)
       xi[cn] = x_sigma_f[cn][ck];
     }
 
-    model_output(yi, xi, t);
+    model_output(yi, xi, t, time);
 
     for (cn = 1 ; cn <= m ; cn++)
     {
@@ -369,7 +369,7 @@ void UnscentedKalmanFilter::state(const int t)
       xp[cn] = x_sigma[cn][j];
     }
 
-    model_state(xi, xp, xlast, t);
+    model_state(xi, xp, xlast, t, time);
 
     for (cn = 1 ; cn <= n ; cn++)
     {
@@ -396,7 +396,7 @@ void UnscentedKalmanFilter::limitState(ARRAY_1D xout, const ARRAY_1D xin, const 
     xp[j]    = xin[j];
   }
 
-  model_limit_state(xi, xp, xlast, t);
+  model_limit_state(xi, xp, xlast, t, time);
 
   for (j = 1 ; j <= n ; j++)
   {
@@ -924,7 +924,7 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
       xi[cr] = x_k_smooth[t][cr];
     }
 
-    model_output(yi, xi, t+1);
+    model_output(yi, xi, t+1, time);
 
     for (cc = 1 ; cc <= m ; cc++)
     {
@@ -1026,7 +1026,7 @@ double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */,
       x_est[t][i] = xi[i];
     }
 
-    model_output(yi, xi, t);
+    model_output(yi, xi, t, time);
 
     for (i = 1 ; i <= m ; i++)
     {

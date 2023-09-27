@@ -46,6 +46,7 @@ protected:
   R_CALL    model_state;
   R_CALL    model_limit_state;
   ARRAY_2D  y /* ns, m */;  // observed measurement data
+  ARRAY_1D  time /* ns */;  // observed time data
   
   /* AUTODEC */
   // UKF params
