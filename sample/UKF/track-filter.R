@@ -522,7 +522,6 @@ estimateQ <- function(df)
 
   return (list(Q=Q, Qscaling=Qscaling))
 }
-QandQscaling2 <- estimateQ(df2)
 
 # ----------------------------------------------------------------------------
 
@@ -578,7 +577,8 @@ y_0    <- array(NA, m)
 # generate model data
 size_n <- length(df$LON)
 
-y <- array(NA, c(size_n, m))
+y      <- array(NA, c(size_n, m))
+time   <- df$t * 3600 * 24
 
 y[,1] <- df$LON + df$LonOffsets
 y[,2] <- df$LAT
@@ -592,7 +592,7 @@ y_0[2] <- y[1,1]
 
 # ----------------------------------------------------------------------------
 
-model_output <- function(x, t)
+model_output <- function(x, t, time)
 {
   y <- x[1:2]
 
@@ -601,60 +601,22 @@ model_output <- function(x, t)
 
 # ----------------------------------------------------------------------------
 
-model_state <- function(xp, xlast, t)
+model_state <- function(xp, xlast, t, time)
 {
-  seconds_in_days <- 3600 * 24 
-
   x      <- xp * 0
   xi     <- .External('LandLimit', LFContext, xlast[1], xlast[2], xp[1], xp[2])
-  dt     <- as.double(if (t==1) 0.0 else (data.time[t] - data.time[t-1]))
-  x[1:4] <- .External('SpeedAndLandLimit', LFContext, xi[1], xi[2], xp[3], xp[4], dt * seconds_in_days, max_speed)
-  
-  if (.External('PointOnLand', LFContext, xlast[1], xlast[2]))
-  {
-    browser()
-  }
-
-  if (.External('PointOnLand', LFContext, xi[1], xi[2]))
-  {
-    browser()
-  }
-
-  if (.External('PointOnLand', LFContext, x[1], x[2]))
-  {
-    browser()
-  }
- 
-  if (any(is.na(x)))
-  {
-    browser()
-  }
+  dt     <- as.double(if (t==1) 0.0 else (time[t] - time[t-1]))
+  x[1:4] <- .External('SpeedAndLandLimit', LFContext, xi[1], xi[2], xp[3], xp[4], dt, max_speed)
 
   return (x)
 }
 
 # ----------------------------------------------------------------------------
 
-model_limit_state <- function(xp, xlast, t)
+model_limit_state <- function(xp, xlast, t, time)
 {
-  x <- xp
-
-  if (.External('PointOnLand', LFContext, xlast[1], xlast[2]))
-  {
-    browser()
-  }
-
+  x       <- xp
   x[1:2]  <- .External('LandLimit', LFContext, xlast[1], xlast[2], xp[1], xp[2])
-
-  if (any(is.na(x)))
-  {
-    browser()
-  }
-
-  if (.External('PointOnLand', LFContext, x[1], x[2]))
-  {
-    browser()
-  }
 
   return (x)
 }
@@ -677,7 +639,8 @@ UKF.Context <- UKF.create(n,
                           model_limit_state,
                           environment(), 
                           F, 
-                          y)
+                          y, 
+                          time)
 
 est_state  <- array(as.double(NA), c(size_n, n))
 est_output <- array(as.double(NA), c(size_n, m))
@@ -687,7 +650,6 @@ smt_output <- array(as.double(NA), c(size_n, m))
 R         <- initR(df)
 Q         <- QandQscaling$Q
 Qscaling  <- QandQscaling$Qscaling
-Qscaling  <- Qscaling / 10
 
 # run filtering
 UKF.filter(UKF.Context,
@@ -717,6 +679,9 @@ UKF.smooth(UKF.Context,
            smt_output,
            as.raw(T))
 
+xlim <- c(min(smt_output[,1], na.rm=T),max(smt_output[,1], na.rm=T))
+ylim <- c(min(smt_output[,2], na.rm=T),max(smt_output[,2], na.rm=T))
+
 points(smt_output, col='blue')
 lines(smt_output, col='blue')
 
@@ -741,7 +706,7 @@ data.time2    <- df2$t
 
 # ----------------------------------------------------------------------------
 
-model_output2 <- function(x, t)
+model_output2 <- function(x, t, time)
 {
   y <- x[1:2]
 
@@ -750,21 +715,19 @@ model_output2 <- function(x, t)
 
 # ----------------------------------------------------------------------------
 
-model_state2 <- function(xp, xlast, t)
+model_state2 <- function(xp, xlast, t, time)
 {
-  seconds_in_days <- 3600 * 24 
-
   x      <- xp * 0
   xi     <- .External('LandLimit', LFContext, xlast[1], xlast[2], xp[1], xp[2])
-  dt     <- as.double(if (t==1) 0.0 else (data.time2[t] - data.time2[t-1]))
-  x[1:4] <- .External('SpeedAndLandLimit', LFContext, xi[1], xi[2], xp[3], xp[4], dt * seconds_in_days, max_speed)
+  dt     <- as.double(if (t==1) 0.0 else (time[t] - time[t-1]))
+  x[1:4] <- .External('SpeedAndLandLimit', LFContext, xi[1], xi[2], xp[3], xp[4], dt, max_speed)
 
   return (x)
 }
 
 # ----------------------------------------------------------------------------
 
-model_limit_state2 <- function(xp, xlast, t)
+model_limit_state2 <- function(xp, xlast, t, time)
 {
   x      <- xp
   x[1:2] <- .External('LandLimit', LFContext, xlast[1], xlast[2], xp[1], xp[2])
@@ -780,7 +743,8 @@ y2_0    <- array(NA, m)
 # generate model data
 size_n2 <- length(df2$LON)
 
-y2 <- array(NA, c(size_n2, m))
+y2     <- array(NA, c(size_n2, m))
+time2  <- df2$t * 3600 * 24
 
 y2[,1] <- df2$LON + df2$LonOffsets
 y2[,2] <- df2$LAT
@@ -807,7 +771,8 @@ UKF.Context2 <- UKF.create(n,
                            model_limit_state2,
                            environment(), 
                            F, 
-                           y2)
+                           y2,
+                           time2)
 
 est_state2  <- array(as.double(NA), c(size_n2, n))
 est_output2 <- array(as.double(NA), c(size_n2, m))
@@ -817,8 +782,6 @@ smt_output2 <- array(as.double(NA), c(size_n2, m))
 R2         <- initR(df2)
 Q2         <- QandQscaling2$Q
 Qscaling2  <- QandQscaling2$Qscaling
-Qscaling2  <- Qscaling2 / 100
-Qscaling2  <- Qscaling2 / 10
 
 # run filtering
 UKF.filter(UKF.Context2,
@@ -860,6 +823,132 @@ ozmap(xlim=xlim, ylim=ylim)
 points(df2$LON,df2$LAT, col='green')
 points(est_output2, col='red')
 lines(est_output2, col='red')
+points(smt_output2, col='blue')
+lines(smt_output2, col='blue')
+
+
+# ----------------------------------------------------------------------------
+# find best Q scaling using minimisation of negative log likelihood estimate
+# ----------------------------------------------------------------------------
+est_state  <- array(as.double(NA), c(size_n, n))
+est_output <- array(as.double(NA), c(size_n, m))
+smt_state  <- array(as.double(NA), c(size_n, n))
+smt_output <- array(as.double(NA), c(size_n, m))
+
+R         <- initR(df)
+Q         <- QandQscaling$Q
+Qscaling  <- QandQscaling$Qscaling
+
+negLogLikelihood <- function(par)
+{
+  Q <- QandQscaling$Q
+  Q[1,1] <- Q[1,1] * exp(par[1])
+  Q[2,2] <- Q[2,2] * exp(par[2])
+  Q[3,3] <- Q[3,3] * exp(par[3])
+  Q[4,4] <- Q[4,4] * exp(par[4])
+
+  # run filtering
+  ll <- -UKF.filter(UKF.Context,
+                    est_state,
+                    est_output,
+                    Q, 
+                    Qscaling, 
+                    R, 
+                    x_0)
+
+  print(ll)
+
+  return (ll)
+}
+
+start <- c(1,1,1,1)
+lower <- c(log(0.0001),log(0.0001),log(0.0001),log(0.0001))
+upper <- c(log(10.0),log(10.0),log(10.0),log(10.0))
+res   <- nlminb(start, negLogLikelihood, control=list(trace=1), lower=lower, upper=upper)
+
+Q <- QandQscaling$Q
+Q[1,1] <- Q[1,1] * exp(res$par[1])
+Q[2,2] <- Q[2,2] * exp(res$par[2])
+Q[3,3] <- Q[3,3] * exp(res$par[3])
+Q[4,4] <- Q[4,4] * exp(res$par[4])
+
+# run filtering
+UKF.filter(UKF.Context,
+           est_state,
+           est_output,
+           Q, 
+           Qscaling, 
+           R, 
+           x_0)
+ 
+# ----------------------------------------------------------------------------
+
+xlim <- c(min(df$LON, na.rm=T),max(df$LON, na.rm=T))
+ylim <- c(min(df$LAT, na.rm=T),max(df$LAT, na.rm=T))
+
+require(ozmaps)
+ozmap(xlim=xlim, ylim=ylim)
+points(df$LON,df$LAT, col='green')
+points(est_output, col='red')
+lines(est_output, col='red')
+
+UKF.smooth(UKF.Context,
+           smt_state,
+           smt_output,
+           as.raw(T))
+
+points(smt_output, col='blue')
+lines(smt_output, col='blue')
+
+
+#closer view 
+xlim <- c(146, 149)
+ylim <- c(-44, -42)
+
+ozmap(xlim=xlim, ylim=ylim)
+points(df$LON,df$LAT, col='green')
+points(est_output, col='red')
+lines(est_output, col='red')
+
+# ----------------------------------------------------------------------------
+# re-run filter with interpolation points
+# ----------------------------------------------------------------------------
+R2         <- initR(df2)
+Q2         <- QandQscaling2$Q
+Qscaling2  <- QandQscaling2$Qscaling
+
+Q2[1,1] <- Q2[1,1] * exp(res$par[1])
+Q2[2,2] <- Q2[2,2] * exp(res$par[2])
+Q2[3,3] <- Q2[3,3] * exp(res$par[3])
+Q2[4,4] <- Q2[4,4] * exp(res$par[4])
+
+# run filtering
+UKF.filter(UKF.Context2,
+          est_state2,
+          est_output2,
+          Q2, 
+          Qscaling2, 
+          R2, 
+          x2_0)
+
+est_output2[,1] <- est_output2[,1] - df2$LonOffsets
+
+# ----------------------------------------------------------------------------
+
+xlim <- c(min(df2$LON, na.rm=T),max(df2$LON, na.rm=T))
+ylim <- c(min(df2$LAT, na.rm=T),max(df2$LAT, na.rm=T))
+
+require(ozmaps)
+ozmap(xlim=xlim, ylim=ylim)
+points(df2$LON,df2$LAT, col='green')
+points(est_output2, col='red')
+lines(est_output2, col='red')
+
+UKF.smooth(UKF.Context2,
+           smt_state2,
+           smt_output2,
+           as.raw(T))
+
 points(smt_output2, col='blue')
 lines(smt_output2, col='blue')
 

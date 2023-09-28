@@ -55,6 +55,12 @@ protected:
   double  W0m;
   double  W0c;
   double  W;
+  double  SavedLogLikelihood;
+  int     t_start;
+  bool    InNA;
+
+  // measurement data plus interpolations for NA points
+  ARRAY_2D  y_working /* ns, m */;
 
   // Result data
   ARRAY_2D  y_k /* 0:ns, m */;
@@ -138,8 +144,10 @@ protected:
 
   void      timeUpdate(const int t);
 
-  void      measurementUpdate(const int t,
-                              const ARRAY_1D z/* m */);
+  void      measurementUpdate(int& t,
+                              const ARRAY_1D z/* m */,
+                              ARRAY_2D  x_est /* ns, n */,
+                              ARRAY_2D  y_est /* ns, m */);
 
   void      smoothingUpdate(ARRAY_1D  x_smooth /* n */, 
                             ARRAY_1D  y_smooth /* m */, 

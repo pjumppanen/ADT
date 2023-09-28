@@ -252,6 +252,8 @@ void UnscentedKalmanFilter::resetUKF(const ARRAY_2D _Q /* n,n */,
 
     for (cn = 1 ; cn <= m ; cn++)
     {
+      y_working[ct][cn] = y[ct][cn];
+
       for (cm = 1 ; cm <= m ; cm++)
       {
         R[ct][cn][cm] = _R[ct][cn][cm];
@@ -385,7 +387,10 @@ void UnscentedKalmanFilter::state(const int t)
 // a weighted mean. If the non-linearity in our model restricts the next state
 // to a particular range (ie. in the sea and not on land), the weighted mean 
 // will no necessarily be in the valid range. To avoid this happening we make
-// sure that it is in the valid range by 
+// sure that it is in the valid range by running limitState(). Statistically, it 
+// will potentially mean that the mean state is slightly biased relative to the 
+// covariance matrix representing it but there is no way to avoid this if we are
+// to ensure filtered points do not lie on land.
 void UnscentedKalmanFilter::limitState(ARRAY_1D xout, const ARRAY_1D xin, const ARRAY_1D xprev, const int t)
 {
   int j;
@@ -486,18 +491,25 @@ void UnscentedKalmanFilter::timeUpdate(const int t)
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::measurementUpdate(const int t,
-                                              const ARRAY_1D z/* m */)
+void UnscentedKalmanFilter::measurementUpdate(int& t,
+                                              const ARRAY_1D z/* m */,
+                                              ARRAY_2D  x_est /* ns, n */,
+                                              ARRAY_2D  y_est /* ns, m */)
 {
   int     ck;
   int     cn;
   int     cm;
   int     cr;
+  int     cc;
   double  dW;
   double  dSum;
   double  yt_invPy_y; 
   bool    bIsNA;
   bool    bIsOk;
+  int     t_end;
+  double  alpha;
+  double  beta;
+  double  delta;
 
   bIsNA = false;
 
@@ -514,6 +526,14 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
 
   if (bIsNA)
   {
+    if (!InNA)
+    {
+      t_start            = t - 1;
+      SavedLogLikelihood = LogLikelihood;
+    }
+
+    InNA = true;
+
     // with NA data next state equals previous state
     for (cn = 1 ; cn <= n ; cn++)
     {
@@ -694,6 +714,77 @@ void UnscentedKalmanFilter::measurementUpdate(const int t,
         P_k[t][cn][cm] = P_k_bar[t][cn][cm] - dSum;
       }
     }
+
+    // Update the model output
+    for (cr = 1 ; cr <= n ; cr++)
+    {
+      xi[cr]       = x_k[t][cr];
+      x_est[t][cr] = xi[cr];
+    }
+
+    model_output(yi, xi, t, time);
+
+    for (cr = 1 ; cr <= m ; cr++)
+    {
+      y_k[t][cr]   = yi[cr];
+      y_est[t][cr] = yi[cr];
+    }
+
+    if (InNA)
+    {
+      // We have reached the end of an NA block so we now do Kalman interpolation
+      // between the last non NA point and now, then wind back the filter to 
+      // the first NA in the block (now interpolated) and run the filter over it.
+      t_end = t;
+
+      for (cn = t_start + 1 ; cn < t_end ; cn++)
+      {
+        delta = (time[t_end] - time[t_start]);
+
+        if (delta == 0)
+        {
+#ifndef AD
+          if (!bIsOk)
+          {
+            Rf_error("time difference between samples is zero.");
+          }
+#endif
+        }
+        else
+        {
+          // Interpolate between states
+          beta  = (time[cn] - time[t_start]) / delta;
+          alpha = (time[t_end] - time[cn]) / delta;
+
+          for (cr = 1 ; cr <= n ; cr++)
+          {
+            x_k[cn][cr] = alpha * x_k[t_start][cr] + beta * x_k[t_end][cr];
+            xi[cr]      = x_k[cn][cr];
+          }
+
+          for (cr = 1 ; cr <= m ; cr++)
+          {
+            for (cc = 1 ; cc <= m ; cc++)
+            {
+              R[cn][cr][cc] = alpha * R[t_start][cr][cc] + beta * R[t_end][cr][cc];
+            }
+          }
+
+          model_output(yi, xi, cn, time);
+
+          for (cr = 1 ; cr <= m ; cr++)
+          {
+            y_working[cn][cr] = yi[cr];
+          }
+        }
+      }
+
+      LogLikelihood = SavedLogLikelihood;
+      t             = t_start;
+      InNA          = false;
+    }
+
+    InNA = false;
   }
 }
 
@@ -926,10 +1017,10 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
     model_output(yi, xi, t+1, time);
 
-    for (cc = 1 ; cc <= m ; cc++)
+    for (cr = 1 ; cr <= m ; cr++)
     {
-      y_k_smooth[t][cc] = yi[cc];
-      y_smooth[cc]      = yi[cc];
+      y_k_smooth[t][cr] = yi[cr];
+      y_smooth[cr]      = yi[cr];
     }
 
     // find smoothed covariance
@@ -991,10 +1082,10 @@ void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */,
 
       for (cr = 1 ; cr <= m ; cr++)
       {
-        dSum += inv_P_y[cn][cr] * (y[t][cr] - ym[cr]);
+        dSum += inv_P_y[cn][cr] * (y_working[t][cr] - ym[cr]);
       }
 
-      yt_invPy_y += dSum * (y[t][cn] - ym[cn]);
+      yt_invPy_y += dSum * (y_working[t][cn] - ym[cn]);
     }
 
     SmoothedLogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y + (m * log(2 * M_PI)));
@@ -1011,28 +1102,13 @@ double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */,
                                      const ARRAY_1D x_0 /* n */)
 {
   int t;
-  int i;
 
   resetUKF(_Q, _Qscale, _R, x_0);
 
   for (t = 1 ; t <= ns ; t++)
   {
     timeUpdate(t);
-    measurementUpdate(t, y[t]);
-
-    for (i = 1 ; i <= n ; i++)
-    {
-      xi[i]       = x_k[t][i];
-      x_est[t][i] = xi[i];
-    }
-
-    model_output(yi, xi, t, time);
-
-    for (i = 1 ; i <= m ; i++)
-    {
-      y_k[t][i]   = yi[i];
-      y_est[t][i] = yi[i];
-    }
+    measurementUpdate(t, y_working[t], x_est, y_est);
   }
 
   LogLikelihood *= -0.5;
