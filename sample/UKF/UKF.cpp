@@ -1,12 +1,6 @@
 // -----------------------------------------------------------------------------
-// Unscented Kalman Filter Example project based on by Jaroslaw Goslinski code in:
-//
-// https://github.com/jaroslav87/UKF-MNGM.git
-//
-// Companion article:
-//
-// https://jgoslinski.medium.com/the-unscented-kalman-filter-simply-the-best-python-code-5cd5ebaebf5f
-//
+// Unscented Kalman Filter
+// -----------------------------------------------------------------------------
 // Implements UKF Kalman smoothing based on the Jacobian Equivalent Rauch-Tung-Striebel
 // smoother (abbreviated as JE-RTS method) described in:
 //
@@ -25,7 +19,53 @@
 // ----------------------------------------------------------------------------
 // UnscentedKalmanFilter method implementations
 // ----------------------------------------------------------------------------
-bool UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize)
+#ifndef AD
+void UnscentedKalmanFilter::printMatrix(const char* pLabel, const ARRAY_2D pA, const int nRow, const int nCol)
+{
+  int cn;
+  int cm;
+  char sBuffer[2048] = {0};
+
+  Rprintf("\n%s\n", pLabel);
+
+  for (cn = 1 ; cn <= nRow ; cn++)
+  {
+    sBuffer[0] = 0;
+
+    for (cm = 1 ; cm <= nCol ; cm++)
+    {
+      sprintf(sBuffer + strlen(sBuffer), "%g ", pA[cn][cm]);
+    }
+
+    Rprintf("%s\n", sBuffer);
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::printVector(const char* pLabel, const ARRAY_1D pV, const int nSize)
+{
+  int cm;
+  char sBuffer[2048] = {0};
+
+  Rprintf("\n%s\n", pLabel);
+
+  sBuffer[0] = 0;
+
+  for (cm = 1 ; cm <= nSize ; cm++)
+  {
+    sprintf(sBuffer + strlen(sBuffer), "%g ", pV[cm]);
+  }
+
+  Rprintf("%s\n", sBuffer);
+}
+#endif
+
+// ----------------------------------------------------------------------------
+
+bool UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, 
+                                                  ARRAY_2D pU/* nSize, nSize */, 
+                                                  const int nSize)
 {
   //--------------------------------------------------------------------------
   // pA is symetric positive definite matrix
@@ -73,7 +113,8 @@ bool UnscentedKalmanFilter::choleskyDecomposition(const ARRAY_2D pA/* nSize, nSi
 
 // ----------------------------------------------------------------------------
 
-double UnscentedKalmanFilter::logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, const int nSize)
+double UnscentedKalmanFilter::logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, 
+                                                     const int nSize)
 {
   double dLogDet;
   int    ci;
@@ -92,7 +133,9 @@ double UnscentedKalmanFilter::logDeterminantFromChol(const ARRAY_2D pU/* nSize, 
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize)
+void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, 
+                                                  ARRAY_2D pInv/* nSize, nSize */, 
+                                                  const int nSize)
 {
   //--------------------------------------------------------------------------
   // pU is the cholesky decomposition of A in upper triangular form
@@ -140,217 +183,318 @@ void UnscentedKalmanFilter::matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSi
 
 // ----------------------------------------------------------------------------
 
-UnscentedKalmanFilter::UnscentedKalmanFilter(
-#include "UKF_constructor_args.hpp"
-)
- : model_output(),
-   model_state(),
-   model_limit_state()
+void UnscentedKalmanFilter::inverseFromUpperTriangular(const ARRAY_2D pU/* nSize, nSize */, 
+                                                       ARRAY_2D pInv/* nSize, nSize */, 
+                                                       const int nSize)
 {
-  #include "UKF_constructor_locals.hpp"
-  #include "UKF_constructor_scalars_phase_1.hpp"
-  #include "UKF_constructor_arrays_phase_1.hpp"
-  #include "UKF_array_plans_init.hpp"
+  int i, j, k;
+  double sum;
 
-  // UKF params
-  lambda_     = (n + kappa) * alfa * alfa - n;
-  gamma       = sqrt(n + lambda_);
-  W0m         = lambda_ / (n + lambda_);
-  W0c         = lambda_ / (n + lambda_) + (1.0 - alfa * alfa + beta);
-  W           = 1.0 / (2.0 * (n + lambda_));
-
-  zero(y_k);
-  zero(x_k);
-  zero(x_k_bar);
-  zero(y_k_smooth);
-  zero(x_k_smooth);
-
-  // all vectors used in the UKF process
-  zero(x_P);
-  zero(y_P);
-  zero(ym);
-
-  // covarince matrices used in the process
-  zero(P_k);
-  zero(P_k_bar);
-  zero(chol_P_k);
-  zero(Ps_k);
-
-  // clear sigma points
-  zero(y_sigma);
-  zero(x_sigma);
-
-  // sigma points after passing through the function f/h
-  zero(x_sigma_f);
-
-  // cross covariances
-  zero(P_xy);
-  zero(P_xyP);
-
-  zero(P_y);
-  zero(K);
-  zero(K_0);
-  zero(K_UKF_T);
-
-  Filtered = false;
-  Smoothed = false;
-}
-
-// ----------------------------------------------------------------------------
-// Q - process noise covraiance,
-// Qscale - process noise covraiance scaling by sample
-// R - measurement noise covariance,
-// x_0 - initial state
-// ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::resetUKF(const ARRAY_2D _Q /* n,n */, 
-                                     const ARRAY_2D _Qscale /* ns,n */, 
-                                     const ARRAY_3D _R /* ns,m,m */, 
-                                     const ARRAY_1D x_0 /* n */)
-{
-  int cn;
-  int cm;
-  int ct;
-
-  zero(y_k);
-  zero(x_k);
-  zero(x_k_bar);
-  zero(y_k_smooth);
-  zero(x_k_smooth);
-
-  zero(ym);
-  zero(y_P);
-  zero(P_y);
-  zero(P_xy);
-  zero(P_xyP);
-  
-  zero(K);
-  zero(K_0);
-  zero(K_UKF_T);
-
-  zero(y_sigma);
-  zero(x_sigma);
-  zero(x_sigma_f);
-
-  zero(P_k);
-  zero(P_k_bar);
-  zero(chol_P_k);
-
-  for (cn = 1 ; cn <= n ; cn++)
+  // Initialize the result matrix as the identity matrix
+  for (i = 1 ; i <= nSize ; i++)
   {
-    for (cm = 1 ; cm <= n ; cm++)
+    for (j = 1 ; j <= nSize ; j++)
     {
-      Q[cn][cm] = _Q[cn][cm];
-    }
-  }
-
-  for (ct = 1 ; ct <= ns ; ct++)
-  {
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      Qscale[ct][cn] = _Qscale[ct][cn];
-    }
-
-    for (cn = 1 ; cn <= m ; cn++)
-    {
-      y_working[ct][cn] = y[ct][cn];
-
-      for (cm = 1 ; cm <= m ; cm++)
+      if (i == j)
       {
-        R[ct][cn][cm] = _R[ct][cn][cm];
+        pInv[i][j] = 1.0;
+      }
+      else
+      {
+        pInv[i][j] = 0.0;
       }
     }
   }
 
-  for (cn = 1 ; cn <= n ; cn++)
+  // Perform back-substitution to find the inverse
+  for (k = 1 ; k <= nSize ; k++)
   {
-    x_k[0][cn] = x_0[cn];
-
-    for (cm = 1 ; cm <= n ; cm++)
+    for (i = nSize ; i >= 1 ; i--)
     {
-      P_k[0][cn][cm] = Qscale[1][cn] * Q[cn][cm] * Qscale[1][cm];
+      sum = 0.0;
+
+      for (j = i + 2 ; j <= nSize ; j++)
+      {
+        sum += pU[i][j] * pInv[j][k];
+      }
+
+      pInv[i][k] = (pInv[i][k] - sum) / pU[i][i];
     }
   }
-
-  zero(x_P);
-
-  LogLikelihood         = 0.0;
-  SmoothedLogLikelihood = 0.0;
-  
-  Filtered = false;
-  Smoothed = false;
 }
 
 
 // ----------------------------------------------------------------------------
-// vect_X - state vector
-// sigma points are drawn from P
-// ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */)
+
+void UnscentedKalmanFilter::copy(ARRAY_1D target_measurement /* measurement_dim */, 
+                                 ARRAY_1D target_state /* state_dim */, 
+                                 ARRAY_2D target_covariance /* state_dim, state_dim */)
 {
+  int cn;
+  int cm;
+
+  if (target_measurement != 0)
+  {
+    for (cn = 1 ; cn <= measurement_dim ; cn++)
+    {
+      target_measurement[cn] = output_measurement[cn];
+    }
+  }
+
+  if (target_state != 0)
+  {
+    for (cn = 1 ; cn <= state_dim ; cn++)
+    {
+      target_state[cn] = state_mean[cn];
+    }
+  }
+
+  if (target_covariance != 0)
+  {
+    for (cn = 1 ; cn <= state_dim ; cn++)
+    {
+      for (cm = 1 ; cm <= state_dim ; cm++)
+      {
+        target_covariance[cn][cm] = state_cov[cn][cm];
+      }
+    }
+  }
+}                                   
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::initialise(const ARRAY_2D _process_noise_cov /* state_dim,state_dim */, 
+                                       const ARRAY_2D _process_noise_scale /* time_dim,state_dim */, 
+                                       const ARRAY_3D _measurement_noise_cov /* time_dim,measurement_dim,measurement_dim */, 
+                                       const ARRAY_1D _init_state /* state_dim */)
+{
+  int     cn;
+  int     cm;
+  int     ct;
+  double  lambda;
+
+  // initialise state, covariance matrices and mean
+  for (ct = 1 ; ct <= time_dim ; ct++)
+  {
+    for (cn = 1 ; cn <= state_dim ; cn++)
+    {
+      process_noise_scale[ct][cn] = _process_noise_scale[ct][cn];
+    }
+
+    for (cn = 1 ; cn <= measurement_dim ; cn++)
+    {
+      for (cm = 1 ; cm <= measurement_dim ; cm++)
+      {
+        measurement_noise_cov[ct][cn][cm] = _measurement_noise_cov[ct][cn][cm];
+      }
+    }
+  }
+
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    state_mean[cn]               = _init_state[cn];
+    posterior_state_means[0][cn] = state_mean[cn];
+    apriori_state_means[0][cn]   = state_mean[cn];
+
+    for (cm = 1 ; cm <= state_dim ; cm++)
+    {
+      process_noise_cov[cn][cm]       = _process_noise_cov[cn][cm];
+      state_cov[cn][cm]               = process_noise_scale[1][cn] * process_noise_cov[cn][cm] * process_noise_scale[1][cm];
+      posterior_state_covs[0][cn][cm] = state_cov[cn][cm];
+      apriori_state_covs[0][cn][cm]   = state_cov[cn][cm];
+    }
+  }
+
+  // initialise sigma point weights
+  n_sigma = 2 * state_dim + 1;
+  lambda  = (alpha * alpha) * (state_dim + kappa) - state_dim;
+  _gamma  = ::sqrt(state_dim + lambda);
+
+  wm[1] = lambda / (state_dim + lambda);
+  wc[1] = lambda / (state_dim + lambda) + (1 - (alpha * alpha) + beta);
+
+  for (cn = 2 ; cn <= n_sigma ; cn++)
+  {
+    wm[cn] = 1.0 / (2.0 * (state_dim + lambda));
+    wc[cn] = 1.0 / (2.0 * (state_dim + lambda));
+  } 
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::sigmaPointsToMean(ARRAY_1D _transformed_mean /* _dim */, 
+                                               const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                               int _dim)
+{
+  int cn;
   int ck;
-  int cn;
 
-  for (cn = 1 ; cn <= n ; cn++)
+  // transformed mean
+  for (cn = 1 ; cn <= _dim ; cn++)
   {
-    x_sigma[cn][1] = vect_X[cn];
-  }
+    _transformed_mean[cn] = 0.0;
 
-  for (ck = 2 ; ck <= n + 1 ; ck++)
-  {
-    for (cn = 1 ; cn <= n ; cn++)
+    for (ck = 1 ; ck <= n_sigma ; ck++)
     {
-      x_sigma[cn][ck]     = vect_X[cn] + gamma * matrix_S[cn][ck - 1];
-      x_sigma[cn][n + ck] = vect_X[cn] - gamma * matrix_S[cn][ck - 1];
+      _transformed_mean[cn] += wm[ck] * _sigma_points[ck][cn];
     }
   }
 }
 
 // ----------------------------------------------------------------------------
-// finding the y = h(x, ...)
-// the input is x_sigma, which is using h(...) then we find y_sigma_UKF from which we get to the y_UKF
-// ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::y_UKF_calc(const int t)
+
+void UnscentedKalmanFilter::sigmaPointsToCovariance(ARRAY_2D _transformed_cov /* _dim,_dim */, 
+                                                    ARRAY_1D _devs /* _dim */, 
+                                                    const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                                    const ARRAY_2D _noise_cov /* _dim,_dim */,
+                                                    const ARRAY_1D _noise_scale /* _dim */,
+                                                    const ARRAY_1D _mean /* _dim */,
+                                                    int _dim)
 {
+  int cn;
+  int cm;
   int ck;
-  int cn;
 
-  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
+  // transformed covariance
+  for (cn = 1 ; cn <= _dim ; cn++)
   {
-    for (cn = 1 ; cn <= n ; cn++)
+    for (cm = 1 ; cm <= _dim ; cm++)
     {
-      xi[cn] = x_sigma_f[cn][ck];
-    }
-
-    model_output(yi, xi, t, time);
-
-    for (cn = 1 ; cn <= m ; cn++)
-    {
-      y_sigma[cn][ck] = yi[cn];
+      _transformed_cov[cn][cm] = 0.0;
     }
   }
 
-  // y_UKF
-  for (cn = 1 ; cn <= m ; cn++)
+  for (ck = 1 ; ck <= n_sigma ; ck++)
   {
-    ym[cn] = W0m * y_sigma[cn][1];
+    for (cn = 1 ; cn <= _dim ; cn++)
+    {
+      _devs[cn] = _sigma_points[ck][cn] - _mean[cn];
+    }
+
+    for (cn = 1 ; cn <= _dim ; cn++)
+    {
+      for (cm = 1 ; cm <= _dim ; cm++)
+      {
+        _transformed_cov[cn][cm] += wc[ck] * _devs[cn] * _devs[cm];
+      }
+    }
   }
 
-  for (ck = 2 ; ck <= 2 * n + 1; ck++)
+  if (_noise_scale != 0)
   {
-    for (cn = 1 ; cn <= m ; cn++)
+    for (cn = 1 ; cn <= _dim ; cn++)
     {
-      ym[cn] += W * y_sigma[cn][ck];
+      for (cm = 1 ; cm <= _dim ; cm++)
+      {
+        _transformed_cov[cn][cm] += _noise_scale[cn] * _noise_cov[cn][cm] * _noise_scale[cm];
+      }
+    }
+  }
+  else
+  {
+    for (cn = 1 ; cn <= _dim ; cn++)
+    {
+      for (cm = 1 ; cm <= _dim ; cm++)
+      {
+        _transformed_cov[cn][cm] += _noise_cov[cn][cm];
+      }
     }
   }
 }
 
 // ----------------------------------------------------------------------------
-// w - input vector data
-// ----------------------------------------------------------------------------
-void UnscentedKalmanFilter::state(const int t)
+
+void UnscentedKalmanFilter::crossCovariance(ARRAY_2D _cross_cov /* state_dim,state_dim */, 
+                                            const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                            const ARRAY_1D _mean /* state_dim */,
+                                            const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                            const ARRAY_1D _input_mean /* state_dim */)
 {
-  int j;
   int cn;
+  int cm;
+  int ck;
+
+  // cross covariance
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    for (cm = 1 ; cm <= state_dim ; cm++)
+    {
+      _cross_cov[cn][cm] = 0.0;
+    }
+  }
+
+  for (ck = 1 ; ck <= n_sigma ; ck++)
+  {
+    for (cn = 1 ; cn <= state_dim ; cn++)
+    {
+      state_dev[cn]  = _sigma_points[ck][cn] - _mean[cn];
+      state_dev2[cn] = _input_sigma_points[ck][cn] - _input_mean[cn];
+    }
+
+    for (cn = 1 ; cn <= state_dim ; cn++)
+    {
+      for (cm = 1 ; cm <= state_dim ; cm++)
+      {
+        _cross_cov[cn][cm] += wc[ck] * state_dev2[cn] * state_dev[cm];
+      }
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::findSigmaPoints(ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                            const ARRAY_2D _chol_cov /* state_dim,state_dim */,
+                                            const ARRAY_1D _mean /* state_dim */, 
+                                            const ARRAY_2D _cov /* state_dim,state_dim */)
+{
+  int   ck;
+  int   ci;
+  bool  bIsOk;
+
+  // initialise cholesky decomposition target
+  for (ci = 1 ; ci <= state_dim ; ci++)
+  {
+    for (ck = 1 ; ck <= state_dim ; ck++)
+    {
+      _chol_cov[ci][ck] = 0.0;
+    }
+  }
+
+  // find cholesky decomposition
+  bIsOk = choleskyDecomposition(_cov, _chol_cov, state_dim);
+
+#ifndef AD
+  if (!bIsOk)
+  {
+    Rf_error("cov has no Cholesky decomposition");
+  }
+#endif
+
+  // find sigma points
+  for (ck = 1 ; ck <= state_dim ; ck++)
+  {
+    _sigma_points[1][ck] = _mean[ck];
+  }
+
+  for (ci = 2 ; ci <= state_dim + 1 ; ci++)
+  {
+    for (ck = 1 ; ck <= state_dim ; ck++)
+    {
+      _sigma_points[ci][ck]             = _mean[ck] + (_gamma * _chol_cov[ck][ci - 1]);
+      _sigma_points[state_dim + ci][ck] = _mean[ck] - (_gamma * _chol_cov[ck][ci - 1]);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::propagateSigmaPoints(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                                 const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                                 const int t)
+{
+  int cn;
+  int cm;
 
   // get last state that the sigma points are based on. This is then
   // passed to the model_state() function as the previous state reference
@@ -359,24 +503,59 @@ void UnscentedKalmanFilter::state(const int t)
   // it without the previous state because it needs it to figure out if the 
   // change in state implied by a given sigma point exceeds the limit imposed
   // by the non-linearity. 
-  for (j = 1 ; j <= n ; j++)
+  for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    xlast[j] = x_k[t-1][j];  
+    last_state[cn] = posterior_state_means[t-1][cn];  
   }
 
-  for (j = 1 ; j <= 2 * n + 1 ; j++)
+  for (cm = 1 ; cm <= n_sigma ; cm++)
   {
-    for (cn = 1 ; cn <= n ; cn++)
+    for (cn = 1 ; cn <= state_dim ; cn++)
     {
-      xp[cn] = x_sigma[cn][j];
+      input_state[cn] = _input_sigma_points[cm][cn];
     }
 
-    model_state(xi, xp, xlast, t, time);
+    model_state(output_state, input_state, last_state, t, time);
 
-    for (cn = 1 ; cn <= n ; cn++)
+    for (cn = 1 ; cn <= state_dim ; cn++)
     {
-      x_sigma_f[cn][j] = xi[cn];
+      _output_sigma_points[cm][cn] = output_state[cn];
     }
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::findOutput(ARRAY_1D _output_measurement /* measurment_dim */, 
+                                       const ARRAY_1D _input_state /* state_dim */, 
+                                       const int t)
+{
+  int cn;
+
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    input_state[cn] = _input_state[cn];
+  }
+
+  model_output(output_measurement, input_state, t, time);
+
+  for (cn = 1 ; cn <= measurement_dim ; cn++)
+  {
+    _output_measurement[cn] = output_measurement[cn];
+  }
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::predictOutput(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,measurment_dim */, 
+                                          const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                          const int t)
+{
+  int ck;
+
+  for (ck = 1 ; ck <= n_sigma ; ck++)
+  {
+    findOutput(_output_sigma_points[ck], _input_sigma_points[ck], t);
   }
 }
 
@@ -391,779 +570,515 @@ void UnscentedKalmanFilter::state(const int t)
 // will potentially mean that the mean state is slightly biased relative to the 
 // covariance matrix representing it but there is no way to avoid this if we are
 // to ensure filtered points do not lie on land.
-void UnscentedKalmanFilter::limitState(ARRAY_1D xout, const ARRAY_1D xin, const ARRAY_1D xprev, const int t)
+void UnscentedKalmanFilter::limitState(ARRAY_1D _output_state, 
+                                       const ARRAY_1D _input_state, 
+                                       const ARRAY_1D _last_state, 
+                                       const int t)
 {
-  int j;
+  int cn;
 
-  for (j = 1 ; j <= n ; j++)
+  for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    xlast[j] = xprev[j];  
-    xp[j]    = xin[j];
+    last_state[cn]  = _last_state[cn];  
+    input_state[cn] = _input_state[cn];
   }
 
-  model_limit_state(xi, xp, xlast, t, time);
+  model_limit_state(output_state, input_state, last_state, t, time);
 
-  for (j = 1 ; j <= n ; j++)
+  for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    xout[j] = xi[j];
+    _output_state[cn] = output_state[cn];
   }
 }
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::timeUpdate(const int t)
+void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim */,
+                                    ARRAY_1D  _state_mean /* state_dim */,
+                                    const ARRAY_2D  _in_state_cov /* state_dim,state_dim */,
+                                    const ARRAY_1D  _in_state_mean /* state_dim */,
+                                    const int t)
 {
-  int     cn;
-  int     cm;
-  int     ck;
-  double  dW;
-  bool    bIsOk;
+  int cn;
 
-  bIsOk = choleskyDecomposition(P_k[t-1], chol_P_k[t], n);
-#ifndef AD
-  if (!bIsOk)
+  for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    Rf_error("P_k in timeUpdate() has no Cholesky decomposition");
+    input_state_mean[cn] = _in_state_mean[cn];
   }
+
+  // generate sigma points
+  findSigmaPoints(input_sigma_points, state_chol_cov, _in_state_mean, _in_state_cov);
+
+#ifndef AD
+//    printMatrix("sigma points", sigma_points, 2 * state_dim + 1, state_dim);
 #endif
 
-  sigma_points(x_k[t-1], chol_P_k[t]);
-  state(t);
+  // Propagate sigma points through the state transition model
+  propagateSigmaPoints(sigma_points, input_sigma_points, t);
 
-  // apriori state:
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    x_k_bar[t][cn] = W0m * x_sigma_f[cn][1];
+  // Find new mean
+  sigmaPointsToMean(_state_mean, 
+                    sigma_points, 
+                    state_dim);
 
-    for (ck = 2 ; ck <= 2 * n + 1 ; ck++)
-    {
-      x_k_bar[t][cn] += W * x_sigma_f[cn][ck]; 
-    }
-  }
+  // Update mean to ensure it lies in valid space
+  model_state(_state_mean, _state_mean, last_state, t, time);
 
-  // need to make next state comply with non-linear requirements of model
-  limitState(x_k_bar[t], x_k_bar[t], x_k[t-1], t);
+  // find new covariance
+  sigmaPointsToCovariance(_state_cov, 
+                          state_dev, 
+                          sigma_points, 
+                          process_noise_cov,
+                          process_noise_scale[t],
+                          _state_mean,
+                          state_dim);
 
-  // apriori covariance matrix:
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    for (cm = 1 ; cm <= n ; cm++)
-    {
-      P_k_bar[t][cn][cm] = 0.0;
-    }
-  }
+  // find cross covariance for smoothing stage
+  crossCovariance(smoothing_cross_covs[t], 
+                  sigma_points, 
+                  _state_mean,
+                  input_sigma_points, 
+                  input_state_mean);
 
-  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-  {
-    if (ck == 1)
-    {
-      dW = W0c;
-    }
-    else
-    {
-      dW = W;
-    }
+  // find predicted model outputs
+  predictOutput(output_sigma_points, 
+                sigma_points, 
+                t);
 
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      x_P[cn] = x_sigma_f[cn][ck] - x_k_bar[t][cn];
-    }
-
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      for (cm = 1 ; cm <= n ; cm++)
-      {
-        P_k_bar[t][cn][cm] += dW * x_P[cn] * x_P[cm];
-      }
-    }
-  }
-
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    for (cm = 1 ; cm <= n ; cm++)
-    {
-      P_k_bar[t][cn][cm] += Qscale[t][cn] * Q[cn][cm] * Qscale[t][cm];
-    }
-  }
-
-  y_UKF_calc(t);
+#ifndef AD
+//    printMatrix("f sigma points", sigma_points, 2 * state_dim + 1, state_dim);
+//    printMatrix("y sigma points", output_sigma_points, 2 * state_dim + 1, measurement_dim);
+//    printMatrix("Pk", _state_cov, state_dim,state_dim);
+#endif
 }
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::measurementUpdate(int& t,
-                                              const ARRAY_1D z/* m */,
-                                              ARRAY_2D  x_est /* ns, n */,
-                                              ARRAY_2D  y_est /* ns, m */)
+void UnscentedKalmanFilter::update(const ARRAY_1D measurement /* measurement_dim */, 
+                                   const int t)
 {
-  int     ck;
   int     cn;
   int     cm;
   int     cr;
-  int     cc;
-  double  dW;
+  int     ck;
   double  dSum;
-  double  yt_invPy_y; 
-  bool    bIsNA;
+  double  dSumLklA;
+  double  dSumLklB;
   bool    bIsOk;
-  int     t_end;
-  double  alpha;
-  double  beta;
-  double  delta;
+  bool    bIsNA;
 
   bIsNA = false;
 
-  for (cn = 1 ; cn <= m ; cn++)
+  for (cn = 1 ; cn <= measurement_dim ; cn++)
   {
-    if (ISNA(z[cn]) || ISNAN(z[cn]))
+    if (ISNA(measurement[cn]) || ISNAN(measurement[cn]))
     {
       bIsNA = true;
       break;
     }
   }
 
-  naData[t] = bIsNA;
-
-  if (bIsNA)
+  if (!bIsNA)
   {
-    if (!InNA)
+    // Find new mean
+    sigmaPointsToMean(predicted_measurement_mean, 
+                      output_sigma_points, 
+                      measurement_dim);
+
+    // find new covariance
+    sigmaPointsToCovariance(predicted_measurement_cov, 
+                            measurement_dev, 
+                            output_sigma_points, 
+                            measurement_noise_cov[t],
+                            0,
+                            predicted_measurement_mean,
+                            measurement_dim);
+
+    // calculate cross-covariance between state and measurement
+    zero(cross_cov);
+
+    for (ck = 1 ; ck <= n_sigma ; ck++)
     {
-      t_start            = t - 1;
-      SavedLogLikelihood = LogLikelihood;
-    }
-
-    InNA = true;
-
-    // with NA data next state equals previous state
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      x_k[t][cn] = x_k_bar[t][cn];
-
-      for (cm = 1 ; cm <= n ; cm++)
-      {
-        P_k[t][cn][cm]  = P_k_bar[t][cn][cm];
-      }
-    }
-  }
-  else
-  {
-    zero(P_y);
-
-    // only do measurement update if we have a new measurement
-    for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-    {
-      if (ck == 1)
-      {
-        dW = W0c;
-      }
-      else
-      {
-        dW = W;
-      }
-
-      // cov matrix output/output
-      for (cn = 1 ; cn <= m ; cn++)
-      {
-        y_P[cn] = y_sigma[cn][ck] - ym[cn];
-      }
-
-      for (cn = 1 ; cn <= m ; cn++)
-      {
-        for (cm = 1 ; cm <= m ; cm++)
-        {
-          P_y[cn][cm]  += dW * y_P[cn] * y_P[cm];
-        }
-      }
-    }
-
-    for (cn = 1 ; cn <= m ; cn++)
-    {
-      for (cm = 1 ; cm <= m ; cm++)
-      {
-        P_y[cn][cm]  += R[t][cn][cm];
-      }
-    }
-
-    zero(P_xy);
-
-    for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-    {
-      if (ck == 1)
-      {
-        dW = W0c;
-      }
-      else
-      {
-        dW = W;
-      }
-
       // cross cov matrix input/output:
-      for (cn = 1 ; cn <= n ; cn++)
+      for (cn = 1 ; cn <= state_dim ; cn++)
       {
-        x_P[cn] = x_sigma_f[cn][ck] - x_k_bar[t][cn];
+        state_dev[cn] = sigma_points[ck][cn] - state_mean[cn];
       }
 
-      for (cn = 1 ; cn <= m ; cn++)
+      for (cn = 1 ; cn <= measurement_dim ; cn++)
       {
-        y_P[cn] = y_sigma[cn][ck] - ym[cn];
+        measurement_dev[cn] = output_sigma_points[ck][cn] - predicted_measurement_mean[cn];
       }
 
-      for (cn = 1 ; cn <= n ; cn++)
+      for (cn = 1 ; cn <= state_dim ; cn++)
       {
-        for (cm = 1 ; cm <= m ; cm++)
+        for (cm = 1 ; cm <= measurement_dim ; cm++)
         {
-          P_xyP[cn][cm]  = dW * x_P[cn] * y_P[cm];
-          P_xy[cn][cm]  += P_xyP[cn][cm];
+          cross_cov[cn][cm]  += wc[ck] * state_dev[cn] * measurement_dev[cm];
         }
       }
     }
 
-    // kalman gain:
-    zero(chol_P_y);
+    // Kalman gain
+    zero(measurement_chol_cov);
+    zero(measurement_inv_cov);
 
-    bIsOk = choleskyDecomposition(P_y, chol_P_y, m);
+    bIsOk = choleskyDecomposition(predicted_measurement_cov, measurement_chol_cov, measurement_dim);
+
 #ifndef AD
     if (!bIsOk)
     {
-      Rf_error("P_y in measurementUpdate() has no Cholesky decomposition");
+      Rf_error("measurement_cov in update() has no Cholesky decomposition");
     }
 #endif
 
-    matrixInverseFromChol(chol_P_y, inv_P_y, m);
+    matrixInverseFromChol(measurement_chol_cov, measurement_inv_cov, measurement_dim);
 
-    for (cn = 1 ; cn <= n ; cn++)
+    for (cn = 1 ; cn <= state_dim ; cn++)
     {
-      for (cm = 1 ; cm <= m ; cm++)
+      for (cm = 1 ; cm <= measurement_dim ; cm++)
       {
         dSum = 0.0;
 
-        for (cr = 1 ; cr <= m ; cr++)
+        for (cr = 1 ; cr <= measurement_dim ; cr++)
         {
-          dSum += P_xy[cn][cr] * inv_P_y[cr][cm];
+          dSum += cross_cov[cn][cr] * measurement_inv_cov[cr][cm];
         }
 
-        K[cn][cm] = dSum;
+        KalmanGain[cn][cm] = dSum;
       }
+    }
+
+#ifndef AD
+  //  printMatrix("Pk_bar", state_cov, state_dim,state_dim);
+  //  printMatrix("Kalman Gain", KalmanGain, state_dim,measurement_dim);
+  //  printMatrix("Cross Cov", cross_cov, state_dim,measurement_dim);
+  //  printVector("x_k", state_mean, state_dim);
+#endif
+
+    // update state estimate
+    for (cn = 1 ; cn <= measurement_dim ; cn++)
+    {
+      innovation[cn] = measurement[cn] - predicted_measurement_mean[cn];
+    }
+
+    dSumLklB = 0.0;
+
+    for (cn = 1 ; cn <= state_dim ; cn++)
+    {
+      dSum     = 0.0;
+      dSumLklA = 0.0;
+
+      for (cr = 1 ; cr <= measurement_dim ; cr++)
+      {
+        dSum    += KalmanGain[cn][cr] * innovation[cr];
+        dSumLklA += measurement_inv_cov[cn][cr] * innovation[cr];
+      }
+
+      state_mean[cn] = state_mean[cn] + dSum;
+      dSumLklB      += dSumLklA * innovation[cn];
     }
 
     // log likelihood
-    yt_invPy_y = 0.0;
-
-    for (cn = 1 ; cn <= m ; cn++)
-    {
-      dSum = 0.0;
-
-      for (cr = 1 ; cr <= m ; cr++)
-      {
-        dSum += inv_P_y[cn][cr] * (z[cr] - ym[cr]);
-      }
-
-      yt_invPy_y += dSum * (z[cn] - ym[cn]);
-    }
-
-    LogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y + (m * log(2 * M_PI)));
-
-    // aposteriori state:
-    for (cn = 1 ; cn <= m ; cn++)
-    {
-      y_P[cn] = z[cn] - ym[cn];
-    }
-
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      dSum = 0.0;
-
-      for (cr = 1 ; cr <= m ; cr++)
-      {
-        dSum += K[cn][cr] * y_P[cr];
-      }
-
-      x_k[t][cn] = x_k_bar[t][cn] + dSum;
-    }
+    LogLikelihood += (logDeterminantFromChol(measurement_chol_cov, measurement_dim) + dSumLklB + (measurement_dim * log(2 * M_PI)));
 
     // need to make next state comply with non-linear requirements of model
-    limitState(x_k[t], x_k[t], x_k[t-1], t);
-
-    // cov aposteriori:
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      for (cm = 1 ; cm <= m ; cm++)
-      {
-        dSum = 0.0;
-
-        for (cr = 1 ; cr <= m ; cr++)
-        {
-          dSum += K[cn][cr] * P_y[cr][cm];
-        }
-
-        K_P_y[cn][cm] = dSum;
-      }
-    }
-
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      for (cm = 1 ; cm <= n ; cm++)
-      {
-        dSum = 0.0;
-
-        for (cr = 1 ; cr <= m ; cr++)
-        {
-          dSum += K_P_y[cn][cr] * K[cm][cr];
-        }
-
-        P_k[t][cn][cm] = P_k_bar[t][cn][cm] - dSum;
-      }
-    }
+    limitState(state_mean, state_mean, posterior_state_means[t-1], t);
 
     // Update the model output
-    for (cr = 1 ; cr <= n ; cr++)
+    findOutput(output_measurement, state_mean, t);
+
+    // update state covariance
+    for (cn = 1 ; cn <= state_dim ; cn++)
     {
-      xi[cr]       = x_k[t][cr];
-      x_est[t][cr] = xi[cr];
-    }
-
-    model_output(yi, xi, t, time);
-
-    for (cr = 1 ; cr <= m ; cr++)
-    {
-      y_k[t][cr]   = yi[cr];
-      y_est[t][cr] = yi[cr];
-    }
-
-    if (InNA)
-    {
-      // We have reached the end of an NA block so we now do Kalman interpolation
-      // between the last non NA point and now, then wind back the filter to 
-      // the first NA in the block (now interpolated) and run the filter over it.
-      t_end = t;
-
-      for (cn = t_start + 1 ; cn < t_end ; cn++)
+      for (cm = 1 ; cm <= measurement_dim ; cm++)
       {
-        delta = (time[t_end] - time[t_start]);
+        dSum = 0.0;
 
-        if (delta == 0)
+        for (cr = 1 ; cr <= measurement_dim ; cr++)
         {
-#ifndef AD
-          if (!bIsOk)
-          {
-            Rf_error("time difference between samples is zero.");
-          }
-#endif
+          dSum += KalmanGain[cn][cr] * predicted_measurement_cov[cr][cm];
         }
-        else
-        {
-          // Interpolate between states
-          beta  = (time[cn] - time[t_start]) / delta;
-          alpha = (time[t_end] - time[cn]) / delta;
 
-          for (cr = 1 ; cr <= n ; cr++)
-          {
-            x_k[cn][cr] = alpha * x_k[t_start][cr] + beta * x_k[t_end][cr];
-            xi[cr]      = x_k[cn][cr];
-          }
-
-          for (cr = 1 ; cr <= m ; cr++)
-          {
-            for (cc = 1 ; cc <= m ; cc++)
-            {
-              R[cn][cr][cc] = alpha * R[t_start][cr][cc] + beta * R[t_end][cr][cc];
-            }
-          }
-
-          model_output(yi, xi, cn, time);
-
-          for (cr = 1 ; cr <= m ; cr++)
-          {
-            y_working[cn][cr] = yi[cr];
-          }
-        }
+        temp_cross_cov[cn][cm] = dSum;
       }
-
-      LogLikelihood = SavedLogLikelihood;
-      t             = t_start;
-      InNA          = false;
     }
 
-    InNA = false;
+    for (cn = 1 ; cn <= state_dim ; cn++)
+    {
+      for (cm = 1 ; cm <= state_dim ; cm++)
+      {
+        dSum = 0.0;
+
+        for (cr = 1 ; cr <= measurement_dim ; cr++)
+        {
+          dSum += temp_cross_cov[cn][cr] * KalmanGain[cm][cr];
+        }
+
+        state_cov[cn][cm] = state_cov[cn][cm] - dSum;
+      }
+    }
+
+#ifndef AD
+  //  printVector("x_k_bar", state_mean, state_dim);
+  //  printVector("y_k", output_measurement, measurement_dim);
+#endif
   }
 }
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::smoothingUpdate(ARRAY_1D  x_smooth /* n */, 
-                                            ARRAY_1D  y_smooth /* m */, 
-                                            const int t, 
-                                            const bool bWithLogLikelihood)
+void UnscentedKalmanFilter::smoothingUpdate(const int t)
 {
-  int     cr;
-  int     cc;
   int     cn;
   int     cm;
-  int     ck;
+  int     cr;
   double  dSum;
-  double  dW;
-  double  yt_invPy_y;
   bool    bIsOk;
 
-  // find smoothing gain
-  zero(A_k);
+  // Do smoothing using the RTS method
+  zero(tempSA);
+  zero(tempSB);
 
-  // find chol_Ps_k
-  bIsOk = choleskyDecomposition(Ps_k[t+1], chol_Ps_k, n);
+#ifndef AD
+  printMatrix("apriori_state_covs[t+1]", apriori_state_covs[t], state_dim,state_dim);
+//  printMatrix("apriori_state_covs[t+1]", apriori_state_covs[t+1], state_dim,state_dim);
+#endif
+
+  bIsOk = choleskyDecomposition(apriori_state_covs[t], tempSA, state_dim);
+//  bIsOk = choleskyDecomposition(apriori_state_covs[t+1], tempSA, state_dim);
+
 #ifndef AD
   if (!bIsOk)
   {
-    Rf_error("P_k_bar[t] in smoothingUpdate() has no Cholesky decomposition");
+    Rf_error("apriori_state_covs[t+1] in smoothingUpdate() has no Cholesky decomposition");
   }
 #endif
 
-  // Find new sigma points
-  sigma_points(x_k[t], chol_Ps_k);
-  state(t);
+  matrixInverseFromChol(tempSA, tempSB, state_dim);
 
-  // apriori state:
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    x_k_bar[t+1][cn] = W0m * x_sigma_f[cn][1];
-    xi[cn]           = W0m * x_sigma[cn][1];
-
-    for (ck = 2 ; ck <= 2 * n + 1 ; ck++)
-    {
-      x_k_bar[t+1][cn] += W * x_sigma_f[cn][ck]; 
-      xi[cn]           += W * x_sigma[cn][ck]; 
-    }
-  }
-
-  // apriori covariance matrix:
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    for (cm = 1 ; cm <= n ; cm++)
-    {
-      P_k_bar[t+1][cn][cm] = 0.0;
-      C_k[cn][cm]          = 0.0;
-    }
-  }
-
-  for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-  {
-    if (ck == 1)
-    {
-      dW = W0c;
-    }
-    else
-    {
-      dW = W;
-    }
-
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      x_P[cn]  = x_sigma_f[cn][ck] - x_k_bar[t+1][cn];
-      x_Pc[cn] = x_sigma[cn][ck] - xi[cn]; // This looks like it is using the wrong x_sigma
-    }
-
-    for (cn = 1 ; cn <= n ; cn++)
-    {
-      for (cm = 1 ; cm <= n ; cm++)
-      {
-        C_k[cn][cm]          += dW * x_Pc[cn] * x_P[cm];
-        P_k_bar[t+1][cn][cm] += dW * x_P[cn] * x_P[cm];
-      }
-    }
-  }
-
-  for (cn = 1 ; cn <= n ; cn++)
-  {
-    for (cm = 1 ; cm <= n ; cm++)
-    {
-      P_k_bar[t+1][cn][cm] += Qscale[t+1][cn] * Q[cn][cm] * Qscale[t+1][cm];
-    }
-  }
-
-  y_UKF_calc(t+1);
-
-  if (naData[t])
-  {
-    // with NA data next smoothed state equals previous state
-    for (cc = 1 ; cc <= n ; cc++)
-    {
-      x_smooth[cc]      = x_k_smooth[t+1][cc];
-      x_k_smooth[t][cc] = x_k[t][cc];
-
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        Ps_k[t][cr][cc] = Ps_k[t+1][cr][cc];
-      }
-    }
-
-    for (cc = 1 ; cc <= m ; cc++)
-    {
-      y_smooth[cc]      = y_k_smooth[t+1][cc];
-      y_k_smooth[t][cc] = yi[cc];
-    }
-  }
-  else
-  {
-    zero(P_y);
-
-    // Find P_y
-    for (ck = 1 ; ck <= 2 * n + 1 ; ck++)
-    {
-      if (ck == 1)
-      {
-        dW = W0c;
-      }
-      else
-      {
-        dW = W;
-      }
-
-      // cov matrix output/output
-      for (cn = 1 ; cn <= m ; cn++)
-      {
-        y_P[cn] = y_sigma[cn][ck] - ym[cn];
-      }
-
-      for (cn = 1 ; cn <= m ; cn++)
-      {
-        for (cm = 1 ; cm <= m ; cm++)
-        {
-          P_y[cn][cm]  += dW * y_P[cn] * y_P[cm];
-        }
-      }
-    }
-
-    for (cn = 1 ; cn <= m ; cn++)
-    {
-      for (cm = 1 ; cm <= m ; cm++)
-      {
-        P_y[cn][cm]  += R[t+1][cn][cm];
-      }
-    }
-
-    // find smoothing gain
-    zero(A_k);
-
-    // Use A_k as temp to find inv_P_k_bar
-    bIsOk = choleskyDecomposition(P_k_bar[t+1], A_k, n);
 #ifndef AD
-    if (!bIsOk)
-    {
-      Rf_error("P_k_bar[t] in smoothingUpdate() has no Cholesky decomposition");
-    }
+  printMatrix("apriori_state_covs[t+1] inverse", tempSB, state_dim,state_dim);
 #endif
 
-    zero(inv_P_k_bar);
-
-    matrixInverseFromChol(A_k, inv_P_k_bar, n);
-
-    // A_k = C_k * inv_P_k_bar
-    for (cc = 1 ; cc <= n ; cc++)
-    {
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        dSum = 0.0;
-
-        for (cn = 1 ; cn <= n ; cn++)
-        {
-          dSum += C_k[cr][cn] * inv_P_k_bar[cn][cc];
-        }
-
-        A_k[cr][cc] = dSum;
-      }
-    }
-
-    // A_k = Ps_k[t] * A_k 
-    for (cc = 1 ; cc <= n ; cc++)
-    {
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        x_Temp[cr] = A_k[cr][cc];
-      }
-
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        dSum = 0.0;
-
-        for (cn = 1 ; cn <= n ; cn++)
-        {
-          dSum += Ps_k[t][cr][cn] * x_Temp[cn];
-        }
-
-        A_k[cr][cc] = dSum;
-      }
-    }
-
-    // find smoothed state
-    for (cr = 1 ; cr <= n ; cr++)
-    {
-      dSum = x_k[t][cr];
-
-      for (cc = 1 ; cc <= n ; cc++)
-      {
-        dSum += A_k[cr][cc] * (x_k_smooth[t+1][cc] - x_k_bar[t+1][cc]);
-      }
-
-      x_k_smooth[t][cr] = dSum;
-      x_smooth[cr]      = dSum;
-    }
-
-    // need to make next state comply with non-linear requirements of model
-    limitState(x_k_smooth[t], x_k_smooth[t], x_k_smooth[t], t+1);
-
-    for (cr = 1 ; cr <= n ; cr++)
-    {
-      xi[cr] = x_k_smooth[t][cr];
-    }
-
-    model_output(yi, xi, t+1, time);
-
-    for (cr = 1 ; cr <= m ; cr++)
-    {
-      y_k_smooth[t][cr] = yi[cr];
-      y_smooth[cr]      = yi[cr];
-    }
-
-    // find smoothed covariance
-    // Ps_k[t] = (P_k_bar[t+1] - Ps_k[t+1]) * t(A_k)
-    for (cr = 1 ; cr <= n ; cr++)
-    {
-      for (cc = 1 ; cc <= n ; cc++)
-      {
-        dSum = 0.0;
-
-        for (cn = 1 ; cn <= n ; cn++)
-        {
-          dSum += (P_k_bar[t+1][cr][cn] - Ps_k[t+1][cr][cn]) * A_k[cc][cn];
-        }
-
-        Ps_k[t][cr][cc] = dSum;
-      }
-    }
-
-    // Ps_k[t] = P_k[t] - A_k * Ps_k[t]
-    for (cc = 1 ; cc <= n ; cc++)
-    {
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        x_Temp[cr] = Ps_k[t][cr][cc];
-      }
-
-      for (cr = 1 ; cr <= n ; cr++)
-      {
-        dSum = P_k[t][cr][cc];
-
-        for (cn = 1 ; cn <= n ; cn++)
-        {
-          dSum += -A_k[cr][cn] * x_Temp[cn];
-        }
-
-        Ps_k[t][cr][cc] = dSum;
-      }
-    }
-
-    // Find loglikelihood
-    zero(chol_P_y);
-
-    bIsOk = choleskyDecomposition(P_y, chol_P_y, m);
-#ifndef AD
-    if (!bIsOk)
-    {
-      Rf_error("P_y in smoothingUpdate() has no Cholesky decomposition");
-    }
-#endif
-
-    matrixInverseFromChol(chol_P_y, inv_P_y, m);
-
-    yt_invPy_y = 0.0;
-
-    for (cn = 1 ; cn <= m ; cn++)
+  // Calculate smoothing gain
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    for (cm = 1 ; cm <= state_dim ; cm++)
     {
       dSum = 0.0;
 
-      for (cr = 1 ; cr <= m ; cr++)
+      for (cr = 1 ; cr <= state_dim ; cr++)
       {
-        dSum += inv_P_y[cn][cr] * (y_working[t][cr] - ym[cr]);
+        dSum += smoothing_cross_cov[cn][cr] * tempSB[cr][cm];
+//        dSum += smoothing_cross_covs[t+1][cn][cr] * tempSB[cr][cm];
       }
 
-      yt_invPy_y += dSum * (y_working[t][cn] - ym[cn]);
+      SmoothingGain[cn][cm] = dSum;
+    }
+  }
+
+#ifndef AD
+  printMatrix("smoothing_cross_covs[t]", smoothing_cross_covs[t], state_dim,state_dim);
+//  printMatrix("smoothing_cross_covs[t+1]", smoothing_cross_covs[t+1], state_dim,state_dim);
+  printMatrix("SmoothingGain", SmoothingGain, state_dim,state_dim);
+#endif
+
+  // Update Smoothed covariance
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    for (cm = 1 ; cm <= state_dim ; cm++)
+    {
+      dSum = 0.0;
+
+      for (cr = 1 ; cr <= state_dim ; cr++)
+      {
+        dSum += (apriori_state_covs[t][cn][cr] - smoothed_state_covs[t][cn][cr]) * SmoothingGain[cm][cr];
+//        dSum += (apriori_state_covs[t+1][cn][cr] - smoothed_state_covs[t+1][cn][cr]) * SmoothingGain[cm][cr];
+      }
+
+      tempSA[cn][cm] = dSum;
+    }
+  }
+
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    for (cm = 1 ; cm <= state_dim ; cm++)
+    {
+      dSum = 0.0;
+
+      for (cr = 1 ; cr <= state_dim ; cr++)
+      {
+        dSum += SmoothingGain[cn][cr] * tempSA[cr][cm];
+      }
+
+      state_cov[cn][cm]              = posterior_state_covs[t][cn][cm] - dSum;
+      smoothed_state_covs[t][cn][cm] = state_cov[cn][cm];
+    }
+  }
+
+#ifndef AD
+  printMatrix("state_cov", state_cov, state_dim,state_dim);
+#endif
+
+  // Update Smoothed mean
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    dSum = 0.0;
+
+    for (cr = 1 ; cr <= state_dim ; cr++)
+    {
+      dSum += SmoothingGain[cn][cr] * (smoothed_state_means[t+1][cr] - apriori_state_means[t+1][cr]);
     }
 
-    SmoothedLogLikelihood += (logDeterminantFromChol(chol_P_y, m) + yt_invPy_y + (m * log(2 * M_PI)));
+    state_mean[cn]              = posterior_state_means[t][cn] + dSum;
+    smoothed_state_means[t][cn] = state_mean[cn];
   }
+
+#ifndef AD
+  printVector("state_mean", state_mean, state_dim);
+#endif
+
+  // need to make next state comply with non-linear requirements of model
+  limitState(smoothed_state_means[t], smoothed_state_means[t], smoothed_state_means[t+1], t);
+
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    state_mean[cn] =  smoothed_state_means[t][cn];
+  }
+
+  // Update the model output
+  findOutput(output_measurement, smoothed_state_means[t], t);
+/*
+  // find smoothing cross covariance
+  // generate sigma points
+  findSigmaPoints(input_sigma_points, state_chol_cov, state_mean, state_cov);
+
+  // Propagate sigma points through the state transition model
+  propagateSigmaPoints(sigma_points, input_sigma_points, t);
+
+  // find predicted state mean and covariance using the unscented transform
+  unscentedTransform(output_state_mean, 
+                     0, 
+                     0,
+                     sigma_points,
+                     process_noise_cov,
+                     process_noise_scale[t],
+                     state_dim);
+
+  // find cross covariance for smoothing stage
+  crossCovariance(smoothing_cross_covs[t], 
+                  sigma_points, 
+                  output_state_mean,
+                  input_sigma_points, 
+                  input_state_mean);
+*/              
 }
 
 // ----------------------------------------------------------------------------
 
-double UnscentedKalmanFilter::filter(ARRAY_2D  x_est /* ns, n */, 
-                                     ARRAY_2D  y_est /* ns, m */, 
-                                     const ARRAY_2D _Q /* n,n */, 
-                                     const ARRAY_2D _Qscale /* ns,n */, 
-                                     const ARRAY_3D _R /* ns,m,m */, 
-                                     const ARRAY_1D x_0 /* n */)
+UnscentedKalmanFilter::UnscentedKalmanFilter(
+#include "UKF_constructor_args.hpp"
+)
+ : model_output(),
+   model_state(),
+   model_limit_state()
+{
+  double lambda;
+
+  #include "UKF_constructor_locals.hpp"
+  #include "UKF_constructor_scalars_phase_1.hpp"
+  
+  n_sigma = 2 * state_dim + 1;
+  lambda  = (alpha * alpha) * (state_dim + kappa) - state_dim;
+  _gamma  = ::sqrt(state_dim + lambda);
+
+  #include "UKF_constructor_arrays_phase_1.hpp"
+  #include "UKF_array_plans_init.hpp"
+}
+
+// ----------------------------------------------------------------------------
+
+double UnscentedKalmanFilter::filter(ARRAY_2D states /* time_dim, state_dim */, 
+                                     ARRAY_2D measurements /* time_dim, measurement_dim */, 
+                                     ARRAY_3D covariances /* time_dim, state_dim, state_dim */,                                     
+                                     const ARRAY_2D _process_noise_cov /* state_dim,state_dim */, 
+                                     const ARRAY_2D _process_noise_scale /* time_dim,state_dim */, 
+                                     const ARRAY_3D _measurement_noise_cov /* time_dim,measurement_dim,measurement_dim */, 
+                                     const ARRAY_1D _init_state /* state_dim */)
 {
   int t;
 
-  resetUKF(_Q, _Qscale, _R, x_0);
+  initialise(_process_noise_cov, 
+             _process_noise_scale, 
+             _measurement_noise_cov, 
+             _init_state);
 
-  for (t = 1 ; t <= ns ; t++)
+  LogLikelihood = 0.0;             
+
+  for (t = 1 ; t <= time_dim ; t++)
   {
-    timeUpdate(t);
-    measurementUpdate(t, y_working[t], x_est, y_est);
+    predict(state_cov,
+            state_mean,
+            state_cov,
+            state_mean,
+            t);
+
+    copy(0, apriori_state_means[t], apriori_state_covs[t]);
+
+    update(y[t], t);
+    copy(posterior_measurement_means[t], posterior_state_means[t], posterior_state_covs[t]);
+  
+    // Save the smoothed state estimate and covariance
+    copy(measurements[t], states[t], covariances[t]);
   }
 
   LogLikelihood *= -0.5;
 
-  Filtered = true;
-  Smoothed = false;
-
   return (LogLikelihood);
-}                                   
+}                                     
 
 // ----------------------------------------------------------------------------
 
-double UnscentedKalmanFilter::smooth(ARRAY_2D  x_smooth /* ns, n */, 
-                                     ARRAY_2D  y_smooth /* ns, m */, 
-                                     const bool bWithLogLikelihood)
+double UnscentedKalmanFilter::smooth(ARRAY_2D states /* time_dim, state_dim */, 
+                                     ARRAY_2D measurements /* time_dim, measurement_dim */, 
+                                     ARRAY_3D covariances /* time_dim, state_dim, state_dim */)
 {
   int t;
-  int cr;
-  int cc;
+  int cn;
+  int cm;
 
-  if (Filtered && !Smoothed)
+  // intitialise the starting smoothed state
+  for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    zero(y_k_smooth);
-    zero(x_k_smooth);
-    zero(Ps_k);
+    smoothed_state_means[time_dim][cn] = posterior_state_means[time_dim][cn];
+    states[time_dim][cn]               = posterior_state_means[time_dim][cn];
 
-    for (cr = 1 ; cr <= m ; cr++)
+    for (cm = 1 ; cm <= state_dim ; cm++)
     {
-      y_k_smooth[ns][cr] = y_k[ns][cr];
-      y_smooth[ns][cr]   = y_k[ns][cr];
+      smoothed_state_covs[time_dim][cn][cm] = posterior_state_covs[time_dim][cn][cm];
+      covariances[time_dim][cn][cm] = posterior_state_covs[time_dim][cn][cm];
     }
-
-    for (cr = 1 ; cr <= n ; cr++)
-    {
-      x_k_smooth[ns][cr] = x_k[ns][cr];
-      x_smooth[ns][cr]   = x_k[ns][cr];
-
-      for (cc = 1 ; cc <= n ; cc++)
-      {
-        Ps_k[ns][cr][cc] = P_k[ns][cr][cc];
-      }
-    }
-
-    SmoothedLogLikelihood = 0.0;
-
-    for (t = ns-1 ; t > 1 ; t--)
-    {
-      smoothingUpdate(x_smooth[t], y_smooth[t], t, bWithLogLikelihood);
-    }
-
-    SmoothedLogLikelihood *= -0.5;
-
-    Smoothed = true;
   }
 
-  return (SmoothedLogLikelihood);
-}
+  for (cn = 1 ; cn <= measurement_dim ; cn++)
+  {
+    measurements[time_dim][cn] = posterior_measurement_means[time_dim][cn];
+  }
 
+  for (t = time_dim - 1 ; t >= 1 ; t--)
+  {
+    predict(state_cov,
+            state_mean,
+            posterior_state_covs[t],
+            posterior_state_means[t],
+            t);
+
+    smoothingUpdate(t);
+
+    // Save the smoothed state estimate and covariance
+    copy(measurements[t], states[t], covariances[t]);
+  }
+
+  return (0);
+}

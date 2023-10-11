@@ -565,7 +565,9 @@ data.time    <- df$t
 n     <- 4
 m     <- 2
 kappa <- 0.0
-alfa  <- 1.0
+#alfa  <- 1.0
+alfa  <- 0.8
+#kappa <- 3 - n
 #alfa  <- 0.001
 beta  <- 2.0
 
@@ -615,6 +617,11 @@ model_state <- function(xp, xlast, t, time)
 
 model_limit_state <- function(xp, xlast, t, time)
 {
+  if (.External('PointOnLand', LFContext, xlast[1], xlast[2]))
+  {
+    browser()
+  }
+
   x       <- xp
   x[1:2]  <- .External('LandLimit', LFContext, xlast[1], xlast[2], xp[1], xp[2])
 
@@ -644,17 +651,21 @@ UKF.Context <- UKF.create(n,
 
 est_state  <- array(as.double(NA), c(size_n, n))
 est_output <- array(as.double(NA), c(size_n, m))
+est_cov    <- array(as.double(NA), c(size_n, n, n))
 smt_state  <- array(as.double(NA), c(size_n, n))
 smt_output <- array(as.double(NA), c(size_n, m))
+smt_cov    <- array(as.double(NA), c(size_n, n, n))
 
 R         <- initR(df)
 Q         <- QandQscaling$Q
 Qscaling  <- QandQscaling$Qscaling
+Qscaling  <- QandQscaling$Qscaling / 10
 
 # run filtering
 UKF.filter(UKF.Context,
           est_state,
           est_output,
+          est_cov,
           Q, 
           Qscaling, 
           R, 
@@ -673,18 +684,49 @@ points(df$LON,df$LAT, col='green')
 points(est_output, col='red')
 lines(est_output, col='red')
 
+
+xcov <- UKF.get.smoothing_cross_covs(UKF.Context)
+pP <- UKF.get.posterior_state_covs(UKF.Context)
+aP <- UKF.get.apriori_state_covs(UKF.Context)
+pX <- UKF.get.posterior_state_means(UKF.Context)
+aX <- UKF.get.apriori_state_means(UKF.Context)
+
+# smoothing alogrithm
+t <- 289
+sX <- pX[289,]
+S <- pP[289,,]
+pPs <- pP * 0.0
+pXs <- pX * 0.0
+pXs[289,]  <- sX
+
+for (t in 289:2)
+{
+  Ft <- xcov[t,,] %*% solve(aP[t,,])
+  A <- pP[t-1,,] %*% t(Ft) %*% solve(aP[t,,])
+  sX <- pX[t-1,] + A %*% (sX - aX[t,])
+  S <- pP[t-1,,] - A %*% (aP[t,,] - S) %*% t(A)
+
+  sX <-  model_state(sX, pX[t,], t-1, time)
+
+  pPs[t-1,,] <- S
+  pXs[t-1,]  <- sX
+}
+
+points(pXs[1:289,], col='blue')
+lines(pXs[1:289,], col='blue')
+
+
 # Whats wrong with smoothing
 UKF.smooth(UKF.Context,
            smt_state,
            smt_output,
-           as.raw(T))
+           smt_cov)
 
 xlim <- c(min(smt_output[,1], na.rm=T),max(smt_output[,1], na.rm=T))
 ylim <- c(min(smt_output[,2], na.rm=T),max(smt_output[,2], na.rm=T))
 
 points(smt_output, col='blue')
 lines(smt_output, col='blue')
-
 
 #closer view 
 xlim <- c(146, 149)
@@ -729,6 +771,11 @@ model_state2 <- function(xp, xlast, t, time)
 
 model_limit_state2 <- function(xp, xlast, t, time)
 {
+  if (.External('PointOnLand', LFContext, xlast[1], xlast[2]))
+  {
+    browser()
+  }
+
   x      <- xp
   x[1:2] <- .External('LandLimit', LFContext, xlast[1], xlast[2], xp[1], xp[2])
 
@@ -776,17 +823,21 @@ UKF.Context2 <- UKF.create(n,
 
 est_state2  <- array(as.double(NA), c(size_n2, n))
 est_output2 <- array(as.double(NA), c(size_n2, m))
+est_cov2    <- array(as.double(NA), c(size_n2, n, n))
 smt_state2  <- array(as.double(NA), c(size_n2, n))
 smt_output2 <- array(as.double(NA), c(size_n2, m))
+smt_cov2    <- array(as.double(NA), c(size_n2, n, n))
 
 R2         <- initR(df2)
 Q2         <- QandQscaling2$Q
 Qscaling2  <- QandQscaling2$Qscaling
+Qscaling2  <- QandQscaling2$Qscaling / 10
 
 # run filtering
 UKF.filter(UKF.Context2,
           est_state2,
           est_output2,
+          est_cov2,
           Q2, 
           Qscaling2, 
           R2, 
@@ -805,15 +856,48 @@ points(df2$LON,df2$LAT, col='green')
 points(est_output2, col='red')
 lines(est_output2, col='red')
 
+xcov <- UKF.get.smoothing_cross_covs(UKF.Context2)
+pP <- UKF.get.posterior_state_covs(UKF.Context2)
+aP <- UKF.get.apriori_state_covs(UKF.Context2)
+pX <- UKF.get.posterior_state_means(UKF.Context2)
+aX <- UKF.get.apriori_state_means(UKF.Context2)
+
+# smoothing alogrithm
+tm <- length(xcov[,1,1])-1
+sX <- pX[tm,]
+S <- pP[tm,,]
+pPs <- pP * 0.0
+pXs <- pX * 0.0
+pXs[tm,]  <- sX
+
+for (ti in tm:2)
+{
+  Ft <- xcov[ti,,] %*% solve(aP[ti,,])
+  A <- pP[ti-1,,] %*% t(Ft) %*% solve(aP[ti,,])
+  sX <- pX[ti-1,] + A %*% (sX - aX[ti,])
+  S <- pP[ti-1,,] - A %*% (aP[ti,,] - S) %*% t(A)
+
+  sX <-  model_state2(sX, pX[ti,], ti-1, time2)
+
+  pPs[ti-1,,] <- S
+  pXs[ti-1,]  <- sX
+}
+
+points(pXs[1:tm,], col='blue')
+lines(pXs[1:tm,], col='blue')
+
+
 # Whats wrong with smoothing
 UKF.smooth(UKF.Context2,
            smt_state2,
            smt_output2,
-           as.raw(T))
+           smt_cov2)
 
 points(smt_output2, col='blue')
 lines(smt_output2, col='blue')
 
+points(smt_state2[,1:2], col='blue')
+lines(smt_state2[,1:2], col='blue')
 
 #closer view 
 xlim <- c(146, 149)

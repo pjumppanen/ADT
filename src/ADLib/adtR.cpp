@@ -29,7 +29,8 @@
 
 
 SEXP R_CALLARG::wrapArgument(const AdtMemAllocator& rMemAllocator,
-                             bool bNoTranslation)
+                             bool bNoTranslation,
+                             int& nProtect)
 {
   SEXP  Result(R_NilValue);
 
@@ -43,7 +44,7 @@ SEXP R_CALLARG::wrapArgument(const AdtMemAllocator& rMemAllocator,
         {
           PROTECT(Result = Rf_allocVector(INTSXP, 1));
           INTEGER(Result)[0] = ((int*)Array)[0];
-          UNPROTECT(1);
+          nProtect++;
           break;
         }
 
@@ -51,7 +52,7 @@ SEXP R_CALLARG::wrapArgument(const AdtMemAllocator& rMemAllocator,
         {
           PROTECT(Result = Rf_allocVector(REALSXP, 1));
           REAL(Result)[0] = ((double*)Array)[0];
-          UNPROTECT(1);
+          nProtect++;
           break;
         }
 
@@ -87,22 +88,25 @@ SEXP R_CALLARG::wrapArgument(const AdtMemAllocator& rMemAllocator,
           {
             case AdtVarType_INT:
             {
-              Result      = R_CreateArray(nCoords, aCoords, INTSXP);
+              PROTECT(Result = R_CreateArray(nCoords, aCoords, INTSXP));
               pResultData = (char*)INTEGER(Result);
+              nProtect++;
               break;
             }
 
             case AdtVarType_DOUBLE:
             {
-              Result      = R_CreateArray(nCoords, aCoords, REALSXP);
+              PROTECT(Result = R_CreateArray(nCoords, aCoords, REALSXP));
               pResultData = (char*)REAL(Result);
+              nProtect++;
               break;
             }
 
             case AdtVarType_LONGBOOL:
             {
-              Result      = R_CreateArray(nCoords, aCoords, LGLSXP);
+              PROTECT(Result = R_CreateArray(nCoords, aCoords, LGLSXP));
               pResultData = (char*)LOGICAL(Result);
+              nProtect++;
               break;
             }
 
@@ -110,8 +114,9 @@ SEXP R_CALLARG::wrapArgument(const AdtMemAllocator& rMemAllocator,
             case AdtVarType_UCHAR:
             case AdtVarType_BOOL:
             {
-              Result      = R_CreateArray(nCoords, aCoords, RAWSXP);
+              PROTECT(Result = R_CreateArray(nCoords, aCoords, RAWSXP));
               pResultData = (char*)RAW(Result);
+              nProtect++;
               break;
             }
 
@@ -150,7 +155,8 @@ SEXP R_CALLARG::wrapArgument(const AdtMemAllocator& rMemAllocator,
 //  ----------------------------------------------------------------------------
 void R_RETARG::assign(SEXP Result,
                       const AdtMemAllocator& rMemAllocator,
-                      bool bNoTranslation)
+                      bool bNoTranslation,
+                      int& nProtect)
 {
   try
   {
@@ -164,7 +170,7 @@ void R_RETARG::assign(SEXP Result,
 
           PROTECT(Result);
           ((int*)Array)[0] = INTEGER(Result)[0];
-          UNPROTECT(1);
+          nProtect++;
           break;
         }
 
@@ -174,7 +180,7 @@ void R_RETARG::assign(SEXP Result,
 
           PROTECT(Result);
           ((double*)Array)[0] = REAL(Result)[0];
-          UNPROTECT(1);
+          nProtect++;
           break;
         }
 
@@ -214,6 +220,7 @@ void R_RETARG::assign(SEXP Result,
               pSrcArgData     = (char*)INTEGER(Result);
               nSrcArgType     = INTSXP;
               pSrcArgTypeName = "INTSXP";
+              nProtect++;
               break;
             }
 
@@ -226,6 +233,7 @@ void R_RETARG::assign(SEXP Result,
               pSrcArgData     = (char*)REAL(Result);
               nSrcArgType     = REALSXP;
               pSrcArgTypeName = "REALSXP";
+              nProtect++;
               break;
             }
 
@@ -249,8 +257,6 @@ void R_RETARG::assign(SEXP Result,
             {
               AdtArrayPlanActor::R_to_ADlib(rMemAllocator, pSrcArgData, Array);
             }
-
-            UNPROTECT(1);
           }
         }
 
@@ -280,6 +286,7 @@ void R_CALL::callR(R_RETARG& ret, R_CALLARG* Arguments[], int nArguments)
   if (Valid)
   {
     int           cn;
+    int           nProtect = 0;
     SEXP          Nil(R_NilValue);
     SEXP          Result(R_NilValue);
     SEXP          Call = langN(nArguments);
@@ -290,14 +297,14 @@ void R_CALL::callR(R_RETARG& ret, R_CALLARG* Arguments[], int nArguments)
 
     for (cn = 0 ; cn < nArguments ; cn++)
     {
-      SETCADR(tcall, Arguments[cn]->wrapArgument(*MemAllocator, NoTranslation));
+      SETCADR(tcall, Arguments[cn]->wrapArgument(*MemAllocator, NoTranslation, nProtect));
       tcall = CDR(tcall);
     }
 
     PROTECT_WITH_INDEX(Result = Rf_eval(Call, Environment), &ipx);
     REPROTECT(Result = Rf_coerceVector(Result, ret.type()), ipx);
-    ret.assign(Result, *MemAllocator, NoTranslation);
-    UNPROTECT(1);
+    ret.assign(Result, *MemAllocator, NoTranslation, nProtect);
+    UNPROTECT(1 + nProtect);
   }
 }
 

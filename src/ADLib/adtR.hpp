@@ -80,7 +80,8 @@ public:
   R_CALLARG(const ARRAY_10I pArray);
 
   SEXP  wrapArgument(const AdtMemAllocator& rMemAllocator,
-                     bool bNoTranslation);
+                     bool bNoTranslation,
+                     int& nProtect);
 };
 
 //  ----------------------------------------------------------------------------
@@ -321,7 +322,8 @@ public:
 
   void        assign(SEXP Result,
                      const AdtMemAllocator& rMemAllocator,
-                     bool bNoTranslation);
+                     bool bNoTranslation,
+                     int& nProtect);
 
   SEXPTYPE    type() const;
 };

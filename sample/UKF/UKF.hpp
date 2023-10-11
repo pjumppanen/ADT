@@ -1,12 +1,6 @@
 // -----------------------------------------------------------------------------
-// Unscented Kalman Filter Example project based on by Jaroslaw Goslinski code in:
-//
-// https://github.com/jaroslav87/UKF-MNGM.git
-//
-// Companion article:
-//
-// https://jgoslinski.medium.com/the-unscented-kalman-filter-simply-the-best-python-code-5cd5ebaebf5f
-//
+// Unscented Kalman Filter
+// -----------------------------------------------------------------------------
 // Implements UKF Kalman smoothing based on the Jacobian Equivalent Rauch-Tung-Striebel
 // smoother (abbreviated as JE-RTS method) described in:
 //
@@ -36,139 +30,192 @@ protected:
   /* AD_LIBNAME UKF */
   /* AD_ALIAS UKF=I_UnscentedKalmanFilter */
   /* AUTOINIT */
-  int       n;  // size of the state vector
-  int       m;  // size of the output vector
-  int       ns; // number of samples
+  int       state_dim;
+  int       measurement_dim;
+  int       time_dim;
   double    kappa;
-  double    alfa;
+  double    alpha;
   double    beta;
   R_CALL    model_output;
   R_CALL    model_state;
   R_CALL    model_limit_state;
-  ARRAY_2D  y /* ns, m */;  // observed measurement data
-  ARRAY_1D  time /* ns */;  // observed time data
-  
+
+  // observed measurement data
+  ARRAY_2D  y /* time_dim, measurement_dim */;
+
+  // time of obsevered measurement data
+  ARRAY_1D  time /* time_dim */;
+
   /* AUTODEC */
-  // UKF params
-  double  lambda_;
-  double  gamma;
-  double  W0m;
-  double  W0c;
-  double  W;
-  double  SavedLogLikelihood;
-  int     t_start;
-  bool    InNA;
+  // process noise covariance matrix
+  ARRAY_2D  process_noise_cov /* state_dim,state_dim */;
 
-  // measurement data plus interpolations for NA points
-  ARRAY_2D  y_working /* ns, m */;
+  // process noise scaling to cater for non-uniform sample time
+  ARRAY_2D  process_noise_scale /* time_dim,state_dim */;
 
-  // Result data
-  ARRAY_2D  y_k /* 0:ns, m */;
-  ARRAY_2D  x_k /* 0:ns, n */; 
-  ARRAY_2D  x_k_bar /* ns, n */; 
-  ARRAY_2D  y_k_smooth /* 0:ns, m */;
-  ARRAY_2D  x_k_smooth /* 0:ns, n */;
-  ARRAY_1B  naData /* 1:ns */;
-                 
-  // all vectors used in the UKF process
-  ARRAY_1D  x_P /* n */;
-  ARRAY_1D  x_Pc /* n */;
-  ARRAY_1D  y_P /* m */;
-  ARRAY_1D  ym /* m */;
-  ARRAY_1D  xi /* n */;
-  ARRAY_1D  xp /* n */;
-  ARRAY_1D  xlast /* n */;
-  ARRAY_1D  yi /* m */;
+  // observation noise covariance by sample
+  ARRAY_3D  measurement_noise_cov /* time_dim,measurement_dim,measurement_dim */;
 
-  // covarince matrices used in the process
-  ARRAY_3D  P_k /* 0:ns,n,n */;   // Kalman filter covariance
-  ARRAY_3D  P_k_bar /* ns,n,n */;   // Kalman filter covariance
-  ARRAY_3D  chol_P_k /* ns,n,n */;
-  ARRAY_3D  Ps_k /* 0:ns,n,n */;  // URTS smoothed covariance
+  // current state
+  ARRAY_2D  state_cov /* state_dim,state_dim */;
+  ARRAY_1D  state_mean /* state_dim */;
+  ARRAY_1D  input_state_mean /* state_dim */;
+  ARRAY_1D  output_state_mean /* state_dim */;
+
+  ARRAY_1D  state_dev /* state_dim */;
+  ARRAY_1D  state_dev2 /* state_dim */;
+  ARRAY_1D  measurement_dev /* measurement_dim */;
+
+  // cholesky decomposition temporary
+  ARRAY_2D  state_chol_cov /* state_dim,state_dim */;
+  ARRAY_2D  measurement_chol_cov /* state_dim,state_dim */;
+  ARRAY_2D  measurement_inv_cov /* state_dim,state_dim */;
+
+  // sigma points temporary
+  ARRAY_2D sigma_points /* 2 * n_sigma + 1,state_dim */;
+  ARRAY_2D input_sigma_points /* 2 * n_sigma + 1,state_dim */;
+  ARRAY_2D output_sigma_points /* 2 * n_sigma + 1,measurement_dim */;
+
+  ARRAY_3D  apriori_state_covs /* 0:time_dim,state_dim,state_dim */;
+  ARRAY_2D  apriori_state_means /* 0:time_dim,state_dim */;
   
-  // Arrays used in smoothing
-  ARRAY_2D  inv_P_k_bar /* n,n */;
-  ARRAY_2D  A_k /* n,n */;
-  ARRAY_1D  x_Temp /* n */;
-  ARRAY_2D  chol_Ps_k /* n,n */;
-  ARRAY_2D  C_k /* n,n */;
+  ARRAY_3D  posterior_state_covs /* 0:time_dim,state_dim,state_dim */;
+  ARRAY_2D  posterior_state_means /* 0:time_dim,state_dim */;
+  ARRAY_2D  posterior_measurement_means /* 0:time_dim,measurement_dim */;
 
-  // sigma points
-  ARRAY_2D  x_sigma /* n, 2 * n + 1 */;
+  ARRAY_3D  smoothing_cross_covs /* 0:time_dim,state_dim,state_dim */;
+  ARRAY_2D  smoothing_cross_cov /* state_dim,state_dim */;
 
-  // sigma points after passing through the function f/h
-  ARRAY_2D  x_sigma_f /* n, 2 * n + 1 */;
+  ARRAY_1D  input_state /* state_dim */;
+  ARRAY_1D  output_state /* state_dim */;
+  ARRAY_1D  output_measurement /* measurement_dim */;
+  ARRAY_1D  last_state /* state_dim */;
 
-  // sigma output points (ie. after passing through the function f/h)
-  ARRAY_2D  y_sigma /* m, 2 * n + 1 */;
-  
-  // cross covariance
-  ARRAY_2D  P_xy /* n,m */;
-  ARRAY_2D  P_xyP /* n,m */;
+  ARRAY_1D  predicted_measurement_mean /* measurement_dim */;
+  ARRAY_2D  predicted_measurement_cov /* measurement_dim,measurement_dim */;
+  ARRAY_2D  cross_cov /* state_dim,measurement_dim */;
 
-  ARRAY_2D  P_y /* m,m */;
-  ARRAY_2D  chol_P_y /* m,m */;
-  ARRAY_2D  inv_P_y /* m,m */;
-  ARRAY_2D  K /* n,m */;
-  ARRAY_2D  K_P_y /* n,m */;
-  ARRAY_2D  K_0 /* n,m */;
-  ARRAY_2D  K_UKF_T /* m,n */;
+  ARRAY_2D  KalmanGain /* state_dim,measurement_dim */;
+  ARRAY_2D  temp_cross_cov /* state_dim,measurement_dim */;
+  ARRAY_1D  innovation /* measurement_dim */;
 
-  ARRAY_2D  Q /* n,n */; // Process noise covariance matrix
-  ARRAY_2D  Qscale /* ns,n */; // vector of Q scaling to cater for non-uniform sample time
-  ARRAY_3D  R /* ns,m,m */; // Observation noise covariance by sample
+  ARRAY_2D  apriori_state_m_noise_cov /* state_dim,state_dim */;
+  ARRAY_2D  posterior_state_cov_chol_inv /* state_dim,state_dim */;
+  ARRAY_2D  state_cov_chol_inv /* state_dim,state_dim */;
+  ARRAY_2D  state_transition /* state_dim,state_dim */;
+  ARRAY_2D  tempSA /* state_dim,state_dim */;
+  ARRAY_2D  tempSB /* state_dim,state_dim */;
+  ARRAY_2D  tempSC /* state_dim,state_dim */;
+  ARRAY_2D  SmoothingGain /* state_dim,state_dim */;
+  ARRAY_3D  smoothed_state_covs /* 0:time_dim,state_dim,state_dim */;
+  ARRAY_2D  smoothed_state_means /* 0:time_dim,state_dim */;
 
+  // sigma point weights
+  ARRAY_1D  wm /* 2 * n_sigma + 1 */;
+  ARRAY_1D  wc /* 2 * n_sigma + 1 */;
   double    LogLikelihood;
-  double    SmoothedLogLikelihood;
+  double    _gamma;
+  int       n_sigma;
 
-  bool      Filtered;
-  bool      Smoothed;
-  
 #include "UKF_array_plans.hpp"
 
 protected:
-  bool      choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, ARRAY_2D pU/* nSize, nSize */, const int nSize);
-  double    logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, const int nSize);
-  void      matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, ARRAY_2D pInv/* nSize, nSize */, const int nSize);
+#ifndef AD
+  void      printMatrix(const char* pLabel, const ARRAY_2D pA, const int nRow, const int nCol);
+  void      printVector(const char* pLabel, const ARRAY_1D pV, const int nSize);
+#endif
 
-  void      setCovariances(double _Q, double _R);
-  void      sigma_points(const ARRAY_1D vect_X /* n */, const ARRAY_2D matrix_S /* n,n */);
-  void      y_UKF_calc(const int t);
-  void      state(const int t);
-  void      limitState(ARRAY_1D xout, const ARRAY_1D xin, const ARRAY_1D xprev, const int t);
+  bool            choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, 
+                                        ARRAY_2D pU/* nSize, nSize */, 
+                                        const int nSize);
 
-  void      resetUKF(const ARRAY_2D _Q /* n,n */, 
-                     const ARRAY_2D _Qscale /* ns,n */, 
-                     const ARRAY_3D _R /* ns,m,m */, 
-                     const ARRAY_1D x_0 /* n */);
+  double          logDeterminantFromChol(const ARRAY_2D pU/* nSize, nSize */, 
+                                         const int nSize);
 
-  void      timeUpdate(const int t);
+  void            matrixInverseFromChol(const ARRAY_2D pU/* nSize, nSize */, 
+                                        ARRAY_2D pInv/* nSize, nSize */, 
+                                        const int nSize);
 
-  void      measurementUpdate(int& t,
-                              const ARRAY_1D z/* m */,
-                              ARRAY_2D  x_est /* ns, n */,
-                              ARRAY_2D  y_est /* ns, m */);
+  void            inverseFromUpperTriangular(const ARRAY_2D pU/* nSize, nSize */, 
+                                             ARRAY_2D pInv/* nSize, nSize */, 
+                                             const int nSize);
+                                             
+  void            copy(ARRAY_1D target_measurement /* measurement_dim */, 
+                       ARRAY_1D target_state /* state_dim */, 
+                       ARRAY_2D target_covariance /* state_dim, state_dim */);
 
-  void      smoothingUpdate(ARRAY_1D  x_smooth /* n */, 
-                            ARRAY_1D  y_smooth /* m */, 
-                            const int t, 
-                            const bool bWithLogLikelihood);
+  void            initialise(const ARRAY_2D _process_noise_cov /* state_dim,state_dim */, 
+                             const ARRAY_2D _process_noise_scale /* time_dim,state_dim */, 
+                             const ARRAY_3D _measurement_noise_cov /* time_dim,measurement_dim,measurement_dim */, 
+                             const ARRAY_1D _init_state /* state_dim */);
+
+  void            sigmaPointsToMean(ARRAY_1D _transformed_mean /* _dim */, 
+                                    const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                    int _dim);
+
+  void            sigmaPointsToCovariance(ARRAY_2D _transformed_cov /* _dim,_dim */, 
+                                          ARRAY_1D _devs /* _dim */, 
+                                          const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                          const ARRAY_2D _noise_cov /* _dim,_dim */,
+                                          const ARRAY_1D _noise_scale /* _dim */,
+                                          const ARRAY_1D _mean /* _dim */,
+                                          int _dim);
+
+  void            crossCovariance(ARRAY_2D _cross_cov /* state_dim,state_dim */, 
+                                  const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                  const ARRAY_1D _mean /* state_dim */,
+                                  const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                  const ARRAY_1D _input_mean /* state_dim */);
+
+  void            findSigmaPoints(ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                  const ARRAY_2D _chol_cov /* state_dim,state_dim */,
+                                  const ARRAY_1D _mean /* state_dim */, 
+                                  const ARRAY_2D _cov /* state_dim,state_dim */);
+
+  void            propagateSigmaPoints(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                       const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                       const int t);
+
+  void            findOutput(ARRAY_1D _output_measurement /* measurment_dim */, 
+                             const ARRAY_1D _input_state /* state_dim */, 
+                             const int t);
+
+  void            predictOutput(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,measurment_dim */, 
+                                const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                const int t);
+
+  void            limitState(ARRAY_1D _output_state /* state_dim */, 
+                             const ARRAY_1D _input_state /* state_dim */, 
+                             const ARRAY_1D _last_state /* state_dim */, 
+                             const int t);
+
+  void            predict(ARRAY_2D  _state_cov /* state_dim,state_dim */,
+                          ARRAY_1D  _state_mean /* state_dim */,
+                          const ARRAY_2D  _in_state_cov /* state_dim,state_dim */,
+                          const ARRAY_1D  _in_state_mean /* state_dim */,
+                          const int t);
+
+  void            update(const ARRAY_1D measurement /* measurement_dim */, 
+                         const int t);
+
+  void            smoothingUpdate(const int t);
 
 public:
   UnscentedKalmanFilter(
 #include "UKF_constructor_args.hpp"
   );
 
-  double    filter(ARRAY_2D  x_est /* ns, n */,
-                   ARRAY_2D  y_est /* ns, m */,
-                   const ARRAY_2D _Q /* n,n */, 
-                   const ARRAY_2D _Qscale /* ns,n */, 
-                   const ARRAY_3D _R /* ns,m,m */, 
-                   const ARRAY_1D x_0 /* n */);
+  double          filter(ARRAY_2D states /* time_dim, state_dim */, 
+                         ARRAY_2D measurements /* time_dim, measurement_dim */, 
+                         ARRAY_3D covariances /* time_dim, state_dim, state_dim */,                                     
+                         const ARRAY_2D _process_noise_cov /* state_dim,state_dim */, 
+                         const ARRAY_2D _process_noise_scale /* time_dim,state_dim */, 
+                         const ARRAY_3D _measurement_noise_cov /* time_dim,measurement_dim,measurement_dim */, 
+                         const ARRAY_1D _init_state /* state_dim */);
 
-  double    smooth(ARRAY_2D  x_smooth /* ns, n */, 
-                   ARRAY_2D  y_smooth /* ns, m */, 
-                   const bool bWithLogLikelihood);
+  double          smooth(ARRAY_2D states /* time_dim, state_dim */, 
+                         ARRAY_2D measurements /* time_dim, measurement_dim */, 
+                         ARRAY_3D covariances /* time_dim, state_dim, state_dim */);
 };
 
 #endif  __UKF_HPP__
