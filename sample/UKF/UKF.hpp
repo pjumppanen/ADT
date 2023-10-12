@@ -60,31 +60,30 @@ protected:
   ARRAY_2D  state_cov /* state_dim,state_dim */;
   ARRAY_1D  state_mean /* state_dim */;
   ARRAY_1D  input_state_mean /* state_dim */;
-  ARRAY_1D  output_state_mean /* state_dim */;
-
+  
   ARRAY_1D  state_dev /* state_dim */;
   ARRAY_1D  state_dev2 /* state_dim */;
   ARRAY_1D  measurement_dev /* measurement_dim */;
 
   // cholesky decomposition temporary
   ARRAY_2D  state_chol_cov /* state_dim,state_dim */;
+  ARRAY_2D  state_inv_cov /* state_dim,state_dim */;
   ARRAY_2D  measurement_chol_cov /* state_dim,state_dim */;
   ARRAY_2D  measurement_inv_cov /* state_dim,state_dim */;
 
   // sigma points temporary
-  ARRAY_2D sigma_points /* 2 * n_sigma + 1,state_dim */;
-  ARRAY_2D input_sigma_points /* 2 * n_sigma + 1,state_dim */;
-  ARRAY_2D output_sigma_points /* 2 * n_sigma + 1,measurement_dim */;
+  ARRAY_2D sigma_points /* 2 * state_dim + 1,state_dim */;
+  ARRAY_2D input_sigma_points /* 2 * state_dim + 1,state_dim */;
+  ARRAY_2D output_sigma_points /* 2 * state_dim + 1,measurement_dim */;
 
   ARRAY_3D  apriori_state_covs /* 0:time_dim,state_dim,state_dim */;
   ARRAY_2D  apriori_state_means /* 0:time_dim,state_dim */;
   
   ARRAY_3D  posterior_state_covs /* 0:time_dim,state_dim,state_dim */;
   ARRAY_2D  posterior_state_means /* 0:time_dim,state_dim */;
-  ARRAY_2D  posterior_measurement_means /* 0:time_dim,measurement_dim */;
+  ARRAY_2D  posterior_measurement_means /* time_dim,measurement_dim */;
 
   ARRAY_3D  smoothing_cross_covs /* 0:time_dim,state_dim,state_dim */;
-  ARRAY_2D  smoothing_cross_cov /* state_dim,state_dim */;
 
   ARRAY_1D  input_state /* state_dim */;
   ARRAY_1D  output_state /* state_dim */;
@@ -99,20 +98,14 @@ protected:
   ARRAY_2D  temp_cross_cov /* state_dim,measurement_dim */;
   ARRAY_1D  innovation /* measurement_dim */;
 
-  ARRAY_2D  apriori_state_m_noise_cov /* state_dim,state_dim */;
-  ARRAY_2D  posterior_state_cov_chol_inv /* state_dim,state_dim */;
-  ARRAY_2D  state_cov_chol_inv /* state_dim,state_dim */;
-  ARRAY_2D  state_transition /* state_dim,state_dim */;
-  ARRAY_2D  tempSA /* state_dim,state_dim */;
-  ARRAY_2D  tempSB /* state_dim,state_dim */;
-  ARRAY_2D  tempSC /* state_dim,state_dim */;
   ARRAY_2D  SmoothingGain /* state_dim,state_dim */;
-  ARRAY_3D  smoothed_state_covs /* 0:time_dim,state_dim,state_dim */;
-  ARRAY_2D  smoothed_state_means /* 0:time_dim,state_dim */;
+  ARRAY_2D  StateTransition /* state_dim,state_dim */;
+  ARRAY_2D  working_state_mat /* state_dim,state_dim */;
+  ARRAY_1D  working_state_vec /* state_dim */;
 
   // sigma point weights
-  ARRAY_1D  wm /* 2 * n_sigma + 1 */;
-  ARRAY_1D  wc /* 2 * n_sigma + 1 */;
+  ARRAY_1D  wm /* 2 * state_dim + 1 */;
+  ARRAY_1D  wc /* 2 * state_dim + 1 */;
   double    LogLikelihood;
   double    _gamma;
   int       n_sigma;
@@ -150,38 +143,38 @@ protected:
                              const ARRAY_1D _init_state /* state_dim */);
 
   void            sigmaPointsToMean(ARRAY_1D _transformed_mean /* _dim */, 
-                                    const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                    const ARRAY_2D _sigma_points /* 2 * state_dim + 1,_dim */, 
                                     int _dim);
 
   void            sigmaPointsToCovariance(ARRAY_2D _transformed_cov /* _dim,_dim */, 
                                           ARRAY_1D _devs /* _dim */, 
-                                          const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                          const ARRAY_2D _sigma_points /* 2 * state_dim + 1,_dim */, 
                                           const ARRAY_2D _noise_cov /* _dim,_dim */,
                                           const ARRAY_1D _noise_scale /* _dim */,
                                           const ARRAY_1D _mean /* _dim */,
                                           int _dim);
 
   void            crossCovariance(ARRAY_2D _cross_cov /* state_dim,state_dim */, 
-                                  const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                  const ARRAY_2D _sigma_points /* 2 * state_dim + 1,state_dim */, 
                                   const ARRAY_1D _mean /* state_dim */,
-                                  const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                  const ARRAY_2D _input_sigma_points /* 2 * state_dim + 1,state_dim */, 
                                   const ARRAY_1D _input_mean /* state_dim */);
 
-  void            findSigmaPoints(ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+  void            findSigmaPoints(ARRAY_2D _sigma_points /* 2 * state_dim + 1,state_dim */, 
                                   const ARRAY_2D _chol_cov /* state_dim,state_dim */,
                                   const ARRAY_1D _mean /* state_dim */, 
                                   const ARRAY_2D _cov /* state_dim,state_dim */);
 
-  void            propagateSigmaPoints(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,state_dim */, 
-                                       const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+  void            propagateSigmaPoints(ARRAY_2D _output_sigma_points /* 2 * state_dim + 1,state_dim */, 
+                                       const ARRAY_2D _input_sigma_points /* 2 * state_dim + 1,state_dim */, 
                                        const int t);
 
   void            findOutput(ARRAY_1D _output_measurement /* measurment_dim */, 
                              const ARRAY_1D _input_state /* state_dim */, 
                              const int t);
 
-  void            predictOutput(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,measurment_dim */, 
-                                const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+  void            predictOutput(ARRAY_2D _output_sigma_points /* 2 * state_dim + 1,measurment_dim */, 
+                                const ARRAY_2D _input_sigma_points /* 2 * state_dim + 1,state_dim */, 
                                 const int t);
 
   void            limitState(ARRAY_1D _output_state /* state_dim */, 

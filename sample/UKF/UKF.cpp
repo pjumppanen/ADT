@@ -323,7 +323,7 @@ void UnscentedKalmanFilter::initialise(const ARRAY_2D _process_noise_cov /* stat
 // ----------------------------------------------------------------------------
 
 void UnscentedKalmanFilter::sigmaPointsToMean(ARRAY_1D _transformed_mean /* _dim */, 
-                                               const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                               const ARRAY_2D _sigma_points /* 2 * state_dim + 1,_dim */, 
                                                int _dim)
 {
   int cn;
@@ -345,7 +345,7 @@ void UnscentedKalmanFilter::sigmaPointsToMean(ARRAY_1D _transformed_mean /* _dim
 
 void UnscentedKalmanFilter::sigmaPointsToCovariance(ARRAY_2D _transformed_cov /* _dim,_dim */, 
                                                     ARRAY_1D _devs /* _dim */, 
-                                                    const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,_dim */, 
+                                                    const ARRAY_2D _sigma_points /* 2 * state_dim + 1,_dim */, 
                                                     const ARRAY_2D _noise_cov /* _dim,_dim */,
                                                     const ARRAY_1D _noise_scale /* _dim */,
                                                     const ARRAY_1D _mean /* _dim */,
@@ -405,9 +405,9 @@ void UnscentedKalmanFilter::sigmaPointsToCovariance(ARRAY_2D _transformed_cov /*
 // ----------------------------------------------------------------------------
 
 void UnscentedKalmanFilter::crossCovariance(ARRAY_2D _cross_cov /* state_dim,state_dim */, 
-                                            const ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                            const ARRAY_2D _sigma_points /* 2 * state_dim + 1,state_dim */, 
                                             const ARRAY_1D _mean /* state_dim */,
-                                            const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+                                            const ARRAY_2D _input_sigma_points /* 2 * state_dim + 1,state_dim */, 
                                             const ARRAY_1D _input_mean /* state_dim */)
 {
   int cn;
@@ -443,7 +443,7 @@ void UnscentedKalmanFilter::crossCovariance(ARRAY_2D _cross_cov /* state_dim,sta
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::findSigmaPoints(ARRAY_2D _sigma_points /* 2 * n_sigma + 1,state_dim */, 
+void UnscentedKalmanFilter::findSigmaPoints(ARRAY_2D _sigma_points /* 2 * state_dim + 1,state_dim */, 
                                             const ARRAY_2D _chol_cov /* state_dim,state_dim */,
                                             const ARRAY_1D _mean /* state_dim */, 
                                             const ARRAY_2D _cov /* state_dim,state_dim */)
@@ -489,8 +489,8 @@ void UnscentedKalmanFilter::findSigmaPoints(ARRAY_2D _sigma_points /* 2 * n_sigm
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::propagateSigmaPoints(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,state_dim */, 
-                                                 const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+void UnscentedKalmanFilter::propagateSigmaPoints(ARRAY_2D _output_sigma_points /* 2 * state_dim + 1,state_dim */, 
+                                                 const ARRAY_2D _input_sigma_points /* 2 * state_dim + 1,state_dim */, 
                                                  const int t)
 {
   int cn;
@@ -547,8 +547,8 @@ void UnscentedKalmanFilter::findOutput(ARRAY_1D _output_measurement /* measurmen
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::predictOutput(ARRAY_2D _output_sigma_points /* 2 * n_sigma + 1,measurment_dim */, 
-                                          const ARRAY_2D _input_sigma_points /* 2 * n_sigma + 1,state_dim */, 
+void UnscentedKalmanFilter::predictOutput(ARRAY_2D _output_sigma_points /* 2 * state_dim + 1,measurment_dim */, 
+                                          const ARRAY_2D _input_sigma_points /* 2 * state_dim + 1,state_dim */, 
                                           const int t)
 {
   int ck;
@@ -610,19 +610,40 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
   findSigmaPoints(input_sigma_points, state_chol_cov, _in_state_mean, _in_state_cov);
 
 #ifndef AD
-//    printMatrix("sigma points", sigma_points, 2 * state_dim + 1, state_dim);
+#ifdef __TRACE
+  Rprintf("time %d\n", t);
+  printMatrix("sigma points", input_sigma_points, 2 * state_dim + 1, state_dim);
+#endif
 #endif
 
   // Propagate sigma points through the state transition model
   propagateSigmaPoints(sigma_points, input_sigma_points, t);
+
+#ifndef AD
+#ifdef __TRACE
+  printMatrix("output sigma points", sigma_points, 2 * state_dim + 1, state_dim);
+#endif
+#endif
 
   // Find new mean
   sigmaPointsToMean(_state_mean, 
                     sigma_points, 
                     state_dim);
 
+#ifndef AD
+#ifdef __TRACE
+  printVector("state mean", _state_mean, state_dim);
+#endif
+#endif
+
   // Update mean to ensure it lies in valid space
-  model_state(_state_mean, _state_mean, last_state, t, time);
+  limitState(_state_mean, _state_mean, last_state, t);
+
+#ifndef AD
+#ifdef __TRACE
+  printVector("limited state mean", _state_mean, state_dim);
+#endif  
+#endif
 
   // find new covariance
   sigmaPointsToCovariance(_state_cov, 
@@ -633,6 +654,12 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
                           _state_mean,
                           state_dim);
 
+#ifndef AD
+#ifdef __TRACE
+  printMatrix("state cov", _state_cov, state_dim, state_dim);
+#endif
+#endif
+
   // find cross covariance for smoothing stage
   crossCovariance(smoothing_cross_covs[t], 
                   sigma_points, 
@@ -640,16 +667,27 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
                   input_sigma_points, 
                   input_state_mean);
 
+#ifndef AD
+#ifdef __TRACE
+  printMatrix("smoothing cross cov", smoothing_cross_covs[t], state_dim, state_dim);
+#endif
+#endif
+
   // find predicted model outputs
   predictOutput(output_sigma_points, 
                 sigma_points, 
                 t);
 
+  // Need to update the measurement mean based on the average state
+  findOutput(output_measurement, 
+             state_mean, 
+             t);
+
 #ifndef AD
-//    printMatrix("f sigma points", sigma_points, 2 * state_dim + 1, state_dim);
-//    printMatrix("y sigma points", output_sigma_points, 2 * state_dim + 1, measurement_dim);
-//    printMatrix("Pk", _state_cov, state_dim,state_dim);
+#ifdef __TRACE
+  printMatrix("Pk", _state_cov, state_dim,state_dim);
 #endif
+#endif                
 }
 
 // ----------------------------------------------------------------------------
@@ -750,10 +788,12 @@ void UnscentedKalmanFilter::update(const ARRAY_1D measurement /* measurement_dim
     }
 
 #ifndef AD
-  //  printMatrix("Pk_bar", state_cov, state_dim,state_dim);
-  //  printMatrix("Kalman Gain", KalmanGain, state_dim,measurement_dim);
-  //  printMatrix("Cross Cov", cross_cov, state_dim,measurement_dim);
-  //  printVector("x_k", state_mean, state_dim);
+#ifdef __TRACE
+    printMatrix("Pk_bar", state_cov, state_dim,state_dim);
+    printMatrix("Kalman Gain", KalmanGain, state_dim,measurement_dim);
+    printMatrix("Cross Cov", cross_cov, state_dim,measurement_dim);
+    printVector("x_k", state_mean, state_dim);
+#endif    
 #endif
 
     // update state estimate
@@ -818,11 +858,12 @@ void UnscentedKalmanFilter::update(const ARRAY_1D measurement /* measurement_dim
         state_cov[cn][cm] = state_cov[cn][cm] - dSum;
       }
     }
-
 #ifndef AD
-  //  printVector("x_k_bar", state_mean, state_dim);
-  //  printVector("y_k", output_measurement, measurement_dim);
+#ifdef __TRACE
+    printVector("x_k_bar", state_mean, state_dim);
+    printVector("y_k", output_measurement, measurement_dim);
 #endif
+#endif  
   }
 }
 
@@ -837,31 +878,33 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
   bool    bIsOk;
 
   // Do smoothing using the RTS method
-  zero(tempSA);
-  zero(tempSB);
+  zero(state_chol_cov);
+  zero(state_inv_cov);
 
 #ifndef AD
-  printMatrix("apriori_state_covs[t+1]", apriori_state_covs[t], state_dim,state_dim);
-//  printMatrix("apriori_state_covs[t+1]", apriori_state_covs[t+1], state_dim,state_dim);
+#ifdef __TRACE
+  printMatrix("apriori_state_covs[t]", apriori_state_covs[t], state_dim,state_dim);
+#endif
 #endif
 
-  bIsOk = choleskyDecomposition(apriori_state_covs[t], tempSA, state_dim);
-//  bIsOk = choleskyDecomposition(apriori_state_covs[t+1], tempSA, state_dim);
+  bIsOk = choleskyDecomposition(apriori_state_covs[t], state_chol_cov, state_dim);
 
 #ifndef AD
   if (!bIsOk)
   {
-    Rf_error("apriori_state_covs[t+1] in smoothingUpdate() has no Cholesky decomposition");
+    Rf_error("apriori_state_covs[t] in smoothingUpdate() has no Cholesky decomposition");
   }
 #endif
 
-  matrixInverseFromChol(tempSA, tempSB, state_dim);
+  matrixInverseFromChol(state_chol_cov, state_inv_cov, state_dim);
 
 #ifndef AD
-  printMatrix("apriori_state_covs[t+1] inverse", tempSB, state_dim,state_dim);
+#ifdef __TRACE
+  printMatrix("apriori_state_covs[t] inverse", state_inv_cov, state_dim,state_dim);
+#endif
 #endif
 
-  // Calculate smoothing gain
+  // Calculate Dk, state transition matrix (conceptually from EKF)
   for (cn = 1 ; cn <= state_dim ; cn++)
   {
     for (cm = 1 ; cm <= state_dim ; cm++)
@@ -870,18 +913,64 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
 
       for (cr = 1 ; cr <= state_dim ; cr++)
       {
-        dSum += smoothing_cross_cov[cn][cr] * tempSB[cr][cm];
-//        dSum += smoothing_cross_covs[t+1][cn][cr] * tempSB[cr][cm];
+        dSum += smoothing_cross_covs[t][cn][cr] * state_inv_cov[cr][cm];
       }
 
-      SmoothingGain[cn][cm] = dSum;
+      StateTransition[cn][cm] = dSum;
     }
   }
 
 #ifndef AD
-  printMatrix("smoothing_cross_covs[t]", smoothing_cross_covs[t], state_dim,state_dim);
-//  printMatrix("smoothing_cross_covs[t+1]", smoothing_cross_covs[t+1], state_dim,state_dim);
-  printMatrix("SmoothingGain", SmoothingGain, state_dim,state_dim);
+#ifdef __TRACE
+  printMatrix("Dk", StateTransition, state_dim,state_dim);
+#endif
+#endif
+
+  // Calculate Ak, smoothing gain
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    for (cm = 1 ; cm <= state_dim ; cm++)
+    {
+      dSum = 0.0;
+
+      for (cr = 1 ; cr <= state_dim ; cr++)
+      {
+        // t(Dk) * inv(aP[t])
+        dSum += StateTransition[cr][cn] * state_inv_cov[cr][cm];
+      }
+
+      working_state_mat[cn][cm] = dSum;
+    }
+  }
+
+#ifndef AD
+#ifdef __TRACE
+  printMatrix("working_state_mat", working_state_mat, state_dim,state_dim);
+#endif
+#endif
+
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    for (cm = 1 ; cm <= state_dim ; cm++)
+    {
+      dSum = 0.0;
+
+      for (cr = 1 ; cr <= state_dim ; cr++)
+      {
+        // pP[t] * t(Dk) * inv(aP[t])
+        dSum += posterior_state_covs[t-1][cm][cr] * working_state_mat[cr][cn];
+      }
+
+      SmoothingGain[cm][cn] = dSum;
+    }
+  }
+
+#ifndef AD
+#ifdef __TRACE
+  printMatrix("Ak", SmoothingGain, state_dim,state_dim);
+  printMatrix("state_cov", state_cov, state_dim,state_dim);
+  printMatrix("apriori_state_covs[t]", apriori_state_covs[t], state_dim,state_dim);
+#endif
 #endif
 
   // Update Smoothed covariance
@@ -893,13 +982,19 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
 
       for (cr = 1 ; cr <= state_dim ; cr++)
       {
-        dSum += (apriori_state_covs[t][cn][cr] - smoothed_state_covs[t][cn][cr]) * SmoothingGain[cm][cr];
-//        dSum += (apriori_state_covs[t+1][cn][cr] - smoothed_state_covs[t+1][cn][cr]) * SmoothingGain[cm][cr];
+        // (aP[t] - S) * t(Ak)
+        dSum += (apriori_state_covs[t][cn][cr] - state_cov[cn][cr]) * SmoothingGain[cm][cr];
       }
 
-      tempSA[cn][cm] = dSum;
+      working_state_mat[cn][cm] = dSum;
     }
   }
+
+#ifndef AD
+#ifdef __TRACE
+  printMatrix("working_state_mat", working_state_mat, state_dim,state_dim);
+#endif
+#endif
 
   for (cn = 1 ; cn <= state_dim ; cn++)
   {
@@ -909,16 +1004,18 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
 
       for (cr = 1 ; cr <= state_dim ; cr++)
       {
-        dSum += SmoothingGain[cn][cr] * tempSA[cr][cm];
+        // Ak * (aP[t] - S) * t(Ak)
+        dSum += SmoothingGain[cn][cr] * working_state_mat[cr][cm];
       }
 
-      state_cov[cn][cm]              = posterior_state_covs[t][cn][cm] - dSum;
-      smoothed_state_covs[t][cn][cm] = state_cov[cn][cm];
+      state_cov[cn][cm] = posterior_state_covs[t-1][cn][cm] - dSum;
     }
   }
 
 #ifndef AD
+#ifdef __TRACE
   printMatrix("state_cov", state_cov, state_dim,state_dim);
+#endif
 #endif
 
   // Update Smoothed mean
@@ -928,51 +1025,24 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
 
     for (cr = 1 ; cr <= state_dim ; cr++)
     {
-      dSum += SmoothingGain[cn][cr] * (smoothed_state_means[t+1][cr] - apriori_state_means[t+1][cr]);
+      dSum += SmoothingGain[cn][cr] * (state_mean[cr] - apriori_state_means[t][cr]);
     }
 
-    state_mean[cn]              = posterior_state_means[t][cn] + dSum;
-    smoothed_state_means[t][cn] = state_mean[cn];
+    working_state_vec[cn] = posterior_state_means[t-1][cn] + dSum;
   }
 
 #ifndef AD
+#ifdef __TRACE
   printVector("state_mean", state_mean, state_dim);
+  printVector("smoothed state_mean", working_state_vec, state_dim);
+#endif
 #endif
 
   // need to make next state comply with non-linear requirements of model
-  limitState(smoothed_state_means[t], smoothed_state_means[t], smoothed_state_means[t+1], t);
-
-  for (cn = 1 ; cn <= state_dim ; cn++)
-  {
-    state_mean[cn] =  smoothed_state_means[t][cn];
-  }
+  limitState(state_mean, working_state_vec, state_mean, t-1);
 
   // Update the model output
-  findOutput(output_measurement, smoothed_state_means[t], t);
-/*
-  // find smoothing cross covariance
-  // generate sigma points
-  findSigmaPoints(input_sigma_points, state_chol_cov, state_mean, state_cov);
-
-  // Propagate sigma points through the state transition model
-  propagateSigmaPoints(sigma_points, input_sigma_points, t);
-
-  // find predicted state mean and covariance using the unscented transform
-  unscentedTransform(output_state_mean, 
-                     0, 
-                     0,
-                     sigma_points,
-                     process_noise_cov,
-                     process_noise_scale[t],
-                     state_dim);
-
-  // find cross covariance for smoothing stage
-  crossCovariance(smoothing_cross_covs[t], 
-                  sigma_points, 
-                  output_state_mean,
-                  input_sigma_points, 
-                  input_state_mean);
-*/              
+  findOutput(output_measurement, state_mean, t-1);
 }
 
 // ----------------------------------------------------------------------------
@@ -1051,12 +1121,12 @@ double UnscentedKalmanFilter::smooth(ARRAY_2D states /* time_dim, state_dim */,
   // intitialise the starting smoothed state
   for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    smoothed_state_means[time_dim][cn] = posterior_state_means[time_dim][cn];
-    states[time_dim][cn]               = posterior_state_means[time_dim][cn];
+    state_mean[cn]       = posterior_state_means[time_dim][cn];
+    states[time_dim][cn] = posterior_state_means[time_dim][cn];
 
     for (cm = 1 ; cm <= state_dim ; cm++)
     {
-      smoothed_state_covs[time_dim][cn][cm] = posterior_state_covs[time_dim][cn][cm];
+      state_cov[cn][cm]             = posterior_state_covs[time_dim][cn][cm];
       covariances[time_dim][cn][cm] = posterior_state_covs[time_dim][cn][cm];
     }
   }
@@ -1066,18 +1136,12 @@ double UnscentedKalmanFilter::smooth(ARRAY_2D states /* time_dim, state_dim */,
     measurements[time_dim][cn] = posterior_measurement_means[time_dim][cn];
   }
 
-  for (t = time_dim - 1 ; t >= 1 ; t--)
+  for (t = time_dim ; t >= 2 ; t--)
   {
-    predict(state_cov,
-            state_mean,
-            posterior_state_covs[t],
-            posterior_state_means[t],
-            t);
-
     smoothingUpdate(t);
 
     // Save the smoothed state estimate and covariance
-    copy(measurements[t], states[t], covariances[t]);
+    copy(measurements[t-1], states[t-1], covariances[t-1]);
   }
 
   return (0);
