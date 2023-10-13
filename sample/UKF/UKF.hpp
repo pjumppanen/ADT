@@ -57,6 +57,7 @@ protected:
   ARRAY_3D  measurement_noise_cov /* time_dim,measurement_dim,measurement_dim */;
 
   // current state
+  ARRAY_2D  accumulated_process_noise_cov /* state_dim,state_dim */;
   ARRAY_2D  state_cov /* state_dim,state_dim */;
   ARRAY_1D  state_mean /* state_dim */;
   ARRAY_1D  input_state_mean /* state_dim */;
@@ -110,6 +111,11 @@ protected:
   double    _gamma;
   int       n_sigma;
 
+  ARRAY_1I  StartNA /* time_dim */;
+  ARRAY_1I  EndNA /* time_dim */;
+  int       NA_count;
+  bool      IsNA;
+
 #include "UKF_array_plans.hpp"
 
 protected:
@@ -146,11 +152,14 @@ protected:
                                     const ARRAY_2D _sigma_points /* 2 * state_dim + 1,_dim */, 
                                     int _dim);
 
+  void            resetNoiseCovariance();
+
+  void            updateProcessNoiseCovariance(const int t);
+
   void            sigmaPointsToCovariance(ARRAY_2D _transformed_cov /* _dim,_dim */, 
                                           ARRAY_1D _devs /* _dim */, 
                                           const ARRAY_2D _sigma_points /* 2 * state_dim + 1,_dim */, 
                                           const ARRAY_2D _noise_cov /* _dim,_dim */,
-                                          const ARRAY_1D _noise_scale /* _dim */,
                                           const ARRAY_1D _mean /* _dim */,
                                           int _dim);
 
@@ -182,11 +191,11 @@ protected:
                              const ARRAY_1D _last_state /* state_dim */, 
                              const int t);
 
-  void            predict(ARRAY_2D  _state_cov /* state_dim,state_dim */,
-                          ARRAY_1D  _state_mean /* state_dim */,
-                          const ARRAY_2D  _in_state_cov /* state_dim,state_dim */,
-                          const ARRAY_1D  _in_state_mean /* state_dim */,
-                          const int t);
+  bool            checkIsNA(const ARRAY_1D measurement /* measurement_dim */);                             
+  void            clearIsNA();
+  bool            isNA() const;
+
+  void            predict(const int t);
 
   void            update(const ARRAY_1D measurement /* measurement_dim */, 
                          const int t);
@@ -210,5 +219,19 @@ public:
                          ARRAY_2D measurements /* time_dim, measurement_dim */, 
                          ARRAY_3D covariances /* time_dim, state_dim, state_dim */);
 };
+
+// ----------------------------------------------------------------------------
+
+inline void UnscentedKalmanFilter::clearIsNA()
+{
+  IsNA = false;
+}
+
+// ----------------------------------------------------------------------------
+
+inline bool UnscentedKalmanFilter::isNA() const
+{
+  return (IsNA);
+}
 
 #endif  __UKF_HPP__

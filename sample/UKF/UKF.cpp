@@ -273,6 +273,9 @@ void UnscentedKalmanFilter::initialise(const ARRAY_2D _process_noise_cov /* stat
   int     ct;
   double  lambda;
 
+  NA_count  = 0;
+  IsNA      = false;
+
   // initialise state, covariance matrices and mean
   for (ct = 1 ; ct <= time_dim ; ct++)
   {
@@ -343,11 +346,33 @@ void UnscentedKalmanFilter::sigmaPointsToMean(ARRAY_1D _transformed_mean /* _dim
 
 // ----------------------------------------------------------------------------
 
+void UnscentedKalmanFilter::resetNoiseCovariance()
+{
+  zero(accumulated_process_noise_cov);
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::updateProcessNoiseCovariance(const int t)
+{
+  int cn;
+  int cm;
+
+  for (cn = 1 ; cn <= state_dim ; cn++)
+  {
+    for (cm = 1 ; cm <= state_dim ; cm++)
+    {
+      accumulated_process_noise_cov[cn][cm] += process_noise_scale[t][cn] * process_noise_cov[cn][cm] * process_noise_scale[t][cm];
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+
 void UnscentedKalmanFilter::sigmaPointsToCovariance(ARRAY_2D _transformed_cov /* _dim,_dim */, 
                                                     ARRAY_1D _devs /* _dim */, 
                                                     const ARRAY_2D _sigma_points /* 2 * state_dim + 1,_dim */, 
                                                     const ARRAY_2D _noise_cov /* _dim,_dim */,
-                                                    const ARRAY_1D _noise_scale /* _dim */,
                                                     const ARRAY_1D _mean /* _dim */,
                                                     int _dim)
 {
@@ -380,24 +405,11 @@ void UnscentedKalmanFilter::sigmaPointsToCovariance(ARRAY_2D _transformed_cov /*
     }
   }
 
-  if (_noise_scale != 0)
+  for (cn = 1 ; cn <= _dim ; cn++)
   {
-    for (cn = 1 ; cn <= _dim ; cn++)
+    for (cm = 1 ; cm <= _dim ; cm++)
     {
-      for (cm = 1 ; cm <= _dim ; cm++)
-      {
-        _transformed_cov[cn][cm] += _noise_scale[cn] * _noise_cov[cn][cm] * _noise_scale[cm];
-      }
-    }
-  }
-  else
-  {
-    for (cn = 1 ; cn <= _dim ; cn++)
-    {
-      for (cm = 1 ; cm <= _dim ; cm++)
-      {
-        _transformed_cov[cn][cm] += _noise_cov[cn][cm];
-      }
+      _transformed_cov[cn][cm] += _noise_cov[cn][cm];
     }
   }
 }
@@ -593,21 +605,40 @@ void UnscentedKalmanFilter::limitState(ARRAY_1D _output_state,
 
 // ----------------------------------------------------------------------------
 
-void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim */,
-                                    ARRAY_1D  _state_mean /* state_dim */,
-                                    const ARRAY_2D  _in_state_cov /* state_dim,state_dim */,
-                                    const ARRAY_1D  _in_state_mean /* state_dim */,
-                                    const int t)
+bool UnscentedKalmanFilter::checkIsNA(const ARRAY_1D measurement /* measurement_dim */)
 {
   int cn;
 
+  IsNA = false;
+
+  for (cn = 1 ; cn <= measurement_dim ; cn++)
+  {
+    if (ISNA(measurement[cn]) || ISNAN(measurement[cn]))
+    {
+      IsNA = true;
+      break;
+    }
+  }
+
+  return (IsNA);
+}
+
+// ----------------------------------------------------------------------------
+
+void UnscentedKalmanFilter::predict(const int t)
+{
+  int cn;
+
+  resetNoiseCovariance();
+  updateProcessNoiseCovariance(t);
+
   for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    input_state_mean[cn] = _in_state_mean[cn];
+    input_state_mean[cn] = state_mean[cn];
   }
 
   // generate sigma points
-  findSigmaPoints(input_sigma_points, state_chol_cov, _in_state_mean, _in_state_cov);
+  findSigmaPoints(input_sigma_points, state_chol_cov, state_mean, state_cov);
 
 #ifndef AD
 #ifdef __TRACE
@@ -626,7 +657,7 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
 #endif
 
   // Find new mean
-  sigmaPointsToMean(_state_mean, 
+  sigmaPointsToMean(state_mean, 
                     sigma_points, 
                     state_dim);
 
@@ -637,7 +668,7 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
 #endif
 
   // Update mean to ensure it lies in valid space
-  limitState(_state_mean, _state_mean, last_state, t);
+  limitState(state_mean, state_mean, last_state, t);
 
 #ifndef AD
 #ifdef __TRACE
@@ -646,12 +677,11 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
 #endif
 
   // find new covariance
-  sigmaPointsToCovariance(_state_cov, 
+  sigmaPointsToCovariance(state_cov, 
                           state_dev, 
                           sigma_points, 
-                          process_noise_cov,
-                          process_noise_scale[t],
-                          _state_mean,
+                          accumulated_process_noise_cov,
+                          state_mean,
                           state_dim);
 
 #ifndef AD
@@ -663,7 +693,7 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
   // find cross covariance for smoothing stage
   crossCovariance(smoothing_cross_covs[t], 
                   sigma_points, 
-                  _state_mean,
+                  state_mean,
                   input_sigma_points, 
                   input_state_mean);
 
@@ -680,8 +710,8 @@ void UnscentedKalmanFilter::predict(ARRAY_2D  _state_cov /* state_dim,state_dim 
 
   // Need to update the measurement mean based on the average state
   findOutput(output_measurement, 
-             state_mean, 
-             t);
+            state_mean, 
+            t);
 
 #ifndef AD
 #ifdef __TRACE
@@ -703,20 +733,8 @@ void UnscentedKalmanFilter::update(const ARRAY_1D measurement /* measurement_dim
   double  dSumLklA;
   double  dSumLklB;
   bool    bIsOk;
-  bool    bIsNA;
 
-  bIsNA = false;
-
-  for (cn = 1 ; cn <= measurement_dim ; cn++)
-  {
-    if (ISNA(measurement[cn]) || ISNAN(measurement[cn]))
-    {
-      bIsNA = true;
-      break;
-    }
-  }
-
-  if (!bIsNA)
+  if (!isNA())
   {
     // Find new mean
     sigmaPointsToMean(predicted_measurement_mean, 
@@ -728,7 +746,6 @@ void UnscentedKalmanFilter::update(const ARRAY_1D measurement /* measurement_dim
                             measurement_dev, 
                             output_sigma_points, 
                             measurement_noise_cov[t],
-                            0,
                             predicted_measurement_mean,
                             measurement_dim);
 
@@ -1077,8 +1094,11 @@ double UnscentedKalmanFilter::filter(ARRAY_2D states /* time_dim, state_dim */,
                                      const ARRAY_3D _measurement_noise_cov /* time_dim,measurement_dim,measurement_dim */, 
                                      const ARRAY_1D _init_state /* state_dim */)
 {
-  int t;
-
+  int   t;
+  int   cn;
+  bool  bIsNA;
+  bool  bLastIsNA;
+  
   initialise(_process_noise_cov, 
              _process_noise_scale, 
              _measurement_noise_cov, 
@@ -1088,17 +1108,30 @@ double UnscentedKalmanFilter::filter(ARRAY_2D states /* time_dim, state_dim */,
 
   for (t = 1 ; t <= time_dim ; t++)
   {
-    predict(state_cov,
-            state_mean,
-            state_cov,
-            state_mean,
-            t);
+    bLastIsNA = isNA();
+    bIsNA     = checkIsNA(y[t]);
 
+    if (bLastIsNA != bIsNA)
+    {
+      // track NA segments
+      if (bIsNA)
+      {
+        NA_count++;
+
+        StartNA[NA_count] = t;
+      }
+      else
+      {
+        EndNA[NA_count] = t;
+      }
+    }
+
+    predict(t);
     copy(0, apriori_state_means[t], apriori_state_covs[t]);
 
     update(y[t], t);
     copy(posterior_measurement_means[t], posterior_state_means[t], posterior_state_covs[t]);
-  
+
     // Save the smoothed state estimate and covariance
     copy(measurements[t], states[t], covariances[t]);
   }
