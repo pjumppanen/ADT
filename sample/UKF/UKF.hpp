@@ -69,19 +69,19 @@ protected:
   // cholesky decomposition temporary
   ARRAY_2D  state_chol_cov /* state_dim,state_dim */;
   ARRAY_2D  state_inv_cov /* state_dim,state_dim */;
-  ARRAY_2D  measurement_chol_cov /* state_dim,state_dim */;
-  ARRAY_2D  measurement_inv_cov /* state_dim,state_dim */;
+  ARRAY_2D  measurement_chol_cov /* measurement_dim,measurement_dim */;
+  ARRAY_2D  measurement_inv_cov /* measurement_dim,measurement_dim */;
 
   // sigma points temporary
   ARRAY_2D sigma_points /* 2 * state_dim + 1,state_dim */;
   ARRAY_2D input_sigma_points /* 2 * state_dim + 1,state_dim */;
   ARRAY_2D output_sigma_points /* 2 * state_dim + 1,measurement_dim */;
 
-  ARRAY_3D  apriori_state_covs /* 0:time_dim,state_dim,state_dim */;
-  ARRAY_2D  apriori_state_means /* 0:time_dim,state_dim */;
+  ARRAY_3D  apriori_state_covs /* 0:time_dim + 1,state_dim,state_dim */;
+  ARRAY_2D  apriori_state_means /* 0:time_dim + 1,state_dim */;
   
-  ARRAY_3D  posterior_state_covs /* 0:time_dim,state_dim,state_dim */;
-  ARRAY_2D  posterior_state_means /* 0:time_dim,state_dim */;
+  ARRAY_3D  posterior_state_covs /* 0:time_dim + 1,state_dim,state_dim */;
+  ARRAY_2D  posterior_state_means /* 0:time_dim + 1,state_dim */;
   ARRAY_2D  posterior_measurement_means /* time_dim,measurement_dim */;
 
   ARRAY_3D  smoothing_cross_covs /* 0:time_dim,state_dim,state_dim */;
@@ -120,8 +120,8 @@ protected:
 
 protected:
 #ifndef AD
-  void      printMatrix(const char* pLabel, const ARRAY_2D pA, const int nRow, const int nCol);
-  void      printVector(const char* pLabel, const ARRAY_1D pV, const int nSize);
+  void            printMatrix(const char* pLabel, const ARRAY_2D pA, const int nRow, const int nCol);
+  void            printVector(const char* pLabel, const ARRAY_1D pV, const int nSize);
 #endif
 
   bool            choleskyDecomposition(const ARRAY_2D pA/* nSize, nSize */, 

@@ -271,10 +271,14 @@ void UnscentedKalmanFilter::initialise(const ARRAY_2D _process_noise_cov /* stat
   int     cn;
   int     cm;
   int     ct;
+  int     n1;
+  int     n2;
   double  lambda;
 
   NA_count  = 0;
   IsNA      = false;
+  n1        = 0;
+  n2        = 1;
 
   // initialise state, covariance matrices and mean
   for (ct = 1 ; ct <= time_dim ; ct++)
@@ -295,16 +299,16 @@ void UnscentedKalmanFilter::initialise(const ARRAY_2D _process_noise_cov /* stat
 
   for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    state_mean[cn]               = _init_state[cn];
-    posterior_state_means[0][cn] = state_mean[cn];
-    apriori_state_means[0][cn]   = state_mean[cn];
+    state_mean[cn]                = _init_state[cn];
+    posterior_state_means[n1][cn] = state_mean[cn];
+    apriori_state_means[n1][cn]   = state_mean[cn];
 
     for (cm = 1 ; cm <= state_dim ; cm++)
     {
-      process_noise_cov[cn][cm]       = _process_noise_cov[cn][cm];
-      state_cov[cn][cm]               = process_noise_scale[1][cn] * process_noise_cov[cn][cm] * process_noise_scale[1][cm];
-      posterior_state_covs[0][cn][cm] = state_cov[cn][cm];
-      apriori_state_covs[0][cn][cm]   = state_cov[cn][cm];
+      process_noise_cov[cn][cm]        = _process_noise_cov[cn][cm];
+      state_cov[cn][cm]                = process_noise_scale[n2][cn] * process_noise_cov[cn][cm] * process_noise_scale[n2][cm];
+      posterior_state_covs[n1][cn][cm] = state_cov[cn][cm];
+      apriori_state_covs[n1][cn][cm]   = state_cov[cn][cm];
     }
   }
 
@@ -507,6 +511,9 @@ void UnscentedKalmanFilter::propagateSigmaPoints(ARRAY_2D _output_sigma_points /
 {
   int cn;
   int cm;
+  int t_last;
+
+  t_last = t-1;
 
   // get last state that the sigma points are based on. This is then
   // passed to the model_state() function as the previous state reference
@@ -517,7 +524,7 @@ void UnscentedKalmanFilter::propagateSigmaPoints(ARRAY_2D _output_sigma_points /
   // by the non-linearity. 
   for (cn = 1 ; cn <= state_dim ; cn++)
   {
-    last_state[cn] = posterior_state_means[t-1][cn];  
+    last_state[cn] = posterior_state_means[t_last][cn];  
   }
 
   for (cm = 1 ; cm <= n_sigma ; cm++)
@@ -729,10 +736,13 @@ void UnscentedKalmanFilter::update(const ARRAY_1D measurement /* measurement_dim
   int     cm;
   int     cr;
   int     ck;
+  int     t_last;
   double  dSum;
   double  dSumLklA;
   double  dSumLklB;
   bool    bIsOk;
+
+  t_last = t-1;
 
   if (!isNA())
   {
@@ -840,7 +850,7 @@ void UnscentedKalmanFilter::update(const ARRAY_1D measurement /* measurement_dim
     LogLikelihood += (logDeterminantFromChol(measurement_chol_cov, measurement_dim) + dSumLklB + (measurement_dim * log(2 * M_PI)));
 
     // need to make next state comply with non-linear requirements of model
-    limitState(state_mean, state_mean, posterior_state_means[t-1], t);
+    limitState(state_mean, state_mean, posterior_state_means[t_last], t);
 
     // Update the model output
     findOutput(output_measurement, state_mean, t);
@@ -891,8 +901,11 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
   int     cn;
   int     cm;
   int     cr;
+  int     t_last;
   double  dSum;
   bool    bIsOk;
+
+  t_last = t-1;
 
   // Do smoothing using the RTS method
   zero(state_chol_cov);
@@ -975,7 +988,7 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
       for (cr = 1 ; cr <= state_dim ; cr++)
       {
         // pP[t] * t(Dk) * inv(aP[t])
-        dSum += posterior_state_covs[t-1][cm][cr] * working_state_mat[cr][cn];
+        dSum += posterior_state_covs[t_last][cm][cr] * working_state_mat[cr][cn];
       }
 
       SmoothingGain[cm][cn] = dSum;
@@ -1025,7 +1038,7 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
         dSum += SmoothingGain[cn][cr] * working_state_mat[cr][cm];
       }
 
-      state_cov[cn][cm] = posterior_state_covs[t-1][cn][cm] - dSum;
+      state_cov[cn][cm] = posterior_state_covs[t_last][cn][cm] - dSum;
     }
   }
 
@@ -1045,7 +1058,7 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
       dSum += SmoothingGain[cn][cr] * (state_mean[cr] - apriori_state_means[t][cr]);
     }
 
-    working_state_vec[cn] = posterior_state_means[t-1][cn] + dSum;
+    working_state_vec[cn] = posterior_state_means[t_last][cn] + dSum;
   }
 
 #ifndef AD
@@ -1056,10 +1069,10 @@ void UnscentedKalmanFilter::smoothingUpdate(const int t)
 #endif
 
   // need to make next state comply with non-linear requirements of model
-  limitState(state_mean, working_state_vec, state_mean, t-1);
+  limitState(state_mean, working_state_vec, apriori_state_means[t], t_last);
 
   // Update the model output
-  findOutput(output_measurement, state_mean, t-1);
+  findOutput(output_measurement, state_mean, t_last);
 }
 
 // ----------------------------------------------------------------------------
@@ -1095,7 +1108,6 @@ double UnscentedKalmanFilter::filter(ARRAY_2D states /* time_dim, state_dim */,
                                      const ARRAY_1D _init_state /* state_dim */)
 {
   int   t;
-  int   cn;
   bool  bIsNA;
   bool  bLastIsNA;
   
@@ -1104,7 +1116,7 @@ double UnscentedKalmanFilter::filter(ARRAY_2D states /* time_dim, state_dim */,
              _measurement_noise_cov, 
              _init_state);
 
-  LogLikelihood = 0.0;             
+  LogLikelihood = 0.0;
 
   for (t = 1 ; t <= time_dim ; t++)
   {
